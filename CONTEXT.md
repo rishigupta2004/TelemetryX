@@ -1,9 +1,9 @@
 # Telemetry X - Development Context
 
 ## Current Status
-- **Phase**: Tier 1 Complete - Local Analytics MVP
+- **Phase**: Tier 2 In Progress - Team Collaboration
 - **Last Updated**: 2026-01-13
-- **Next Action**: Tier 2 planning or enhance Tier 1 features
+- **Next Action**: Enhanced visualizations, more features
 
 ## Tier 1: Local Analytics - COMPLETE
 
@@ -40,50 +40,81 @@
 - [x] XGBoost regression model
 - [x] predict_degradation_curve function
 
-## Pending (Tier 2)
-- [ ] MLflow experiment tracking
-- [ ] FastAPI endpoints
-- [ ] More races data ingestion
-- [ ] Strategy simulator
-- [ ] Enhanced visualizations
+## Tier 2: Team Collaboration - IN PROGRESS
+
+### T2-Phase 1: MLflow Tracking
+- [x] MLflow integration (`src/mlops/tracking.py`)
+- [x] Experiment tracking, model logging
+- [x] Run: `mlflow ui` to view experiments
+
+### T2-Phase 2: FastAPI Endpoints
+- [x] REST API (`api/main.py`)
+- [x] Endpoints: /sessions, /laps, /drivers, /predict
+- [x] Run: `uvicorn api.main:app --reload`
+
+### T2-Phase 3: More Races
+- [x] Bahrain 2024: 1129 laps
+- [x] Monaco 2024: 1111 laps
+- [x] British GP 2024: 1310 laps
+- [x] Abu Dhabi 2024: 1035 laps
+
+### T2-Phase 4: Strategy Simulator
+- [x] Monte Carlo simulation (`src/analysis/strategy.py`)
+- [x] simulate_strategy, compare_strategies functions
+
+### T2-Phase 5: Enhanced Visualizations
+- [ ] Track maps
+- [ ] Animated race replay
+- [ ] 3D telemetry
 
 ## Configuration
-- **Test Race**: Abu Dhabi 2024 (Round 24)
-- **Data Scope**: 2018-2024 seasons
+- **Data Scope**: 2024 season (4 races loaded)
 - **Python**: 3.12.2
+- **MLflow**: file://mlruns
 
 ## Data Available
-- Abu Dhabi 2024: 1035 laps, 20 drivers
-- VER/NOR telemetry saved
+| Race | Laps | Drivers |
+|------|------|---------|
+| Bahrain 2024 (R1) | 1129 | 20 |
+| Monaco 2024 (R6) | 1111 | 20 |
+| British 2024 (R10) | 1310 | 20 |
+| Abu Dhabi 2024 (R24) | 1035 | 20 |
 
 ## Commits
 | Hash | Phase | Description |
 |------|-------|-------------|
-| 11c5c3c | 0 | Project setup |
-| e691279 | 1 | FastF1 data ingestion |
-| bdc885d | 2 | Parquet + DuckDB storage |
-| 2cca5fa | 3 | Analytics queries |
-| 81a16fa | 4 | Plotly visualizations |
-| 9d2e375 | 5 | Streamlit dashboard |
-| 25e8e89 | 6 | Tire degradation ML model |
+| 11c5c3c | T1-0 | Project setup |
+| e691279 | T1-1 | FastF1 data ingestion |
+| bdc885d | T1-2 | Parquet + DuckDB storage |
+| 2cca5fa | T1-3 | Analytics queries |
+| 81a16fa | T1-4 | Plotly visualizations |
+| 9d2e375 | T1-5 | Streamlit dashboard |
+| 25e8e89 | T1-6 | Tire degradation ML model |
+| 14470c7 | T2-1/2 | MLflow + FastAPI |
+| fabb9d8 | T2-3/4 | More races + Strategy Simulator |
 
 ## How to Run
+
 ```bash
 cd /Users/rishigupta/Documents/TelemetryX
 
-# Run dashboard
+# Streamlit Dashboard
 streamlit run app/main.py
 
-# Fetch more data
-python -c "from src.ingestion.fastf1_client import fetch_session; fetch_session(2024, 1, 'R')"
+# FastAPI Server
+uvicorn api.main:app --reload --port 8000
+# Then visit: http://localhost:8000/docs
 
-# Train ML model
+# MLflow UI
+mlflow ui --backend-store-uri file://mlruns
+# Then visit: http://localhost:5000
+
+# Strategy Simulation
 python -c "
 from src.storage.parquet_store import load_laps
-from src.models.tire_deg import prepare_training_data, train_model, save_model
+from src.analysis.strategy import simulate_strategy
 laps = load_laps(2024, 24)
-X, y, enc = prepare_training_data(laps)
-model = train_model(X, y)
-save_model(model, enc)
+result = simulate_strategy(laps, 'VER', [29], ['MEDIUM', 'HARD'])
+print(f'Expected: P{result.expected_position:.1f}')
 "
 ```

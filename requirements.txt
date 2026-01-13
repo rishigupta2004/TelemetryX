@@ -1,0 +1,15 @@
+# Core data
+fastf1>=3.3.0
+polars>=0.20.0
+duckdb>=0.10.0
+
+# Visualization
+plotly>=5.18.0
+streamlit>=1.30.0
+
+# ML
+xgboost>=2.0.0
+scikit-learn>=1.4.0
+
+# Utils
+python-dotenv>=1.0.0

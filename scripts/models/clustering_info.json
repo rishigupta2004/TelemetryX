@@ -1,0 +1,85 @@
+{
+  "model": "kmeans_gmm",
+  "n_clusters": 4,
+  "silhouette_score": 0.5927324487378326,
+  "features": [
+    "avg_lap",
+    "fastest_lap",
+    "lap_consistency",
+    "position_gain",
+    "avg_s1",
+    "avg_s2",
+    "avg_s3",
+    "avg_tyre_deg",
+    "avg_stint_len",
+    "avg_speed_max",
+    "avg_speed",
+    "avg_throttle"
+  ],
+  "labels": {
+    "0": "Front Field - Consistent",
+    "3": "Back Field - Variable",
+    "2": "Back Field - Variable",
+    "1": "Back Field - Consistent"
+  },
+  "cluster_means": {
+    "0": {
+      "avg_lap": 0.2480604249447046,
+      "fastest_lap": 0.05027077414772678,
+      "lap_consistency": 1.64697879165531,
+      "position_gain": 0.5263157894736841,
+      "avg_s1": 15.945712000961286,
+      "avg_s2": 13.418725017088713,
+      "avg_s3": 13.425447470949615,
+      "avg_tyre_deg": 0.10209805825204071,
+      "avg_stint_len": 0.2687155304727857,
+      "avg_speed_max": 0.2439829508138049,
+      "avg_speed": 0.12789810880022984,
+      "avg_throttle": -0.4696983074578374
+    },
+    "1": {
+      "avg_lap": 0.23296422196112812,
+      "fastest_lap": -0.6370405717329546,
+      "lap_consistency": 0.8927844407499997,
+      "position_gain": 0.2763157894736841,
+      "avg_s1": -13.40470556006505,
+      "avg_s2": -15.53415578007468,
+      "avg_s3": -15.548678688909828,
+      "avg_tyre_deg": -0.044506979377806476,
+      "avg_stint_len": 0.056321854829549566,
+      "avg_speed_max": 0.11793314336038219,
+      "avg_speed": 0.2434619656230831,
+      "avg_throttle": -0.5739012955173735
+    },
+    "2": {
+      "avg_lap": -0.8633002879173801,
+      "fastest_lap": -0.2483805593652038,
+      "lap_consistency": 0.09211803715105274,
+      "position_gain": 0.014519056261343026,
+      "avg_s1": -0.09351606251352519,
+      "avg_s2": 0.11440154264986128,
+      "avg_s3": 0.11098212125141108,
+      "avg_tyre_deg": 7.827253612347694e-05,
+      "avg_stint_len": -0.47340101482550057,
+      "avg_speed_max": 0.16071577533051445,
+      "avg_speed": -0.5137993808128641,
+      "avg_throttle": 0.26558068267442403
+    },
+    "3": {
+      "avg_lap": 0.03129627718906964,
+      "fastest_lap": -0.9129527698863624,
+      "lap_consistency": 0.9747423320632255,
+      "position_gain": 0.10526315789473678,
+      "avg_s1": 26.88834559884569,
+      "avg_s2": 26.851718671679436,
+      "avg_s3": 26.938521303258284,
+      "avg_tyre_deg": 0.8708010859071261,
+      "avg_stint_len": -0.6322020838727553,
+      "avg_speed_max": 0.07194852425827168,
+      "avg_speed": 0.4251523238336408,
+      "avg_throttle": -0.13236241482012948
+    }
+  },
+  "n_drivers": 43,
+  "trained_at": "2026-01-18T03:12:00.841484"
+}

@@ -1,0 +1,27 @@
+{
+  "model": "xgboost",
+  "n_events": 5890,
+  "features": [
+    "position_before_pit",
+    "tyre_age",
+    "stint_length",
+    "compound_ordinal",
+    "track_stress",
+    "pit_lap"
+  ],
+  "feature_importance": {
+    "position_before_pit": 0.47483566403388977,
+    "tyre_age": 0.10903342813253403,
+    "stint_length": 0.12925903499126434,
+    "compound_ordinal": 0.12282808125019073,
+    "track_stress": 0.0,
+    "pit_lap": 0.16404378414154053
+  },
+  "train_accuracy": 0.7603989813242784,
+  "test_accuracy": 0.634974533106961,
+  "train_auc": 0.9060827353785732,
+  "test_auc": 0.7296921053069789,
+  "undercut_rate": 0.2728353140916808,
+  "n_races": 169,
+  "trained_at": "2026-01-18T04:19:47.036079"
+}

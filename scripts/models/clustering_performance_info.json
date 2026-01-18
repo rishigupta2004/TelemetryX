@@ -1,0 +1,45 @@
+{
+  "model": "kmeans_gmm",
+  "n_clusters": 3,
+  "silhouette_score": 0.709401613066367,
+  "features": [
+    "avg_qualifying",
+    "best_qualifying",
+    "quali_std",
+    "quali_variance",
+    "q1_appearances",
+    "q2_appearances",
+    "q3_appearances",
+    "pole_positions",
+    "front_row",
+    "avg_finish",
+    "best_finish",
+    "finish_std",
+    "finish_variance",
+    "wins",
+    "podiums",
+    "points_finishes",
+    "dnfs",
+    "wins_rate",
+    "podiums_rate",
+    "points_rate",
+    "dnf_rate",
+    "pos_change_avg"
+  ],
+  "labels": {
+    "0": "Midfield Runner",
+    "1": "The Elite",
+    "2": "The Winner"
+  },
+  "n_drivers": 40,
+  "years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+  ],
+  "trained_at": "2026-01-18T13:53:35.058929"
+}

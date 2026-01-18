@@ -1,31 +1,27 @@
-# Telemetry X
+# TelemetryX | F1 Strategy Dashboard
 
-Post-race F1 deep-dive analysis platform.
+Professional Formula 1 playback and analysis platform featuring high-fidelity telemetry visualization, real-time strategy tools, and machine learning insights.
 
-## Quick Start
+## Architecture V1.0
 
+- **Backend:** Python FastAPI (REST + WebSocket), DuckDB, FastF1
+- **Frontend:** React 18, TypeScript, Vite, Tailwind, Recharts, Deck.gl
+- **Data:** Parquet-based silver/gold architecture with DuckDB query layer
+
+## Getting Started
+
+### Backend
 ```bash
-# Install dependencies
+cd backend
+python -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
-
-# Run Streamlit app
-streamlit run app/main.py
+python main.py
 ```
 
-## Project Structure
-
+### Frontend
+```bash
+cd frontend
+npm install
+npm run dev
 ```
-src/
-├── ingestion/     # FastF1 data fetching
-├── storage/       # Parquet + DuckDB storage
-├── analysis/      # Queries and analytics
-├── viz/           # Plotly visualizations
-└── models/        # ML models
-
-app/               # Streamlit dashboard
-data/              # Local data storage
-```
-
-## Data Source
-
-Uses [FastF1](https://github.com/theOehrly/Fast-F1) for F1 telemetry data (2018-present).

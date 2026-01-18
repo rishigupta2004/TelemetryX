@@ -1,0 +1,25 @@
+{
+  "model": "strategy_analysis",
+  "n_races": 36,
+  "n_drivers": 43,
+  "avg_stints_per_race": 2.87,
+  "avg_pit_stops": 0.0,
+  "trained_at": "2026-01-18T01:06:50.211689",
+  "winning_compounds": [
+    {
+      "compound": "HARD",
+      "avg_stints": 2.0,
+      "avg_pits": 0.0
+    },
+    {
+      "compound": "SOFT",
+      "avg_stints": 2.0,
+      "avg_pits": 0.0
+    }
+  ],
+  "top_compound": {
+    "compound": "HARD",
+    "avg_stints": 2.0,
+    "avg_pits": 0.0
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "model": "random_forest_multiclass",
+  "n_events": 5890,
+  "n_classes": 3,
+  "class_distribution": {
+    "class_0_no_advantage": 4283,
+    "class_1_undercut": 1607,
+    "class_2_overcut": 0
+  },
+  "features": [
+    "position_before_pit",
+    "tyre_age_initiator",
+    "stint_length",
+    "compound_ordinal",
+    "track_temp",
+    "track_stress",
+    "pit_lap",
+    "is_undercut_initiator",
+    "is_overcut_initiator",
+    "position_change"
+  ],
+  "feature_importance": {
+    "is_undercut_initiator": 0.7362840777533194,
+    "position_change": 0.15359243113612264,
+    "position_before_pit": 0.06699068598351393,
+    "stint_length": 0.021000492511332142,
+    "pit_lap": 0.00988698405074463,
+    "tyre_age_initiator": 0.007944716070066178,
+    "track_temp": 0.0043006124949011276,
+    "compound_ordinal": 0.0,
+    "track_stress": 0.0,
+    "is_overcut_initiator": 0.0
+  },
+  "train_accuracy": 1.0,
+  "test_accuracy": 1.0,
+  "test_class_accuracy": {
+    "class_0": 1.0,
+    "class_1": 1.0,
+    "class_2": 0.0
+  },
+  "n_races": 169,
+  "trained_at": "2026-01-18T04:06:18.104662"
+}

@@ -1,0 +1,16 @@
+{
+  "model": "strategy_analysis",
+  "n_records": 3890,
+  "n_races": 169,
+  "n_drivers": 43,
+  "avg_stints": 2.51,
+  "avg_pit_stops": 0.0,
+  "common_strategies": {
+    "MEDIUM\u2192HARD": 915,
+    "SOFT\u2192MEDIUM\u2192SOFT": 416,
+    "SOFT\u2192MEDIUM": 245,
+    "MEDIUM\u2192SOFT": 230,
+    "MEDIUM\u2192HARD\u2192MEDIUM": 170
+  },
+  "trained_at": "2026-01-18T03:09:21.195403"
+}

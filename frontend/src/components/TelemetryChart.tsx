@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import {
   LineChart,
   Line,
@@ -8,287 +8,198 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  ReferenceLine,
   Area,
   ComposedChart,
+  ReferenceLine,
 } from 'recharts';
+import { api, TelemetryPoint } from '../lib/api';
 
 interface TelemetryChartProps {
+  year: number;
+  race: string;
   driver: string;
-  session: string;
-  lapRange?: { start: number; end: number };
+  lap: number;
+  compareDriver?: string; // Optional comparison
+  compareLap?: number;
+  onCursorMove?: (data: TelemetryPoint | null) => void;
 }
-
-interface TelemetryDataPoint {
-  timestamp: number;
-  distance: number;
-  speed: number;
-  throttle: number;
-  brake: number;
-  gear: number;
-  drs: boolean;
-  rpm: number;
-}
-
-const SAMPLE_SPEED_DATA: TelemetryDataPoint[] = Array.from({ length: 500 }, (_, i) => {
-  const seed = i * 12345;
-  const seededRandom = () => {
-    const result = (seed * 9301 + 49297) % 233280;
-    return result / 233280;
-  };
-  return {
-    timestamp: i * 10,
-    distance: i * 5,
-    speed: 150 + Math.sin(i * 0.05) * 80 + seededRandom() * 20,
-    throttle: Math.max(0, Math.min(100, 60 + Math.sin(i * 0.08) * 40 + seededRandom() * 20)),
-    brake: i % 100 < 10 ? 80 + seededRandom() * 20 : seededRandom() * 10,
-    gear: Math.floor(2 + (i % 50) / 10),
-    drs: i > 150 && i < 200,
-    rpm: 8000 + Math.sin(i * 0.1) * 3000,
-  };
-});
-
-const formatSpeed = (speed: number): string => `${Math.round(speed)}`;
 
 const DRIVER_COLORS: Record<string, string> = {
   VER: '#ff0000',
-  LEC: '#0066ff',
-  NOR: '#ff8c00',
-  PIA: '#ffff00',
-  HAM: '#0080ff',
-  RUS: '#808080',
+  LEC: '#ff2400',
+  NOR: '#ff8000',
+  PIA: '#ffac2f',
+  HAM: '#00d2be',
+  RUS: '#24ffff',
+  SAI: '#ff0000',
+  ALO: '#006f62',
+  STR: '#006f62',
+  PER: '#ff0000',
 };
 
-const generateComparisonData = (baseData: TelemetryDataPoint[]): (TelemetryDataPoint & { speed2: number; throttle2: number })[] => {
-  const seed = 12345;
-  let seedRandom = seed;
-  const seededRandom = () => {
-    seedRandom = (seedRandom * 9301 + 49297) % 233280;
-    return seedRandom / 233280;
-  };
-  return baseData.map(point => ({
-    ...point,
-    speed2: point.speed + (seededRandom() - 0.5) * 30,
-    throttle2: point.throttle + (seededRandom() - 0.5) * 20,
-  }));
-};
+const CHART_HEIGHT = 160;
 
 export const TelemetryChart: React.FC<TelemetryChartProps> = ({
+  year,
+  race,
   driver,
-  session,
+  lap,
+  compareDriver,
+  compareLap,
 }) => {
-  const [activeView, setActiveView] = useState<'speed' | 'throttle' | 'gears' | 'comparison'>('speed');
-  const [compareDriver, setCompareDriver] = useState<string>('LEC');
-  
-  const comparisonData = useMemo(() => {
-    return generateComparisonData(SAMPLE_SPEED_DATA);
-  }, []);
+  const [data, setData] = useState<TelemetryPoint[]>([]);
+  const [compareData, setCompareData] = useState<TelemetryPoint[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await api.telemetry.getLapData(year, race, driver, lap);
+        setData(response.data);
+
+        if (compareDriver && compareLap) {
+          const compResponse = await api.telemetry.getLapData(year, race, compareDriver, compareLap);
+          setCompareData(compResponse.data);
+        } else {
+            setCompareData([]);
+        }
+      } catch (err) {
+        console.error("Failed to fetch telemetry", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [year, race, driver, lap, compareDriver, compareLap]);
+
+  // Resample/Merge data for comparison (simple distance matching for V1)
+  // In a real app, we'd use a more robust interpolation
+  const chartData = useMemo(() => {
+    if (compareData.length === 0) return data;
+    
+    // Simple approach: Use primary driver's distance as x-axis
+    // Find closest point in compareData for each point in data
+    return data.map(p => {
+        // Optimization: Assume sorted by distance, could use binary search or sliding window
+        // For < 5000 points, find is ok-ish but slow. Let's stick to simple map for prototype.
+        const match = compareData.find(cp => Math.abs(cp.distance - p.distance) < 10); // 10m window
+        return {
+            ...p,
+            speed2: match?.speed,
+            rpm2: match?.rpm,
+            throttle2: match?.throttle,
+            brake2: match?.brake,
+            gear2: match?.gear,
+        };
+    });
+  }, [data, compareData]);
+
+  if (loading) return <div className="p-10 text-center text-gray-400">Loading telemetry...</div>;
+  if (data.length === 0) return <div className="p-10 text-center text-gray-400">No telemetry data available for Lap {lap}</div>;
+
+  const driverColor = DRIVER_COLORS[driver] || '#ffffff';
+  const compareColor = compareDriver ? (DRIVER_COLORS[compareDriver] || '#cccccc') : 'transparent';
 
   return (
-    <div className="telemetry-chart-container w-full h-full bg-gray-900 rounded-lg p-4">
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <h3 className="text-white font-bold text-lg">Telemetry Analysis</h3>
-          <p className="text-gray-400 text-sm">{driver} - {session}</p>
-        </div>
-        <div className="flex gap-2">
-          {(['speed', 'throttle', 'gears', 'comparison'] as const).map(view => (
-            <button
-              key={view}
-              onClick={() => setActiveView(view)}
-              className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
-                activeView === view
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-              }`}
-            >
-              {view.charAt(0).toUpperCase() + view.slice(1)}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {activeView === 'comparison' && (
-        <div className="mb-4 flex items-center gap-2">
-          <span className="text-gray-400 text-sm">Compare with:</span>
-          <select
-            value={compareDriver}
-            onChange={(e) => setCompareDriver(e.target.value)}
-            className="bg-gray-700 text-white px-3 py-1 rounded text-sm"
-          >
-            {Object.keys(DRIVER_COLORS).filter(d => d !== driver).map(d => (
-              <option key={d} value={d}>{d}</option>
-            ))}
-          </select>
-        </div>
-      )}
-
-      <div className="h-[400px]">
+    <div className="w-full bg-slate-900 rounded-lg p-4 flex flex-col gap-1">
+        
+      {/* SPEED */}
+      <div style={{ height: CHART_HEIGHT }}>
+        <h4 className="text-xs font-bold text-gray-400 uppercase mb-1 ml-2">Speed</h4>
         <ResponsiveContainer width="100%" height="100%">
-          {activeView === 'speed' ? (
-            <ComposedChart data={SAMPLE_SPEED_DATA}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-              <XAxis
-                dataKey="distance"
-                stroke="#9ca3af"
-                tickFormatter={(v: number) => `${Math.round(v)}m`}
-                label={{ value: 'Distance', position: 'bottom', fill: '#9ca3af' }}
-              />
-              <YAxis
-                stroke="#9ca3af"
-                tickFormatter={(v: number) => formatSpeed(v)}
-                domain={[0, 'auto']}
-                label={{ value: 'Speed (km/h)', angle: -90, position: 'insideLeft', fill: '#9ca3af' }}
-              />
-              <Tooltip
-                contentStyle={{ backgroundColor: '#1f2937', border: 'none', borderRadius: '8px' }}
-                labelFormatter={(v: number) => `Distance: ${Math.round(v)}m`}
-                formatter={(value: number) => [`${Math.round(value)} km/h`, 'Speed']}
-              />
-              <Legend />
-              <Area
-                type="monotone"
-                dataKey="speed"
-                stroke="#22c55e"
-                fill="url(#speedGradient)"
-                strokeWidth={2}
-              />
-              <defs>
-                <linearGradient id="speedGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#22c55e" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              {SAMPLE_SPEED_DATA.filter(d => d.drs).length > 0 && (
-                <ReferenceLine
-                  y={300}
-                  stroke="#06b6d4"
-                  strokeDasharray="5 5"
-                  label={{ value: 'DRS Zone', fill: '#06b6d4', fontSize: 12 }}
-                />
-              )}
-            </ComposedChart>
-          ) : activeView === 'throttle' ? (
-            <ComposedChart data={SAMPLE_SPEED_DATA}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-              <XAxis
-                dataKey="distance"
-                stroke="#9ca3af"
-                tickFormatter={(v: number) => `${Math.round(v)}m`}
-              />
-              <YAxis
-                stroke="#9ca3af"
-                domain={[0, 100]}
-                label={{ value: 'Throttle/Brake %', angle: -90, position: 'insideLeft', fill: '#9ca3af' }}
-              />
-              <Tooltip
-                contentStyle={{ backgroundColor: '#1f2937', border: 'none', borderRadius: '8px' }}
-                formatter={(value: number, name: string) => [`${Math.round(value)}%`, name === 'throttle' ? 'Throttle' : 'Brake']}
-              />
-              <Legend />
-              <Area
-                type="monotone"
-                dataKey="throttle"
-                stroke="#22c55e"
-                fill="url(#throttleGradient)"
-                strokeWidth={2}
-              />
-              <Line
-                type="monotone"
-                dataKey="brake"
-                stroke="#ef4444"
-                strokeWidth={2}
-              />
-              <defs>
-                <linearGradient id="throttleGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#22c55e" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-            </ComposedChart>
-          ) : activeView === 'gears' ? (
-            <LineChart data={SAMPLE_SPEED_DATA}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-              <XAxis
-                dataKey="distance"
-                stroke="#9ca3af"
-                tickFormatter={(v: number) => `${Math.round(v)}m`}
-              />
-              <YAxis
-                stroke="#9ca3af"
-                domain={[1, 8]}
-                ticks={[1, 2, 3, 4, 5, 6, 7, 8]}
-                tickFormatter={(v: number) => `${v}`}
-                label={{ value: 'Gear', angle: -90, position: 'insideLeft', fill: '#9ca3af' }}
-              />
-              <Tooltip
-                contentStyle={{ backgroundColor: '#1f2937', border: 'none', borderRadius: '8px' }}
-                formatter={(value: number) => [`Gear ${value}`, 'Gear']}
-              />
-              <Legend />
-              <Line
-                type="step"
-                dataKey="gear"
-                stroke="#8b5cf6"
-                strokeWidth={3}
-              />
-            </LineChart>
-          ) : (
-            <ComposedChart data={comparisonData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-              <XAxis
-                dataKey="distance"
-                stroke="#9ca3af"
-                tickFormatter={(v: number) => `${Math.round(v)}m`}
-              />
-              <YAxis
-                stroke="#9ca3af"
-                tickFormatter={(v: number) => formatSpeed(v)}
-                domain={[0, 'auto']}
-                label={{ value: 'Speed (km/h)', angle: -90, position: 'insideLeft', fill: '#9ca3af' }}
-              />
-              <Tooltip
-                contentStyle={{ backgroundColor: '#1f2937', border: 'none', borderRadius: '8px' }}
-                formatter={(value: number, name: string) => [`${Math.round(value)} km/h`, name.startsWith('speed') ? driver : compareDriver]}
-              />
-              <Legend />
-              <Line
-                type="monotone"
-                dataKey="speed"
-                stroke={DRIVER_COLORS[driver]}
-                strokeWidth={2}
-                dot={false}
-              />
-              <Line
-                type="monotone"
-                dataKey="speed2"
-                stroke={DRIVER_COLORS[compareDriver]}
-                strokeWidth={2}
-                dot={false}
-              />
-            </ComposedChart>
-          )}
+          <ComposedChart data={chartData} syncId="telemetry">
+            <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+            <XAxis dataKey="distance" hide type="number" domain={['dataMin', 'dataMax']} />
+            <YAxis domain={[0, 360]} hide />
+            <Tooltip 
+                contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', fontSize: '12px' }}
+                labelFormatter={(v) => `${Math.round(v)}m`}
+                active={true}
+                content={({ active, payload }) => {
+                    if (active && payload && payload.length) {
+                        const point = payload[0].payload;
+                        if (onCursorMove) onCursorMove(point);
+                        return (
+                            <div className="bg-slate-900 border border-slate-700 p-2 rounded shadow-lg">
+                                <p className="text-slate-400 text-xs mb-1">{Math.round(point.distance)}m</p>
+                                <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
+                                    <span style={{ color: driverColor }}>{driver}:</span>
+                                    <span className="font-mono text-white">{Math.round(point.speed)} km/h</span>
+                                    {compareDriver && (
+                                        <>
+                                            <span style={{ color: compareColor }}>{compareDriver}:</span>
+                                            <span className="font-mono text-white">{Math.round(point.speed2)} km/h</span>
+                                            <span className="col-span-1 text-slate-500">Delta:</span>
+                                            <span className={`font-mono ${point.speed - point.speed2 > 0 ? 'text-green-400' : 'text-red-400'}`}>
+                                                {(point.speed - point.speed2).toFixed(1)}
+                                            </span>
+                                        </>
+                                    )}
+                                </div>
+                            </div>
+                        );
+                    }
+                    if (onCursorMove) onCursorMove(null);
+                    return null;
+                }}
+            />
+            <Line type="monotone" dataKey="speed" stroke={driverColor} strokeWidth={2} dot={false} />
+            {compareDriver && <Line type="monotone" dataKey="speed2" stroke={compareColor} strokeWidth={2} dot={false} strokeDasharray="4 4" />}
+          </ComposedChart>
         </ResponsiveContainer>
       </div>
 
-      <div className="mt-4 grid grid-cols-4 gap-4">
-        <div className="bg-gray-800 rounded-lg p-3">
-          <p className="text-gray-400 text-xs">Max Speed</p>
-          <p className="text-white text-xl font-bold">{Math.round(Math.max(...SAMPLE_SPEED_DATA.map(d => d.speed)))} <span className="text-sm font-normal text-gray-400">km/h</span></p>
-        </div>
-        <div className="bg-gray-800 rounded-lg p-3">
-          <p className="text-gray-400 text-xs">Avg Throttle</p>
-          <p className="text-green-400 text-xl font-bold">{Math.round(SAMPLE_SPEED_DATA.reduce((a, b) => a + b.throttle, 0) / SAMPLE_SPEED_DATA.length)} <span className="text-sm font-normal text-gray-400">%</span></p>
-        </div>
-        <div className="bg-gray-800 rounded-lg p-3">
-          <p className="text-gray-400 text-xs">Top Gear</p>
-          <p className="text-purple-400 text-xl font-bold">{Math.max(...SAMPLE_SPEED_DATA.map(d => d.gear))}</p>
-        </div>
-        <div className="bg-gray-800 rounded-lg p-3">
-          <p className="text-gray-400 text-xs">DRS Zones</p>
-          <p className="text-cyan-400 text-xl font-bold">{SAMPLE_SPEED_DATA.filter(d => d.drs).length > 0 ? 'Active' : 'Inactive'}</p>
-        </div>
+      {/* RPM & GEAR */}
+      <div style={{ height: CHART_HEIGHT }}>
+        <h4 className="text-xs font-bold text-gray-400 uppercase mb-1 ml-2">RPM / Gear</h4>
+        <ResponsiveContainer width="100%" height="100%">
+            <ComposedChart data={chartData} syncId="telemetry">
+                <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                <XAxis dataKey="distance" hide type="number" domain={['dataMin', 'dataMax']} />
+                <YAxis yAxisId="rpm" domain={[0, 13000]} hide />
+                <YAxis yAxisId="gear" domain={[0, 9]} hide orientation="right" />
+                <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', fontSize: '12px' }} />
+                
+                <Area yAxisId="rpm" type="monotone" dataKey="rpm" stroke={driverColor} fill={driverColor} fillOpacity={0.1} strokeWidth={1} />
+                <Line yAxisId="gear" type="step" dataKey="gear" stroke="#ffffff" strokeWidth={1} dot={false} />
+                
+                {compareDriver && <Line yAxisId="rpm" type="monotone" dataKey="rpm2" stroke={compareColor} strokeWidth={1} dot={false} strokeDasharray="2 2" />}
+            </ComposedChart>
+        </ResponsiveContainer>
       </div>
+
+      {/* THROTTLE */}
+      <div style={{ height: 100 }}>
+        <h4 className="text-xs font-bold text-gray-400 uppercase mb-1 ml-2">Throttle</h4>
+        <ResponsiveContainer width="100%" height="100%">
+            <ComposedChart data={chartData} syncId="telemetry">
+                <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                <XAxis dataKey="distance" hide type="number" domain={['dataMin', 'dataMax']} />
+                <YAxis domain={[0, 100]} hide />
+                <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', fontSize: '12px' }} />
+                <Area type="monotone" dataKey="throttle" stroke="#22c55e" fill="#22c55e" fillOpacity={0.3} strokeWidth={2} />
+                {compareDriver && <Line type="monotone" dataKey="throttle2" stroke={compareColor} strokeWidth={1} dot={false} />}
+            </ComposedChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* BRAKE */}
+      <div style={{ height: 100 }}>
+        <h4 className="text-xs font-bold text-gray-400 uppercase mb-1 ml-2">Brake</h4>
+        <ResponsiveContainer width="100%" height="100%">
+            <ComposedChart data={chartData} syncId="telemetry">
+                <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                <XAxis dataKey="distance" type="number" domain={['dataMin', 'dataMax']} tick={{fill: '#94a3b8', fontSize: 10}} tickFormatter={(v) => `${Math.round(v)}m`} />
+                <YAxis domain={[0, 100]} hide />
+                <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', fontSize: '12px' }} />
+                <Area type="monotone" dataKey="brake" stroke="#ef4444" fill="#ef4444" fillOpacity={0.3} strokeWidth={2} />
+                {compareDriver && <Line type="monotone" dataKey="brake2" stroke={compareColor} strokeWidth={1} dot={false} />}
+            </ComposedChart>
+        </ResponsiveContainer>
+      </div>
+
     </div>
   );
 };

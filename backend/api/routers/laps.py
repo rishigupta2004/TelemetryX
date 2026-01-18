@@ -189,7 +189,78 @@ async def get_fastest_lap(year: int, round: str) -> Dict[str, Any]:
         conn.close()
 
 
-@router.get("/head-to-head/{year}/{round}/{driver1}/{driver2}")
+@router.get("/laps/{year}/{round}/gap-analysis")
+async def get_gap_analysis(year: int, round: str) -> Dict[str, Any]:
+    """
+    Calculate gap to leader for all drivers per lap.
+    Returns a format suitable for Race Trace visualization.
+    """
+    race_name = round.replace("-", " ")
+    
+    silver_path = os.path.join(DATA_DIR, str(year), race_name, "R")
+    if not os.path.exists(silver_path):
+        # Fallback to Q? Usually gap analysis is for Race.
+        raise HTTPException(status_code=404, detail="Race session not found")
+    
+    laps_file = os.path.join(silver_path, "laps.parquet")
+    if not os.path.exists(laps_file):
+        raise HTTPException(status_code=404, detail="Laps data not found")
+
+    conn = duckdb.connect(DB_PATH, read_only=True)
+    try:
+        # Calculate cumulative time
+        # We need: LapNumber, Driver, TotalTime (sum of LapTime)
+        # Then for each lap, find min(TotalTime) as LeaderTime
+        # Gap = TotalTime - LeaderTime
+        
+        # 1. Get raw lap data
+        query = f"""
+            SELECT 
+                driver_number,
+                driver_name,
+                lap_number,
+                lap_time_seconds,
+                is_valid_lap
+            FROM read_parquet('{laps_file}')
+            WHERE lap_time_seconds IS NOT NULL
+            ORDER BY driver_number, lap_number
+        """
+        df = conn.execute(query).df()
+        
+        # Use pandas for window functions (easier than complex SQL windowing in DuckDB sometimes)
+        import pandas as pd
+        
+        # Calculate cumulative time (Race Time at end of lap)
+        df['race_time'] = df.groupby('driver_number')['lap_time_seconds'].cumsum()
+        
+        # Find leader time per lap
+        leader_times = df.groupby('lap_number')['race_time'].min().reset_index()
+        leader_times = leader_times.rename(columns={'race_time': 'leader_time'})
+        
+        # Join back
+        merged = pd.merge(df, leader_times, on='lap_number')
+        merged['gap_to_leader'] = merged['race_time'] - merged['leader_time']
+        
+        # Format for frontend: Series per driver
+        # { "VER": [{lap: 1, gap: 0}, {lap: 2, gap: 0.5}], "HAM": ... }
+        result = {}
+        drivers = merged['driver_name'].unique()
+        
+        for driver in drivers:
+            driver_data = merged[merged['driver_name'] == driver][['lap_number', 'gap_to_leader', 'position']]
+            # Convert to list of dicts
+            result[driver] = driver_data.to_dict(orient='records')
+            
+        return {
+            "drivers": list(drivers),
+            "data": result
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        conn.close()
+
 async def get_head_to_head(year: int, round: str, driver1: str, driver2: str) -> Dict[str, Any]:
     """
     Compare fastest laps between two drivers.

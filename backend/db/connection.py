@@ -1,4 +1,4 @@
-from duckdb import duckdb
+import duckdb
 import pandas as pd
 import os
 from dotenv import load_dotenv
@@ -7,38 +7,48 @@ load_dotenv()
 
 class DuckDBConnection:
     _instance = None
+    _conn = None
     _cursor = None
+    _initialized = False
     
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
-            cls._instance._initialize()
         return cls._instance
     
     def _initialize(self):
-        db_path = os.getenv("DUCKDB_PATH", "f1_data.duckdb")
-        self._conn = duckdb.connect(database=db_path, read_only=False)
-        self._cursor = self._conn.cursor()
+        """Lazy initialization - only connect when first accessed"""
+        if not self._initialized:
+            db_path = os.getenv("DUCKDB_PATH", "f1_data.duckdb")
+            self._conn = duckdb.connect(database=db_path, read_only=False)
+            self._cursor = self._conn.cursor()
+            self._initialized = True
     
     @property
     def conn(self):
+        self._initialize()  # Ensure initialized before access
         return self._conn
     
     @property
     def cursor(self):
+        self._initialize()  # Ensure initialized before access
         return self._cursor
     
     def execute(self, query: str, params: tuple = None):
+        self._initialize()  # Ensure initialized before use
         if params:
             return self._cursor.execute(query, params)
         return self._cursor.execute(query)
     
     def query_parquet(self, parquet_path: str) -> pd.DataFrame:
-        query = f"SELECT * FROM read_parquet('{parquet_path}')"
-        return self._conn.execute(query).df()
+        self._initialize()  # Ensure initialized before use
+        query = "SELECT * FROM read_parquet(?)"
+        return self._conn.execute(query, [parquet_path]).df()
     
     def close(self):
         if self._conn:
             self._conn.close()
+            self._initialized = False
 
+# Create singleton instance (but don't initialize connection yet)
 db_connection = DuckDBConnection()

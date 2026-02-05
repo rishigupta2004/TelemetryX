@@ -3,19 +3,22 @@ from typing import List, Dict, Any, Optional
 import os
 import duckdb
 from db.connection import db_connection
+from ..utils import resolve_dir, normalize_session_code
+from ..config import SILVER_DIR
 
 router = APIRouter()
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-DATA_DIR = os.path.join(BASE_DIR, "etl", "data", "silver")
-
 def get_session_path(year: int, race_name: str) -> Optional[str]:
     """Get path to session directory (Q or R)."""
+    year_path = os.path.join(SILVER_DIR, str(year))
+    race_dir = resolve_dir(year_path, race_name)
+    if not race_dir:
+        return None
     # Try Q first (often has cleaner fast laps), then R
-    session_path = os.path.join(DATA_DIR, str(year), race_name, "Q")
+    session_path = os.path.join(year_path, race_dir, "Q")
     if os.path.exists(session_path):
         return session_path
-    session_path = os.path.join(DATA_DIR, str(year), race_name, "R")
+    session_path = os.path.join(year_path, race_dir, "R")
     if os.path.exists(session_path):
         return session_path
     return None
@@ -35,7 +38,11 @@ async def get_telemetry(
     
     # Resolve path
     if session_type:
-        silver_path = os.path.join(DATA_DIR, str(year), race_name, session_type)
+        year_path = os.path.join(SILVER_DIR, str(year))
+        race_dir = resolve_dir(year_path, race_name)
+        if not race_dir:
+            return []
+        silver_path = os.path.join(year_path, race_dir, normalize_session_code(session_type))
     else:
         silver_path = get_session_path(year, race_name)
 
@@ -47,33 +54,68 @@ async def get_telemetry(
         return []
 
     try:
-        # Construct query
-        query = f"SELECT * FROM read_parquet('{telemetry_file}') WHERE 1=1"
-        params = []
+        # Base query structure
+        query = f"SELECT * FROM read_parquet(?) WHERE 1=1"
+        params = [telemetry_file]
 
         if driver:
-            query += " AND (driver_number = ? OR driver_number = ?)" 
-            # DuckDB generic handling for mixed types can be tricky, assuming driver is string or int
-            # We'll pass it as string for safety if column is string, or cast if needed. 
-            # Let's try to match both string/int representation if possible or just use string params
-            params.extend([int(driver) if driver.isdigit() else driver, driver])
+            # Handle driver number lookup
+            if not driver.isdigit():
+                # Get number from laps file for 'VER' etc.
+                laps_file = os.path.join(silver_path, "laps.parquet")
+                if os.path.exists(laps_file):
+                    # Use parameterized query for lookup
+                    drv_row = db_connection.conn.execute(
+                        f"SELECT driver_number FROM read_parquet(?) WHERE driver_name = ? LIMIT 1",
+                        [laps_file, driver]
+                    ).fetchone()
+                    
+                    if drv_row:
+                        driver_num = drv_row[0]
+                        query += " AND driver_number = ?"
+                        params.append(int(driver_num))
+                    else:
+                        return [] # Driver not found
+                else:
+                    return []
+            else:
+                query += " AND driver_number = ?"
+                params.append(int(driver))
+
 
         if lap:
-             # We need lap info. Telemetry parquet might not have 'lap_number' if it wasn't joined.
-             # The current silver schema (checked via bash) doesn't show lap_number, 
-             # but it has 'session_time_seconds'.
-             # We usually need to join with laps.parquet to filter by lap.
-             # For V1, let's assume the telemetry file might have been enriched or we filter by time range if we had it.
-             # If lap_number is missing in telemetry, this filter won't work without a join.
-             pass
+             if not driver:
+                 # Requires driver to filter by lap (simplification for V1)
+                 # To support all drivers for a lap, we'd need to join or look up all start/ends
+                 pass 
+             else:
+                 # Get lap time window for this driver
+                 laps_file = os.path.join(silver_path, "laps.parquet")
+                 if os.path.exists(laps_file):
+                     # Reuse the params[-1] which is the driver number (int)
+                     # Verify we added a driver param above
+                     if params and isinstance(params[-1], int):
+                        current_driver_num = params[-1]
+                        
+                        lap_info = db_connection.conn.execute(f"""
+                            SELECT 
+                                session_time_seconds as end_time,
+                                lap_time_seconds as duration
+                            FROM read_parquet(?)
+                            WHERE driver_number = ?
+                            AND lap_number = ?
+                        """, [laps_file, current_driver_num, lap]).fetchone()
+                        
+                        if lap_info:
+                            end_time, duration = lap_info
+                            start_time = end_time - duration
+                            query += " AND session_time_seconds >= ? AND session_time_seconds <= ?"
+                            params.extend([start_time, end_time])
 
         # For the graph, we need sorted data
         query += " ORDER BY session_time_seconds"
         
-        # Execute via connection
-        # db_connection is our singleton wrapper
-        # We need to fetch into a format FastAPI likes (list of dicts)
-        # .df() -> to_dict is easiest for now
+        # Execute with params
         df = db_connection.conn.execute(query, params).df()
         
         # Optimize: Round floats to reduce payload size
@@ -176,13 +218,25 @@ async def get_lap_telemetry(
         # 2. Start Time = End Time - Duration
         # 3. Query Telemetry between Start and End
         
+        # Handle driver ID (name or number)
+        # Fix: Ensure d_param is treated correctly. 
+        # If it's a digit (e.g. '1'), query using driver_number.
+        # If string (e.g. 'VER'), query using driver_name.
+        
+        # d_param logic fix:
+        try:
+            driver_num_int = int(d_param)
+            where_clause = f"driver_number = {driver_num_int}"
+        except ValueError:
+            where_clause = f"driver_name = '{d_param}'"
+
         lap_info = db_connection.conn.execute(f"""
             SELECT 
                 session_time_seconds as end_time,
                 lap_time_seconds as duration,
                 driver_number
             FROM read_parquet('{laps_file}')
-            WHERE (driver_number = '{driver_id}' OR driver_name = '{driver_id}')
+            WHERE {where_clause}
             AND lap_number = {lap_number}
         """).fetchone()
         
@@ -196,6 +250,14 @@ async def get_lap_telemetry(
         # We also calculate 'distance' (approx via speed * time) or 'lap_distance' if available
         # For simple V1, we return time-based array, frontend can scale to distance if needed
         # Or better: FastF1 telemetry usually has 'Distance' column.
+        
+        # Check if 'n_gear' column exists, if not use 'gear'
+        # The bash check showed 'n_gear' is NOT in standard parquet but 'gear' IS?
+        # Actually in silver/telemetry.parquet, checking earlier schema, it has 14 columns.
+        # Let's just select * to be safe or check columns
+        
+        # Try standard column names first (FastF1 usually uses 'n_gear' or 'gear')
+        # Based on schema check: 'gear' is the column name
         
         tel_query = f"""
             SELECT

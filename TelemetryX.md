@@ -357,6 +357,13 @@ data/
 | **2000-2005** | None | Full | None | Full | Ergast |
 | **Pre-2000** | None | Partial | None | Full | Ergast |
 
+**Exception:** 2018 Bahrain Grand Prix (Race) telemetry is missing from FastF1/OpenF1/TracingInsights and is treated as deprecated for telemetry features.
+**Exception:** 2024 gaps due to missing `laps.parquet` in Silver:
+- Abu Dhabi Grand Prix (S)
+- Azerbaijan Grand Prix (SS)
+- Emilia Romagna Grand Prix (SS)
+- Italian Grand Prix (SS)
+
 ### Modern Era (2018-2025) - Full Coverage
 
 ```

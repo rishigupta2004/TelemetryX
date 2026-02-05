@@ -6,43 +6,32 @@
 │  • Lap quality score (0-100)                                    │
 │  • Valid lap flag                                               │
 │  • Deleted lap flag                                             │
+│  • Deletion reason                                              │
 │  • Track status during lap                                      │
+│  • Personal best lap                                            │
+│  • Session best lap                                            │
 │  • Lap delta to leader                                          │
 │  • Tyre compound on lap                                         │
 │  • Tyre age on lap                                              │
 └─────────────────────────────────────────────────────────────────┘
 ┌─────────────────────────────────────────────────────────────────┐
-│                 DRIVER PERFORMANCE (20+ features)               │
+│                  DRIVER PERFORMANCE (15+ features)              │
 ├─────────────────────────────────────────────────────────────────┤
-│  QUALIFYING (Per driver all-time):                              │
-│  • Average qualifying position                                  │
-│  • Best qualifying position                                     │
-│  • Qualifying standard deviation                               │
-│  • Qualifying variance (consistency)                           │
-│  • Q1 appearances (P1-P10)                                     │
-│  • Q2 appearances (P11-P15)                                    │
-│  • Q3 appearances (P16-P20)                                    │
-│  • Pole positions                                               │
-│  • Front row starts (P1-P2)                                    │
-│                                                                  │
-│  RACE PERFORMANCE (Per driver all-time):                        │
-│  • Average finish position                                      │
-│  • Best finish position                                         │
-│  • Finish standard deviation                                    │
-│  • Win count / win rate                                         │
-│  • Podium count / podium rate                                   │
-│  • Points finishes count / rate                                 │
-│  • DNF count / DNF rate                                         │
-│  • Position change average (start vs finish)                    │
-│                                                                  │
-│  CLUSTER LABELS:                                                │
-│  • The Elite (win rate > 20%)                                   │
-│  • The Winner (win rate 5-20%)                                  │
-│  • Podium Hunter (podium rate > 15%)                            │
-│  • Sunday Specialist (good race pace, lower quali)              │
-│  • The Qualifier (strong quali, average race)                   │
-│  • Mr. Consistent (low variance, top 10)                        │
-│  • Midfield Runner                                              │
+│  • Fastest lap time (session)                                   │
+│  • Average lap time                                             │
+│  • Lap time standard deviation                                  │
+│  • Position progression                                         │
+│  • Laps led                                                    
+│  • Overtakes made                                               │
+│  • Defensive actions                                            │
+│  • Head-to-head pace delta                                      │
+│  • Tyre management score                                        │
+│  • Consistency score                                            │
+│  • Peak performance lap                                         │
+│  • Longest stint                                                │
+│  • Pit stop efficiency                                          │
+│  • Start position vs finish position                            │
+│  • Points contributed                                           │
 └─────────────────────────────────────────────────────────────────┘
 ┌─────────────────────────────────────────────────────────────────┐
 │                    TYRE ANALYSIS (12+ features)                 │
@@ -54,68 +43,74 @@
 │  • Tyre life remaining                                          │
 │  • Optimal pit window                                           │
 │  • Tyre change history                                          │
+│  • Tyre switch direction (supersoft→hard)                       │
 │  • Tyre temperature estimate                                    │
 │  • Grip level indicator                                         │
-│  • Tyre strategy sequence (e.g., SOFT→MEDIUM→HARD)              │
-│  • Traffic density                                              │
-│  • Position during stint                                        │
-│  • Overtake laps count                                          │
+│  • Tyre strategy (1-stop, 2-stop, etc)                          │
+│  • Predicted tyre performance                                   │
 └─────────────────────────────────────────────────────────────────┘
 ┌─────────────────────────────────────────────────────────────────┐
-│                  TELEMETRY ANALYSIS (10+ features)              │
+│                  TELEMETRY ANALYSIS (15+ features)              │
 ├─────────────────────────────────────────────────────────────────┤
 │  • Max speed                                                    │
 │  • Average speed                                                │
+│  • Speed at specific corners                                    │
 │  • Throttle application %                                       │
+│  • Throttle trace (time series)                                 │
 │  • Brake application %                                          │
-│  • Brake frequency                                              │
-│  • DRS activations                                              │
-│  • Max RPM                                                      │
+│  • Brake trace (time series)                                    │
+│  • Gear shift points                                            │
+│  • Gear distribution                                            │
+│  • Cornering speed comparison                                   │
+│  • DRS usage (if available)                                     │
 │  • Throttle-brake correlation                                   │
-│  • Gear shifts                                                  │
+│  • Speed trace (time series)                                    │
+│  • Position trace (time series)                                 │
+│  • Mini-sector times                                            │
 └─────────────────────────────────────────────────────────────────┘
 ┌─────────────────────────────────────────────────────────────────┐
 │                  RACE CONTEXT (10+ features)                    │
 ├─────────────────────────────────────────────────────────────────┤
 │  • Track status (green/yellow/red/VSC/SC)                       │
-│  • Yellow flag periods                                          │
-│  • Red flag periods                                             │
+│  • Number of yellow flag periods                                │
+│  • Number of red flag periods                                   │
 │  • Safety car deployments                                       │
 │  • VSC deployments                                              │
-│  • Weather conditions (RAIN/HOT/WINDY/DRY)                      │
+│  • Virtual safety car periods                                   │
+│  • Race control incidents count                                 │
+│  • Weather conditions                                           │
 │  • Air temperature                                              │
 │  • Track temperature                                            │
+│  • Wind speed/direction                                         │
 │  • Humidity                                                     │
 └─────────────────────────────────────────────────────────────────┘
 ┌─────────────────────────────────────────────────────────────────┐
 │                   STRATEGIC ANALYSIS (8+ features)              │
 ├─────────────────────────────────────────────────────────────────┤
-│  UNDERCUT PREDICTION MODEL:                                     │
-│  • Undercut success probability                                 │
-│  • Key factors: position, tyre age, stint length, compound      │
-│  • Track stress factor                                          │
-│  • Pit lap timing                                               │
-│  • Recommendations based on conditions                          │
-│                                                                  │
-│  RACE STRATEGY ANALYSIS:                                        │
-│  • Common compound sequences                                    │
-│  • Average stint lengths                                        │
-│  • Pit stop patterns                                            │
-│  • Winning strategies                                           │
+│  • Race strategy simulation                                     │
+│  • Predicted finish time                                        │
+│  • Undercut probability                                         │
+│  • Overcut probability                                          │
+│  • Optimal tyre window                                          │
+│  • Track position impact                                        │
+│  • Traffic impact                                               │
+│  • Tow effect (drag reduction)                                  │
+│  • tyre offset delta                                            │
 └─────────────────────────────────────────────────────────────────┘
 ┌─────────────────────────────────────────────────────────────────┐
 │                   COMPARISON FEATURES (10+ features)            │
 ├─────────────────────────────────────────────────────────────────┤
 │  • Head-to-head lap times                                       │
-│  • Pace delta between drivers                                   │
-│  • Team comparisons                                             │
-│  • Qualifying vs race pace comparison                           │
+│  • Sector-by-sector comparison                                  │
+│  • Pace delta                                                   │
+│  • Tyre management comparison                                   │
+│  • Speed trap comparison                                        │
+│  • Qualifying pace comparison                                   │
+│  • Race pace comparison                                         │
+│  • Tire degradation comparison                                  │
+│  • Max speed comparison                                         │
+│  •一致性 comparison (who is more consistent)                    │
 └─────────────────────────────────────────────────────────────────┘
 ┌─────────────────────────────────────────────────────────────────┐
 │                     TOTAL: ~80+ FEATURES                        │
-├─────────────────────────────────────────────────────────────────┤
-│  MODELS:                                                        │
-│  • Driver Clustering (Performance-based)                        │
-│  • Undercut Prediction (XGBoost/RF)                             │
-│  • Race Strategy Analysis (Descriptive)                         │
 └─────────────────────────────────────────────────────────────────┘

@@ -1,0 +1,28 @@
+services:
+  telemetryx-backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "9010:9000"
+    environment:
+      # Data + models
+      TELEMETRYX_DATA_ROOT: /data
+      TELEMETRYX_MODELS_DIR: /app/scripts/models
+
+      # Auth
+      TELEMETRYX_REQUIRE_AUTH: ${TELEMETRYX_REQUIRE_AUTH:-0}
+      AUTH_SECRET: ${AUTH_SECRET:-dev-secret-change-me}
+      TELEMETRYX_AUTH_DB_PATH: /state/auth.db
+
+      # Google OAuth (optional; configure in prod)
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      GOOGLE_REDIRECT_URI: ${GOOGLE_REDIRECT_URI:-http://localhost:9010/api/v1/auth/oauth/google/callback}
+    volumes:
+      # Local dev default: use repo data. In prod, mount your 45–50GB dataset here instead.
+      - ./backend/etl/data:/data:ro
+      - telemetryx_state:/state
+
+volumes:
+  telemetryx_state:

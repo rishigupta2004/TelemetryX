@@ -14,7 +14,7 @@ def build_telemetry_features(year: int, race: str, session: str) -> pd.DataFrame
         return pd.DataFrame()
 
     drv_col = next((c for c in ["driver_number", "driver_name"] if c in tel_df.columns), None)
-    lap_col = next((c for c in ["lap_number", "lap"] if c in tel_df.columns), None)
+    lap_col = next((c for c in ["lap_number", "lap", "lapNumber"] if c in tel_df.columns), None)
     if drv_col is None:
         return pd.DataFrame()
 
@@ -38,15 +38,30 @@ def build_telemetry_features(year: int, race: str, session: str) -> pd.DataFrame
         for lap_num, lap_d in groups:
             if lap_d.empty:
                 continue
-            spd = lap_d.get("speed", pd.Series()).dropna()
-            thr = lap_d.get("throttle", pd.Series()).dropna()
-            brk = lap_d.get("brake", pd.Series()).dropna()
-            drs = lap_d.get("drs", pd.Series()).dropna()
-            gear = lap_d.get("n_gear", pd.Series()).dropna()
-            rpm = lap_d.get("rpm", pd.Series()).dropna()
+            spd = lap_d.get("speed", pd.Series(dtype=float)).dropna()
+            thr = lap_d.get("throttle", pd.Series(dtype=float)).dropna()
+            brk = lap_d.get("brake", pd.Series(dtype=float)).dropna()
+            drs = lap_d.get("drs", pd.Series(dtype=float)).dropna()
+            gear = lap_d.get("n_gear", lap_d.get("gear", pd.Series(dtype=float))).dropna()
+            rpm = lap_d.get("rpm", pd.Series(dtype=float)).dropna()
 
-            corr = np.corrcoef(thr.values[:min(len(thr), len(brk))],
-                              brk.values[:min(len(thr), len(brk))])[0, 1] if not thr.empty and not brk.empty else None
+            corr = None
+            if not thr.empty and not brk.empty:
+                size = min(len(thr), len(brk))
+                if size > 1:
+                    corr = float(np.corrcoef(thr.values[:size], brk.values[:size])[0, 1])
+
+            gear_changes = None
+            if not gear.empty:
+                gear_changes = int((gear.diff().fillna(0) != 0).sum())
+
+            drs_usage_pct = None
+            if not drs.empty:
+                drs_usage_pct = float((drs > 0).mean())
+
+            coast_pct = None
+            if not thr.empty and not brk.empty:
+                coast_pct = float(((thr < 5) & (brk < 5)).mean())
 
             result.append({
                 "year": year, "race_name": race, "session": session.upper(),
@@ -54,11 +69,17 @@ def build_telemetry_features(year: int, race: str, session: str) -> pd.DataFrame
                 "lap_number": lap_num if lap_col else None,
                 "speed_max": float(spd.max()) if not spd.empty else None,
                 "speed_avg": float(spd.mean()) if not spd.empty else None,
+                "speed_std": float(spd.std()) if len(spd) > 1 else None,
                 "throttle_avg": float(thr.mean()) if not thr.empty else None,
+                "throttle_std": float(thr.std()) if len(thr) > 1 else None,
                 "brake_avg": float(brk.mean()) if not brk.empty else None,
+                "brake_std": float(brk.std()) if len(brk) > 1 else None,
                 "brake_frequency": float((brk > 50).mean()) if not brk.empty else None,
                 "drs_activations": int((drs > 0).sum()) if not drs.empty else 0,
+                "drs_usage_pct": drs_usage_pct,
                 "rpm_max": float(rpm.max()) if not rpm.empty else None,
+                "gear_changes": gear_changes,
+                "coast_pct": coast_pct,
                 "throttle_brake_correlation": corr,
             })
     return pd.DataFrame(result)

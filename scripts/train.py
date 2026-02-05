@@ -258,13 +258,19 @@ def detect_undercut_events(tyre_df, lap_df):
                 pos_before = drv_laps[drv_laps["lap_number"] < pit_lap]
                 if pos_before.empty:
                     continue
-                pos_before_pit = int(pos_before["position"].iloc[-1])
+                pos_before_series = pos_before["position"].dropna()
+                if pos_before_series.empty:
+                    continue
+                pos_before_pit = int(pos_before_series.iloc[-1])
 
                 max_lap = drv_laps["lap_number"].max()
                 pos_after = drv_laps[(drv_laps["lap_number"] >= pit_lap) & (drv_laps["lap_number"] <= min(pit_lap + 5, max_lap))]
                 if pos_after.empty:
                     continue
-                pos_after_pit = int(pos_after["position"].iloc[-1])
+                pos_after_series = pos_after["position"].dropna()
+                if pos_after_series.empty:
+                    continue
+                pos_after_pit = int(pos_after_series.iloc[-1])
 
                 drivers_ahead = race_laps[(race_laps["lap_number"] >= pit_lap - 1) & (race_laps["lap_number"] <= pit_lap + 1)]
                 if not drivers_ahead.empty:

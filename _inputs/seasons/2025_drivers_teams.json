@@ -1,0 +1,205 @@
+{
+  "season": 2025,
+  "teams": [
+    {
+      "team_id": "red_bull",
+      "team_name": "Red Bull Racing",
+      "constructor": "Red Bull Racing Honda RBPT",
+      "color": "#3671C6",
+      "drivers": [
+        {
+          "driver_id": "VER",
+          "driver_name": "Max Verstappen",
+          "driver_number": 1,
+          "abbrev": "VER"
+        },
+        {
+          "driver_id": "LAW",
+          "driver_name": "Liam Lawson",
+          "driver_number": 30,
+          "abbrev": "LAW"
+        }
+      ]
+    },
+    {
+      "team_id": "ferrari",
+      "team_name": "Ferrari",
+      "constructor": "Scuderia Ferrari",
+      "color": "#E8002D",
+      "drivers": [
+        {
+          "driver_id": "HAM",
+          "driver_name": "Lewis Hamilton",
+          "driver_number": 44,
+          "abbrev": "HAM"
+        },
+        {
+          "driver_id": "LEC",
+          "driver_name": "Charles Leclerc",
+          "driver_number": 16,
+          "abbrev": "LEC"
+        }
+      ]
+    },
+    {
+      "team_id": "mclaren",
+      "team_name": "McLaren",
+      "constructor": "McLaren Mercedes",
+      "color": "#FF8000",
+      "drivers": [
+        {
+          "driver_id": "NOR",
+          "driver_name": "Lando Norris",
+          "driver_number": 4,
+          "abbrev": "NOR"
+        },
+        {
+          "driver_id": "PIA",
+          "driver_name": "Oscar Piastri",
+          "driver_number": 81,
+          "abbrev": "PIA"
+        }
+      ]
+    },
+    {
+      "team_id": "mercedes",
+      "team_name": "Mercedes",
+      "constructor": "Mercedes-AMG Petronas F1 Team",
+      "color": "#27F4D2",
+      "drivers": [
+        {
+          "driver_id": "RUS",
+          "driver_name": "George Russell",
+          "driver_number": 63,
+          "abbrev": "RUS"
+        },
+        {
+          "driver_id": "ANT",
+          "driver_name": "Andrea Kimi Antonelli",
+          "driver_number": 12,
+          "abbrev": "ANT"
+        }
+      ]
+    },
+    {
+      "team_id": "aston_martin",
+      "team_name": "Aston Martin",
+      "constructor": "Aston Martin Aramco F1 Team",
+      "color": "#229971",
+      "drivers": [
+        {
+          "driver_id": "ALO",
+          "driver_name": "Fernando Alonso",
+          "driver_number": 14,
+          "abbrev": "ALO"
+        },
+        {
+          "driver_id": "STR",
+          "driver_name": "Lance Stroll",
+          "driver_number": 18,
+          "abbrev": "STR"
+        }
+      ]
+    },
+    {
+      "team_id": "alpine",
+      "team_name": "Alpine",
+      "constructor": "BWT Alpine F1 Team",
+      "color": "#FF87BC",
+      "drivers": [
+        {
+          "driver_id": "GAS",
+          "driver_name": "Pierre Gasly",
+          "driver_number": 10,
+          "abbrev": "GAS"
+        },
+        {
+          "driver_id": "DOO",
+          "driver_name": "Jack Doohan",
+          "driver_number": 7,
+          "abbrev": "DOO"
+        }
+      ]
+    },
+    {
+      "team_id": "haas",
+      "team_name": "Haas F1 Team",
+      "constructor": "MoneyGram Haas F1 Team",
+      "color": "#B6BABD",
+      "drivers": [
+        {
+          "driver_id": "OCO",
+          "driver_name": "Esteban Ocon",
+          "driver_number": 31,
+          "abbrev": "OCO"
+        },
+        {
+          "driver_id": "BEA",
+          "driver_name": "Oliver Bearman",
+          "driver_number": 87,
+          "abbrev": "BEA"
+        }
+      ]
+    },
+    {
+      "team_id": "rb",
+      "team_name": "RB",
+      "constructor": "Visa Cash App RB F1 Team",
+      "color": "#6692FF",
+      "drivers": [
+        {
+          "driver_id": "TSU",
+          "driver_name": "Yuki Tsunoda",
+          "driver_number": 22,
+          "abbrev": "TSU"
+        },
+        {
+          "driver_id": "HAD",
+          "driver_name": "Isack Hadjar",
+          "driver_number": 6,
+          "abbrev": "HAD"
+        }
+      ]
+    },
+    {
+      "team_id": "williams",
+      "team_name": "Williams",
+      "constructor": "Williams Racing",
+      "color": "#64C4FF",
+      "drivers": [
+        {
+          "driver_id": "ALB",
+          "driver_name": "Alex Albon",
+          "driver_number": 23,
+          "abbrev": "ALB"
+        },
+        {
+          "driver_id": "SAI",
+          "driver_name": "Carlos Sainz",
+          "driver_number": 55,
+          "abbrev": "SAI"
+        }
+      ]
+    },
+    {
+      "team_id": "sauber",
+      "team_name": "Sauber",
+      "constructor": "Stake F1 Team Kick Sauber",
+      "color": "#52E252",
+      "drivers": [
+        {
+          "driver_id": "HUL",
+          "driver_name": "Nico Hulkenberg",
+          "driver_number": 27,
+          "abbrev": "HUL"
+        },
+        {
+          "driver_id": "BOR",
+          "driver_name": "Gabriel Bortoleto",
+          "driver_number": 5,
+          "abbrev": "BOR"
+        }
+      ]
+    }
+  ]
+}

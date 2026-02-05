@@ -1,7 +1,7 @@
 {
   "model": "kmeans_gmm",
   "n_clusters": 3,
-  "silhouette_score": 0.709401613066367,
+  "silhouette_score": 0.7168317477507061,
   "features": [
     "avg_qualifying",
     "best_qualifying",
@@ -41,5 +41,5 @@
     2023,
     2024
   ],
-  "trained_at": "2026-01-18T13:53:35.058929"
+  "trained_at": "2026-01-27T22:50:58.262797"
 }

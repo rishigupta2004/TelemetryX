@@ -1,0 +1,686 @@
+{
+  "track_name": "Circuit of the Americas",
+  "circuit_key": "usa",
+  "country": "USA",
+  "location": "Austin, Texas",
+  "length_km": 5.513,
+  "lap_record": {
+    "time": "1:36.169",
+    "driver": "Charles Leclerc",
+    "year": 2019
+  },
+  "layout": {
+    "svg_viewbox": "0 0 800 600",
+    "track_width": 8,
+    "path_coordinates": [
+      {
+        "x": 750.0,
+        "y": 300.0,
+        "distance": 0.0,
+        "sector": 1
+      },
+      {
+        "x": 760.56,
+        "y": 321.94,
+        "distance": 68.91,
+        "sector": 1
+      },
+      {
+        "x": 768.11,
+        "y": 343.57,
+        "distance": 137.83,
+        "sector": 1
+      },
+      {
+        "x": 771.9,
+        "y": 364.6,
+        "distance": 206.74,
+        "sector": 1
+      },
+      {
+        "x": 771.34,
+        "y": 384.75,
+        "distance": 275.65,
+        "sector": 1
+      },
+      {
+        "x": 766.04,
+        "y": 403.79,
+        "distance": 344.56,
+        "sector": 1
+      },
+      {
+        "x": 755.85,
+        "y": 421.5,
+        "distance": 413.47,
+        "sector": 1
+      },
+      {
+        "x": 740.92,
+        "y": 437.74,
+        "distance": 482.39,
+        "sector": 1
+      },
+      {
+        "x": 721.63,
+        "y": 452.4,
+        "distance": 551.3,
+        "sector": 1
+      },
+      {
+        "x": 698.56,
+        "y": 465.41,
+        "distance": 620.21,
+        "sector": 1
+      },
+      {
+        "x": 672.49,
+        "y": 476.78,
+        "distance": 689.12,
+        "sector": 1
+      },
+      {
+        "x": 644.27,
+        "y": 486.53,
+        "distance": 758.04,
+        "sector": 1
+      },
+      {
+        "x": 614.81,
+        "y": 494.75,
+        "distance": 826.95,
+        "sector": 1
+      },
+      {
+        "x": 584.92,
+        "y": 501.55,
+        "distance": 895.86,
+        "sector": 1
+      },
+      {
+        "x": 555.35,
+        "y": 507.04,
+        "distance": 964.77,
+        "sector": 1
+      },
+      {
+        "x": 526.62,
+        "y": 511.37,
+        "distance": 1033.69,
+        "sector": 1
+      },
+      {
+        "x": 499.07,
+        "y": 514.68,
+        "distance": 1102.6,
+        "sector": 1
+      },
+      {
+        "x": 472.83,
+        "y": 517.1,
+        "distance": 1171.51,
+        "sector": 1
+      },
+      {
+        "x": 447.78,
+        "y": 518.74,
+        "distance": 1240.43,
+        "sector": 1
+      },
+      {
+        "x": 423.65,
+        "y": 519.69,
+        "distance": 1309.34,
+        "sector": 1
+      },
+      {
+        "x": 400.0,
+        "y": 520.0,
+        "distance": 1378.25,
+        "sector": 1
+      },
+      {
+        "x": 376.35,
+        "y": 519.69,
+        "distance": 1447.16,
+        "sector": 1
+      },
+      {
+        "x": 352.22,
+        "y": 518.74,
+        "distance": 1516.08,
+        "sector": 1
+      },
+      {
+        "x": 327.17,
+        "y": 517.1,
+        "distance": 1584.99,
+        "sector": 1
+      },
+      {
+        "x": 300.93,
+        "y": 514.68,
+        "distance": 1653.9,
+        "sector": 1
+      },
+      {
+        "x": 273.38,
+        "y": 511.37,
+        "distance": 1722.81,
+        "sector": 1
+      },
+      {
+        "x": 244.65,
+        "y": 507.04,
+        "distance": 1791.72,
+        "sector": 1
+      },
+      {
+        "x": 215.08,
+        "y": 501.55,
+        "distance": 1860.64,
+        "sector": 2
+      },
+      {
+        "x": 185.19,
+        "y": 494.75,
+        "distance": 1929.55,
+        "sector": 2
+      },
+      {
+        "x": 155.73,
+        "y": 486.53,
+        "distance": 1998.46,
+        "sector": 2
+      },
+      {
+        "x": 127.51,
+        "y": 476.78,
+        "distance": 2067.38,
+        "sector": 2
+      },
+      {
+        "x": 101.44,
+        "y": 465.41,
+        "distance": 2136.29,
+        "sector": 2
+      },
+      {
+        "x": 78.37,
+        "y": 452.4,
+        "distance": 2205.2,
+        "sector": 2
+      },
+      {
+        "x": 59.08,
+        "y": 437.74,
+        "distance": 2274.11,
+        "sector": 2
+      },
+      {
+        "x": 44.15,
+        "y": 421.5,
+        "distance": 2343.03,
+        "sector": 2
+      },
+      {
+        "x": 33.96,
+        "y": 403.79,
+        "distance": 2411.94,
+        "sector": 2
+      },
+      {
+        "x": 28.66,
+        "y": 384.75,
+        "distance": 2480.85,
+        "sector": 2
+      },
+      {
+        "x": 28.1,
+        "y": 364.6,
+        "distance": 2549.76,
+        "sector": 2
+      },
+      {
+        "x": 31.89,
+        "y": 343.57,
+        "distance": 2618.67,
+        "sector": 2
+      },
+      {
+        "x": 39.44,
+        "y": 321.94,
+        "distance": 2687.59,
+        "sector": 2
+      },
+      {
+        "x": 50.0,
+        "y": 300.0,
+        "distance": 2756.5,
+        "sector": 2
+      },
+      {
+        "x": 62.72,
+        "y": 278.06,
+        "distance": 2825.41,
+        "sector": 2
+      },
+      {
+        "x": 76.73,
+        "y": 256.43,
+        "distance": 2894.33,
+        "sector": 2
+      },
+      {
+        "x": 91.25,
+        "y": 235.4,
+        "distance": 2963.24,
+        "sector": 2
+      },
+      {
+        "x": 105.6,
+        "y": 215.25,
+        "distance": 3032.15,
+        "sector": 2
+      },
+      {
+        "x": 119.32,
+        "y": 196.21,
+        "distance": 3101.06,
+        "sector": 2
+      },
+      {
+        "x": 132.15,
+        "y": 178.5,
+        "distance": 3169.97,
+        "sector": 2
+      },
+      {
+        "x": 144.08,
+        "y": 162.26,
+        "distance": 3238.89,
+        "sector": 2
+      },
+      {
+        "x": 155.32,
+        "y": 147.6,
+        "distance": 3307.8,
+        "sector": 2
+      },
+      {
+        "x": 166.28,
+        "y": 134.59,
+        "distance": 3376.71,
+        "sector": 2
+      },
+      {
+        "x": 177.51,
+        "y": 123.22,
+        "distance": 3445.62,
+        "sector": 2
+      },
+      {
+        "x": 189.66,
+        "y": 113.47,
+        "distance": 3514.54,
+        "sector": 2
+      },
+      {
+        "x": 203.36,
+        "y": 105.25,
+        "distance": 3583.45,
+        "sector": 2
+      },
+      {
+        "x": 219.18,
+        "y": 98.45,
+        "distance": 3652.36,
+        "sector": 2
+      },
+      {
+        "x": 237.55,
+        "y": 92.96,
+        "distance": 3721.28,
+        "sector": 3
+      },
+      {
+        "x": 258.74,
+        "y": 88.63,
+        "distance": 3790.19,
+        "sector": 3
+      },
+      {
+        "x": 282.76,
+        "y": 85.32,
+        "distance": 3859.1,
+        "sector": 3
+      },
+      {
+        "x": 309.42,
+        "y": 82.9,
+        "distance": 3928.01,
+        "sector": 3
+      },
+      {
+        "x": 338.28,
+        "y": 81.26,
+        "distance": 3996.92,
+        "sector": 3
+      },
+      {
+        "x": 368.72,
+        "y": 80.31,
+        "distance": 4065.84,
+        "sector": 3
+      },
+      {
+        "x": 400.0,
+        "y": 80.0,
+        "distance": 4134.75,
+        "sector": 3
+      },
+      {
+        "x": 431.28,
+        "y": 80.31,
+        "distance": 4203.66,
+        "sector": 3
+      },
+      {
+        "x": 461.72,
+        "y": 81.26,
+        "distance": 4272.57,
+        "sector": 3
+      },
+      {
+        "x": 490.58,
+        "y": 82.9,
+        "distance": 4341.49,
+        "sector": 3
+      },
+      {
+        "x": 517.24,
+        "y": 85.32,
+        "distance": 4410.4,
+        "sector": 3
+      },
+      {
+        "x": 541.26,
+        "y": 88.63,
+        "distance": 4479.31,
+        "sector": 3
+      },
+      {
+        "x": 562.45,
+        "y": 92.96,
+        "distance": 4548.22,
+        "sector": 3
+      },
+      {
+        "x": 580.82,
+        "y": 98.45,
+        "distance": 4617.14,
+        "sector": 3
+      },
+      {
+        "x": 596.64,
+        "y": 105.25,
+        "distance": 4686.05,
+        "sector": 3
+      },
+      {
+        "x": 610.34,
+        "y": 113.47,
+        "distance": 4754.96,
+        "sector": 3
+      },
+      {
+        "x": 622.49,
+        "y": 123.22,
+        "distance": 4823.88,
+        "sector": 3
+      },
+      {
+        "x": 633.72,
+        "y": 134.59,
+        "distance": 4892.79,
+        "sector": 3
+      },
+      {
+        "x": 644.68,
+        "y": 147.6,
+        "distance": 4961.7,
+        "sector": 3
+      },
+      {
+        "x": 655.92,
+        "y": 162.26,
+        "distance": 5030.61,
+        "sector": 3
+      },
+      {
+        "x": 667.85,
+        "y": 178.5,
+        "distance": 5099.52,
+        "sector": 3
+      },
+      {
+        "x": 680.68,
+        "y": 196.21,
+        "distance": 5168.44,
+        "sector": 3
+      },
+      {
+        "x": 694.4,
+        "y": 215.25,
+        "distance": 5237.35,
+        "sector": 3
+      },
+      {
+        "x": 708.75,
+        "y": 235.4,
+        "distance": 5306.26,
+        "sector": 3
+      },
+      {
+        "x": 723.27,
+        "y": 256.43,
+        "distance": 5375.17,
+        "sector": 3
+      },
+      {
+        "x": 737.28,
+        "y": 278.06,
+        "distance": 5444.09,
+        "sector": 3
+      }
+    ]
+  },
+  "corners": [
+    {
+      "number": 1,
+      "name": "Turn 1",
+      "distance": 0.0,
+      "x": 750.0,
+      "y": 300.0,
+      "type": "right"
+    },
+    {
+      "number": 2,
+      "name": "Turn 2",
+      "distance": 275.65,
+      "x": 771.34,
+      "y": 384.75,
+      "type": "left"
+    },
+    {
+      "number": 3,
+      "name": "Turn 3",
+      "distance": 551.3,
+      "x": 721.63,
+      "y": 452.4,
+      "type": "right"
+    },
+    {
+      "number": 4,
+      "name": "Turn 4",
+      "distance": 826.95,
+      "x": 614.81,
+      "y": 494.75,
+      "type": "left"
+    },
+    {
+      "number": 5,
+      "name": "Turn 5",
+      "distance": 1102.6,
+      "x": 499.07,
+      "y": 514.68,
+      "type": "right"
+    },
+    {
+      "number": 6,
+      "name": "Turn 6",
+      "distance": 1378.25,
+      "x": 400.0,
+      "y": 520.0,
+      "type": "left"
+    },
+    {
+      "number": 7,
+      "name": "Turn 7",
+      "distance": 1653.9,
+      "x": 300.93,
+      "y": 514.68,
+      "type": "right"
+    },
+    {
+      "number": 8,
+      "name": "Turn 8",
+      "distance": 1929.55,
+      "x": 185.19,
+      "y": 494.75,
+      "type": "left"
+    },
+    {
+      "number": 9,
+      "name": "Turn 9",
+      "distance": 2205.2,
+      "x": 78.37,
+      "y": 452.4,
+      "type": "right"
+    },
+    {
+      "number": 10,
+      "name": "Turn 10",
+      "distance": 2480.85,
+      "x": 28.66,
+      "y": 384.75,
+      "type": "left"
+    },
+    {
+      "number": 11,
+      "name": "Turn 11",
+      "distance": 2756.5,
+      "x": 50.0,
+      "y": 300.0,
+      "type": "right"
+    },
+    {
+      "number": 12,
+      "name": "Turn 12",
+      "distance": 3032.15,
+      "x": 105.6,
+      "y": 215.25,
+      "type": "left"
+    },
+    {
+      "number": 13,
+      "name": "Turn 13",
+      "distance": 3307.8,
+      "x": 155.32,
+      "y": 147.6,
+      "type": "right"
+    },
+    {
+      "number": 14,
+      "name": "Turn 14",
+      "distance": 3583.45,
+      "x": 203.36,
+      "y": 105.25,
+      "type": "left"
+    },
+    {
+      "number": 15,
+      "name": "Turn 15",
+      "distance": 3859.1,
+      "x": 282.76,
+      "y": 85.32,
+      "type": "right"
+    },
+    {
+      "number": 16,
+      "name": "Turn 16",
+      "distance": 4134.75,
+      "x": 400.0,
+      "y": 80.0,
+      "type": "left"
+    },
+    {
+      "number": 17,
+      "name": "Turn 17",
+      "distance": 4410.4,
+      "x": 517.24,
+      "y": 85.32,
+      "type": "right"
+    },
+    {
+      "number": 18,
+      "name": "Turn 18",
+      "distance": 4686.05,
+      "x": 596.64,
+      "y": 105.25,
+      "type": "left"
+    },
+    {
+      "number": 19,
+      "name": "Turn 19",
+      "distance": 4961.7,
+      "x": 644.68,
+      "y": 147.6,
+      "type": "right"
+    },
+    {
+      "number": 20,
+      "name": "Turn 20",
+      "distance": 5237.35,
+      "x": 694.4,
+      "y": 215.25,
+      "type": "left"
+    }
+  ],
+  "drs_zones": [
+    {
+      "zone_number": 1,
+      "detection_point": 4961.7,
+      "activation_point": 5237.35,
+      "end_point": 826.95,
+      "description": "Main straight"
+    }
+  ],
+  "sectors": [
+    {
+      "sector": 1,
+      "start_distance": 0,
+      "end_distance": 1835.83
+    },
+    {
+      "sector": 2,
+      "start_distance": 1835.83,
+      "end_distance": 3671.66
+    },
+    {
+      "sector": 3,
+      "start_distance": 3671.66,
+      "end_distance": 5513.0
+    }
+  ]
+}

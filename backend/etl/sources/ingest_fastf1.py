@@ -4,6 +4,7 @@ import os
 import argparse
 from pathlib import Path
 from typing import List, Optional, Dict
+from .name_utils import canonicalize_race_name
 
 
 def get_available_data_types() -> List[str]:
@@ -34,10 +35,27 @@ def ingest_fastf1(year, race, session_type="R", types: Optional[List[str]] = Non
     
     if types is None:
         types = get_available_data_types()
-    
+
     try:
-        session = fastf1.get_session(year, race, session_type)
-        session.load()
+        race_name = canonicalize_race_name(year, race)
+        session_type_map = {
+            "SS": "SQ",
+        }
+        session_type = session_type_map.get(str(session_type).upper(), session_type)
+        # Use Ergast backend for schedule stability
+        session = fastf1.get_session(year, race_name, session_type, backend="ergast")
+        # Load only what we need for this request
+        types_set = set(t.lower() for t in (types or []))
+        laps_flag = 'laps' in types_set or 'stints' in types_set
+        telemetry_flag = 'telemetry' in types_set or 'position' in types_set
+        weather_flag = 'weather' in types_set
+        messages_flag = 'race_control' in types_set
+        session.load(
+            laps=laps_flag,
+            telemetry=telemetry_flag,
+            weather=weather_flag,
+            messages=messages_flag
+        )
     except Exception as e:
         print(f"  Failed to load session: {e}")
         return None

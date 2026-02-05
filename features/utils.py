@@ -41,6 +41,15 @@ def save_features(df: pd.DataFrame, year: int, race: str, session: str, name: st
     print(f"Saved: {out / f'{name}.parquet'} ({len(df)} rows)")
 
 
+def ensure_driver_identity(df: pd.DataFrame) -> pd.DataFrame:
+    """Ensure driver_name/driver_number are present."""
+    if "driver_name" not in df.columns and "driver_number" in df.columns:
+        df["driver_name"] = df["driver_number"].astype(str)
+    if "driver_number" not in df.columns and "driver_name" in df.columns:
+        df["driver_number"] = None
+    return df
+
+
 def tdelta_to_seconds(val) -> float:
     """Convert timedelta to seconds."""
     if val is None or pd.isna(val):
@@ -57,4 +66,5 @@ def tdelta_to_formatted(val) -> str:
     seconds = tdelta_to_seconds(val)
     if seconds is None or pd.isna(seconds):
         return None
+    seconds = round(float(seconds), 3)
     return f"{int(seconds // 60)}:{seconds % 60:06.3f}"

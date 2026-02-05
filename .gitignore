@@ -1,67 +1,59 @@
 # Python
 __pycache__/
 *.py[cod]
-*$py.class
 *.so
 .Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.cache/
 
-# Virtual Environments
+# Virtual environments
+.venv/
 .venvs/
 venv/
 ENV/
 env/
-.venv
 
-# Data Files
+# Data & artifacts
+backend/etl/data/
+backend/etl/data/**
 data/
-backend/data/
-etl/data/
 *.duckdb
 *.db
 *.parquet
 *.csv
 
-# Node.js
+# Node / web artifacts (legacy)
 node_modules/
-frontend/node_modules/
+dist/
+build/
+coverage/
 frontend/dist/
 frontend/coverage/
-.npm
-.yarn
 
-# FastF1
+# FastF1 cache
 .fastf1_cache/
 fastf1_cache/
 
-# Environment
+# Env & secrets
 .env
-.env.local
+.env.*
 *.env
+.envrc
+.direnv/
+.python-version
+.tool-versions
+.telemetryx_port
 
-# IDE
+# IDE / OS
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
-.DS_Store
-
-# OS
 .DS_Store
 Thumbs.db
 

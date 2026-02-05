@@ -39,6 +39,22 @@ class SimulationResult:
     strategy_used: str
 
 
+def infer_tyre_life(year: int, race_name: str, session: str = "R") -> Dict[str, int]:
+    path = FEATURES_PATH / str(year) / race_name / session / "tyre_features.parquet"
+    if not path.exists():
+        return {"SOFT": 18, "MEDIUM": 28, "HARD": 35}
+    df = pd.read_parquet(path)
+    if df.empty or "tyre_compound" not in df.columns:
+        return {"SOFT": 18, "MEDIUM": 28, "HARD": 35}
+    life = {}
+    for compound, group in df.groupby("tyre_compound"):
+        lengths = group["tyre_laps_in_stint"].dropna()
+        if lengths.empty:
+            continue
+        life[str(compound).upper()] = int(max(5, lengths.quantile(0.75)))
+    return life or {"SOFT": 18, "MEDIUM": 28, "HARD": 35}
+
+
 def load_session_data(year: int, race_name: str, session: str = "R") -> Dict:
     session_path = SILVER_PATH / str(year) / race_name / session
     if not session_path.exists():
@@ -54,12 +70,13 @@ def load_session_data(year: int, race_name: str, session: str = "R") -> Dict:
 
 def get_race_config(year: int, race_name: str, session: str = "R") -> RaceConfig:
     session_data = load_session_data(year, race_name, session)
+    tyre_life = infer_tyre_life(year, race_name, session)
     
     if "laps" not in session_data:
         return RaceConfig(
             total_laps=50,
             base_lap_time=90.0,
-            tyre_life={"SOFT": 18, "MEDIUM": 28, "HARD": 35},
+            tyre_life=tyre_life,
             pit_stop_time=22.0,
             track_length_km=5.0
         )
@@ -73,7 +90,7 @@ def get_race_config(year: int, race_name: str, session: str = "R") -> RaceConfig
     return RaceConfig(
         total_laps=int(total_laps),
         base_lap_time=float(avg_lap_time),
-        tyre_life={"SOFT": 18, "MEDIUM": 28, "HARD": 35},
+        tyre_life=tyre_life,
         pit_stop_time=22.0,
         track_length_km=5.0
     )
@@ -203,6 +220,24 @@ def analyze_simulation_results(results: List[SimulationResult]) -> Dict:
     }
 
 
+def strategy_results_to_frame(strategy_results: Dict) -> pd.DataFrame:
+    if not strategy_results:
+        return pd.DataFrame()
+    df = pd.DataFrame(list(strategy_results.values()))
+    cols = [
+        "strategy",
+        "avg_finish_position",
+        "avg_points",
+        "podium_probability",
+        "points_probability",
+        "avg_pit_stops",
+    ]
+    for c in cols:
+        if c not in df.columns:
+            df[c] = None
+    return df[cols]
+
+
 def run_monte_carlo_simulation(
     year: int,
     race_name: str,
@@ -278,6 +313,17 @@ def optimize_strategy(
     return run_monte_carlo_simulation(year, race_name, n_simulations, verbose)
 
 
+def optimize_strategy_year(year: int, n_simulations: int = 100, verbose: bool = True) -> Dict:
+    year_dir = SILVER_PATH / str(year)
+    if not year_dir.exists():
+        return {}
+    results = {}
+    races = [d.name for d in year_dir.iterdir() if d.is_dir()]
+    for race in races:
+        results[race] = run_monte_carlo_simulation(year, race, n_simulations, verbose)
+    return results
+
+
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description="Strategy Optimizer")
@@ -293,4 +339,8 @@ if __name__ == "__main__":
     output_file.parent.mkdir(parents=True, exist_ok=True)
     with open(output_file, "w") as f:
         json.dump(result, f, indent=2, default=str)
+    frame = strategy_results_to_frame(result.get("all_strategies", {}))
+    if not frame.empty:
+        frame = frame.sort_values("avg_points", ascending=False).head(10)
+        frame.to_csv(output_file.with_suffix(".csv"), index=False)
     print(f"Results saved to: {output_file}")

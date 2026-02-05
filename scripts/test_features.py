@@ -4,6 +4,13 @@ import sys
 from pathlib import Path
 import pandas as pd
 
+# This is a manual smoke-test script (run via `python scripts/test_features.py`).
+# Prevent pytest from collecting it as a test module.
+if "pytest" in sys.modules:
+    import pytest
+
+    pytest.skip("Utility script; not a pytest test.", allow_module_level=True)
+
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from features.lap import build_lap_features

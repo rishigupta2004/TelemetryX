@@ -1,338 +1,189 @@
-from fastapi import APIRouter, HTTPException
-from typing import List, Dict, Any, Optional
-import duckdb
+from __future__ import annotations
+
 import os
+from typing import Any, Dict, List, Optional, Tuple
+
+import pandas as pd
+from fastapi import APIRouter, HTTPException, Query
+
+from ..config import SILVER_DIR
+from ..utils import normalize_session_code, read_parquet_df, resolve_dir
 
 router = APIRouter()
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-DATA_DIR = os.path.join(BASE_DIR, "etl", "data", "silver")
-DB_PATH = os.path.join(BASE_DIR, "..", "telemetryx.duckdb")
+
+def _resolve_session_dir(year: int, race_name: str, session_type: Optional[str]) -> Optional[Tuple[str, str]]:
+    year_path = os.path.join(SILVER_DIR, str(year))
+    race_dir = resolve_dir(year_path, race_name)
+    if not race_dir:
+        return None
+
+    if session_type:
+        sess = normalize_session_code(session_type)
+        path = os.path.join(year_path, race_dir, sess)
+        return (race_dir, path) if os.path.exists(path) else None
+
+    # Default: prefer Qualifying, then Race, then Sprint, then Sprint Shootout.
+    for sess in ("Q", "R", "S", "SS"):
+        path = os.path.join(year_path, race_dir, sess)
+        if os.path.exists(path):
+            return race_dir, path
+    return None
+
+
+def _laps_df(year: int, race_slug: str, session_type: Optional[str]) -> pd.DataFrame:
+    race_name = race_slug.replace("-", " ")
+    resolved = _resolve_session_dir(year, race_name, session_type)
+    if not resolved:
+        return pd.DataFrame()
+    _race_dir, silver_path = resolved
+    laps_file = os.path.join(silver_path, "laps.parquet")
+    return read_parquet_df(laps_file)
 
 
 @router.get("/laps/{year}/{round}")
-async def get_laps(year: int, round: str, valid_only: bool = False) -> List[Dict[str, Any]]:
-    """
-    Get lap times for a specific race.
-    
-    Query params:
-        - valid_only: If true, only return valid laps (60-600s, not deleted)
-    
-    Returns laps with:
-        - driver_name: Full driver name
-        - driver_number: FIA driver number
-        - lap_number: Lap number
-        - lap_time_formatted: "M:SS.mmm" format
-        - lap_time_seconds: Seconds (for calculations)
-        - team_name: Team name
-        - position: Finishing position
-        - tyre_compound: SOFT/MEDIUM/HARD/INTER/WET
-        - is_valid_lap: Whether lap is valid for stats
-        - is_deleted: Whether lap was deleted
-    """
-    race_name = round.replace("-", " ")
-    
-    # Query the silver layer directly
-    silver_path = os.path.join(DATA_DIR, str(year), race_name, "Q")
-    if not os.path.exists(silver_path):
-        silver_path = os.path.join(DATA_DIR, str(year), race_name, "R")
-    
-    laps_file = os.path.join(silver_path, "laps.parquet")
-    if not os.path.exists(laps_file):
-        raise HTTPException(status_code=404, detail=f"No lap data found for {year} {race_name}")
-    
-    conn = duckdb.connect(DB_PATH, read_only=True)
-    try:
-        query = f"""
-            SELECT 
-                driver_name,
-                driver_number,
-                lap_number,
-                lap_time_formatted,
-                lap_time_seconds,
-                team_name,
-                position,
-                tyre_compound,
-                is_valid_lap,
-                is_deleted,
-                deletion_reason
-            FROM read_parquet(?)
-        """
-        params = [laps_file]
-        
-        if valid_only:
-            query += " WHERE is_valid_lap = true"
-        
-        query += " ORDER BY driver_name, lap_number"
-        
-        result = conn.execute(query, params).fetchall()
-        
-        columns = ["driver_name", "driver_number", "lap_number", "lap_time_formatted",
-                   "lap_time_seconds", "team_name", "position", "tyre_compound",
-                   "is_valid_lap", "is_deleted", "deletion_reason"]
-        
-        return [dict(zip(columns, row)) for row in result]
-    finally:
-        conn.close()
+async def get_laps(
+    year: int,
+    round: str,
+    valid_only: bool = Query(default=False),
+    session_type: Optional[str] = Query(default=None),
+) -> List[Dict[str, Any]]:
+    """Return lap rows (schema depends on source/parquet)."""
+    df = _laps_df(year, round, session_type)
+    if df.empty:
+        return []
+    if valid_only and "is_valid_lap" in df.columns:
+        df = df[df["is_valid_lap"] == True]  # noqa: E712
+    return df.to_dict(orient="records")
 
 
 @router.get("/laps/{year}/{round}/{driver_id}")
-async def get_driver_laps(year: int, round: str, driver_id: str, 
-                         valid_only: bool = False) -> List[Dict[str, Any]]:
-    """
-    Get lap times for a specific driver in a specific race.
-    
-    Query params:
-        - valid_only: If true, only return valid laps (60-600s, not deleted)
-    """
-    race_name = round.replace("-", " ")
-    
-    # Query the silver layer directly
-    silver_path = os.path.join(DATA_DIR, str(year), race_name, "Q")
-    if not os.path.exists(silver_path):
-        silver_path = os.path.join(DATA_DIR, str(year), race_name, "R")
-    
-    laps_file = os.path.join(silver_path, "laps.parquet")
-    if not os.path.exists(laps_file):
-        raise HTTPException(status_code=404, detail=f"No lap data found for {year} {race_name}")
-    
-    conn = duckdb.connect(DB_PATH, read_only=True)
-    try:
-        # Try driver name first, then driver number
-        query = f"""
-            SELECT 
-                driver_name,
-                driver_number,
-                lap_number,
-                lap_time_formatted,
-                lap_time_seconds,
-                team_name,
-                position,
-                tyre_compound,
-                is_valid_lap,
-                is_deleted,
-                deletion_reason
-            FROM read_parquet(?)
-            WHERE driver_name = ? OR driver_number = ?
-        """
-        params = [laps_file, driver_id, driver_id]
-        
-        if valid_only:
-            query += " AND is_valid_lap = true"
-        
-        query += " ORDER BY lap_number"
-        
-        result = conn.execute(query, params).fetchall()
-        
-        columns = ["driver_name", "driver_number", "lap_number", "lap_time_formatted",
-                   "lap_time_seconds", "team_name", "position", "tyre_compound",
-                   "is_valid_lap", "is_deleted", "deletion_reason"]
-        
-        return [dict(zip(columns, row)) for row in result]
-    finally:
-        conn.close()
+async def get_driver_laps(
+    year: int,
+    round: str,
+    driver_id: str,
+    valid_only: bool = Query(default=False),
+    session_type: Optional[str] = Query(default=None),
+) -> List[Dict[str, Any]]:
+    df = _laps_df(year, round, session_type)
+    if df.empty:
+        raise HTTPException(status_code=404, detail="Laps data not found")
 
+    driver_mask = None
+    if "driver_name" in df.columns:
+        driver_mask = df["driver_name"].astype(str) == str(driver_id)
+    if "driver_number" in df.columns:
+        m = df["driver_number"].astype(str) == str(driver_id)
+        driver_mask = m if driver_mask is None else (driver_mask | m)
+    if driver_mask is None:
+        return []
 
-@router.get("/fastest-lap/{year}/{round}")
-async def get_fastest_lap(year: int, round: str) -> Dict[str, Any]:
-    """
-    Get the fastest lap for a specific race.
-    
-    Returns:
-        - driver_name, driver_number
-        - lap_time_formatted, lap_time_seconds
-        - lap_number
-        - team_name
-        - tyre_compound
-    """
-    race_name = round.replace("-", " ")
-    
-    silver_path = os.path.join(DATA_DIR, str(year), race_name, "Q")
-    if not os.path.exists(silver_path):
-        silver_path = os.path.join(DATA_DIR, str(year), race_name, "R")
-    
-    laps_file = os.path.join(silver_path, "laps.parquet")
-    if not os.path.exists(laps_file):
-        raise HTTPException(status_code=404, detail=f"No lap data found for {year} {race_name}")
-    
-    conn = duckdb.connect(DB_PATH, read_only=True)
-    try:
-        query = f"""
-            SELECT 
-                driver_name,
-                driver_number,
-                lap_number,
-                lap_time_formatted,
-                lap_time_seconds,
-                team_name,
-                tyre_compound
-            FROM read_parquet(?)
-            WHERE is_valid_lap = true
-            ORDER BY lap_time_seconds ASC
-            LIMIT 1
-        """
-        result = conn.execute(query, [laps_file]).fetchone()
-        
-        if not result:
-            raise HTTPException(status_code=404, detail="No valid laps found")
-        
-        return {
-            "driver_name": result[0],
-            "driver_number": result[1],
-            "lap_number": result[2],
-            "lap_time_formatted": result[3],
-            "lap_time_seconds": result[4],
-            "team_name": result[5],
-            "tyre_compound": result[6]
-        }
-    finally:
-        conn.close()
+    df = df[driver_mask]
+    if valid_only and "is_valid_lap" in df.columns:
+        df = df[df["is_valid_lap"] == True]  # noqa: E712
+    if "lap_number" in df.columns:
+        df = df.sort_values("lap_number")
+    return df.to_dict(orient="records")
 
 
 @router.get("/laps/{year}/{round}/gap-analysis")
-async def get_gap_analysis(year: int, round: str) -> Dict[str, Any]:
-    """
-    Calculate gap to leader for all drivers per lap.
-    Returns a format suitable for Race Trace visualization.
-    """
-    race_name = round.replace("-", " ")
-    
-    silver_path = os.path.join(DATA_DIR, str(year), race_name, "R")
-    if not os.path.exists(silver_path):
-        # Fallback to Q? Usually gap analysis is for Race.
-        raise HTTPException(status_code=404, detail="Race session not found")
-    
-    laps_file = os.path.join(silver_path, "laps.parquet")
-    if not os.path.exists(laps_file):
+async def get_gap_analysis(
+    year: int,
+    round: str,
+    session_type: str = Query(default="R"),
+) -> Dict[str, Any]:
+    """Gap-to-leader per lap (race trace style)."""
+    df = _laps_df(year, round, session_type=session_type)
+    if df.empty:
         raise HTTPException(status_code=404, detail="Laps data not found")
+    required = {"driver_number", "lap_number", "lap_time_seconds"}
+    if not required.issubset(set(df.columns)):
+        raise HTTPException(status_code=422, detail="Missing required lap columns for gap analysis")
 
-    conn = duckdb.connect(DB_PATH, read_only=True)
-    try:
-        # Calculate cumulative time
-        # We need: LapNumber, Driver, TotalTime (sum of LapTime)
-        # Then for each lap, find min(TotalTime) as LeaderTime
-        # Gap = TotalTime - LeaderTime
-        
-        # 1. Get raw lap data
-        query = f"""
-            SELECT 
-                driver_number,
-                driver_name,
-                lap_number,
-                lap_time_seconds,
-                is_valid_lap
-            FROM read_parquet('{laps_file}')
-            WHERE lap_time_seconds IS NOT NULL
-            ORDER BY driver_number, lap_number
-        """
-        df = conn.execute(query).df()
-        
-        # Use pandas for window functions (easier than complex SQL windowing in DuckDB sometimes)
-        import pandas as pd
-        
-        # Calculate cumulative time (Race Time at end of lap)
-        df['race_time'] = df.groupby('driver_number')['lap_time_seconds'].cumsum()
-        
-        # Find leader time per lap
-        leader_times = df.groupby('lap_number')['race_time'].min().reset_index()
-        leader_times = leader_times.rename(columns={'race_time': 'leader_time'})
-        
-        # Join back
-        merged = pd.merge(df, leader_times, on='lap_number')
-        merged['gap_to_leader'] = merged['race_time'] - merged['leader_time']
-        
-        # Format for frontend: Series per driver
-        # { "VER": [{lap: 1, gap: 0}, {lap: 2, gap: 0.5}], "HAM": ... }
-        result = {}
-        drivers = merged['driver_name'].unique()
-        
-        for driver in drivers:
-            driver_data = merged[merged['driver_name'] == driver][['lap_number', 'gap_to_leader', 'position']]
-            # Convert to list of dicts
-            result[driver] = driver_data.to_dict(orient='records')
-            
-        return {
-            "drivers": list(drivers),
-            "data": result
-        }
+    df = df.dropna(subset=["driver_number", "lap_number", "lap_time_seconds"])
+    df = df.sort_values(["driver_number", "lap_number"])
+    df["race_time"] = df.groupby("driver_number")["lap_time_seconds"].cumsum()
 
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-    finally:
-        conn.close()
+    leader = df.groupby("lap_number")["race_time"].min().rename("leader_time").reset_index()
+    merged = df.merge(leader, on="lap_number", how="left")
+    merged["gap_to_leader"] = merged["race_time"] - merged["leader_time"]
 
-async def get_head_to_head(year: int, round: str, driver1: str, driver2: str) -> Dict[str, Any]:
-    """
-    Compare fastest laps between two drivers.
-    
-    Returns:
-        - Driver 1 info
-        - Driver 2 info  
-        - Difference in seconds
-        - Interpretation (who is faster by how much)
-    """
-    import pandas as pd
-    
-    race_name = round.replace("-", " ")
-    
-    silver_path = os.path.join(DATA_DIR, str(year), race_name, "Q")
-    if not os.path.exists(silver_path):
-        silver_path = os.path.join(DATA_DIR, str(year), race_name, "R")
-    
-    laps_file = os.path.join(silver_path, "laps.parquet")
-    if not os.path.exists(laps_file):
-        raise HTTPException(status_code=404, detail=f"No lap data found for {year} {race_name}")
-    
-    try:
-        df = pd.read_parquet(laps_file)
-        
-        # Filter for valid laps and the two drivers
-        mask = (
-            (df["is_valid_lap"] == True) & 
-            ((df["driver_name"] == driver1.upper()) | (df["driver_name"] == driver1) |
-             (df["driver_number"].astype(str) == driver1) |
-             (df["driver_name"] == driver2.upper()) | (df["driver_name"] == driver2) |
-             (df["driver_number"].astype(str) == driver2))
-        )
-        driver_df = df[mask]
-        
-        # Get fastest lap for each driver
-        fastest = driver_df.groupby(["driver_name", "driver_number"])["lap_time_seconds"].min().reset_index()
-        
-        if len(fastest) < 2:
-            raise HTTPException(status_code=404, detail="Could not find both drivers with valid laps")
-        
-        # Sort by fastest lap
-        fastest = fastest.sort_values("lap_time_seconds")
-        
-        d1_name = fastest.iloc[0]["driver_name"]
-        d1_num = fastest.iloc[0]["driver_number"]
-        d1_time = fastest.iloc[0]["lap_time_seconds"]
-        
-        d2_name = fastest.iloc[1]["driver_name"]
-        d2_num = fastest.iloc[1]["driver_number"]
-        d2_time = fastest.iloc[1]["lap_time_seconds"]
-        
-        difference = d2_time - d1_time
-        
-        return {
-            "driver_1": {
-                "name": d1_name,
-                "number": int(d1_num),
-                "fastest_lap_formatted": f"{int(d1_time // 60)}:{d1_time % 60:06.3f}",
-                "fastest_lap_seconds": d1_time
-            },
-            "driver_2": {
-                "name": d2_name,
-                "number": int(d2_num),
-                "fastest_lap_formatted": f"{int(d2_time // 60)}:{d2_time % 60:06.3f}",
-                "fastest_lap_seconds": d2_time
-            },
-            "difference": f"+{difference:.3f}",
-            "difference_seconds": difference,
-            "interpretation": f"{d2_name} is {difference:.3f}s slower than {d1_name}"
-        }
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    name_col = "driver_name" if "driver_name" in merged.columns else None
+    driver_keys = merged[name_col].unique().tolist() if name_col else merged["driver_number"].unique().tolist()
+
+    out: Dict[str, Any] = {"drivers": [], "data": {}}
+    for drv in driver_keys:
+        if name_col:
+            ddf = merged[merged[name_col] == drv]
+            key = str(drv)
+        else:
+            ddf = merged[merged["driver_number"] == drv]
+            key = str(int(drv))
+        cols = ["lap_number", "gap_to_leader"]
+        if "position" in ddf.columns:
+            cols.append("position")
+        out["drivers"].append(key)
+        out["data"][key] = ddf[cols].to_dict(orient="records")
+    return out
+
+
+@router.get("/laps/{year}/{round}/head-to-head")
+async def get_head_to_head(
+    year: int,
+    round: str,
+    driver1: str,
+    driver2: str,
+    session_type: Optional[str] = Query(default=None),
+) -> Dict[str, Any]:
+    """Fastest-lap comparison between two drivers."""
+    df = _laps_df(year, round, session_type=session_type)
+    if df.empty:
+        raise HTTPException(status_code=404, detail="Laps data not found")
+    if "lap_time_seconds" not in df.columns:
+        raise HTTPException(status_code=422, detail="Missing lap_time_seconds")
+
+    # Filter to just the two drivers (by name or number) and valid laps if available.
+    mask = pd.Series([False] * len(df))
+    if "driver_name" in df.columns:
+        mask = mask | (df["driver_name"].astype(str) == driver1) | (df["driver_name"].astype(str) == driver2)
+    if "driver_number" in df.columns:
+        mask = mask | (df["driver_number"].astype(str) == str(driver1)) | (df["driver_number"].astype(str) == str(driver2))
+    df = df[mask]
+    if "is_valid_lap" in df.columns:
+        df = df[df["is_valid_lap"] == True]  # noqa: E712
+
+    group_cols = [c for c in ("driver_name", "driver_number") if c in df.columns]
+    if not group_cols:
+        raise HTTPException(status_code=422, detail="Missing driver identity columns")
+
+    fastest = df.groupby(group_cols)["lap_time_seconds"].min().reset_index().sort_values("lap_time_seconds")
+    if len(fastest) < 2:
+        raise HTTPException(status_code=404, detail="Could not find both drivers with valid laps")
+
+    a = fastest.iloc[0].to_dict()
+    b = fastest.iloc[1].to_dict()
+    diff = float(b["lap_time_seconds"]) - float(a["lap_time_seconds"])
+
+    def _fmt(seconds: float) -> str:
+        m = int(seconds // 60)
+        s = seconds % 60
+        return f"{m}:{s:06.3f}"
+
+    return {
+        "driver_1": {
+            "name": str(a.get("driver_name") or ""),
+            "number": int(a.get("driver_number") or 0),
+            "fastest_lap_formatted": _fmt(float(a["lap_time_seconds"])),
+            "fastest_lap_seconds": float(a["lap_time_seconds"]),
+        },
+        "driver_2": {
+            "name": str(b.get("driver_name") or ""),
+            "number": int(b.get("driver_number") or 0),
+            "fastest_lap_formatted": _fmt(float(b["lap_time_seconds"])),
+            "fastest_lap_seconds": float(b["lap_time_seconds"]),
+        },
+        "difference_seconds": diff,
+        "difference": f"{diff:+.3f}",
+        "interpretation": f"{b.get('driver_name') or b.get('driver_number')} is {diff:.3f}s slower than {a.get('driver_name') or a.get('driver_number')}",
+    }
+

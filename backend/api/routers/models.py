@@ -5,6 +5,8 @@ import json
 import os
 import pickle
 import numpy as np
+from ..utils import read_parquet_df
+from ..config import MODELS_DIR
 
 def convert_numpy(obj):
     if isinstance(obj, dict):
@@ -18,8 +20,6 @@ def convert_numpy(obj):
     return obj
 
 router = APIRouter()
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-MODELS_DIR = "/Volumes/Space/PROJECTS/TelemetryX/scripts/models"
 
 
 @router.get("/models/clustering")
@@ -31,7 +31,7 @@ async def get_driver_clusters(probabilities: bool = False, driver: Optional[str]
     if not os.path.exists(clusters_file):
         raise HTTPException(status_code=404, detail="Clustering model not found")
 
-    df = pd.read_parquet(clusters_file)
+    df = read_parquet_df(clusters_file)
     info = json.load(open(info_file)) if os.path.exists(info_file) else {}
 
     if driver:
@@ -68,7 +68,7 @@ async def get_cluster_drivers(cluster_label: str) -> Dict[str, Any]:
     if not os.path.exists(clusters_file):
         raise HTTPException(status_code=404, detail="Clustering model not found")
 
-    df, info = pd.read_parquet(clusters_file), json.load(open(info_file)) if os.path.exists(info_file) else {}
+    df, info = read_parquet_df(clusters_file), json.load(open(info_file)) if os.path.exists(info_file) else {}
     labels = info.get("labels", {})
 
     reverse_labels = {v.lower(): k for k, v in labels.items()}
@@ -90,7 +90,7 @@ async def get_undercut_analysis() -> Dict[str, Any]:
     if not os.path.exists(events_file):
         raise HTTPException(status_code=404, detail="Undercut model not found")
 
-    df, info = pd.read_parquet(events_file), json.load(open(info_file)) if os.path.exists(info_file) else {}
+    df, info = read_parquet_df(events_file), json.load(open(info_file)) if os.path.exists(info_file) else {}
     success_df = df[df["undercut_success"] == 1]
 
     return {
@@ -147,7 +147,7 @@ async def get_undercut_events(race_name: Optional[str] = None, year: Optional[in
     if not os.path.exists(events_file):
         raise HTTPException(status_code=404, detail="Undercut events not found")
 
-    df = pd.read_parquet(events_file)
+    df = read_parquet_df(events_file)
     if race_name:
         df = df[df["race_name"].str.contains(race_name, case=False, na=False)]
     if year:

@@ -1,73 +1,89 @@
-# React + TypeScript + Vite
+# TelemetryX Desktop
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Professional-grade F1 telemetry command center built with PySide6 and QML.
 
-Currently, two official plugins are available:
+## Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+TelemetryX Desktop is a high-performance desktop application for analyzing Formula 1 telemetry data. It provides real-time and post-race analysis capabilities with broadcast-quality visuals.
 
-## React Compiler
+## Architecture
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Built following the architecture defined in `Frontend_ArchitectureOverview.md`:
 
-## Expanding the ESLint configuration
+- **Framework**: PySide6 (Qt 6)
+- **UI Layer**: QML + Qt Quick
+- **Charts**: PyQtGraph + Custom OpenGL
+- **State**: Custom Reactive Store
+- **Data**: httpx + DuckDB
+- **Packaging**: PyInstaller
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Directory Structure
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+frontend/
+├── app/                      # Python application code
+│   ├── core/                # Core infrastructure
+│   │   ├── store/           # Reactive state management
+│   │   ├── commands/        # Command pattern + undo/redo
+│   │   ├── playback/        # Playback engine
+│   │   └── bridge/          # QML ↔ Python bridge
+│   ├── services/            # Services layer
+│   │   ├── api/             # HTTP/WebSocket clients
+│   │   ├── cache/           # Memory + disk caching
+│   │   └── sync/            # Offline sync
+│   ├── models/              # Pydantic data models
+│   ├── rendering/           # Rendering components
+│   │   ├── charts/          # PyQtGraph charts
+│   │   ├── track/           # Track map rendering
+│   │   └── video/           # Video player
+│   ├── exports/             # Export functionality
+│   └── plugins/             # Plugin system
+├── ui/                      # QML user interface
+│   ├── qml/                 # QML files
+│   │   ├── components/      # Component library
+│   │   │   ├── atoms/       # Primitive components
+│   │   │   ├── molecules/   # Combined components
+│   │   │   ├── organisms/   # Section components
+│   │   │   └── templates/   # Layout templates
+│   │   ├── views/           # Main views
+│   │   └── popouts/         # Popout windows
+│   └── assets/              # Static assets
+│       ├── icons/           # Icon files
+│       ├── fonts/           # Custom fonts
+│       └── images/          # Image assets
+├── tests/                   # Test suite
+│   ├── unit/                # Unit tests
+│   ├── integration/         # Integration tests
+│   └── ui/                  # UI tests
+├── plugins/                 # User-installed plugins
+└── scripts/                 # Build and dev scripts
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Development
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Setup
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+cd frontend
+pip install -e ".[dev]"
 ```
+
+### Run Development Mode
+
+```bash
+# Option A: console script (after `pip install -e ".[dev]"`)
+telemetryx
+
+# Option B: module (no console script needed)
+python -m app.main
+```
+
+### Build
+
+```bash
+python scripts/build.py
+```
+
+## License
+
+MIT

@@ -2,19 +2,91 @@ from fastapi import APIRouter, HTTPException
 from typing import List, Dict, Any, Optional
 import pandas as pd
 import os
+from ..utils import resolve_dir, read_parquet_df, normalize_session_code, display_session_code
+from ..config import FEATURES_DIR
+from ..catalog import calendar_order
+from ..utils import normalize_key
 
 router = APIRouter()
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-FEATURES_DIR = os.path.join(BASE_DIR, "etl", "data", "features")
 
 
 def find_features_path(year: int, race_name: str, session: str) -> Optional[str]:
     """Find path to feature files for a race session."""
-    path = os.path.join(FEATURES_DIR, str(year), race_name, session)
+    year_path = os.path.join(FEATURES_DIR, str(year))
+    if not os.path.exists(year_path):
+        return None
+    race_dir = resolve_dir(year_path, race_name)
+    if not race_dir:
+        return None
+    path = os.path.join(year_path, race_dir, normalize_session_code(session))
     if os.path.exists(path):
         return path
     return None
+
+
+def load_feature_records(session_path: Optional[str], filename: str) -> List[Dict[str, Any]]:
+    if not session_path:
+        return []
+    feature_file = os.path.join(session_path, filename)
+    if not os.path.exists(feature_file):
+        return []
+    try:
+        df = read_parquet_df(feature_file)
+        return df.to_dict(orient="records")
+    except Exception:
+        return []
+
+
+def _filter_driver(df: pd.DataFrame, driver: str) -> pd.DataFrame:
+    if df is None or df.empty or not driver:
+        return pd.DataFrame()
+    d = str(driver).strip()
+    if "driver_name" in df.columns:
+        mask = df["driver_name"].astype(str).str.upper() == d.upper()
+        if mask.any():
+            return df[mask]
+    if "driver_number" in df.columns and d.isdigit():
+        mask = df["driver_number"].astype(str) == str(d)
+        if mask.any():
+            return df[mask]
+    return pd.DataFrame()
+
+
+def _latest_row(df: pd.DataFrame, col: str) -> Dict[str, Any]:
+    if df is None or df.empty:
+        return {}
+    if col in df.columns:
+        df2 = df.sort_values(col, ascending=True)
+        if not df2.empty:
+            return df2.iloc[-1].to_dict()
+    return df.iloc[-1].to_dict()
+
+
+def _mean(df: pd.DataFrame, col: str) -> Optional[float]:
+    if df is None or df.empty or col not in df.columns:
+        return None
+    try:
+        return float(pd.to_numeric(df[col], errors="coerce").dropna().mean())
+    except Exception:
+        return None
+
+
+def _max(df: pd.DataFrame, col: str) -> Optional[float]:
+    if df is None or df.empty or col not in df.columns:
+        return None
+    try:
+        return float(pd.to_numeric(df[col], errors="coerce").dropna().max())
+    except Exception:
+        return None
+
+
+def _min(df: pd.DataFrame, col: str) -> Optional[float]:
+    if df is None or df.empty or col not in df.columns:
+        return None
+    try:
+        return float(pd.to_numeric(df[col], errors="coerce").dropna().min())
+    except Exception:
+        return None
 
 
 def get_available_races(year: int) -> List[str]:
@@ -22,7 +94,13 @@ def get_available_races(year: int) -> List[str]:
     year_path = os.path.join(FEATURES_DIR, str(year))
     if not os.path.exists(year_path):
         return []
-    return sorted([d for d in os.listdir(year_path) if os.path.isdir(os.path.join(year_path, d))])
+    races = [d for d in os.listdir(year_path) if os.path.isdir(os.path.join(year_path, d))]
+    order = calendar_order(year)
+    order_map = {normalize_key(name): idx for idx, name in enumerate(order)}
+    def _sort_key(name: str):
+        key = normalize_key(name)
+        return (0, order_map[key]) if key in order_map else (1, name)
+    return sorted(races, key=_sort_key)
 
 
 def get_available_sessions(year: int, race_name: str) -> List[str]:
@@ -30,7 +108,8 @@ def get_available_sessions(year: int, race_name: str) -> List[str]:
     race_path = os.path.join(FEATURES_DIR, str(year), race_name)
     if not os.path.exists(race_path):
         return []
-    return sorted([d for d in os.listdir(race_path) if os.path.isdir(os.path.join(race_path, d))])
+    sessions = [d for d in os.listdir(race_path) if os.path.isdir(os.path.join(race_path, d))]
+    return sorted([display_session_code(s) for s in sessions])
 
 
 @router.get("/features/summary")
@@ -126,7 +205,7 @@ async def get_session_features(
         features = {}
         for fname in feature_files:
             fpath = os.path.join(session_path, fname)
-            df = pd.read_parquet(fpath)
+            df = read_parquet_df(fpath)
             fname_key = fname.replace("_features.parquet", "")
             features[fname_key] = {
                 "n_rows": len(df),
@@ -150,19 +229,7 @@ async def get_lap_features(year: int, race: str, session: str) -> List[Dict[str,
     """Get lap features for a race session."""
     race_name = race.replace("-", " ")
     session_path = find_features_path(year, race_name, session)
-    
-    if not session_path:
-        raise HTTPException(status_code=404, detail=f"No features found for {year} {race_name} {session}")
-    
-    lap_file = os.path.join(session_path, "lap_features.parquet")
-    if not os.path.exists(lap_file):
-        raise HTTPException(status_code=404, detail="Lap features not found")
-    
-    try:
-        df = pd.read_parquet(lap_file)
-        return df.to_dict(orient="records")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    return load_feature_records(session_path, "lap_features.parquet")
 
 
 @router.get("/features/{year}/{race}/{session}/tyre")
@@ -170,19 +237,7 @@ async def get_tyre_features(year: int, race: str, session: str) -> List[Dict[str
     """Get tyre features for a race session."""
     race_name = race.replace("-", " ")
     session_path = find_features_path(year, race_name, session)
-    
-    if not session_path:
-        raise HTTPException(status_code=404, detail=f"No features found for {year} {race_name} {session}")
-    
-    tyre_file = os.path.join(session_path, "tyre_features.parquet")
-    if not os.path.exists(tyre_file):
-        raise HTTPException(status_code=404, detail="Tyre features not found")
-    
-    try:
-        df = pd.read_parquet(tyre_file)
-        return df.to_dict(orient="records")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    return load_feature_records(session_path, "tyre_features.parquet")
 
 
 @router.get("/features/{year}/{race}/{session}/comparison")
@@ -190,19 +245,7 @@ async def get_comparison_features(year: int, race: str, session: str) -> List[Di
     """Get comparison features (head-to-head) for a race session."""
     race_name = race.replace("-", " ")
     session_path = find_features_path(year, race_name, session)
-    
-    if not session_path:
-        raise HTTPException(status_code=404, detail=f"No features found for {year} {race_name} {session}")
-    
-    comp_file = os.path.join(session_path, "comparison_features.parquet")
-    if not os.path.exists(comp_file):
-        raise HTTPException(status_code=404, detail="Comparison features not found")
-    
-    try:
-        df = pd.read_parquet(comp_file)
-        return df.to_dict(orient="records")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    return load_feature_records(session_path, "comparison_features.parquet")
 
 
 @router.get("/features/{year}/{race}/{session}/telemetry")
@@ -210,16 +253,160 @@ async def get_telemetry_features(year: int, race: str, session: str) -> List[Dic
     """Get telemetry features for a race session."""
     race_name = race.replace("-", " ")
     session_path = find_features_path(year, race_name, session)
-    
+    return load_feature_records(session_path, "telemetry_features.parquet")
+
+
+@router.get("/features/{year}/{race}/{session}/traffic")
+async def get_traffic_features(year: int, race: str, session: str) -> List[Dict[str, Any]]:
+    race_name = race.replace("-", " ")
+    session_path = find_features_path(year, race_name, session)
+    return load_feature_records(session_path, "traffic_features.parquet")
+
+
+@router.get("/features/{year}/{race}/{session}/overtakes")
+async def get_overtakes_features(year: int, race: str, session: str) -> List[Dict[str, Any]]:
+    race_name = race.replace("-", " ")
+    session_path = find_features_path(year, race_name, session)
+    return load_feature_records(session_path, "overtakes_features.parquet")
+
+
+@router.get("/features/{year}/{race}/{session}/position")
+async def get_position_features(year: int, race: str, session: str) -> List[Dict[str, Any]]:
+    race_name = race.replace("-", " ")
+    session_path = find_features_path(year, race_name, session)
+    return load_feature_records(session_path, "position_features.parquet")
+
+
+@router.get("/features/{year}/{race}/{session}/points")
+async def get_points_features(year: int, race: str, session: str) -> List[Dict[str, Any]]:
+    race_name = race.replace("-", " ")
+    session_path = find_features_path(year, race_name, session)
+    return load_feature_records(session_path, "points_features.parquet")
+
+
+@router.get("/features/{year}/{race}/{session}/race-context")
+async def get_race_context_features(year: int, race: str, session: str) -> List[Dict[str, Any]]:
+    race_name = race.replace("-", " ")
+    session_path = find_features_path(year, race_name, session)
+    return load_feature_records(session_path, "race_context_features.parquet")
+
+
+@router.get("/features/{year}/{race}/{session}/driver-summary")
+async def get_driver_summary(
+    year: int,
+    race: str,
+    session: str,
+    driver: str,
+    compare: Optional[str] = None,
+) -> Dict[str, Any]:
+    """Compact driver summary: 1–2 features per category."""
+    race_name = race.replace("-", " ")
+    session_path = find_features_path(year, race_name, session)
     if not session_path:
         raise HTTPException(status_code=404, detail=f"No features found for {year} {race_name} {session}")
-    
-    tel_file = os.path.join(session_path, "telemetry_features.parquet")
-    if not os.path.exists(tel_file):
-        raise HTTPException(status_code=404, detail="Telemetry features not found")
-    
-    try:
-        df = pd.read_parquet(tel_file)
-        return df.to_dict(orient="records")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+
+    def _load(name: str) -> pd.DataFrame:
+        return read_parquet_df(os.path.join(session_path, name))
+
+    lap_all_df = _load("lap_features.parquet")
+    lap_df = _filter_driver(lap_all_df, driver)
+    pos_df = _filter_driver(_load("position_features.parquet"), driver)
+    tyre_df = _filter_driver(_load("tyre_features.parquet"), driver)
+    tel_df = _filter_driver(_load("telemetry_features.parquet"), driver)
+    traffic_df = _filter_driver(_load("traffic_features.parquet"), driver)
+    points_df = _filter_driver(_load("points_features.parquet"), driver)
+    over_df = _filter_driver(_load("overtakes_features.parquet"), driver)
+    race_ctx_df = _load("race_context_features.parquet")
+
+    lap_row = _latest_row(lap_df, "lap_number")
+    tyre_row = _latest_row(tyre_df, "stint_number")
+    pos_row = pos_df.iloc[0].to_dict() if not pos_df.empty else {}
+    race_row = _latest_row(race_ctx_df, "lap_number")
+    points_row = points_df.iloc[0].to_dict() if not points_df.empty else {}
+    over_row = over_df.iloc[0].to_dict() if not over_df.empty else {}
+
+    personal_best = _min(lap_df, "lap_duration")
+    session_best = _min(lap_all_df, "lap_duration")
+
+    summary = {
+        "driver": driver,
+        "compare": compare or "",
+        "lap_analysis": {
+            "last_lap_time": lap_row.get("lap_time_formatted"),
+            "sector_times": [lap_row.get("sector_1_time"), lap_row.get("sector_2_time"), lap_row.get("sector_3_time")],
+            "is_valid": lap_row.get("is_valid_lap"),
+            "lap_quality_score": lap_row.get("lap_quality_score"),
+            "lap_delta_to_leader": lap_row.get("lap_delta_to_leader"),
+            "track_status_at_lap": lap_row.get("track_status_at_lap"),
+            "tyre_compound": lap_row.get("tyre_compound"),
+            "tyre_age_laps": lap_row.get("tyre_age_laps"),
+            "personal_best": personal_best,
+            "session_best": session_best,
+        },
+        "driver_performance": {
+            "start_position": pos_row.get("start_position"),
+            "end_position": pos_row.get("end_position"),
+            "position_change": pos_row.get("position_change"),
+            "laps_led": pos_row.get("laps_led"),
+            "best_position": pos_row.get("best_position"),
+            "worst_position": pos_row.get("worst_position"),
+            "points": points_row.get("points"),
+            "overtakes_made": over_row.get("overtakes_made"),
+            "positions_lost_defensive": over_row.get("positions_lost_defensive"),
+        },
+        "tyre_analysis": {
+            "current_compound": tyre_row.get("tyre_compound"),
+            "tyre_age": tyre_row.get("tyre_age_at_stint_end"),
+            "tyre_degradation_rate": tyre_row.get("tyre_degradation_rate"),
+            "tyre_life_remaining": tyre_row.get("tyre_life_remaining"),
+            "pit_stop_count": tyre_row.get("pit_stop_count"),
+            "tyre_strategy_sequence": tyre_row.get("tyre_strategy_sequence"),
+        },
+        "telemetry_analysis": {
+            "speed_max": _max(tel_df, "speed_max"),
+            "speed_avg": _mean(tel_df, "speed_avg"),
+            "throttle_avg": _mean(tel_df, "throttle_avg"),
+            "brake_avg": _mean(tel_df, "brake_avg"),
+            "drs_usage_pct": _mean(tel_df, "drs_usage_pct"),
+            "gear_changes": _mean(tel_df, "gear_changes"),
+        },
+        "race_context": {
+            "track_status": race_row.get("track_status_at_lap") or race_row.get("track_status"),
+            "weather": race_row.get("weather_conditions"),
+            "air_temp": race_row.get("air_temperature"),
+            "track_temp": race_row.get("track_temperature"),
+            "wind_speed": race_row.get("wind_speed"),
+            "wind_direction": race_row.get("wind_direction"),
+            "humidity": race_row.get("humidity"),
+            "rainfall": race_row.get("rainfall"),
+        },
+        "strategic_analysis": {
+            "optimal_pit_window": tyre_row.get("optimal_pit_window"),
+            "traffic_time_lost": (traffic_df.iloc[0].get("estimated_time_lost") if not traffic_df.empty else None),
+            "tyre_degradation_rate": tyre_row.get("tyre_degradation_rate"),
+            "tyre_life_remaining": tyre_row.get("tyre_life_remaining"),
+        },
+    }
+
+    # Comparison block (optional)
+    if compare:
+        comp_df = _load("comparison_features.parquet")
+        if not comp_df.empty:
+            d = str(driver).upper()
+            c = str(compare).upper()
+            match = comp_df[(comp_df["driver_1"].str.upper() == d) & (comp_df["driver_2"].str.upper() == c)]
+            invert = False
+            if match.empty:
+                match = comp_df[(comp_df["driver_1"].str.upper() == c) & (comp_df["driver_2"].str.upper() == d)]
+                invert = True
+            if not match.empty:
+                row = match.iloc[0]
+                delta = row.get("pace_delta_seconds")
+                if invert and delta is not None:
+                    delta = -float(delta)
+                summary["comparison"] = {
+                    "pace_delta_seconds": delta,
+                    "head_to_head_winner": row.get("head_to_head_winner"),
+                }
+
+    return summary

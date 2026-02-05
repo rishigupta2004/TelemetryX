@@ -63,6 +63,17 @@ def get_available_sessions() -> List[str]:
 def generate_for_race_session(args: Tuple) -> dict:
     """Generate all features for a single race/session."""
     year, race, session, features = args
+
+    silver_path = Path(__file__).parent.parent / "backend" / "etl" / "data" / "silver" / str(year) / race / session
+    if not silver_path.exists():
+        return {
+            "year": year,
+            "race": race,
+            "session": session,
+            "status": "skipped",
+            "features_generated": 0,
+            "errors": []
+        }
     
     result = {
         "year": year,

@@ -22,6 +22,30 @@ fi
 export PORT
 export TELEMETRYX_API_BASE_URL="${TELEMETRYX_API_BASE_URL:-http://localhost:${PORT}/api/v1}"
 health_url="${TELEMETRYX_API_BASE_URL%/api/v1}/health"
+release_gate=0
+gate_only=0
+print_qa_matrix=0
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --release-gate)
+      release_gate=1
+      ;;
+    --gate-only)
+      release_gate=1
+      gate_only=1
+      ;;
+    --print-qa-matrix)
+      print_qa_matrix=1
+      ;;
+    *)
+      echo "Unknown argument: $1" >&2
+      echo "Usage: $0 [--release-gate] [--gate-only] [--print-qa-matrix]" >&2
+      exit 2
+      ;;
+  esac
+  shift
+done
 
 backend_pid=""
 cleanup() {
@@ -59,13 +83,6 @@ raise SystemExit(0 if getattr(r,"status_code",0)==200 else 1)
 
 # If the user explicitly requests in-process mode, skip any local server startup.
 if [[ "${TELEMETRYX_BACKEND_MODE:-}" == "inproc" ]]; then
-  "${PY}" -m app.main
-  exit 0
-fi
-
-# If localhost networking is blocked but imports work, use in-process backend (fast start).
-if ! is_healthy && can_inproc; then
-  export TELEMETRYX_BACKEND_MODE="inproc"
   "${PY}" -m app.main
   exit 0
 fi
@@ -127,6 +144,27 @@ if ! is_healthy; then
   echo "Backend not reachable at ${health_url}." >&2
   echo "Falling back to in-process backend (no HTTP server)." >&2
   export TELEMETRYX_BACKEND_MODE="inproc"
+fi
+
+run_release_gate() {
+  local checklist_flag=""
+  if [[ "${print_qa_matrix}" == "1" ]]; then
+    checklist_flag="--print-checklist"
+  fi
+
+  echo "[phase6] running backend consistency gate (R, SR, Q)"
+  "${PY}" scripts/diagnose_backend.py --release-gate --sessions "R,SR,Q" ${checklist_flag}
+
+  echo "[phase6] running regression tests"
+  PYTHONPATH="${PWD}/backend${PYTHONPATH:+:${PYTHONPATH}}" "${PY}" -m pytest backend/tests/test_lap_selection_logic.py -q
+  PYTHONPATH="${PWD}/frontend:${PWD}/frontend/app${PYTHONPATH:+:${PYTHONPATH}}" "${PY}" -m pytest frontend/tests/ui/test_main_window.py -q
+}
+
+if [[ "${release_gate}" == "1" ]]; then
+  run_release_gate
+  if [[ "${gate_only}" == "1" ]]; then
+    exit 0
+  fi
 fi
 
 "${PY}" -m app.main

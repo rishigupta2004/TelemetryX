@@ -1,0 +1,15 @@
+import TimingTower from '../components/TimingTower'
+import { useTimingData } from '../hooks/useTimingData'
+import { useSessionStore } from '../stores/sessionStore'
+
+export default function TimingView() {
+  const laps = useSessionStore((s) => s.laps)
+  const drivers = useSessionStore((s) => s.sessionData?.drivers ?? [])
+  const rows = useTimingData(laps, drivers)
+
+  return (
+    <div className="h-full w-full p-2">
+      <TimingTower rows={rows} />
+    </div>
+  )
+}

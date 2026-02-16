@@ -1,14 +1,19 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 from typing import List, Dict, Any, Optional
-import duckdb
 import os
+from db.connection import db_connection
 from ..utils import resolve_dir, normalize_session_code
 from ..config import SILVER_DIR
 
 router = APIRouter()
 
 @router.get("/drivers/{year}/{round}")
-async def get_drivers(year: int, round: str, session_type: Optional[str] = None) -> List[Dict[str, Any]]:
+async def get_drivers(
+    year: int,
+    round: str,
+    session_type: Optional[str] = None,
+    limit: int = Query(default=40, ge=1, le=200),
+) -> List[Dict[str, Any]]:
     race_name = round.replace("-", " ")
     year_path = os.path.join(SILVER_DIR, str(year))
     race_dir = resolve_dir(year_path, race_name)
@@ -29,18 +34,18 @@ async def get_drivers(year: int, round: str, session_type: Optional[str] = None)
     if not os.path.exists(laps_file):
         return []
 
-    conn = duckdb.connect()
     try:
-        query = f"""
+        query = """
             SELECT DISTINCT 
                 driver_name, 
                 driver_number,
                 team_name
-            FROM read_parquet('{laps_file}')
+            FROM read_parquet(?)
             WHERE driver_name IS NOT NULL
             ORDER BY driver_name
+            LIMIT ?
         """
-        result = conn.execute(query).fetchall()
+        result = db_connection.conn.execute(query, [laps_file, int(limit)]).fetchall()
         
         return [{
             "driver": row[0],
@@ -50,8 +55,6 @@ async def get_drivers(year: int, round: str, session_type: Optional[str] = None)
     except Exception as e:
         print(f"Error fetching drivers: {e}")
         return []
-    finally:
-        conn.close()
 
 @router.get("/drivers/{year}/{round}/{driver_id}")
 async def get_driver(year: int, round: str, driver_id: str, session_type: Optional[str] = None) -> Dict[str, Any]:
@@ -75,20 +78,20 @@ async def get_driver(year: int, round: str, driver_id: str, session_type: Option
     if not os.path.exists(laps_file):
         return {"error": "Data not found"}
 
-    conn = duckdb.connect()
     try:
         # Handle driver ID (name or number)
         where_clause = "driver_number = ?" if driver_id.isdigit() else "driver_name = ?"
         param = int(driver_id) if driver_id.isdigit() else driver_id
         
-        result = conn.execute(f"""
+        result = db_connection.conn.execute("""
             SELECT DISTINCT 
                 driver_name, 
                 driver_number,
                 team_name
-            FROM read_parquet('{laps_file}')
+            FROM read_parquet(?)
             WHERE {where_clause}
-        """, [param]).fetchone()
+            LIMIT 1
+        """.replace("{where_clause}", where_clause), [laps_file, param]).fetchone()
         
         if result:
             return {
@@ -97,5 +100,6 @@ async def get_driver(year: int, round: str, driver_id: str, session_type: Option
                 "team": result[2]
             }
         return {"error": "Driver not found"}
-    finally:
-        conn.close()
+    except Exception as e:
+        print(f"Error fetching driver: {e}")
+        return {"error": "Driver not found"}

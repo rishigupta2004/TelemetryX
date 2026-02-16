@@ -1,27 +1,200 @@
-from fastapi import APIRouter, HTTPException, Query
-from typing import List, Dict, Any, Optional
+from __future__ import annotations
+
 import os
-import duckdb
+import builtins
+import json
+import time
+from typing import Any, Dict, List, Optional
+
+from fastapi import APIRouter, HTTPException, Query
+
 from db.connection import db_connection
-from ..utils import resolve_dir, normalize_session_code
 from ..config import SILVER_DIR
+from ..utils import normalize_session_code, resolve_dir
+from . import metrics as metrics_router
 
 router = APIRouter()
 
-def get_session_path(year: int, race_name: str) -> Optional[str]:
-    """Get path to session directory (Q or R)."""
+MAX_WINDOW_S = 30.0
+MAX_LAP_WINDOW_S = 180.0
+MAX_CHANNELS = 8
+MAX_SAMPLES = 5_000
+ALLOWED_CHANNELS = {"speed", "throttle", "brake", "rpm", "gear", "drs"}
+_STREAM_METRICS_ROUTE = "/api/v1/telemetry/{year}/{round}/stream"
+
+
+def _estimate_payload_bytes(payload: Any) -> int:
+    try:
+        return len(json.dumps(payload, separators=(",", ":"), default=str).encode("utf-8"))
+    except Exception:
+        return 0
+
+
+def get_session_path(year: int, race_name: str, session_type: Optional[str] = None) -> Optional[str]:
     year_path = os.path.join(SILVER_DIR, str(year))
     race_dir = resolve_dir(year_path, race_name)
     if not race_dir:
         return None
-    # Try Q first (often has cleaner fast laps), then R
-    session_path = os.path.join(year_path, race_dir, "Q")
-    if os.path.exists(session_path):
-        return session_path
-    session_path = os.path.join(year_path, race_dir, "R")
-    if os.path.exists(session_path):
-        return session_path
+    if session_type:
+        path = os.path.join(year_path, race_dir, normalize_session_code(session_type))
+        return path if os.path.exists(path) else None
+    for code in ("Q", "R", "S", "SS"):
+        path = os.path.join(year_path, race_dir, code)
+        if os.path.exists(path):
+            return path
     return None
+
+
+def _resolve_driver_number(silver_path: str, driver: str) -> Optional[int]:
+    if driver.isdigit():
+        return int(driver)
+    laps_file = os.path.join(silver_path, "laps.parquet")
+    if not os.path.exists(laps_file):
+        return None
+    row = db_connection.conn.execute(
+        "SELECT CAST(driver_number AS INTEGER) FROM read_parquet(?) WHERE driver_name = ? LIMIT 1",
+        [laps_file, driver],
+    ).fetchone()
+    if not row:
+        return None
+    return int(row[0])
+
+
+def _normalize_channel_value(channel: str, value: Any) -> Any:
+    if value is None:
+        return None
+    if isinstance(value, bool):
+        return 1 if value else 0
+    try:
+        numeric = float(value)
+    except Exception:
+        return value
+    if channel in {"throttle", "brake"} and 0.0 <= numeric <= 1.0:
+        numeric *= 100.0
+    if channel in {"gear", "drs"}:
+        return int(round(numeric))
+    return builtins.round(numeric, 2)
+
+
+@router.get("/telemetry/{year}/{round}/stream")
+async def get_telemetry_stream(
+    year: int,
+    round: str,
+    time_start_ms: Optional[int] = Query(default=None, description="Window start in milliseconds"),
+    time_end_ms: Optional[int] = Query(default=None, description="Window end in milliseconds"),
+    driver_number: int = Query(...),
+    channels: List[str] = Query(default=["speed", "throttle", "brake"]),
+    session_type: str = Query(default="R"),
+    lap_number: Optional[int] = Query(default=None, ge=1),
+) -> Dict[str, Any]:
+    started_at = time.perf_counter()
+    if lap_number is None and (time_start_ms is None or time_end_ms is None):
+        raise HTTPException(status_code=422, detail="time_start_ms and time_end_ms are required when lap_number is not provided")
+    if lap_number is None and int(time_end_ms) <= int(time_start_ms):
+        raise HTTPException(status_code=400, detail="time_end_ms must be greater than time_start_ms")
+    if len(channels) > MAX_CHANNELS:
+        raise HTTPException(status_code=413, detail=f"Max {MAX_CHANNELS} channels per request")
+
+    requested = [str(c).strip().lower() for c in channels if str(c).strip()]
+    if not requested:
+        requested = ["speed", "throttle", "brake"]
+    invalid = [c for c in requested if c not in ALLOWED_CHANNELS]
+    if invalid:
+        raise HTTPException(status_code=400, detail=f"Invalid channels: {invalid}")
+
+    race_name = round.replace("-", " ")
+    silver_path = get_session_path(year, race_name, session_type=session_type)
+    if not silver_path:
+        payload = {
+            "driver_number": driver_number,
+            "time_window": [int(time_start_ms or 0), int(time_end_ms or 0)],
+            "channels": requested,
+            "samples": 0,
+            "data": [],
+        }
+        metrics_router.record_endpoint_sample(
+            _STREAM_METRICS_ROUTE,
+            (time.perf_counter() - started_at) * 1000.0,
+            _estimate_payload_bytes(payload),
+            0,
+        )
+        return payload
+
+    if lap_number is not None:
+        laps_file = os.path.join(silver_path, "laps.parquet")
+        if not os.path.exists(laps_file):
+            raise HTTPException(status_code=404, detail="Laps data not found for lap selection")
+        lap_row = db_connection.conn.execute(
+            """
+            SELECT
+                CAST(session_time_seconds AS DOUBLE) AS end_time,
+                CAST(lap_time_seconds AS DOUBLE) AS duration
+            FROM read_parquet(?)
+            WHERE CAST(driver_number AS INTEGER) = ? AND CAST(lap_number AS INTEGER) = ?
+            LIMIT 1
+            """,
+            [laps_file, int(driver_number), int(lap_number)],
+        ).fetchone()
+        if not lap_row:
+            raise HTTPException(status_code=404, detail="Lap not found")
+        end_time = float(lap_row[0] or 0.0)
+        duration = float(lap_row[1] or 0.0)
+        time_start_ms = int(max(0.0, end_time - duration) * 1000.0)
+        time_end_ms = int(end_time * 1000.0)
+
+    duration_s = max(0.0, (float(time_end_ms) - float(time_start_ms)) / 1000.0)
+    max_window = MAX_LAP_WINDOW_S if lap_number is not None else MAX_WINDOW_S
+    if duration_s > max_window:
+        raise HTTPException(status_code=413, detail=f"Window exceeds {int(max_window)}s limit")
+
+    telemetry_file = os.path.join(silver_path, "telemetry.parquet")
+    if not os.path.exists(telemetry_file):
+        payload = {"driver_number": driver_number, "time_window": [time_start_ms, time_end_ms], "channels": requested, "samples": 0, "data": []}
+        metrics_router.record_endpoint_sample(
+            _STREAM_METRICS_ROUTE,
+            (time.perf_counter() - started_at) * 1000.0,
+            _estimate_payload_bytes(payload),
+            0,
+        )
+        return payload
+
+    select_cols = ["session_time_seconds * 1000.0 AS time_ms"] + requested
+    sql = f"""
+        SELECT {", ".join(select_cols)}
+        FROM read_parquet(?)
+        WHERE CAST(driver_number AS INTEGER) = ?
+          AND (session_time_seconds * 1000.0) BETWEEN ? AND ?
+        ORDER BY session_time_seconds
+        LIMIT ?
+    """
+    rows = db_connection.conn.execute(
+        sql,
+        [telemetry_file, int(driver_number), int(time_start_ms), int(time_end_ms), int(MAX_SAMPLES + 1)],
+    ).fetchall()
+    if len(rows) > MAX_SAMPLES:
+        raise HTTPException(status_code=413, detail=f"Result exceeds {MAX_SAMPLES} samples")
+
+    data: List[Dict[str, Any]] = []
+    for r in rows:
+        item: Dict[str, Any] = {"time_ms": float(r[0])}
+        for idx, name in enumerate(requested, start=1):
+            item[name] = _normalize_channel_value(name, r[idx])
+        data.append(item)
+    payload = {
+        "driver_number": int(driver_number),
+        "time_window": [int(time_start_ms), int(time_end_ms)],
+        "channels": requested,
+        "samples": len(data),
+        "data": data,
+    }
+    metrics_router.record_endpoint_sample(
+        _STREAM_METRICS_ROUTE,
+        (time.perf_counter() - started_at) * 1000.0,
+        _estimate_payload_bytes(payload),
+        len(data),
+    )
+    return payload
+
 
 @router.get("/telemetry/{year}/{round}")
 async def get_telemetry(
@@ -29,270 +202,185 @@ async def get_telemetry(
     round: str,
     driver: Optional[str] = None,
     lap: Optional[int] = None,
-    session_type: Optional[str] = None
+    session_type: Optional[str] = None,
 ) -> List[Dict[str, Any]]:
-    """
-    Get telemetry data for a specific race.
-    """
+    """Backward-compatible endpoint."""
     race_name = round.replace("-", " ")
-    
-    # Resolve path
-    if session_type:
-        year_path = os.path.join(SILVER_DIR, str(year))
-        race_dir = resolve_dir(year_path, race_name)
-        if not race_dir:
-            return []
-        silver_path = os.path.join(year_path, race_dir, normalize_session_code(session_type))
-    else:
-        silver_path = get_session_path(year, race_name)
-
-    if not silver_path or not os.path.exists(silver_path):
+    silver_path = get_session_path(year, race_name, session_type=session_type)
+    if not silver_path:
         return []
-
     telemetry_file = os.path.join(silver_path, "telemetry.parquet")
     if not os.path.exists(telemetry_file):
         return []
 
-    try:
-        # Base query structure
-        query = f"SELECT * FROM read_parquet(?) WHERE 1=1"
-        params = [telemetry_file]
+    if not driver:
+        sql = """
+            SELECT
+                session_time_seconds,
+                CAST(driver_number AS INTEGER) AS driver_number,
+                speed,
+                throttle,
+                brake,
+                rpm,
+                gear,
+                drs
+            FROM read_parquet(?)
+            ORDER BY driver_number, session_time_seconds
+        """
+        rows = db_connection.conn.execute(sql, [telemetry_file]).fetchall()
+        return [
+            {
+                "session_time_seconds": float(r[0]),
+                "driver_number": int(r[1]),
+                "speed": _normalize_channel_value("speed", r[2]),
+                "throttle": _normalize_channel_value("throttle", r[3]),
+                "brake": _normalize_channel_value("brake", r[4]),
+                "rpm": _normalize_channel_value("rpm", r[5]),
+                "gear": _normalize_channel_value("gear", r[6]),
+                "drs": _normalize_channel_value("drs", r[7]),
+            }
+            for r in rows
+        ]
 
-        if driver:
-            # Handle driver number lookup
-            if not driver.isdigit():
-                # Get number from laps file for 'VER' etc.
-                laps_file = os.path.join(silver_path, "laps.parquet")
-                if os.path.exists(laps_file):
-                    # Use parameterized query for lookup
-                    drv_row = db_connection.conn.execute(
-                        f"SELECT driver_number FROM read_parquet(?) WHERE driver_name = ? LIMIT 1",
-                        [laps_file, driver]
-                    ).fetchone()
-                    
-                    if drv_row:
-                        driver_num = drv_row[0]
-                        query += " AND driver_number = ?"
-                        params.append(int(driver_num))
-                    else:
-                        return [] # Driver not found
-                else:
-                    return []
-            else:
-                query += " AND driver_number = ?"
-                params.append(int(driver))
-
-
-        if lap:
-             if not driver:
-                 # Requires driver to filter by lap (simplification for V1)
-                 # To support all drivers for a lap, we'd need to join or look up all start/ends
-                 pass 
-             else:
-                 # Get lap time window for this driver
-                 laps_file = os.path.join(silver_path, "laps.parquet")
-                 if os.path.exists(laps_file):
-                     # Reuse the params[-1] which is the driver number (int)
-                     # Verify we added a driver param above
-                     if params and isinstance(params[-1], int):
-                        current_driver_num = params[-1]
-                        
-                        lap_info = db_connection.conn.execute(f"""
-                            SELECT 
-                                session_time_seconds as end_time,
-                                lap_time_seconds as duration
-                            FROM read_parquet(?)
-                            WHERE driver_number = ?
-                            AND lap_number = ?
-                        """, [laps_file, current_driver_num, lap]).fetchone()
-                        
-                        if lap_info:
-                            end_time, duration = lap_info
-                            start_time = end_time - duration
-                            query += " AND session_time_seconds >= ? AND session_time_seconds <= ?"
-                            params.extend([start_time, end_time])
-
-        # For the graph, we need sorted data
-        query += " ORDER BY session_time_seconds"
-        
-        # Execute with params
-        df = db_connection.conn.execute(query, params).df()
-        
-        # Optimize: Round floats to reduce payload size
-        cols_to_round = ['speed', 'throttle', 'brake', 'rpm']
-        for col in cols_to_round:
-            if col in df.columns:
-                df[col] = df[col].round(2)
-
-        return df.to_dict(orient="records")
-
-    except Exception as e:
-        print(f"Error fetching telemetry: {e}")
+    driver_number = _resolve_driver_number(silver_path, str(driver))
+    if driver_number is None:
         return []
+
+    if lap is not None:
+        laps_file = os.path.join(silver_path, "laps.parquet")
+        if not os.path.exists(laps_file):
+            return []
+        lap_row = db_connection.conn.execute(
+            """
+            SELECT
+                CAST(session_time_seconds AS DOUBLE) AS end_time,
+                CAST(lap_time_seconds AS DOUBLE) AS duration
+            FROM read_parquet(?)
+            WHERE CAST(driver_number AS INTEGER) = ? AND CAST(lap_number AS INTEGER) = ?
+            LIMIT 1
+            """,
+            [laps_file, int(driver_number), int(lap)],
+        ).fetchone()
+        if not lap_row:
+            return []
+        end_time = float(lap_row[0] or 0.0)
+        duration = float(lap_row[1] or 0.0)
+        start_ms = int(max(0.0, end_time - duration) * 1000.0)
+        end_ms = int(end_time * 1000.0)
+    else:
+        sql = """
+            SELECT
+                session_time_seconds,
+                CAST(driver_number AS INTEGER) AS driver_number,
+                speed,
+                throttle,
+                brake,
+                rpm,
+                gear,
+                drs
+            FROM read_parquet(?)
+            WHERE CAST(driver_number AS INTEGER) = ?
+            ORDER BY session_time_seconds
+        """
+        rows = db_connection.conn.execute(sql, [telemetry_file, int(driver_number)]).fetchall()
+        return [
+            {
+                "session_time_seconds": float(r[0]),
+                "driver_number": int(r[1]),
+                "speed": _normalize_channel_value("speed", r[2]),
+                "throttle": _normalize_channel_value("throttle", r[3]),
+                "brake": _normalize_channel_value("brake", r[4]),
+                "rpm": _normalize_channel_value("rpm", r[5]),
+                "gear": _normalize_channel_value("gear", r[6]),
+                "drs": _normalize_channel_value("drs", r[7]),
+            }
+            for r in rows
+        ]
+
+    lap_sql = """
+        SELECT
+            session_time_seconds,
+            CAST(driver_number AS INTEGER) AS driver_number,
+            speed,
+            throttle,
+            brake,
+            rpm,
+            gear,
+            drs
+        FROM read_parquet(?)
+        WHERE CAST(driver_number AS INTEGER) = ?
+          AND (session_time_seconds * 1000.0) BETWEEN ? AND ?
+        ORDER BY session_time_seconds
+    """
+    rows = db_connection.conn.execute(
+        lap_sql,
+        [telemetry_file, int(driver_number), int(start_ms), int(end_ms)],
+    ).fetchall()
+    return [
+        {
+            "session_time_seconds": float(r[0]),
+            "driver_number": int(r[1]),
+            "speed": _normalize_channel_value("speed", r[2]),
+            "throttle": _normalize_channel_value("throttle", r[3]),
+            "brake": _normalize_channel_value("brake", r[4]),
+            "rpm": _normalize_channel_value("rpm", r[5]),
+            "gear": _normalize_channel_value("gear", r[6]),
+            "drs": _normalize_channel_value("drs", r[7]),
+        }
+        for r in rows
+    ]
+
 
 @router.get("/telemetry/{year}/{round}/{driver_id}/laps/{lap_number}")
 async def get_lap_telemetry(
-    year: int, 
-    round: str, 
+    year: int,
+    round: str,
     driver_id: str,
-    lap_number: int
+    lap_number: int,
+    session_type: Optional[str] = None,
 ) -> Dict[str, Any]:
-    """
-    Get high-frequency telemetry for a specific driver's lap.
-    Joins laps.parquet to get time window, then queries telemetry.parquet.
-    """
     race_name = round.replace("-", " ")
-    silver_path = get_session_path(year, race_name)
-    
+    silver_path = get_session_path(year, race_name, session_type=session_type)
     if not silver_path:
         raise HTTPException(status_code=404, detail="Session not found")
-
     laps_file = os.path.join(silver_path, "laps.parquet")
-    tel_file = os.path.join(silver_path, "telemetry.parquet")
-    
-    if not os.path.exists(laps_file) or not os.path.exists(tel_file):
+    telemetry_file = os.path.join(silver_path, "telemetry.parquet")
+    if not os.path.exists(laps_file) or not os.path.exists(telemetry_file):
         raise HTTPException(status_code=404, detail="Data files not found")
 
-    try:
-        # 1. Get Lap Start/End Time
-        lap_query = f"""
-            SELECT 
-                lap_start_time_seconds,
-                lap_end_time_seconds,
-                lap_time_seconds
-            FROM read_parquet('{laps_file}')
-            WHERE (driver_number = ? OR driver_name = ?)
-            AND lap_number = ?
-            LIMIT 1
-        """
-        # handling driver_id (could be '1' or 'VER')
-        d_param = int(driver_id) if driver_id.isdigit() else driver_id
-        
-        # Note: lap_start_time_seconds might need to be calculated if not in parquet
-        # Checking schema earlier: "lap_time_seconds" exists. "session_time_seconds" usually exists.
-        # We might need to approximate start/end if columns missing.
-        # Standard FastF1 "laps" usually has 'LapStartTime', 'Time' (end).
-        
-        # Let's peek at laps schema effectively using a flexible query if columns are uncertain
-        # But for V1 let's assume standard names or calculate from running sum if needed.
-        # Actually, let's just query the telemetry directly if we can Join.
-        
-        # Safer approach: Join on driver and time range
-        # But first let's just get the time window from laps
-        
-        # Check available columns in laps first? No, let's assume standard FastF1 Silver schema
-        # If schema is unknown, we might break. 
-        # Plan B: Use a subquery join
-        
-        full_query = f"""
-            WITH target_lap AS (
-                SELECT 
-                    driver_number,
-                    Time - LapTime as start_time,
-                    Time as end_time
-                FROM read_parquet('{laps_file}')
-                WHERE (driver_number = ? OR driver_name = ?)
-                AND lap_number = ?
-            )
-            SELECT 
-                t.date,
-                t.session_time_seconds,
-                t.speed,
-                t.rpm,
-                t.throttle,
-                t.brake,
-                t.gear,
-                t.drs
-            FROM read_parquet('{tel_file}') t, target_lap l
-            WHERE t.driver_number = l.driver_number
-            AND t.session_time_seconds >= epoch(l.start_time) -- FastF1 Time is Timedelta usually? 
-            -- Wait, in Silver we converted times to seconds.
-            -- Let's assume laps.parquet has 'session_time_seconds' (end of lap) and 'lap_time_seconds'
-            
-            -- REVISED QUERY based on standard Silver transform
-        """
-        pass # Placeholder for thought trace
-        
-        # Correct logic:
-        # 1. Fetch Lap info (End Time & Lap Duration)
-        # 2. Start Time = End Time - Duration
-        # 3. Query Telemetry between Start and End
-        
-        # Handle driver ID (name or number)
-        # Fix: Ensure d_param is treated correctly. 
-        # If it's a digit (e.g. '1'), query using driver_number.
-        # If string (e.g. 'VER'), query using driver_name.
-        
-        # d_param logic fix:
-        try:
-            driver_num_int = int(d_param)
-            where_clause = f"driver_number = {driver_num_int}"
-        except ValueError:
-            where_clause = f"driver_name = '{d_param}'"
+    driver_number = _resolve_driver_number(silver_path, str(driver_id))
+    if driver_number is None:
+        raise HTTPException(status_code=404, detail="Driver not found")
 
-        lap_info = db_connection.conn.execute(f"""
-            SELECT 
-                session_time_seconds as end_time,
-                lap_time_seconds as duration,
-                driver_number
-            FROM read_parquet('{laps_file}')
-            WHERE {where_clause}
-            AND lap_number = {lap_number}
-        """).fetchone()
-        
-        if not lap_info:
-             raise HTTPException(status_code=404, detail="Lap not found")
-             
-        end_time, duration, drv_num = lap_info
-        start_time = end_time - duration
-        
-        # Query Telemetry
-        # We also calculate 'distance' (approx via speed * time) or 'lap_distance' if available
-        # For simple V1, we return time-based array, frontend can scale to distance if needed
-        # Or better: FastF1 telemetry usually has 'Distance' column.
-        
-        # Check if 'n_gear' column exists, if not use 'gear'
-        # The bash check showed 'n_gear' is NOT in standard parquet but 'gear' IS?
-        # Actually in silver/telemetry.parquet, checking earlier schema, it has 14 columns.
-        # Let's just select * to be safe or check columns
-        
-        # Try standard column names first (FastF1 usually uses 'n_gear' or 'gear')
-        # Based on schema check: 'gear' is the column name
-        
-        tel_query = f"""
-            SELECT
-                session_time_seconds,
-                speed,
-                rpm,
-                throttle,
-                brake,
-                gear,
-                drs,
-                (session_time_seconds - {start_time}) as lap_time
-            FROM read_parquet('{tel_file}')
-            WHERE driver_number = {drv_num}
-            AND session_time_seconds >= {start_time}
-            AND session_time_seconds <= {end_time}
-            ORDER BY session_time_seconds ASC
+    lap_row = db_connection.conn.execute(
         """
-        
-        df = db_connection.conn.execute(tel_query).df()
-        
-        # Calculate distance (integral of speed) if Distance column missing
-        # Distance = speed (km/h) * time (s) / 3600 * 1000 = speed * time / 3.6
-        if 'Distance' not in df.columns:
-            # Simple Riemann sum
-            df['dt'] = df['session_time_seconds'].diff().fillna(0)
-            df['dist_inc'] = (df['speed'] / 3.6) * df['dt']
-            df['distance'] = df['dist_inc'].cumsum()
-        
-        return {
-            "driver": driver_id,
-            "lap": lap_number,
-            "data": df.to_dict(orient="records")
-        }
+        SELECT
+            CAST(session_time_seconds AS DOUBLE) AS end_time,
+            CAST(lap_time_seconds AS DOUBLE) AS duration
+        FROM read_parquet(?)
+        WHERE CAST(driver_number AS INTEGER) = ? AND CAST(lap_number AS INTEGER) = ?
+        LIMIT 1
+        """,
+        [laps_file, int(driver_number), int(lap_number)],
+    ).fetchone()
+    if not lap_row:
+        raise HTTPException(status_code=404, detail="Lap not found")
 
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        raise HTTPException(status_code=500, detail=str(e))
+    end_time = float(lap_row[0] or 0.0)
+    duration = float(lap_row[1] or 0.0)
+    start_ms = int(max(0.0, end_time - duration) * 1000.0)
+    end_ms = int(end_time * 1000.0)
+    payload = await get_telemetry_stream(
+        year=year,
+        round=round,
+        time_start_ms=start_ms,
+        time_end_ms=end_ms,
+        driver_number=int(driver_number),
+        channels=["speed", "throttle", "brake", "rpm", "gear", "drs"],
+        session_type=session_type or "R",
+    )
+    return {
+        "driver": str(driver_id),
+        "lap": int(lap_number),
+        "data": payload.get("data", []),
+    }

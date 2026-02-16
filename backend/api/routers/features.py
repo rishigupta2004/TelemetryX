@@ -1,13 +1,28 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 from typing import List, Dict, Any, Optional
 import pandas as pd
 import os
-from ..utils import resolve_dir, read_parquet_df, normalize_session_code, display_session_code
+import duckdb
+import logging
+from ..utils import resolve_dir, read_parquet_df, read_parquet_records, normalize_session_code, display_session_code
 from ..config import FEATURES_DIR
 from ..catalog import calendar_order
 from ..utils import normalize_key
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
+
+FEATURE_DATASETS: Dict[str, str] = {
+    "lap": "lap_features.parquet",
+    "tyre": "tyre_features.parquet",
+    "telemetry": "telemetry_features.parquet",
+    "race_context": "race_context_features.parquet",
+    "comparison": "comparison_features.parquet",
+    "position": "position_features.parquet",
+    "overtakes": "overtakes_features.parquet",
+    "traffic": "traffic_features.parquet",
+    "points": "points_features.parquet",
+}
 
 
 def find_features_path(year: int, race_name: str, session: str) -> Optional[str]:
@@ -24,17 +39,39 @@ def find_features_path(year: int, race_name: str, session: str) -> Optional[str]
     return None
 
 
-def load_feature_records(session_path: Optional[str], filename: str) -> List[Dict[str, Any]]:
+DEFAULT_FEATURE_LIMIT = 2000
+MAX_FEATURE_LIMIT = 20000
+
+
+def load_feature_records(session_path: Optional[str], filename: str, limit: int = DEFAULT_FEATURE_LIMIT) -> List[Dict[str, Any]]:
     if not session_path:
+        logger.warning("features_missing_session_path filename=%s", str(filename))
         return []
     feature_file = os.path.join(session_path, filename)
     if not os.path.exists(feature_file):
+        logger.warning("features_missing_file path=%s", feature_file)
         return []
     try:
-        df = read_parquet_df(feature_file)
-        return df.to_dict(orient="records")
-    except Exception:
+        use_limit = max(1, min(int(limit), MAX_FEATURE_LIMIT))
+        return read_parquet_records(feature_file, limit=use_limit)
+    except Exception as e:
+        logger.warning("features_read_failed path=%s error=%s", feature_file, str(e))
         return []
+
+
+def _load_named_feature(
+    year: int,
+    race: str,
+    session: str,
+    feature_name: str,
+    limit: int = DEFAULT_FEATURE_LIMIT,
+) -> List[Dict[str, Any]]:
+    race_name = race.replace("-", " ")
+    session_path = find_features_path(year, race_name, session)
+    filename = FEATURE_DATASETS.get(feature_name)
+    if not filename:
+        return []
+    return load_feature_records(session_path, filename, limit=limit)
 
 
 def _filter_driver(df: pd.DataFrame, driver: str) -> pd.DataFrame:
@@ -152,7 +189,7 @@ async def get_features_summary() -> Dict[str, Any]:
         return {
             "total_feature_files": total_features,
             "by_year": by_year,
-            "feature_types": ["lap", "tyre", "telemetry", "race_context", "comparison", "position", "overtakes", "traffic", "points"],
+            "feature_types": list(FEATURE_DATASETS.keys()),
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -187,7 +224,8 @@ async def get_session_features(
     year: int,
     race: str,
     session: str,
-    feature_type: Optional[str] = None
+    feature_type: Optional[str] = None,
+    sample_limit: int = Query(default=2, ge=1, le=20),
 ) -> Dict[str, Any]:
     """Get feature data for a race session."""
     race_name = race.replace("-", " ")
@@ -205,12 +243,17 @@ async def get_session_features(
         features = {}
         for fname in feature_files:
             fpath = os.path.join(session_path, fname)
-            df = read_parquet_df(fpath)
+            conn = duckdb.connect()
+            try:
+                n_rows = int(conn.execute("SELECT COUNT(*) FROM read_parquet(?)", [fpath]).fetchone()[0] or 0)
+                sample_df = conn.execute("SELECT * FROM read_parquet(?) LIMIT ?", [fpath, int(sample_limit)]).df()
+            finally:
+                conn.close()
             fname_key = fname.replace("_features.parquet", "")
             features[fname_key] = {
-                "n_rows": len(df),
-                "columns": list(df.columns),
-                "sample": df.head(2).to_dict(orient="records") if len(df) > 0 else [],
+                "n_rows": n_rows,
+                "columns": list(sample_df.columns),
+                "sample": sample_df.to_dict(orient="records") if len(sample_df) > 0 else [],
             }
         
         return {
@@ -227,68 +270,87 @@ async def get_session_features(
 @router.get("/features/{year}/{race}/{session}/lap")
 async def get_lap_features(year: int, race: str, session: str) -> List[Dict[str, Any]]:
     """Get lap features for a race session."""
-    race_name = race.replace("-", " ")
-    session_path = find_features_path(year, race_name, session)
-    return load_feature_records(session_path, "lap_features.parquet")
+    return _load_named_feature(year, race, session, "lap")
 
 
 @router.get("/features/{year}/{race}/{session}/tyre")
 async def get_tyre_features(year: int, race: str, session: str) -> List[Dict[str, Any]]:
     """Get tyre features for a race session."""
-    race_name = race.replace("-", " ")
-    session_path = find_features_path(year, race_name, session)
-    return load_feature_records(session_path, "tyre_features.parquet")
+    return _load_named_feature(year, race, session, "tyre")
 
 
 @router.get("/features/{year}/{race}/{session}/comparison")
 async def get_comparison_features(year: int, race: str, session: str) -> List[Dict[str, Any]]:
     """Get comparison features (head-to-head) for a race session."""
-    race_name = race.replace("-", " ")
-    session_path = find_features_path(year, race_name, session)
-    return load_feature_records(session_path, "comparison_features.parquet")
+    return _load_named_feature(year, race, session, "comparison")
 
 
 @router.get("/features/{year}/{race}/{session}/telemetry")
 async def get_telemetry_features(year: int, race: str, session: str) -> List[Dict[str, Any]]:
     """Get telemetry features for a race session."""
-    race_name = race.replace("-", " ")
-    session_path = find_features_path(year, race_name, session)
-    return load_feature_records(session_path, "telemetry_features.parquet")
+    return _load_named_feature(year, race, session, "telemetry")
 
 
 @router.get("/features/{year}/{race}/{session}/traffic")
 async def get_traffic_features(year: int, race: str, session: str) -> List[Dict[str, Any]]:
-    race_name = race.replace("-", " ")
-    session_path = find_features_path(year, race_name, session)
-    return load_feature_records(session_path, "traffic_features.parquet")
+    return _load_named_feature(year, race, session, "traffic")
 
 
 @router.get("/features/{year}/{race}/{session}/overtakes")
 async def get_overtakes_features(year: int, race: str, session: str) -> List[Dict[str, Any]]:
-    race_name = race.replace("-", " ")
-    session_path = find_features_path(year, race_name, session)
-    return load_feature_records(session_path, "overtakes_features.parquet")
+    return _load_named_feature(year, race, session, "overtakes")
 
 
 @router.get("/features/{year}/{race}/{session}/position")
 async def get_position_features(year: int, race: str, session: str) -> List[Dict[str, Any]]:
-    race_name = race.replace("-", " ")
-    session_path = find_features_path(year, race_name, session)
-    return load_feature_records(session_path, "position_features.parquet")
+    return _load_named_feature(year, race, session, "position")
 
 
 @router.get("/features/{year}/{race}/{session}/points")
 async def get_points_features(year: int, race: str, session: str) -> List[Dict[str, Any]]:
-    race_name = race.replace("-", " ")
-    session_path = find_features_path(year, race_name, session)
-    return load_feature_records(session_path, "points_features.parquet")
+    return _load_named_feature(year, race, session, "points")
 
 
 @router.get("/features/{year}/{race}/{session}/race-context")
 async def get_race_context_features(year: int, race: str, session: str) -> List[Dict[str, Any]]:
+    return _load_named_feature(year, race, session, "race_context")
+
+
+@router.get("/features/{year}/{race}/{session}/catalog")
+async def get_session_feature_catalog(
+    year: int,
+    race: str,
+    session: str,
+    sample_limit: int = Query(default=1, ge=1, le=10),
+) -> Dict[str, Any]:
     race_name = race.replace("-", " ")
     session_path = find_features_path(year, race_name, session)
-    return load_feature_records(session_path, "race_context_features.parquet")
+    if not session_path:
+        raise HTTPException(status_code=404, detail=f"No features found for {year} {race_name} {session}")
+
+    catalog: Dict[str, Any] = {}
+    for feature_type, filename in FEATURE_DATASETS.items():
+        fpath = os.path.join(session_path, filename)
+        if not os.path.exists(fpath):
+            continue
+        conn = duckdb.connect()
+        try:
+            n_rows = int(conn.execute("SELECT COUNT(*) FROM read_parquet(?)", [fpath]).fetchone()[0] or 0)
+            sample_df = conn.execute("SELECT * FROM read_parquet(?) LIMIT ?", [fpath, int(sample_limit)]).df()
+        finally:
+            conn.close()
+        catalog[feature_type] = {
+            "n_rows": n_rows,
+            "columns": list(sample_df.columns),
+            "sample": sample_df.to_dict(orient="records") if len(sample_df) > 0 else [],
+        }
+
+    return {
+        "year": year,
+        "race": race_name,
+        "session": session,
+        "features": catalog,
+    }
 
 
 @router.get("/features/{year}/{race}/{session}/driver-summary")

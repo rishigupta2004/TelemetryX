@@ -1,40 +1,217 @@
-from fastapi import APIRouter
-from typing import List, Dict, Any, Optional
+from __future__ import annotations
+
 import os
-import pandas as pd
+import json
+import time
+from typing import Any, Dict, List, Optional, Tuple
+
 import duckdb
-from ..utils import resolve_dir, normalize_session_code
-from ..config import BRONZE_DIR, GOLD_DIR
+from fastapi import APIRouter, HTTPException, Query
+
+from db.connection import db_connection
+from ..config import BRONZE_DIR, GOLD_DIR, SILVER_DIR
+from ..utils import normalize_session_code, resolve_dir
+from . import metrics as metrics_router
 
 router = APIRouter()
 
+MAX_WINDOW_S = 60.0
+MAX_ROWS = 10_000
+MAX_DRIVERS = 5
+COORD_ABS_LIMIT = 1_000_000.0
+_STREAM_METRICS_ROUTE = "/api/v1/positions/{year}/{round}/stream"
 
-def _load_openf1_positions(year: int, race_name: str, session: str) -> Optional[pd.DataFrame]:
-    parquet_path = os.path.join(BRONZE_DIR, str(year), race_name, session, "openf1", "telemetry_3d.parquet")
-    if not os.path.exists(parquet_path):
-        return None
+
+def _estimate_payload_bytes(payload: Any) -> int:
     try:
-        conn = duckdb.connect()
-        try:
-            return conn.execute(f"SELECT * FROM read_parquet('{parquet_path}')").df()
-        finally:
-            conn.close()
+        return len(json.dumps(payload, separators=(",", ":"), default=str).encode("utf-8"))
     except Exception:
-        return None
+        return 0
 
 
-def _load_gold_track_map(year: int, race_name: str, session: str) -> Optional[pd.DataFrame]:
-    parquet_path = os.path.join(GOLD_DIR, str(year), race_name, session, "track_map.parquet")
-    if not os.path.exists(parquet_path):
-        return None
+def _candidate_position_files(year: int, race_name: str, session: str) -> List[str]:
+    sess = normalize_session_code(session)
+    files: List[str] = []
+    roots = [
+        os.path.join(SILVER_DIR, str(year)),
+        os.path.join(BRONZE_DIR, str(year)),
+        os.path.join(GOLD_DIR, str(year)),
+    ]
+    for root in roots:
+        race_dir = resolve_dir(root, race_name) or race_name
+        base = os.path.join(root, race_dir, sess)
+        files.extend(
+            [
+                os.path.join(base, "positions.parquet"),
+                os.path.join(base, "openf1", "positions.parquet"),
+                os.path.join(base, "openf1", "telemetry_3d.parquet"),
+                os.path.join(base, "track_map.parquet"),
+            ]
+        )
+    out: List[str] = []
+    seen = set()
+    for path in files:
+        if path in seen or not os.path.exists(path):
+            continue
+        seen.add(path)
+        out.append(path)
+    return out
+
+
+def _column_set(path: str) -> set[str]:
+    conn = duckdb.connect()
     try:
-        conn = duckdb.connect()
-        try:
-            return conn.execute(f"SELECT * FROM read_parquet('{parquet_path}')").df()
-        finally:
-            conn.close()
-    except Exception:
+        rows = conn.execute("DESCRIBE SELECT * FROM read_parquet(?)", [path]).fetchall()
+        return {str(r[0]) for r in rows}
+    finally:
+        conn.close()
+
+
+def _shape(path: str) -> Optional[Tuple[str, str, str, str]]:
+    cols = _column_set(path)
+    x_col = "position_x" if "position_x" in cols else ("x" if "x" in cols else "")
+    y_col = "position_y" if "position_y" in cols else ("y" if "y" in cols else "")
+    d_col = "driver_number" if "driver_number" in cols else ("driver" if "driver" in cols else "")
+    if not x_col or not y_col or not d_col:
         return None
+    if "session_time_seconds" in cols:
+        return x_col, y_col, d_col, "session_time_seconds"
+    if "timestamp" in cols:
+        return x_col, y_col, d_col, "timestamp"
+    if "date" in cols:
+        return x_col, y_col, d_col, "date"
+    return None
+
+
+@router.get("/positions/{year}/{round}/stream")
+async def get_positions_stream(
+    year: int,
+    round: str,
+    time_start_ms: int = Query(..., description="Window start in milliseconds"),
+    time_end_ms: int = Query(..., description="Window end in milliseconds"),
+    drivers: Optional[List[int]] = Query(default=None),
+    sample_rate: int = Query(default=1, ge=1, le=100),
+    session_type: str = Query(default="R"),
+) -> List[Dict[str, Any]]:
+    started_at = time.perf_counter()
+    if int(time_end_ms) <= int(time_start_ms):
+        raise HTTPException(status_code=400, detail="time_end_ms must be greater than time_start_ms")
+
+    race_name = round.replace("-", " ")
+    duration_s = max(0.0, (float(time_end_ms) - float(time_start_ms)) / 1000.0)
+    if duration_s > MAX_WINDOW_S:
+        raise HTTPException(status_code=413, detail=f"Window exceeds {int(MAX_WINDOW_S)}s limit")
+    if drivers and len(drivers) > MAX_DRIVERS:
+        raise HTTPException(status_code=413, detail=f"Max {MAX_DRIVERS} drivers per request")
+
+    candidates = _candidate_position_files(year, race_name, session_type)
+    if not candidates:
+        metrics_router.record_endpoint_sample(
+            _STREAM_METRICS_ROUTE,
+            (time.perf_counter() - started_at) * 1000.0,
+            2,
+            0,
+        )
+        return []
+
+    for path in candidates:
+        shaped = _shape(path)
+        if not shaped:
+            continue
+        x_col, y_col, d_col, time_col = shaped
+        try:
+            where = [
+                "x IS NOT NULL",
+                "y IS NOT NULL",
+                "driver_number IS NOT NULL",
+                f"abs(x) <= {float(COORD_ABS_LIMIT)}",
+                f"abs(y) <= {float(COORD_ABS_LIMIT)}",
+                "time_ms BETWEEN ? AND ?",
+            ]
+            params: List[Any] = [int(time_start_ms), int(time_end_ms)]
+            if drivers:
+                where.append("driver_number IN (" + ",".join(["?"] * len(drivers)) + ")")
+                params.extend([int(x) for x in drivers])
+
+            if time_col == "date":
+                source = f"""
+                    SELECT
+                        (epoch(date) - min(epoch(date)) OVER ()) * 1000.0 AS time_ms,
+                        CAST({d_col} AS INTEGER) AS driver_number,
+                        CAST({x_col} AS DOUBLE) AS x,
+                        CAST({y_col} AS DOUBLE) AS y
+                    FROM read_parquet(?)
+                """
+            else:
+                if time_col == "session_time_seconds":
+                    t_expr = "session_time_seconds * 1000.0"
+                else:
+                    # Support absolute epoch timestamps by normalizing to session-relative ms.
+                    t_expr = "(timestamp - min(timestamp) OVER ()) * 1000.0"
+                source = f"""
+                    SELECT
+                        {t_expr} AS time_ms,
+                        CAST({d_col} AS INTEGER) AS driver_number,
+                        CAST({x_col} AS DOUBLE) AS x,
+                        CAST({y_col} AS DOUBLE) AS y
+                    FROM read_parquet(?)
+                """
+
+            sql = f"""
+                WITH base AS (
+                    {source}
+                ),
+                filtered AS (
+                    SELECT * FROM base
+                    WHERE {" AND ".join(where)}
+                ),
+                ranked AS (
+                    SELECT
+                        *,
+                        row_number() OVER (PARTITION BY driver_number ORDER BY time_ms) AS rn
+                    FROM filtered
+                )
+                SELECT
+                    time_ms,
+                    driver_number,
+                    x,
+                    y
+                FROM ranked
+                WHERE ((rn - 1) % ?) = 0
+                ORDER BY driver_number, time_ms
+                LIMIT ?
+            """
+            query_params = [path, *params, int(sample_rate), int(MAX_ROWS + 1)]
+            rows = db_connection.conn.execute(sql, query_params).fetchall()
+            if len(rows) > MAX_ROWS:
+                raise HTTPException(status_code=413, detail=f"Result exceeds {MAX_ROWS} rows")
+            payload = [
+                {
+                    "time_ms": float(r[0]),
+                    "driver_number": int(r[1]),
+                    "x": float(r[2]),
+                    "y": float(r[3]),
+                }
+                for r in rows
+            ]
+            metrics_router.record_endpoint_sample(
+                _STREAM_METRICS_ROUTE,
+                (time.perf_counter() - started_at) * 1000.0,
+                _estimate_payload_bytes(payload),
+                len(payload),
+            )
+            return payload
+        except HTTPException:
+            raise
+        except Exception:
+            continue
+    metrics_router.record_endpoint_sample(
+        _STREAM_METRICS_ROUTE,
+        (time.perf_counter() - started_at) * 1000.0,
+        2,
+        0,
+    )
+    return []
 
 
 @router.get("/positions/{year}/{round}")
@@ -44,65 +221,105 @@ async def get_positions(
     session_type: str = "R",
     driver: Optional[str] = None,
     step: int = 10,
-    max_points: int = 20000
+    max_points: int = 20000,
 ) -> List[Dict[str, Any]]:
+    """Backward-compatible endpoint kept for older clients.
+
+    Legacy endpoint intentionally does not enforce stream window/row caps.
+    """
     race_name = round.replace("-", " ")
-    bronze_year = os.path.join(BRONZE_DIR, str(year))
-    gold_year = os.path.join(GOLD_DIR, str(year))
-    bronze_race = resolve_dir(bronze_year, race_name) or race_name
-    gold_race = resolve_dir(gold_year, race_name) or race_name
-    session = normalize_session_code(session_type)
-
-    df = _load_openf1_positions(year, bronze_race, session)
-    source = "openf1"
-    if df is None or df.empty:
-        df = _load_gold_track_map(year, gold_race, session)
-        source = "gold"
-
-    if df is None or df.empty:
+    candidates = _candidate_position_files(year, race_name, session_type)
+    if not candidates:
         return []
 
-    x_col = "position_x" if "position_x" in df.columns else "x" if "x" in df.columns else None
-    y_col = "position_y" if "position_y" in df.columns else "y" if "y" in df.columns else None
-    drv_col = "driver_number" if "driver_number" in df.columns else "driver" if "driver" in df.columns else None
-    t_col = "session_time_seconds" if "session_time_seconds" in df.columns else "timestamp" if "timestamp" in df.columns else "date" if "date" in df.columns else None
+    driver_number: Optional[int] = None
+    if driver:
+        if not str(driver).isdigit():
+            return []
+        driver_number = int(driver)
 
-    if not x_col or not y_col or not drv_col or not t_col:
-        return []
+    sample_rate = max(1, int(step))
+    max_points = max(1, int(max_points))
 
-    out = df[[t_col, drv_col, x_col, y_col]].copy()
-    out.columns = ["time_raw", "driver_number", "x", "y"]
-
-    if driver is not None:
-        if driver.isdigit():
-            out = out[out["driver_number"] == int(driver)]
-        else:
-            out = out[out["driver_number"].astype(str) == driver]
-
-    if out.empty:
-        return []
-
-    if not pd.api.types.is_numeric_dtype(out["time_raw"]):
+    for path in candidates:
+        shaped = _shape(path)
+        if not shaped:
+            continue
+        x_col, y_col, d_col, time_col = shaped
         try:
-            times = pd.to_datetime(out["time_raw"], errors="coerce")
-            base = times.min()
-            out["time"] = (times - base).dt.total_seconds()
+            where = [
+                "x IS NOT NULL",
+                "y IS NOT NULL",
+                "driver_number IS NOT NULL",
+                f"abs(x) <= {float(COORD_ABS_LIMIT)}",
+                f"abs(y) <= {float(COORD_ABS_LIMIT)}",
+            ]
+            params: List[Any] = []
+            if driver_number is not None:
+                where.append("driver_number = ?")
+                params.append(int(driver_number))
+
+            if time_col == "date":
+                source = f"""
+                    SELECT
+                        (epoch(date) - min(epoch(date)) OVER ()) * 1000.0 AS time_ms,
+                        CAST({d_col} AS INTEGER) AS driver_number,
+                        CAST({x_col} AS DOUBLE) AS x,
+                        CAST({y_col} AS DOUBLE) AS y
+                    FROM read_parquet(?)
+                """
+            else:
+                if time_col == "session_time_seconds":
+                    t_expr = "session_time_seconds * 1000.0"
+                else:
+                    t_expr = "(timestamp - min(timestamp) OVER ()) * 1000.0"
+                source = f"""
+                    SELECT
+                        {t_expr} AS time_ms,
+                        CAST({d_col} AS INTEGER) AS driver_number,
+                        CAST({x_col} AS DOUBLE) AS x,
+                        CAST({y_col} AS DOUBLE) AS y
+                    FROM read_parquet(?)
+                """
+
+            sql = f"""
+                WITH base AS (
+                    {source}
+                ),
+                filtered AS (
+                    SELECT * FROM base
+                    WHERE {" AND ".join(where)}
+                ),
+                ranked AS (
+                    SELECT
+                        *,
+                        row_number() OVER (PARTITION BY driver_number ORDER BY time_ms) AS rn
+                    FROM filtered
+                )
+                SELECT
+                    time_ms,
+                    driver_number,
+                    x,
+                    y
+                FROM ranked
+                WHERE ((rn - 1) % ?) = 0
+                ORDER BY driver_number, time_ms
+                LIMIT ?
+            """
+            rows = db_connection.conn.execute(
+                sql,
+                [path, *params, int(sample_rate), int(max_points)],
+            ).fetchall()
+            return [
+                {
+                    "time": float(r[0]) / 1000.0,
+                    "driver_number": int(r[1]),
+                    "x": float(r[2]),
+                    "y": float(r[3]),
+                    "source": "legacy",
+                }
+                for r in rows
+            ]
         except Exception:
-            out["time"] = pd.Series([0.0] * len(out))
-    else:
-        out["time"] = pd.to_numeric(out["time_raw"], errors="coerce")
-
-    out = out.dropna(subset=["time", "x", "y", "driver_number"])
-    out = out.sort_values(["driver_number", "time"])
-
-    step = max(1, int(step))
-    if step > 1:
-        out = out.groupby("driver_number", as_index=False, group_keys=False).apply(lambda g: g.iloc[::step])
-
-    if len(out) > max_points:
-        out = out.iloc[:max_points]
-
-    records = out[["time", "driver_number", "x", "y"]].to_dict(orient="records")
-    for r in records:
-        r["source"] = source
-    return records
+            continue
+    return []

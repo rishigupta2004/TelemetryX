@@ -41,12 +41,94 @@ def _laps_df(year: int, race_slug: str, session_type: Optional[str]) -> pd.DataF
     return read_parquet_df(laps_file)
 
 
+def _is_quali_like(session_type: Optional[str]) -> bool:
+    code = normalize_session_code(session_type) if session_type else ""
+    return code in {"Q", "S"}
+
+
+def _segment_labels(session_type: Optional[str]) -> List[str]:
+    return ["SQ1", "SQ2", "SQ3"] if normalize_session_code(session_type) == "S" else ["Q1", "Q2", "Q3"]
+
+
+def _assign_segment(end_time_s: float, cuts: Tuple[float, float], labels: List[str]) -> str:
+    if end_time_s < cuts[0]:
+        return labels[0]
+    if end_time_s < cuts[1]:
+        return labels[1]
+    return labels[2]
+
+
+def _with_segments(df: pd.DataFrame, session_type: Optional[str]) -> pd.DataFrame:
+    if df.empty or not _is_quali_like(session_type):
+        return df
+    if "segment" in df.columns:
+        return df
+    if "session_time_seconds" not in df.columns:
+        return df
+
+    times = pd.to_numeric(df["session_time_seconds"], errors="coerce").dropna()
+    if times.empty:
+        return df
+    t_min = float(times.min())
+    t_max = float(times.max())
+    if t_max <= t_min:
+        return df
+    span = t_max - t_min
+    cuts = (t_min + span / 3.0, t_min + 2.0 * span / 3.0)
+    labels = _segment_labels(session_type)
+
+    out = df.copy()
+    out["segment"] = [
+        _assign_segment(float(t), cuts, labels) if pd.notna(t) else ""
+        for t in pd.to_numeric(out["session_time_seconds"], errors="coerce")
+    ]
+    return out
+
+
+def _driver_filter_mask(df: pd.DataFrame, driver_id: str) -> Optional[pd.Series]:
+    mask = None
+    if "driver_name" in df.columns:
+        mask = df["driver_name"].astype(str) == str(driver_id)
+    if "driver_number" in df.columns:
+        by_number = df["driver_number"].astype(str) == str(driver_id)
+        mask = by_number if mask is None else (mask | by_number)
+    return mask
+
+
+def _lap_sort(df: pd.DataFrame) -> pd.DataFrame:
+    if df.empty:
+        return df
+    by = []
+    if "lap_time_seconds" in df.columns:
+        by.append("lap_time_seconds")
+    if "lap_number" in df.columns:
+        by.append("lap_number")
+    if not by:
+        return df
+    return df.sort_values(by, na_position="last")
+
+
+def _pick_selected_lap(df: pd.DataFrame, lap_number: Optional[int]) -> Optional[Dict[str, Any]]:
+    if df.empty:
+        return None
+    selected = df
+    if lap_number is not None and "lap_number" in selected.columns:
+        selected = selected[selected["lap_number"].astype("Int64") == int(lap_number)]
+        if selected.empty:
+            return None
+    selected = _lap_sort(selected)
+    if selected.empty:
+        return None
+    return selected.iloc[0].to_dict()
+
+
 @router.get("/laps/{year}/{round}")
 async def get_laps(
     year: int,
     round: str,
     valid_only: bool = Query(default=False),
     session_type: Optional[str] = Query(default=None),
+    limit: int = Query(default=2000, ge=1, le=20000),
 ) -> List[Dict[str, Any]]:
     """Return lap rows (schema depends on source/parquet)."""
     df = _laps_df(year, round, session_type)
@@ -54,7 +136,44 @@ async def get_laps(
         return []
     if valid_only and "is_valid_lap" in df.columns:
         df = df[df["is_valid_lap"] == True]  # noqa: E712
+    if len(df) > int(limit):
+        df = df.head(int(limit))
     return df.to_dict(orient="records")
+
+
+@router.get("/laps/{year}/{round}/summary")
+async def get_laps_summary(
+    year: int,
+    round: str,
+    session_type: Optional[str] = Query(default=None),
+) -> Dict[str, Any]:
+    """Lightweight lap summary for fast initial table render."""
+    df = _laps_df(year, round, session_type)
+    if df.empty:
+        return {"session_info": {"total_laps": 0, "drivers": 0}, "laps": []}
+
+    summary_cols = [
+        "driver_number",
+        "driver_name",
+        "lap_number",
+        "lap_time_seconds",
+        "position",
+        "is_valid_lap",
+    ]
+    cols = [c for c in summary_cols if c in df.columns]
+    if cols:
+        summary = df[cols]
+    else:
+        summary = df
+    if "lap_number" in summary.columns:
+        summary = summary.sort_values(["driver_number", "lap_number"], na_position="last")
+
+    total_laps = int(df["lap_number"].max()) if "lap_number" in df.columns and not df["lap_number"].isna().all() else 0
+    drivers = int(df["driver_number"].nunique()) if "driver_number" in df.columns else 0
+    return {
+        "session_info": {"total_laps": total_laps, "drivers": drivers},
+        "laps": summary.to_dict(orient="records"),
+    }
 
 
 @router.get("/laps/{year}/{round}/{driver_id}")
@@ -64,26 +183,74 @@ async def get_driver_laps(
     driver_id: str,
     valid_only: bool = Query(default=False),
     session_type: Optional[str] = Query(default=None),
+    segment: Optional[str] = Query(default=None),
+    limit: int = Query(default=1000, ge=1, le=10000),
 ) -> List[Dict[str, Any]]:
     df = _laps_df(year, round, session_type)
     if df.empty:
         raise HTTPException(status_code=404, detail="Laps data not found")
 
-    driver_mask = None
-    if "driver_name" in df.columns:
-        driver_mask = df["driver_name"].astype(str) == str(driver_id)
-    if "driver_number" in df.columns:
-        m = df["driver_number"].astype(str) == str(driver_id)
-        driver_mask = m if driver_mask is None else (driver_mask | m)
+    df = _with_segments(df, session_type)
+    driver_mask = _driver_filter_mask(df, driver_id)
     if driver_mask is None:
         return []
 
     df = df[driver_mask]
     if valid_only and "is_valid_lap" in df.columns:
         df = df[df["is_valid_lap"] == True]  # noqa: E712
-    if "lap_number" in df.columns:
+    if segment and "segment" in df.columns:
+        df = df[df["segment"].astype(str).str.upper() == str(segment).upper()]
+    if "lap_number" in df.columns and "lap_time_seconds" in df.columns:
+        df = _lap_sort(df)
+    elif "lap_number" in df.columns:
         df = df.sort_values("lap_number")
+    if len(df) > int(limit):
+        df = df.head(int(limit))
     return df.to_dict(orient="records")
+
+
+@router.get("/laps/{year}/{round}/{driver_id}/selection")
+async def get_driver_lap_selection(
+    year: int,
+    round: str,
+    driver_id: str,
+    session_type: Optional[str] = Query(default=None),
+    segment: Optional[str] = Query(default=None),
+    lap_number: Optional[int] = Query(default=None, ge=1),
+    valid_only: bool = Query(default=True),
+    limit: int = Query(default=400, ge=1, le=5000),
+) -> Dict[str, Any]:
+    df = _laps_df(year, round, session_type)
+    if df.empty:
+        raise HTTPException(status_code=404, detail="Laps data not found")
+
+    df = _with_segments(df, session_type)
+    driver_mask = _driver_filter_mask(df, driver_id)
+    if driver_mask is None:
+        return {"driver": str(driver_id), "segments": [], "selected": None, "laps": []}
+
+    df = df[driver_mask]
+    if valid_only and "is_valid_lap" in df.columns:
+        df = df[df["is_valid_lap"] == True]  # noqa: E712
+    if segment and "segment" in df.columns:
+        df = df[df["segment"].astype(str).str.upper() == str(segment).upper()]
+
+    sorted_df = _lap_sort(df)
+    if len(sorted_df) > int(limit):
+        sorted_df = sorted_df.head(int(limit))
+
+    selected = _pick_selected_lap(sorted_df, lap_number)
+    segments = []
+    if "segment" in sorted_df.columns:
+        segments = sorted({str(s) for s in sorted_df["segment"].dropna().tolist() if str(s)})
+
+    return {
+        "driver": str(driver_id),
+        "segment": str(segment or ""),
+        "segments": segments,
+        "selected": selected,
+        "laps": sorted_df.to_dict(orient="records"),
+    }
 
 
 @router.get("/laps/{year}/{round}/gap-analysis")
@@ -186,4 +353,3 @@ async def get_head_to_head(
         "difference": f"{diff:+.3f}",
         "interpretation": f"{b.get('driver_name') or b.get('driver_number')} is {diff:.3f}s slower than {a.get('driver_name') or a.get('driver_number')}",
     }
-

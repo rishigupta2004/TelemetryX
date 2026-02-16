@@ -1,7 +1,7 @@
 import os
 import unicodedata
 from functools import lru_cache
-from typing import Optional, Sequence
+from typing import Any, Dict, List, Optional, Sequence
 
 import duckdb
 import pandas as pd
@@ -92,3 +92,39 @@ def read_parquet_df(path: str, columns: Optional[Sequence[str]] = None) -> pd.Da
         return conn.execute(f"SELECT {cols} FROM read_parquet('{path}')").df()
     finally:
         conn.close()
+
+
+def read_parquet_records(
+    path: str,
+    columns: Optional[Sequence[str]] = None,
+    where_sql: Optional[str] = None,
+    params: Optional[Sequence[Any]] = None,
+    order_by: Optional[str] = None,
+    limit: Optional[int] = None,
+) -> List[Dict[str, Any]]:
+    if not path or not os.path.exists(path):
+        return []
+    cols = "*"
+    if columns:
+        cols = ", ".join([f'"{c}"' for c in columns])
+    sql = f"SELECT {cols} FROM read_parquet(?)"
+    query_params: List[Any] = [path]
+    if where_sql:
+        sql += f" WHERE {where_sql}"
+        if params:
+            query_params.extend(params)
+    if order_by:
+        sql += f" ORDER BY {order_by}"
+    if limit is not None:
+        sql += " LIMIT ?"
+        query_params.append(int(limit))
+    conn = duckdb.connect()
+    try:
+        rows = conn.execute(sql, query_params).fetchall()
+        cols_meta = [str(d[0]) for d in conn.description] if conn.description else []
+    finally:
+        conn.close()
+    out: List[Dict[str, Any]] = []
+    for row in rows:
+        out.append({cols_meta[i]: row[i] for i in range(len(cols_meta))})
+    return out

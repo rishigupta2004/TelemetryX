@@ -34,7 +34,7 @@ async def get_season(year: int) -> Dict[str, Any]:
 
 
 @router.get("/seasons/{year}/races")
-async def get_races_by_year(year: int) -> List[Dict[str, Any]]:
+async def get_races_by_year(year: int, include_timestamps: bool = False) -> List[Dict[str, Any]]:
     """Get list of races for a specific year."""
     year_path = os.path.join(str(SILVER_DIR), str(year))
     if not os.path.exists(year_path):
@@ -77,7 +77,7 @@ async def get_races_by_year(year: int) -> List[Dict[str, Any]]:
             races.append({
                 "name": race_dir,
                 "sessions": sessions,
-                "startDate": _read_sort_date(race_dir),
+                "startDate": _read_sort_date(race_dir) if include_timestamps else "",
             })
     
     # Sort by calendar round when available; fall back to name.

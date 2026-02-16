@@ -17,14 +17,19 @@ venv/
 ENV/
 env/
 
-# Data & artifacts
+# Data & artifacts (keep raw datasets out of git)
 backend/etl/data/
 backend/etl/data/**
+backend/etl/cache/
+backend/etl/output/
+backend/etl/tmp/
 data/
 *.duckdb
 *.db
 *.parquet
-*.csv
+*.sqlite
+telemetryx*.duckdb
+views*.duckdb
 
 # Node / web artifacts (legacy)
 node_modules/

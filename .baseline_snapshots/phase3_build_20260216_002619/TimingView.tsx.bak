@@ -1,0 +1,33 @@
+import { useEffect } from 'react'
+import TimingTower from '../components/TimingTower'
+import { useTimingData } from '../hooks/useTimingData'
+import { useSessionStore } from '../stores/sessionStore'
+
+export default function TimingView() {
+  const laps = useSessionStore((s) => s.laps)
+  const sessionData = useSessionStore((s) => s.sessionData)
+  const drivers = sessionData?.drivers ?? []
+  const totalLaps = sessionData?.metadata.totalLaps ?? null
+  const rows = useTimingData(laps, drivers, totalLaps)
+
+  useEffect(() => {
+    if (!sessionData?.trackGeometry) return
+    const tg = sessionData.trackGeometry
+    console.log('Track geometry:', {
+      name: tg.name,
+      centerlinePoints: tg.centerline?.length,
+      corners: tg.corners?.length,
+      sectors: tg.sectors?.length,
+      drsZones: tg.drsZones?.length,
+      firstPoint: tg.centerline?.[0],
+      trackWidth: tg.trackWidth
+    })
+  }, [sessionData])
+
+  return (
+    <div className="h-full w-full p-2">
+      <div className="mb-2 text-xs text-text-secondary">Final Classification</div>
+      <TimingTower rows={rows} />
+    </div>
+  )
+}

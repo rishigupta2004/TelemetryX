@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 from typing import List, Dict, Any
 import duckdb
 import os
@@ -96,7 +96,11 @@ async def get_race(year: int, round: str) -> Dict[str, Any]:
     return {"error": "Race not found"}
 
 @router.get("/races/{year}/{round}/stints")
-async def get_stints(year: int, round: str) -> List[Dict[str, Any]]:
+async def get_stints(
+    year: int,
+    round: str,
+    limit: int = Query(default=2000, ge=1, le=20000),
+) -> List[Dict[str, Any]]:
     """Get stint data for the race."""
     race_info = await get_race(year, round)
     if "error" in race_info:
@@ -133,13 +137,19 @@ async def get_stints(year: int, round: str) -> List[Dict[str, Any]]:
 
     try:
         df = read_parquet_df(stints_file)
+        if len(df) > int(limit):
+            df = df.head(int(limit))
         return df.to_dict(orient="records")
     except Exception as e:
         print(f"Error reading stints: {e}")
         return []
 
 @router.get("/races/{year}/{round}/control")
-async def get_race_control(year: int, round: str) -> List[Dict[str, Any]]:
+async def get_race_control(
+    year: int,
+    round: str,
+    limit: int = Query(default=1000, ge=1, le=10000),
+) -> List[Dict[str, Any]]:
     """Get race control messages (Flags, Penalties, etc.)"""
     # Resolve race name
     race_info = await get_race(year, round)
@@ -167,6 +177,8 @@ async def get_race_control(year: int, round: str) -> List[Dict[str, Any]]:
         if 'Time' in df.columns:
             df['Time'] = df['Time'].astype(str)
             
+        if len(df) > int(limit):
+            df = df.head(int(limit))
         return df.to_dict(orient="records")
     except Exception as e:
         print(f"Error reading race control: {e}")

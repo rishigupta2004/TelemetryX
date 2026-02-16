@@ -1,0 +1,109 @@
+import { create } from 'zustand'
+
+interface PlaybackState {
+  currentTime: number
+  isPlaying: boolean
+  speed: number
+  duration: number
+  sessionStartTime: number
+  play: () => void
+  pause: () => void
+  togglePlay: () => void
+  seek: (time: number) => void
+  setSpeed: (speed: number) => void
+  setDuration: (duration: number, sessionStartTime: number) => void
+  reset: () => void
+  _animFrameId: number | null
+  _lastFrameTime: number | null
+}
+
+export const usePlaybackStore = create<PlaybackState>((set, get) => ({
+  currentTime: 0,
+  isPlaying: false,
+  speed: 1,
+  duration: 0,
+  sessionStartTime: 0,
+  _animFrameId: null,
+  _lastFrameTime: null,
+
+  play: () => {
+    const state = get()
+    if (state.isPlaying || state.duration === 0) return
+
+    set({ isPlaying: true, _lastFrameTime: performance.now() })
+
+    const tick = (now: number) => {
+      const s = get()
+      if (!s.isPlaying) return
+
+      const delta = (now - (s._lastFrameTime || now)) / 1000
+      let newTime = s.currentTime + delta * s.speed
+
+      if (newTime >= s.duration) {
+        newTime = s.duration
+        set({ currentTime: newTime, isPlaying: false, _animFrameId: null })
+        return
+      }
+
+      set({ currentTime: newTime, _lastFrameTime: now })
+      const id = requestAnimationFrame(tick)
+      set({ _animFrameId: id })
+    }
+
+    const id = requestAnimationFrame(tick)
+    set({ _animFrameId: id })
+  },
+
+  pause: () => {
+    const state = get()
+    if (state._animFrameId) cancelAnimationFrame(state._animFrameId)
+    set({ isPlaying: false, _animFrameId: null, _lastFrameTime: null })
+  },
+
+  togglePlay: () => {
+    const state = get()
+    if (state.isPlaying) {
+      state.pause()
+    } else {
+      if (state.currentTime >= state.duration) set({ currentTime: 0 })
+      state.play()
+    }
+  },
+
+  seek: (time: number) => {
+    const state = get()
+    const clamped = Math.max(0, Math.min(time, state.duration))
+    set({ currentTime: clamped })
+  },
+
+  setSpeed: (speed: number) => {
+    set({ speed })
+  },
+
+  setDuration: (duration: number, sessionStartTime: number) => {
+    const state = get()
+    if (state._animFrameId) cancelAnimationFrame(state._animFrameId)
+    set({
+      duration,
+      sessionStartTime,
+      currentTime: 0,
+      isPlaying: false,
+      _animFrameId: null,
+      _lastFrameTime: null
+    })
+  },
+
+  reset: () => {
+    const state = get()
+    if (state._animFrameId) cancelAnimationFrame(state._animFrameId)
+    set({
+      currentTime: 0,
+      isPlaying: false,
+      speed: 1,
+      duration: 0,
+      sessionStartTime: 0,
+      _animFrameId: null,
+      _lastFrameTime: null
+    })
+  }
+}))

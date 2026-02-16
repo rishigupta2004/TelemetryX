@@ -6,12 +6,12 @@ interface TimingTowerProps {
   rows: TimingRow[]
 }
 
-function sectorStyle(status: TimingRow['sector1Status']): { backgroundColor?: string; color?: string } {
-  if (status === 'purple') return { backgroundColor: '#a855f7', color: '#ffffff' }
-  if (status === 'green') return { backgroundColor: '#00d846', color: '#000000' }
-  if (status === 'yellow') return { backgroundColor: '#ffd700', color: '#000000' }
-  return {}
-}
+const SECTOR_COLORS = {
+  purple: '#a855f7',
+  green: '#00d846',
+  yellow: '#ffd700',
+  white: '#a0a0a0'
+} as const
 
 function cellLap(value: number | null): string {
   if (value == null || !Number.isFinite(value)) return '—'
@@ -36,7 +36,7 @@ export default function TimingTower({ rows }: TimingTowerProps) {
 
   return (
     <div className="h-full overflow-x-auto overflow-y-auto rounded-md border border-border bg-bg-secondary shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]">
-      <table className="min-w-[640px] table-fixed text-xs">
+      <table className="min-w-[676px] table-fixed text-xs">
         <thead className="sticky top-0 z-10 bg-bg-secondary/95 backdrop-blur-sm">
           <tr className="h-7 border-b border-border text-text-secondary">
             <th className="w-9 px-1 text-left">POS</th>
@@ -46,6 +46,7 @@ export default function TimingTower({ rows }: TimingTowerProps) {
             <th className="w-[80px] px-1 text-right">LAST</th>
             <th className="w-[80px] px-1 text-right">BEST</th>
             <th className="w-9 px-1 text-left">TYRE</th>
+            <th className="w-9 px-1 text-right">PITS</th>
             <th className="w-16 px-1 text-right">S1</th>
             <th className="w-16 px-1 text-right">S2</th>
             <th className="w-16 px-1 text-right">S3</th>
@@ -70,7 +71,6 @@ export default function TimingTower({ rows }: TimingTowerProps) {
                 style={{ backgroundColor: selectedBg }}
                 onClick={() => {
                   setSelectedDriver(row.driverNumber)
-                  console.log('selected driver:', row.driverName)
                 }}
                 title={`${row.teamName} - Lap ${row.lapsCompleted}`}
               >
@@ -95,9 +95,10 @@ export default function TimingTower({ rows }: TimingTowerProps) {
                     {tyreKey?.[0] ?? '?'}
                   </div>
                 </td>
-                <td className="px-1 text-right font-mono" style={sectorStyle(row.sector1Status)}>{cellLap(row.sector1)}</td>
-                <td className="px-1 text-right font-mono" style={sectorStyle(row.sector2Status)}>{cellLap(row.sector2)}</td>
-                <td className="px-1 text-right font-mono" style={sectorStyle(row.sector3Status)}>{cellLap(row.sector3)}</td>
+                <td className="px-1 text-right font-mono">{row.pits > 0 ? row.pits : '—'}</td>
+                <td className="px-1 text-right font-mono" style={{ color: SECTOR_COLORS[row.s1Color] }}>{cellLap(row.sector1)}</td>
+                <td className="px-1 text-right font-mono" style={{ color: SECTOR_COLORS[row.s2Color] }}>{cellLap(row.sector2)}</td>
+                <td className="px-1 text-right font-mono" style={{ color: SECTOR_COLORS[row.s3Color] }}>{cellLap(row.sector3)}</td>
               </tr>
             )
           })}

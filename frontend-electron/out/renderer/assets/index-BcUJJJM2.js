@@ -12493,6 +12493,95 @@ const createImpl = (createState) => {
   return useBoundStore;
 };
 const create = ((createState) => createState ? createImpl(createState) : createImpl);
+let _animFrameId = null;
+let _lastFrameTime = null;
+let _internalTime = 0;
+let _lastStoreUpdate = 0;
+const UPDATE_INTERVAL_MS = 11;
+const usePlaybackStore = create((set, get2) => ({
+  currentTime: 0,
+  isPlaying: false,
+  speed: 1,
+  duration: 0,
+  sessionStartTime: 0,
+  play: () => {
+    const state = get2();
+    if (state.isPlaying || state.duration === 0) return;
+    _lastFrameTime = performance.now();
+    _lastStoreUpdate = _lastFrameTime;
+    _internalTime = state.currentTime;
+    set({ isPlaying: true });
+    const tick = (now) => {
+      const s = get2();
+      if (!s.isPlaying) return;
+      const delta = (now - (_lastFrameTime || now)) / 1e3;
+      _lastFrameTime = now;
+      _internalTime += delta * s.speed;
+      if (_internalTime >= s.duration) {
+        _internalTime = s.duration;
+        set({ currentTime: _internalTime, isPlaying: false });
+        _animFrameId = null;
+        return;
+      }
+      if (now - _lastStoreUpdate >= UPDATE_INTERVAL_MS) {
+        set({ currentTime: _internalTime });
+        _lastStoreUpdate = now;
+      }
+      _animFrameId = requestAnimationFrame(tick);
+    };
+    _animFrameId = requestAnimationFrame(tick);
+  },
+  pause: () => {
+    if (_animFrameId) cancelAnimationFrame(_animFrameId);
+    _animFrameId = null;
+    _lastFrameTime = null;
+    set({ isPlaying: false, currentTime: _internalTime });
+  },
+  togglePlay: () => {
+    const s = get2();
+    if (s.isPlaying) {
+      s.pause();
+    } else {
+      if (s.currentTime >= s.duration) {
+        _internalTime = 0;
+        set({ currentTime: 0 });
+      }
+      s.play();
+    }
+  },
+  seek: (time) => {
+    const s = get2();
+    const clamped = Math.max(0, Math.min(time, s.duration));
+    _internalTime = clamped;
+    set({ currentTime: clamped });
+  },
+  setSpeed: (speed) => set({ speed }),
+  setDuration: (duration, sessionStartTime) => {
+    if (_animFrameId) cancelAnimationFrame(_animFrameId);
+    _animFrameId = null;
+    _lastFrameTime = null;
+    _internalTime = 0;
+    set({ duration, sessionStartTime, currentTime: 0, isPlaying: false });
+  },
+  reset: () => {
+    if (_animFrameId) cancelAnimationFrame(_animFrameId);
+    _animFrameId = null;
+    _lastFrameTime = null;
+    _internalTime = 0;
+    set({
+      currentTime: 0,
+      isPlaying: false,
+      speed: 1,
+      duration: 0,
+      sessionStartTime: 0
+    });
+  }
+}));
+function useSessionTime() {
+  const currentTime = usePlaybackStore((s) => s.currentTime);
+  const sessionStartTime = usePlaybackStore((s) => s.sessionStartTime);
+  return sessionStartTime + currentTime;
+}
 const BASE_URL = "http://localhost:8000/api/v1";
 async function get(path) {
   const res = await fetch(`${BASE_URL}${path}`);
@@ -12514,7 +12603,10 @@ const api = {
     if (hz !== void 0) params.push(`hz=${hz}`);
     if (params.length) path += `?${params.join("&")}`;
     return get(path);
-  }
+  },
+  getTyreStints: (year, race, session) => get(
+    `/features/${year}/${encodeURIComponent(race)}/${session}/tyre`
+  )
 };
 const useSessionStore = create((set, get2) => ({
   seasons: [],
@@ -12524,6 +12616,7 @@ const useSessionStore = create((set, get2) => ({
   selectedSession: null,
   sessionData: null,
   laps: [],
+  tyreStints: null,
   loadingState: "idle",
   error: null,
   fetchSeasons: async () => {
@@ -12551,23 +12644,29 @@ const useSessionStore = create((set, get2) => ({
     }
   },
   loadSession: async (year, race, session) => {
+    const state = get2();
+    if (state.loadingState === "loading") return;
     set({
       loadingState: "loading",
       error: null,
       selectedYear: year,
       selectedRace: race,
       selectedSession: session,
-      laps: []
+      laps: [],
+      tyreStints: null
     });
     try {
-      const sessionData = await api.getSessionViz(year, race, session);
-      const laps = await api.getLaps(year, race, session);
-      const numberToCode = /* @__PURE__ */ new Map();
-      for (const lap of sessionData.laps ?? []) {
-        const code = lap.driverName;
-        if (code && lap.driverNumber != null) numberToCode.set(lap.driverNumber, code);
+      const data = await api.getSessionViz(year, race, session);
+      try {
+        const fullLaps = await api.getLaps(year, race, session);
+        if (fullLaps && fullLaps.length > (data.laps?.length ?? 0)) {
+          data.laps = fullLaps;
+        }
+      } catch (e) {
+        console.warn("Could not load full laps, using viz laps:", e);
       }
-      for (const lap of laps ?? []) {
+      const numberToCode = /* @__PURE__ */ new Map();
+      for (const lap of data.laps ?? []) {
         const code = lap.driverName;
         if (code && lap.driverNumber != null) numberToCode.set(lap.driverNumber, code);
       }
@@ -12581,21 +12680,39 @@ const useSessionStore = create((set, get2) => ({
         } catch {
         }
       }
-      const enrichedDrivers = (sessionData.drivers ?? []).map((driver) => {
+      const enrichedDrivers = (data.drivers ?? []).map((driver) => {
         const mappedCode = numberToCode.get(driver.driverNumber);
         if (mappedCode) return { ...driver, code: mappedCode };
         const parts = driver.driverName.split(" ");
         const lastName = parts[parts.length - 1] || driver.driverName;
         return { ...driver, code: lastName.substring(0, 3).toUpperCase() };
       });
+      if ((data.laps?.length ?? 0) > 0) {
+        const allLapEnds = data.laps.map((lap) => lap.lapEndSeconds).filter((t) => Number.isFinite(t) && t > 0);
+        const allLapStarts = data.laps.map((lap) => lap.lapStartSeconds).filter((t) => Number.isFinite(t) && t > 0);
+        if (allLapEnds.length && allLapStarts.length) {
+          const sessionStartTime = Math.min(...allLapStarts);
+          const sessionEndTime = Math.max(...allLapEnds);
+          const duration = Math.max(0, sessionEndTime - sessionStartTime);
+          usePlaybackStore.getState().setDuration(duration, sessionStartTime);
+        }
+      }
       set({
-        sessionData: { ...sessionData, drivers: enrichedDrivers },
-        laps,
+        sessionData: { ...data, drivers: enrichedDrivers },
+        laps: data.laps ?? [],
         selectedYear: year,
         selectedRace: race,
         selectedSession: session,
         loadingState: "ready",
         error: null
+      });
+      api.getTyreStints(year, race, session).then((stints) => {
+        const current = get2();
+        if (current.selectedYear === year && current.selectedRace === race && current.selectedSession === session) {
+          set({ tyreStints: stints });
+        }
+      }).catch((err) => {
+        console.warn("Tyre data not available:", err);
       });
     } catch (err) {
       set({ error: String(err), loadingState: "error" });
@@ -12603,6 +12720,7 @@ const useSessionStore = create((set, get2) => ({
   },
   clearSession: () => {
     const { seasons, races } = get2();
+    usePlaybackStore.getState().reset();
     set({
       seasons,
       races,
@@ -12611,11 +12729,571 @@ const useSessionStore = create((set, get2) => ({
       selectedSession: null,
       sessionData: null,
       laps: [],
+      tyreStints: null,
       loadingState: "idle",
       error: null
     });
   }
 }));
+function DebugOverlay() {
+  const currentTime = usePlaybackStore((s) => s.currentTime);
+  const sessionStartTime = usePlaybackStore((s) => s.sessionStartTime);
+  const duration = usePlaybackStore((s) => s.duration);
+  const isPlaying = usePlaybackStore((s) => s.isPlaying);
+  const speed = usePlaybackStore((s) => s.speed);
+  const sessionData = useSessionStore((s) => s.sessionData);
+  const fullLaps = useSessionStore((s) => s.laps);
+  const sessionTime = useSessionTime();
+  const laps = fullLaps.length ? fullLaps : sessionData?.laps || [];
+  const weatherRows = sessionData?.weather || [];
+  const firstLapStart = laps.length > 0 ? Math.min(...laps.map((l) => l.lapStartSeconds).filter((t) => t > 0)) : 0;
+  const lastLapEnd = laps.length > 0 ? Math.max(...laps.map((l) => l.lapEndSeconds)) : 0;
+  const verLaps = laps.filter((l) => l.driverName === "VER").sort((a, b) => a.lapNumber - b.lapNumber);
+  let verCurrentLap = 0;
+  for (const lap of verLaps) {
+    if (sessionTime >= lap.lapStartSeconds && sessionTime <= lap.lapEndSeconds) {
+      verCurrentLap = lap.lapNumber;
+      break;
+    }
+    if (sessionTime > lap.lapEndSeconds) {
+      verCurrentLap = lap.lapNumber;
+    }
+  }
+  const rc = sessionData?.raceControl || [];
+  const rcTimestamps = rc.map((m) => m.timestamp);
+  const lapStarts = laps.map((l) => l.lapStartSeconds).filter((t) => t > 0);
+  const rcUpToNow = rc.filter((m) => m.timestamp >= sessionStartTime && m.timestamp <= sessionTime);
+  const lastRC = rcUpToNow.length > 0 ? rcUpToNow[rcUpToNow.length - 1] : null;
+  const weatherNearest = weatherRows.length > 0 ? weatherRows.reduce(
+    (best, row) => Math.abs(row.timestamp - sessionTime) < Math.abs(best.timestamp - sessionTime) ? row : best
+  ) : null;
+  reactExports.useEffect(() => {
+    if (!sessionData) return;
+    const weather = sessionData?.weather || [];
+    const weatherTs = weather.map((w) => w.timestamp);
+    console.log("=== FULL TIMESTAMP AUDIT ===");
+    console.log(
+      "RC range:",
+      rc.length ? `${Math.min(...rcTimestamps)} → ${Math.max(...rcTimestamps)}` : "none"
+    );
+    console.log(
+      "Weather range:",
+      weather.length ? `${Math.min(...weatherTs)} → ${Math.max(...weatherTs)}` : "none"
+    );
+    console.log(
+      "Lap range:",
+      laps.length ? `${Math.min(...lapStarts)} → ${Math.max(...laps.map((l) => l.lapEndSeconds))}` : "none"
+    );
+    console.log("sessionStartTime:", sessionStartTime);
+    console.log("duration:", duration);
+    console.log("");
+    console.log("At currentTime=0:");
+    console.log("  sessionTime:", sessionStartTime);
+    console.log(
+      "  RC messages at this time:",
+      rc.filter((m) => m.timestamp <= sessionStartTime).length,
+      "/",
+      rc.length
+    );
+    console.log(
+      "  RC race-window messages at this time:",
+      rc.filter((m) => m.timestamp >= sessionStartTime && m.timestamp <= sessionStartTime).length,
+      "/",
+      rc.length
+    );
+    console.log(
+      "  RC messages at currentTime=0:",
+      rc.filter((m) => m.timestamp <= 0).length,
+      "/",
+      rc.length
+    );
+    console.log("");
+    console.log("First 5 RC messages:");
+    rc.slice(0, 5).forEach((m) => console.log(`  t=${m.timestamp} L${m.lap} ${m.flag || m.category}: ${(m.message || "").substring(0, 50)}`));
+  }, [sessionData]);
+  reactExports.useEffect(() => {
+    if (!sessionData) return;
+    const drivers = sessionData.drivers || [];
+    const laps2 = sessionData.laps || [];
+    console.log("=== DRIVER MATCHING AUDIT ===");
+    console.log("Driver count:", drivers.length);
+    console.log("Lap count:", laps2.length);
+    console.log("Drivers:");
+    drivers.forEach((d) => {
+      console.log(`  #${d.driverNumber} code="${d.code}" name="${d.driverName}" team="${d.teamName}"`);
+    });
+    const lapDriverNames = [...new Set(laps2.map((l) => l.driverName))];
+    console.log("Lap driverName values:", lapDriverNames.sort());
+    const lapDriverNumbers = [...new Set(laps2.map((l) => l.driverNumber))];
+    console.log("Lap driverNumber values:", lapDriverNumbers.sort((a, b) => a - b));
+    console.log("");
+    console.log("MATCHING:");
+    for (const driver of drivers) {
+      const byCode = laps2.filter((l) => l.driverName === driver.code);
+      const byNumber = laps2.filter((l) => l.driverNumber === driver.driverNumber);
+      const byName = laps2.filter((l) => l.driverName === driver.driverName);
+      console.log(
+        `  ${driver.driverName} (#${driver.driverNumber}) code="${driver.code}": byCode=${byCode.length} byNumber=${byNumber.length} byName=${byName.length}`
+      );
+    }
+    if (laps2.length > 0) {
+      console.log("");
+      console.log("First lap row ALL fields:", JSON.stringify(laps2[0]));
+    }
+  }, [sessionData]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
+    position: "fixed",
+    bottom: 60,
+    right: 10,
+    background: "rgba(0,0,0,0.9)",
+    color: "#0f0",
+    fontFamily: "monospace",
+    fontSize: 11,
+    padding: 8,
+    borderRadius: 4,
+    zIndex: 9999,
+    maxWidth: 350,
+    border: "1px solid #333"
+  }, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: /* @__PURE__ */ jsxRuntimeExports.jsx("b", { children: "DEBUG OVERLAY" }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      "currentTime: ",
+      currentTime.toFixed(1)
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      "sessionStartTime: ",
+      firstLapStart.toFixed(1)
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      "sessionTime: ",
+      sessionTime.toFixed(1)
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      "duration: ",
+      duration.toFixed(1)
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      "isPlaying: ",
+      String(isPlaying),
+      " | speed: ",
+      speed,
+      "x"
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "---" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      "firstLapStart: ",
+      firstLapStart.toFixed(1)
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      "lastLapEnd: ",
+      lastLapEnd.toFixed(1)
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { color: "#0f0" }, children: "MATCH: sessionTime = firstLapStart + currentTime" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "---" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      "VER on lap: ",
+      verCurrentLap
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      "VER lap1: ",
+      verLaps[0]?.lapStartSeconds?.toFixed(1),
+      " - ",
+      verLaps[0]?.lapEndSeconds?.toFixed(1)
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      "VER lap5: ",
+      verLaps[4]?.lapStartSeconds?.toFixed(1),
+      " - ",
+      verLaps[4]?.lapEndSeconds?.toFixed(1)
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "---" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      "RC messages up to now: ",
+      rcUpToNow.length,
+      " / ",
+      rc.length
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      "Last RC: ",
+      lastRC ? `L${lastRC.lap} ${lastRC.flag || lastRC.category}` : "none"
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      "Last RC timestamp: ",
+      lastRC?.timestamp
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      "Weather rows up to now: ",
+      weatherRows.filter((w) => w.timestamp <= sessionTime).length,
+      " / ",
+      weatherRows.length
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      "Weather nearest ts: ",
+      weatherNearest?.timestamp?.toFixed?.(1) ?? "none"
+    ] })
+  ] });
+}
+const mergeClasses = (...classes) => classes.filter((className, index, array) => {
+  return Boolean(className) && className.trim() !== "" && array.indexOf(className) === index;
+}).join(" ").trim();
+const toKebabCase = (string) => string.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
+const toCamelCase = (string) => string.replace(
+  /^([A-Z])|[\s-_]+(\w)/g,
+  (match, p1, p2) => p2 ? p2.toUpperCase() : p1.toLowerCase()
+);
+const toPascalCase = (string) => {
+  const camelCase = toCamelCase(string);
+  return camelCase.charAt(0).toUpperCase() + camelCase.slice(1);
+};
+var defaultAttributes = {
+  xmlns: "http://www.w3.org/2000/svg",
+  width: 24,
+  height: 24,
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 2,
+  strokeLinecap: "round",
+  strokeLinejoin: "round"
+};
+const hasA11yProp = (props) => {
+  for (const prop in props) {
+    if (prop.startsWith("aria-") || prop === "role" || prop === "title") {
+      return true;
+    }
+  }
+  return false;
+};
+const Icon = reactExports.forwardRef(
+  ({
+    color = "currentColor",
+    size = 24,
+    strokeWidth = 2,
+    absoluteStrokeWidth,
+    className = "",
+    children,
+    iconNode,
+    ...rest
+  }, ref) => reactExports.createElement(
+    "svg",
+    {
+      ref,
+      ...defaultAttributes,
+      width: size,
+      height: size,
+      stroke: color,
+      strokeWidth: absoluteStrokeWidth ? Number(strokeWidth) * 24 / Number(size) : strokeWidth,
+      className: mergeClasses("lucide", className),
+      ...!children && !hasA11yProp(rest) && { "aria-hidden": "true" },
+      ...rest
+    },
+    [
+      ...iconNode.map(([tag, attrs]) => reactExports.createElement(tag, attrs)),
+      ...Array.isArray(children) ? children : [children]
+    ]
+  )
+);
+const createLucideIcon = (iconName, iconNode) => {
+  const Component = reactExports.forwardRef(
+    ({ className, ...props }, ref) => reactExports.createElement(Icon, {
+      ref,
+      iconNode,
+      className: mergeClasses(
+        `lucide-${toKebabCase(toPascalCase(iconName))}`,
+        `lucide-${iconName}`,
+        className
+      ),
+      ...props
+    })
+  );
+  Component.displayName = toPascalCase(iconName);
+  return Component;
+};
+const __iconNode$8 = [
+  ["path", { d: "M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z", key: "p7xjir" }]
+];
+const Cloud = createLucideIcon("cloud", __iconNode$8);
+const __iconNode$7 = [
+  [
+    "path",
+    {
+      d: "M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z",
+      key: "1ptgy4"
+    }
+  ],
+  [
+    "path",
+    {
+      d: "M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97",
+      key: "1sl1rz"
+    }
+  ]
+];
+const Droplets = createLucideIcon("droplets", __iconNode$7);
+const __iconNode$6 = [
+  ["path", { d: "m12 14 4-4", key: "9kzdfg" }],
+  ["path", { d: "M3.34 19a10 10 0 1 1 17.32 0", key: "19p75a" }]
+];
+const Gauge = createLucideIcon("gauge", __iconNode$6);
+const __iconNode$5 = [
+  ["rect", { x: "14", y: "3", width: "5", height: "18", rx: "1", key: "kaeet6" }],
+  ["rect", { x: "5", y: "3", width: "5", height: "18", rx: "1", key: "1wsw3u" }]
+];
+const Pause = createLucideIcon("pause", __iconNode$5);
+const __iconNode$4 = [
+  [
+    "path",
+    {
+      d: "M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z",
+      key: "10ikf1"
+    }
+  ]
+];
+const Play = createLucideIcon("play", __iconNode$4);
+const __iconNode$3 = [
+  [
+    "path",
+    {
+      d: "M17.971 4.285A2 2 0 0 1 21 6v12a2 2 0 0 1-3.029 1.715l-9.997-5.998a2 2 0 0 1-.003-3.432z",
+      key: "15892j"
+    }
+  ],
+  ["path", { d: "M3 20V4", key: "1ptbpl" }]
+];
+const SkipBack = createLucideIcon("skip-back", __iconNode$3);
+const __iconNode$2 = [
+  ["path", { d: "M21 4v16", key: "7j8fe9" }],
+  [
+    "path",
+    {
+      d: "M6.029 4.285A2 2 0 0 0 3 6v12a2 2 0 0 0 3.029 1.715l9.997-5.998a2 2 0 0 0 .003-3.432z",
+      key: "zs4d6"
+    }
+  ]
+];
+const SkipForward = createLucideIcon("skip-forward", __iconNode$2);
+const __iconNode$1 = [
+  ["path", { d: "M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z", key: "17jzev" }]
+];
+const Thermometer = createLucideIcon("thermometer", __iconNode$1);
+const __iconNode = [
+  ["path", { d: "M12.8 19.6A2 2 0 1 0 14 16H2", key: "148xed" }],
+  ["path", { d: "M17.5 8a2.5 2.5 0 1 1 2 4H2", key: "1u4tom" }],
+  ["path", { d: "M9.8 4.4A2 2 0 1 1 11 8H2", key: "75valh" }]
+];
+const Wind = createLucideIcon("wind", __iconNode);
+const SPEEDS = [1, 2, 4, 8, 16];
+function PlaybackBar() {
+  const currentTime = usePlaybackStore((s) => s.currentTime);
+  const isPlaying = usePlaybackStore((s) => s.isPlaying);
+  const speed = usePlaybackStore((s) => s.speed);
+  const duration = usePlaybackStore((s) => s.duration);
+  const sessionTime = useSessionTime();
+  const togglePlay = usePlaybackStore((s) => s.togglePlay);
+  const seek = usePlaybackStore((s) => s.seek);
+  const setSpeed = usePlaybackStore((s) => s.setSpeed);
+  const loadingState = useSessionStore((s) => s.loadingState);
+  const sessionData = useSessionStore((s) => s.sessionData);
+  const scrubberRef = reactExports.useRef(null);
+  const formatTime = (seconds) => {
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor(seconds % 3600 / 60);
+    const s = Math.floor(seconds % 60);
+    if (h > 0) return `${h}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+    return `${m}:${String(s).padStart(2, "0")}`;
+  };
+  const currentLap = reactExports.useMemo(() => {
+    if (!sessionData?.laps || duration === 0) {
+      return { current: 0, total: 0 };
+    }
+    const laps = sessionData.laps;
+    const totalLaps = Math.max(...laps.map((lap) => lap.lapNumber));
+    let currentLapNum = 0;
+    for (const lap of laps) {
+      if (sessionTime >= lap.lapStartSeconds && sessionTime <= lap.lapEndSeconds) {
+        currentLapNum = Math.max(currentLapNum, lap.lapNumber);
+      }
+    }
+    if (currentLapNum === 0) {
+      for (const lap of laps) {
+        if (lap.lapStartSeconds <= sessionTime) {
+          currentLapNum = Math.max(currentLapNum, lap.lapNumber);
+        }
+      }
+    }
+    if (currentLapNum === 0) currentLapNum = 1;
+    return { current: currentLapNum, total: totalLaps };
+  }, [sessionData?.laps, sessionTime, duration]);
+  const handleScrub = reactExports.useCallback(
+    (clientX) => {
+      if (!scrubberRef.current || duration === 0) return;
+      const rect2 = scrubberRef.current.getBoundingClientRect();
+      const pct = Math.max(0, Math.min(1, (clientX - rect2.left) / rect2.width));
+      seek(pct * duration);
+    },
+    [duration, seek]
+  );
+  const handleMouseDown = reactExports.useCallback(
+    (e) => {
+      handleScrub(e.clientX);
+      const handleMove = (moveEvent) => handleScrub(moveEvent.clientX);
+      const handleUp = () => {
+        window.removeEventListener("mousemove", handleMove);
+        window.removeEventListener("mouseup", handleUp);
+      };
+      window.addEventListener("mousemove", handleMove);
+      window.addEventListener("mouseup", handleUp);
+    },
+    [handleScrub]
+  );
+  const skipBack = () => seek(Math.max(0, currentTime - 10 * speed));
+  const skipForward = () => seek(Math.min(duration, currentTime + 10 * speed));
+  const progress = duration > 0 ? currentTime / duration * 100 : 0;
+  const isReady = loadingState === "ready" && duration > 0;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "h-[56px] bg-bg-secondary border-t border-border flex items-center px-4 gap-3 flex-shrink-0", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "button",
+        {
+          type: "button",
+          onClick: skipBack,
+          disabled: !isReady,
+          className: "p-1.5 rounded text-text-secondary hover:text-text-primary hover:bg-bg-hover disabled:opacity-30 disabled:cursor-not-allowed",
+          children: /* @__PURE__ */ jsxRuntimeExports.jsx(SkipBack, { size: 16 })
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "button",
+        {
+          type: "button",
+          onClick: togglePlay,
+          disabled: !isReady,
+          className: "p-2 rounded-full bg-accent hover:bg-accent/80 text-white disabled:opacity-30 disabled:cursor-not-allowed",
+          children: isPlaying ? /* @__PURE__ */ jsxRuntimeExports.jsx(Pause, { size: 18 }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Play, { size: 18 })
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "button",
+        {
+          type: "button",
+          onClick: skipForward,
+          disabled: !isReady,
+          className: "p-1.5 rounded text-text-secondary hover:text-text-primary hover:bg-bg-hover disabled:opacity-30 disabled:cursor-not-allowed",
+          children: /* @__PURE__ */ jsxRuntimeExports.jsx(SkipForward, { size: 16 })
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-sm text-text-primary w-[64px] text-center", children: formatTime(currentTime) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        ref: scrubberRef,
+        className: "flex-1 h-2 bg-bg-card rounded-full cursor-pointer relative group",
+        onMouseDown: handleMouseDown,
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-y-0 left-0 bg-accent rounded-full", style: { width: `${progress}%` } }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "div",
+            {
+              className: "absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow opacity-0 group-hover:opacity-100 transition-opacity",
+              style: { left: `calc(${progress}% - 6px)` }
+            }
+          )
+        ]
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-sm text-text-muted w-[64px] text-center", children: formatTime(duration) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-xs text-text-secondary font-mono w-[80px] text-center", children: [
+      "Lap ",
+      currentLap.current,
+      " / ",
+      currentLap.total
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-0.5", children: SPEEDS.map((s) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "button",
+      {
+        type: "button",
+        onClick: () => setSpeed(s),
+        className: `px-1.5 py-0.5 text-[10px] font-mono rounded ${speed === s ? "bg-accent text-white" : "text-text-muted hover:text-text-primary hover:bg-bg-hover"}`,
+        children: [
+          s,
+          "x"
+        ]
+      },
+      s
+    )) })
+  ] });
+}
+const VIEWS = [
+  { id: "timing", label: "Timing", icon: "T" },
+  { id: "telemetry", label: "Telemetry", icon: "M" },
+  { id: "strategy", label: "Strategy", icon: "S" }
+];
+const Sidebar = React.memo(function Sidebar2({ currentView, onViewChange }) {
+  const sessionData = useSessionStore((s) => s.sessionData);
+  const loadingState = useSessionStore((s) => s.loadingState);
+  const drivers = sessionData?.drivers || [];
+  const sortedDrivers = reactExports.useMemo(() => {
+    if (!drivers.length || !sessionData?.laps) return drivers;
+    const laps = sessionData.laps;
+    return [...drivers].sort((a, b) => {
+      const aLaps = laps.filter(
+        (l) => l.driverName === a.code || l.driverNumber === a.driverNumber
+      );
+      const bLaps = laps.filter(
+        (l) => l.driverName === b.code || l.driverNumber === b.driverNumber
+      );
+      const aPos = aLaps.length ? aLaps[aLaps.length - 1].position : 99;
+      const bPos = bLaps.length ? bLaps[bLaps.length - 1].position : 99;
+      return aPos - bPos;
+    });
+  }, [drivers, sessionData?.laps]);
+  const getPosition = (driver) => {
+    if (!sessionData?.laps) return null;
+    const driverLaps = sessionData.laps.filter(
+      (l) => l.driverName === driver.code || l.driverNumber === driver.driverNumber
+    );
+    if (!driverLaps.length) return null;
+    return driverLaps[driverLaps.length - 1].position;
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-[200px] bg-bg-secondary flex flex-col h-full border-r border-border flex-shrink-0", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-2 py-2 border-b border-border", children: VIEWS.map((view) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "button",
+      {
+        type: "button",
+        onClick: () => onViewChange(view.id),
+        className: `w-full flex items-center gap-2 px-2 py-1.5 rounded text-xs mb-0.5 transition-colors ${currentView === view.id ? "bg-bg-selected text-text-primary" : "text-text-secondary hover:bg-bg-hover hover:text-text-primary"}`,
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: view.icon }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: view.label })
+        ]
+      },
+      view.id
+    )) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 overflow-y-auto px-1 py-1", children: loadingState !== "ready" ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-2 py-4 text-text-muted text-xs text-center", children: loadingState === "idle" ? "Load a session" : loadingState === "loading" ? "Loading..." : "Error loading" }) : sortedDrivers.map((driver) => {
+      const pos = getPosition(driver);
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "div",
+        {
+          className: "flex items-center gap-1.5 px-1.5 py-1 rounded hover:bg-bg-hover cursor-pointer group",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-muted text-[10px] font-mono w-5 text-right flex-shrink-0", children: pos ? `P${pos}` : "—" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "div",
+              {
+                className: "w-1 h-4 rounded-sm flex-shrink-0",
+                style: { backgroundColor: driver.teamColor || "#666666" }
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-primary text-xs font-mono font-bold", children: driver.code || "???" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-muted text-[10px] truncate opacity-60 group-hover:opacity-100", children: driver.driverName?.split(" ").pop() || "" })
+          ]
+        },
+        driver.driverNumber
+      );
+    }) })
+  ] });
+});
 const SESSION_PRIORITY = ["R", "Q", "S", "SR", "FP1", "FP2", "FP3"];
 function sortSessions(sessions) {
   return [...sessions].sort((a, b) => {
@@ -12758,136 +13436,161 @@ function getMessageStyle(msg) {
     return {
       bg: "bg-orange-500/10",
       border: "border-l-orange-500",
-      badge: msg.message.includes("VIRTUAL") ? "VSC" : "SC",
+      badge: msg.message?.includes("VIRTUAL") ? "VSC" : "SC",
       badgeColor: "bg-orange-500/20 text-orange-400"
     };
   }
   if (flag === "GREEN") return { bg: "bg-green-500/5", border: "border-l-green-500" };
-  if (flag === "DOUBLE YELLOW" || flag === "YELLOW") return { bg: "bg-yellow-500/10", border: "border-l-yellow-500" };
-  if (flag === "RED") {
-    return { bg: "bg-red-500/10", border: "border-l-red-500", badge: "RED", badgeColor: "bg-red-500/20 text-red-400" };
-  }
-  if (flag === "CHEQUERED") {
-    return { bg: "bg-white/5", border: "border-l-white", badge: "🏁", badgeColor: "bg-white/10 text-white" };
-  }
+  if (flag.includes("YELLOW")) return { bg: "bg-yellow-500/10", border: "border-l-yellow-500" };
+  if (flag === "RED") return {
+    bg: "bg-red-500/10",
+    border: "border-l-red-500",
+    badge: "RED",
+    badgeColor: "bg-red-500/20 text-red-400"
+  };
+  if (flag === "CHEQUERED") return {
+    bg: "bg-white/5",
+    border: "border-l-white",
+    badge: "🏁",
+    badgeColor: "bg-white/10 text-white"
+  };
   if (flag === "BLACK AND WHITE") return { bg: "bg-yellow-500/5", border: "border-l-yellow-600" };
-  if (category === "drs") {
-    return {
-      bg: "bg-blue-500/5",
-      border: "border-l-blue-500",
-      badge: "DRS",
-      badgeColor: "bg-blue-500/20 text-blue-400"
-    };
-  }
+  if (category === "drs") return {
+    bg: "bg-blue-500/5",
+    border: "border-l-blue-500",
+    badge: "DRS",
+    badgeColor: "bg-blue-500/20 text-blue-400"
+  };
   return { bg: "bg-bg-card", border: "border-l-border" };
 }
 function RaceControlFeed() {
   const sessionData = useSessionStore((s) => s.sessionData);
+  const currentTime = usePlaybackStore((s) => s.currentTime);
+  const sessionStartTime = usePlaybackStore((s) => s.sessionStartTime);
+  const sessionTime = sessionStartTime + currentTime;
   const messages = reactExports.useMemo(() => {
     const rc = sessionData?.raceControl;
     if (!rc || !rc.length) return [];
-    return [...rc].reverse();
-  }, [sessionData?.raceControl]);
-  if (messages.length === 0) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex h-full items-center justify-center rounded-md bg-bg-card p-3 text-sm text-text-muted", children: "No race control messages" });
-  }
+    return rc.filter(
+      (m) => m.timestamp >= sessionStartTime && m.timestamp <= sessionTime
+    ).reverse();
+  }, [sessionData?.raceControl, sessionStartTime, sessionTime]);
   const currentFlag = reactExports.useMemo(() => {
-    const flagMsgs = messages.filter((m) => m.category === "Flag" && m.flag && m.scope === "Track");
-    return flagMsgs.length > 0 ? flagMsgs[0] : null;
-  }, [messages]);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex h-full flex-col overflow-hidden rounded-md bg-bg-card", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-shrink-0 items-center justify-between border-b border-border px-3 py-2", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs uppercase tracking-wider text-text-secondary", children: "Race Control" }),
-      currentFlag && /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "span",
-        {
-          className: `rounded px-2 py-0.5 text-[10px] font-bold uppercase ${currentFlag.flag === "GREEN" || currentFlag.flag === "CLEAR" ? "bg-green-500/20 text-green-400" : currentFlag.flag === "CHEQUERED" ? "bg-white/10 text-white" : currentFlag.flag.includes("YELLOW") ? "bg-yellow-500/20 text-yellow-400" : currentFlag.flag === "RED" ? "bg-red-500/20 text-red-400" : "bg-bg-hover text-text-secondary"}`,
-          children: currentFlag.flag === "CLEAR" ? "GREEN" : currentFlag.flag
-        }
-      )
+    const rc = sessionData?.raceControl;
+    if (!rc || !rc.length) return null;
+    const trackFlags = rc.filter(
+      (m) => m.category === "Flag" && m.scope === "Track" && m.timestamp >= sessionStartTime && m.timestamp <= sessionTime
+    );
+    return trackFlags.length > 0 ? trackFlags[trackFlags.length - 1] : null;
+  }, [sessionData?.raceControl, sessionStartTime, sessionTime]);
+  if (messages.length === 0) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-bg-card rounded-md p-3 h-full flex items-center \n                      justify-center text-text-muted text-sm", children: "No race control messages" });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-card rounded-md flex flex-col h-full overflow-hidden", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between px-3 py-2 \n                      border-b border-border flex-shrink-0", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-secondary text-xs uppercase tracking-wider", children: "Race Control" }),
+      currentFlag && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `text-[10px] px-2 py-0.5 rounded font-bold uppercase
+            ${currentFlag.flag === "GREEN" || currentFlag.flag === "CLEAR" ? "bg-green-500/20 text-green-400" : currentFlag.flag === "CHEQUERED" ? "bg-white/10 text-white" : currentFlag.flag?.includes("YELLOW") ? "bg-yellow-500/20 text-yellow-400" : currentFlag.flag === "RED" ? "bg-red-500/20 text-red-400" : "bg-bg-hover text-text-secondary"}`, children: currentFlag.flag === "CLEAR" ? "GREEN" : currentFlag.flag })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 overflow-y-auto", children: messages.map((msg, i) => {
       const style = getMessageStyle(msg);
-      return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `${style.bg} ${style.border} border-b border-border/50 border-l-2 px-3 py-1.5`, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-0.5 flex items-center gap-2", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono text-[10px] text-text-muted", children: msg.time }),
-          msg.lap && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-[10px] text-text-muted", children: [
-            "L",
-            msg.lap
-          ] }),
-          style.badge && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `rounded px-1.5 py-0 text-[9px] font-bold ${style.badgeColor}`, children: style.badge }),
-          msg.racingNumber && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-[10px] text-text-muted", children: [
-            "#",
-            msg.racingNumber
-          ] })
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs leading-tight text-text-primary", children: msg.message })
-      ] }, i);
+      return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "div",
+        {
+          className: `${style.bg} border-l-2 ${style.border} 
+                         px-3 py-1.5 border-b border-border/50`,
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-0.5", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-muted text-[10px] font-mono", children: msg.time }),
+              msg.lap && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-text-muted text-[10px]", children: [
+                "L",
+                msg.lap
+              ] }),
+              style.badge && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `text-[9px] px-1.5 py-0 rounded font-bold ${style.badgeColor}`, children: style.badge }),
+              msg.racingNumber && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-text-muted text-[10px]", children: [
+                "#",
+                msg.racingNumber
+              ] })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-text-primary text-xs leading-tight", children: msg.message })
+          ]
+        },
+        `${msg.timestamp}-${i}`
+      );
     }) })
   ] });
 }
-const usePlaybackStore = create((set) => ({
-  // Mid-race default provides usable track marker separation until playback controls are added.
-  currentTime: 3e3,
-  setCurrentTime: (time) => set({ currentTime: time })
-}));
-function codeFromDriver(driver) {
-  return driver.code || String(driver.driverNumber);
-}
 function useCarPositions() {
   const sessionData = useSessionStore((s) => s.sessionData);
-  const fullLaps = useSessionStore((s) => s.laps);
   const currentTime = usePlaybackStore((s) => s.currentTime);
+  const sessionStartTime = usePlaybackStore((s) => s.sessionStartTime);
+  const sessionTime = sessionStartTime + currentTime;
   return reactExports.useMemo(() => {
-    if (!sessionData?.drivers?.length) return [];
+    if (!sessionData?.laps || !sessionData?.drivers) return [];
     const drivers = sessionData.drivers;
-    const laps = fullLaps.length ? fullLaps : sessionData.laps;
-    const effectiveTime = Math.max(0, currentTime);
-    const validStarts = laps.map((lap) => lap.lapStartSeconds).filter((t) => Number.isFinite(t) && t > 0);
-    const sessionStartTime = validStarts.length ? Math.min(...validStarts) : 0;
-    const sessionTime = sessionStartTime + effectiveTime;
-    return drivers.map((driver) => {
-      const driverLaps = laps.filter((lap) => lap.driverName === driver.code || lap.driverNumber === driver.driverNumber).sort((a, b) => (a.lapNumber ?? 0) - (b.lapNumber ?? 0));
-      if (driverLaps.length === 0) {
-        return {
-          driverCode: codeFromDriver(driver),
+    const allLaps = sessionData.laps;
+    const results = [];
+    for (const driver of drivers) {
+      const driverLaps = allLaps.filter(
+        (l) => l.driverName === driver.code || l.driverNumber === driver.driverNumber
+      ).sort((a, b) => a.lapNumber - b.lapNumber);
+      if (driverLaps.length === 0) continue;
+      const firstStart = driverLaps[0].lapStartSeconds;
+      const lastEnd = driverLaps[driverLaps.length - 1].lapEndSeconds;
+      const driverMaxLap = driverLaps[driverLaps.length - 1].lapNumber;
+      const raceMaxLap = Math.max(
+        ...allLaps.map((l) => l.lapNumber)
+      );
+      if (sessionTime < firstStart) {
+        results.push({
+          driverCode: driver.code,
           driverNumber: driver.driverNumber,
-          teamColor: driver.teamColor || "#ffffff",
+          teamColor: driver.teamColor || "#fff",
           progress: 0,
           currentLap: 0,
-          position: 0,
-          isInPit: false
-        };
+          position: driverLaps[0].position || 99
+        });
+        continue;
       }
-      let currentLapData = driverLaps[0];
+      if (sessionTime > lastEnd + 30 && driverMaxLap < raceMaxLap - 1) {
+        continue;
+      }
+      let found = false;
       for (const lap of driverLaps) {
-        if (sessionTime >= lap.lapStartSeconds && sessionTime <= lap.lapEndSeconds) {
-          currentLapData = lap;
+        if (lap.lapStartSeconds <= sessionTime && sessionTime <= lap.lapEndSeconds) {
+          const dur = lap.lapEndSeconds - lap.lapStartSeconds;
+          let progress = dur > 0 ? (sessionTime - lap.lapStartSeconds) / dur : 0;
+          progress = Math.max(0, Math.min(0.999, progress));
+          results.push({
+            driverCode: driver.code,
+            driverNumber: driver.driverNumber,
+            teamColor: driver.teamColor || "#fff",
+            progress,
+            currentLap: lap.lapNumber,
+            position: lap.position || 99
+          });
+          found = true;
           break;
         }
-        if (sessionTime > lap.lapEndSeconds) {
-          currentLapData = lap;
-        }
       }
-      const lapDuration = Math.max(1, currentLapData.lapEndSeconds - currentLapData.lapStartSeconds);
-      let progress = (sessionTime - currentLapData.lapStartSeconds) / lapDuration;
-      progress = Math.max(0, Math.min(1, progress));
-      const isInPit = lapDuration > 120 && progress > 0.8;
-      return {
-        driverCode: codeFromDriver(driver),
-        driverNumber: driver.driverNumber,
-        teamColor: driver.teamColor || "#ffffff",
-        progress,
-        currentLap: currentLapData?.lapNumber || currentLapIndex + 1,
-        position: currentLapData?.position || 0,
-        isInPit
-      };
-    }).filter((car) => car.currentLap > 0).sort((a, b) => {
-      const pa = a.position || Number.MAX_SAFE_INTEGER;
-      const pb = b.position || Number.MAX_SAFE_INTEGER;
-      return pa - pb;
-    });
-  }, [sessionData, fullLaps, currentTime]);
+      if (found) continue;
+      const completed = driverLaps.filter(
+        (l) => l.lapEndSeconds <= sessionTime
+      );
+      if (completed.length > 0) {
+        const lastLap = completed[completed.length - 1];
+        results.push({
+          driverCode: driver.code,
+          driverNumber: driver.driverNumber,
+          teamColor: driver.teamColor || "#fff",
+          progress: 0.999,
+          currentLap: lastLap.lapNumber,
+          position: lastLap.position || 99
+        });
+      }
+    }
+    return results;
+  }, [sessionData, sessionTime]);
 }
 function parseCenterline(raw) {
   return raw.map(([x, y]) => ({ x: -y, y: -x }));
@@ -12908,17 +13611,39 @@ function getBounds(points2, padding = 60) {
 function toPolylinePoints(points2) {
   return points2.map((p) => `${p.x},${p.y}`).join(" ");
 }
-function interpolateAlongPath(points2, progress) {
-  if (!points2.length) return { x: 0, y: 0 };
+function computeArcLengths(points2) {
+  if (!points2.length) return [0];
+  const lengths = [0];
+  for (let i = 1; i < points2.length; i++) {
+    const dx = points2[i].x - points2[i - 1].x;
+    const dy = points2[i].y - points2[i - 1].y;
+    lengths.push(lengths[i - 1] + Math.sqrt(dx * dx + dy * dy));
+  }
+  return lengths;
+}
+function interpolateAlongPath(points2, progress, arcLengths) {
+  if (points2.length === 0) return { x: 0, y: 0 };
+  if (points2.length === 1) return points2[0];
   const clamped = Math.max(0, Math.min(1, progress));
-  const index = clamped * (points2.length - 1);
-  const lower = Math.floor(index);
-  const upper = Math.ceil(index);
-  if (lower === upper) return points2[lower];
-  const t = index - lower;
+  const lengths = arcLengths || computeArcLengths(points2);
+  const totalLength = lengths[lengths.length - 1];
+  const targetLength = clamped * totalLength;
+  let low = 0;
+  let high = lengths.length - 1;
+  while (low < high - 1) {
+    const mid = Math.floor((low + high) / 2);
+    if (lengths[mid] < targetLength) {
+      low = mid;
+    } else {
+      high = mid;
+    }
+  }
+  const segmentLength = lengths[high] - lengths[low];
+  if (segmentLength === 0) return points2[low];
+  const t = (targetLength - lengths[low]) / segmentLength;
   return {
-    x: points2[lower].x + (points2[upper].x - points2[lower].x) * t,
-    y: points2[lower].y + (points2[upper].y - points2[lower].y) * t
+    x: points2[low].x + (points2[high].x - points2[low].x) * t,
+    y: points2[low].y + (points2[high].y - points2[low].y) * t
   };
 }
 function normalizeToViewport(points2, viewportWidth, viewportHeight, padding = 24) {
@@ -12945,6 +13670,8 @@ function asArray(value) {
 }
 function TrackMap({ compact = false }) {
   const sessionData = useSessionStore((s) => s.sessionData);
+  const sessionTime = useSessionTime();
+  const sessionStartTime = usePlaybackStore((s) => s.sessionStartTime);
   const carPositions = useCarPositions();
   const [hoveredDriver, setHoveredDriver] = reactExports.useState(null);
   const trackData = reactExports.useMemo(() => {
@@ -12953,11 +13680,13 @@ function TrackMap({ compact = false }) {
     if (!rawCenterline.length) return null;
     const rawPoints = parseCenterline(rawCenterline);
     const points22 = normalizeToViewport(rawPoints, 1e3, 620, 28);
+    const arcLengths2 = computeArcLengths(points22);
     const bounds2 = getBounds(points22, 0);
     const width2 = bounds2.maxX - bounds2.minX;
     const height2 = bounds2.maxY - bounds2.minY;
     return {
       points: points22,
+      arcLengths: arcLengths2,
       bounds: bounds2,
       width: width2,
       height: height2,
@@ -12966,15 +13695,63 @@ function TrackMap({ compact = false }) {
       drsZones: asArray(geo?.drsZones)
     };
   }, [sessionData?.trackGeometry]);
+  const currentFlags = reactExports.useMemo(() => {
+    const raceControl = sessionData?.raceControl || [];
+    if (!raceControl.length) {
+      return {
+        latestTrackFlag: null,
+        sectorFlags: {},
+        isSafetyCar: false,
+        isVSC: false,
+        isRedFlag: false
+      };
+    }
+    const activeMessages = raceControl.filter(
+      (m) => m.timestamp >= sessionStartTime && m.timestamp <= sessionTime
+    );
+    const trackFlags = activeMessages.filter(
+      (m) => m.category === "Flag" && m.scope === "Track"
+    );
+    const latestTrackFlag = trackFlags.length > 0 ? trackFlags[trackFlags.length - 1] : null;
+    const sectorFlags = {};
+    for (const msg of activeMessages) {
+      if (msg.category === "Flag" && msg.scope === "Sector" && msg.sector) {
+        if (msg.flag === "CLEAR" || msg.flag === "GREEN") {
+          delete sectorFlags[msg.sector];
+        } else {
+          sectorFlags[msg.sector] = msg.flag;
+        }
+      }
+    }
+    const scMessages = activeMessages.filter(
+      (m) => m.category === "SafetyCar"
+    );
+    const lastSC = scMessages.length > 0 ? scMessages[scMessages.length - 1] : null;
+    const text = (lastSC?.message || "").toUpperCase();
+    const isSafetyCar = !!lastSC && (text.includes("DEPLOYED") || text.includes("SAFETY CAR"));
+    const isVSC = !!lastSC && text.includes("VIRTUAL");
+    const scEnded = !!lastSC && (text.includes("ENDING") || text.includes("IN THIS LAP"));
+    const isRedFlag = latestTrackFlag?.flag === "RED";
+    return {
+      latestTrackFlag: latestTrackFlag?.flag || null,
+      sectorFlags,
+      isSafetyCar: isSafetyCar && !scEnded,
+      isVSC: isVSC && !scEnded,
+      isRedFlag
+    };
+  }, [sessionData?.raceControl, sessionStartTime, sessionTime]);
   if (!trackData) {
     return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex h-full items-center justify-center text-sm text-text-muted", children: "Track layout not available" });
   }
-  const { points: points2, bounds, width, height, sectors } = trackData;
+  const { points: points2, arcLengths, bounds, width, height, sectors } = trackData;
   const viewBox = `${bounds.minX} ${bounds.minY} ${width} ${height}`;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative h-full w-full overflow-hidden rounded-md bg-[radial-gradient(circle_at_20%_20%,#2a2a2a_0%,#1f1f1f_40%,#181818_100%)]", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "absolute left-3 top-2 z-10", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[10px] uppercase tracking-[0.16em] text-text-muted", children: "Track Map" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-0.5 text-xs uppercase tracking-wider text-text-secondary", children: sessionData?.trackGeometry?.name || "Track" })
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "absolute left-3 top-2 z-20 flex flex-col gap-1", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-xs uppercase tracking-wider text-text-secondary", children: sessionData?.trackGeometry?.name || "Track" }),
+      currentFlags.isRedFlag && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "animate-pulse rounded border border-red-500/50 bg-red-600/40 px-3 py-1 font-mono text-sm font-bold text-red-400", children: "🔴 RED FLAG" }),
+      currentFlags.isSafetyCar && !currentFlags.isRedFlag && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "rounded border border-orange-500/50 bg-orange-500/30 px-3 py-1 font-mono text-sm font-bold text-orange-400", children: "🚗 SAFETY CAR" }),
+      currentFlags.isVSC && !currentFlags.isRedFlag && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "rounded border border-orange-500/50 bg-orange-500/30 px-3 py-1 font-mono text-sm font-bold text-orange-400", children: "⚠ VIRTUAL SAFETY CAR" }),
+      currentFlags.latestTrackFlag === "GREEN" && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "rounded bg-green-500/20 px-2 py-0.5 text-xs font-bold text-green-400", children: "🟢 GREEN" })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { viewBox, className: "h-full w-full", preserveAspectRatio: "xMidYMid meet", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -13023,20 +13800,83 @@ function TrackMap({ compact = false }) {
           strokeWidth: 3
         }
       ),
+      currentFlags.isRedFlag && /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "polyline",
+        {
+          points: toPolylinePoints(points2),
+          fill: "none",
+          stroke: "#ff1801",
+          strokeWidth: 20,
+          strokeLinecap: "round",
+          strokeLinejoin: "round",
+          opacity: 0.4
+        }
+      ),
+      (currentFlags.isSafetyCar || currentFlags.isVSC) && /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "polyline",
+        {
+          points: toPolylinePoints(points2),
+          fill: "none",
+          stroke: "#ffd700",
+          strokeWidth: 20,
+          strokeLinecap: "round",
+          strokeLinejoin: "round",
+          opacity: 0.3
+        }
+      ),
+      Object.entries(currentFlags.sectorFlags).map(([sector, flag]) => {
+        if (flag !== "DOUBLE YELLOW" && flag !== "YELLOW") return null;
+        const sectorNum = Number(sector);
+        const startIdx = Math.floor((sectorNum - 1) / 3 * points2.length);
+        const endIdx = Math.floor(sectorNum / 3 * points2.length);
+        const sectorPoints = points2.slice(startIdx, endIdx + 1);
+        return /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "polyline",
+          {
+            points: toPolylinePoints(sectorPoints),
+            fill: "none",
+            stroke: "#ffd700",
+            strokeWidth: 18,
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+            opacity: 0.35
+          },
+          `flag-s${sector}`
+        );
+      }),
+      trackData.drsZones?.map((zone, i) => {
+        const startIdx = zone?.startIndex ?? zone?.start ?? -1;
+        const endIdx = zone?.endIndex ?? zone?.end ?? -1;
+        if (startIdx < 0 || endIdx <= startIdx || endIdx >= points2.length) return null;
+        const drsPoints = points2.slice(startIdx, endIdx + 1);
+        return /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "polyline",
+          {
+            points: toPolylinePoints(drsPoints),
+            fill: "none",
+            stroke: "#00d846",
+            strokeWidth: 6,
+            strokeLinecap: "round",
+            opacity: 0.5
+          },
+          `drs-${i}`
+        );
+      }),
       sectors.map((sector, i) => {
         const idx = sector?.startIndex ?? sector?.start ?? Math.floor(i / 3 * points2.length);
         if (idx >= points2.length) return null;
         const p = points2[idx];
+        const colors = ["#ff1801", "#ffd700", "#0090ff"];
         return /* @__PURE__ */ jsxRuntimeExports.jsxs("g", { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { cx: p.x, cy: p.y, r: 5, fill: "#737373" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("text", { x: p.x + 10, y: p.y + 4, fill: "#9a9a9a", fontSize: "11", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("circle", { cx: p.x, cy: p.y, r: 6, fill: colors[i % 3], opacity: 0.8 }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("text", { x: p.x + 10, y: p.y + 4, fill: colors[i % 3], fontSize: "11", fontWeight: "bold", fontFamily: "monospace", children: [
             "S",
             i + 1
           ] })
         ] }, `sector-${i}`);
       }),
       carPositions.map((car) => {
-        const pos = interpolateAlongPath(points2, car.progress);
+        const pos = interpolateAlongPath(points2, car.progress, arcLengths);
         const isHovered = hoveredDriver === car.driverCode;
         const radius = compact ? 6 : 10;
         return /* @__PURE__ */ jsxRuntimeExports.jsxs(
@@ -13044,13 +13884,17 @@ function TrackMap({ compact = false }) {
           {
             onMouseEnter: () => setHoveredDriver(car.driverCode),
             onMouseLeave: () => setHoveredDriver(null),
-            style: { cursor: "pointer" },
+            style: {
+              cursor: "pointer",
+              transform: `translate(${pos.x}px, ${pos.y}px)`,
+              transition: "transform 0.25s linear"
+            },
             children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx(
                 "circle",
                 {
-                  cx: pos.x,
-                  cy: pos.y,
+                  cx: 0,
+                  cy: 0,
                   r: isHovered ? radius + 3 : radius,
                   fill: car.teamColor,
                   stroke: isHovered ? "#ffffff" : "none",
@@ -13061,8 +13905,8 @@ function TrackMap({ compact = false }) {
               (!compact || isHovered) && /* @__PURE__ */ jsxRuntimeExports.jsx(
                 "text",
                 {
-                  x: pos.x + radius + 3,
-                  y: pos.y + 4,
+                  x: radius + 3,
+                  y: 4,
                   fill: "#ffffff",
                   fontSize: compact ? "10" : "12",
                   fontFamily: "monospace",
@@ -13073,8 +13917,8 @@ function TrackMap({ compact = false }) {
               isHovered && /* @__PURE__ */ jsxRuntimeExports.jsx(
                 "circle",
                 {
-                  cx: pos.x,
-                  cy: pos.y,
+                  cx: 0,
+                  cy: 0,
                   r: radius + 7,
                   fill: "none",
                   stroke: car.teamColor,
@@ -13115,125 +13959,23 @@ function TrackMap({ compact = false }) {
     })() })
   ] });
 }
-const mergeClasses = (...classes) => classes.filter((className, index, array) => {
-  return Boolean(className) && className.trim() !== "" && array.indexOf(className) === index;
-}).join(" ").trim();
-const toKebabCase = (string) => string.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
-const toCamelCase = (string) => string.replace(
-  /^([A-Z])|[\s-_]+(\w)/g,
-  (match, p1, p2) => p2 ? p2.toUpperCase() : p1.toLowerCase()
-);
-const toPascalCase = (string) => {
-  const camelCase = toCamelCase(string);
-  return camelCase.charAt(0).toUpperCase() + camelCase.slice(1);
-};
-var defaultAttributes = {
-  xmlns: "http://www.w3.org/2000/svg",
-  width: 24,
-  height: 24,
-  viewBox: "0 0 24 24",
-  fill: "none",
-  stroke: "currentColor",
-  strokeWidth: 2,
-  strokeLinecap: "round",
-  strokeLinejoin: "round"
-};
-const hasA11yProp = (props) => {
-  for (const prop in props) {
-    if (prop.startsWith("aria-") || prop === "role" || prop === "title") {
-      return true;
-    }
-  }
-  return false;
-};
-const Icon = reactExports.forwardRef(
-  ({
-    color = "currentColor",
-    size = 24,
-    strokeWidth = 2,
-    absoluteStrokeWidth,
-    className = "",
-    children,
-    iconNode,
-    ...rest
-  }, ref) => reactExports.createElement(
-    "svg",
-    {
-      ref,
-      ...defaultAttributes,
-      width: size,
-      height: size,
-      stroke: color,
-      strokeWidth: absoluteStrokeWidth ? Number(strokeWidth) * 24 / Number(size) : strokeWidth,
-      className: mergeClasses("lucide", className),
-      ...!children && !hasA11yProp(rest) && { "aria-hidden": "true" },
-      ...rest
-    },
-    [
-      ...iconNode.map(([tag, attrs]) => reactExports.createElement(tag, attrs)),
-      ...Array.isArray(children) ? children : [children]
-    ]
-  )
-);
-const createLucideIcon = (iconName, iconNode) => {
-  const Component = reactExports.forwardRef(
-    ({ className, ...props }, ref) => reactExports.createElement(Icon, {
-      ref,
-      iconNode,
-      className: mergeClasses(
-        `lucide-${toKebabCase(toPascalCase(iconName))}`,
-        `lucide-${iconName}`,
-        className
-      ),
-      ...props
-    })
-  );
-  Component.displayName = toPascalCase(iconName);
-  return Component;
-};
-const __iconNode$4 = [
-  ["path", { d: "M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z", key: "p7xjir" }]
-];
-const Cloud = createLucideIcon("cloud", __iconNode$4);
-const __iconNode$3 = [
-  [
-    "path",
-    {
-      d: "M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z",
-      key: "1ptgy4"
-    }
-  ],
-  [
-    "path",
-    {
-      d: "M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97",
-      key: "1sl1rz"
-    }
-  ]
-];
-const Droplets = createLucideIcon("droplets", __iconNode$3);
-const __iconNode$2 = [
-  ["path", { d: "m12 14 4-4", key: "9kzdfg" }],
-  ["path", { d: "M3.34 19a10 10 0 1 1 17.32 0", key: "19p75a" }]
-];
-const Gauge = createLucideIcon("gauge", __iconNode$2);
-const __iconNode$1 = [
-  ["path", { d: "M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z", key: "17jzev" }]
-];
-const Thermometer = createLucideIcon("thermometer", __iconNode$1);
-const __iconNode = [
-  ["path", { d: "M12.8 19.6A2 2 0 1 0 14 16H2", key: "148xed" }],
-  ["path", { d: "M17.5 8a2.5 2.5 0 1 1 2 4H2", key: "1u4tom" }],
-  ["path", { d: "M9.8 4.4A2 2 0 1 1 11 8H2", key: "75valh" }]
-];
-const Wind = createLucideIcon("wind", __iconNode);
-function WeatherPanel() {
+const WeatherPanel = React.memo(function WeatherPanel2() {
   const sessionData = useSessionStore((s) => s.sessionData);
+  const sessionTime = useSessionTime();
   const weather = reactExports.useMemo(() => {
     const w = sessionData?.weather;
     if (!w || !w.length) return null;
-    return w[w.length - 1];
-  }, [sessionData?.weather]);
+    let nearest = w[0];
+    let minDiff = Math.abs(sessionTime - nearest.timestamp);
+    for (const reading of w) {
+      const diff = Math.abs(sessionTime - reading.timestamp);
+      if (diff < minDiff) {
+        minDiff = diff;
+        nearest = reading;
+      }
+    }
+    return nearest;
+  }, [sessionData?.weather, sessionTime]);
   if (!weather) {
     return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex h-full items-center justify-center rounded-md bg-bg-card p-3 text-sm text-text-muted", children: "No weather data" });
   }
@@ -13315,7 +14057,7 @@ function WeatherPanel() {
       ] })
     ] })
   ] });
-}
+});
 const COMPOUND_COLORS = {
   SOFT: "#ff1801",
   MEDIUM: "#ffd700",
@@ -13323,12 +14065,12 @@ const COMPOUND_COLORS = {
   INTERMEDIATE: "#00d846",
   WET: "#0090ff"
 };
-function sectorStyle(status) {
-  if (status === "purple") return { backgroundColor: "#a855f7", color: "#ffffff" };
-  if (status === "green") return { backgroundColor: "#00d846", color: "#000000" };
-  if (status === "yellow") return { backgroundColor: "#ffd700", color: "#000000" };
-  return {};
-}
+const SECTOR_COLORS = {
+  purple: "#a855f7",
+  green: "#00d846",
+  yellow: "#ffd700",
+  white: "#a0a0a0"
+};
 function cellLap(value) {
   if (value == null || !Number.isFinite(value)) return "—";
   return value.toFixed(3);
@@ -13346,7 +14088,7 @@ function TimingTower({ rows }) {
   if (!rows.length) {
     return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-3 text-text-muted", children: "No timing data available" });
   }
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-full overflow-x-auto overflow-y-auto rounded-md border border-border bg-bg-secondary shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "min-w-[640px] table-fixed text-xs", children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-full overflow-x-auto overflow-y-auto rounded-md border border-border bg-bg-secondary shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "min-w-[676px] table-fixed text-xs", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { className: "sticky top-0 z-10 bg-bg-secondary/95 backdrop-blur-sm", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "h-7 border-b border-border text-text-secondary", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "w-9 px-1 text-left", children: "POS" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "w-[60px] px-1 text-left", children: "DRIVER" }),
@@ -13355,6 +14097,7 @@ function TimingTower({ rows }) {
       /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "w-[80px] px-1 text-right", children: "LAST" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "w-[80px] px-1 text-right", children: "BEST" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "w-9 px-1 text-left", children: "TYRE" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "w-9 px-1 text-right", children: "PITS" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "w-16 px-1 text-right", children: "S1" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "w-16 px-1 text-right", children: "S2" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "w-16 px-1 text-right", children: "S3" })
@@ -13373,7 +14116,6 @@ function TimingTower({ rows }) {
           style: { backgroundColor: selectedBg },
           onClick: () => {
             setSelectedDriver(row.driverNumber);
-            console.log("selected driver:", row.driverName);
           },
           title: `${row.teamName} - Lap ${row.lapsCompleted}`,
           children: [
@@ -13398,9 +14140,10 @@ function TimingTower({ rows }) {
                 children: tyreKey?.[0] ?? "?"
               }
             ) }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-1 text-right font-mono", style: sectorStyle(row.sector1Status), children: cellLap(row.sector1) }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-1 text-right font-mono", style: sectorStyle(row.sector2Status), children: cellLap(row.sector2) }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-1 text-right font-mono", style: sectorStyle(row.sector3Status), children: cellLap(row.sector3) })
+            /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-1 text-right font-mono", children: row.pits > 0 ? row.pits : "—" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-1 text-right font-mono", style: { color: SECTOR_COLORS[row.s1Color] }, children: cellLap(row.sector1) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-1 text-right font-mono", style: { color: SECTOR_COLORS[row.s2Color] }, children: cellLap(row.sector2) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-1 text-right font-mono", style: { color: SECTOR_COLORS[row.s3Color] }, children: cellLap(row.sector3) })
           ]
         },
         row.driverNumber
@@ -13408,198 +14151,242 @@ function TimingTower({ rows }) {
     }) })
   ] }) });
 }
-const EPS = 1e-6;
+const COMPOUND_MAP = {
+  S: "SOFT",
+  M: "MEDIUM",
+  H: "HARD",
+  I: "INTERMEDIATE",
+  W: "WET"
+};
+function isValidLap(lap) {
+  return !!lap.lapTime && lap.lapTime > 0 && lap.isValid !== false && lap.isDeleted !== true;
+}
 function formatLapTime(seconds) {
   if (seconds == null || !Number.isFinite(seconds) || seconds <= 0) return "—";
-  const minutes = Math.floor(seconds / 60);
-  const remainder = seconds - minutes * 60;
-  return `${minutes}:${remainder.toFixed(3).padStart(6, "0")}`;
+  const mins = Math.floor(seconds / 60);
+  const secs = (seconds % 60).toFixed(3);
+  return mins > 0 ? `${mins}:${secs.padStart(6, "0")}` : secs;
 }
-function formatRaceDelta(seconds) {
-  if (seconds == null || !Number.isFinite(seconds)) return "—";
-  if (seconds < 60) return `+${seconds.toFixed(3)}`;
-  const minutes = Math.floor(seconds / 60);
-  const remainder = seconds - minutes * 60;
-  return `+${minutes}:${remainder.toFixed(3).padStart(6, "0")}`;
-}
-function formatLapDelta(lapsBehind) {
-  if (lapsBehind <= 0) return "—";
-  return `+${lapsBehind} Lap${lapsBehind > 1 ? "s" : ""}`;
-}
-function pickSectorStatus(value, sessionBest, personalBest) {
-  if (value == null || !Number.isFinite(value)) return "none";
-  if (sessionBest != null && Math.abs(value - sessionBest) < EPS) return "purple";
-  if (personalBest != null && Math.abs(value - personalBest) < EPS) return "green";
+function getSectorColor(value, sessionBest, personalBest) {
+  if (!value || value <= 0) return "white";
+  if (sessionBest === Number.POSITIVE_INFINITY) return "yellow";
+  if (personalBest === Number.POSITIVE_INFINITY && value <= sessionBest + 5e-3) return "purple";
+  if (value <= sessionBest + 5e-3) return "purple";
+  if (personalBest < Number.POSITIVE_INFINITY && value <= personalBest + 5e-3) return "green";
   return "yellow";
 }
-function useTimingData(laps, drivers, totalLaps) {
-  return reactExports.useMemo(() => {
-    if (!drivers.length && !laps.length) return [];
-    const driversByNumber = /* @__PURE__ */ new Map();
-    for (const driver of drivers) {
-      driversByNumber.set(driver.driverNumber, driver);
-    }
-    const lapsByDriver = /* @__PURE__ */ new Map();
-    for (const lap of laps) {
-      const driverNumber = lap.driverNumber;
-      if (driverNumber == null) continue;
-      if (!lapsByDriver.has(driverNumber)) lapsByDriver.set(driverNumber, []);
-      lapsByDriver.get(driverNumber).push(lap);
-    }
-    const allDriverNumbers = /* @__PURE__ */ new Set();
-    for (const key of driversByNumber.keys()) allDriverNumbers.add(key);
-    for (const key of lapsByDriver.keys()) allDriverNumbers.add(key);
-    const allCompletedLaps = laps.filter((lap) => lap.lapTime != null && lap.lapTime > 0);
-    const sessionBestS1 = allCompletedLaps.reduce((min2, lap) => {
-      if (lap.sector1 == null) return min2;
-      return min2 == null ? lap.sector1 : Math.min(min2, lap.sector1);
-    }, null);
-    const sessionBestS2 = allCompletedLaps.reduce((min2, lap) => {
-      if (lap.sector2 == null) return min2;
-      return min2 == null ? lap.sector2 : Math.min(min2, lap.sector2);
-    }, null);
-    const sessionBestS3 = allCompletedLaps.reduce((min2, lap) => {
-      if (lap.sector3 == null) return min2;
-      return min2 == null ? lap.sector3 : Math.min(min2, lap.sector3);
-    }, null);
-    const internalRows = Array.from(allDriverNumbers).map((driverNumber) => {
-      const driverLaps = [...lapsByDriver.get(driverNumber) ?? []].sort((a, b) => {
-        const lapDiff = (a.lapNumber ?? 0) - (b.lapNumber ?? 0);
-        if (lapDiff !== 0) return lapDiff;
-        return (a.lapEndSeconds ?? 0) - (b.lapEndSeconds ?? 0);
-      });
-      const completedLaps = driverLaps.filter((lap) => lap.lapTime != null && lap.lapTime > 0);
-      const lastCompletedLap = completedLaps[completedLaps.length - 1] ?? null;
-      const lastKnownLap = driverLaps[driverLaps.length - 1] ?? null;
-      const lapsCompleted = lastCompletedLap?.lapNumber ?? 0;
-      const bestLapTime = completedLaps.reduce((min2, lap) => {
-        if (lap.lapTime == null || lap.lapTime <= 0) return min2;
-        return min2 == null ? lap.lapTime : Math.min(min2, lap.lapTime);
-      }, null);
-      const personalBestS1 = completedLaps.reduce((min2, lap) => {
-        if (lap.sector1 == null) return min2;
-        return min2 == null ? lap.sector1 : Math.min(min2, lap.sector1);
-      }, null);
-      const personalBestS2 = completedLaps.reduce((min2, lap) => {
-        if (lap.sector2 == null) return min2;
-        return min2 == null ? lap.sector2 : Math.min(min2, lap.sector2);
-      }, null);
-      const personalBestS3 = completedLaps.reduce((min2, lap) => {
-        if (lap.sector3 == null) return min2;
-        return min2 == null ? lap.sector3 : Math.min(min2, lap.sector3);
-      }, null);
-      const driverInfo = driversByNumber.get(driverNumber);
-      const displayName = lastCompletedLap?.driverName ?? driverInfo?.driverName ?? String(driverNumber);
-      const lastLapEndSeconds = lastCompletedLap?.lapEndSeconds != null && Number.isFinite(lastCompletedLap.lapEndSeconds) ? lastCompletedLap.lapEndSeconds : null;
-      const sumLapTime = completedLaps.reduce((acc, lap) => acc + (lap.lapTime ?? 0), 0);
-      const elapsedTime = lastLapEndSeconds ?? (sumLapTime > 0 ? sumLapTime : null);
-      const row = {
-        position: 0,
-        driverCode: driverInfo?.code ?? String(driverNumber),
-        driverName: displayName,
-        driverNumber,
-        teamColor: driverInfo?.teamColor ?? "#666666",
-        teamName: driverInfo?.teamName ?? "Unknown",
-        gap: lapsCompleted > 0 ? "—" : "DNF",
-        interval: "—",
-        lastLap: lastCompletedLap?.lapTimeFormatted ?? formatLapTime(lastCompletedLap?.lapTime),
-        bestLap: bestLapTime == null ? "—" : formatLapTime(bestLapTime),
-        bestLapTime,
-        tyreCompound: lastCompletedLap?.tyreCompound ?? lastKnownLap?.tyreCompound ?? "—",
-        sector1: lastCompletedLap?.sector1 ?? null,
-        sector2: lastCompletedLap?.sector2 ?? null,
-        sector3: lastCompletedLap?.sector3 ?? null,
-        sector1Status: pickSectorStatus(lastCompletedLap?.sector1 ?? null, sessionBestS1, personalBestS1),
-        sector2Status: pickSectorStatus(lastCompletedLap?.sector2 ?? null, sessionBestS2, personalBestS2),
-        sector3Status: pickSectorStatus(lastCompletedLap?.sector3 ?? null, sessionBestS3, personalBestS3),
-        lapsCompleted
-      };
-      return { row, lapsCompleted, lastLapEndSeconds, elapsedTime, isDNF: false, isDNS: false };
-    });
-    const leader = internalRows.find((entry) => entry.lapsCompleted > 0) ?? null;
-    const leaderLaps = leader?.lapsCompleted ?? 0;
-    const hasTotalLaps = totalLaps != null && Number.isFinite(totalLaps) && totalLaps > 0;
-    for (const entry of internalRows) {
-      if (entry.lapsCompleted === 0) {
-        entry.isDNS = true;
-        entry.isDNF = true;
-        continue;
-      }
-      const lapsBehindLeader = Math.max(0, leaderLaps - entry.lapsCompleted);
-      const belowNinetyPercent = hasTotalLaps ? entry.lapsCompleted < totalLaps * 0.9 : false;
-      const retiredThreePlusBehind = hasTotalLaps && entry.lapsCompleted < totalLaps && lapsBehindLeader >= 3;
-      entry.isDNF = belowNinetyPercent || retiredThreePlusBehind;
-    }
-    internalRows.sort((a, b) => {
-      if (a.isDNF !== b.isDNF) return a.isDNF ? 1 : -1;
-      if (a.lapsCompleted !== b.lapsCompleted) return b.lapsCompleted - a.lapsCompleted;
-      if (a.lapsCompleted === 0 && b.lapsCompleted === 0) return a.row.driverNumber - b.row.driverNumber;
-      const aEnd = a.lastLapEndSeconds ?? Number.MAX_SAFE_INTEGER;
-      const bEnd = b.lastLapEndSeconds ?? Number.MAX_SAFE_INTEGER;
-      if (aEnd !== bEnd) return aEnd - bEnd;
-      const aBest = a.row.bestLapTime ?? Number.MAX_SAFE_INTEGER;
-      const bBest = b.row.bestLapTime ?? Number.MAX_SAFE_INTEGER;
-      if (aBest !== bBest) return aBest - bBest;
-      return a.row.driverNumber - b.row.driverNumber;
-    });
-    const classifiedLeader = internalRows.find((entry) => !entry.isDNF && entry.lapsCompleted > 0) ?? null;
-    return internalRows.map((entry, idx) => {
-      const row = entry.row;
-      row.position = idx + 1;
-      if (!classifiedLeader || entry.isDNF) {
-        row.gap = entry.isDNS ? "DNS" : "DNF";
-        row.interval = "—";
-        if (entry.isDNS) {
-          row.lastLap = "—";
-          row.bestLap = "—";
-          row.sector1 = null;
-          row.sector2 = null;
-          row.sector3 = null;
-          row.sector1Status = "none";
-          row.sector2Status = "none";
-          row.sector3Status = "none";
-        }
-        return row;
-      }
-      if (entry.row.driverNumber === classifiedLeader.row.driverNumber) {
-        row.gap = "LEADER";
-        row.interval = "—";
-      } else {
-        const lapsBehindLeader = classifiedLeader.lapsCompleted - entry.lapsCompleted;
-        if (lapsBehindLeader > 0) {
-          row.gap = formatLapDelta(lapsBehindLeader);
-        } else {
-          row.gap = formatRaceDelta(
-            entry.elapsedTime != null && classifiedLeader.elapsedTime != null ? entry.elapsedTime - classifiedLeader.elapsedTime : null
-          );
-        }
-        const ahead = internalRows[idx - 1];
-        if (!ahead || ahead.lapsCompleted === 0) {
-          row.interval = "—";
-        } else {
-          const lapsBehindAhead = ahead.lapsCompleted - entry.lapsCompleted;
-          if (lapsBehindAhead > 0) {
-            row.interval = formatLapDelta(lapsBehindAhead);
-          } else {
-            row.interval = formatRaceDelta(
-              entry.elapsedTime != null && ahead.elapsedTime != null ? entry.elapsedTime - ahead.elapsedTime : null
-            );
-          }
-        }
-      }
-      return row;
-    });
-  }, [laps, drivers, totalLaps]);
+function normalizeCompound(raw) {
+  if (!raw) return "—";
+  const upper = raw.toUpperCase();
+  if (COMPOUND_MAP[upper]) return COMPOUND_MAP[upper];
+  if (upper === "SOFT" || upper === "MEDIUM" || upper === "HARD" || upper === "INTERMEDIATE" || upper === "WET") {
+    return upper;
+  }
+  return "—";
 }
-function TimingView() {
-  const laps = useSessionStore((s) => s.laps);
+function minOrInfinity(values) {
+  return values.length ? Math.min(...values) : Number.POSITIVE_INFINITY;
+}
+function getElapsedAtPosition(allLaps, driverCode, driverNumber, sessionTime) {
+  const driverLaps = allLaps.filter((lap) => lap.driverName === driverCode || lap.driverNumber === driverNumber).filter((lap) => lap.lapEndSeconds <= sessionTime).sort((a, b) => a.lapNumber - b.lapNumber || a.lapEndSeconds - b.lapEndSeconds);
+  if (!driverLaps.length) return { totalTime: 0, lapsCompleted: 0, lastLapEnd: 0 };
+  const totalTime = driverLaps.reduce((sum, lap) => sum + (lap.lapTime || 0), 0);
+  const lapsCompleted = driverLaps.length;
+  const lastLapEnd = driverLaps[driverLaps.length - 1].lapEndSeconds;
+  const allDriverLaps = allLaps.filter((lap) => lap.driverName === driverCode || lap.driverNumber === driverNumber).sort((a, b) => a.lapNumber - b.lapNumber || a.lapEndSeconds - b.lapEndSeconds);
+  const currentLap = allDriverLaps.find(
+    (lap) => lap.lapStartSeconds <= sessionTime && sessionTime < lap.lapEndSeconds
+  );
+  const partialTime = currentLap ? Math.max(0, sessionTime - currentLap.lapStartSeconds) : 0;
+  return { totalTime: totalTime + partialTime, lapsCompleted, lastLapEnd };
+}
+function useTimingData() {
   const sessionData = useSessionStore((s) => s.sessionData);
-  const drivers = sessionData?.drivers ?? [];
-  const totalLaps = sessionData?.metadata.totalLaps ?? null;
-  const rows = useTimingData(laps, drivers, totalLaps);
+  const lapsFromStore = useSessionStore((s) => s.laps);
+  const sessionTime = useSessionTime();
+  const roundedSessionTime = Math.round(sessionTime);
+  return reactExports.useMemo(() => {
+    if (!sessionData?.drivers?.length) return [];
+    const drivers = sessionData.drivers;
+    const allLaps = lapsFromStore.length ? lapsFromStore : sessionData.laps;
+    if (!allLaps.length) return [];
+    const sessionTime2 = roundedSessionTime;
+    const leaderMaxLap = Math.max(...allLaps.map((lap) => lap.lapNumber || 0));
+    const completedLapsAll = allLaps.filter((lap) => lap.lapEndSeconds <= sessionTime2);
+    const allS1 = completedLapsAll.map((lap) => lap.sector1).filter((v) => !!v && v > 0);
+    const allS2 = completedLapsAll.map((lap) => lap.sector2).filter((v) => !!v && v > 0);
+    const allS3 = completedLapsAll.map((lap) => lap.sector3).filter((v) => !!v && v > 0);
+    const sessionBestS1 = allS1.length > 0 ? Math.min(...allS1) : Number.POSITIVE_INFINITY;
+    const sessionBestS2 = allS2.length > 0 ? Math.min(...allS2) : Number.POSITIVE_INFINITY;
+    const sessionBestS3 = allS3.length > 0 ? Math.min(...allS3) : Number.POSITIVE_INFINITY;
+    const rows = drivers.map((driver) => {
+      const driverLaps = allLaps.filter((lap) => lap.driverName === driver.code || lap.driverNumber === driver.driverNumber).sort((a, b) => a.lapNumber - b.lapNumber || a.lapEndSeconds - b.lapEndSeconds);
+      if (!driverLaps.length) {
+        return {
+          position: 99,
+          driverCode: driver.code || "???",
+          driverName: driver.driverName || "",
+          driverNumber: driver.driverNumber,
+          teamColor: driver.teamColor || "#666666",
+          teamName: driver.teamName || "Unknown",
+          gap: "—",
+          interval: "—",
+          lastLap: "—",
+          bestLap: "—",
+          bestLapTime: null,
+          tyreCompound: "—",
+          pits: 0,
+          sector1: null,
+          sector2: null,
+          sector3: null,
+          s1Color: "white",
+          s2Color: "white",
+          s3Color: "white",
+          status: "dns",
+          currentLap: 0,
+          currentSector: 1,
+          lapsCompleted: 0,
+          lapProgress: 0,
+          lapTimeRef: 90
+        };
+      }
+      const firstLapStart = driverLaps[0].lapStartSeconds;
+      const lastLapEnd = driverLaps[driverLaps.length - 1].lapEndSeconds;
+      const completedLaps = driverLaps.filter((lap) => lap.lapEndSeconds <= sessionTime2 && isValidLap(lap));
+      const completedDriverLaps = driverLaps.filter((lap) => lap.lapEndSeconds <= sessionTime2);
+      const lastCompletedLap = completedDriverLaps.length ? completedDriverLaps[completedDriverLaps.length - 1] : null;
+      const currentInProgressLap = driverLaps.find(
+        (lap) => lap.lapStartSeconds <= sessionTime2 && sessionTime2 < lap.lapEndSeconds
+      );
+      const currentLapData = currentInProgressLap || lastCompletedLap || driverLaps[0];
+      const lapStart = currentLapData.lapStartSeconds;
+      const lapEnd = currentLapData.lapEndSeconds;
+      const lapDuration = Math.max(1, lapEnd - lapStart);
+      const lapProgress = lapDuration > 0 ? Math.max(0, Math.min(1, (sessionTime2 - lapStart) / lapDuration)) : 0;
+      let displayS1 = null;
+      let displayS2 = null;
+      let displayS3 = null;
+      if (currentInProgressLap) {
+        if (lapProgress > 0.33) displayS1 = currentInProgressLap.sector1;
+        if (lapProgress > 0.66) displayS2 = currentInProgressLap.sector2;
+      }
+      if (lastCompletedLap) {
+        const timeSinceCompletion = sessionTime2 - lastCompletedLap.lapEndSeconds;
+        if (timeSinceCompletion >= 0 && timeSinceCompletion < 5) {
+          displayS1 = lastCompletedLap.sector1;
+          displayS2 = lastCompletedLap.sector2;
+          displayS3 = lastCompletedLap.sector3;
+        } else if (timeSinceCompletion >= 5 && timeSinceCompletion < 8) {
+          if (!displayS1) displayS3 = lastCompletedLap.sector3;
+        }
+      }
+      let currentSector = 1;
+      if (lapProgress > 0.33 && lapProgress <= 0.66) currentSector = 2;
+      if (lapProgress > 0.66) currentSector = 3;
+      const validTimes = completedLaps.map((lap) => lap.lapTime || 0).filter((time) => time > 0);
+      const bestLapTime = validTimes.length ? Math.min(...validTimes) : null;
+      const driverCompletedLaps = completedLapsAll.filter(
+        (lap) => lap.driverName === driver.code || lap.driverNumber === driver.driverNumber
+      );
+      const personalBestS1 = minOrInfinity(
+        driverCompletedLaps.filter((lap) => (lap.sector1 || 0) > 0).map((lap) => lap.sector1)
+      );
+      const personalBestS2 = minOrInfinity(
+        driverCompletedLaps.filter((lap) => (lap.sector2 || 0) > 0).map((lap) => lap.sector2)
+      );
+      const personalBestS3 = minOrInfinity(
+        driverCompletedLaps.filter((lap) => (lap.sector3 || 0) > 0).map((lap) => lap.sector3)
+      );
+      let pitCount = 0;
+      const completedSorted = driverLaps.filter((lap) => lap.lapEndSeconds <= sessionTime2).sort((a, b) => a.lapNumber - b.lapNumber || a.lapEndSeconds - b.lapEndSeconds);
+      for (let i = 1; i < completedSorted.length; i++) {
+        const prevComp = normalizeCompound(completedSorted[i - 1].tyreCompound);
+        const curComp = normalizeCompound(completedSorted[i].tyreCompound);
+        if (prevComp !== "—" && curComp !== "—" && prevComp !== curComp) pitCount++;
+      }
+      let compound = "—";
+      if (currentInProgressLap?.tyreCompound) compound = normalizeCompound(currentInProgressLap.tyreCompound);
+      else if (lastCompletedLap?.tyreCompound) compound = normalizeCompound(lastCompletedLap.tyreCompound);
+      else if (driverLaps[0]?.tyreCompound) compound = normalizeCompound(driverLaps[0].tyreCompound);
+      let status = "racing";
+      if (sessionTime2 < firstLapStart - 10) status = "dns";
+      else if (sessionTime2 > lastLapEnd + 30 && currentLapData.lapNumber < leaderMaxLap - 2) status = "dnf";
+      else if (lapDuration > 120 && lapProgress > 0.8) status = "pit";
+      return {
+        position: currentLapData.position || 99,
+        driverCode: driver.code || currentLapData.driverName || "???",
+        driverName: driver.driverName || "",
+        driverNumber: driver.driverNumber,
+        teamColor: driver.teamColor || "#666666",
+        teamName: driver.teamName || "Unknown",
+        gap: "—",
+        interval: "—",
+        lastLap: formatLapTime(lastCompletedLap?.lapTime),
+        bestLap: formatLapTime(bestLapTime),
+        bestLapTime,
+        tyreCompound: compound,
+        pits: pitCount,
+        sector1: displayS1,
+        sector2: displayS2,
+        sector3: displayS3,
+        s1Color: getSectorColor(displayS1, sessionBestS1, personalBestS1),
+        s2Color: getSectorColor(displayS2, sessionBestS2, personalBestS2),
+        s3Color: getSectorColor(displayS3, sessionBestS3, personalBestS3),
+        status,
+        currentLap: currentLapData.lapNumber,
+        currentSector,
+        lapsCompleted: completedLaps.length,
+        lapProgress,
+        lapTimeRef: currentLapData.lapTime || lastCompletedLap?.lapTime || 90
+      };
+    });
+    rows.sort((a, b) => {
+      if (a.status === "dns" && b.status !== "dns") return 1;
+      if (b.status === "dns" && a.status !== "dns") return -1;
+      if (a.status === "dnf" && b.status !== "dnf") return 1;
+      if (b.status === "dnf" && a.status !== "dnf") return -1;
+      return a.position - b.position;
+    });
+    if (rows.length > 0 && (rows[0].status === "racing" || rows[0].status === "pit")) {
+      const leaderElapsed = getElapsedAtPosition(allLaps, rows[0].driverCode, rows[0].driverNumber, sessionTime2);
+      const leaderDistance = rows[0].lapsCompleted + rows[0].lapProgress;
+      const leaderLapSec = rows[0].lapTimeRef || 90;
+      rows[0].gap = "LEADER";
+      rows[0].interval = "—";
+      for (let i = 1; i < rows.length; i++) {
+        if (rows[i].status !== "racing" && rows[i].status !== "pit") {
+          rows[i].gap = "—";
+          rows[i].interval = "—";
+          continue;
+        }
+        const driverElapsed = getElapsedAtPosition(allLaps, rows[i].driverCode, rows[i].driverNumber, sessionTime2);
+        const driverDistance = rows[i].lapsCompleted + rows[i].lapProgress;
+        const aheadDistance = rows[i - 1].lapsCompleted + rows[i - 1].lapProgress;
+        const gapToLeader = (leaderDistance - driverDistance) * leaderLapSec;
+        const interval = (aheadDistance - driverDistance) * leaderLapSec;
+        if (gapToLeader > 1e-3) {
+          rows[i].gap = `+${gapToLeader.toFixed(3)}`;
+        } else if (leaderElapsed.lapsCompleted > driverElapsed.lapsCompleted) {
+          const lapDiff = leaderElapsed.lapsCompleted - driverElapsed.lapsCompleted;
+          rows[i].gap = `+${lapDiff} LAP${lapDiff > 1 ? "S" : ""}`;
+        } else {
+          rows[i].gap = "+0.000";
+        }
+        if (interval > 1e-3) {
+          rows[i].interval = `+${interval.toFixed(3)}`;
+        } else {
+          rows[i].interval = "+0.000";
+        }
+      }
+    }
+    return rows;
+  }, [sessionData, lapsFromStore, roundedSessionTime]);
+}
+const TimingView = React.memo(function TimingView2() {
+  const rows = useTimingData();
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "h-full w-full p-2", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-2 flex items-center justify-between", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs uppercase tracking-[0.18em] text-text-secondary", children: "Final Classification" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs uppercase tracking-[0.18em] text-text-secondary", children: "Live Classification" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "rounded border border-border bg-bg-secondary px-2 py-0.5 text-[11px] text-text-muted", children: "Timing + Track" })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex h-[calc(100%-1.5rem)] gap-3", children: [
@@ -13613,7 +14400,7 @@ function TimingView() {
       ] })
     ] })
   ] });
-}
+});
 const FEAT_TIME = true;
 const pre = "u-";
 const UPLOT = "uplot";
@@ -17917,104 +18704,149 @@ uPlot.sync = _sync;
   paths.bars = bars;
   paths.spline = monotoneCubic;
 }
-function UPlotChart({ title, timestamps, series, height, yRange, yLabel, stepped: stepped2 }) {
+function UPlotChart({
+  title,
+  timestamps,
+  series,
+  height,
+  yRange,
+  xRange,
+  yLabel,
+  stepped: stepped2
+}) {
   const containerRef = reactExports.useRef(null);
   const chartRef = reactExports.useRef(null);
-  reactExports.useEffect(() => {
-    if (!containerRef.current || timestamps.length === 0) return;
-    if (chartRef.current) {
-      chartRef.current.destroy();
-      chartRef.current = null;
-    }
-    const container = containerRef.current;
-    const width = Math.max(320, container.clientWidth);
-    const steppedPath = stepped2 ? uPlot.paths.stepped({ align: 1 }) : void 0;
-    const opts = {
-      width,
-      height,
-      padding: [8, 12, 0, 0],
-      hooks: {
-        init: [
-          (u) => {
-            const canvas = u.root.querySelector("canvas");
-            if (canvas) canvas.style.background = "#1a1a1a";
-          }
-        ]
+  const seriesCountRef = reactExports.useRef(0);
+  const lastDataLenRef = reactExports.useRef(0);
+  const resizeObserverRef = reactExports.useRef(null);
+  const opts = reactExports.useMemo(() => ({
+    width: 800,
+    height,
+    padding: [8, 12, 0, 0],
+    cursor: {
+      show: true,
+      sync: { key: "telemetry-sync", setSeries: false },
+      points: { show: false }
+    },
+    scales: {
+      x: {
+        time: false,
+        range: xRange ? () => xRange : void 0
       },
-      cursor: {
+      y: yRange ? { range: () => yRange } : {}
+    },
+    axes: [
+      {
         show: true,
-        x: true,
-        y: true,
-        points: { show: false },
-        sync: { key: "telemetry-sync", setSeries: false }
+        stroke: "#666",
+        grid: { stroke: "#222", width: 1 },
+        ticks: { stroke: "#444", width: 1 },
+        font: "10px monospace",
+        values: (_self, values) => values.map((v) => {
+          if (v < 60) return `${v.toFixed(0)}s`;
+          const mins = Math.floor(v / 60);
+          const secs = Math.floor(v % 60);
+          return `${mins}:${String(secs).padStart(2, "0")}`;
+        })
       },
-      scales: {
-        x: { time: false },
-        y: yRange ? { range: () => yRange } : {}
-      },
-      axes: [
-        {
-          show: true,
-          stroke: "#888",
-          grid: { stroke: "#1a1a1a", width: 1 },
-          ticks: { stroke: "#333", width: 1 },
-          font: "10px monospace",
-          values: (_self, values) => values.map((v) => {
-            if (v < 60) return `${v.toFixed(0)}s`;
-            const mins = Math.floor(v / 60);
-            const secs = Math.floor(v % 60);
-            return `${mins}:${String(secs).padStart(2, "0")}`;
-          })
-        },
-        {
-          show: true,
-          label: yLabel || title,
-          stroke: "#888",
-          grid: { stroke: "#1a1a1a", width: 1 },
-          ticks: { stroke: "#333", width: 1 },
-          font: "10px monospace",
-          size: 50
+      {
+        show: true,
+        label: yLabel || title,
+        stroke: "#666",
+        grid: { stroke: "#1a1a1a", width: 1 },
+        ticks: { stroke: "#444", width: 1 },
+        font: "10px monospace",
+        size: 50
+      }
+    ],
+    series: [
+      { label: "Time" },
+      ...series.map((s, i) => ({
+        label: s.label,
+        stroke: s.color,
+        width: s.width || 1.5,
+        dash: i > 0 ? [8, 4] : void 0,
+        paths: stepped2 ? uPlot.paths.stepped({ align: 1 }) : uPlot.paths.linear(),
+        points: { show: false }
+      }))
+    ],
+    hooks: {
+      init: [
+        (u) => {
+          const canvas = u.root.querySelector("canvas");
+          if (canvas) canvas.style.background = "#1a1a1a";
         }
-      ],
-      series: [
-        { label: "Time" },
-        ...series.map((s, i) => ({
-          label: s.label,
-          stroke: s.color,
-          width: s.width || 1.5,
-          dash: i > 0 ? [8, 4] : void 0,
-          paths: steppedPath
-        }))
       ]
-    };
+    }
+  }), [
+    height,
+    yRange?.[0],
+    yRange?.[1],
+    xRange?.[0],
+    xRange?.[1],
+    yLabel,
+    title,
+    stepped2,
+    series.length,
+    series.map((s) => s.color).join(",")
+  ]);
+  reactExports.useEffect(() => {
+    if (!containerRef.current) return;
+    chartRef.current?.destroy();
+    chartRef.current = null;
+    resizeObserverRef.current?.disconnect();
+    resizeObserverRef.current = null;
+    if (!timestamps.length) return;
+    const container = containerRef.current;
+    const width = container.clientWidth || 800;
+    const optsWithWidth = { ...opts, width };
     const plotData = [
       new Float64Array(timestamps),
       ...series.map((s) => new Float64Array(s.data))
     ];
-    chartRef.current = new uPlot(opts, plotData, container);
-    const resizeObserver = new ResizeObserver(() => {
-      if (!chartRef.current || !containerRef.current) return;
-      chartRef.current.setSize({
-        width: Math.max(320, containerRef.current.clientWidth),
-        height
-      });
+    chartRef.current = new uPlot(optsWithWidth, plotData, container);
+    seriesCountRef.current = series.length;
+    lastDataLenRef.current = timestamps.length;
+    resizeObserverRef.current = new ResizeObserver(() => {
+      if (chartRef.current && containerRef.current) {
+        chartRef.current.setSize({
+          width: containerRef.current.clientWidth,
+          height
+        });
+      }
     });
-    resizeObserver.observe(container);
+    resizeObserverRef.current.observe(container);
     return () => {
-      resizeObserver.disconnect();
-      chartRef.current?.destroy();
-      chartRef.current = null;
+      resizeObserverRef.current?.disconnect();
+      resizeObserverRef.current = null;
     };
-  }, [timestamps, series, height, yRange, yLabel, title, stepped2]);
+  }, [opts]);
+  reactExports.useEffect(() => {
+    if (!chartRef.current) return;
+    if (!timestamps.length) return;
+    if (series.length !== seriesCountRef.current) return;
+    if (timestamps.length === lastDataLenRef.current) return;
+    lastDataLenRef.current = timestamps.length;
+    const plotData = [
+      new Float64Array(timestamps),
+      ...series.map((s) => new Float64Array(s.data))
+    ];
+    chartRef.current.setData(plotData);
+  }, [timestamps, series]);
+  reactExports.useEffect(() => () => {
+    resizeObserverRef.current?.disconnect();
+    chartRef.current?.destroy();
+    chartRef.current = null;
+  }, []);
   if (!timestamps.length) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-center text-sm text-text-muted", style: { height }, children: [
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-center text-text-muted text-sm", style: { height }, children: [
       "No ",
       title.toLowerCase(),
       " data"
     ] });
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-1 px-2 text-xs uppercase tracking-wider text-text-secondary", children: title }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-text-secondary text-xs uppercase tracking-wider px-2 mb-1", children: title }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { ref: containerRef, className: "w-full" })
   ] });
 }
@@ -18040,7 +18872,7 @@ const useTelemetryStore = create((set) => ({
   },
   clearTelemetry: () => set({ telemetryData: null, loadingState: "idle", error: null })
 }));
-function TelemetryView() {
+const TelemetryView = React.memo(function TelemetryView2() {
   const sessionData = useSessionStore((s) => s.sessionData);
   const selectedYear = useSessionStore((s) => s.selectedYear);
   const selectedRace = useSessionStore((s) => s.selectedRace);
@@ -18051,7 +18883,9 @@ function TelemetryView() {
   const loadTelemetry = useTelemetryStore((s) => s.loadTelemetry);
   const [selectedDriver, setSelectedDriver] = reactExports.useState(null);
   const [compareDriver, setCompareDriver] = reactExports.useState(null);
-  const [selectedLap, setSelectedLap] = reactExports.useState(5);
+  const [selectedLap, setSelectedLap] = reactExports.useState(1);
+  const sessionTime = useSessionTime();
+  const roundedSessionTime = Math.round(sessionTime * 10) / 10;
   const drivers = sessionData?.drivers || [];
   const laps = fullLaps.length ? fullLaps : sessionData?.laps || [];
   const driverLaps = reactExports.useMemo(() => {
@@ -18075,8 +18909,7 @@ function TelemetryView() {
   }, [drivers, selectedDriver]);
   reactExports.useEffect(() => {
     if (lapNumbers.length > 0 && !lapNumbers.includes(selectedLap)) {
-      const goodLap = lapNumbers.find((l) => l >= 3) || lapNumbers[0];
-      setSelectedLap(goodLap);
+      setSelectedLap(lapNumbers[0]);
     }
   }, [lapNumbers, selectedLap]);
   reactExports.useEffect(() => {
@@ -18093,10 +18926,11 @@ function TelemetryView() {
     if (!primaryRaw.length) return null;
     const lapT0 = lapTimeWindow.t0;
     const lapT1 = lapTimeWindow.t1;
-    const primaryData = primaryRaw.filter((r) => r.timestamp >= lapT0 && r.timestamp <= lapT1);
-    const compareData = compareRaw.filter((r) => r.timestamp >= lapT0 && r.timestamp <= lapT1);
+    const timeLimit = Math.min(roundedSessionTime, lapT1);
+    const primaryData = primaryRaw.filter((r) => r.timestamp >= lapT0 && r.timestamp <= timeLimit);
+    const compareData = compareRaw.filter((r) => r.timestamp >= lapT0 && r.timestamp <= timeLimit);
     if (!primaryData.length) return null;
-    const firstTimestamp = primaryData[0].timestamp;
+    const firstTimestamp = lapT0;
     const timestamps = primaryData.map((r) => r.timestamp - firstTimestamp);
     const alignCompare = (field) => {
       if (!compareData.length) return [];
@@ -18118,6 +18952,7 @@ function TelemetryView() {
     const compareColor = compareDriver ? drivers.find((d) => d.code === compareDriver)?.teamColor || "#ff8c00" : "#ff8c00";
     return {
       timestamps,
+      fullLapDuration: lapT1 - lapT0,
       primaryColor,
       compareColor,
       speed: { primary: primaryData.map((r) => r.speed), compare: alignCompare("speed") },
@@ -18127,7 +18962,14 @@ function TelemetryView() {
       rpm: { primary: primaryData.map((r) => r.rpm), compare: alignCompare("rpm") },
       drs: { primary: primaryData.map((r) => r.drs), compare: alignCompare("drs") }
     };
-  }, [telemetryData, selectedDriver, compareDriver, drivers, lapTimeWindow]);
+  }, [telemetryData, selectedDriver, compareDriver, drivers, lapTimeWindow, roundedSessionTime]);
+  reactExports.useEffect(() => {
+    if (!lapTimeWindow) return;
+    if (roundedSessionTime > lapTimeWindow.t1 + 2) {
+      const nextLap = lapNumbers.find((lap) => lap > selectedLap);
+      if (nextLap) setSelectedLap(nextLap);
+    }
+  }, [roundedSessionTime, lapTimeWindow, selectedLap, lapNumbers]);
   const goToPrevLap = () => {
     const idx = lapNumbers.indexOf(selectedLap);
     if (idx > 0) setSelectedLap(lapNumbers[idx - 1]);
@@ -18165,7 +19007,7 @@ function TelemetryView() {
             value: selectedDriver || "",
             onChange: (e) => {
               setSelectedDriver(e.target.value);
-              setSelectedLap(5);
+              setSelectedLap(1);
             },
             className: "rounded border border-border bg-bg-card px-2 py-1 text-sm text-text-primary",
             children: drivers.map((d) => /* @__PURE__ */ jsxRuntimeExports.jsxs("option", { value: d.code, children: [
@@ -18243,6 +19085,7 @@ function TelemetryView() {
           series: makeSeries(chartData.speed.primary, chartData.speed.compare),
           height: 150,
           yRange: [0, 360],
+          xRange: [0, chartData.fullLapDuration],
           yLabel: "km/h"
         }
       ),
@@ -18254,6 +19097,7 @@ function TelemetryView() {
           series: makeSeries(chartData.throttle.primary, chartData.throttle.compare),
           height: 90,
           yRange: [0, 105],
+          xRange: [0, chartData.fullLapDuration],
           yLabel: "%"
         }
       ),
@@ -18265,6 +19109,7 @@ function TelemetryView() {
           series: makeSeries(chartData.brake.primary, chartData.brake.compare),
           height: 90,
           yRange: [0, 105],
+          xRange: [0, chartData.fullLapDuration],
           yLabel: "%"
         }
       ),
@@ -18276,6 +19121,7 @@ function TelemetryView() {
           series: makeSeries(chartData.gear.primary, chartData.gear.compare),
           height: 70,
           yRange: [0, 9],
+          xRange: [0, chartData.fullLapDuration],
           yLabel: "Gear",
           stepped: true
         }
@@ -18288,6 +19134,7 @@ function TelemetryView() {
           series: makeSeries(chartData.rpm.primary, chartData.rpm.compare),
           height: 90,
           yRange: [0, 15e3],
+          xRange: [0, chartData.fullLapDuration],
           yLabel: "RPM"
         }
       ),
@@ -18299,13 +19146,111 @@ function TelemetryView() {
           series: makeSeries(chartData.drs.primary, chartData.drs.compare),
           height: 50,
           yRange: [0, 2],
+          xRange: [0, chartData.fullLapDuration],
           yLabel: "DRS",
           stepped: true
         }
       )
     ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex h-full items-center justify-center text-sm text-text-muted", children: loadingState === "error" ? "Error loading telemetry" : "No telemetry data for this lap" }) })
   ] });
-}
+});
+const PitStrategy = React.memo(function PitStrategy2() {
+  const tyreStints = useSessionStore((s) => s.tyreStints);
+  const sessionData = useSessionStore((s) => s.sessionData);
+  const driverStints = reactExports.useMemo(() => {
+    if (!tyreStints || tyreStints.length === 0) return [];
+    const grouped = /* @__PURE__ */ new Map();
+    for (const stint of tyreStints) {
+      const key = stint.driver_name;
+      if (!grouped.has(key)) grouped.set(key, []);
+      grouped.get(key).push(stint);
+    }
+    const result = Array.from(grouped.entries()).map(([driver, stints]) => ({
+      driver,
+      driverNumber: stints[0].driver_number,
+      position: stints[0].position,
+      strategy: stints[0].tyre_strategy_sequence,
+      stints: stints.sort((a, b) => a.stint_number - b.stint_number)
+    }));
+    result.sort((a, b) => a.position - b.position);
+    return result;
+  }, [tyreStints]);
+  const totalLaps = reactExports.useMemo(() => {
+    if (!tyreStints || tyreStints.length === 0) return 57;
+    return Math.max(...tyreStints.map((s) => s.last_lap));
+  }, [tyreStints]);
+  const getTeamColor = (driverCode) => {
+    const driver = sessionData?.drivers?.find((d) => d.code === driverCode);
+    return driver?.teamColor || "#666666";
+  };
+  if (!driverStints.length) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-bg-card rounded-md p-4 flex items-center justify-center text-text-muted text-sm h-full", children: "No pit strategy data available" });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-bg-card rounded-md flex flex-col h-full overflow-hidden", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between px-3 py-2 border-b border-border flex-shrink-0", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-secondary text-xs uppercase tracking-wider", children: "Pit Strategy" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-text-muted text-[10px]", children: [
+        totalLaps,
+        " laps"
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 overflow-y-auto px-3 py-2", children: driverStints.map(({ driver, position, stints, strategy }) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-1.5 h-7", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1.5 w-[72px] flex-shrink-0", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-text-muted text-[10px] font-mono w-5 text-right", children: [
+          "P",
+          position
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "div",
+          {
+            className: "w-1 h-5 rounded-sm flex-shrink-0",
+            style: { backgroundColor: getTeamColor(driver) }
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-primary text-xs font-mono font-bold", children: driver })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 flex h-5 rounded overflow-hidden gap-px", children: stints.map((stint) => {
+        const widthPct = stint.tyre_laps_in_stint / totalLaps * 100;
+        const compound = stint.tyre_compound.toUpperCase();
+        const color = COMPOUND_COLORS[compound] || "#666666";
+        return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "div",
+          {
+            className: "relative flex items-center justify-center overflow-hidden group cursor-default",
+            style: {
+              width: `${widthPct}%`,
+              backgroundColor: `${color}33`,
+              borderTop: `2px solid ${color}`,
+              minWidth: "20px"
+            },
+            title: `${compound} — Laps ${stint.first_lap}-${stint.last_lap} (${stint.tyre_laps_in_stint} laps)`,
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] font-bold font-mono", style: { color }, children: compound[0] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-[9px] font-mono text-white", children: [
+                "L",
+                stint.first_lap,
+                "-",
+                stint.last_lap
+              ] }) })
+            ]
+          },
+          `${driver}-${stint.stint_number}`
+        );
+      }) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-text-muted text-[10px] font-mono w-6 text-right flex-shrink-0", children: [
+        stints.length - 1,
+        "P"
+      ] })
+    ] }, `${driver}-${strategy}`)) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex items-center gap-3 px-3 py-1.5 border-t border-border flex-shrink-0", children: Object.entries(COMPOUND_COLORS).slice(0, 5).map(([compound, color]) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-2.5 h-2.5 rounded-sm", style: { backgroundColor: color } }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-text-muted text-[10px]", children: compound[0] + compound.slice(1).toLowerCase() })
+    ] }, compound)) })
+  ] });
+});
+const StrategyView = React.memo(function StrategyView2() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-full flex flex-col p-3 gap-3", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 min-h-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx(PitStrategy, {}) }) });
+});
 function App() {
   const [pickerOpen, setPickerOpen] = reactExports.useState(false);
   const [activeView, setActiveView] = reactExports.useState("timing");
@@ -18315,10 +19260,6 @@ function App() {
   reactExports.useEffect(() => {
     if (!sessionData) setActiveView("timing");
   }, [sessionData]);
-  const renderReadyView = () => {
-    if (activeView === "timing") return /* @__PURE__ */ jsxRuntimeExports.jsx(TimingView, {});
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(TelemetryView, {});
-  };
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "h-screen w-screen bg-bg-primary text-text-primary", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       TopBar,
@@ -18330,27 +19271,26 @@ function App() {
       }
     ),
     /* @__PURE__ */ jsxRuntimeExports.jsx(SessionPicker, { open: pickerOpen, onClose: () => setPickerOpen(false) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "h-full pt-12", children: [
-      loadingState === "idle" && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex h-full items-center justify-center text-lg text-text-secondary", children: "Select a session to begin" }),
-      loadingState === "loading" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex h-full items-center justify-center gap-3 text-text-secondary", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "inline-block h-6 w-6 animate-spin rounded-full border-2 border-text-secondary border-t-transparent" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Loading session data..." })
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("main", { className: "h-full pt-12 flex flex-col", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 min-h-0", children: [
+        loadingState === "idle" && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex h-full items-center justify-center text-lg text-text-secondary", children: "Select a session to begin" }),
+        loadingState === "loading" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex h-full items-center justify-center gap-3 text-text-secondary", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "inline-block h-6 w-6 animate-spin rounded-full border-2 border-text-secondary border-t-transparent" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Loading session data..." })
+        ] }),
+        loadingState === "error" && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex h-full items-center justify-center text-lg text-red-400", children: error ?? "Failed to load session" }),
+        loadingState === "ready" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex h-full min-h-0", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Sidebar, { currentView: activeView, onViewChange: (view) => setActiveView(view) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 min-h-0 min-w-0", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { display: activeView === "timing" ? "flex" : "none" }, className: "h-full", children: /* @__PURE__ */ jsxRuntimeExports.jsx(TimingView, {}) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { display: activeView === "telemetry" ? "flex" : "none" }, className: "h-full", children: /* @__PURE__ */ jsxRuntimeExports.jsx(TelemetryView, {}) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { display: activeView === "strategy" ? "flex" : "none" }, className: "h-full", children: /* @__PURE__ */ jsxRuntimeExports.jsx(StrategyView, {}) })
+          ] })
+        ] })
       ] }),
-      loadingState === "error" && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex h-full items-center justify-center text-lg text-red-400", children: error ?? "Failed to load session" }),
-      loadingState === "ready" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex h-full flex-col gap-2 p-3", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex gap-1 border-b border-border bg-bg-primary px-3 py-1", children: ["timing", "telemetry"].map((view) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "button",
-          {
-            type: "button",
-            onClick: () => setActiveView(view),
-            className: `rounded px-3 py-1 text-xs uppercase tracking-wider ${activeView === view ? "bg-bg-selected text-text-primary" : "text-text-secondary hover:bg-bg-hover hover:text-text-primary"}`,
-            children: view
-          },
-          view
-        )) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-h-0 flex-1", children: renderReadyView() })
-      ] })
-    ] })
+      /* @__PURE__ */ jsxRuntimeExports.jsx(PlaybackBar, {})
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(DebugOverlay, {})
   ] });
 }
 ReactDOM.createRoot(document.getElementById("root")).render(

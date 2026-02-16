@@ -1,4 +1,4 @@
-import type { LapRow, Race, Season, SessionVizResponse, TelemetryResponse } from '../types'
+import type { LapRow, Race, Season, SessionVizResponse, TelemetryResponse, TyreStint } from '../types'
 
 const BASE_URL = 'http://localhost:8000/api/v1'
 
@@ -25,5 +25,9 @@ export const api = {
     if (hz !== undefined) params.push(`hz=${hz}`)
     if (params.length) path += `?${params.join('&')}`
     return get<TelemetryResponse>(path)
-  }
+  },
+  getTyreStints: (year: number, race: string, session: string) =>
+    get<TyreStint[]>(
+      `/features/${year}/${encodeURIComponent(race)}/${session}/tyre`
+    )
 }

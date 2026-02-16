@@ -1,0 +1,104 @@
+import React, { useMemo } from 'react'
+import { useSessionStore } from '../stores/sessionStore'
+
+interface SidebarProps {
+  currentView: string
+  onViewChange: (view: string) => void
+}
+
+const VIEWS = [
+  { id: 'timing', label: 'Timing', icon: 'T' },
+  { id: 'telemetry', label: 'Telemetry', icon: 'M' },
+  { id: 'strategy', label: 'Strategy', icon: 'S' }
+]
+
+export const Sidebar = React.memo(function Sidebar({ currentView, onViewChange }: SidebarProps) {
+  const sessionData = useSessionStore((s) => s.sessionData)
+  const loadingState = useSessionStore((s) => s.loadingState)
+
+  const drivers = sessionData?.drivers || []
+
+  const sortedDrivers = useMemo(() => {
+    if (!drivers.length || !sessionData?.laps) return drivers
+    const laps = sessionData.laps
+
+    return [...drivers].sort((a, b) => {
+      const aLaps = laps.filter(
+        (l) => l.driverName === a.code || l.driverNumber === a.driverNumber
+      )
+      const bLaps = laps.filter(
+        (l) => l.driverName === b.code || l.driverNumber === b.driverNumber
+      )
+      const aPos = aLaps.length ? aLaps[aLaps.length - 1].position : 99
+      const bPos = bLaps.length ? bLaps[bLaps.length - 1].position : 99
+      return aPos - bPos
+    })
+  }, [drivers, sessionData?.laps])
+
+  const getPosition = (driver: (typeof drivers)[number]) => {
+    if (!sessionData?.laps) return null
+    const driverLaps = sessionData.laps.filter(
+      (l) => l.driverName === driver.code || l.driverNumber === driver.driverNumber
+    )
+    if (!driverLaps.length) return null
+    return driverLaps[driverLaps.length - 1].position
+  }
+
+  return (
+    <div className="w-[200px] bg-bg-secondary flex flex-col h-full border-r border-border flex-shrink-0">
+      <div className="px-2 py-2 border-b border-border">
+        {VIEWS.map((view) => (
+          <button
+            key={view.id}
+            type="button"
+            onClick={() => onViewChange(view.id)}
+            className={`w-full flex items-center gap-2 px-2 py-1.5 rounded text-xs mb-0.5 transition-colors ${
+              currentView === view.id
+                ? 'bg-bg-selected text-text-primary'
+                : 'text-text-secondary hover:bg-bg-hover hover:text-text-primary'
+            }`}
+          >
+            <span>{view.icon}</span>
+            <span>{view.label}</span>
+          </button>
+        ))}
+      </div>
+
+      <div className="flex-1 overflow-y-auto px-1 py-1">
+        {loadingState !== 'ready' ? (
+          <div className="px-2 py-4 text-text-muted text-xs text-center">
+            {loadingState === 'idle'
+              ? 'Load a session'
+              : loadingState === 'loading'
+                ? 'Loading...'
+                : 'Error loading'}
+          </div>
+        ) : (
+          sortedDrivers.map((driver) => {
+            const pos = getPosition(driver)
+            return (
+              <div
+                key={driver.driverNumber}
+                className="flex items-center gap-1.5 px-1.5 py-1 rounded hover:bg-bg-hover cursor-pointer group"
+              >
+                <span className="text-text-muted text-[10px] font-mono w-5 text-right flex-shrink-0">
+                  {pos ? `P${pos}` : '—'}
+                </span>
+                <div
+                  className="w-1 h-4 rounded-sm flex-shrink-0"
+                  style={{ backgroundColor: driver.teamColor || '#666666' }}
+                />
+                <span className="text-text-primary text-xs font-mono font-bold">
+                  {driver.code || '???'}
+                </span>
+                <span className="text-text-muted text-[10px] truncate opacity-60 group-hover:opacity-100">
+                  {driver.driverName?.split(' ').pop() || ''}
+                </span>
+              </div>
+            )
+          })
+        )}
+      </div>
+    </div>
+  )
+})

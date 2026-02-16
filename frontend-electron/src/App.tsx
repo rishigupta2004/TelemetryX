@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react'
+import { DebugOverlay } from './components/DebugOverlay'
+import { PlaybackBar } from './components/PlaybackBar'
+import { Sidebar } from './components/Sidebar'
 import SessionPicker from './components/SessionPicker'
 import TopBar from './components/TopBar'
 import TimingView from './views/TimingView'
 import { TelemetryView } from './views/TelemetryView'
+import { StrategyView } from './views/StrategyView'
 import { useSessionStore } from './stores/sessionStore'
 
-type AppView = 'timing' | 'telemetry'
+type AppView = 'timing' | 'telemetry' | 'strategy'
 
 export default function App() {
   const [pickerOpen, setPickerOpen] = useState(false)
@@ -18,11 +22,6 @@ export default function App() {
     if (!sessionData) setActiveView('timing')
   }, [sessionData])
 
-  const renderReadyView = () => {
-    if (activeView === 'timing') return <TimingView />
-    return <TelemetryView />
-  }
-
   return (
     <div className="h-screen w-screen bg-bg-primary text-text-primary">
       <TopBar
@@ -34,46 +33,45 @@ export default function App() {
 
       <SessionPicker open={pickerOpen} onClose={() => setPickerOpen(false)} />
 
-      <main className="h-full pt-12">
-        {loadingState === 'idle' && (
-          <div className="flex h-full items-center justify-center text-lg text-text-secondary">Select a session to begin</div>
-        )}
+      <main className="h-full pt-12 flex flex-col">
+        <div className="flex-1 min-h-0">
+          {loadingState === 'idle' && (
+            <div className="flex h-full items-center justify-center text-lg text-text-secondary">Select a session to begin</div>
+          )}
 
-        {loadingState === 'loading' && (
-          <div className="flex h-full items-center justify-center gap-3 text-text-secondary">
-            <span className="inline-block h-6 w-6 animate-spin rounded-full border-2 border-text-secondary border-t-transparent" />
-            <span>Loading session data...</span>
-          </div>
-        )}
-
-        {loadingState === 'error' && (
-          <div className="flex h-full items-center justify-center text-lg text-red-400">
-            {error ?? 'Failed to load session'}
-          </div>
-        )}
-
-        {loadingState === 'ready' && (
-          <div className="flex h-full flex-col gap-2 p-3">
-            <div className="flex gap-1 border-b border-border bg-bg-primary px-3 py-1">
-              {(['timing', 'telemetry'] as AppView[]).map((view) => (
-                <button
-                  key={view}
-                  type="button"
-                  onClick={() => setActiveView(view)}
-                  className={`rounded px-3 py-1 text-xs uppercase tracking-wider ${
-                    activeView === view
-                      ? 'bg-bg-selected text-text-primary'
-                      : 'text-text-secondary hover:bg-bg-hover hover:text-text-primary'
-                  }`}
-                >
-                  {view}
-                </button>
-              ))}
+          {loadingState === 'loading' && (
+            <div className="flex h-full items-center justify-center gap-3 text-text-secondary">
+              <span className="inline-block h-6 w-6 animate-spin rounded-full border-2 border-text-secondary border-t-transparent" />
+              <span>Loading session data...</span>
             </div>
-            <div className="min-h-0 flex-1">{renderReadyView()}</div>
-          </div>
-        )}
+          )}
+
+          {loadingState === 'error' && (
+            <div className="flex h-full items-center justify-center text-lg text-red-400">
+              {error ?? 'Failed to load session'}
+            </div>
+          )}
+
+          {loadingState === 'ready' && (
+            <div className="flex h-full min-h-0">
+              <Sidebar currentView={activeView} onViewChange={(view) => setActiveView(view as AppView)} />
+              <div className="flex-1 min-h-0 min-w-0">
+                <div style={{ display: activeView === 'timing' ? 'flex' : 'none' }} className="h-full">
+                  <TimingView />
+                </div>
+                <div style={{ display: activeView === 'telemetry' ? 'flex' : 'none' }} className="h-full">
+                  <TelemetryView />
+                </div>
+                <div style={{ display: activeView === 'strategy' ? 'flex' : 'none' }} className="h-full">
+                  <StrategyView />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        <PlaybackBar />
       </main>
+      <DebugOverlay />
     </div>
   )
 }

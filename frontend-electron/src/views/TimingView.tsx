@@ -1,21 +1,17 @@
+import React from 'react'
 import { RaceControlFeed } from '../components/RaceControlFeed'
 import { TrackMap } from '../components/TrackMap'
 import { WeatherPanel } from '../components/WeatherPanel'
 import TimingTower from '../components/TimingTower'
 import { useTimingData } from '../hooks/useTimingData'
-import { useSessionStore } from '../stores/sessionStore'
 
-export default function TimingView() {
-  const laps = useSessionStore((s) => s.laps)
-  const sessionData = useSessionStore((s) => s.sessionData)
-  const drivers = sessionData?.drivers ?? []
-  const totalLaps = sessionData?.metadata.totalLaps ?? null
-  const rows = useTimingData(laps, drivers, totalLaps)
+export const TimingView = React.memo(function TimingView() {
+  const rows = useTimingData()
 
   return (
     <div className="h-full w-full p-2">
       <div className="mb-2 flex items-center justify-between">
-        <div className="text-xs uppercase tracking-[0.18em] text-text-secondary">Final Classification</div>
+        <div className="text-xs uppercase tracking-[0.18em] text-text-secondary">Live Classification</div>
         <div className="rounded border border-border bg-bg-secondary px-2 py-0.5 text-[11px] text-text-muted">
           Timing + Track
         </div>
@@ -41,4 +37,6 @@ export default function TimingView() {
       </div>
     </div>
   )
-}
+})
+
+export default TimingView

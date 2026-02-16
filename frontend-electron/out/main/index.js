@@ -4,6 +4,7 @@ import __cjs_mod__ from "node:module";
 const __filename = import.meta.filename;
 const __dirname = import.meta.dirname;
 const require2 = __cjs_mod__.createRequire(import.meta.url);
+app.disableHardwareAcceleration();
 app.commandLine.appendSwitch("no-sandbox");
 app.commandLine.appendSwitch("disable-gpu-sandbox");
 app.commandLine.appendSwitch("disable-software-rasterizer");
@@ -18,7 +19,8 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      sandbox: false
+      sandbox: false,
+      preload: join(__dirname, "../preload/preload.mjs")
     }
   });
   if (isDev) {

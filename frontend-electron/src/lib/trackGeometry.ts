@@ -37,24 +37,51 @@ export function toPolylinePoints(points: Point[]): string {
 }
 
 /**
+ * Precompute cumulative arc lengths for the path.
+ */
+export function computeArcLengths(points: Point[]): number[] {
+  if (!points.length) return [0]
+  const lengths = [0]
+  for (let i = 1; i < points.length; i++) {
+    const dx = points[i].x - points[i - 1].x
+    const dy = points[i].y - points[i - 1].y
+    lengths.push(lengths[i - 1] + Math.sqrt(dx * dx + dy * dy))
+  }
+  return lengths
+}
+
+/**
  * Given progress 0.0-1.0, return interpolated point
  * along the centerline path.
  * progress=0 -> first point, progress=1 -> last point
  */
-export function interpolateAlongPath(points: Point[], progress: number): Point {
-  if (!points.length) return { x: 0, y: 0 }
+export function interpolateAlongPath(points: Point[], progress: number, arcLengths?: number[]): Point {
+  if (points.length === 0) return { x: 0, y: 0 }
+  if (points.length === 1) return points[0]
 
   const clamped = Math.max(0, Math.min(1, progress))
-  const index = clamped * (points.length - 1)
-  const lower = Math.floor(index)
-  const upper = Math.ceil(index)
+  const lengths = arcLengths || computeArcLengths(points)
+  const totalLength = lengths[lengths.length - 1]
+  const targetLength = clamped * totalLength
 
-  if (lower === upper) return points[lower]
+  let low = 0
+  let high = lengths.length - 1
+  while (low < high - 1) {
+    const mid = Math.floor((low + high) / 2)
+    if (lengths[mid] < targetLength) {
+      low = mid
+    } else {
+      high = mid
+    }
+  }
 
-  const t = index - lower
+  const segmentLength = lengths[high] - lengths[low]
+  if (segmentLength === 0) return points[low]
+
+  const t = (targetLength - lengths[low]) / segmentLength
   return {
-    x: points[lower].x + (points[upper].x - points[lower].x) * t,
-    y: points[lower].y + (points[upper].y - points[lower].y) * t
+    x: points[low].x + (points[high].x - points[low].x) * t,
+    y: points[low].y + (points[high].y - points[low].y) * t
   }
 }
 

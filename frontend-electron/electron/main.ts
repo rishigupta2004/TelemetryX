@@ -1,6 +1,8 @@
 import { app, BrowserWindow } from 'electron'
 import { join } from 'node:path'
 
+app.disableHardwareAcceleration()
+
 // Fix network service crash on macOS
 app.commandLine.appendSwitch('no-sandbox')
 app.commandLine.appendSwitch('disable-gpu-sandbox')
@@ -18,7 +20,8 @@ function createWindow(): void {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      sandbox: false
+      sandbox: false,
+      preload: join(__dirname, '../preload/preload.mjs')
     }
   })
 

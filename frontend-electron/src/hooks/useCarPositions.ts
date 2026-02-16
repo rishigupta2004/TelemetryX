@@ -1,90 +1,115 @@
 import { useMemo } from 'react'
-import { usePlaybackStore } from '../stores/playbackStore'
 import { useSessionStore } from '../stores/sessionStore'
-import type { Driver, LapRow } from '../types'
+import { usePlaybackStore } from '../stores/playbackStore'
 
-interface CarPosition {
+export interface CarPosition {
   driverCode: string
   driverNumber: number
   teamColor: string
   progress: number
   currentLap: number
   position: number
-  isInPit: boolean
-}
-
-function codeFromDriver(driver: Driver): string {
-  return driver.code || String(driver.driverNumber)
 }
 
 export function useCarPositions(): CarPosition[] {
-  const sessionData = useSessionStore((s) => s.sessionData)
-  const fullLaps = useSessionStore((s) => s.laps)
-  const currentTime = usePlaybackStore((s) => s.currentTime)
+  const sessionData = useSessionStore(s => s.sessionData)
+  const currentTime = usePlaybackStore(s => s.currentTime)
+  const sessionStartTime = usePlaybackStore(s => s.sessionStartTime)
+
+  const sessionTime = sessionStartTime + currentTime
 
   return useMemo(() => {
-    if (!sessionData?.drivers?.length) return []
+    if (!sessionData?.laps || !sessionData?.drivers) return []
 
     const drivers = sessionData.drivers
-    const laps = fullLaps.length ? fullLaps : sessionData.laps
-    const effectiveTime = Math.max(0, currentTime)
-    const validStarts = laps
-      .map((lap) => lap.lapStartSeconds)
-      .filter((t) => Number.isFinite(t) && t > 0)
-    const sessionStartTime = validStarts.length ? Math.min(...validStarts) : 0
-    const sessionTime = sessionStartTime + effectiveTime
+    const allLaps = sessionData.laps
+    const results: CarPosition[] = []
 
-    return drivers
-      .map((driver) => {
-        const driverLaps = laps
-          .filter((lap: LapRow) => lap.driverName === driver.code || lap.driverNumber === driver.driverNumber)
-          .sort((a, b) => (a.lapNumber ?? 0) - (b.lapNumber ?? 0))
+    for (const driver of drivers) {
+      const driverLaps = allLaps
+        .filter((l: any) =>
+          l.driverName === driver.code ||
+          l.driverNumber === driver.driverNumber
+        )
+        .sort((a: any, b: any) => a.lapNumber - b.lapNumber)
 
-        if (driverLaps.length === 0) {
-          return {
-            driverCode: codeFromDriver(driver),
-            driverNumber: driver.driverNumber,
-            teamColor: driver.teamColor || '#ffffff',
-            progress: 0,
-            currentLap: 0,
-            position: 0,
-            isInPit: false
-          }
-        }
+      // No lap data at all — truly DNS, skip
+      if (driverLaps.length === 0) continue
 
-        let currentLapData = driverLaps[0]
-        for (const lap of driverLaps) {
-          if (sessionTime >= lap.lapStartSeconds && sessionTime <= lap.lapEndSeconds) {
-            currentLapData = lap
-            break
-          }
-          if (sessionTime > lap.lapEndSeconds) {
-            currentLapData = lap
-          }
-        }
+      const firstStart = driverLaps[0].lapStartSeconds
+      const lastEnd = driverLaps[driverLaps.length - 1].lapEndSeconds
+      const driverMaxLap = driverLaps[driverLaps.length - 1].lapNumber
+      const raceMaxLap = Math.max(
+        ...allLaps.map((l: any) => l.lapNumber)
+      )
 
-        const lapDuration = Math.max(1, currentLapData.lapEndSeconds - currentLapData.lapStartSeconds)
-        let progress = (sessionTime - currentLapData.lapStartSeconds) / lapDuration
-        progress = Math.max(0, Math.min(1, progress))
-        const isInPit = lapDuration > 120 && progress > 0.8
-
-        return {
-          driverCode: codeFromDriver(driver),
+      // Before this driver's first lap — show at start line
+      if (sessionTime < firstStart) {
+        results.push({
+          driverCode: driver.code,
           driverNumber: driver.driverNumber,
-          teamColor: driver.teamColor || '#ffffff',
-          progress,
-          currentLap: currentLapData?.lapNumber || currentLapIndex + 1,
-          position: currentLapData?.position || 0,
-          isInPit
-        }
-      })
-      .filter((car) => car.currentLap > 0)
-      .sort((a, b) => {
-        const pa = a.position || Number.MAX_SAFE_INTEGER
-        const pb = b.position || Number.MAX_SAFE_INTEGER
-        return pa - pb
-      })
-  }, [sessionData, fullLaps, currentTime])
-}
+          teamColor: driver.teamColor || '#fff',
+          progress: 0,
+          currentLap: 0,
+          position: driverLaps[0].position || 99,
+        })
+        continue
+      }
 
-export type { CarPosition }
+      // After this driver's last lap + 30s grace
+      // If they completed far fewer laps than leader = DNF
+      if (sessionTime > lastEnd + 30 &&
+          driverMaxLap < raceMaxLap - 1) {
+        // DNF — don't show
+        continue
+      }
+
+      // Find current in-progress lap
+      let found = false
+      for (const lap of driverLaps) {
+        if (lap.lapStartSeconds <= sessionTime &&
+            sessionTime <= lap.lapEndSeconds) {
+          // Currently on this lap
+          const dur = lap.lapEndSeconds - lap.lapStartSeconds
+          let progress = dur > 0
+            ? (sessionTime - lap.lapStartSeconds) / dur
+            : 0
+          progress = Math.max(0, Math.min(0.999, progress))
+
+          results.push({
+            driverCode: driver.code,
+            driverNumber: driver.driverNumber,
+            teamColor: driver.teamColor || '#fff',
+            progress,
+            currentLap: lap.lapNumber,
+            position: lap.position || 99,
+          })
+          found = true
+          break
+        }
+      }
+
+      if (found) continue
+
+      // Between laps (gap between lapEnd and next lapStart)
+      // Find last completed lap
+      const completed = driverLaps.filter(
+        (l: any) => l.lapEndSeconds <= sessionTime
+      )
+      if (completed.length > 0) {
+        const lastLap = completed[completed.length - 1]
+        // Show at finish line of last completed lap
+        results.push({
+          driverCode: driver.code,
+          driverNumber: driver.driverNumber,
+          teamColor: driver.teamColor || '#fff',
+          progress: 0.999,
+          currentLap: lastLap.lapNumber,
+          position: lastLap.position || 99,
+        })
+      }
+    }
+
+    return results
+  }, [sessionData, sessionTime])
+}

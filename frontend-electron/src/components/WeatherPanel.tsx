@@ -1,15 +1,26 @@
 import React, { useMemo } from 'react'
 import { Cloud, Droplets, Gauge, Thermometer, Wind } from 'lucide-react'
+import { useSessionTime } from '../lib/timeUtils'
 import { useSessionStore } from '../stores/sessionStore'
 
-export function WeatherPanel() {
+export const WeatherPanel = React.memo(function WeatherPanel() {
   const sessionData = useSessionStore((s) => s.sessionData)
+  const sessionTime = useSessionTime()
 
   const weather = useMemo(() => {
     const w = sessionData?.weather
     if (!w || !w.length) return null
-    return w[w.length - 1]
-  }, [sessionData?.weather])
+    let nearest = w[0]
+    let minDiff = Math.abs(sessionTime - nearest.timestamp)
+    for (const reading of w) {
+      const diff = Math.abs(sessionTime - reading.timestamp)
+      if (diff < minDiff) {
+        minDiff = diff
+        nearest = reading
+      }
+    }
+    return nearest
+  }, [sessionData?.weather, sessionTime])
 
   if (!weather) {
     return (
@@ -102,4 +113,4 @@ export function WeatherPanel() {
       </div>
     </div>
   )
-}
+})

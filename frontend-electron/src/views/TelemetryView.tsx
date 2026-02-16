@@ -1,9 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { UPlotChart } from '../components/UPlotChart'
+import { useSessionTime } from '../lib/timeUtils'
 import { useSessionStore } from '../stores/sessionStore'
 import { useTelemetryStore } from '../stores/telemetryStore'
 
-export function TelemetryView() {
+export const TelemetryView = React.memo(function TelemetryView() {
   const sessionData = useSessionStore((s) => s.sessionData)
   const selectedYear = useSessionStore((s) => s.selectedYear)
   const selectedRace = useSessionStore((s) => s.selectedRace)
@@ -16,7 +17,9 @@ export function TelemetryView() {
 
   const [selectedDriver, setSelectedDriver] = useState<string | null>(null)
   const [compareDriver, setCompareDriver] = useState<string | null>(null)
-  const [selectedLap, setSelectedLap] = useState<number>(5)
+  const [selectedLap, setSelectedLap] = useState<number>(1)
+  const sessionTime = useSessionTime()
+  const roundedSessionTime = Math.round(sessionTime * 10) / 10
 
   const drivers = sessionData?.drivers || []
   const laps = fullLaps.length ? fullLaps : sessionData?.laps || []
@@ -46,8 +49,7 @@ export function TelemetryView() {
 
   useEffect(() => {
     if (lapNumbers.length > 0 && !lapNumbers.includes(selectedLap)) {
-      const goodLap = lapNumbers.find((l) => l >= 3) || lapNumbers[0]
-      setSelectedLap(goodLap)
+      setSelectedLap(lapNumbers[0])
     }
   }, [lapNumbers, selectedLap])
 
@@ -68,12 +70,13 @@ export function TelemetryView() {
 
     const lapT0 = lapTimeWindow.t0
     const lapT1 = lapTimeWindow.t1
+    const timeLimit = Math.min(roundedSessionTime, lapT1)
 
-    const primaryData = primaryRaw.filter((r) => r.timestamp >= lapT0 && r.timestamp <= lapT1)
-    const compareData = compareRaw.filter((r) => r.timestamp >= lapT0 && r.timestamp <= lapT1)
+    const primaryData = primaryRaw.filter((r) => r.timestamp >= lapT0 && r.timestamp <= timeLimit)
+    const compareData = compareRaw.filter((r) => r.timestamp >= lapT0 && r.timestamp <= timeLimit)
     if (!primaryData.length) return null
 
-    const firstTimestamp = primaryData[0].timestamp
+    const firstTimestamp = lapT0
     const timestamps = primaryData.map((r) => r.timestamp - firstTimestamp)
 
     const alignCompare = (field: 'speed' | 'throttle' | 'brake' | 'gear' | 'rpm' | 'drs') => {
@@ -100,6 +103,7 @@ export function TelemetryView() {
 
     return {
       timestamps,
+      fullLapDuration: lapT1 - lapT0,
       primaryColor,
       compareColor,
       speed: { primary: primaryData.map((r) => r.speed), compare: alignCompare('speed') },
@@ -109,7 +113,15 @@ export function TelemetryView() {
       rpm: { primary: primaryData.map((r) => r.rpm), compare: alignCompare('rpm') },
       drs: { primary: primaryData.map((r) => r.drs), compare: alignCompare('drs') }
     }
-  }, [telemetryData, selectedDriver, compareDriver, drivers, lapTimeWindow])
+  }, [telemetryData, selectedDriver, compareDriver, drivers, lapTimeWindow, roundedSessionTime])
+
+  useEffect(() => {
+    if (!lapTimeWindow) return
+    if (roundedSessionTime > lapTimeWindow.t1 + 2) {
+      const nextLap = lapNumbers.find((lap) => lap > selectedLap)
+      if (nextLap) setSelectedLap(nextLap)
+    }
+  }, [roundedSessionTime, lapTimeWindow, selectedLap, lapNumbers])
 
   const goToPrevLap = () => {
     const idx = lapNumbers.indexOf(selectedLap)
@@ -152,7 +164,7 @@ export function TelemetryView() {
             value={selectedDriver || ''}
             onChange={(e) => {
               setSelectedDriver(e.target.value)
-              setSelectedLap(5)
+              setSelectedLap(1)
             }}
             className="rounded border border-border bg-bg-card px-2 py-1 text-sm text-text-primary"
           >
@@ -217,12 +229,14 @@ export function TelemetryView() {
       <div className="flex-1 space-y-1 overflow-y-auto px-2 py-2">
         {chartData ? (
           <>
+            {/* Keep x-axis fixed to full lap duration while traces draw progressively */}
             <UPlotChart
               title="Speed (km/h)"
               timestamps={chartData.timestamps}
               series={makeSeries(chartData.speed.primary, chartData.speed.compare)}
               height={150}
               yRange={[0, 360]}
+              xRange={[0, chartData.fullLapDuration]}
               yLabel="km/h"
             />
             <UPlotChart
@@ -231,6 +245,7 @@ export function TelemetryView() {
               series={makeSeries(chartData.throttle.primary, chartData.throttle.compare)}
               height={90}
               yRange={[0, 105]}
+              xRange={[0, chartData.fullLapDuration]}
               yLabel="%"
             />
             <UPlotChart
@@ -239,6 +254,7 @@ export function TelemetryView() {
               series={makeSeries(chartData.brake.primary, chartData.brake.compare)}
               height={90}
               yRange={[0, 105]}
+              xRange={[0, chartData.fullLapDuration]}
               yLabel="%"
             />
             <UPlotChart
@@ -247,6 +263,7 @@ export function TelemetryView() {
               series={makeSeries(chartData.gear.primary, chartData.gear.compare)}
               height={70}
               yRange={[0, 9]}
+              xRange={[0, chartData.fullLapDuration]}
               yLabel="Gear"
               stepped
             />
@@ -256,6 +273,7 @@ export function TelemetryView() {
               series={makeSeries(chartData.rpm.primary, chartData.rpm.compare)}
               height={90}
               yRange={[0, 15000]}
+              xRange={[0, chartData.fullLapDuration]}
               yLabel="RPM"
             />
             <UPlotChart
@@ -264,6 +282,7 @@ export function TelemetryView() {
               series={makeSeries(chartData.drs.primary, chartData.drs.compare)}
               height={50}
               yRange={[0, 2]}
+              xRange={[0, chartData.fullLapDuration]}
               yLabel="DRS"
               stepped
             />
@@ -276,4 +295,4 @@ export function TelemetryView() {
       </div>
     </div>
   )
-}
+})

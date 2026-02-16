@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { api } from '../api/client'
-import type { LapRow, Race, Season, SessionVizResponse } from '../types'
+import { usePlaybackStore } from './playbackStore'
+import type { LapRow, Race, Season, SessionVizResponse, TyreStint } from '../types'
 
 interface SessionState {
   seasons: Season[]
@@ -10,6 +11,7 @@ interface SessionState {
   selectedSession: string | null
   sessionData: SessionVizResponse | null
   laps: LapRow[]
+  tyreStints: TyreStint[] | null
   loadingState: 'idle' | 'loading' | 'ready' | 'error'
   error: string | null
   fetchSeasons: () => Promise<void>
@@ -26,6 +28,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   selectedSession: null,
   sessionData: null,
   laps: [],
+  tyreStints: null,
   loadingState: 'idle',
   error: null,
 
@@ -56,24 +59,33 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   },
 
   loadSession: async (year, race, session) => {
+    const state = get()
+    if (state.loadingState === 'loading') return
+
     set({
       loadingState: 'loading',
       error: null,
       selectedYear: year,
       selectedRace: race,
       selectedSession: session,
-      laps: []
+      laps: [],
+      tyreStints: null
     })
     try {
-      const sessionData = await api.getSessionViz(year, race, session)
-      const laps = await api.getLaps(year, race, session)
+      const data = await api.getSessionViz(year, race, session)
+
+      try {
+        const fullLaps = await api.getLaps(year, race, session)
+        if (fullLaps && fullLaps.length > (data.laps?.length ?? 0)) {
+          data.laps = fullLaps
+        }
+      } catch (e) {
+        console.warn('Could not load full laps, using viz laps:', e)
+      }
+
       const numberToCode = new Map<number, string>()
 
-      for (const lap of sessionData.laps ?? []) {
-        const code = lap.driverName
-        if (code && lap.driverNumber != null) numberToCode.set(lap.driverNumber, code)
-      }
-      for (const lap of laps ?? []) {
+      for (const lap of data.laps ?? []) {
         const code = lap.driverName
         if (code && lap.driverNumber != null) numberToCode.set(lap.driverNumber, code)
       }
@@ -90,7 +102,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
         }
       }
 
-      const enrichedDrivers = (sessionData.drivers ?? []).map((driver) => {
+      const enrichedDrivers = (data.drivers ?? []).map((driver) => {
         const mappedCode = numberToCode.get(driver.driverNumber)
         if (mappedCode) return { ...driver, code: mappedCode }
         const parts = driver.driverName.split(' ')
@@ -98,15 +110,45 @@ export const useSessionStore = create<SessionState>((set, get) => ({
         return { ...driver, code: lastName.substring(0, 3).toUpperCase() }
       })
 
+      if ((data.laps?.length ?? 0) > 0) {
+        const allLapEnds = data.laps
+          .map((lap) => lap.lapEndSeconds)
+          .filter((t) => Number.isFinite(t) && t > 0)
+        const allLapStarts = data.laps
+          .map((lap) => lap.lapStartSeconds)
+          .filter((t) => Number.isFinite(t) && t > 0)
+        if (allLapEnds.length && allLapStarts.length) {
+          const sessionStartTime = Math.min(...allLapStarts)
+          const sessionEndTime = Math.max(...allLapEnds)
+          const duration = Math.max(0, sessionEndTime - sessionStartTime)
+          usePlaybackStore.getState().setDuration(duration, sessionStartTime)
+        }
+      }
+
       set({
-        sessionData: { ...sessionData, drivers: enrichedDrivers },
-        laps,
+        sessionData: { ...data, drivers: enrichedDrivers },
+        laps: data.laps ?? [],
         selectedYear: year,
         selectedRace: race,
         selectedSession: session,
         loadingState: 'ready',
         error: null
       })
+
+      api.getTyreStints(year, race, session)
+        .then((stints) => {
+          const current = get()
+          if (
+            current.selectedYear === year &&
+            current.selectedRace === race &&
+            current.selectedSession === session
+          ) {
+            set({ tyreStints: stints })
+          }
+        })
+        .catch((err) => {
+          console.warn('Tyre data not available:', err)
+        })
     } catch (err) {
       set({ error: String(err), loadingState: 'error' })
     }
@@ -114,6 +156,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
 
   clearSession: () => {
     const { seasons, races } = get()
+    usePlaybackStore.getState().reset()
     set({
       seasons,
       races,
@@ -122,6 +165,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       selectedSession: null,
       sessionData: null,
       laps: [],
+      tyreStints: null,
       loadingState: 'idle',
       error: null
     })

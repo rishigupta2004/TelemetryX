@@ -127,3 +127,30 @@ export interface TelemetryRow {
 export interface TelemetryResponse {
   [driverCode: string]: TelemetryRow[]
 }
+
+export interface TyreStint {
+  year: number
+  race_name: string
+  session: string
+  driver_name: string
+  driver_number: number
+  stint_number: number
+  tyre_compound: string
+  tyre_age_at_stint_start: number
+  tyre_age_at_stint_end: number
+  tyre_laps_in_stint: number
+  tyre_degradation_rate: number
+  pit_stop_count: number
+  first_lap: number
+  last_lap: number
+  estimated_tyre_temp: number
+  grip_level: number
+  traffic_density: number
+  position: number
+  is_overtake_lap: number
+  tyre_gap_ahead: number
+  tyre_gap_behind: number
+  tyre_life_remaining: number
+  optimal_pit_window: number
+  tyre_strategy_sequence: string
+}

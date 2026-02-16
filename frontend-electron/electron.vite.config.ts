@@ -17,10 +17,24 @@ export default defineConfig({
       }
     }
   },
+  preload: {
+    build: {
+      outDir: 'out/preload',
+      lib: {
+        entry: 'electron/preload.ts'
+      },
+      rollupOptions: {
+        output: {
+          entryFileNames: 'index.js'
+        }
+      }
+    }
+  },
   renderer: {
     root: '.',
     plugins: [react(), tailwindcss()],
     resolve: {
+      dedupe: ['react', 'react-dom'],
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url))
       }

@@ -1,12 +1,15 @@
 import React, { useMemo, useState } from 'react'
 import { useCarPositions } from '../hooks/useCarPositions'
 import {
+  computeArcLengths,
   getBounds,
   interpolateAlongPath,
   normalizeToViewport,
   parseCenterline,
   toPolylinePoints
 } from '../lib/trackGeometry'
+import { useSessionTime } from '../lib/timeUtils'
+import { usePlaybackStore } from '../stores/playbackStore'
 import { useSessionStore } from '../stores/sessionStore'
 
 interface TrackMapProps {
@@ -21,6 +24,8 @@ function asArray<T = unknown>(value: unknown): T[] {
 
 export function TrackMap({ compact = false }: TrackMapProps) {
   const sessionData = useSessionStore((s) => s.sessionData)
+  const sessionTime = useSessionTime()
+  const sessionStartTime = usePlaybackStore((s) => s.sessionStartTime)
   const carPositions = useCarPositions()
   const [hoveredDriver, setHoveredDriver] = useState<string | null>(null)
 
@@ -31,12 +36,14 @@ export function TrackMap({ compact = false }: TrackMapProps) {
 
     const rawPoints = parseCenterline(rawCenterline)
     const points = normalizeToViewport(rawPoints, 1000, 620, 28)
+    const arcLengths = computeArcLengths(points)
     const bounds = getBounds(points, 0)
     const width = bounds.maxX - bounds.minX
     const height = bounds.maxY - bounds.minY
 
     return {
       points,
+      arcLengths,
       bounds,
       width,
       height,
@@ -46,20 +53,91 @@ export function TrackMap({ compact = false }: TrackMapProps) {
     }
   }, [sessionData?.trackGeometry])
 
+  const currentFlags = useMemo(() => {
+    const raceControl = sessionData?.raceControl || []
+
+    if (!raceControl.length) {
+      return {
+        latestTrackFlag: null as string | null,
+        sectorFlags: {} as Record<number, string>,
+        isSafetyCar: false,
+        isVSC: false,
+        isRedFlag: false
+      }
+    }
+    const activeMessages = raceControl.filter(
+      (m: any) => m.timestamp >= sessionStartTime && m.timestamp <= sessionTime
+    )
+
+    const trackFlags = activeMessages.filter(
+      (m: any) => m.category === 'Flag' && m.scope === 'Track'
+    )
+    const latestTrackFlag = trackFlags.length > 0 ? trackFlags[trackFlags.length - 1] : null
+
+    const sectorFlags: Record<number, string> = {}
+    for (const msg of activeMessages) {
+      if (msg.category === 'Flag' && msg.scope === 'Sector' && msg.sector) {
+        if (msg.flag === 'CLEAR' || msg.flag === 'GREEN') {
+          delete sectorFlags[msg.sector]
+        } else {
+          sectorFlags[msg.sector] = msg.flag
+        }
+      }
+    }
+
+    const scMessages = activeMessages.filter(
+      (m: any) => m.category === 'SafetyCar'
+    )
+    const lastSC = scMessages.length > 0 ? scMessages[scMessages.length - 1] : null
+    const text = (lastSC?.message || '').toUpperCase()
+    const isSafetyCar = !!lastSC && (text.includes('DEPLOYED') || text.includes('SAFETY CAR'))
+    const isVSC = !!lastSC && text.includes('VIRTUAL')
+    const scEnded = !!lastSC && (text.includes('ENDING') || text.includes('IN THIS LAP'))
+    const isRedFlag = latestTrackFlag?.flag === 'RED'
+
+    return {
+      latestTrackFlag: latestTrackFlag?.flag || null,
+      sectorFlags,
+      isSafetyCar: isSafetyCar && !scEnded,
+      isVSC: isVSC && !scEnded,
+      isRedFlag
+    }
+  }, [sessionData?.raceControl, sessionStartTime, sessionTime])
+
   if (!trackData) {
     return <div className="flex h-full items-center justify-center text-sm text-text-muted">Track layout not available</div>
   }
 
-  const { points, bounds, width, height, sectors } = trackData
+  const { points, arcLengths, bounds, width, height, sectors } = trackData
   const viewBox = `${bounds.minX} ${bounds.minY} ${width} ${height}`
 
   return (
     <div className="relative h-full w-full overflow-hidden rounded-md bg-[radial-gradient(circle_at_20%_20%,#2a2a2a_0%,#1f1f1f_40%,#181818_100%)]">
-      <div className="absolute left-3 top-2 z-10">
-        <div className="text-[10px] uppercase tracking-[0.16em] text-text-muted">Track Map</div>
-        <div className="mt-0.5 text-xs uppercase tracking-wider text-text-secondary">
+      {/* Flag status banners — top left, stacked */}
+      <div className="absolute left-3 top-2 z-20 flex flex-col gap-1">
+        <span className="text-xs uppercase tracking-wider text-text-secondary">
           {sessionData?.trackGeometry?.name || 'Track'}
-        </div>
+        </span>
+        {currentFlags.isRedFlag && (
+          <span className="animate-pulse rounded border border-red-500/50 bg-red-600/40 px-3 py-1 font-mono text-sm font-bold text-red-400">
+            🔴 RED FLAG
+          </span>
+        )}
+        {currentFlags.isSafetyCar && !currentFlags.isRedFlag && (
+          <span className="rounded border border-orange-500/50 bg-orange-500/30 px-3 py-1 font-mono text-sm font-bold text-orange-400">
+            🚗 SAFETY CAR
+          </span>
+        )}
+        {currentFlags.isVSC && !currentFlags.isRedFlag && (
+          <span className="rounded border border-orange-500/50 bg-orange-500/30 px-3 py-1 font-mono text-sm font-bold text-orange-400">
+            ⚠ VIRTUAL SAFETY CAR
+          </span>
+        )}
+        {currentFlags.latestTrackFlag === 'GREEN' && (
+          <span className="rounded bg-green-500/20 px-2 py-0.5 text-xs font-bold text-green-400">
+            🟢 GREEN
+          </span>
+        )}
       </div>
 
       <svg viewBox={viewBox} className="h-full w-full" preserveAspectRatio="xMidYMid meet">
@@ -101,14 +179,77 @@ export function TrackMap({ compact = false }: TrackMapProps) {
           />
         )}
 
+        {currentFlags.isRedFlag && (
+          <polyline
+            points={toPolylinePoints(points)}
+            fill="none"
+            stroke="#ff1801"
+            strokeWidth={20}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            opacity={0.4}
+          />
+        )}
+
+        {(currentFlags.isSafetyCar || currentFlags.isVSC) && (
+          <polyline
+            points={toPolylinePoints(points)}
+            fill="none"
+            stroke="#ffd700"
+            strokeWidth={20}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            opacity={0.3}
+          />
+        )}
+
+        {Object.entries(currentFlags.sectorFlags).map(([sector, flag]) => {
+          if (flag !== 'DOUBLE YELLOW' && flag !== 'YELLOW') return null
+          const sectorNum = Number(sector)
+          const startIdx = Math.floor(((sectorNum - 1) / 3) * points.length)
+          const endIdx = Math.floor((sectorNum / 3) * points.length)
+          const sectorPoints = points.slice(startIdx, endIdx + 1)
+          return (
+            <polyline
+              key={`flag-s${sector}`}
+              points={toPolylinePoints(sectorPoints)}
+              fill="none"
+              stroke="#ffd700"
+              strokeWidth={18}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              opacity={0.35}
+            />
+          )
+        })}
+
+        {trackData.drsZones?.map((zone: any, i: number) => {
+          const startIdx = zone?.startIndex ?? zone?.start ?? -1
+          const endIdx = zone?.endIndex ?? zone?.end ?? -1
+          if (startIdx < 0 || endIdx <= startIdx || endIdx >= points.length) return null
+          const drsPoints = points.slice(startIdx, endIdx + 1)
+          return (
+            <polyline
+              key={`drs-${i}`}
+              points={toPolylinePoints(drsPoints)}
+              fill="none"
+              stroke="#00d846"
+              strokeWidth={6}
+              strokeLinecap="round"
+              opacity={0.5}
+            />
+          )
+        })}
+
         {sectors.map((sector: any, i: number) => {
           const idx = sector?.startIndex ?? sector?.start ?? Math.floor((i / 3) * points.length)
           if (idx >= points.length) return null
           const p = points[idx]
+          const colors = ['#ff1801', '#ffd700', '#0090ff']
           return (
             <g key={`sector-${i}`}>
-              <circle cx={p.x} cy={p.y} r={5} fill="#737373" />
-              <text x={p.x + 10} y={p.y + 4} fill="#9a9a9a" fontSize="11">
+              <circle cx={p.x} cy={p.y} r={6} fill={colors[i % 3]} opacity={0.8} />
+              <text x={p.x + 10} y={p.y + 4} fill={colors[i % 3]} fontSize="11" fontWeight="bold" fontFamily="monospace">
                 S{i + 1}
               </text>
             </g>
@@ -116,7 +257,7 @@ export function TrackMap({ compact = false }: TrackMapProps) {
         })}
 
         {carPositions.map((car) => {
-          const pos = interpolateAlongPath(points, car.progress)
+          const pos = interpolateAlongPath(points, car.progress, arcLengths)
           const isHovered = hoveredDriver === car.driverCode
           const radius = compact ? 6 : 10
 
@@ -125,11 +266,15 @@ export function TrackMap({ compact = false }: TrackMapProps) {
               key={car.driverNumber}
               onMouseEnter={() => setHoveredDriver(car.driverCode)}
               onMouseLeave={() => setHoveredDriver(null)}
-              style={{ cursor: 'pointer' }}
+              style={{
+                cursor: 'pointer',
+                transform: `translate(${pos.x}px, ${pos.y}px)`,
+                transition: 'transform 0.25s linear'
+              }}
             >
               <circle
-                cx={pos.x}
-                cy={pos.y}
+                cx={0}
+                cy={0}
                 r={isHovered ? radius + 3 : radius}
                 fill={car.teamColor}
                 stroke={isHovered ? '#ffffff' : 'none'}
@@ -138,8 +283,8 @@ export function TrackMap({ compact = false }: TrackMapProps) {
               />
               {(!compact || isHovered) && (
                 <text
-                  x={pos.x + radius + 3}
-                  y={pos.y + 4}
+                  x={radius + 3}
+                  y={4}
                   fill="#ffffff"
                   fontSize={compact ? '10' : '12'}
                   fontFamily="monospace"
@@ -150,8 +295,8 @@ export function TrackMap({ compact = false }: TrackMapProps) {
               )}
               {isHovered && (
                 <circle
-                  cx={pos.x}
-                  cy={pos.y}
+                  cx={0}
+                  cy={0}
                   r={radius + 7}
                   fill="none"
                   stroke={car.teamColor}

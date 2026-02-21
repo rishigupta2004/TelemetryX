@@ -85,9 +85,8 @@ def resolve_track_geometry_file(track_dir: str, race_name: str, year: Optional[i
 
 @lru_cache(maxsize=16)
 def _load_canonical_routing(track_dir: str) -> Dict[str, Any]:
-    parent = os.path.dirname(track_dir)
-    canonical_dir = os.path.join(parent, "track_geometry_canonical")
-    routing_path = os.path.join(canonical_dir, "session_routing_2018_2025.json")
+    canonical_dir = track_dir
+    routing_path = os.path.join(track_dir, "session_routing_2018_2025.json")
     if not os.path.exists(routing_path):
         return {"canonical_dir": canonical_dir, "routes": []}
     try:
@@ -131,12 +130,11 @@ def _resolve_canonical_track_geometry_file(
         race_keys.append("british grand prix")
 
     # Interlagos switched event naming between "Brazilian" and "Sao Paulo".
+    # Keep both aliases available for all years.
     if race_key == "brazilian grand prix":
-        if y >= 2021:
-            race_keys.append("sao paulo grand prix")
+        race_keys.append("sao paulo grand prix")
     if race_key == "sao paulo grand prix":
-        if y <= 2020:
-            race_keys.append("brazilian grand prix")
+        race_keys.append("brazilian grand prix")
 
     # Keep deterministic order and remove duplicates.
     seen = set()

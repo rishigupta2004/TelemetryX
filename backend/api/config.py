@@ -42,12 +42,8 @@ GOLD_DIR = DATA_ROOT / "gold"
 FEATURES_DIR = DATA_ROOT / "features"
 MEDIA_CACHE_DIR = DATA_ROOT / "media_cache"
 TRACK_GEOMETRY_DIR = Path(
-    os.getenv("TELEMETRYX_TRACK_GEOMETRY_DIR", str(DATA_ROOT / "track_geometry_canonical"))
+    os.getenv("TELEMETRYX_TRACK_GEOMETRY_DIR", str(DATA_ROOT / "track_geometry"))
 ).expanduser().resolve()
-TRACK_GEOMETRY_MANUAL_DIR = _env_or_default(
-    "TELEMETRYX_TRACKS_DIR",
-    INPUTS_TRACKS_DIR if INPUTS_TRACKS_DIR.exists() else DATA_ROOT / "track_geometry_manual",
-)
 CATALOG_DIR = _env_or_default(
     "TELEMETRYX_CATALOG_DIR",
     INPUTS_SEASONS_DIR if INPUTS_SEASONS_DIR.exists() else DATA_ROOT / "catalog",

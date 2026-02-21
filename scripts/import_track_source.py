@@ -10,7 +10,7 @@ import re
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SOURCE = Path("/Users/rishigupta/Downloads/F1 Track_Source")
-DEFAULT_OUT = ROOT / "backend" / "etl" / "data" / "track_geometry_manual"
+DEFAULT_OUT = ROOT / "backend" / "etl" / "data" / "track_geometry"
 DEFAULT_CATALOG = ROOT / "backend" / "etl" / "data" / "catalog" / "2025_season.json"
 
 

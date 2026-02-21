@@ -10,7 +10,7 @@ from typing import Dict, List, Tuple
 
 ROOT = Path(__file__).resolve().parents[1]
 GEOM_DIR = ROOT / "backend" / "etl" / "data" / "track_geometry"
-OUT_DIR = ROOT / "backend" / "etl" / "data" / "track_geometry_manual"
+OUT_DIR = ROOT / "backend" / "etl" / "data" / "track_geometry"
 CATALOG_DIR = ROOT / "backend" / "etl" / "data" / "catalog"
 
 

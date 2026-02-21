@@ -10,7 +10,6 @@ import uuid
 import pandas as pd
 import duckdb
 import logging
-from pathlib import Path
 from ..driver_mapping import get_driver_name, get_team_name
 from ..cache import cache_get, cache_set
 from ..utils import (
@@ -20,8 +19,7 @@ from ..utils import (
     normalize_session_code,
     display_session_code,
 )
-from ..config import SILVER_DIR, BRONZE_DIR, GOLD_DIR, TRACK_GEOMETRY_DIR, TRACK_GEOMETRY_MANUAL_DIR
-from ..catalog import race_key_for_name, load_season_catalog
+from ..config import SILVER_DIR, BRONZE_DIR, GOLD_DIR, TRACK_GEOMETRY_DIR
 from . import metrics as metrics_router
 
 logger = logging.getLogger(__name__)
@@ -1709,118 +1707,10 @@ def calculate_track_length(centerline: list) -> float:
     return length
 
 
-def _load_layout_map() -> Dict[str, Dict[str, str]]:
-    def _read_json(path: os.PathLike) -> Dict[str, Any]:
-        try:
-            return json.loads(Path(path).read_text())
-        except Exception:
-            return {}
-
-    def _layout_id_map(layout_versions: Dict[str, Any]) -> Dict[str, str]:
-        out: Dict[str, str] = {}
-        for track_key, info in (layout_versions or {}).items():
-            layouts = (info or {}).get("layouts") or {}
-            for layout_key, layout in layouts.items():
-                file = (layout or {}).get("file")
-                if not file:
-                    continue
-                base = f"{track_key}_{layout_key}"
-                out[base] = file
-                if layout_key == "outer_circuit":
-                    out[f"{track_key}_outer"] = file
-                    out[f"{track_key}_outer_sakhir"] = file
-        return out
-
-    def _resolve_layout_file(layout_id: str, layout_files: Dict[str, str]) -> Optional[str]:
-        if not layout_id:
-            return None
-        if layout_id in layout_files:
-            return layout_files[layout_id]
-        parts = layout_id.split("_")
-        if len(parts) > 2:
-            base = "_".join(parts[:2])
-            if base in layout_files:
-                return layout_files[base]
-        if layout_id.startswith("bahrain_outer"):
-            return layout_files.get("bahrain_outer") or layout_files.get("bahrain_outer_circuit")
-        return None
-
-    mapping_path = TRACK_GEOMETRY_MANUAL_DIR / "track_layout_mapping.json"
-    if mapping_path.exists():
-        data = _read_json(mapping_path)
-        layout_versions = data.get("track_layout_versions") or {}
-        season_map = data.get("season_to_tracks_map") or {}
-        layout_files = _layout_id_map(layout_versions)
-        derived: Dict[str, Dict[str, str]] = {}
-        for year_str, layout_ids in season_map.items():
-            try:
-                year = int(year_str)
-            except Exception:
-                continue
-            catalog = load_season_catalog(year)
-            races = catalog.get("races") or []
-            year_map: Dict[str, str] = {}
-            for idx, layout_id in enumerate(layout_ids or []):
-                if idx >= len(races):
-                    break
-                file = _resolve_layout_file(str(layout_id), layout_files)
-                if not file:
-                    continue
-                file_name = str(file)
-                if not file_name.endswith(".json"):
-                    file_name = f"{file_name}.json"
-                race_name = str(races[idx])
-                year_map[race_name] = file_name
-                year_map[normalize_key(race_name).replace(" ", "_")] = file_name
-                key = race_key_for_name(year, race_name)
-                if key:
-                    year_map[key] = file_name
-            derived[str(year)] = year_map
-        if derived:
-            return derived
-
-    path = TRACK_GEOMETRY_MANUAL_DIR / "layout_map.json"
-    if path.exists():
-        return _read_json(path)
-    return {}
-
-
-def _resolve_manual_layout(race_name: str, year: Optional[int]) -> Optional[str]:
-    if not year:
-        return None
-    mapping = _load_layout_map()
-    year_map = mapping.get(str(year), {})
-    if not year_map:
-        return None
-    key = race_key_for_name(int(year), race_name) if year else ""
-    slug = normalize_key(race_name).replace(" ", "_")
-    for k in [key, slug, race_name, normalize_key(race_name)]:
-        if k and k in year_map:
-            layout_id = str(year_map[k])
-            if not layout_id.endswith(".json"):
-                layout_id = layout_id + ".json"
-            candidate = TRACK_GEOMETRY_MANUAL_DIR / layout_id
-            if candidate.exists():
-                return str(candidate)
-    return None
-
-
 def load_track_geometry(race_name: str, year: Optional[int] = None) -> Optional[Dict]:
-    import json
-    for base_dir in (TRACK_GEOMETRY_DIR,):
-        geometry_file = resolve_track_geometry_file(str(base_dir), race_name, year=year)
-        if geometry_file:
-            with open(geometry_file, "r") as f:
-                return json.load(f)
-    # Fallback to manual layout routing (layout_map.json / track_layout_mapping.json).
-    manual_file = _resolve_manual_layout(race_name, year)
-    if manual_file and os.path.exists(manual_file):
-        with open(manual_file, "r") as f:
-            return json.load(f)
-    # Last-resort direct file resolution from manual track directory.
-    manual_direct = resolve_track_geometry_file(str(TRACK_GEOMETRY_MANUAL_DIR), race_name, year=year)
-    if manual_direct:
-        with open(manual_direct, "r") as f:
+    geometry_file = resolve_track_geometry_file(str(TRACK_GEOMETRY_DIR), race_name, year=year)
+    if geometry_file:
+        with open(geometry_file, "r") as f:
             return json.load(f)
     return None
 

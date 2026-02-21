@@ -21,6 +21,8 @@ from api.routers import (
     streams,
     metrics,
     sessions,
+    fia_documents,
+    assets,
 )
 from api.websocket import router as websocket_router
 import time
@@ -83,6 +85,8 @@ app.include_router(streams.router, prefix="/api/v1", tags=["Streams"], dependenc
 app.include_router(metrics.router, prefix="/api/v1", tags=["Metrics"], dependencies=_AUTH_DEPS)
 app.include_router(models.router, prefix="/api/v1", tags=["Models"], dependencies=_AUTH_DEPS)
 app.include_router(features.router, prefix="/api/v1", tags=["Features"], dependencies=_AUTH_DEPS)
+app.include_router(fia_documents.router, prefix="/api/v1", tags=["FIA Documents"], dependencies=_AUTH_DEPS)
+app.include_router(assets.router, prefix="/api/v1", tags=["Assets"], dependencies=_AUTH_DEPS)
 app.include_router(websocket_router, prefix="/api/v1", tags=["WebSocket"], dependencies=_AUTH_DEPS)
 
 # Auth endpoints must remain public (used to obtain a token).

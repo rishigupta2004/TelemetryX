@@ -1,10 +1,11 @@
 from fastapi import APIRouter, HTTPException, Query
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 import pandas as pd
 import json
 import os
 import pickle
 import numpy as np
+from pydantic import BaseModel
 from ..utils import read_parquet_df
 from ..config import MODELS_DIR, FEATURES_DIR
 from ..utils import normalize_key
@@ -21,6 +22,35 @@ def convert_numpy(obj):
     return obj
 
 router = APIRouter()
+
+
+class UndercutPredictRequest(BaseModel):
+    position_before_pit: int
+    tyre_age: int
+    stint_length: int
+    compound: str
+    track_temp: float = 30.0
+    pit_lap: int = 15
+    race_name: str = "Bahrain Grand Prix"
+
+
+class StrategyRecommendationItem(BaseModel):
+    strategy: str
+    avg_finish_position: float
+    avg_points: float
+    podium_probability: Optional[float] = None
+    points_probability: Optional[float] = None
+    avg_pit_stops: float
+    compounds: Optional[List[str]] = None
+    pit_laps: Optional[List[int]] = None
+
+
+class StrategyRecommendationsPayload(BaseModel):
+    year: int
+    race_name: str
+    n_simulations: int
+    best_strategy: StrategyRecommendationItem
+    all_strategies: Dict[str, StrategyRecommendationItem]
 
 
 def _strategy_recommendations_path(year: int, race_name: str) -> Optional[str]:
@@ -43,6 +73,70 @@ def _strategy_recommendations_path(year: int, race_name: str) -> Optional[str]:
         if normalize_key(race_part) == target:
             return os.path.join(strategy_dir, fname)
     return None
+
+
+def _to_float(value: Any, default: float = 0.0) -> float:
+    try:
+        if value is None:
+            return float(default)
+        return float(value)
+    except Exception:
+        return float(default)
+
+
+def _to_int(value: Any, default: int = 0) -> int:
+    try:
+        if value is None:
+            return int(default)
+        return int(value)
+    except Exception:
+        return int(default)
+
+
+def _normalize_strategy_item(raw: Any, fallback_name: str) -> Dict[str, Any]:
+    item = raw if isinstance(raw, dict) else {}
+    compounds = item.get("compounds")
+    pit_laps = item.get("pit_laps")
+    return {
+        "strategy": str(item.get("strategy") or fallback_name),
+        "avg_finish_position": _to_float(item.get("avg_finish_position"), 20.0),
+        "avg_points": _to_float(item.get("avg_points"), 0.0),
+        "podium_probability": _to_float(item.get("podium_probability"), 0.0),
+        "points_probability": _to_float(item.get("points_probability"), 0.0),
+        "avg_pit_stops": _to_float(item.get("avg_pit_stops"), 0.0),
+        "compounds": [str(v) for v in compounds] if isinstance(compounds, list) else None,
+        "pit_laps": [_to_int(v, 0) for v in pit_laps] if isinstance(pit_laps, list) else None,
+    }
+
+
+def _normalize_strategy_payload(raw_payload: Any, expected_year: int, expected_race_name: str) -> Dict[str, Any]:
+    payload = raw_payload if isinstance(raw_payload, dict) else {}
+    all_raw = payload.get("all_strategies")
+    normalized_all: Dict[str, Dict[str, Any]] = {}
+    if isinstance(all_raw, dict):
+        for name, item in all_raw.items():
+            strategy_name = str(name)
+            normalized_all[strategy_name] = _normalize_strategy_item(item, strategy_name)
+
+    best_raw = payload.get("best_strategy")
+    if isinstance(best_raw, dict):
+        best_strategy = _normalize_strategy_item(best_raw, str(best_raw.get("strategy") or "Best Strategy"))
+    elif normalized_all:
+        best_strategy = max(normalized_all.values(), key=lambda x: _to_float(x.get("avg_points"), 0.0))
+    else:
+        best_strategy = _normalize_strategy_item({}, "Unknown")
+
+    best_name = str(best_strategy.get("strategy") or "Unknown")
+    if best_name not in normalized_all:
+        normalized_all[best_name] = best_strategy
+
+    return {
+        "year": _to_int(payload.get("year"), int(expected_year)),
+        "race_name": str(payload.get("race_name") or expected_race_name),
+        "n_simulations": _to_int(payload.get("n_simulations"), 0),
+        "best_strategy": best_strategy,
+        "all_strategies": normalized_all,
+    }
 
 
 @router.get("/models/clustering")
@@ -144,12 +238,10 @@ async def get_undercut_analysis(sample_limit: int = Query(default=20, ge=0, le=2
     }
 
 
-@router.get("/models/undercut/predict")
-async def predict_undercut(
+def _predict_undercut_core(
     position_before_pit: int, tyre_age: int, stint_length: int, compound: str,
     track_temp: float = 30.0, pit_lap: int = 15, race_name: str = "Bahrain Grand Prix"
 ) -> Dict[str, Any]:
-    """Predict undercut success probability."""
     model_file = os.path.join(MODELS_DIR, "undercut_model.pkl")
     if not os.path.exists(model_file):
         raise HTTPException(status_code=404, detail="Undercut model not found")
@@ -162,10 +254,41 @@ async def predict_undercut(
     circuit_data = model_data.get("circuit_data", {})
 
     compound_ord = compound_order.get(compound.upper(), 3)
-    track_stress = circuit_data.get(race_name, circuit_data.get("default", {"stress": 0.5}))["stress"]
+    race_key = normalize_key(str(race_name))
+    race_circuit = None
+    if isinstance(circuit_data, dict):
+        race_circuit = circuit_data.get(race_name)
+        if not isinstance(race_circuit, dict):
+            for key, value in circuit_data.items():
+                if normalize_key(str(key)) == race_key and isinstance(value, dict):
+                    race_circuit = value
+                    break
+    if not isinstance(race_circuit, dict):
+        race_circuit = circuit_data.get("default", {"stress": 0.5}) if isinstance(circuit_data, dict) else {"stress": 0.5}
+    if not isinstance(race_circuit, dict):
+        race_circuit = {"stress": 0.5}
 
-    X = pd.DataFrame([{"position_before_pit": position_before_pit, "tyre_age": tyre_age, "stint_length": stint_length,
-                       "compound_ordinal": compound_ord, "track_stress": track_stress, "pit_lap": pit_lap}])[features]
+    base_stress = float(race_circuit.get("stress", 0.5))
+    temp_adjustment = max(-0.2, min(0.2, (float(track_temp) - 30.0) / 50.0))
+    track_stress = max(0.0, min(1.0, base_stress + temp_adjustment))
+
+    feature_row = {
+        "position_before_pit": int(position_before_pit),
+        "tyre_age": int(tyre_age),
+        "stint_length": int(stint_length),
+        "compound_ordinal": int(compound_ord),
+        "track_stress": float(track_stress),
+        "track_temp": float(track_temp),
+        "pit_lap": int(pit_lap),
+    }
+    missing_features = [f for f in features if f not in feature_row]
+    if missing_features:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Undercut model requires unsupported features: {', '.join(missing_features)}",
+        )
+
+    X = pd.DataFrame([feature_row])[features]
     prob = model.predict_proba(scaler.transform(X))[0][1]
     prediction = "SUCCESS" if prob > 0.5 else "FAILURE"
     confidence = "high" if abs(prob - 0.5) > 0.3 else "medium" if abs(prob - 0.5) > 0.15 else "low"
@@ -186,6 +309,37 @@ async def predict_undercut(
         "strategy_call": strategy_call,
         "recommendations": recommendations,
     }
+
+
+@router.get("/models/undercut/predict")
+async def predict_undercut(
+    position_before_pit: int, tyre_age: int, stint_length: int, compound: str,
+    track_temp: float = 30.0, pit_lap: int = 15, race_name: str = "Bahrain Grand Prix"
+) -> Dict[str, Any]:
+    """Predict undercut success probability (query parameter form)."""
+    return _predict_undercut_core(
+        position_before_pit=position_before_pit,
+        tyre_age=tyre_age,
+        stint_length=stint_length,
+        compound=compound,
+        track_temp=track_temp,
+        pit_lap=pit_lap,
+        race_name=race_name,
+    )
+
+
+@router.post("/models/undercut/predict")
+async def predict_undercut_post(payload: UndercutPredictRequest) -> Dict[str, Any]:
+    """Predict undercut success probability (JSON body form)."""
+    return _predict_undercut_core(
+        position_before_pit=int(payload.position_before_pit),
+        tyre_age=int(payload.tyre_age),
+        stint_length=int(payload.stint_length),
+        compound=str(payload.compound),
+        track_temp=float(payload.track_temp),
+        pit_lap=int(payload.pit_lap),
+        race_name=str(payload.race_name),
+    )
 
 
 @router.get("/models/undercut/events")
@@ -256,6 +410,14 @@ async def get_strategy_recommendations(year: int, race: str) -> Dict[str, Any]:
             payload = json.load(f)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to read strategy recommendations: {e}")
-    if not isinstance(payload, dict):
-        raise HTTPException(status_code=500, detail="Invalid strategy recommendations payload")
-    return payload
+    payload = _normalize_strategy_payload(payload, expected_year=int(year), expected_race_name=str(race_name))
+    try:
+        if hasattr(StrategyRecommendationsPayload, "model_validate"):
+            validated = StrategyRecommendationsPayload.model_validate(payload)  # pydantic v2
+        else:
+            validated = StrategyRecommendationsPayload.parse_obj(payload)  # pydantic v1
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Invalid strategy recommendations payload schema: {e}")
+    if hasattr(validated, "model_dump"):
+        return validated.model_dump()
+    return validated.dict()

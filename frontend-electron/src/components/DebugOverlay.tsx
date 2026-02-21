@@ -1,167 +1,79 @@
-import { useEffect } from 'react'
-import { useSessionTime } from '../lib/timeUtils'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { usePlaybackStore } from '../stores/playbackStore'
-import { useSessionStore } from '../stores/sessionStore'
+
+type Snapshot = { fps: number; fpsFloor: number; frameP95: number; frameP99: number; tickP95: number; heapMb: number | null }
+type Sample = Snapshot & { tMs: number; playbackTime: number }
+const p = (arr: number[], q: number) => { if (!arr.length) return 0; const s = [...arr].sort((a, b) => a - b); return s[Math.max(0, Math.min(s.length - 1, Math.floor((s.length - 1) * q)))] }
+const c = (ok: boolean) => (ok ? '#4ade80' : '#f87171')
 
 export function DebugOverlay() {
   const currentTime = usePlaybackStore((s) => s.currentTime)
-  const sessionStartTime = usePlaybackStore((s) => s.sessionStartTime)
-  const duration = usePlaybackStore((s) => s.duration)
   const isPlaying = usePlaybackStore((s) => s.isPlaying)
   const speed = usePlaybackStore((s) => s.speed)
-  const sessionData = useSessionStore((s) => s.sessionData)
-  const fullLaps = useSessionStore((s) => s.laps)
-  const sessionTime = useSessionTime()
+  const duration = usePlaybackStore((s) => s.duration)
+  const [snap, setSnap] = useState<Snapshot>({ fps: 0, fpsFloor: 0, frameP95: 0, frameP99: 0, tickP95: 0, heapMb: null })
+  const currentTimeRef = useRef(0), frameTimesRef = useRef<number[]>([]), tickTimesRef = useRef<number[]>([]), historyRef = useRef<Sample[]>([]), frameCountRef = useRef(0), lastFrameRef = useRef<number | null>(null), lastTickRef = useRef<number | null>(null), rafRef = useRef<number | null>(null), timerRef = useRef<number | null>(null)
 
-  const laps = fullLaps.length ? fullLaps : sessionData?.laps || []
-  const weatherRows = sessionData?.weather || []
-  const firstLapStart = laps.length > 0
-    ? Math.min(...laps.map((l) => l.lapStartSeconds).filter((t) => t > 0))
-    : 0
-  const lastLapEnd = laps.length > 0
-    ? Math.max(...laps.map((l) => l.lapEndSeconds))
-    : 0
-
-  const verLaps = laps
-    .filter((l) => l.driverName === 'VER')
-    .sort((a, b) => a.lapNumber - b.lapNumber)
-
-  let verCurrentLap = 0
-  for (const lap of verLaps) {
-    if (sessionTime >= lap.lapStartSeconds &&
-        sessionTime <= lap.lapEndSeconds) {
-      verCurrentLap = lap.lapNumber
-      break
+  useEffect(() => {
+    currentTimeRef.current = currentTime
+    const now = performance.now()
+    if (lastTickRef.current != null) {
+      tickTimesRef.current.push(now - lastTickRef.current)
+      if (tickTimesRef.current.length > 900) tickTimesRef.current.splice(0, tickTimesRef.current.length - 900)
     }
-    if (sessionTime > lap.lapEndSeconds) {
-      verCurrentLap = lap.lapNumber
+    lastTickRef.current = now
+  }, [currentTime])
+
+  useEffect(() => {
+    const onFrame = (now: number) => {
+      if (lastFrameRef.current != null) {
+        frameTimesRef.current.push(now - lastFrameRef.current)
+        if (frameTimesRef.current.length > 1200) frameTimesRef.current.splice(0, frameTimesRef.current.length - 1200)
+      }
+      lastFrameRef.current = now
+      frameCountRef.current += 1
+      rafRef.current = requestAnimationFrame(onFrame)
     }
+
+    rafRef.current = requestAnimationFrame(onFrame)
+    timerRef.current = window.setInterval(() => {
+      const mem = (performance as Performance & { memory?: { usedJSHeapSize: number } }).memory?.usedJSHeapSize
+      const next: Snapshot = { fps: frameCountRef.current, fpsFloor: frameTimesRef.current.length ? Math.floor(1000 / Math.max(...frameTimesRef.current)) : 0, frameP95: p(frameTimesRef.current, 0.95), frameP99: p(frameTimesRef.current, 0.99), tickP95: p(tickTimesRef.current, 0.95), heapMb: mem ? mem / (1024 * 1024) : null }
+      frameCountRef.current = 0
+      setSnap(next)
+      historyRef.current.push({ ...next, tMs: Date.now(), playbackTime: currentTimeRef.current })
+      if (historyRef.current.length > 2400) historyRef.current.splice(0, historyRef.current.length - 2400)
+    }, 1000)
+
+    return () => { if (rafRef.current != null) cancelAnimationFrame(rafRef.current); if (timerRef.current != null) window.clearInterval(timerRef.current) }
+  }, [])
+
+  const checks = useMemo(() => ({ fps: snap.fps >= 60 && snap.fpsFloor >= 55, p95: snap.frameP95 <= 16.7, p99: snap.frameP99 <= 20, tick: !isPlaying || snap.tickP95 <= 18 }), [isPlaying, snap])
+  const drift = useMemo(() => {
+    if (historyRef.current.length < 20) return null
+    const recent = historyRef.current.slice(-300), first = recent.find((s) => s.heapMb != null), last = [...recent].reverse().find((s) => s.heapMb != null)
+    if (!first || !last || first.heapMb == null || last.heapMb == null) return null
+    const mins = Math.max(1e-6, (last.tMs - first.tMs) / 60000), delta = last.heapMb - first.heapMb
+    return { delta, rate: delta / mins }
+  }, [snap.heapMb])
+
+  const exportReport = () => {
+    const payload = { generatedAt: new Date().toISOString(), targets: { fps: '60-90', fpsFloor: '>=55', frameP95Ms: '<=16.7', frameP99Ms: '<=20', tickP95Ms: '<=18 while playing' }, playback: { isPlaying, speed, currentTime, duration }, current: snap, drift, samples: historyRef.current }
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' }), url = URL.createObjectURL(blob), a = document.createElement('a')
+    a.href = url; a.download = `telemetryx-perf-report-${Date.now()}.json`; a.click(); URL.revokeObjectURL(url)
   }
 
-  const rc = sessionData?.raceControl || []
-  const rcTimestamps = rc.map((m: any) => m.timestamp)
-  const lapStarts = laps.map((l: any) => l.lapStartSeconds).filter((t: number) => t > 0)
-  const rcUpToNow = rc.filter((m) => m.timestamp >= sessionStartTime && m.timestamp <= sessionTime)
-  const lastRC = rcUpToNow.length > 0 ? rcUpToNow[rcUpToNow.length - 1] : null
-  const weatherNearest = weatherRows.length > 0
-    ? weatherRows.reduce((best, row) =>
-      Math.abs(row.timestamp - sessionTime) < Math.abs(best.timestamp - sessionTime) ? row : best
-    )
-    : null
-
-  useEffect(() => {
-    if (!sessionData) return
-    const weather = sessionData?.weather || []
-    const weatherTs = weather.map((w: any) => w.timestamp)
-
-    console.log('=== FULL TIMESTAMP AUDIT ===')
-    console.log('RC range:',
-      rc.length ? `${Math.min(...rcTimestamps)} → ${Math.max(...rcTimestamps)}` : 'none')
-    console.log('Weather range:',
-      weather.length ? `${Math.min(...weatherTs)} → ${Math.max(...weatherTs)}` : 'none')
-    console.log('Lap range:',
-      laps.length ? `${Math.min(...lapStarts)} → ${Math.max(...laps.map((l: any) => l.lapEndSeconds))}` : 'none')
-    console.log('sessionStartTime:', sessionStartTime)
-    console.log('duration:', duration)
-    console.log('')
-    console.log('At currentTime=0:')
-    console.log('  sessionTime:', sessionStartTime)
-    console.log('  RC messages at this time:',
-      rc.filter((m: any) => m.timestamp <= sessionStartTime).length, '/', rc.length)
-    console.log('  RC race-window messages at this time:',
-      rc.filter((m: any) => m.timestamp >= sessionStartTime && m.timestamp <= sessionStartTime).length, '/', rc.length)
-    console.log('  RC messages at currentTime=0:',
-      rc.filter((m: any) => m.timestamp <= 0).length, '/', rc.length)
-    console.log('')
-    console.log('First 5 RC messages:')
-    rc.slice(0, 5).forEach((m: any) =>
-      console.log(`  t=${m.timestamp} L${m.lap} ${m.flag || m.category}: ${(m.message || '').substring(0, 50)}`))
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sessionData])
-
-  // Driver code matching audit
-  useEffect(() => {
-    if (!sessionData) return
-
-    const drivers = sessionData.drivers || []
-    const laps = sessionData.laps || []
-
-    console.log('=== DRIVER MATCHING AUDIT ===')
-    console.log('Driver count:', drivers.length)
-    console.log('Lap count:', laps.length)
-
-    // Show all driver objects
-    console.log('Drivers:')
-    drivers.forEach((d: any) => {
-      console.log(`  #${d.driverNumber} code="${d.code}" name="${d.driverName}" team="${d.teamName}"`)
-    })
-
-    // Show unique driverName values from laps
-    const lapDriverNames = [...new Set(laps.map((l: any) => l.driverName))]
-    console.log('Lap driverName values:', lapDriverNames.sort())
-
-    // Show unique driverNumber values from laps
-    const lapDriverNumbers = [...new Set(laps.map((l: any) => l.driverNumber))]
-    console.log('Lap driverNumber values:', lapDriverNumbers.sort((a: number, b: number) => a - b))
-
-    // Check matching
-    console.log('')
-    console.log('MATCHING:')
-    for (const driver of drivers) {
-      const byCode = laps.filter((l: any) => l.driverName === driver.code)
-      const byNumber = laps.filter((l: any) => l.driverNumber === driver.driverNumber)
-      const byName = laps.filter((l: any) => l.driverName === driver.driverName)
-
-      console.log(
-        `  ${driver.driverName} (#${driver.driverNumber}) code="${driver.code}": ` +
-          `byCode=${byCode.length} byNumber=${byNumber.length} byName=${byName.length}`
-      )
-    }
-
-    // Show first lap row fully
-    if (laps.length > 0) {
-      console.log('')
-      console.log('First lap row ALL fields:', JSON.stringify(laps[0]))
-    }
-  }, [sessionData])
-
   return (
-    <div style={{
-      position: 'fixed',
-      bottom: 60,
-      right: 10,
-      background: 'rgba(0,0,0,0.9)',
-      color: '#0f0',
-      fontFamily: 'monospace',
-      fontSize: 11,
-      padding: 8,
-      borderRadius: 4,
-      zIndex: 9999,
-      maxWidth: 350,
-      border: '1px solid #333'
-    }}>
-      <div><b>DEBUG OVERLAY</b></div>
-      <div>currentTime: {currentTime.toFixed(1)}</div>
-      <div>sessionStartTime: {firstLapStart.toFixed(1)}</div>
-      <div>sessionTime: {sessionTime.toFixed(1)}</div>
-      <div>duration: {duration.toFixed(1)}</div>
-      <div>isPlaying: {String(isPlaying)} | speed: {speed}x</div>
-      <div>---</div>
-      <div>firstLapStart: {firstLapStart.toFixed(1)}</div>
-      <div>lastLapEnd: {lastLapEnd.toFixed(1)}</div>
-      <div style={{ color: '#0f0' }}>
-        MATCH: sessionTime = firstLapStart + currentTime
-      </div>
-      <div>---</div>
-      <div>VER on lap: {verCurrentLap}</div>
-      <div>VER lap1: {verLaps[0]?.lapStartSeconds?.toFixed(1)} - {verLaps[0]?.lapEndSeconds?.toFixed(1)}</div>
-      <div>VER lap5: {verLaps[4]?.lapStartSeconds?.toFixed(1)} - {verLaps[4]?.lapEndSeconds?.toFixed(1)}</div>
-      <div>---</div>
-      <div>RC messages up to now: {rcUpToNow.length} / {rc.length}</div>
-      <div>Last RC: {lastRC ? `L${lastRC.lap} ${lastRC.flag || lastRC.category}` : 'none'}</div>
-      <div>Last RC timestamp: {lastRC?.timestamp}</div>
-      <div>Weather rows up to now: {weatherRows.filter((w) => w.timestamp <= sessionTime).length} / {weatherRows.length}</div>
-      <div>Weather nearest ts: {weatherNearest?.timestamp?.toFixed?.(1) ?? 'none'}</div>
+    <div style={{ position: 'fixed', right: 12, bottom: 74, zIndex: 9999, minWidth: 250, borderRadius: 10, border: '1px solid rgba(113,160,226,0.45)', background: 'rgba(7,14,27,0.88)', color: '#dbeafe', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace', fontSize: 11, padding: '10px 11px', backdropFilter: 'blur(10px)' }}>
+      <div style={{ marginBottom: 6, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase' }}>Perf HUD</div>
+      <div>playback: {isPlaying ? `playing ${speed}x` : 'paused'}</div>
+      <div style={{ color: c(checks.fps) }}>fps: {snap.fps} | floor: {snap.fpsFloor} (60-90, floor 55)</div>
+      <div style={{ color: c(checks.p95) }}>frame p95: {snap.frameP95.toFixed(2)}ms (&lt;=16.7)</div>
+      <div style={{ color: c(checks.p99) }}>frame p99: {snap.frameP99.toFixed(2)}ms (&lt;=20)</div>
+      <div style={{ color: c(checks.tick) }}>ui tick p95: {snap.tickP95.toFixed(2)}ms (&lt;=18 while playing)</div>
+      <div>heap: {snap.heapMb == null ? 'n/a' : `${snap.heapMb.toFixed(1)} MB`}</div>
+      <div>drift: {drift == null ? 'n/a' : `${drift.delta >= 0 ? '+' : ''}${drift.delta.toFixed(2)} MB (${drift.rate.toFixed(3)} MB/min)`}</div>
+      <button type="button" onClick={exportReport} style={{ marginTop: 6, width: '100%', borderRadius: 6, border: '1px solid rgba(125,175,241,0.55)', background: 'rgba(21,49,87,0.82)', color: '#e3f0ff', padding: '4px 6px', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', cursor: 'pointer' }}>Export Perf Report JSON</button>
     </div>
   )
 }

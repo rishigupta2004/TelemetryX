@@ -3,12 +3,53 @@ export interface Point {
   y: number
 }
 
+function appearsLonLat(points: Array<{ x: number; y: number }>): boolean {
+  if (!points.length) return false
+  let checks = 0
+  let valid = 0
+  for (const p of points) {
+    if (!Number.isFinite(p.x) || !Number.isFinite(p.y)) continue
+    checks += 1
+    if (Math.abs(p.x) <= 180 && Math.abs(p.y) <= 90) valid += 1
+    if (checks >= 20) break
+  }
+  return checks > 0 && valid / checks >= 0.8
+}
+
+function projectLonLatToMeters(points: Array<{ x: number; y: number }>): Point[] {
+  if (!points.length) return []
+  const lon0 = points[0].x
+  const lat0 = points[0].y
+  const lat0Rad = (lat0 * Math.PI) / 180
+  const metersPerDegLat = 111_320
+  const metersPerDegLon = 111_320 * Math.cos(lat0Rad)
+  return points.map((p) => ({
+    x: (p.x - lon0) * metersPerDegLon,
+    y: (p.y - lat0) * metersPerDegLat
+  }))
+}
+
 /**
  * Takes raw centerline array [[x,y], [x,y], ...]
  * Returns Point[]
  */
 export function parseCenterline(raw: number[][]): Point[] {
-  return raw.map(([x, y]) => ({ x: -y, y: -x }))
+  const out: Point[] = []
+  for (const item of raw as unknown as Array<unknown>) {
+    let x: number | undefined
+    let y: number | undefined
+    if (Array.isArray(item)) {
+      x = Number(item[0])
+      y = Number(item[1])
+    } else if (item && typeof item === 'object') {
+      x = Number((item as { x?: number }).x)
+      y = Number((item as { y?: number }).y)
+    }
+    if (!Number.isFinite(x) || !Number.isFinite(y)) continue
+    out.push({ x, y })
+  }
+  const projected = appearsLonLat(out) ? projectLonLatToMeters(out) : out
+  return projected.map((p) => ({ x: -p.y, y: -p.x }))
 }
 
 /**
@@ -111,8 +152,9 @@ export function normalizeToViewport(
   if (!points.length) return []
 
   const { minX, maxX, minY, maxY } = getBounds(points, 0)
-  const sourceWidth = Math.max(1, maxX - minX)
-  const sourceHeight = Math.max(1, maxY - minY)
+  const epsilon = 1e-9
+  const sourceWidth = Math.max(epsilon, maxX - minX)
+  const sourceHeight = Math.max(epsilon, maxY - minY)
 
   const targetWidth = Math.max(1, viewportWidth - padding * 2)
   const targetHeight = Math.max(1, viewportHeight - padding * 2)

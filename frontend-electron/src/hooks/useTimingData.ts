@@ -12,6 +12,8 @@ export interface TimingRow {
   driverNumber: number
   teamColor: string
   teamName: string
+  driverImage?: string | null
+  teamImage?: string | null
   gap: string
   interval: string
   lastLap: string
@@ -36,7 +38,23 @@ export interface TimingRow {
 interface ElapsedInfo {
   totalTime: number
   lapsCompleted: number
-  lastLapEnd: number
+}
+
+interface DriverLapBundle {
+  driver: Driver
+  laps: LapRow[]
+  prefixValidCount: number[]
+  prefixPitCount: number[]
+  prefixBestLap: Array<number | null>
+  prefixBestS1: number[]
+  prefixBestS2: number[]
+  prefixBestS3: number[]
+}
+
+interface TimingIndex {
+  allLapsByEnd: LapRow[]
+  driverBundles: DriverLapBundle[]
+  leaderMaxLap: number
 }
 
 const COMPOUND_MAP: Record<string, string> = {
@@ -58,11 +76,7 @@ function formatLapTime(seconds: number | null | undefined): string {
   return mins > 0 ? `${mins}:${secs.padStart(6, '0')}` : secs
 }
 
-function getSectorColor(
-  value: number | null,
-  sessionBest: number,
-  personalBest: number
-): SectorColor {
+function getSectorColor(value: number | null, sessionBest: number, personalBest: number): SectorColor {
   if (!value || value <= 0) return 'white'
   if (sessionBest === Number.POSITIVE_INFINITY) return 'yellow'
   if (personalBest === Number.POSITIVE_INFINITY && value <= sessionBest + 0.005) return 'purple'
@@ -81,68 +95,147 @@ function normalizeCompound(raw: string | null | undefined): string {
   return '—'
 }
 
-function minOrInfinity(values: number[]): number {
-  return values.length ? Math.min(...values) : Number.POSITIVE_INFINITY
+function upperBoundLapEnd(laps: LapRow[], t: number): number {
+  let lo = 0
+  let hi = laps.length
+  while (lo < hi) {
+    const mid = (lo + hi) >> 1
+    if (laps[mid].lapEndSeconds <= t) lo = mid + 1
+    else hi = mid
+  }
+  return lo
 }
 
-function getElapsedAtPosition(
-  allLaps: LapRow[],
-  driverCode: string,
-  driverNumber: number,
-  sessionTime: number
-): ElapsedInfo {
-  const driverLaps = allLaps
-    .filter((lap) => lap.driverName === driverCode || lap.driverNumber === driverNumber)
-    .filter((lap) => lap.lapEndSeconds <= sessionTime)
-    .sort((a, b) => a.lapNumber - b.lapNumber || a.lapEndSeconds - b.lapEndSeconds)
+function findCurrentLap(laps: LapRow[], t: number): LapRow | null {
+  let lo = 0
+  let hi = laps.length - 1
+  while (lo <= hi) {
+    const mid = (lo + hi) >> 1
+    const lap = laps[mid]
+    if (lap.lapStartSeconds <= t && t < lap.lapEndSeconds) return lap
+    if (t < lap.lapStartSeconds) hi = mid - 1
+    else lo = mid + 1
+  }
+  return null
+}
 
-  if (!driverLaps.length) return { totalTime: 0, lapsCompleted: 0, lastLapEnd: 0 }
+function getElapsedAtPosition(driverLaps: LapRow[], sessionTime: number): ElapsedInfo {
+  if (!driverLaps.length) return { totalTime: 0, lapsCompleted: 0 }
 
-  const totalTime = driverLaps.reduce((sum, lap) => sum + (lap.lapTime || 0), 0)
-  const lapsCompleted = driverLaps.length
-  const lastLapEnd = driverLaps[driverLaps.length - 1].lapEndSeconds
+  const completedIdx = upperBoundLapEnd(driverLaps, sessionTime)
+  if (completedIdx <= 0) return { totalTime: 0, lapsCompleted: 0 }
 
-  const allDriverLaps = allLaps
-    .filter((lap) => lap.driverName === driverCode || lap.driverNumber === driverNumber)
-    .sort((a, b) => a.lapNumber - b.lapNumber || a.lapEndSeconds - b.lapEndSeconds)
-  const currentLap = allDriverLaps.find(
-    (lap) => lap.lapStartSeconds <= sessionTime && sessionTime < lap.lapEndSeconds
-  )
+  let totalTime = 0
+  for (let i = 0; i < completedIdx; i += 1) {
+    totalTime += driverLaps[i].lapTime || 0
+  }
 
+  const currentLap = findCurrentLap(driverLaps, sessionTime)
   const partialTime = currentLap ? Math.max(0, sessionTime - currentLap.lapStartSeconds) : 0
-  return { totalTime: totalTime + partialTime, lapsCompleted, lastLapEnd }
+  return { totalTime: totalTime + partialTime, lapsCompleted: completedIdx }
+}
+
+function buildTimingIndex(drivers: Driver[], allLaps: LapRow[]): TimingIndex {
+  const lapsByDriverNumber = new Map<number, LapRow[]>()
+  const lapsByDriverCode = new Map<string, LapRow[]>()
+
+  for (const lap of allLaps) {
+    const byNum = lapsByDriverNumber.get(lap.driverNumber) ?? []
+    byNum.push(lap)
+    lapsByDriverNumber.set(lap.driverNumber, byNum)
+
+    if (lap.driverName) {
+      const byCode = lapsByDriverCode.get(lap.driverName) ?? []
+      byCode.push(lap)
+      lapsByDriverCode.set(lap.driverName, byCode)
+    }
+  }
+
+  const driverBundles: DriverLapBundle[] = drivers.map((driver) => {
+    const laps = (lapsByDriverNumber.get(driver.driverNumber) ?? lapsByDriverCode.get(driver.code) ?? []).slice()
+    laps.sort((a, b) => a.lapNumber - b.lapNumber || a.lapEndSeconds - b.lapEndSeconds)
+
+    const prefixValidCount: number[] = new Array(laps.length)
+    const prefixPitCount: number[] = new Array(laps.length)
+    const prefixBestLap: Array<number | null> = new Array(laps.length)
+    const prefixBestS1: number[] = new Array(laps.length)
+    const prefixBestS2: number[] = new Array(laps.length)
+    const prefixBestS3: number[] = new Array(laps.length)
+
+    let validCount = 0
+    let pitCount = 0
+    let bestLap: number | null = null
+    let bestS1 = Number.POSITIVE_INFINITY
+    let bestS2 = Number.POSITIVE_INFINITY
+    let bestS3 = Number.POSITIVE_INFINITY
+
+    for (let i = 0; i < laps.length; i += 1) {
+      const lap = laps[i]
+      if (isValidLap(lap)) validCount += 1
+      if (i > 0) {
+        const prevComp = normalizeCompound(laps[i - 1].tyreCompound)
+        const curComp = normalizeCompound(lap.tyreCompound)
+        if (prevComp !== '—' && curComp !== '—' && prevComp !== curComp) pitCount += 1
+      }
+      if ((lap.lapTime || 0) > 0 && isValidLap(lap)) {
+        bestLap = bestLap == null ? (lap.lapTime as number) : Math.min(bestLap, lap.lapTime as number)
+      }
+      if ((lap.sector1 || 0) > 0) bestS1 = Math.min(bestS1, lap.sector1 as number)
+      if ((lap.sector2 || 0) > 0) bestS2 = Math.min(bestS2, lap.sector2 as number)
+      if ((lap.sector3 || 0) > 0) bestS3 = Math.min(bestS3, lap.sector3 as number)
+
+      prefixValidCount[i] = validCount
+      prefixPitCount[i] = pitCount
+      prefixBestLap[i] = bestLap
+      prefixBestS1[i] = bestS1
+      prefixBestS2[i] = bestS2
+      prefixBestS3[i] = bestS3
+    }
+
+    return { driver, laps, prefixValidCount, prefixPitCount, prefixBestLap, prefixBestS1, prefixBestS2, prefixBestS3 }
+  })
+
+  const allLapsByEnd = allLaps.slice().sort((a, b) => a.lapEndSeconds - b.lapEndSeconds)
+  const leaderMaxLap = Math.max(...allLaps.map((lap) => lap.lapNumber || 0))
+
+  return { allLapsByEnd, driverBundles, leaderMaxLap }
 }
 
 export function useTimingData(): TimingRow[] {
   const sessionData = useSessionStore((s) => s.sessionData)
   const lapsFromStore = useSessionStore((s) => s.laps)
   const sessionTime = useSessionTime()
-  const roundedSessionTime = Math.round(sessionTime)
+
+  const index = useMemo(() => {
+    if (!sessionData?.drivers?.length) return null
+    const allLaps = lapsFromStore.length ? lapsFromStore : sessionData.laps
+    if (!allLaps.length) return null
+    return buildTimingIndex(sessionData.drivers, allLaps)
+  }, [sessionData?.drivers, sessionData?.laps, lapsFromStore])
 
   return useMemo(() => {
-    if (!sessionData?.drivers?.length) return []
+    if (!sessionData?.drivers?.length || !index) return []
 
-    const drivers = sessionData.drivers
-    const allLaps = lapsFromStore.length ? lapsFromStore : sessionData.laps
-    if (!allLaps.length) return []
-    const sessionTime = roundedSessionTime
+    const effectiveSessionTime = sessionTime
+    const lapsByDriverNumber = new Map<number, LapRow[]>()
+    for (const bundle of index.driverBundles) {
+      lapsByDriverNumber.set(bundle.driver.driverNumber, bundle.laps)
+    }
 
-    const leaderMaxLap = Math.max(...allLaps.map((lap) => lap.lapNumber || 0))
+    const completedExclusive = upperBoundLapEnd(index.allLapsByEnd, effectiveSessionTime)
+    let sessionBestS1 = Number.POSITIVE_INFINITY
+    let sessionBestS2 = Number.POSITIVE_INFINITY
+    let sessionBestS3 = Number.POSITIVE_INFINITY
 
-    const completedLapsAll = allLaps.filter((lap) => lap.lapEndSeconds <= sessionTime)
-    const allS1 = completedLapsAll.map((lap) => lap.sector1).filter((v): v is number => !!v && v > 0)
-    const allS2 = completedLapsAll.map((lap) => lap.sector2).filter((v): v is number => !!v && v > 0)
-    const allS3 = completedLapsAll.map((lap) => lap.sector3).filter((v): v is number => !!v && v > 0)
-    const sessionBestS1 = allS1.length > 0 ? Math.min(...allS1) : Number.POSITIVE_INFINITY
-    const sessionBestS2 = allS2.length > 0 ? Math.min(...allS2) : Number.POSITIVE_INFINITY
-    const sessionBestS3 = allS3.length > 0 ? Math.min(...allS3) : Number.POSITIVE_INFINITY
+    for (let i = 0; i < completedExclusive; i += 1) {
+      const lap = index.allLapsByEnd[i]
+      if ((lap.sector1 || 0) > 0) sessionBestS1 = Math.min(sessionBestS1, lap.sector1 as number)
+      if ((lap.sector2 || 0) > 0) sessionBestS2 = Math.min(sessionBestS2, lap.sector2 as number)
+      if ((lap.sector3 || 0) > 0) sessionBestS3 = Math.min(sessionBestS3, lap.sector3 as number)
+    }
 
-    const rows: TimingRow[] = drivers.map((driver: Driver) => {
-      const driverLaps = allLaps
-        .filter((lap) => lap.driverName === driver.code || lap.driverNumber === driver.driverNumber)
-        .sort((a, b) => a.lapNumber - b.lapNumber || a.lapEndSeconds - b.lapEndSeconds)
-
-      if (!driverLaps.length) {
+    const rows: TimingRow[] = index.driverBundles.map(({ driver, laps, prefixValidCount, prefixPitCount, prefixBestLap, prefixBestS1, prefixBestS2, prefixBestS3 }) => {
+      if (!laps.length) {
         return {
           position: 99,
           driverCode: driver.code || '???',
@@ -150,6 +243,8 @@ export function useTimingData(): TimingRow[] {
           driverNumber: driver.driverNumber,
           teamColor: driver.teamColor || '#666666',
           teamName: driver.teamName || 'Unknown',
+          driverImage: driver.driverImage || null,
+          teamImage: driver.teamImage || null,
           gap: '—',
           interval: '—',
           lastLap: '—',
@@ -172,20 +267,18 @@ export function useTimingData(): TimingRow[] {
         }
       }
 
-      const firstLapStart = driverLaps[0].lapStartSeconds
-      const lastLapEnd = driverLaps[driverLaps.length - 1].lapEndSeconds
-      const completedLaps = driverLaps.filter((lap) => lap.lapEndSeconds <= sessionTime && isValidLap(lap))
-      const completedDriverLaps = driverLaps.filter((lap) => lap.lapEndSeconds <= sessionTime)
-      const lastCompletedLap = completedDriverLaps.length ? completedDriverLaps[completedDriverLaps.length - 1] : null
-      const currentInProgressLap = driverLaps.find(
-        (lap) => lap.lapStartSeconds <= sessionTime && sessionTime < lap.lapEndSeconds
-      )
-      const currentLapData = currentInProgressLap || lastCompletedLap || driverLaps[0]
+      const firstLapStart = laps[0].lapStartSeconds
+      const lastLapEnd = laps[laps.length - 1].lapEndSeconds
+
+      const completedCount = upperBoundLapEnd(laps, effectiveSessionTime)
+      const lastCompletedLap = completedCount > 0 ? laps[completedCount - 1] : null
+      const currentInProgressLap = findCurrentLap(laps, effectiveSessionTime)
+      const currentLapData = currentInProgressLap || lastCompletedLap || laps[0]
 
       const lapStart = currentLapData.lapStartSeconds
       const lapEnd = currentLapData.lapEndSeconds
       const lapDuration = Math.max(1, lapEnd - lapStart)
-      const lapProgress = lapDuration > 0 ? Math.max(0, Math.min(1, (sessionTime - lapStart) / lapDuration)) : 0
+      const lapProgress = Math.max(0, Math.min(1, (effectiveSessionTime - lapStart) / lapDuration))
 
       let displayS1: number | null = null
       let displayS2: number | null = null
@@ -196,13 +289,13 @@ export function useTimingData(): TimingRow[] {
       }
 
       if (lastCompletedLap) {
-        const timeSinceCompletion = sessionTime - lastCompletedLap.lapEndSeconds
+        const timeSinceCompletion = effectiveSessionTime - lastCompletedLap.lapEndSeconds
         if (timeSinceCompletion >= 0 && timeSinceCompletion < 5) {
           displayS1 = lastCompletedLap.sector1
           displayS2 = lastCompletedLap.sector2
           displayS3 = lastCompletedLap.sector3
-        } else if (timeSinceCompletion >= 5 && timeSinceCompletion < 8) {
-          if (!displayS1) displayS3 = lastCompletedLap.sector3
+        } else if (timeSinceCompletion >= 5 && timeSinceCompletion < 8 && !displayS1) {
+          displayS3 = lastCompletedLap.sector3
         }
       }
 
@@ -210,39 +303,22 @@ export function useTimingData(): TimingRow[] {
       if (lapProgress > 0.33 && lapProgress <= 0.66) currentSector = 2
       if (lapProgress > 0.66) currentSector = 3
 
-      const validTimes = completedLaps.map((lap) => lap.lapTime || 0).filter((time) => time > 0)
-      const bestLapTime = validTimes.length ? Math.min(...validTimes) : null
-      const driverCompletedLaps = completedLapsAll.filter(
-        (lap) => lap.driverName === driver.code || lap.driverNumber === driver.driverNumber
-      )
-      const personalBestS1 = minOrInfinity(
-        driverCompletedLaps.filter((lap) => (lap.sector1 || 0) > 0).map((lap) => lap.sector1 as number)
-      )
-      const personalBestS2 = minOrInfinity(
-        driverCompletedLaps.filter((lap) => (lap.sector2 || 0) > 0).map((lap) => lap.sector2 as number)
-      )
-      const personalBestS3 = minOrInfinity(
-        driverCompletedLaps.filter((lap) => (lap.sector3 || 0) > 0).map((lap) => lap.sector3 as number)
-      )
-
-      let pitCount = 0
-      const completedSorted = driverLaps
-        .filter((lap) => lap.lapEndSeconds <= sessionTime)
-        .sort((a, b) => a.lapNumber - b.lapNumber || a.lapEndSeconds - b.lapEndSeconds)
-      for (let i = 1; i < completedSorted.length; i++) {
-        const prevComp = normalizeCompound(completedSorted[i - 1].tyreCompound)
-        const curComp = normalizeCompound(completedSorted[i].tyreCompound)
-        if (prevComp !== '—' && curComp !== '—' && prevComp !== curComp) pitCount++
-      }
+      const completedIdx = completedCount - 1
+      const bestLapTime = completedIdx >= 0 ? prefixBestLap[completedIdx] : null
+      const personalBestS1 = completedIdx >= 0 ? prefixBestS1[completedIdx] : Number.POSITIVE_INFINITY
+      const personalBestS2 = completedIdx >= 0 ? prefixBestS2[completedIdx] : Number.POSITIVE_INFINITY
+      const personalBestS3 = completedIdx >= 0 ? prefixBestS3[completedIdx] : Number.POSITIVE_INFINITY
+      const pitCount = completedIdx >= 0 ? prefixPitCount[completedIdx] : 0
+      const lapsCompleted = completedIdx >= 0 ? prefixValidCount[completedIdx] : 0
 
       let compound = '—'
       if (currentInProgressLap?.tyreCompound) compound = normalizeCompound(currentInProgressLap.tyreCompound)
       else if (lastCompletedLap?.tyreCompound) compound = normalizeCompound(lastCompletedLap.tyreCompound)
-      else if (driverLaps[0]?.tyreCompound) compound = normalizeCompound(driverLaps[0].tyreCompound)
+      else if (laps[0]?.tyreCompound) compound = normalizeCompound(laps[0].tyreCompound)
 
       let status: TimingRow['status'] = 'racing'
-      if (sessionTime < firstLapStart - 10) status = 'dns'
-      else if (sessionTime > lastLapEnd + 30 && currentLapData.lapNumber < leaderMaxLap - 2) status = 'dnf'
+      if (effectiveSessionTime < firstLapStart - 10) status = 'dns'
+      else if (effectiveSessionTime > lastLapEnd + 30 && currentLapData.lapNumber < index.leaderMaxLap - 2) status = 'dnf'
       else if (lapDuration > 120 && lapProgress > 0.8) status = 'pit'
 
       return {
@@ -252,6 +328,8 @@ export function useTimingData(): TimingRow[] {
         driverNumber: driver.driverNumber,
         teamColor: driver.teamColor || '#666666',
         teamName: driver.teamName || 'Unknown',
+        driverImage: driver.driverImage || null,
+        teamImage: driver.teamImage || null,
         gap: '—',
         interval: '—',
         lastLap: formatLapTime(lastCompletedLap?.lapTime),
@@ -268,7 +346,7 @@ export function useTimingData(): TimingRow[] {
         status,
         currentLap: currentLapData.lapNumber,
         currentSector,
-        lapsCompleted: completedLaps.length,
+        lapsCompleted,
         lapProgress,
         lapTimeRef: currentLapData.lapTime || lastCompletedLap?.lapTime || 90
       }
@@ -283,43 +361,37 @@ export function useTimingData(): TimingRow[] {
     })
 
     if (rows.length > 0 && (rows[0].status === 'racing' || rows[0].status === 'pit')) {
-      const leaderElapsed = getElapsedAtPosition(allLaps, rows[0].driverCode, rows[0].driverNumber, sessionTime)
+      const leaderLaps = lapsByDriverNumber.get(rows[0].driverNumber) ?? []
+      const leaderElapsed = getElapsedAtPosition(leaderLaps, effectiveSessionTime)
       const leaderDistance = rows[0].lapsCompleted + rows[0].lapProgress
       const leaderLapSec = rows[0].lapTimeRef || 90
       rows[0].gap = 'LEADER'
       rows[0].interval = '—'
 
-      for (let i = 1; i < rows.length; i++) {
+      for (let i = 1; i < rows.length; i += 1) {
         if (rows[i].status !== 'racing' && rows[i].status !== 'pit') {
           rows[i].gap = '—'
           rows[i].interval = '—'
           continue
         }
 
-        const driverElapsed = getElapsedAtPosition(allLaps, rows[i].driverCode, rows[i].driverNumber, sessionTime)
+        const driverLaps = lapsByDriverNumber.get(rows[i].driverNumber) ?? []
+        const driverElapsed = getElapsedAtPosition(driverLaps, effectiveSessionTime)
         const driverDistance = rows[i].lapsCompleted + rows[i].lapProgress
         const aheadDistance = rows[i - 1].lapsCompleted + rows[i - 1].lapProgress
         const gapToLeader = (leaderDistance - driverDistance) * leaderLapSec
         const interval = (aheadDistance - driverDistance) * leaderLapSec
 
-        if (gapToLeader > 0.001) {
-          rows[i].gap = `+${gapToLeader.toFixed(3)}`
-        } else if (leaderElapsed.lapsCompleted > driverElapsed.lapsCompleted) {
+        if (gapToLeader > 0.001) rows[i].gap = `+${gapToLeader.toFixed(3)}`
+        else if (leaderElapsed.lapsCompleted > driverElapsed.lapsCompleted) {
           const lapDiff = leaderElapsed.lapsCompleted - driverElapsed.lapsCompleted
           rows[i].gap = `+${lapDiff} LAP${lapDiff > 1 ? 'S' : ''}`
-        } else {
-          rows[i].gap = '+0.000'
-        }
+        } else rows[i].gap = '+0.000'
 
-        if (interval > 0.001) {
-          rows[i].interval = `+${interval.toFixed(3)}`
-        } else {
-          rows[i].interval = '+0.000'
-        }
-
+        rows[i].interval = interval > 0.001 ? `+${interval.toFixed(3)}` : '+0.000'
       }
     }
 
     return rows
-  }, [sessionData, lapsFromStore, roundedSessionTime])
+  }, [index, sessionData?.drivers, sessionTime])
 }

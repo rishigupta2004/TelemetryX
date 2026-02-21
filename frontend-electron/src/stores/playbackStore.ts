@@ -20,7 +20,16 @@ let _lastFrameTime: number | null = null
 let _internalTime = 0
 let _lastStoreUpdate = 0
 
-const UPDATE_INTERVAL_MS = 11
+const MIN_UPDATE_INTERVAL_MS = 8
+const MAX_UPDATE_INTERVAL_MS = 42
+
+function computeUpdateIntervalMs(speed: number): number {
+  const visibilityMultiplier = typeof document !== 'undefined' && document.hidden ? 1.85 : 1
+  const speedFactor = Math.max(1, speed)
+  const base = 18 / Math.sqrt(speedFactor)
+  const interval = base * visibilityMultiplier
+  return Math.max(MIN_UPDATE_INTERVAL_MS, Math.min(MAX_UPDATE_INTERVAL_MS, interval))
+}
 
 export const usePlaybackStore = create<PlaybackState>((set, get) => ({
   currentTime: 0,
@@ -53,7 +62,8 @@ export const usePlaybackStore = create<PlaybackState>((set, get) => ({
         return
       }
 
-      if (now - _lastStoreUpdate >= UPDATE_INTERVAL_MS) {
+      const updateIntervalMs = computeUpdateIntervalMs(s.speed)
+      if (now - _lastStoreUpdate >= updateIntervalMs) {
         set({ currentTime: _internalTime })
         _lastStoreUpdate = now
       }

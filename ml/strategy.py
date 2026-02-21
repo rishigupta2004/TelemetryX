@@ -200,7 +200,19 @@ def simulate_race(
 
 def analyze_simulation_results(results: List[SimulationResult]) -> Dict:
     if not results:
-        return {}
+        return {
+            "n_simulations": 0,
+            "avg_finish_position": 20.0,
+            "std_finish_position": 0.0,
+            "min_finish_position": 20,
+            "max_finish_position": 20,
+            "avg_points": 0.0,
+            "std_points": 0.0,
+            "podium_probability": 0.0,
+            "points_probability": 0.0,
+            "avg_pit_stops": 0.0,
+            "strategy_used": "",
+        }
     
     finish_positions = [r.finish_position for r in results]
     points = [r.points_scored for r in results]

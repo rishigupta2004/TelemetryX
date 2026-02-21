@@ -1,3 +1,4 @@
+import json
 import os
 import unicodedata
 from functools import lru_cache
@@ -35,7 +36,6 @@ def display_session_code(value: str) -> str:
     return "SR" if code == "SS" else code
 
 
-@lru_cache(maxsize=2048)
 def _list_dir_entries(base_dir: str) -> tuple:
     if not base_dir or not os.path.exists(base_dir):
         return ()
@@ -56,6 +56,9 @@ def resolve_dir(base_dir: str, name: str) -> Optional[str]:
 
 
 def resolve_track_geometry_file(track_dir: str, race_name: str, year: Optional[int] = None) -> Optional[str]:
+    canonical_match = _resolve_canonical_track_geometry_file(track_dir, race_name, year)
+    if canonical_match:
+        return canonical_match
     if not track_dir or not os.path.exists(track_dir):
         return None
     slug = normalize_key(race_name).replace(" ", "_")
@@ -77,6 +80,83 @@ def resolve_track_geometry_file(track_dir: str, race_name: str, year: Optional[i
         base = entry[:-5].replace("_", " ")
         if normalize_key(base) == target:
             return os.path.join(track_dir, entry)
+    return None
+
+
+@lru_cache(maxsize=16)
+def _load_canonical_routing(track_dir: str) -> Dict[str, Any]:
+    parent = os.path.dirname(track_dir)
+    canonical_dir = os.path.join(parent, "track_geometry_canonical")
+    routing_path = os.path.join(canonical_dir, "session_routing_2018_2025.json")
+    if not os.path.exists(routing_path):
+        return {"canonical_dir": canonical_dir, "routes": []}
+    try:
+        with open(routing_path, "r") as f:
+            payload = json.load(f)
+        routes = payload.get("routes", []) if isinstance(payload, dict) else []
+        if not isinstance(routes, list):
+            routes = []
+        return {"canonical_dir": canonical_dir, "routes": routes}
+    except Exception:
+        return {"canonical_dir": canonical_dir, "routes": []}
+
+
+def _resolve_canonical_track_geometry_file(
+    track_dir: str,
+    race_name: str,
+    year: Optional[int],
+) -> Optional[str]:
+    if year is None:
+        return None
+    try:
+        y = int(year)
+    except Exception:
+        return None
+
+    payload = _load_canonical_routing(track_dir)
+    routes = payload.get("routes", [])
+    canonical_dir = payload.get("canonical_dir", "")
+    if not routes or not canonical_dir:
+        return None
+
+    race_key = normalize_key(race_name)
+    race_keys = [race_key]
+
+    # Canonical alias handling for historical naming variants.
+    if race_key == "anniversary grand prix":
+        race_keys.append("70th anniversary grand prix")
+        race_keys.append("british grand prix")
+    if race_key == "70th anniversary grand prix":
+        race_keys.append("anniversary grand prix")
+        race_keys.append("british grand prix")
+
+    # Interlagos switched event naming between "Brazilian" and "Sao Paulo".
+    if race_key == "brazilian grand prix":
+        if y >= 2021:
+            race_keys.append("sao paulo grand prix")
+    if race_key == "sao paulo grand prix":
+        if y <= 2020:
+            race_keys.append("brazilian grand prix")
+
+    # Keep deterministic order and remove duplicates.
+    seen = set()
+    race_keys = [k for k in race_keys if not (k in seen or seen.add(k))]
+    for route in routes:
+        if not isinstance(route, dict):
+            continue
+        route_key = normalize_key(route.get("race_key", ""))
+        if route_key not in race_keys:
+            continue
+        y0 = int(route.get("year_from", y))
+        y1 = int(route.get("year_to", y))
+        if y < y0 or y > y1:
+            continue
+        file_name = route.get("file")
+        if not file_name:
+            continue
+        candidate = os.path.join(canonical_dir, file_name)
+        if os.path.exists(candidate):
+            return candidate
     return None
 
 

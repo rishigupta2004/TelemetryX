@@ -7,28 +7,49 @@ export interface RaceControlState {
   isVSC: boolean
 }
 
+export function upperBoundRaceControlByTimestamp(
+  raceControl: RaceControlMessage[],
+  sessionTime: number
+): number {
+  let lo = 0
+  let hi = raceControl.length
+  while (lo < hi) {
+    const mid = (lo + hi) >> 1
+    if (raceControl[mid].timestamp <= sessionTime) lo = mid + 1
+    else hi = mid
+  }
+  return lo
+}
+
 /**
  * Builds effective race-control state at a given absolute session time.
  * Includes a global stale pre-race suppression rule so incidents before
  * race-start don't leak into playback t=0 when lap timing starts later.
  */
-export function getRaceControlState(
+export function getRaceControlStateFromSlice(
   raceControl: RaceControlMessage[],
+  endExclusive: number,
   sessionTime: number,
   raceStartTime: number | null
 ): RaceControlState {
-  const activeMessages = raceControl.filter((m) => m.timestamp <= sessionTime)
-
   let trackFlag: string | null = null
   const sectorFlags: Record<number, string> = {}
   let isSafetyCar = false
   let isVSC = false
+  let inRaceTrackEvents = false
+  let inRaceScEvents = false
 
-  for (const msg of activeMessages) {
+  for (let i = 0; i < endExclusive; i += 1) {
+    const msg = raceControl[i]
     const category = (msg.category || '').toUpperCase()
     const scope = (msg.scope || '').toUpperCase()
     const flag = (msg.flag || '').toUpperCase()
     const text = (msg.message || '').toUpperCase()
+
+    if (raceStartTime != null && msg.timestamp >= raceStartTime) {
+      if (category === 'FLAG' && scope === 'TRACK') inRaceTrackEvents = true
+      if (category === 'SAFETYCAR') inRaceScEvents = true
+    }
 
     if (category === 'FLAG' && scope === 'TRACK') {
       if (flag === 'GREEN' || flag === 'CLEAR') trackFlag = 'GREEN'
@@ -63,13 +84,6 @@ export function getRaceControlState(
   }
 
   if (raceStartTime != null && sessionTime >= raceStartTime) {
-    const inRaceTrackEvents = activeMessages.some(
-      (m) => m.timestamp >= raceStartTime && (m.category || '').toUpperCase() === 'FLAG' && (m.scope || '').toUpperCase() === 'TRACK'
-    )
-    const inRaceScEvents = activeMessages.some(
-      (m) => m.timestamp >= raceStartTime && (m.category || '').toUpperCase() === 'SAFETYCAR'
-    )
-
     if (!inRaceTrackEvents && (trackFlag === 'RED' || trackFlag === 'YELLOW' || trackFlag === 'DOUBLE YELLOW')) {
       trackFlag = 'GREEN'
     }
@@ -85,3 +99,11 @@ export function getRaceControlState(
   return { trackFlag, sectorFlags, isSafetyCar, isVSC }
 }
 
+export function getRaceControlState(
+  raceControl: RaceControlMessage[],
+  sessionTime: number,
+  raceStartTime: number | null
+): RaceControlState {
+  const endExclusive = upperBoundRaceControlByTimestamp(raceControl, sessionTime)
+  return getRaceControlStateFromSlice(raceControl, endExclusive, sessionTime, raceStartTime)
+}

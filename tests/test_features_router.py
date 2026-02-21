@@ -113,3 +113,24 @@ def test_feature_catalog_schema_consistency(tmp_path, monkeypatch):
         assert row["n_rows"] >= 1
         assert len(row["columns"]) > 0
         assert len(row["sample"]) == 1
+
+
+def test_driver_summary_works_with_partial_feature_files(tmp_path, monkeypatch):
+    _seed_feature_session(tmp_path)
+    monkeypatch.setattr(features_router, "FEATURES_DIR", tmp_path)
+
+    summary = asyncio.run(
+        features_router.get_driver_summary(
+            2024,
+            "Test-GP",
+            "R",
+            driver="Max Verstappen",
+        )
+    )
+
+    assert summary["driver"] == "Max Verstappen"
+    assert summary["lap_analysis"]["lap_number"] == 2
+    assert summary["lap_analysis"]["position"] == 1
+    assert summary["race_context"]["track_temp"] == 38.1
+    assert summary["strategic_analysis"]["current_lap"] == 2
+    assert summary["strategic_analysis"]["current_position"] == 1

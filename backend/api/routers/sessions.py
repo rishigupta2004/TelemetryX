@@ -23,7 +23,6 @@ from ..utils import (
 from ..config import SILVER_DIR, BRONZE_DIR, GOLD_DIR, TRACK_GEOMETRY_DIR, TRACK_GEOMETRY_MANUAL_DIR
 from ..catalog import race_key_for_name, load_season_catalog
 from . import metrics as metrics_router
-from functools import lru_cache
 
 logger = logging.getLogger(__name__)
 
@@ -1323,187 +1322,8 @@ def _point_at_distance(pts: List[Dict[str, float]], dist: float) -> Tuple[float,
 
 
 def _remap_positions_to_manual(rows: List[Dict[str, Any]], year: int, race_name: str) -> List[Dict[str, Any]]:
-    if not rows or len(rows) > MAX_MANUAL_REMAP_ROWS:
-        return rows
-    manual_path = _resolve_manual_layout(race_name, year)
-    if not manual_path or not os.path.exists(manual_path):
-        return rows
-    auto_path = resolve_track_geometry_file(str(TRACK_GEOMETRY_DIR), race_name, year=year)
-    if not auto_path or not os.path.exists(auto_path):
-        return rows
-    try:
-        manual = json.loads(Path(manual_path).read_text())
-        auto = json.loads(Path(auto_path).read_text())
-    except Exception:
-        return rows
-    if _is_placeholder_layout(manual):
-        # Keep real geometry/positions untouched when the manual layout is scaffold-only.
-        return rows
-    manual_pts = _centerline_with_dist(manual)
-    auto_pts = _centerline_with_dist(auto)
-    if not manual_pts or not auto_pts:
-        return rows
-    def _sector_fractions(geometry: Dict[str, Any], pts: List[Dict[str, float]]) -> List[float]:
-        sectors = geometry.get("sectors") if isinstance(geometry, dict) else None
-        if not pts:
-            return []
-        if isinstance(sectors, list):
-            total = float(pts[-1].get("distance") or 0.0)
-            if total <= 0:
-                return []
-            out: List[float] = []
-            for sec in sectors:
-                try:
-                    end_d = float((sec or {}).get("end_distance"))
-                except Exception:
-                    continue
-                out.append(max(0.0, min(1.0, end_d / total)))
-            return out[:3]
-        if not isinstance(sectors, dict):
-            return []
-        order = [("sector1", 0), ("sector2", 1), ("sector3", 2)]
-        out: List[float] = []
-        max_end = 0.0
-        for key, _ in order:
-            sec = sectors.get(key) or {}
-            try:
-                end_idx = float(sec.get("endIndex"))
-            except Exception:
-                end_idx = 0.0
-            max_end = max(max_end, end_idx)
-        denom = float(max(1.0, len(pts) - 1, max_end))
-        for key, _ in order:
-            sec = sectors.get(key) or {}
-            try:
-                end_idx = float(sec.get("endIndex"))
-            except Exception:
-                end_idx = 0.0
-            f = 0.0 if denom <= 0 else (end_idx / denom)
-            out.append(max(0.0, min(1.0, f)))
-        return out
-
-    # Align manual centerline direction to auto centerline direction by using
-    # sector-order matching first, then nearest-index progression fallback.
-    def _orientation_score(src: List[Dict[str, float]], dst: List[Dict[str, float]]) -> float:
-        if len(src) < 4 or len(dst) < 4:
-            return 0.0
-        step = max(1, len(src) // 200)
-        src_s = src[::step]
-        idxs: List[int] = []
-        for p in src_s:
-            x = float(p.get("x") or 0.0)
-            y = float(p.get("y") or 0.0)
-            best_idx = 0
-            best_d = None
-            for i, q in enumerate(dst):
-                dx = x - float(q.get("x") or 0.0)
-                dy = y - float(q.get("y") or 0.0)
-                d = dx * dx + dy * dy
-                if best_d is None or d < best_d:
-                    best_d = d
-                    best_idx = i
-            idxs.append(best_idx)
-        if len(idxs) < 2:
-            return 0.0
-        n = float(len(dst))
-        total = 0.0
-        for i in range(1, len(idxs)):
-            delta = ((idxs[i] - idxs[i - 1] + n / 2.0) % n) - (n / 2.0)
-            total += delta
-        return total / max(1, len(idxs) - 1)
-
-    try:
-        should_reverse = False
-        auto_sectors = _sector_fractions(auto, auto_pts)
-        manual_sectors = _sector_fractions(manual, manual_pts)
-        if len(auto_sectors) == 3 and len(manual_sectors) == 3:
-            def _circ(a: float, b: float) -> float:
-                d = abs(a - b)
-                return min(d, 1.0 - d)
-
-            normal_score = sum(_circ(auto_sectors[i], manual_sectors[i]) for i in range(3))
-            reverse_score = sum(_circ(auto_sectors[i], (1.0 - manual_sectors[i]) % 1.0) for i in range(3))
-            should_reverse = reverse_score + 1e-6 < normal_score
-        else:
-            normal = _orientation_score(auto_pts, manual_pts)
-            rev_pts_probe = _recompute_distances(list(reversed(manual_pts)))
-            reverse = _orientation_score(auto_pts, rev_pts_probe)
-            should_reverse = reverse > normal
-        if should_reverse:
-            manual_pts = _recompute_distances(list(reversed(manual_pts)))
-    except Exception:
-        pass
-    total_auto = float(auto_pts[-1].get("distance") or 0.0)
-    total_manual = float(manual_pts[-1].get("distance") or 0.0)
-    if total_auto <= 0 or total_manual <= 0:
-        return rows
-    # Track span for sanity checks (meters in geometry units).
-    try:
-        ax = [float(p.get("x") or 0.0) for p in auto_pts]
-        ay = [float(p.get("y") or 0.0) for p in auto_pts]
-        track_span = math.hypot(max(ax) - min(ax), max(ay) - min(ay))
-    except Exception:
-        track_span = 0.0
-
-    by_driver: Dict[int, List[Dict[str, Any]]] = {}
-    for r in rows:
-        try:
-            num = int(r.get("driverNumber") or r.get("driver_number") or 0)
-        except Exception:
-            continue
-        by_driver.setdefault(num, []).append(r)
-
-    out: List[Dict[str, Any]] = []
-    max_speed_mps = 120.0  # clamp unrealistic jumps (~430 km/h)
-    recover_sq_error = (track_span * 0.08) ** 2 if track_span > 0 else None
-    for num, drv_rows in by_driver.items():
-        drv_rows.sort(key=lambda r: float(r.get("timestamp") or 0.0))
-        last_idx = None
-        last_dist: Optional[float] = None
-        last_t: Optional[float] = None
-        for r in drv_rows:
-            try:
-                x = float(r.get("x") or 0.0)
-                y = float(r.get("y") or 0.0)
-                ts = float(r.get("timestamp") or 0.0)
-            except Exception:
-                continue
-            if abs(x) + abs(y) <= 1e-6:
-                continue
-            dist, idx, d2 = _project_distance(
-                x,
-                y,
-                auto_pts,
-                last_idx=last_idx,
-                window=240,
-                max_sq_error=recover_sq_error,
-            )
-            if dist is None:
-                continue
-            last_idx = idx
-            if last_dist is not None:
-                # Unwrap distance on a circular track (keep continuity).
-                candidates = [dist, dist + total_auto, dist - total_auto]
-                dist = min(candidates, key=lambda d: abs(d - last_dist))
-                # Clamp unrealistic jumps (bad samples / sparse feeds).
-                if last_t is not None:
-                    dt = max(0.0, ts - last_t)
-                    if dt > 0:
-                        max_step = max_speed_mps * dt
-                        if abs(dist - last_dist) > max_step * 2.5:
-                            dist = last_dist + (max_step if dist >= last_dist else -max_step)
-                # Reject extreme projections far from the track centerline.
-                if d2 is not None and track_span > 0:
-                    if d2 > (track_span * 0.25) ** 2:
-                        dist = last_dist
-            last_dist = dist
-            last_t = ts
-            frac = (dist % total_auto) / total_auto
-            frac = max(0.0, min(1.0, frac))
-            manual_dist = frac * total_manual
-            mx, my = _point_at_distance(manual_pts, manual_dist)
-            out.append({**r, "x": mx, "y": my, "_projected": True, "_trackDistance": manual_dist})
-    return out
+    # Canonical-only mode: no manual remapping.
+    return rows
 
 
 def load_positions(year: int, race_name: str, session: str) -> list:
@@ -1889,7 +1709,6 @@ def calculate_track_length(centerline: list) -> float:
     return length
 
 
-@lru_cache(maxsize=128)
 def _load_layout_map() -> Dict[str, Dict[str, str]]:
     def _read_json(path: os.PathLike) -> Dict[str, Any]:
         try:
@@ -1988,40 +1807,21 @@ def _resolve_manual_layout(race_name: str, year: Optional[int]) -> Optional[str]
 
 def load_track_geometry(race_name: str, year: Optional[int] = None) -> Optional[Dict]:
     import json
-    def _layout_signature(data: Dict) -> Optional[tuple]:
-        try:
-            coords = (data.get("layout") or {}).get("path_coordinates") or []
-            if not coords:
-                return None
-            head = coords[:8]
-            tail = coords[-8:] if len(coords) > 8 else []
-            sig = [len(coords)]
-            for p in head + tail:
-                sig.extend([round(float(p.get("x") or 0.0), 2), round(float(p.get("y") or 0.0), 2)])
-            return tuple(sig)
-        except Exception:
-            return None
-
-    manual = _resolve_manual_layout(race_name, year)
-    if manual and os.path.exists(manual):
-        with open(manual, "r") as f:
-            data = json.load(f)
-        if _is_placeholder_layout(data):
-            data = None
-        if data and not data.get("centerline"):
-            coords = (data.get("layout") or {}).get("path_coordinates") or []
-            if coords:
-                data["centerline"] = [[p.get("x"), p.get("y")] for p in coords if "x" in p and "y" in p]
-        if data:
-            coords = (data.get("layout") or {}).get("path_coordinates") or []
-            centerline = data.get("centerline") or []
-            if (isinstance(coords, list) and len(coords) >= 5) or (isinstance(centerline, list) and len(centerline) >= 5):
-                return data
     for base_dir in (TRACK_GEOMETRY_DIR,):
         geometry_file = resolve_track_geometry_file(str(base_dir), race_name, year=year)
         if geometry_file:
             with open(geometry_file, "r") as f:
                 return json.load(f)
+    # Fallback to manual layout routing (layout_map.json / track_layout_mapping.json).
+    manual_file = _resolve_manual_layout(race_name, year)
+    if manual_file and os.path.exists(manual_file):
+        with open(manual_file, "r") as f:
+            return json.load(f)
+    # Last-resort direct file resolution from manual track directory.
+    manual_direct = resolve_track_geometry_file(str(TRACK_GEOMETRY_MANUAL_DIR), race_name, year=year)
+    if manual_direct:
+        with open(manual_direct, "r") as f:
+            return json.load(f)
     return None
 
 

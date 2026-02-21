@@ -1,0 +1,324 @@
+from __future__ import annotations
+
+import datetime as dt
+import html
+import logging
+import re
+from typing import Any, Dict, List, Optional, Tuple
+
+import httpx
+from fastapi import APIRouter, HTTPException, Query
+
+from ..cache import cache_get, cache_set
+from ..utils import normalize_key
+
+router = APIRouter()
+logger = logging.getLogger(__name__)
+
+_FIA_BASE_URL = "https://www.fia.com"
+_F1_CHAMPIONSHIP_DOCS_PATH = "/documents/championships/fia-formula-one-world-championship-14"
+_DEFAULT_TIMEOUT_S = 20.0
+
+
+def _abs_url(path_or_url: str) -> str:
+    value = str(path_or_url or "").strip()
+    if value.startswith("http://") or value.startswith("https://"):
+        return value
+    if not value.startswith("/"):
+        value = "/" + value
+    return f"{_FIA_BASE_URL}{value}"
+
+
+def _strip_html(value: str) -> str:
+    text = re.sub(r"<[^>]+>", " ", str(value or ""))
+    return " ".join(html.unescape(text).split())
+
+
+def _extract_select_options(page_html: str, select_id: str) -> List[Tuple[str, str]]:
+    select_match = re.search(
+        rf"<select[^>]*id=\"{re.escape(select_id)}\"[^>]*>(.*?)</select>",
+        page_html,
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    if not select_match:
+        return []
+    body = select_match.group(1)
+    options: List[Tuple[str, str]] = []
+    for value, label in re.findall(
+        r"<option\s+value=\"([^\"]*)\"[^>]*>(.*?)</option>",
+        body,
+        flags=re.IGNORECASE | re.DOTALL,
+    ):
+        options.append((html.unescape(value).strip(), _strip_html(label)))
+    return options
+
+
+def _parse_season_paths(championship_page_html: str) -> Dict[int, str]:
+    out: Dict[int, str] = {}
+    for value, label in _extract_select_options(championship_page_html, "facetapi_select_facet_form_3"):
+        if not value.startswith("/"):
+            continue
+        match = re.search(r"\bSEASON\s+(\d{4})\b", label, flags=re.IGNORECASE)
+        if not match:
+            continue
+        out[int(match.group(1))] = value
+    return out
+
+
+def _parse_event_paths(season_page_html: str) -> List[Tuple[str, str]]:
+    out: List[Tuple[str, str]] = []
+    for value, label in _extract_select_options(season_page_html, "facetapi_select_facet_form_2"):
+        if not value.startswith("/documents/"):
+            continue
+        if "/event/" not in value:
+            continue
+        if not label or normalize_key(label) == "event":
+            continue
+        out.append((label, value))
+    return out
+
+
+def _race_signature(value: str) -> str:
+    tokens = [tok for tok in normalize_key(value).split() if tok not in {"grand", "prix", "gp", "tests", "season"}]
+    return " ".join(tokens)
+
+
+def _match_event_path(events: List[Tuple[str, str]], race_name: str) -> Optional[Tuple[str, str]]:
+    if not events:
+        return None
+    direct_key = normalize_key(race_name)
+    direct_sig = _race_signature(race_name)
+
+    for name, path in events:
+        if normalize_key(name) == direct_key:
+            return name, path
+
+    for name, path in events:
+        if _race_signature(name) and _race_signature(name) == direct_sig:
+            return name, path
+
+    return None
+
+
+def _parse_published_at(raw_value: str, timezone_label: str) -> Tuple[Optional[str], Optional[float]]:
+    value = str(raw_value or "").strip()
+    if not value:
+        return None, None
+
+    try:
+        parsed = dt.datetime.strptime(value, "%d.%m.%y %H:%M")
+    except ValueError:
+        return None, None
+
+    tz_key = str(timezone_label or "").strip().upper()
+    tzinfo = None
+    if tz_key == "CET":
+        tzinfo = dt.timezone(dt.timedelta(hours=1), name="CET")
+    elif tz_key == "CEST":
+        tzinfo = dt.timezone(dt.timedelta(hours=2), name="CEST")
+
+    if tzinfo is not None:
+        parsed = parsed.replace(tzinfo=tzinfo)
+        return parsed.isoformat(), parsed.timestamp()
+
+    return parsed.isoformat(), parsed.timestamp()
+
+
+def _classify_document(title: str) -> str:
+    key = normalize_key(title)
+    if not key:
+        return "other"
+    if "technical directive" in key or "td-" in key or key.startswith("td "):
+        return "technical_directive"
+    if "race director" in key or "event notes" in key or "race directors" in key:
+        return "race_director_note"
+    if "infringement" in key or "summons" in key or "decision" in key or "stewards" in key:
+        return "stewards_decision"
+    if "classification" in key or "starting grid" in key or "championship points" in key:
+        return "classification"
+    if "scrutineering" in key:
+        return "scrutineering"
+    if "entry list" in key:
+        return "entry_list"
+    return "other"
+
+
+def _parse_documents(event_page_html: str) -> Tuple[str, List[Dict[str, Any]]]:
+    title_match = re.search(
+        r"<div\s+class=\"event-title\s+active\"\s*>(.*?)</div>",
+        event_page_html,
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    event_name = _strip_html(title_match.group(1)) if title_match else ""
+
+    row_re = re.compile(
+        r"<li\s+class=\"document-row\s+key-(?P<key>\d+)\"[^>]*>\s*"
+        r"<a\s+href=\"(?P<href>[^\"]+)\"[^>]*>"
+        r"(?P<body>.*?)"
+        r"</a>\s*</li>",
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+
+    docs: List[Dict[str, Any]] = []
+    for match in row_re.finditer(event_page_html):
+        key = int(match.group("key"))
+        href = html.unescape(match.group("href").strip())
+        body = match.group("body")
+
+        title_match = re.search(r"<div\s+class=\"title\"[^>]*>(.*?)</div>", body, flags=re.IGNORECASE | re.DOTALL)
+        published_match = re.search(
+            r"<span[^>]*class=\"date-display-single\"[^>]*>(.*?)</span>\s*([A-Za-z]{2,5})?",
+            body,
+            flags=re.IGNORECASE | re.DOTALL,
+        )
+
+        title = _strip_html(title_match.group(1)) if title_match else ""
+        published_raw = _strip_html(published_match.group(1)) if published_match else ""
+        timezone_label = _strip_html(published_match.group(2)) if published_match and published_match.group(2) else ""
+
+        published_at, published_epoch = _parse_published_at(published_raw, timezone_label)
+        number_match = re.search(r"\bDoc\s*(\d+)\b", title, flags=re.IGNORECASE)
+
+        docs.append(
+            {
+                "key": key,
+                "doc_number": int(number_match.group(1)) if number_match else key,
+                "title": title,
+                "category": _classify_document(title),
+                "published_raw": published_raw,
+                "published_at": published_at,
+                "published_epoch": published_epoch,
+                "timezone": timezone_label or None,
+                "url": _abs_url(href),
+                "filename": href.rsplit("/", 1)[-1] if "/" in href else href,
+            }
+        )
+
+    docs.sort(key=lambda item: ((item.get("published_epoch") or -1), int(item.get("doc_number") or 0)), reverse=True)
+    return event_name, docs
+
+
+async def _fetch_text(url: str) -> str:
+    headers = {
+        "User-Agent": "TelemetryX/1.0 (+https://telemetryx.local)",
+        "Accept": "text/html,application/xhtml+xml",
+    }
+    async with httpx.AsyncClient(timeout=_DEFAULT_TIMEOUT_S, follow_redirects=True, headers=headers) as client:
+        response = await client.get(url)
+    if response.status_code >= 400:
+        raise HTTPException(status_code=502, detail=f"FIA source request failed ({response.status_code})")
+    return response.text
+
+
+async def _get_season_paths(force_refresh: bool = False) -> Dict[int, str]:
+    cache_key = ("fia_document_seasons",)
+    if not force_refresh:
+        cached = cache_get(cache_key)
+        if isinstance(cached, dict):
+            return cached
+
+    championship_html = await _fetch_text(_abs_url(_F1_CHAMPIONSHIP_DOCS_PATH))
+    season_paths = _parse_season_paths(championship_html)
+    return cache_set(cache_key, season_paths)
+
+
+async def _resolve_season_path(year: int, force_refresh: bool = False) -> Optional[str]:
+    season_paths = await _get_season_paths(force_refresh=force_refresh)
+    return season_paths.get(int(year))
+
+
+async def _get_events_for_year(year: int, force_refresh: bool = False) -> Dict[str, Any]:
+    cache_key = ("fia_document_events", int(year))
+    if not force_refresh:
+        cached = cache_get(cache_key)
+        if isinstance(cached, dict):
+            return cached
+
+    season_path = await _resolve_season_path(year, force_refresh=force_refresh)
+    if not season_path:
+        raise HTTPException(status_code=404, detail=f"No FIA documents season found for year {year}")
+
+    season_html = await _fetch_text(_abs_url(season_path))
+    events = _parse_event_paths(season_html)
+    payload = {
+        "year": int(year),
+        "season_path": season_path,
+        "n_events": len(events),
+        "events": [{"name": name, "path": path} for name, path in events],
+        "source": _abs_url(season_path),
+        "fetched_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+    }
+    return cache_set(cache_key, payload)
+
+
+@router.get("/fia-documents/seasons")
+async def get_fia_document_seasons(force_refresh: bool = Query(default=False)) -> Dict[str, Any]:
+    season_paths = await _get_season_paths(force_refresh=force_refresh)
+    years = sorted(int(year) for year in season_paths.keys())
+    return {
+        "n_seasons": len(years),
+        "seasons": [{"year": year, "path": season_paths.get(year)} for year in years],
+        "source": _abs_url(_F1_CHAMPIONSHIP_DOCS_PATH),
+        "fetched_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+    }
+
+
+@router.get("/fia-documents/{year}")
+async def get_fia_document_events(year: int, force_refresh: bool = Query(default=False)) -> Dict[str, Any]:
+    return await _get_events_for_year(int(year), force_refresh=force_refresh)
+
+
+@router.get("/fia-documents/{year}/{race}")
+async def get_fia_documents(
+    year: int,
+    race: str,
+    force_refresh: bool = Query(default=False),
+) -> Dict[str, Any]:
+    race_name = race.replace("-", " ").strip()
+    cache_key = ("fia_documents", int(year), normalize_key(race_name))
+
+    if not force_refresh:
+        cached = cache_get(cache_key)
+        if cached is not None:
+            return cached
+
+    season_path = await _resolve_season_path(year, force_refresh=force_refresh)
+    if not season_path:
+        raise HTTPException(status_code=404, detail=f"No FIA documents season found for year {year}")
+
+    events_payload = await _get_events_for_year(int(year), force_refresh=force_refresh)
+    events = [(str(item.get("name") or ""), str(item.get("path") or "")) for item in events_payload.get("events", [])]
+    matched = _match_event_path(events, race_name)
+    if not matched:
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "message": f"No FIA event documents found for '{race_name}' in {year}",
+                "available_events": [name for name, _ in events],
+            },
+        )
+
+    event_name, event_path = matched
+    event_html = await _fetch_text(_abs_url(event_path))
+    parsed_event_name, documents = _parse_documents(event_html)
+
+    category_counts: Dict[str, int] = {}
+    for doc in documents:
+        category = str(doc.get("category") or "other")
+        category_counts[category] = category_counts.get(category, 0) + 1
+
+    latest = next((doc.get("published_at") for doc in documents if doc.get("published_at")), None)
+    payload: Dict[str, Any] = {
+        "year": int(year),
+        "requested_race": race_name,
+        "event_name": parsed_event_name or event_name,
+        "season_path": season_path,
+        "event_path": event_path,
+        "source": _abs_url(event_path),
+        "fetched_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+        "total_documents": len(documents),
+        "category_counts": category_counts,
+        "latest_published_at": latest,
+        "documents": documents,
+    }
+    return cache_set(cache_key, payload)

@@ -361,14 +361,21 @@ async def get_driver_summary(
     driver: str,
     compare: Optional[str] = None,
 ) -> Dict[str, Any]:
-    """Compact driver summary: 1–2 features per category."""
+    """Compact driver summary: 1-2 features per category."""
     race_name = race.replace("-", " ")
     session_path = find_features_path(year, race_name, session)
     if not session_path:
         raise HTTPException(status_code=404, detail=f"No features found for {year} {race_name} {session}")
 
     def _load(name: str) -> pd.DataFrame:
-        return read_parquet_df(os.path.join(session_path, name))
+        fpath = os.path.join(session_path, name)
+        if not os.path.exists(fpath):
+            return pd.DataFrame()
+        try:
+            return read_parquet_df(fpath)
+        except Exception as exc:
+            logger.warning("driver_summary_load_failed path=%s error=%s", fpath, str(exc))
+            return pd.DataFrame()
 
     lap_all_df = _load("lap_features.parquet")
     lap_df = _filter_driver(lap_all_df, driver)
@@ -384,16 +391,96 @@ async def get_driver_summary(
     tyre_row = _latest_row(tyre_df, "stint_number")
     pos_row = pos_df.iloc[0].to_dict() if not pos_df.empty else {}
     race_row = _latest_row(race_ctx_df, "lap_number")
+    traffic_row = _latest_row(traffic_df, "lap_number")
     points_row = points_df.iloc[0].to_dict() if not points_df.empty else {}
     over_row = over_df.iloc[0].to_dict() if not over_df.empty else {}
 
     personal_best = _min(lap_df, "lap_duration")
     session_best = _min(lap_all_df, "lap_duration")
 
+    driver_data_available = any(
+        not df.empty
+        for df in [lap_df, pos_df, tyre_df, tel_df, traffic_df, points_df, over_df]
+    )
+
+    if not driver_data_available:
+        return {
+            "driver": driver,
+            "compare": compare or "",
+            "available": False,
+            "reason": f"No feature rows found for driver '{driver}' in {year} {race_name} {session}",
+            "lap_analysis": {
+                "lap_number": None,
+                "position": None,
+                "last_lap_time": None,
+                "sector_times": [None, None, None],
+                "is_valid": None,
+                "lap_quality_score": None,
+                "lap_delta_to_leader": None,
+                "track_status_at_lap": None,
+                "tyre_compound": None,
+                "tyre_age_laps": None,
+                "personal_best": None,
+                "session_best": session_best,
+            },
+            "driver_performance": {
+                "start_position": None,
+                "end_position": None,
+                "position_change": None,
+                "laps_led": None,
+                "best_position": None,
+                "worst_position": None,
+                "points": None,
+                "overtakes_made": None,
+                "positions_lost_defensive": None,
+            },
+            "tyre_analysis": {
+                "stint_number": None,
+                "stint_length": None,
+                "current_compound": None,
+                "tyre_age": None,
+                "tyre_degradation_rate": None,
+                "tyre_life_remaining": None,
+                "pit_stop_count": None,
+                "tyre_strategy_sequence": None,
+            },
+            "telemetry_analysis": {
+                "speed_max": None,
+                "speed_avg": None,
+                "throttle_avg": None,
+                "brake_avg": None,
+                "drs_usage_pct": None,
+                "gear_changes": None,
+            },
+            "race_context": {
+                "track_status": None,
+                "weather": None,
+                "air_temp": None,
+                "track_temp": None,
+                "wind_speed": None,
+                "wind_direction": None,
+                "humidity": None,
+                "rainfall": None,
+            },
+            "strategic_analysis": {
+                "current_lap": None,
+                "current_position": None,
+                "stint_length": None,
+                "optimal_pit_window": None,
+                "traffic_time_lost": None,
+                "tyre_degradation_rate": None,
+                "tyre_life_remaining": None,
+            },
+        }
+
     summary = {
         "driver": driver,
         "compare": compare or "",
+        "available": True,
+        "reason": None,
         "lap_analysis": {
+            "lap_number": lap_row.get("lap_number"),
+            "position": lap_row.get("position"),
             "last_lap_time": lap_row.get("lap_time_formatted"),
             "sector_times": [lap_row.get("sector_1_time"), lap_row.get("sector_2_time"), lap_row.get("sector_3_time")],
             "is_valid": lap_row.get("is_valid_lap"),
@@ -417,6 +504,8 @@ async def get_driver_summary(
             "positions_lost_defensive": over_row.get("positions_lost_defensive"),
         },
         "tyre_analysis": {
+            "stint_number": tyre_row.get("stint_number"),
+            "stint_length": tyre_row.get("tyre_laps_in_stint"),
             "current_compound": tyre_row.get("tyre_compound"),
             "tyre_age": tyre_row.get("tyre_age_at_stint_end"),
             "tyre_degradation_rate": tyre_row.get("tyre_degradation_rate"),
@@ -443,8 +532,11 @@ async def get_driver_summary(
             "rainfall": race_row.get("rainfall"),
         },
         "strategic_analysis": {
+            "current_lap": lap_row.get("lap_number"),
+            "current_position": lap_row.get("position"),
+            "stint_length": tyre_row.get("tyre_laps_in_stint"),
             "optimal_pit_window": tyre_row.get("optimal_pit_window"),
-            "traffic_time_lost": (traffic_df.iloc[0].get("estimated_time_lost") if not traffic_df.empty else None),
+            "traffic_time_lost": traffic_row.get("estimated_time_lost"),
             "tyre_degradation_rate": tyre_row.get("tyre_degradation_rate"),
             "tyre_life_remaining": tyre_row.get("tyre_life_remaining"),
         },

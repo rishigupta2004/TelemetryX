@@ -1,6 +1,8 @@
 import { create } from 'zustand'
 import { api } from '../api/client'
+import { useDriverStore } from './driverStore'
 import { usePlaybackStore } from './playbackStore'
+import { useTelemetryStore } from './telemetryStore'
 import type { LapRow, Race, Season, SessionVizResponse, TyreStint } from '../types'
 
 interface SessionState {
@@ -61,6 +63,9 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   loadSession: async (year, race, session) => {
     const state = get()
     if (state.loadingState === 'loading') return
+
+    useDriverStore.getState().clearSelection()
+    useTelemetryStore.getState().clearTelemetry()
 
     set({
       loadingState: 'loading',
@@ -135,6 +140,47 @@ export const useSessionStore = create<SessionState>((set, get) => ({
         error: null
       })
 
+      if (enrichedDrivers.length > 0) {
+        useDriverStore.getState().selectPrimary(enrichedDrivers[0].code)
+      }
+
+      api.getIdentityAssets(year, race, session)
+        .then((assets) => {
+          if (!assets?.enabled || !assets.drivers?.length) return
+          const byNumber = new Map(
+            assets.drivers
+              .filter((item) => item.driverNumber != null)
+              .map((item) => [Number(item.driverNumber), item])
+          )
+          const current = get()
+          if (
+            current.selectedYear !== year ||
+            current.selectedRace !== race ||
+            current.selectedSession !== session ||
+            !current.sessionData
+          ) {
+            return
+          }
+          const updatedDrivers = current.sessionData.drivers.map((driver) => {
+            const match = byNumber.get(driver.driverNumber)
+            if (!match) return driver
+            return {
+              ...driver,
+              driverImage: match.driverImage ?? driver.driverImage ?? null,
+              teamImage: match.teamImage ?? driver.teamImage ?? null
+            }
+          })
+          set({
+            sessionData: {
+              ...current.sessionData,
+              drivers: updatedDrivers
+            }
+          })
+        })
+        .catch((err) => {
+          console.warn('Identity image enrichment unavailable:', err)
+        })
+
       api.getTyreStints(year, race, session)
         .then((stints) => {
           const current = get()
@@ -157,6 +203,8 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   clearSession: () => {
     const { seasons, races } = get()
     usePlaybackStore.getState().reset()
+    useDriverStore.getState().clearSelection()
+    useTelemetryStore.getState().clearTelemetry()
     set({
       seasons,
       races,

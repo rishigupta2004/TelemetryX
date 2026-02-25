@@ -1,6 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { UndercutPredictor } from '../components/UndercutPredictor'
 import { PitStrategy } from '../components/PitStrategy'
+import { ViewErrorBoundary } from '../components/ViewErrorBoundary'
 import { api } from '../api/client'
 import { useSessionStore } from '../stores/sessionStore'
 import type { StrategyRecommendationItem, StrategyRecommendationsResponse } from '../types'
@@ -15,11 +16,11 @@ function strategyCandidates(seasonYears: number[], selectedYear: number): number
   if (fromStore.length > 0) return fromStore
 
   const fallback: number[] = []
-  for (let year = selectedYear - 1; year >= 2018; year -= 1) fallback.push(year)
+  for (let year = selectedYear - 1; year >= Math.max(2020, selectedYear - 2); year -= 1) fallback.push(year)
   return fallback
 }
 
-export const StrategyView = React.memo(function StrategyView() {
+export const StrategyView = React.memo(function StrategyView({ active }: { active: boolean }) {
   const selectedYear = useSessionStore((s) => s.selectedYear)
   const selectedRace = useSessionStore((s) => s.selectedRace)
   const seasons = useSessionStore((s) => s.seasons)
@@ -28,6 +29,9 @@ export const StrategyView = React.memo(function StrategyView() {
   const [strategySourceYear, setStrategySourceYear] = useState<number | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const strategyCacheRef = useRef<
+    Map<string, { data: StrategyRecommendationsResponse | null; sourceYear: number | null; error: string | null }>
+  >(new Map())
 
   const fallbackYears = useMemo(() => {
     if (!selectedYear) return []
@@ -35,10 +39,21 @@ export const StrategyView = React.memo(function StrategyView() {
   }, [seasons, selectedYear])
 
   useEffect(() => {
+    if (!active) return
     if (!selectedYear || !selectedRace) {
       setStrategyData(null)
       setStrategySourceYear(null)
       setError(null)
+      return
+    }
+
+    const strategyKey = `${selectedYear}|${selectedRace}|${fallbackYears.join(',')}`
+    const cached = strategyCacheRef.current.get(strategyKey)
+    if (cached) {
+      setStrategyData(cached.data)
+      setStrategySourceYear(cached.sourceYear)
+      setError(cached.error)
+      setLoading(false)
       return
     }
 
@@ -52,12 +67,15 @@ export const StrategyView = React.memo(function StrategyView() {
         if (cancelled) return
         setStrategyData(data)
         setStrategySourceYear(sourceYear)
+        strategyCacheRef.current.set(strategyKey, { data, sourceYear, error: null })
       })
       .catch((err) => {
         if (cancelled) return
+        const message = String(err)
         setStrategyData(null)
         setStrategySourceYear(null)
-        setError(String(err))
+        setError(message)
+        strategyCacheRef.current.set(strategyKey, { data: null, sourceYear: null, error: message })
       })
       .finally(() => {
         if (!cancelled) setLoading(false)
@@ -66,7 +84,7 @@ export const StrategyView = React.memo(function StrategyView() {
     return () => {
       cancelled = true
     }
-  }, [selectedYear, selectedRace, fallbackYears])
+  }, [active, selectedYear, selectedRace, fallbackYears])
 
   const topStrategies = useMemo(() => {
     if (!strategyData?.all_strategies) return []
@@ -89,12 +107,16 @@ export const StrategyView = React.memo(function StrategyView() {
   return (
     <div className="flex h-full flex-col gap-3 p-3">
       <div className="min-h-0 flex-1">
-        <PitStrategy />
+        <ViewErrorBoundary viewName="Pit Strategy">
+          <PitStrategy />
+        </ViewErrorBoundary>
       </div>
 
       <div className="grid min-h-[320px] grid-cols-1 gap-3 xl:grid-cols-2">
         <div className="min-h-0">
-          <UndercutPredictor />
+          <ViewErrorBoundary viewName="Undercut Predictor">
+            <UndercutPredictor />
+          </ViewErrorBoundary>
         </div>
 
         <div className="min-h-0 rounded-md border border-border bg-bg-card p-3">
@@ -111,7 +133,7 @@ export const StrategyView = React.memo(function StrategyView() {
 
           {!loading && error && (
             <div className="rounded border border-red-500/30 bg-red-500/10 p-2 text-xs text-red-300">
-              Strategy model data unavailable for this selection. {error}
+              Strategy model data unavailable for {selectedYear} {selectedRace ?? 'this race'}. Try a different session or check that model data exists for this event.
             </div>
           )}
 

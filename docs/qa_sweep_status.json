@@ -1,0 +1,77 @@
+{
+  "generatedAt": "2026-02-22T16:13:31.267212Z",
+  "timingTower": {
+    "status": "working",
+    "notes": [
+      "20-driver live rows via useTimingData",
+      "gap format fixed to +0.000s / +1L"
+    ]
+  },
+  "trackMap": {
+    "status": "working",
+    "notes": [
+      "2.5D perspective active",
+      "minimap mode active",
+      "start/finish fallback coverage 32/32 circuits from external layers"
+    ]
+  },
+  "telemetryCharts": {
+    "status": "working",
+    "notes": [
+      "uPlot-only path in TelemetryView",
+      "6 channels + compare delta-speed",
+      "red playback cursor marker"
+    ]
+  },
+  "weatherPanel": {
+    "status": "working",
+    "notes": [
+      "compact mode in TimingView",
+      "uPlot sparkline"
+    ]
+  },
+  "pitStrategy": {
+    "status": "working",
+    "notes": [
+      "sort controls",
+      "pit flash",
+      "stint tooltip",
+      "undercut events badge"
+    ]
+  },
+  "raceControl": {
+    "status": "working",
+    "notes": [
+      "filters + newest-first + slide-in animation"
+    ]
+  },
+  "standingsAndProfiles": {
+    "status": "working",
+    "notes": [
+      "click-through to Driver/Team profile views",
+      "row move highlight animation",
+      "profile pages auto-fallback to session-derived real data when insights/profiles is empty"
+    ]
+  },
+  "analyticsView": {
+    "status": "working",
+    "notes": [
+      "standalone view with lap progression, pace delta, tyre degradation, mini-sector heatmap, efficiency ranking",
+      "corner speed analysis now rendered from best-lap telemetry apex minima"
+    ]
+  },
+  "smokeGate": {
+    "status": "blocked_in_env",
+    "notes": [
+      "localhost port bind denied in current sandbox; build checks pass"
+    ]
+  },
+  "global": {
+    "status": "working_with_env_note",
+    "notes": [
+      "renderer entry chunk reduced to ~876.93kB via route-level lazy loading",
+      "build passes after all changes",
+      "full smoke gate still blocked by sandbox port bind policy"
+    ]
+  }
+}

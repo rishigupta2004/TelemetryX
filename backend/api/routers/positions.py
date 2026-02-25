@@ -8,7 +8,6 @@ from typing import Any, Dict, List, Optional, Tuple
 import duckdb
 from fastapi import APIRouter, HTTPException, Query
 
-from db.connection import db_connection
 from ..config import BRONZE_DIR, GOLD_DIR, SILVER_DIR
 from ..utils import normalize_session_code, resolve_dir
 from . import metrics as metrics_router
@@ -20,6 +19,14 @@ MAX_ROWS = 10_000
 MAX_DRIVERS = 5
 COORD_ABS_LIMIT = 1_000_000.0
 _STREAM_METRICS_ROUTE = "/api/v1/positions/{year}/{round}/stream"
+
+
+def _fetchall(sql: str, params: List[Any]) -> List[Any]:
+    conn = duckdb.connect()
+    try:
+        return conn.execute(sql, params).fetchall()
+    finally:
+        conn.close()
 
 
 def _estimate_payload_bytes(payload: Any) -> int:
@@ -182,7 +189,7 @@ async def get_positions_stream(
                 LIMIT ?
             """
             query_params = [path, *params, int(sample_rate), int(MAX_ROWS + 1)]
-            rows = db_connection.conn.execute(sql, query_params).fetchall()
+            rows = _fetchall(sql, query_params)
             if len(rows) > MAX_ROWS:
                 raise HTTPException(status_code=413, detail=f"Result exceeds {MAX_ROWS} rows")
             payload = [
@@ -306,10 +313,10 @@ async def get_positions(
                 ORDER BY driver_number, time_ms
                 LIMIT ?
             """
-            rows = db_connection.conn.execute(
+            rows = _fetchall(
                 sql,
                 [path, *params, int(sample_rate), int(max_points)],
-            ).fetchall()
+            )
             return [
                 {
                     "time": float(r[0]) / 1000.0,

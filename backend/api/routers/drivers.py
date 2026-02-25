@@ -1,11 +1,27 @@
 from fastapi import APIRouter, Query
 from typing import List, Dict, Any, Optional
 import os
-from db.connection import db_connection
+import duckdb
 from ..utils import resolve_dir, normalize_session_code
 from ..config import SILVER_DIR
 
 router = APIRouter()
+
+
+def _fetchall(sql: str, params: List[Any]) -> List[Any]:
+    conn = duckdb.connect()
+    try:
+        return conn.execute(sql, params).fetchall()
+    finally:
+        conn.close()
+
+
+def _fetchone(sql: str, params: List[Any]) -> Any:
+    conn = duckdb.connect()
+    try:
+        return conn.execute(sql, params).fetchone()
+    finally:
+        conn.close()
 
 @router.get("/drivers/{year}/{round}")
 async def get_drivers(
@@ -35,20 +51,30 @@ async def get_drivers(
         return []
 
     try:
-        query = """
-            SELECT DISTINCT 
-                driver_name, 
-                driver_number,
-                team_name
+        schema = _fetchall("DESCRIBE SELECT * FROM read_parquet(?)", [laps_file])
+        columns = {str(row[0]) for row in schema}
+
+        has_driver_name = "driver_name" in columns
+        has_team_name = "team_name" in columns
+
+        name_expr = "CAST(driver_name AS VARCHAR)" if has_driver_name else "CAST(driver_number AS VARCHAR)"
+        team_expr = "CAST(team_name AS VARCHAR)" if has_team_name else "NULL"
+        order_expr = "driver_name" if has_driver_name else "driver_number"
+
+        query = f"""
+            SELECT DISTINCT
+                {name_expr} AS driver_name,
+                CAST(driver_number AS INTEGER) AS driver_number,
+                {team_expr} AS team_name
             FROM read_parquet(?)
-            WHERE driver_name IS NOT NULL
-            ORDER BY driver_name
+            WHERE driver_number IS NOT NULL
+            ORDER BY {order_expr}
             LIMIT ?
         """
-        result = db_connection.conn.execute(query, [laps_file, int(limit)]).fetchall()
+        result = _fetchall(query, [laps_file, int(limit)])
         
         return [{
-            "driver": row[0],
+            "driver": row[0] if row[0] else str(row[1]),
             "driver_number": row[1], 
             "team": row[2]
         } for row in result]
@@ -79,23 +105,40 @@ async def get_driver(year: int, round: str, driver_id: str, session_type: Option
         return {"error": "Data not found"}
 
     try:
-        # Handle driver ID (name or number)
-        where_clause = "driver_number = ?" if driver_id.isdigit() else "driver_name = ?"
-        param = int(driver_id) if driver_id.isdigit() else driver_id
-        
-        result = db_connection.conn.execute("""
-            SELECT DISTINCT 
-                driver_name, 
-                driver_number,
-                team_name
+        schema = _fetchall("DESCRIBE SELECT * FROM read_parquet(?)", [laps_file])
+        columns = {str(row[0]) for row in schema}
+
+        has_driver_name = "driver_name" in columns
+        has_team_name = "team_name" in columns
+
+        if driver_id.isdigit():
+            where_clause = "driver_number = ?"
+            params: List[Any] = [laps_file, int(driver_id)]
+        else:
+            if not has_driver_name:
+                return {"error": "Driver not found"}
+            where_clause = "driver_name = ?"
+            params = [laps_file, driver_id]
+
+        name_expr = "CAST(driver_name AS VARCHAR)" if has_driver_name else "CAST(driver_number AS VARCHAR)"
+        team_expr = "CAST(team_name AS VARCHAR)" if has_team_name else "NULL"
+
+        result = _fetchone(
+            f"""
+            SELECT DISTINCT
+                {name_expr} AS driver_name,
+                CAST(driver_number AS INTEGER) AS driver_number,
+                {team_expr} AS team_name
             FROM read_parquet(?)
             WHERE {where_clause}
             LIMIT 1
-        """.replace("{where_clause}", where_clause), [laps_file, param]).fetchone()
+            """,
+            params,
+        )
         
         if result:
             return {
-                "driver": result[0], 
+                "driver": result[0] if result[0] else str(result[1]),
                 "driver_number": result[1],
                 "team": result[2]
             }

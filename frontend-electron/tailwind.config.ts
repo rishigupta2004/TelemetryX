@@ -16,6 +16,12 @@ export default {
         accent: 'var(--accent)',
         'accent-blue': 'var(--accent-blue)',
         border: 'var(--border)'
+      },
+      fontFamily: {
+        mono: ['"SF Mono"', '"JetBrains Mono"', '"Fira Code"', 'Menlo', 'Consolas', 'monospace']
+      },
+      boxShadow: {
+        'glass-inset': 'var(--glass-inset)'
       }
     }
   },

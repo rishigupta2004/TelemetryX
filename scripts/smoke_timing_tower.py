@@ -129,6 +129,20 @@ def analyze_log(log_path: Path, args: argparse.Namespace) -> Dict[str, Any]:
     checks: List[Dict[str, Any]] = []
     checks.append(
         _check(
+            "tower_tick_count_min",
+            total_ticks >= int(args.min_tower_ticks),
+            f"{total_ticks} >= {int(args.min_tower_ticks)}",
+        )
+    )
+    checks.append(
+        _check(
+            "pos_sample_count_min",
+            len(pos_samples) >= int(args.min_pos_samples),
+            f"{len(pos_samples)} >= {int(args.min_pos_samples)}",
+        )
+    )
+    checks.append(
+        _check(
             "tower_ticks_present",
             total_ticks > 0,
             f"{total_ticks} > 0",
@@ -273,6 +287,8 @@ def analyze_log(log_path: Path, args: argparse.Namespace) -> Dict[str, Any]:
         "checks": checks,
         "metrics": metrics,
         "thresholds": {
+            "min_tower_ticks": int(args.min_tower_ticks),
+            "min_pos_samples": int(args.min_pos_samples),
             "min_non_empty_pct": float(args.min_non_empty_pct),
             "max_fallback_gap_pct": float(args.max_fallback_gap_pct),
             "max_fallback_interval_pct": float(args.max_fallback_interval_pct),
@@ -319,6 +335,8 @@ def _print_human_summary(summary: Dict[str, Any]) -> None:
 
 def main() -> int:
     p = argparse.ArgumentParser(description="Analyze Timing Tower smoke logs and apply pass/fail gates.")
+    p.add_argument("--min-tower-ticks", type=int, default=100, help="Minimum tower_tick events required for stability confidence.")
+    p.add_argument("--min-pos-samples", type=int, default=100, help="Minimum pos_sample events required for mapping stability confidence.")
     p.add_argument("log_file", type=Path)
     p.add_argument("--min-non-empty-pct", type=float, default=99.0)
     p.add_argument("--max-fallback-gap-pct", type=float, default=10.0)

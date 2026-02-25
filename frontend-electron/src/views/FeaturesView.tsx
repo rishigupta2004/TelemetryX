@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { DriverSummary } from '../components/DriverSummary'
+import { RacePaceLiteChart, SeasonStandingsLiteChart, StandingsHeatmapLiteChart } from '../components/FeaturesLiteCharts'
 import { FiaAlertsStrip } from '../components/FiaAlertsStrip'
 import { PitStrategy } from '../components/PitStrategy'
 import { TrackMap } from '../components/TrackMap'
@@ -10,6 +11,8 @@ import { useSessionStore } from '../stores/sessionStore'
 import { FiaDocumentsView } from './FiaDocumentsView'
 import type {
   ClusteringResponse,
+  CircuitInsightsResponse,
+  Driver,
   LapRow,
   PointsFeatureRow,
   Race,
@@ -36,7 +39,7 @@ function strategyCandidates(seasonYears: number[], selectedYear: number): number
   if (fromStore.length > 0) return fromStore
 
   const fallback: number[] = []
-  for (let year = selectedYear - 1; year >= 2018; year -= 1) fallback.push(year)
+  for (let year = selectedYear - 1; year >= Math.max(2020, selectedYear - 2); year -= 1) fallback.push(year)
   return fallback
 }
 
@@ -88,6 +91,7 @@ type HoverTip = {
   y: number
   title: string
   detail?: string
+  color?: string
 }
 
 type SeasonStandingsDriver = {
@@ -101,6 +105,12 @@ type SeasonStandingsDriver = {
 type SeasonStandingsPayload = {
   raceNames: string[]
   drivers: SeasonStandingsDriver[]
+}
+
+type TyreStintRow = {
+  code: string
+  teamColor: string
+  stints: Array<{ startLap: number; endLap: number; laps: number; compound: string }>
 }
 
 type FeaturePanelId =
@@ -127,6 +137,7 @@ const FEATURE_PANELS: Array<{ id: FeaturePanelId; label: string; hint: string }>
 ]
 
 const FEATURE_PANEL_IDS = new Set<FeaturePanelId>(FEATURE_PANELS.map((panel) => panel.id))
+const OVERVIEW_SPOTLIGHT = FEATURE_PANELS.filter((panel) => panel.id !== 'overview')
 
 function loadSavedPanel(key: string): FeaturePanelId | null {
   try {
@@ -162,6 +173,72 @@ function colorFromString(input: string): string {
   for (let i = 0; i < input.length; i += 1) hash = (hash * 31 + input.charCodeAt(i)) | 0
   const hue = Math.abs(hash) % 360
   return `hsl(${hue}, 75%, 58%)`
+}
+
+function tyreColor(compound: string): string {
+  const c = String(compound || '').toUpperCase()
+  if (c.includes('SOFT')) return '#ef4444'
+  if (c.includes('MEDIUM')) return '#facc15'
+  if (c.includes('HARD')) return '#f5f5f5'
+  if (c.includes('INTER')) return '#22c55e'
+  if (c.includes('WET')) return '#3b82f6'
+  return '#9ca3af'
+}
+
+function buildTyreTimeline(
+  laps: LapRow[],
+  drivers: Array<{ code: string; driverNumber: number; teamColor: string }>
+): TyreStintRow[] {
+  if (!laps.length || !drivers.length) return []
+  const byDriver = new Map<number, LapRow[]>()
+  for (const lap of laps) {
+    const rows = byDriver.get(lap.driverNumber) ?? []
+    rows.push(lap)
+    byDriver.set(lap.driverNumber, rows)
+  }
+
+  const out: TyreStintRow[] = []
+  for (const driver of drivers) {
+    const rows = (byDriver.get(driver.driverNumber) ?? [])
+      .filter((row) => Number.isFinite(row.lapNumber) && row.lapNumber > 0)
+      .sort((a, b) => a.lapNumber - b.lapNumber)
+    if (!rows.length) continue
+
+    const stints: TyreStintRow['stints'] = []
+    let startLap = rows[0].lapNumber
+    let prevLap = rows[0].lapNumber
+    let compound = String(rows[0].tyreCompound || 'UNKNOWN')
+
+    for (let i = 1; i < rows.length; i += 1) {
+      const lap = rows[i]
+      const lapNo = lap.lapNumber
+      const comp = String(lap.tyreCompound || 'UNKNOWN')
+      const contiguous = lapNo === prevLap + 1
+      if (!contiguous || comp !== compound) {
+        stints.push({
+          startLap,
+          endLap: prevLap,
+          laps: prevLap - startLap + 1,
+          compound,
+        })
+        startLap = lapNo
+        compound = comp
+      }
+      prevLap = lapNo
+    }
+
+    stints.push({
+      startLap,
+      endLap: prevLap,
+      laps: prevLap - startLap + 1,
+      compound,
+    })
+
+    out.push({ code: driver.code, teamColor: driver.teamColor || '#8aa7d1', stints })
+  }
+
+  out.sort((a, b) => a.code.localeCompare(b.code))
+  return out
 }
 
 function buildPaceSeries(sessionData: ReturnType<typeof useSessionStore.getState>['sessionData']): PaceSeries[] {
@@ -237,7 +314,7 @@ function toPath(
   return `M ${points.join(' L ')}`
 }
 
-export const FeaturesView = React.memo(function FeaturesView() {
+export const FeaturesView = React.memo(function FeaturesView({ active }: { active: boolean }) {
   const selectedYear = useSessionStore((s) => s.selectedYear)
   const selectedRace = useSessionStore((s) => s.selectedRace)
   const selectedSession = useSessionStore((s) => s.selectedSession)
@@ -256,12 +333,16 @@ export const FeaturesView = React.memo(function FeaturesView() {
   const [clusterLoading, setClusterLoading] = useState(false)
   const [clusterError, setClusterError] = useState<string | null>(null)
   const [activePanel, setActivePanel] = useState<FeaturePanelId>('overview')
+  const [tabsCollapsed, setTabsCollapsed] = useState(() => {
+    try { return window.localStorage.getItem('telemetryx_features_tabs_collapsed') === 'true' } catch { return false }
+  })
   const [lapScatterHover, setLapScatterHover] = useState<HoverTip | null>(null)
   const [positionHover, setPositionHover] = useState<HoverTip | null>(null)
-  const [standingsHover, setStandingsHover] = useState<HoverTip | null>(null)
+  const [strategyHover, setStrategyHover] = useState<HoverTip | null>(null)
   const [seasonStandings, setSeasonStandings] = useState<SeasonStandingsPayload | null>(null)
   const [seasonStandingsLoading, setSeasonStandingsLoading] = useState(false)
   const [seasonStandingsError, setSeasonStandingsError] = useState<string | null>(null)
+  const [circuitInsights, setCircuitInsights] = useState<CircuitInsightsResponse | null>(null)
   const [publishReadiness, setPublishReadiness] = useState<Record<string, boolean | null>>({
     api: null,
     clustering: null,
@@ -270,6 +351,11 @@ export const FeaturesView = React.memo(function FeaturesView() {
   })
   const [publishReadinessTs, setPublishReadinessTs] = useState<number | null>(null)
   const standingsCacheRef = useRef<Map<string, SeasonStandingsPayload>>(new Map())
+  const readinessCacheRef = useRef<Map<string, Record<string, boolean | null>>>(new Map())
+  const strategyCacheRef = useRef<
+    Map<string, { data: StrategyRecommendationsResponse | null; sourceYear: number | null; error: string | null }>
+  >(new Map())
+  const clusteringCacheRef = useRef<ClusteringResponse | null>(null)
 
   const panelStorageKey = useMemo(
     () => `telemetryx.features.panel.${selectedYear || 'na'}.${selectedRace || 'na'}.${selectedSession || 'na'}`,
@@ -295,32 +381,42 @@ export const FeaturesView = React.memo(function FeaturesView() {
   }, [seasons, selectedYear])
 
   useEffect(() => {
-    let cancelled = false
-    const run = async () => {
-      const checks = await Promise.allSettled([
-        api.getHealth(),
-        api.getClustering(false),
-        api.getUndercutSummary(),
-        selectedYear && selectedRace
-          ? api.getStrategyRecommendationsWithFallback(selectedYear, selectedRace, fallbackYears)
-          : Promise.reject(new Error('Missing session context'))
-      ])
-      if (cancelled) return
-      setPublishReadiness({
-        api: checks[0].status === 'fulfilled',
-        clustering: checks[1].status === 'fulfilled',
-        undercut: checks[2].status === 'fulfilled',
-        strategy: checks[3].status === 'fulfilled'
-      })
+    const readinessKey = `${selectedYear || 'na'}|${selectedRace || 'na'}`
+    const cached = readinessCacheRef.current.get(readinessKey)
+    if (cached) {
+      setPublishReadiness(cached)
       setPublishReadinessTs(Date.now())
+      return
     }
-    void run()
+    let cancelled = false
+    const timer = window.setTimeout(() => {
+      const run = async () => {
+        const checks = await Promise.allSettled([
+          api.getHealth(),
+          api.getClustering(false),
+          api.getUndercutSummary()
+        ])
+        if (cancelled) return
+        const next = {
+          api: checks[0].status === 'fulfilled',
+          clustering: checks[1].status === 'fulfilled',
+          undercut: checks[2].status === 'fulfilled',
+          strategy: null
+        }
+        readinessCacheRef.current.set(readinessKey, next)
+        setPublishReadiness(next)
+        setPublishReadinessTs(Date.now())
+      }
+      void run()
+    }, 60)
     return () => {
       cancelled = true
+      window.clearTimeout(timer)
     }
   }, [selectedYear, selectedRace, fallbackYears])
 
   useEffect(() => {
+    if (!active) return
     if (!selectedYear || !selectedRace) {
       setStrategyData(null)
       setStrategySourceYear(null)
@@ -329,6 +425,15 @@ export const FeaturesView = React.memo(function FeaturesView() {
     }
 
     let cancelled = false
+    const strategyKey = `${selectedYear}|${selectedRace}|${fallbackYears.join(',')}`
+    const cached = strategyCacheRef.current.get(strategyKey)
+    if (cached) {
+      setStrategyData(cached.data)
+      setStrategySourceYear(cached.sourceYear)
+      setStrategyLoading(false)
+      setStrategyError(cached.error)
+      return
+    }
     setStrategyLoading(true)
     setStrategyError(null)
     setStrategyData(null)
@@ -338,14 +443,17 @@ export const FeaturesView = React.memo(function FeaturesView() {
       .getStrategyRecommendationsWithFallback(selectedYear, selectedRace, fallbackYears)
       .then(({ data, sourceYear }) => {
         if (cancelled) return
+        strategyCacheRef.current.set(strategyKey, { data, sourceYear, error: null })
         setStrategyData(data)
         setStrategySourceYear(sourceYear)
       })
       .catch((err) => {
         if (cancelled) return
+        const message = String(err)
         setStrategyData(null)
         setStrategySourceYear(null)
-        setStrategyError(String(err))
+        setStrategyError(message)
+        strategyCacheRef.current.set(strategyKey, { data: null, sourceYear: null, error: message })
       })
       .finally(() => {
         if (!cancelled) setStrategyLoading(false)
@@ -354,7 +462,7 @@ export const FeaturesView = React.memo(function FeaturesView() {
     return () => {
       cancelled = true
     }
-  }, [selectedYear, selectedRace, fallbackYears])
+  }, [active, selectedYear, selectedRace, fallbackYears])
 
   useEffect(() => {
     if (!selectedYear || !selectedRace || !selectedSession) {
@@ -365,6 +473,12 @@ export const FeaturesView = React.memo(function FeaturesView() {
     }
 
     let cancelled = false
+    if (clusteringCacheRef.current) {
+      setClusterData(clusteringCacheRef.current)
+      setClusterLoading(false)
+      setClusterError(null)
+      return
+    }
     setClusterLoading(true)
     setClusterError(null)
     setClusterData(null)
@@ -372,7 +486,10 @@ export const FeaturesView = React.memo(function FeaturesView() {
     api
       .getClustering(true)
       .then((payload) => {
-        if (!cancelled) setClusterData(payload)
+        if (!cancelled) {
+          clusteringCacheRef.current = payload
+          setClusterData(payload)
+        }
       })
       .catch((err) => {
         if (!cancelled) {
@@ -509,7 +626,7 @@ export const FeaturesView = React.memo(function FeaturesView() {
   }, [clusterData, sessionDriverSet])
 
   const driverByCode = useMemo(() => {
-    const map = new Map<string, (typeof sessionData.drivers)[number]>()
+    const map = new Map<string, Driver>()
     for (const driver of sessionData?.drivers ?? []) map.set(driver.code, driver)
     return map
   }, [sessionData?.drivers])
@@ -767,6 +884,22 @@ export const FeaturesView = React.memo(function FeaturesView() {
     }
   }, [activePanel, selectedYear, orderedRaces, driverByCode])
 
+  useEffect(() => {
+    if (activePanel !== 'race-pace' || !selectedYear || !selectedRace) return
+    let cancelled = false
+    api
+      .getCircuitInsights(selectedYear, selectedRace)
+      .then((payload) => {
+        if (!cancelled) setCircuitInsights(payload)
+      })
+      .catch(() => {
+        if (!cancelled) setCircuitInsights(null)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [activePanel, selectedYear, selectedRace])
+
   const topSeasonStandings = useMemo(() => seasonStandings?.drivers.slice(0, 10) ?? [], [seasonStandings])
 
   const standingsMaxPoints = useMemo(() => {
@@ -774,94 +907,161 @@ export const FeaturesView = React.memo(function FeaturesView() {
     return Math.max(1, ...topSeasonStandings.map((driver) => driver.totalPoints))
   }, [topSeasonStandings])
 
-  const standingsHeatMax = useMemo(() => {
-    if (!topSeasonStandings.length) return 1
-    return Math.max(
-      1,
-      ...topSeasonStandings.flatMap((driver) => driver.byRace.map((points) => Number(points) || 0))
-    )
-  }, [topSeasonStandings])
+  const tyreTimelineRows = useMemo(
+    () =>
+      buildTyreTimeline(
+        sessionData?.laps ?? [],
+        (sessionData?.drivers ?? []).map((driver) => ({
+          code: driver.code,
+          driverNumber: driver.driverNumber,
+          teamColor: driver.teamColor,
+        }))
+      ),
+    [sessionData?.laps, sessionData?.drivers]
+  )
+
+  const tyreTimelineMaxLap = useMemo(() => {
+    let maxLap = 1
+    for (const row of tyreTimelineRows) {
+      for (const stint of row.stints) {
+        maxLap = Math.max(maxLap, stint.endLap)
+      }
+    }
+    return maxLap
+  }, [tyreTimelineRows])
 
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <div className="border-b border-border/80 px-3 pb-3 pt-2.5">
-        <div className="flex flex-wrap items-end justify-between gap-2">
-          <div>
-            <div className="text-xs uppercase tracking-[0.18em] text-text-secondary">Features + ML Workspace</div>
-            <div className="text-[11px] text-text-muted">
-              Single-screen analytics cockpit with dedicated feature tabs and unrestricted vertical scroll
-            </div>
-          </div>
-          <div className="rounded border border-border bg-bg-secondary px-2 py-1 text-[10px] font-mono text-text-muted">
-            {selectedYear || '-'} | {selectedRace || '-'} | {selectedSession || '-'}
-          </div>
+      <div className="glass-panel flex flex-shrink-0 items-center gap-2 px-3 py-2">
+        <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-text-secondary">
+          Features + ML
         </div>
-
-        <div className="mt-2 flex gap-2 overflow-x-auto pb-1">
-          {FEATURE_PANELS.map((panel) => {
-            const active = activePanel === panel.id
-            return (
-              <button
-                key={panel.id}
-                type="button"
-                onClick={() => setActivePanel(panel.id)}
-                className={`flex min-w-[170px] flex-col rounded-md border px-2.5 py-1.5 text-left transition ${
-                  active
-                    ? 'border-accent-blue/80 bg-accent-blue/15 text-text-primary'
-                    : 'border-border bg-bg-secondary text-text-secondary hover:border-accent-blue/50 hover:text-text-primary'
-                }`}
-              >
-                <span className="text-[11px] font-semibold">{panel.label}</span>
-                <span className="text-[10px] opacity-80">{panel.hint}</span>
-              </button>
-            )
-          })}
-        </div>
-
-        <div className="mt-2 flex flex-wrap items-center gap-2 text-[10px]">
-          <span className="text-text-muted">Publish readiness</span>
-          {Object.entries(publishReadiness).map(([key, ok]) => (
-            <span
-              key={key}
-              className={`rounded border px-1.5 py-0.5 font-mono uppercase ${
-                ok == null
-                  ? 'border-border bg-bg-secondary text-text-muted'
-                  : ok
-                    ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-300'
-                    : 'border-red-500/40 bg-red-500/10 text-red-300'
-              }`}
-            >
-              {key}:{ok == null ? '...' : ok ? 'ok' : 'fail'}
+        {tabsCollapsed ? (
+          <div className="flex min-w-0 flex-1 items-center gap-2">
+            <span className="text-[11px] font-semibold text-text-primary">
+              {FEATURE_PANELS.find((p) => p.id === activePanel)?.label ?? 'Overview'}
             </span>
-          ))}
-          {publishReadinessTs && (
-            <span className="text-text-muted">
-              updated {new Date(publishReadinessTs).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-            </span>
-          )}
+          </div>
+        ) : (
+          <div
+            className="flex min-w-0 flex-1 items-center gap-1.5 overflow-x-auto"
+            style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}
+          >
+            {FEATURE_PANELS.map((panel) => {
+              const active = activePanel === panel.id
+              return (
+                <button
+                  key={panel.id}
+                  type="button"
+                  onClick={() => setActivePanel(panel.id)}
+                  title={panel.hint}
+                  className={`flex-shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition-all duration-150 ${active
+                    ? 'text-text-primary'
+                    : 'text-text-muted hover:text-text-secondary'
+                    }`}
+                  style={
+                    active
+                      ? {
+                        background: 'rgba(255,255,255,0.16)',
+                        border: '1px solid rgba(255,255,255,0.24)',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.28)',
+                      }
+                      : {
+                        background: 'transparent',
+                        border: '1px solid transparent',
+                      }
+                  }
+                >
+                  {panel.label}
+                </button>
+              )
+            })}
+          </div>
+        )}
+        <button
+          type="button"
+          onClick={() => {
+            const next = !tabsCollapsed
+            setTabsCollapsed(next)
+            try { window.localStorage.setItem('telemetryx_features_tabs_collapsed', String(next)) } catch { }
+          }}
+          className="rounded border border-border bg-bg-secondary px-2 py-0.5 text-[10px] text-text-muted hover:text-text-primary transition-colors"
+          title={tabsCollapsed ? 'Expand tab bar' : 'Collapse tab bar'}
+        >
+          {tabsCollapsed ? '▼' : '▲'}
+        </button>
+        <div className="rounded-full border border-border bg-bg-secondary px-2 py-0.5 text-[10px] font-mono text-text-muted">
+          {selectedYear || '-'} · {selectedRace || '-'} · {selectedSession || '-'}
         </div>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto p-3">
-        <div className="mx-auto w-full max-w-[1680px] space-y-4">
-          <div className="sticky top-2 z-20">
-            <FiaAlertsStrip />
-          </div>
+      <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
+        <div className="mx-auto w-full max-w-[1600px] space-y-5">
 
-          <section className="rounded-md border border-border bg-bg-card p-3">
-            <div className="mb-2 text-xs uppercase tracking-[0.18em] text-text-secondary">FastF1 Parity Coverage</div>
-            <div className="grid grid-cols-1 gap-2 text-[11px] md:grid-cols-2 xl:grid-cols-3">
-              <div className="rounded border border-border bg-bg-secondary px-2 py-1.5 text-text-primary">Track map + corner/sector styling</div>
-              <div className="rounded border border-border bg-bg-secondary px-2 py-1.5 text-text-primary">Driver laptimes scatter + distribution (hover)</div>
-              <div className="rounded border border-border bg-bg-secondary px-2 py-1.5 text-text-primary">Position changes + team pace comparison</div>
-              <div className="rounded border border-border bg-bg-secondary px-2 py-1.5 text-text-primary">Tyre strategy + qualifying overview</div>
-              <div className="rounded border border-border bg-bg-secondary px-2 py-1.5 text-text-primary">Season standings progression + heatmap</div>
-              <div className="rounded border border-border bg-bg-secondary px-2 py-1.5 text-text-primary">Telemetry overlays (speed/throttle/brake/gear/DRS)</div>
-            </div>
-          </section>
+          {activePanel === 'overview' && (
+            <section className="space-y-4 glass-panel p-4">
+              <div>
+                <div className="text-xs uppercase tracking-[0.18em] text-text-secondary">Session Overview</div>
+                <div className="text-[11px] text-text-muted">
+                  {selectedYear || '-'} {selectedRace || '-'} — {selectedSession || '-'}
+                  {sessionData?.drivers?.length ? ` · ${sessionData.drivers.length} drivers` : ''}
+                  {sessionData?.laps?.length ? ` · ${sessionData.laps.length} lap rows` : ''}
+                </div>
+              </div>
 
-          {(activePanel === 'overview' || activePanel === 'race-pace') && (
-            <section className="rounded-md border border-border bg-bg-card p-3">
+              {/* API Readiness */}
+              <div className="grid grid-cols-2 gap-2 text-[11px] md:grid-cols-4">
+                {Object.entries(publishReadiness).map(([key, status]) => (
+                  <div key={key} className="flex items-center gap-2 rounded border border-border bg-bg-secondary px-2.5 py-2">
+                    <span className={`inline-block h-2 w-2 rounded-full ${status === true ? 'bg-green-400' : status === false ? 'bg-red-400' : 'bg-text-muted animate-pulse'
+                      }`} />
+                    <span className="text-text-primary uppercase font-mono">{key}</span>
+                    <span className="text-text-muted ml-auto">{status === true ? 'Ready' : status === false ? 'Down' : 'Checking…'}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Track metadata */}
+              {trackOverview && (
+                <div className="grid grid-cols-2 gap-2 text-[11px] md:grid-cols-4">
+                  <div className="rounded border border-border bg-bg-secondary px-2.5 py-2">
+                    <div className="text-[10px] uppercase text-text-muted">Track</div>
+                    <div className="font-mono text-text-primary">{trackOverview.name}</div>
+                  </div>
+                  <div className="rounded border border-border bg-bg-secondary px-2.5 py-2">
+                    <div className="text-[10px] uppercase text-text-muted">Corners</div>
+                    <div className="font-mono text-text-primary">{trackOverview.corners || '-'}</div>
+                  </div>
+                  <div className="rounded border border-border bg-bg-secondary px-2.5 py-2">
+                    <div className="text-[10px] uppercase text-text-muted">DRS Zones</div>
+                    <div className="font-mono text-text-primary">{trackOverview.drsZones || '-'}</div>
+                  </div>
+                  <div className="rounded border border-border bg-bg-secondary px-2.5 py-2">
+                    <div className="text-[10px] uppercase text-text-muted">Sectors</div>
+                    <div className="font-mono text-text-primary">{trackOverview.sectors || '-'}</div>
+                  </div>
+                </div>
+              )}
+
+              {/* Feature panels as interactive cards */}
+              <div className="grid grid-cols-1 gap-2 text-[11px] md:grid-cols-2 xl:grid-cols-3">
+                {OVERVIEW_SPOTLIGHT.map((panel) => (
+                  <button
+                    key={panel.id}
+                    type="button"
+                    onClick={() => setActivePanel(panel.id)}
+                    className="group rounded-lg border border-white/10 bg-black/25 px-3 py-2.5 text-left transition-all hover:border-white/25 hover:bg-black/35"
+                  >
+                    <div className="font-semibold text-text-primary group-hover:text-white transition-colors">{panel.label}</div>
+                    <div className="mt-0.5 text-[10px] text-text-muted">{panel.hint}</div>
+                  </button>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {activePanel === 'race-pace' && (
+            <section className="glass-panel p-4">
               <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
                 <div>
                   <div className="text-xs uppercase tracking-[0.18em] text-text-secondary">Track Intelligence Map</div>
@@ -874,8 +1074,8 @@ export const FeaturesView = React.memo(function FeaturesView() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-3 2xl:grid-cols-[1.25fr_0.75fr]">
-                <div className="h-[500px] min-h-[420px] rounded border border-border bg-black">
+              <div className="flex flex-col gap-3">
+                <div className="h-[560px] min-h-[460px] rounded border border-border bg-[#0b0e12]">
                   <TrackMap />
                 </div>
                 <div className="space-y-2">
@@ -915,13 +1115,29 @@ export const FeaturesView = React.memo(function FeaturesView() {
                       <span className="font-mono text-text-primary">{compareDriver || '-'}</span>
                     </div>
                   </div>
+
+                  {circuitInsights && (
+                    <div className="rounded border border-border bg-bg-secondary p-2 text-xs">
+                      <div className="mb-1 text-[10px] uppercase text-text-muted">Circuit Facts</div>
+                      <div className="grid grid-cols-2 gap-1 text-[11px]">
+                        <span className="text-text-muted">Length</span>
+                        <span className="font-mono text-text-primary">{circuitInsights.facts['Circuit Length'] || '-'}</span>
+                        <span className="text-text-muted">Race Distance</span>
+                        <span className="font-mono text-text-primary">{circuitInsights.facts['Race Distance'] || '-'}</span>
+                        <span className="text-text-muted">Laps</span>
+                        <span className="font-mono text-text-primary">{circuitInsights.facts['Number of Laps'] || '-'}</span>
+                        <span className="text-text-muted">First GP</span>
+                        <span className="font-mono text-text-primary">{circuitInsights.facts['First Grand Prix'] || '-'}</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </section>
           )}
 
-          {(activePanel === 'overview' || activePanel === 'race-pace') && (
-            <section className="rounded-md border border-border bg-bg-card p-3">
+          {activePanel === 'race-pace' && (
+            <section className="glass-panel p-4">
               <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
                 <div>
                   <div className="text-xs uppercase tracking-[0.18em] text-text-secondary">Race Pace Explorer</div>
@@ -947,73 +1163,51 @@ export const FeaturesView = React.memo(function FeaturesView() {
                   No lap-time race pace data available for this session
                 </div>
               ) : (
-                <div className="grid grid-cols-1 gap-3 2xl:grid-cols-[1.15fr_0.85fr]">
-                  <div className="rounded border border-border bg-[#0a1122] p-2.5">
-                    <svg viewBox="0 0 1000 360" className="h-[360px] w-full">
-                      {[0, 1, 2, 3, 4].map((idx) => {
-                        const y = 24 + idx * 78
-                        return <line key={`grid-y-${idx}`} x1={42} y1={y} x2={968} y2={y} stroke="rgba(132,160,200,0.22)" strokeDasharray="4 6" />
-                      })}
-                      {[0, 1, 2, 3, 4, 5].map((idx) => {
-                        const x = 42 + idx * 185
-                        return <line key={`grid-x-${idx}`} x1={x} y1={24} x2={x} y2={336} stroke="rgba(132,160,200,0.16)" strokeDasharray="3 7" />
-                      })}
-
-                      {visibleRacePaceSeries.map((item) => {
-                        const path = toPath(item.laps, item.smoothed, paceBounds.xMin, paceBounds.xMax, paceBounds.yMin, paceBounds.yMax, 926, 312)
-                        const highlighted = item.code === primaryDriver || item.code === compareDriver
-                        return (
-                          <path
-                            key={item.code}
-                            d={path.replace(/(\d+\.?\d*),(\d+\.?\d*)/g, (_m, x, y) => `${Number(x) + 42},${Number(y) + 24}`)}
-                            fill="none"
-                            stroke={item.color}
-                            strokeWidth={highlighted ? 3.1 : 1.8}
-                            opacity={highlighted ? 1 : 0.78}
-                          />
-                        )
-                      })}
-
-                      <text x={44} y={18} fill="#9ab4d9" fontSize="10">Lap Time (s)</text>
-                      <text x={902} y={352} fill="#9ab4d9" fontSize="10">Lap</text>
-                    </svg>
+                <div className="flex flex-col gap-3">
+                  <div className="rounded border border-border bg-bg-card p-2.5">
+                    <RacePaceLiteChart
+                      series={visibleRacePaceSeries.map((item) => ({
+                        code: item.code,
+                        color: item.color,
+                        laps: item.laps,
+                        smoothed: item.smoothed,
+                      }))}
+                    />
                   </div>
 
-                  <div className="space-y-2">
-                    <div className="grid grid-cols-2 gap-2 text-xs">
-                      <div className="rounded border border-border bg-bg-secondary p-2">
-                        <div className="text-[10px] uppercase text-text-muted">Best Race Pace</div>
-                        <div className="font-mono text-sm text-text-primary">{paceHighlights.bestMedian?.code || '-'}</div>
-                        <div className="text-[11px] text-text-muted">median {paceHighlights.bestMedian?.median?.toFixed(3) ?? '-'}s</div>
-                      </div>
-                      <div className="rounded border border-border bg-bg-secondary p-2">
-                        <div className="text-[10px] uppercase text-text-muted">Highest Degradation</div>
-                        <div className="font-mono text-sm text-text-primary">{paceHighlights.mostDeg?.code || '-'}</div>
-                        <div className="text-[11px] text-text-muted">slope {formatSigned(paceHighlights.mostDeg?.slope, 3)} s/lap</div>
-                      </div>
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div className="rounded border border-border bg-bg-secondary p-2">
+                      <div className="text-[10px] uppercase text-text-muted">Best Race Pace</div>
+                      <div className="font-mono text-sm text-text-primary">{paceHighlights.bestMedian?.code || '-'}</div>
+                      <div className="text-[11px] text-text-muted">median {paceHighlights.bestMedian?.median?.toFixed(3) ?? '-'}s</div>
                     </div>
+                    <div className="rounded border border-border bg-bg-secondary p-2">
+                      <div className="text-[10px] uppercase text-text-muted">Highest Degradation</div>
+                      <div className="font-mono text-sm text-text-primary">{paceHighlights.mostDeg?.code || '-'}</div>
+                      <div className="text-[11px] text-text-muted">slope {formatSigned(paceHighlights.mostDeg?.slope, 3)} s/lap</div>
+                    </div>
+                  </div>
 
-                    <div className="space-y-1 overflow-y-auto rounded border border-border bg-bg-secondary p-2 text-xs">
-                      {visibleRacePaceSeries.map((item) => {
-                        const highlighted = item.code === primaryDriver || item.code === compareDriver
-                        return (
-                          <div key={item.code} className={`rounded px-2 py-1 ${highlighted ? 'bg-bg-card' : ''}`}>
-                            <div className="mb-0.5 flex items-center justify-between">
-                              <div className="flex items-center gap-2">
-                                <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: item.color }} />
-                                <span className="font-mono text-text-primary">{item.code}</span>
-                              </div>
-                              <span className="font-mono text-[10px] text-text-muted">P{item.latestPosition}</span>
+                  <div className="space-y-1 overflow-y-auto rounded border border-border bg-bg-secondary p-2 text-xs">
+                    {visibleRacePaceSeries.map((item) => {
+                      const highlighted = item.code === primaryDriver || item.code === compareDriver
+                      return (
+                        <div key={item.code} className={`rounded px-2 py-1 ${highlighted ? 'bg-bg-card' : ''}`}>
+                          <div className="mb-0.5 flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: item.color }} />
+                              <span className="font-mono text-text-primary">{item.code}</span>
                             </div>
-                            <div className="grid grid-cols-3 gap-1 text-[10px] text-text-muted">
-                              <span>Median {item.median.toFixed(3)}s</span>
-                              <span>Trend {formatSigned(item.slope, 3)}</span>
-                              <span>Laps {item.laps.length}</span>
-                            </div>
+                            <span className="font-mono text-[10px] text-text-muted">P{item.latestPosition}</span>
                           </div>
-                        )
-                      })}
-                    </div>
+                          <div className="grid grid-cols-3 gap-1 text-[10px] text-text-muted">
+                            <span>Median {item.median.toFixed(3)}s</span>
+                            <span>Trend {formatSigned(item.slope, 3)}</span>
+                            <span>Laps {item.laps.length}</span>
+                          </div>
+                        </div>
+                      )
+                    })}
                   </div>
                 </div>
               )}
@@ -1021,7 +1215,7 @@ export const FeaturesView = React.memo(function FeaturesView() {
           )}
 
           {activePanel === 'lap-results' && (
-            <section className="space-y-3 rounded-md border border-border bg-bg-card p-3">
+            <section className="space-y-3 glass-panel p-4">
               <div>
                 <div className="text-xs uppercase tracking-[0.18em] text-text-secondary">Lap + Results Analytics</div>
                 <div className="text-[11px] text-text-muted">
@@ -1030,7 +1224,7 @@ export const FeaturesView = React.memo(function FeaturesView() {
               </div>
 
               <div className="grid grid-cols-1 gap-3 2xl:grid-cols-[1.2fr_0.8fr]">
-                <div className="rounded border border-border bg-[#0a1122] p-2.5">
+                <div className="rounded border border-border bg-bg-card p-2.5">
                   <div className="mb-1 text-[10px] uppercase tracking-[0.14em] text-text-secondary">Driver Laptimes Scatterplot</div>
                   <svg viewBox="0 0 1000 340" className="h-[340px] w-full">
                     {lapScatterSeries.flatMap((series) =>
@@ -1053,13 +1247,20 @@ export const FeaturesView = React.memo(function FeaturesView() {
                                 x,
                                 y,
                                 title: `${series.code} L${lap}`,
-                                detail: `${series.times[idx].toFixed(3)}s`
+                                detail: `${series.times[idx].toFixed(3)}s`,
+                                color: series.color
                               })
                             }
                             onMouseLeave={() => setLapScatterHover(null)}
                           />
                         )
                       })
+                    )}
+                    {lapScatterHover?.color && (
+                      <>
+                        <circle cx={lapScatterHover.x} cy={lapScatterHover.y} r={6.5} fill={lapScatterHover.color || '#e2e8f0'} fillOpacity={0.25} />
+                        <circle cx={lapScatterHover.x} cy={lapScatterHover.y} r={4} fill={lapScatterHover.color || '#e2e8f0'} stroke="#f8fafc" strokeWidth={1} />
+                      </>
                     )}
 
                     <line x1={52} y1={304} x2={972} y2={304} stroke="rgba(132,160,200,0.35)" />
@@ -1117,7 +1318,7 @@ export const FeaturesView = React.memo(function FeaturesView() {
               </div>
 
               <div className="grid grid-cols-1 gap-3 2xl:grid-cols-[1.15fr_0.85fr]">
-                <div className="rounded border border-border bg-[#0a1122] p-2.5">
+                <div className="rounded border border-border bg-bg-card p-2.5">
                   <div className="mb-1 text-[10px] uppercase tracking-[0.14em] text-text-secondary">Position Changes During Race</div>
                   <svg viewBox="0 0 1000 340" className="h-[340px] w-full">
                     {positionTraces.map((trace) => {
@@ -1144,7 +1345,8 @@ export const FeaturesView = React.memo(function FeaturesView() {
                                   x: point.x,
                                   y: point.y,
                                   title: `${trace.code} | Lap ${point.lap}`,
-                                  detail: `Position P${point.position}`
+                                  detail: `Position P${point.position}`,
+                                  color: trace.color
                                 })
                               }
                               onMouseLeave={() => setPositionHover(null)}
@@ -1153,6 +1355,12 @@ export const FeaturesView = React.memo(function FeaturesView() {
                         </g>
                       )
                     })}
+                    {positionHover && (
+                      <>
+                        <circle cx={positionHover.x} cy={positionHover.y} r={6.2} fill={positionHover.color || '#e2e8f0'} fillOpacity={0.25} />
+                        <circle cx={positionHover.x} cy={positionHover.y} r={4} fill={positionHover.color || '#e2e8f0'} stroke="#f8fafc" strokeWidth={1} />
+                      </>
+                    )}
 
                     <line x1={52} y1={304} x2={972} y2={304} stroke="rgba(132,160,200,0.35)" />
                     <line x1={52} y1={24} x2={52} y2={304} stroke="rgba(132,160,200,0.35)" />
@@ -1217,11 +1425,46 @@ export const FeaturesView = React.memo(function FeaturesView() {
                   </div>
                 </div>
               </div>
+
+              <div className="rounded border border-border bg-bg-secondary p-2.5">
+                <div className="mb-2 text-[10px] uppercase tracking-[0.14em] text-text-secondary">Tyre Strategies Timeline</div>
+                {tyreTimelineRows.length === 0 ? (
+                  <div className="text-xs text-text-muted">No tyre-compound lap history available</div>
+                ) : (
+                  <div className="space-y-1.5 overflow-x-auto">
+                    {tyreTimelineRows.slice(0, 20).map((row) => (
+                      <div key={`tyre-${row.code}`} className="grid min-w-[760px] grid-cols-[42px_1fr_56px] items-center gap-2">
+                        <span className="font-mono text-[11px] text-text-primary">{row.code}</span>
+                        <div className="relative h-5 rounded border border-white/10 bg-bg-card/80">
+                          {row.stints.map((stint, idx) => {
+                            const left = ((stint.startLap - 1) / tyreTimelineMaxLap) * 100
+                            const width = (stint.laps / tyreTimelineMaxLap) * 100
+                            return (
+                              <div
+                                key={`${row.code}-${idx}`}
+                                className="absolute top-0.5 h-4 rounded-sm"
+                                style={{
+                                  left: `${left}%`,
+                                  width: `${Math.max(1.2, width)}%`,
+                                  backgroundColor: tyreColor(stint.compound),
+                                  opacity: 0.92,
+                                }}
+                                title={`${row.code} ${stint.compound} L${stint.startLap}-${stint.endLap} (${stint.laps} laps)`}
+                              />
+                            )
+                          })}
+                        </div>
+                        <span className="font-mono text-right text-[10px] text-text-muted">L{row.stints[row.stints.length - 1]?.endLap || '-'}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </section>
           )}
 
-          {(activePanel === 'overview' || activePanel === 'strategy-ml') && (
-            <section className="rounded-md border border-border bg-bg-card p-3">
+          {activePanel === 'strategy-ml' && (
+            <section className="glass-panel p-4">
               <div className="mb-2 flex items-center justify-between gap-2">
                 <div className="text-xs uppercase tracking-[0.18em] text-text-secondary">Strategy Scenario Map</div>
                 {strategySourceYear != null && selectedYear != null && strategySourceYear !== selectedYear && (
@@ -1232,12 +1475,20 @@ export const FeaturesView = React.memo(function FeaturesView() {
               </div>
 
               {strategyLoading && <div className="text-sm text-text-secondary">Loading strategy analytics...</div>}
-              {!strategyLoading && strategyError && <div className="text-xs text-red-400">{strategyError}</div>}
+              {!strategyLoading && strategyError && (
+                <div className="rounded border border-red-500/30 bg-red-500/10 p-2 text-xs text-red-300">
+                  Strategy model data unavailable for {selectedYear} {selectedRace ?? 'this race'}. Try a different session or check that model data exists.
+                </div>
+              )}
 
               {!strategyLoading && !strategyError && topStrategies.length > 0 && (
                 <div className="space-y-3">
-                  <div className="rounded border border-border bg-[#0a1122] p-2">
-                    <svg viewBox="0 0 480 260" className="h-[260px] w-full">
+                  <div className="rounded border border-border bg-bg-card p-2">
+                    <svg
+                      viewBox="0 0 480 260"
+                      className="h-[260px] w-full"
+                      onMouseLeave={() => setStrategyHover(null)}
+                    >
                       <line x1={38} y1={226} x2={460} y2={226} stroke="rgba(130,160,210,0.35)" />
                       <line x1={38} y1={20} x2={38} y2={226} stroke="rgba(130,160,210,0.35)" />
 
@@ -1251,11 +1502,41 @@ export const FeaturesView = React.memo(function FeaturesView() {
                         const color = `hsl(${Math.max(15, hue)}, 78%, 55%)`
                         return (
                           <g key={`${item.strategy}-${idx}`}>
-                            <circle cx={x} cy={y} r={r} fill={color} fillOpacity={0.55} stroke={color} strokeWidth={1.2} />
+                            <circle
+                              cx={x}
+                              cy={y}
+                              r={r}
+                              fill={color}
+                              fillOpacity={0.55}
+                              stroke={color}
+                              strokeWidth={1.2}
+                              onMouseEnter={() =>
+                                setStrategyHover({
+                                  x,
+                                  y,
+                                  title: item.strategy,
+                                  detail: `Pts ${item.avg_points.toFixed(2)} | Finish ${item.avg_finish_position.toFixed(2)} | Stops ${item.avg_pit_stops.toFixed(1)}`,
+                                  color
+                                })
+                              }
+                            />
                             <text x={x + 8} y={y - 8} fill="#d6e6ff" fontSize="8">{item.strategy}</text>
                           </g>
                         )
                       })}
+                      {strategyHover && (
+                        <>
+                          <circle cx={strategyHover.x} cy={strategyHover.y} r={12} fill={strategyHover.color || '#9ab4d9'} fillOpacity={0.18} />
+                          <circle cx={strategyHover.x} cy={strategyHover.y} r={6} fill={strategyHover.color || '#9ab4d9'} stroke="#f8fafc" strokeWidth={1} />
+                          <g transform={`translate(${Math.min(280, strategyHover.x + 12)} ${Math.max(28, strategyHover.y - 30)})`}>
+                            <rect width={190} height={36} rx={6} fill="#0a1a35" stroke="#5e82b8" />
+                            <text x={8} y={14} fill="#e2eeff" fontSize="10" fontFamily="monospace">{strategyHover.title}</text>
+                            {strategyHover.detail && (
+                              <text x={8} y={27} fill="#b8cce9" fontSize="10" fontFamily="monospace">{strategyHover.detail}</text>
+                            )}
+                          </g>
+                        </>
+                      )}
 
                       <text x={42} y={15} fill="#9ab4d9" fontSize="9">Avg points</text>
                       <text x={365} y={244} fill="#9ab4d9" fontSize="9">Better finish →</text>
@@ -1282,8 +1563,8 @@ export const FeaturesView = React.memo(function FeaturesView() {
             </section>
           )}
 
-          {(activePanel === 'overview' || activePanel === 'clustering') && (
-            <section className="rounded-md border border-border bg-bg-card p-3">
+          {activePanel === 'clustering' && (
+            <section className="glass-panel p-4">
               <div className="mb-2 text-xs uppercase tracking-[0.18em] text-text-secondary">Cluster Intelligence</div>
               {clusterLoading && <div className="text-sm text-text-secondary">Loading clusters...</div>}
               {!clusterLoading && clusterError && <div className="text-xs text-red-400">{clusterError}</div>}
@@ -1336,7 +1617,7 @@ export const FeaturesView = React.memo(function FeaturesView() {
           )}
 
           {activePanel === 'standings' && (
-            <section className="space-y-3 rounded-md border border-border bg-bg-card p-3">
+            <section className="space-y-3 glass-panel p-4">
               <div>
                 <div className="text-xs uppercase tracking-[0.18em] text-text-secondary">Season Standings Analytics</div>
                 <div className="text-[11px] text-text-muted">
@@ -1353,121 +1634,78 @@ export const FeaturesView = React.memo(function FeaturesView() {
 
               {!seasonStandingsLoading && !seasonStandingsError && topSeasonStandings.length > 0 && (
                 <>
-                  <div className="rounded border border-border bg-[#0a1122] p-2.5">
+                  <div className="rounded border border-border bg-bg-card p-2.5">
                     <div className="mb-1 text-[10px] uppercase tracking-[0.14em] text-text-secondary">Season Summary Visualization</div>
-                    <svg viewBox="0 0 1100 340" className="h-[340px] w-full">
-                      {topSeasonStandings.map((driver) => {
-                        const racesCount = Math.max(1, seasonStandings?.raceNames.length || 1)
-                        const xStep = racesCount > 1 ? 980 / (racesCount - 1) : 0
-                        const points = driver.cumulative.map((value, idx) => {
-                          const x = 70 + idx * xStep
-                          const y = 304 - (value / standingsMaxPoints) * 260
-                          return { x, y, value, idx }
-                        })
-                        const path = points.map((point, idx) => `${idx === 0 ? 'M' : 'L'} ${point.x.toFixed(2)} ${point.y.toFixed(2)}`).join(' ')
-                        return (
-                          <g key={`stand-${driver.code}`}>
-                            <path d={path} fill="none" stroke={driver.color} strokeWidth={2.1} opacity={0.9} />
-                            {points.map((point) => (
-                              <circle
-                                key={`${driver.code}-${point.idx}`}
-                                cx={point.x}
-                                cy={point.y}
-                                r={2.6}
-                                fill={driver.color}
-                                onMouseEnter={() =>
-                                  setStandingsHover({
-                                    x: point.x,
-                                    y: point.y,
-                                    title: `${driver.code} | R${point.idx + 1}`,
-                                    detail: `${point.value.toFixed(0)} pts`
-                                  })
-                                }
-                                onMouseLeave={() => setStandingsHover(null)}
-                              />
-                            ))}
-                          </g>
-                        )
-                      })}
-                      <line x1={70} y1={304} x2={1050} y2={304} stroke="rgba(132,160,200,0.35)" />
-                      <line x1={70} y1={24} x2={70} y2={304} stroke="rgba(132,160,200,0.35)" />
-                      <text x={74} y={18} fill="#9ab4d9" fontSize="10">Cumulative Points</text>
-                      <text x={1004} y={332} fill="#9ab4d9" fontSize="10">Race Index</text>
-                      {standingsHover && (
-                        <g transform={`translate(${Math.min(930, standingsHover.x + 10)} ${Math.max(30, standingsHover.y - 28)})`}>
-                          <rect width={150} height={34} rx={6} fill="#0a1a35" stroke="#5e82b8" />
-                          <text x={8} y={14} fill="#e2eeff" fontSize="10" fontFamily="monospace">{standingsHover.title}</text>
-                          <text x={8} y={27} fill="#b8cce9" fontSize="10" fontFamily="monospace">{standingsHover.detail}</text>
-                        </g>
-                      )}
-                    </svg>
+                    <SeasonStandingsLiteChart
+                      drivers={topSeasonStandings.map((driver) => ({
+                        code: driver.code,
+                        color: driver.color,
+                        cumulative: driver.cumulative,
+                      }))}
+                      raceCount={seasonStandings?.raceNames.length || 0}
+                    />
                   </div>
 
                   <div className="rounded border border-border bg-bg-secondary p-2.5">
                     <div className="mb-2 text-[10px] uppercase tracking-[0.14em] text-text-secondary">Driver Standings Heatmap</div>
-                    <div className="overflow-x-auto">
-                      <table className="w-full min-w-[980px] border-collapse text-[10px]">
-                        <thead>
-                          <tr>
-                            <th className="border border-border px-2 py-1 text-left">DRV</th>
-                            {seasonStandings?.raceNames.map((raceName, idx) => (
-                              <th key={`rh-${raceName}-${idx}`} className="border border-border px-1.5 py-1 font-mono text-text-muted">
-                                R{idx + 1}
-                              </th>
-                            ))}
-                            <th className="border border-border px-2 py-1 font-mono text-right">Total</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {topSeasonStandings.map((driver) => (
-                            <tr key={`heat-${driver.code}`}>
-                              <td className="border border-border px-2 py-1 font-mono text-text-primary">{driver.code}</td>
-                              {driver.byRace.map((points, idx) => {
-                                const alpha = Math.max(0.08, Math.min(1, points / standingsHeatMax))
-                                return (
-                                  <td
-                                    key={`cell-${driver.code}-${idx}`}
-                                    className="border border-border px-1.5 py-1 text-center font-mono"
-                                    style={{ backgroundColor: `rgba(58,149,255,${alpha})` }}
-                                    title={`${driver.code} | ${seasonStandings?.raceNames[idx] || `R${idx + 1}`} | ${points.toFixed(0)} pts`}
-                                  >
-                                    {points > 0 ? points.toFixed(0) : '-'}
-                                  </td>
-                                )
-                              })}
-                              <td className="border border-border px-2 py-1 text-right font-mono text-text-primary">
-                                {driver.totalPoints.toFixed(0)}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
+                    <StandingsHeatmapLiteChart
+                      raceNames={seasonStandings?.raceNames || []}
+                      drivers={topSeasonStandings.map((driver) => ({
+                        code: driver.code,
+                        color: driver.color,
+                        byRace: driver.byRace,
+                        totalPoints: driver.totalPoints,
+                      }))}
+                    />
                   </div>
                 </>
               )}
             </section>
           )}
 
-          {(activePanel === 'overview' || activePanel === 'driver-intel') && (
-            <section className="grid grid-cols-1 gap-3 xl:grid-cols-2">
-              <div className="min-h-[520px]">
-                <DriverSummary />
+          {activePanel === 'driver-intel' && (
+            <section className="glass-panel p-3">
+              <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <div className="text-xs uppercase tracking-[0.18em] text-text-secondary">Driver Intelligence Workspace</div>
+                  <div className="text-[11px] text-text-muted">
+                    Snapshot and strategy timeline share the same session window and driver selection.
+                  </div>
+                </div>
+                <div className="rounded border border-border bg-bg-secondary px-2 py-1 text-[10px] font-mono text-text-muted">
+                  Real-time data bound
+                </div>
               </div>
-              <div className="min-h-[520px]">
-                <PitStrategy />
+              <div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
+                <div className="min-h-[560px] rounded-lg border border-white/10 bg-black/15 p-2">
+                  <DriverSummary />
+                </div>
+                <div className="min-h-[560px] rounded-lg border border-white/10 bg-black/15 p-2">
+                  <PitStrategy />
+                </div>
               </div>
             </section>
           )}
 
-          {(activePanel === 'overview' || activePanel === 'undercut' || activePanel === 'strategy-ml') && (
-            <section className="min-h-[620px]">
+          {(activePanel === 'undercut' || activePanel === 'strategy-ml') && (
+            <section className="min-h-[620px] glass-panel p-3">
+              <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <div className="text-xs uppercase tracking-[0.18em] text-text-secondary">Undercut Decision Lab</div>
+                  <div className="text-[11px] text-text-muted">
+                    Validate model inputs, run predictions, and review recommendation confidence in one panel.
+                  </div>
+                </div>
+                <div className="rounded border border-border bg-bg-secondary px-2 py-1 text-[10px] font-mono text-text-muted">
+                  Manual override enabled
+                </div>
+              </div>
               <UndercutPredictor />
             </section>
           )}
 
           {activePanel === 'fia-docs' && (
-            <section className="min-h-[980px] rounded-md border border-border bg-bg-card/40">
+            <section className="glass-panel min-h-[980px]">
               <FiaDocumentsView />
             </section>
           )}

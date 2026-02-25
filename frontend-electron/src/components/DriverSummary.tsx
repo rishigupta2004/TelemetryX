@@ -28,6 +28,15 @@ function fmtPosition(value: number | null | undefined): string {
   return `P${Math.round(Number(value))}`
 }
 
+function MetricRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-center justify-between gap-2 border-b border-border/50 py-0.5 last:border-b-0">
+      <span className="text-text-muted">{label}</span>
+      <span className="font-mono text-text-primary">{value}</span>
+    </div>
+  )
+}
+
 export const DriverSummary = React.memo(function DriverSummary({ onSummaryLoaded }: DriverSummaryProps) {
   const selectedYear = useSessionStore((s) => s.selectedYear)
   const selectedRace = useSessionStore((s) => s.selectedRace)
@@ -142,74 +151,74 @@ export const DriverSummary = React.memo(function DriverSummary({ onSummaryLoaded
 
   return (
     <div className="flex h-full flex-col rounded-md border border-border bg-bg-card">
-      <div className="border-b border-border px-3 py-2">
-        <div className="text-xs uppercase tracking-[0.18em] text-text-secondary">Driver Summary</div>
+      <div className="border-b border-border px-3 py-2.5">
+        <div className="text-[10px] uppercase tracking-[0.18em] text-text-secondary">Driver Summary</div>
         <div className="mt-1 flex items-center gap-2 font-mono text-sm text-text-primary">
           <span>{primaryDriver}</span>
-          {compareDriver && <span className="text-text-secondary">vs {compareDriver}</span>}
+          {compareDriver && <span className="rounded bg-bg-secondary px-1.5 py-0.5 text-[10px] text-text-secondary">vs {compareDriver}</span>}
         </div>
       </div>
 
       <div className="grid flex-1 grid-cols-1 gap-2 overflow-y-auto p-3 text-xs md:grid-cols-2">
         <div className="rounded border border-border bg-bg-secondary p-2">
-          <div className="mb-1 text-text-secondary">Lap</div>
-          <div className="font-mono text-text-primary">Lap {fmtNumber(summary.lap_analysis.lap_number, 0)}</div>
-          <div className="text-text-muted">Position {fmtPosition(summary.lap_analysis.position)}</div>
-          <div className="text-text-muted">Last {summary.lap_analysis.last_lap_time || '-'}</div>
-          <div className="text-text-muted">Best {fmtNumber(summary.lap_analysis.personal_best, 3)}s</div>
-          <div className="text-text-muted">Delta {fmtSigned(summary.lap_analysis.lap_delta_to_leader, 3)}s</div>
+          <div className="mb-1 text-[10px] uppercase tracking-[0.12em] text-text-secondary">Lap</div>
+          <MetricRow label="Current lap" value={fmtNumber(summary.lap_analysis.lap_number, 0)} />
+          <MetricRow label="Position" value={fmtPosition(summary.lap_analysis.position)} />
+          <MetricRow label="Last lap" value={summary.lap_analysis.last_lap_time || '-'} />
+          <MetricRow label="Personal best" value={`${fmtNumber(summary.lap_analysis.personal_best, 3)}s`} />
+          <MetricRow label="Delta to leader" value={`${fmtSigned(summary.lap_analysis.lap_delta_to_leader, 3)}s`} />
         </div>
 
         <div className="rounded border border-border bg-bg-secondary p-2">
-          <div className="mb-1 text-text-secondary">Performance</div>
-          <div className="font-mono text-text-primary">Pos delta {fmtSigned(summary.driver_performance.position_change, 0)}</div>
-          <div className="text-text-muted">Points {fmtNumber(summary.driver_performance.points, 1)}</div>
-          <div className="text-text-muted">Overtakes {fmtNumber(summary.driver_performance.overtakes_made, 0)}</div>
-          <div className="text-text-muted">Defensive losses {fmtNumber(summary.driver_performance.positions_lost_defensive, 0)}</div>
+          <div className="mb-1 text-[10px] uppercase tracking-[0.12em] text-text-secondary">Performance</div>
+          <MetricRow label="Position delta" value={fmtSigned(summary.driver_performance.position_change, 0)} />
+          <MetricRow label="Points" value={fmtNumber(summary.driver_performance.points, 1)} />
+          <MetricRow label="Overtakes made" value={fmtNumber(summary.driver_performance.overtakes_made, 0)} />
+          <MetricRow label="Defensive losses" value={fmtNumber(summary.driver_performance.positions_lost_defensive, 0)} />
         </div>
 
         <div className="rounded border border-border bg-bg-secondary p-2">
-          <div className="mb-1 text-text-secondary">Tyres</div>
-          <div className="font-mono text-text-primary">{summary.tyre_analysis.current_compound || '-'}</div>
-          <div className="text-text-muted">Stint {fmtNumber(summary.tyre_analysis.stint_number, 0)}</div>
-          <div className="text-text-muted">Stint length {fmtNumber(summary.tyre_analysis.stint_length, 0)} laps</div>
-          <div className="text-text-muted">Tyre age {fmtNumber(summary.tyre_analysis.tyre_age, 0)} laps</div>
-          <div className="text-text-muted">Life left {fmtNumber(summary.tyre_analysis.tyre_life_remaining, 1)}</div>
+          <div className="mb-1 text-[10px] uppercase tracking-[0.12em] text-text-secondary">Tyres</div>
+          <MetricRow label="Current compound" value={summary.tyre_analysis.current_compound || '-'} />
+          <MetricRow label="Stint number" value={fmtNumber(summary.tyre_analysis.stint_number, 0)} />
+          <MetricRow label="Stint length" value={`${fmtNumber(summary.tyre_analysis.stint_length, 0)} laps`} />
+          <MetricRow label="Tyre age" value={`${fmtNumber(summary.tyre_analysis.tyre_age, 0)} laps`} />
+          <MetricRow label="Life left" value={fmtNumber(summary.tyre_analysis.tyre_life_remaining, 1)} />
         </div>
 
         <div className="rounded border border-border bg-bg-secondary p-2">
-          <div className="mb-1 text-text-secondary">Telemetry</div>
-          <div className="font-mono text-text-primary">Vmax {fmtNumber(summary.telemetry_analysis.speed_max, 0)} km/h</div>
-          <div className="text-text-muted">Vavg {fmtNumber(summary.telemetry_analysis.speed_avg, 1)} km/h</div>
-          <div className="text-text-muted">Throttle {fmtNumber(summary.telemetry_analysis.throttle_avg, 1)}%</div>
-          <div className="text-text-muted">DRS {fmtPct(summary.telemetry_analysis.drs_usage_pct)}</div>
+          <div className="mb-1 text-[10px] uppercase tracking-[0.12em] text-text-secondary">Telemetry</div>
+          <MetricRow label="Vmax" value={`${fmtNumber(summary.telemetry_analysis.speed_max, 0)} km/h`} />
+          <MetricRow label="Vavg" value={`${fmtNumber(summary.telemetry_analysis.speed_avg, 1)} km/h`} />
+          <MetricRow label="Throttle avg" value={`${fmtNumber(summary.telemetry_analysis.throttle_avg, 1)}%`} />
+          <MetricRow label="DRS usage" value={fmtPct(summary.telemetry_analysis.drs_usage_pct)} />
         </div>
 
         <div className="rounded border border-border bg-bg-secondary p-2 md:col-span-2">
-          <div className="mb-1 text-text-secondary">Race Context</div>
+          <div className="mb-1 text-[10px] uppercase tracking-[0.12em] text-text-secondary">Race Context</div>
           <div className="grid grid-cols-2 gap-2 text-[11px] lg:grid-cols-4">
-            <div className="text-text-muted">Track: <span className="font-mono text-text-primary">{summary.race_context.track_status || '-'}</span></div>
-            <div className="text-text-muted">Air: <span className="font-mono text-text-primary">{fmtNumber(summary.race_context.air_temp, 1)}C</span></div>
-            <div className="text-text-muted">Track temp: <span className="font-mono text-text-primary">{fmtNumber(summary.race_context.track_temp, 1)}C</span></div>
-            <div className="text-text-muted">Humidity: <span className="font-mono text-text-primary">{fmtNumber(summary.race_context.humidity, 0)}%</span></div>
+            <div className="rounded border border-border/60 bg-bg-card/70 px-2 py-1 text-text-muted">Track <span className="font-mono text-text-primary">{summary.race_context.track_status || '-'}</span></div>
+            <div className="rounded border border-border/60 bg-bg-card/70 px-2 py-1 text-text-muted">Air <span className="font-mono text-text-primary">{fmtNumber(summary.race_context.air_temp, 1)}C</span></div>
+            <div className="rounded border border-border/60 bg-bg-card/70 px-2 py-1 text-text-muted">Track temp <span className="font-mono text-text-primary">{fmtNumber(summary.race_context.track_temp, 1)}C</span></div>
+            <div className="rounded border border-border/60 bg-bg-card/70 px-2 py-1 text-text-muted">Humidity <span className="font-mono text-text-primary">{fmtNumber(summary.race_context.humidity, 0)}%</span></div>
           </div>
         </div>
 
         <div className="rounded border border-border bg-bg-secondary p-2 md:col-span-2">
-          <div className="mb-1 text-text-secondary">Strategy Signals</div>
+          <div className="mb-1 text-[10px] uppercase tracking-[0.12em] text-text-secondary">Strategy Signals</div>
           <div className="grid grid-cols-2 gap-2 text-[11px] lg:grid-cols-4">
-            <div className="text-text-muted">Current lap: <span className="font-mono text-text-primary">{fmtNumber(summary.strategic_analysis.current_lap, 0)}</span></div>
-            <div className="text-text-muted">Current pos: <span className="font-mono text-text-primary">{fmtPosition(summary.strategic_analysis.current_position)}</span></div>
-            <div className="text-text-muted">Stint length: <span className="font-mono text-text-primary">{fmtNumber(summary.strategic_analysis.stint_length, 0)}</span></div>
-            <div className="text-text-muted">Pit window: <span className="font-mono text-text-primary">{fmtNumber(summary.strategic_analysis.optimal_pit_window, 0)}</span></div>
+            <div className="rounded border border-border/60 bg-bg-card/70 px-2 py-1 text-text-muted">Current lap <span className="font-mono text-text-primary">{fmtNumber(summary.strategic_analysis.current_lap, 0)}</span></div>
+            <div className="rounded border border-border/60 bg-bg-card/70 px-2 py-1 text-text-muted">Current pos <span className="font-mono text-text-primary">{fmtPosition(summary.strategic_analysis.current_position)}</span></div>
+            <div className="rounded border border-border/60 bg-bg-card/70 px-2 py-1 text-text-muted">Stint length <span className="font-mono text-text-primary">{fmtNumber(summary.strategic_analysis.stint_length, 0)}</span></div>
+            <div className="rounded border border-border/60 bg-bg-card/70 px-2 py-1 text-text-muted">Pit window <span className="font-mono text-text-primary">{fmtNumber(summary.strategic_analysis.optimal_pit_window, 0)}</span></div>
           </div>
         </div>
 
         {summary.comparison && (
           <div className="rounded border border-accent-blue/60 bg-bg-secondary p-2 md:col-span-2">
-            <div className="mb-1 text-text-secondary">Head-to-Head</div>
-            <div className="font-mono text-text-primary">Pace delta {fmtSigned(summary.comparison.pace_delta_seconds, 3)}s</div>
-            <div className="text-text-muted">Winner {summary.comparison.head_to_head_winner || '-'}</div>
+            <div className="mb-1 text-[10px] uppercase tracking-[0.12em] text-text-secondary">Head-to-Head</div>
+            <MetricRow label="Pace delta" value={`${fmtSigned(summary.comparison.pace_delta_seconds, 3)}s`} />
+            <MetricRow label="Winner" value={summary.comparison.head_to_head_winner || '-'} />
           </div>
         )}
       </div>

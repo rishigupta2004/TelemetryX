@@ -43,15 +43,22 @@ export const FiaAlertsStrip = React.memo(function FiaAlertsStrip() {
       .slice(0, 8)
   }, [docs?.documents])
 
+  const lastUpdated = docs?.fetched_at
+    ? new Date(docs.fetched_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+    : null
+
   return (
-    <div className="rounded-md border border-border bg-bg-card p-2.5">
+    <div className="rounded-md border border-border bg-bg-card p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
       <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
         <div>
           <div className="text-[10px] uppercase tracking-[0.18em] text-text-secondary">FIA Alerts</div>
-          <div className="text-[11px] text-text-muted">Latest stewards / race director / technical directives</div>
+          <div className="text-[11px] text-text-muted">Stewards decisions, race director notes, and technical directives</div>
         </div>
 
-        <div className="flex items-center gap-1.5">
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="rounded border border-border bg-bg-secondary px-1.5 py-1 font-mono text-[10px] text-text-muted">
+            {alerts.length} alerts
+          </span>
           <select
             value={activeYear ?? ''}
             onChange={(event) => setActiveYear(event.target.value ? Number(event.target.value) : null)}
@@ -88,11 +95,11 @@ export const FiaAlertsStrip = React.memo(function FiaAlertsStrip() {
 
       {eventsError && <div className="mb-1 text-xs text-red-400">{eventsError}</div>}
       {docsError && <div className="mb-1 text-xs text-red-400">{docsError}</div>}
-      {docs?.fetched_at && (
-        <div className="mb-1 text-[10px] text-text-muted">
-          Updated {new Date(docs.fetched_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-        </div>
-      )}
+      <div className="mb-2 flex flex-wrap items-center gap-1 text-[10px] text-text-muted">
+        {lastUpdated && <span className="rounded border border-border bg-bg-secondary px-1.5 py-0.5">Updated {lastUpdated}</span>}
+        {activeYear && <span className="rounded border border-border bg-bg-secondary px-1.5 py-0.5">{activeYear}</span>}
+        {activeRace && <span className="rounded border border-border bg-bg-secondary px-1.5 py-0.5">{activeRace}</span>}
+      </div>
 
       <div className="flex gap-1.5 overflow-x-auto pb-1">
         {(eventsLoading || docsLoading) && (
@@ -111,13 +118,13 @@ export const FiaAlertsStrip = React.memo(function FiaAlertsStrip() {
             href={item.url}
             target="_blank"
             rel="noreferrer"
-            className="min-w-[240px] max-w-[320px] rounded border border-border bg-bg-secondary px-2.5 py-2 transition hover:border-accent-blue/70 hover:bg-bg-hover/70"
+            className="min-w-[248px] max-w-[340px] rounded border border-border bg-bg-secondary px-2.5 py-2 transition hover:border-accent-blue/70 hover:bg-bg-hover/70"
           >
             <div className="mb-1 flex items-center justify-between gap-2">
               <span className="rounded bg-bg-card px-1.5 py-0.5 text-[9px] uppercase tracking-[0.08em] text-text-secondary">
                 {categoryLabel(item.category)}
               </span>
-              <span className="text-[10px] text-text-muted">Doc {item.doc_number}</span>
+              <span className="rounded border border-border/70 bg-bg-card px-1.5 py-0.5 text-[10px] text-text-muted">Doc {item.doc_number}</span>
             </div>
             <div className="max-h-[2.8em] overflow-hidden text-[11px] font-medium text-text-primary">{item.title}</div>
             <div className="mt-1 text-[10px] text-text-muted">{formatFiaPublishedCompact(item)}</div>

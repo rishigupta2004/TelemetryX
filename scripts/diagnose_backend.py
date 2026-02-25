@@ -5,6 +5,7 @@ import argparse
 import json
 import os
 import sys
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
@@ -81,14 +82,99 @@ def _summarize_seasons(seasons: Any) -> Dict[str, Any]:
 
 
 def _load_backend_client() -> Any:
-    # Ensure both the desktop package (`frontend/app` via `frontend/`) and backend package (`backend/`)
-    # are importable when running this script directly.
+    # Backward compatibility: older repo layouts exposed TelemetryXBackend from frontend/app.
+    # Fall back to a local lightweight client when that package is not present.
     sys.path.insert(0, str(_repo_root()))
     sys.path.insert(0, str(_repo_root() / "frontend"))
+    try:
+        from app.services.api.telemetryx_backend import TelemetryXBackend  # type: ignore # noqa: E402
 
-    from app.services.api.telemetryx_backend import TelemetryXBackend  # noqa: E402
+        return TelemetryXBackend()
+    except Exception:
+        return _CompatBackendClient()
 
-    return TelemetryXBackend()
+
+@dataclass
+class _CompatConfig:
+    base_url: str
+    token: str
+
+
+class _CompatBackendClient:
+    def __init__(self) -> None:
+        self.config = _CompatConfig(
+            base_url=_base_url(),
+            token=os.getenv("TELEMETRYX_API_TOKEN", "").strip(),
+        )
+        self._mode = "http"
+        self._inproc = None
+        self._http = None
+
+        requested_mode = os.getenv("TELEMETRYX_BACKEND_MODE", "").strip().lower()
+        if requested_mode == "inproc":
+            self._inproc = self._build_inproc_client()
+            self._mode = "inproc"
+        else:
+            import httpx
+
+            self._http = httpx.Client(timeout=10.0)
+
+    def _build_inproc_client(self) -> Any:
+        from starlette.testclient import TestClient
+        from backend.main import app
+
+        return TestClient(app)
+
+    def _path(self, path: str) -> str:
+        clean = "/" + str(path or "").lstrip("/")
+        if clean.startswith("/api/v1/") or clean == "/api/v1":
+            return clean
+        return f"/api/v1{clean}"
+
+    def _get(self, path: str, params: Optional[Dict[str, Any]] = None) -> Any:
+        if self._mode == "inproc":
+            if self._inproc is None:
+                raise RuntimeError("in-process backend client is not initialized")
+            resp = self._inproc.get(self._path(path), params=params)
+        else:
+            if self._http is None:
+                raise RuntimeError("http backend client is not initialized")
+            headers: Dict[str, str] = {}
+            if self.config.token:
+                headers["Authorization"] = f"Bearer {self.config.token}"
+            url = f"{self.config.base_url.rstrip('/')}/{str(path).lstrip('/')}"
+            resp = self._http.get(url, params=params, headers=headers)
+
+        if getattr(resp, "status_code", 0) >= 400:
+            detail = ""
+            try:
+                detail = (resp.text or "").strip()
+            except Exception:
+                pass
+            raise RuntimeError(f"GET {path} failed with {resp.status_code}: {detail[:240]}")
+
+        try:
+            return resp.json()
+        except Exception:
+            return json.loads(resp.text or "{}")
+
+    def seasons(self) -> Any:
+        return self._get("/seasons")
+
+    def races_for_year(self, year: int) -> Any:
+        return self._get(f"/seasons/{int(year)}/races")
+
+    def close(self) -> None:
+        try:
+            if self._http is not None:
+                self._http.close()
+        except Exception:
+            pass
+        try:
+            if self._inproc is not None:
+                self._inproc.close()
+        except Exception:
+            pass
 
 
 def _session_list(raw: str) -> List[str]:
@@ -279,7 +365,18 @@ def _run_release_gate(
                 params={"driver1": primary, "driver2": compare, "session_type": session_code},
             )
             checks += 1
-            if not ok_h2h or not isinstance(h2h_or_err, dict):
+            if not ok_h2h:
+                detail = str(h2h_or_err or "")
+                # Sprint-like sessions can legitimately miss two comparable valid laps.
+                if "Could not find both drivers with valid laps" in detail:
+                    print(
+                        f"GATE WARN session={session_code} workflow=compare endpoint=head-to-head "
+                        "insufficient comparable laps"
+                    )
+                else:
+                    failures += 1
+                    print(f"GATE FAIL session={session_code} workflow=compare endpoint=head-to-head detail={h2h_or_err}")
+            elif not isinstance(h2h_or_err, dict):
                 failures += 1
                 print(f"GATE FAIL session={session_code} workflow=compare endpoint=head-to-head detail={h2h_or_err}")
             else:

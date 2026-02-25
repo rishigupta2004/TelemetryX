@@ -1,5 +1,7 @@
 import type {
+  ApiErrorInfo,
   ClusteringResponse,
+  CircuitInsightsResponse,
   DriverSummaryResponse,
   FiaDocumentEventsResponse,
   FiaDocumentSeasonsResponse,
@@ -10,30 +12,86 @@ import type {
   Race,
   Season,
   SessionVizResponse,
+  SeasonStandingsResponse,
+  ProfilesResponse,
   StrategyRecommendationsResponse,
   StrategyRecommendationsWithSource,
   TelemetryResponse,
   TyreStint,
+  UndercutEventsResponse,
   UndercutPredictRequest,
   UndercutPredictResponse
 } from '../types'
+import { API_RETRIES, API_TIMEOUT_MS, API_CACHE_TTL_MS, API_CACHE_MAX_ENTRIES } from '../lib/constants'
 
-const DEFAULT_BASE_URL = 'http://localhost:8000/api/v1'
-const REQUEST_TIMEOUT_MS = 15000
-const GET_RETRIES = 1
+const DEFAULT_BASE_URLS = ['http://localhost:8000/api/v1']
 
-function resolveBaseUrl(): string {
-  const viteUrl = (import.meta as unknown as { env?: { VITE_API_BASE_URL?: string } })?.env?.VITE_API_BASE_URL
-  if (viteUrl && viteUrl.trim()) return viteUrl.replace(/\/+$/, '')
-
-  const runtimeUrl = (globalThis as unknown as { TELEMETRYX_API_BASE_URL?: string }).TELEMETRYX_API_BASE_URL
-  if (runtimeUrl && runtimeUrl.trim()) return runtimeUrl.replace(/\/+$/, '')
-
-  return DEFAULT_BASE_URL
+function isDevMode(): boolean {
+  return (import.meta as unknown as { env?: { DEV?: boolean } })?.env?.DEV === true
 }
 
-const BASE_URL = resolveBaseUrl()
-const ROOT_URL = BASE_URL.replace(/\/api\/v1\/?$/, '')
+function uniqueUrls(values: string[]): string[] {
+  const seen = new Set<string>()
+  const out: string[] = []
+  for (const value of values) {
+    const normalized = value.trim().replace(/\/+$/, '')
+    if (!normalized || seen.has(normalized)) continue
+    seen.add(normalized)
+    out.push(normalized)
+  }
+  return out
+}
+
+function resolveBaseUrls(): string[] {
+  const viteUrl = (import.meta as unknown as { env?: { VITE_API_BASE_URL?: string } })?.env?.VITE_API_BASE_URL
+  const bridgeUrl = (
+    globalThis as unknown as { telemetryx?: { apiBaseUrl?: string | null } }
+  )?.telemetryx?.apiBaseUrl
+  const runtimeUrl = (globalThis as unknown as { TELEMETRYX_API_BASE_URL?: string }).TELEMETRYX_API_BASE_URL
+  const dev = isDevMode()
+  const urls = dev
+    ? uniqueUrls(['http://localhost:8000/api/v1', viteUrl || '', bridgeUrl || '', runtimeUrl || ''])
+    : uniqueUrls([viteUrl || '', bridgeUrl || '', runtimeUrl || '', ...DEFAULT_BASE_URLS])
+  const filtered = urls.filter((url) => !/localhost:9010|127\.0\.0\.1:9010/.test(url))
+  return filtered.length ? filtered : DEFAULT_BASE_URLS
+}
+
+const BASE_URLS = resolveBaseUrls()
+const ROOT_URLS = BASE_URLS.map((url) => url.replace(/\/api\/v1\/?$/, ''))
+let pinnedBaseUrl: string | null = null
+
+// ── Response Cache (in-memory, TTL-based) ──────────────────────────
+interface CacheEntry { data: unknown; ts: number }
+const _responseCache = new Map<string, CacheEntry>()
+
+// ── Request Deduplication ──────────────────────────────────────────
+const _inflightRequests = new Map<string, Promise<unknown>>()
+
+// Paths that should NOT be cached (time-sensitive)
+const NO_CACHE_PATTERNS = ['/telemetry', '/positions', '/health']
+
+function isCacheable(path: string): boolean {
+  return !NO_CACHE_PATTERNS.some((pattern) => path.includes(pattern))
+}
+
+function getCached<T>(path: string): T | null {
+  const entry = _responseCache.get(path)
+  if (!entry) return null
+  if (Date.now() - entry.ts > API_CACHE_TTL_MS) {
+    _responseCache.delete(path)
+    return null
+  }
+  return entry.data as T
+}
+
+function setCache(path: string, data: unknown): void {
+  _responseCache.set(path, { data, ts: Date.now() })
+  // Evict oldest entries if over limit
+  if (_responseCache.size > API_CACHE_MAX_ENTRIES) {
+    const firstKey = _responseCache.keys().next().value
+    if (firstKey) _responseCache.delete(firstKey)
+  }
+}
 
 export class ApiError extends Error {
   status: number
@@ -72,29 +130,54 @@ async function parseErrorDetail(res: Response): Promise<unknown> {
 async function request<T>(path: string, init: RequestInit, retries = 0): Promise<T> {
   let lastErr: unknown = null
   for (let attempt = 0; attempt <= retries; attempt += 1) {
-    const controller = new AbortController()
-    const timeout = globalThis.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
-    try {
-      const res = await fetch(`${BASE_URL}${path}`, { ...init, signal: controller.signal })
-      if (!res.ok) {
-        throw new ApiError(res.status, path, await parseErrorDetail(res))
+    const candidates = pinnedBaseUrl ? [pinnedBaseUrl] : BASE_URLS
+    for (const baseUrl of candidates) {
+      const controller = new AbortController()
+      const timeout = globalThis.setTimeout(() => controller.abort(), API_TIMEOUT_MS)
+      try {
+        const res = await fetch(`${baseUrl}${path}`, { ...init, signal: controller.signal })
+        if (!res.ok) {
+          throw new ApiError(res.status, path, await parseErrorDetail(res))
+        }
+        if (!pinnedBaseUrl) pinnedBaseUrl = baseUrl
+        const data = await res.json()
+        // Cache GET responses
+        if (init.method === 'GET' && isCacheable(path)) {
+          setCache(path, data)
+        }
+        return data
+      } catch (err) {
+        lastErr = err
+        if (baseUrl === pinnedBaseUrl) pinnedBaseUrl = null
+      } finally {
+        globalThis.clearTimeout(timeout)
       }
-      return res.json()
-    } catch (err) {
-      lastErr = err
-      if (attempt >= retries) break
-    } finally {
-      globalThis.clearTimeout(timeout)
     }
   }
   throw lastErr ?? new Error(`Request failed: ${path}`)
 }
 
 export async function get<T>(path: string): Promise<T> {
-  return request<T>(path, { method: 'GET' }, GET_RETRIES)
+  // Check cache first
+  if (isCacheable(path)) {
+    const cached = getCached<T>(path)
+    if (cached != null) return cached
+  }
+  // Deduplicate in-flight requests
+  const existing = _inflightRequests.get(path)
+  if (existing) return existing as Promise<T>
+
+  const promise = request<T>(path, { method: 'GET' }, API_RETRIES)
+    .finally(() => _inflightRequests.delete(path))
+  _inflightRequests.set(path, promise)
+  return promise
 }
 
 export async function getNoRetry<T>(path: string): Promise<T> {
+  if (isCacheable(path)) {
+    const cached = getCached<T>(path)
+    if (cached != null) return cached
+  }
   return request<T>(path, { method: 'GET' }, 0)
 }
 
@@ -112,22 +195,36 @@ export async function post<T>(path: string, body: unknown): Promise<T> {
   )
 }
 
+/** Convert any caught error to a typed { code, message } shape for stores. */
+export function toApiErrorInfo(err: unknown): ApiErrorInfo {
+  if (err instanceof ApiError) {
+    return { code: err.status, message: err.message }
+  }
+  return { code: null, message: String(err) }
+}
+
 function isNotFoundError(err: unknown): boolean {
-  return String(err).includes('API error 404')
+  return err instanceof ApiError && err.status === 404
 }
 
 export const api = {
-  getBaseUrl: () => BASE_URL,
+  getBaseUrl: () => BASE_URLS[0],
   getHealth: async () => {
-    const controller = new AbortController()
-    const timeout = globalThis.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
-    try {
-      const res = await fetch(`${ROOT_URL}/health`, { method: 'GET', signal: controller.signal })
-      if (!res.ok) throw new ApiError(res.status, '/health', await parseErrorDetail(res))
-      return (await res.json()) as { status: string }
-    } finally {
-      globalThis.clearTimeout(timeout)
+    let lastErr: unknown = null
+    for (const rootUrl of ROOT_URLS) {
+      const controller = new AbortController()
+      const timeout = globalThis.setTimeout(() => controller.abort(), API_TIMEOUT_MS)
+      try {
+        const res = await fetch(`${rootUrl}/health`, { method: 'GET', signal: controller.signal })
+        if (!res.ok) throw new ApiError(res.status, '/health', await parseErrorDetail(res))
+        return (await res.json()) as { status: string }
+      } catch (err) {
+        lastErr = err
+      } finally {
+        globalThis.clearTimeout(timeout)
+      }
     }
+    throw lastErr ?? new Error('Health request failed')
   },
   getSeasons: () => get<Season[]>('/seasons'),
   getRaces: (year: number) => get<Race[]>(`/seasons/${year}/races`),
@@ -160,13 +257,21 @@ export const api = {
     ),
   getDriverSummary: (year: number, race: string, session: string, driver: string, compare?: string) =>
     get<DriverSummaryResponse>(
-      `/features/${year}/${encodeURIComponent(race)}/${session}/driver-summary?driver=${encodeURIComponent(driver)}${
-        compare ? `&compare=${encodeURIComponent(compare)}` : ''
+      `/features/${year}/${encodeURIComponent(race)}/${session}/driver-summary?driver=${encodeURIComponent(driver)}${compare ? `&compare=${encodeURIComponent(compare)}` : ''
       }`
     ),
   getClustering: (probabilities = false) =>
     get<ClusteringResponse>(`/models/clustering?probabilities=${probabilities ? '1' : '0'}`),
   getUndercutSummary: () => getNoRetry<{ status: string; n_events: number; model: string }>('/models/undercut'),
+  getUndercutEvents: (params?: { year?: number; raceName?: string; successOnly?: boolean; limit?: number }) => {
+    const search = new URLSearchParams()
+    if (params?.year != null) search.set('year', String(params.year))
+    if (params?.raceName) search.set('race_name', params.raceName)
+    if (params?.successOnly) search.set('success_only', '1')
+    if (params?.limit != null) search.set('limit', String(params.limit))
+    const suffix = search.size ? `?${search.toString()}` : ''
+    return getNoRetry<UndercutEventsResponse>(`/models/undercut/events${suffix}`)
+  },
   getStrategyRecommendations: (year: number, race: string) =>
     get<StrategyRecommendationsResponse>(`/models/strategy-recommendations/${year}/${encodeURIComponent(race)}`),
   getStrategyRecommendationsWithFallback: async (
@@ -187,7 +292,7 @@ export const api = {
     let lastNotFound: unknown = null
     for (const y of candidates) {
       try {
-        const data = await get<StrategyRecommendationsResponse>(
+        const data = await getNoRetry<StrategyRecommendationsResponse>(
           `/models/strategy-recommendations/${y}/${encodeURIComponent(race)}`
         )
         return { sourceYear: y, data }
@@ -209,6 +314,14 @@ export const api = {
     get<FiaDocumentSeasonsResponse>(`/fia-documents/seasons?force_refresh=${forceRefresh ? '1' : '0'}`),
   getFiaDocumentEvents: (year: number) =>
     get<FiaDocumentEventsResponse>(`/fia-documents/${year}`),
+  getSeasonStandings: (year: number, refresh = false) =>
+    get<SeasonStandingsResponse>(`/insights/${year}/standings?refresh=${refresh ? '1' : '0'}`),
+  getProfiles: (refresh = false) =>
+    get<ProfilesResponse>(`/insights/profiles?refresh=${refresh ? '1' : '0'}`),
+  getCircuitInsights: (year: number, race: string, refresh = false) =>
+    get<CircuitInsightsResponse>(
+      `/insights/${year}/${encodeURIComponent(race)}/circuit?refresh=${refresh ? '1' : '0'}`
+    ),
   predictUndercut: (payload: UndercutPredictRequest) =>
     post<UndercutPredictResponse>('/models/undercut/predict', payload)
 }

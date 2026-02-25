@@ -41,8 +41,17 @@ export default defineConfig({
     },
     build: {
       outDir: 'out/renderer',
+      cssCodeSplit: true,
       rollupOptions: {
-        input: 'index.html'
+        input: 'index.html',
+        output: {
+          manualChunks: {
+            'vendor-charts': ['echarts', 'echarts-for-react', 'uplot'],
+            'vendor-icons': ['lucide-react'],
+            'vendor-react': ['react', 'react-dom'],
+            'vendor-state': ['zustand']
+          }
+        }
       }
     }
   }

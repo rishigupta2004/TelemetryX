@@ -3,6 +3,12 @@ export interface Point {
   y: number
 }
 
+export interface PathLookup {
+  x: Float32Array
+  y: Float32Array
+  sampleCount: number
+}
+
 function appearsLonLat(points: Array<{ x: number; y: number }>): boolean {
   if (!points.length) return false
   let checks = 0
@@ -46,7 +52,7 @@ export function parseCenterline(raw: number[][]): Point[] {
       y = Number((item as { y?: number }).y)
     }
     if (!Number.isFinite(x) || !Number.isFinite(y)) continue
-    out.push({ x, y })
+    out.push({ x: x!, y: y! })
   }
   const projected = appearsLonLat(out) ? projectLonLatToMeters(out) : out
   return projected.map((p) => ({ x: -p.y, y: -p.x }))
@@ -59,14 +65,22 @@ export function getBounds(points: Point[], padding = 60) {
   if (!points.length) {
     return { minX: -padding, maxX: padding, minY: -padding, maxY: padding }
   }
-
-  const xs = points.map((p) => p.x)
-  const ys = points.map((p) => p.y)
+  let minX = points[0].x
+  let maxX = points[0].x
+  let minY = points[0].y
+  let maxY = points[0].y
+  for (let i = 1; i < points.length; i += 1) {
+    const p = points[i]
+    if (p.x < minX) minX = p.x
+    if (p.x > maxX) maxX = p.x
+    if (p.y < minY) minY = p.y
+    if (p.y > maxY) maxY = p.y
+  }
   return {
-    minX: Math.min(...xs) - padding,
-    maxX: Math.max(...xs) + padding,
-    minY: Math.min(...ys) - padding,
-    maxY: Math.max(...ys) + padding
+    minX: minX - padding,
+    maxX: maxX + padding,
+    minY: minY - padding,
+    maxY: maxY + padding
   }
 }
 
@@ -74,7 +88,12 @@ export function getBounds(points: Point[], padding = 60) {
  * Convert points to SVG polyline points string
  */
 export function toPolylinePoints(points: Point[]): string {
-  return points.map((p) => `${p.x},${p.y}`).join(' ')
+  if (!points.length) return ''
+  let out = `${points[0].x},${points[0].y}`
+  for (let i = 1; i < points.length; i += 1) {
+    out += ` ${points[i].x},${points[i].y}`
+  }
+  return out
 }
 
 /**
@@ -123,6 +142,36 @@ export function interpolateAlongPath(points: Point[], progress: number, arcLengt
   return {
     x: points[low].x + (points[high].x - points[low].x) * t,
     y: points[low].y + (points[high].y - points[low].y) * t
+  }
+}
+
+export function buildPathLookup(
+  points: Point[],
+  arcLengths: number[],
+  sampleCount = 10_000
+): PathLookup | null {
+  if (points.length < 2 || arcLengths.length < 2 || sampleCount < 2) return null
+  const x = new Float32Array(sampleCount)
+  const y = new Float32Array(sampleCount)
+  const denom = sampleCount - 1
+  for (let i = 0; i < sampleCount; i += 1) {
+    const p = interpolateAlongPath(points, i / denom, arcLengths)
+    x[i] = p.x
+    y[i] = p.y
+  }
+  return { x, y, sampleCount }
+}
+
+export function interpolateFromLookup(lookup: PathLookup | null, progress: number): Point {
+  if (!lookup || lookup.sampleCount < 2) return { x: 0, y: 0 }
+  const clamped = Math.max(0, Math.min(1, progress))
+  const scaled = clamped * (lookup.sampleCount - 1)
+  const idx = Math.floor(scaled)
+  const next = Math.min(lookup.sampleCount - 1, idx + 1)
+  const t = scaled - idx
+  return {
+    x: lookup.x[idx] + (lookup.x[next] - lookup.x[idx]) * t,
+    y: lookup.y[idx] + (lookup.y[next] - lookup.y[idx]) * t
   }
 }
 

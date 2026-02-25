@@ -23,6 +23,7 @@ from api.routers import (
     sessions,
     fia_documents,
     assets,
+    insights,
 )
 from api.websocket import router as websocket_router
 import time
@@ -71,6 +72,10 @@ async def request_timing_middleware(request: Request, call_next):
     except Exception:
         pass
     response.headers["x-telemetryx-duration-ms"] = f"{duration_ms:.2f}"
+    # Add Cache-Control for static-ish endpoints
+    path = request.url.path
+    if any(seg in path for seg in ["/seasons", "/races", "/standings", "/profiles"]):
+        response.headers.setdefault("Cache-Control", "public, max-age=60, stale-while-revalidate=120")
     return response
 
 
@@ -87,6 +92,7 @@ app.include_router(models.router, prefix="/api/v1", tags=["Models"], dependencie
 app.include_router(features.router, prefix="/api/v1", tags=["Features"], dependencies=_AUTH_DEPS)
 app.include_router(fia_documents.router, prefix="/api/v1", tags=["FIA Documents"], dependencies=_AUTH_DEPS)
 app.include_router(assets.router, prefix="/api/v1", tags=["Assets"], dependencies=_AUTH_DEPS)
+app.include_router(insights.router, prefix="/api/v1", tags=["Insights"], dependencies=_AUTH_DEPS)
 app.include_router(websocket_router, prefix="/api/v1", tags=["WebSocket"], dependencies=_AUTH_DEPS)
 
 # Auth endpoints must remain public (used to obtain a token).

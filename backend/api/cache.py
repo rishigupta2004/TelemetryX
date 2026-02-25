@@ -5,8 +5,8 @@ import time
 from collections import OrderedDict
 from typing import Any, Hashable, Optional, Tuple
 
-_MAX_ENTRIES = int(os.getenv("TELEMETRYX_CACHE_MAX_ENTRIES", "16"))
-_TTL_S = float(os.getenv("TELEMETRYX_CACHE_TTL_S", "30"))
+_MAX_ENTRIES = int(os.getenv("TELEMETRYX_CACHE_MAX_ENTRIES", "64"))
+_TTL_S = float(os.getenv("TELEMETRYX_CACHE_TTL_S", "300"))
 
 _CACHE: "OrderedDict[Tuple[Hashable, ...], tuple[float, Any]]" = OrderedDict()
 

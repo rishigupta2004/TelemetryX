@@ -28,6 +28,7 @@ export function PlaybackBar() {
   const isPlaying = usePlaybackStore((s) => s.isPlaying)
   const speed = usePlaybackStore((s) => s.speed)
   const duration = usePlaybackStore((s) => s.duration)
+  const sessionStartTime = usePlaybackStore((s) => s.sessionStartTime)
   const sessionTime = useSessionTime()
   const togglePlay = usePlaybackStore((s) => s.togglePlay)
   const seek = usePlaybackStore((s) => s.seek)
@@ -82,7 +83,8 @@ export function PlaybackBar() {
     const lap = sessionLapRanges[Math.min(idx, sessionLapRanges.length - 1)]
     if (sessionTime <= lap.end) return { current: lap.lapNumber, total: totalLaps }
 
-    return { current: lap.lapNumber, total: totalLaps }
+    // Driver has completed this lap and is ON the next one
+    return { current: Math.min(lap.lapNumber + 1, totalLaps), total: totalLaps }
   }, [sessionLapRanges, lapRangeStarts, sessionTime, duration])
 
   const handleScrub = useCallback(
@@ -142,13 +144,13 @@ export function PlaybackBar() {
   const isReady = loadingState === 'ready' && duration > 0
 
   return (
-    <div className="glass-panel-strong mx-3 mb-3 flex h-[64px] flex-shrink-0 items-center gap-4 rounded-[22px] border border-border/70 px-5 xl:mx-6 xl:mb-4 xl:px-6">
+    <div className="flex h-12 flex-shrink-0 items-center gap-2 border-t border-border bg-bg-secondary px-4">
       <div className="flex items-center gap-1">
         <button
           type="button"
           onClick={skipBack}
           disabled={!isReady}
-          className="rounded p-1.5 text-text-secondary hover:bg-bg-hover/70 hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-30"
+          className="rounded p-1.5 text-text-secondary transition-colors hover:bg-bg-hover/70 hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-30"
         >
           <SkipBack size={16} />
         </button>
@@ -156,7 +158,7 @@ export function PlaybackBar() {
           type="button"
           onClick={togglePlay}
           disabled={!isReady}
-          className="rounded-full bg-gradient-to-r from-accent-blue to-accent p-2 text-white shadow-[0_6px_20px_rgba(71,166,255,0.25)] hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-30"
+          className="rounded-full bg-accent p-2 text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-30"
         >
           {isPlaying ? <Pause size={18} /> : <Play size={18} />}
         </button>
@@ -164,37 +166,46 @@ export function PlaybackBar() {
           type="button"
           onClick={skipForward}
           disabled={!isReady}
-          className="rounded p-1.5 text-text-secondary hover:bg-bg-hover/70 hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-30"
+          className="rounded p-1.5 text-text-secondary transition-colors hover:bg-bg-hover/70 hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-30"
         >
           <SkipForward size={16} />
         </button>
       </div>
 
-      <span className="w-[78px] text-center font-mono text-sm text-text-primary">{formatTime(currentTime)}</span>
+      <span className="hidden w-[78px] text-center font-mono text-sm text-text-primary md:inline">{formatTime(currentTime)}</span>
 
-      <div ref={scrubberRef} className="group relative h-2.5 flex-1 cursor-pointer select-none rounded-full bg-[#1a2f53]" onMouseDown={handleMouseDown}>
-        <div className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-accent-blue to-accent" style={{ width: `${progress}%` }} />
+      <div
+        ref={scrubberRef}
+        className="group relative h-2.5 flex-1 cursor-pointer select-none rounded-full bg-bg-card"
+        onMouseDown={handleMouseDown}
+      >
+        {/* Lap marker ticks */}
+        {duration > 0 && sessionLapRanges.map((lap) => {
+          const pos = ((lap.start - sessionStartTime) / duration) * 100
+          if (pos <= 0 || pos >= 100) return null
+          return <div key={lap.lapNumber} className="absolute top-0 h-full w-px bg-text-muted/30" style={{ left: `${pos}%` }} />
+        })}
+        <div className="absolute inset-y-0 left-0 rounded-full bg-accent" style={{ width: `${progress}%` }} />
         <div
-          className="absolute top-1/2 h-3.5 w-3.5 -translate-y-1/2 rounded-full bg-white shadow opacity-0 transition-opacity group-hover:opacity-100"
+          className="absolute top-1/2 h-3.5 w-3.5 -translate-y-1/2 rounded-full bg-white"
           style={{ left: `calc(${progress}% - 7px)` }}
         />
       </div>
 
-      <span className="w-[78px] text-center font-mono text-sm text-text-muted">{formatTime(duration)}</span>
+      <span className="hidden w-[78px] text-center font-mono text-sm text-text-muted md:inline">{formatTime(duration)}</span>
 
-      <div className="w-[90px] text-center font-mono text-xs text-text-secondary">
+      <div className="w-[70px] text-center font-mono text-[11px] text-text-secondary sm:w-[90px] sm:text-xs">
         Lap {currentLap.current} / {currentLap.total}
       </div>
 
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-0.5 sm:gap-1">
         {SPEEDS.map((s) => (
           <button
             key={s}
             type="button"
             onClick={() => setSpeed(s)}
-            className={`rounded px-2 py-0.5 text-[10px] font-mono ${
-              speed === s ? 'bg-[#2d4f87b8] text-white' : 'text-text-muted hover:bg-bg-hover/70 hover:text-text-primary'
-            }`}
+            className={`rounded px-1.5 py-0.5 text-[10px] font-mono transition-colors sm:px-2 ${speed === s ? 'bg-accent text-white' : 'text-text-muted hover:bg-bg-hover hover:text-text-primary'
+              }`}
           >
             {s}x
           </button>

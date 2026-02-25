@@ -10,6 +10,9 @@ from ..utils import read_parquet_df
 from ..config import MODELS_DIR, FEATURES_DIR
 from ..utils import normalize_key
 
+_strategy_payload_cache: Dict[str, tuple[float, Dict[str, Any]]] = {}
+_undercut_bundle_cache: Dict[str, tuple[float, Dict[str, Any]]] = {}
+
 def convert_numpy(obj):
     if isinstance(obj, dict):
         return {k: convert_numpy(v) for k, v in obj.items()}
@@ -242,12 +245,28 @@ def _predict_undercut_core(
     position_before_pit: int, tyre_age: int, stint_length: int, compound: str,
     track_temp: float = 30.0, pit_lap: int = 15, race_name: str = "Bahrain Grand Prix"
 ) -> Dict[str, Any]:
+    if position_before_pit < 1 or position_before_pit > 20:
+        raise HTTPException(status_code=422, detail="position_before_pit must be within 1-20")
+    if tyre_age < 0 or tyre_age > 80:
+        raise HTTPException(status_code=422, detail="tyre_age must be within 0-80")
+    if stint_length < 1 or stint_length > 90:
+        raise HTTPException(status_code=422, detail="stint_length must be within 1-90")
+    if pit_lap < 1 or pit_lap > 90:
+        raise HTTPException(status_code=422, detail="pit_lap must be within 1-90")
+    if track_temp < -10 or track_temp > 80:
+        raise HTTPException(status_code=422, detail="track_temp must be within -10 to 80")
+
     model_file = os.path.join(MODELS_DIR, "undercut_model.pkl")
     if not os.path.exists(model_file):
         raise HTTPException(status_code=404, detail="Undercut model not found")
-
-    with open(model_file, "rb") as f:
-        model_data = pickle.load(f)
+    model_mtime = float(os.path.getmtime(model_file))
+    cached_bundle = _undercut_bundle_cache.get(model_file)
+    if cached_bundle and cached_bundle[0] == model_mtime:
+        model_data = cached_bundle[1]
+    else:
+        with open(model_file, "rb") as f:
+            model_data = pickle.load(f)
+        _undercut_bundle_cache[model_file] = (model_mtime, model_data)
 
     model, scaler, features = model_data["model"], model_data["scaler"], model_data["features"]
     compound_order = model_data.get("compound_order", {})
@@ -406,8 +425,14 @@ async def get_strategy_recommendations(year: int, race: str) -> Dict[str, Any]:
             detail=f"Strategy recommendations not found for {year} {race_name}",
         )
     try:
-        with open(path, "r", encoding="utf-8") as f:
-            payload = json.load(f)
+        mtime = float(os.path.getmtime(path))
+        cached = _strategy_payload_cache.get(path)
+        if cached and cached[0] == mtime:
+            payload = cached[1]
+        else:
+            with open(path, "r", encoding="utf-8") as f:
+                payload = json.load(f)
+            _strategy_payload_cache[path] = (mtime, payload)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to read strategy recommendations: {e}")
     payload = _normalize_strategy_payload(payload, expected_year=int(year), expected_race_name=str(race_name))

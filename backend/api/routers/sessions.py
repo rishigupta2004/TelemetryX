@@ -487,6 +487,10 @@ def load_laps(silver_path: str, latest_only: bool = False) -> list:
         is_fastf1 = 'driver_name' in columns_in_file
         
         if is_fastf1:
+            has_pit_in = "pit_in_time_formatted" in columns_in_file
+            has_pit_out = "pit_out_time_formatted" in columns_in_file
+            pit_in_expr = "CAST(pit_in_time_formatted AS VARCHAR)" if has_pit_in else "NULL"
+            pit_out_expr = "CAST(pit_out_time_formatted AS VARCHAR)" if has_pit_out else "NULL"
             # FastF1 schema
             if latest_only:
                 session_code = os.path.basename(str(silver_path)).upper()
@@ -505,6 +509,8 @@ def load_laps(silver_path: str, latest_only: bool = False) -> list:
                                 tyre_compound,
                                 is_valid_lap,
                                 is_deleted,
+                                {pit_in_expr} AS pitInTimeFormatted,
+                                {pit_out_expr} AS pitOutTimeFormatted,
                                 Sector1SessionTime,
                                 Sector2SessionTime,
                                 Sector3SessionTime
@@ -530,6 +536,8 @@ def load_laps(silver_path: str, latest_only: bool = False) -> list:
                             tyre_compound,
                             is_valid_lap,
                             is_deleted,
+                            pitInTimeFormatted,
+                            pitOutTimeFormatted,
                             Sector1SessionTime,
                             Sector2SessionTime,
                             Sector3SessionTime
@@ -551,6 +559,8 @@ def load_laps(silver_path: str, latest_only: bool = False) -> list:
                             tyre_compound,
                             is_valid_lap,
                             is_deleted,
+                            {pit_in_expr} AS pitInTimeFormatted,
+                            {pit_out_expr} AS pitOutTimeFormatted,
                             Sector1SessionTime,
                             Sector2SessionTime,
                             Sector3SessionTime
@@ -576,6 +586,8 @@ def load_laps(silver_path: str, latest_only: bool = False) -> list:
                         tyre_compound,
                         is_valid_lap,
                         is_deleted,
+                        {pit_in_expr} AS pitInTimeFormatted,
+                        {pit_out_expr} AS pitOutTimeFormatted,
                         Sector1SessionTime,
                         Sector2SessionTime,
                         Sector3SessionTime
@@ -595,6 +607,8 @@ def load_laps(silver_path: str, latest_only: bool = False) -> list:
                 "tyreCompound",
                 "isValid",
                 "isDeleted",
+                "pitInTimeFormatted",
+                "pitOutTimeFormatted",
                 "sector1",
                 "sector2",
                 "sector3",
@@ -651,6 +665,10 @@ def load_laps(silver_path: str, latest_only: bool = False) -> list:
                     "tyreCompound": None,
                     "isValid": row[3],
                     "isDeleted": False,
+                    "pitInTimeFormatted": None,
+                    "pitOutTimeFormatted": None,
+                    "pitInSeconds": None,
+                    "pitOutSeconds": None,
                     "sector1": row[4],
                     "sector2": row[5],
                     "sector3": row[6]
@@ -684,6 +702,34 @@ def load_laps(silver_path: str, latest_only: bool = False) -> list:
             if numeric > 1e5:
                 return numeric / 1e3
             return numeric
+
+        def _parse_formatted_clock(value):
+            if value is None:
+                return None
+            raw = str(value).strip()
+            if not raw:
+                return None
+            if "day" in raw:
+                parts = raw.split()
+                raw = parts[-1] if parts else raw
+            if ":" not in raw:
+                try:
+                    return float(raw)
+                except Exception:
+                    return None
+            bits = raw.split(":")
+            try:
+                nums = [float(x) for x in bits]
+            except Exception:
+                return None
+            if len(nums) == 2:
+                minutes, seconds = nums
+                hours = 0.0
+            elif len(nums) == 3:
+                hours, minutes, seconds = nums
+            else:
+                return None
+            return hours * 3600.0 + minutes * 60.0 + seconds
 
         laps = []
         for row in result:
@@ -734,6 +780,8 @@ def load_laps(silver_path: str, latest_only: bool = False) -> list:
                 end_s = start_s + lap_time
             record["lapStartSeconds"] = start_s
             record["lapEndSeconds"] = end_s
+            record["pitInSeconds"] = _parse_formatted_clock(record.get("pitInTimeFormatted"))
+            record["pitOutSeconds"] = _parse_formatted_clock(record.get("pitOutTimeFormatted"))
             laps.append(record)
         return laps
     finally:
@@ -1055,6 +1103,70 @@ def load_race_control(silver_path: str, limit: int = 200) -> list:
 
     conn = duckdb.connect()
     try:
+        def _normalize_seconds_expr(expr: str) -> str:
+            return f"""
+                CASE
+                    WHEN {expr} IS NULL THEN NULL
+                    WHEN abs({expr}) > 1e11 THEN {expr} / 1e9
+                    WHEN abs({expr}) > 1e8 THEN {expr} / 1e6
+                    WHEN abs({expr}) > 1e5 THEN {expr} / 1e3
+                    ELSE {expr}
+                END
+            """
+
+        def _session_epoch_offset_seconds() -> Optional[float]:
+            laps_file = os.path.join(silver_path, "laps.parquet")
+            if not os.path.exists(laps_file):
+                return None
+            try:
+                laps_schema_query = f"DESCRIBE SELECT * FROM read_parquet('{laps_file}')"
+                laps_columns = {
+                    str(row[0]).lower(): str(row[0])
+                    for row in conn.execute(laps_schema_query).fetchall()
+                    if row and row[0]
+                }
+
+                def _laps_col_ref(*names: str) -> Optional[str]:
+                    for name in names:
+                        raw = laps_columns.get(name.lower())
+                        if raw:
+                            return f'"{raw}"'
+                    return None
+
+                lap_start_date_expr = _laps_col_ref("LapStartDate", "lap_start_date")
+                lap_start_time_expr = _laps_col_ref("LapStartTime", "lap_start_time", "lapStartTime")
+                lap_end_expr = _laps_col_ref("session_time_seconds", "sessionTimeSeconds", "session_time")
+                lap_time_expr = _laps_col_ref("lap_time_seconds", "lapTime", "lap_time")
+
+                if not lap_start_date_expr:
+                    return None
+
+                rel_start_expr: Optional[str] = None
+                if lap_start_time_expr:
+                    rel_start_expr = _normalize_seconds_expr(f"TRY_CAST({lap_start_time_expr} AS DOUBLE)")
+                elif lap_end_expr and lap_time_expr:
+                    rel_start_expr = f"""
+                        (TRY_CAST({lap_end_expr} AS DOUBLE) - TRY_CAST({lap_time_expr} AS DOUBLE))
+                    """
+                if not rel_start_expr:
+                    return None
+
+                offset_query = f"""
+                    SELECT AVG(epoch(TRY_CAST({lap_start_date_expr} AS TIMESTAMP)) - ({rel_start_expr}))
+                    FROM read_parquet('{laps_file}')
+                    WHERE {lap_start_date_expr} IS NOT NULL
+                      AND ({rel_start_expr}) IS NOT NULL
+                      AND ({rel_start_expr}) >= 0
+                """
+                row = conn.execute(offset_query).fetchone()
+                if not row or row[0] is None:
+                    return None
+                return float(row[0])
+            except Exception:
+                return None
+
+        session_epoch_offset = _session_epoch_offset_seconds()
+
         schema_query = f"DESCRIBE SELECT * FROM read_parquet('{rc_file}')"
         columns = {
             str(row[0]).lower(): str(row[0])
@@ -1119,9 +1231,20 @@ def load_race_control(silver_path: str, limit: int = 200) -> list:
         base_ts = float(rows[0][0]) if rows and rows[0][0] is not None else 0.0
         data = []
         for row in rows:
+            ts_raw = float(row[0]) if row[0] is not None else None
+            if ts_raw is None:
+                ts_session = None
+            elif session_epoch_offset is not None:
+                ts_session = ts_raw - session_epoch_offset
+            elif ts_raw > 1e8:
+                # Backward-compatible fallback: if race-control time is absolute epoch and
+                # we can't derive session epoch offset, keep prior relative behavior.
+                ts_session = ts_raw - base_ts
+            else:
+                ts_session = ts_raw
             data.append(
                 {
-                    "timestamp": (float(row[0]) - base_ts) if row[0] is not None else None,
+                    "timestamp": ts_session,
                     "time": str(row[1]) if row[1] is not None else "",
                     "category": str(row[2]) if row[2] is not None else "",
                     "message": str(row[3]) if row[3] is not None else "",

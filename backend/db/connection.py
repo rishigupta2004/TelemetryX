@@ -1,9 +1,11 @@
 import duckdb
 import pandas as pd
 import os
+import logging
 from dotenv import load_dotenv
 
 load_dotenv()
+logger = logging.getLogger(__name__)
 
 class DuckDBConnection:
     _instance = None
@@ -20,7 +22,13 @@ class DuckDBConnection:
         """Lazy initialization - only connect when first accessed"""
         if not self._initialized:
             db_path = os.getenv("DUCKDB_PATH", "f1_data.duckdb")
-            self._conn = duckdb.connect(database=db_path, read_only=False)
+            try:
+                self._conn = duckdb.connect(database=db_path, read_only=False)
+            except Exception:
+                # In tests and multi-process usage, the writable lock may be held by
+                # another process; fall back to read-only to preserve API availability.
+                logger.warning("DuckDB write lock unavailable for %s; falling back to read-only", db_path)
+                self._conn = duckdb.connect(database=db_path, read_only=True)
             self._cursor = self._conn.cursor()
             self._initialized = True
     

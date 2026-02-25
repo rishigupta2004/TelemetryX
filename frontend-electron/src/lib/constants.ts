@@ -1,0 +1,9 @@
+export const TARGET_FPS = 90
+export const PLAYBACK_FPS = 90
+export const RESIZE_DEBOUNCE_MS = 150
+export const MAX_HISTORY_ENTRIES = 7200
+export const TRACK_LOOKUP_TABLE_SIZE = 2000
+export const API_TIMEOUT_MS = 8000
+export const API_RETRIES = 1
+export const API_CACHE_TTL_MS = 120_000
+export const API_CACHE_MAX_ENTRIES = 64

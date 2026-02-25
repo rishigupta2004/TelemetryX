@@ -5,10 +5,10 @@ import builtins
 import json
 import time
 from typing import Any, Dict, List, Optional
+import duckdb
 
 from fastapi import APIRouter, HTTPException, Query
 
-from db.connection import db_connection
 from ..config import SILVER_DIR
 from ..utils import normalize_session_code, resolve_dir
 from . import metrics as metrics_router
@@ -21,6 +21,22 @@ MAX_CHANNELS = 8
 MAX_SAMPLES = 5_000
 ALLOWED_CHANNELS = {"speed", "throttle", "brake", "rpm", "gear", "drs"}
 _STREAM_METRICS_ROUTE = "/api/v1/telemetry/{year}/{round}/stream"
+
+
+def _fetchall(sql: str, params: List[Any]) -> List[Any]:
+    conn = duckdb.connect()
+    try:
+        return conn.execute(sql, params).fetchall()
+    finally:
+        conn.close()
+
+
+def _fetchone(sql: str, params: List[Any]) -> Any:
+    conn = duckdb.connect()
+    try:
+        return conn.execute(sql, params).fetchone()
+    finally:
+        conn.close()
 
 
 def _estimate_payload_bytes(payload: Any) -> int:
@@ -51,10 +67,10 @@ def _resolve_driver_number(silver_path: str, driver: str) -> Optional[int]:
     laps_file = os.path.join(silver_path, "laps.parquet")
     if not os.path.exists(laps_file):
         return None
-    row = db_connection.conn.execute(
+    row = _fetchone(
         "SELECT CAST(driver_number AS INTEGER) FROM read_parquet(?) WHERE driver_name = ? LIMIT 1",
         [laps_file, driver],
-    ).fetchone()
+    )
     if not row:
         return None
     return int(row[0])
@@ -124,7 +140,7 @@ async def get_telemetry_stream(
         laps_file = os.path.join(silver_path, "laps.parquet")
         if not os.path.exists(laps_file):
             raise HTTPException(status_code=404, detail="Laps data not found for lap selection")
-        lap_row = db_connection.conn.execute(
+        lap_row = _fetchone(
             """
             SELECT
                 CAST(session_time_seconds AS DOUBLE) AS end_time,
@@ -134,7 +150,7 @@ async def get_telemetry_stream(
             LIMIT 1
             """,
             [laps_file, int(driver_number), int(lap_number)],
-        ).fetchone()
+        )
         if not lap_row:
             raise HTTPException(status_code=404, detail="Lap not found")
         end_time = float(lap_row[0] or 0.0)
@@ -167,10 +183,10 @@ async def get_telemetry_stream(
         ORDER BY session_time_seconds
         LIMIT ?
     """
-    rows = db_connection.conn.execute(
+    rows = _fetchall(
         sql,
         [telemetry_file, int(driver_number), int(time_start_ms), int(time_end_ms), int(MAX_SAMPLES + 1)],
-    ).fetchall()
+    )
     if len(rows) > MAX_SAMPLES:
         raise HTTPException(status_code=413, detail=f"Result exceeds {MAX_SAMPLES} samples")
 
@@ -227,7 +243,7 @@ async def get_telemetry(
             FROM read_parquet(?)
             ORDER BY driver_number, session_time_seconds
         """
-        rows = db_connection.conn.execute(sql, [telemetry_file]).fetchall()
+        rows = _fetchall(sql, [telemetry_file])
         return [
             {
                 "session_time_seconds": float(r[0]),
@@ -250,7 +266,7 @@ async def get_telemetry(
         laps_file = os.path.join(silver_path, "laps.parquet")
         if not os.path.exists(laps_file):
             return []
-        lap_row = db_connection.conn.execute(
+        lap_row = _fetchone(
             """
             SELECT
                 CAST(session_time_seconds AS DOUBLE) AS end_time,
@@ -260,7 +276,7 @@ async def get_telemetry(
             LIMIT 1
             """,
             [laps_file, int(driver_number), int(lap)],
-        ).fetchone()
+        )
         if not lap_row:
             return []
         end_time = float(lap_row[0] or 0.0)
@@ -282,7 +298,7 @@ async def get_telemetry(
             WHERE CAST(driver_number AS INTEGER) = ?
             ORDER BY session_time_seconds
         """
-        rows = db_connection.conn.execute(sql, [telemetry_file, int(driver_number)]).fetchall()
+        rows = _fetchall(sql, [telemetry_file, int(driver_number)])
         return [
             {
                 "session_time_seconds": float(r[0]),
@@ -312,10 +328,10 @@ async def get_telemetry(
           AND (session_time_seconds * 1000.0) BETWEEN ? AND ?
         ORDER BY session_time_seconds
     """
-    rows = db_connection.conn.execute(
+    rows = _fetchall(
         lap_sql,
         [telemetry_file, int(driver_number), int(start_ms), int(end_ms)],
-    ).fetchall()
+    )
     return [
         {
             "session_time_seconds": float(r[0]),
@@ -352,7 +368,7 @@ async def get_lap_telemetry(
     if driver_number is None:
         raise HTTPException(status_code=404, detail="Driver not found")
 
-    lap_row = db_connection.conn.execute(
+    lap_row = _fetchone(
         """
         SELECT
             CAST(session_time_seconds AS DOUBLE) AS end_time,
@@ -362,7 +378,7 @@ async def get_lap_telemetry(
         LIMIT 1
         """,
         [laps_file, int(driver_number), int(lap_number)],
-    ).fetchone()
+    )
     if not lap_row:
         raise HTTPException(status_code=404, detail="Lap not found")
 

@@ -4,17 +4,14 @@ import __cjs_mod__ from "node:module";
 const __filename = import.meta.filename;
 const __dirname = import.meta.dirname;
 const require2 = __cjs_mod__.createRequire(import.meta.url);
-app.disableHardwareAcceleration();
-app.commandLine.appendSwitch("no-sandbox");
-app.commandLine.appendSwitch("disable-gpu-sandbox");
-app.commandLine.appendSwitch("disable-software-rasterizer");
 const isDev = !app.isPackaged;
 function createWindow() {
   const mainWindow = new BrowserWindow({
     width: 1400,
     height: 900,
     title: "TelemetryX",
-    backgroundColor: "#0f0f0f",
+    backgroundColor: "#020408",
+    show: false,
     autoHideMenuBar: true,
     webPreferences: {
       nodeIntegration: false,
@@ -22,6 +19,9 @@ function createWindow() {
       sandbox: false,
       preload: join(__dirname, "../preload/preload.mjs")
     }
+  });
+  mainWindow.once("ready-to-show", () => {
+    mainWindow.show();
   });
   if (isDev) {
     mainWindow.webContents.openDevTools({ mode: "detach" });

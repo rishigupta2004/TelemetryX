@@ -1,9 +1,10 @@
 export const COMPOUND_COLORS: Record<string, string> = {
-  SOFT: '#ff1801',
+  SOFT: '#e8002d',
   MEDIUM: '#ffd700',
-  HARD: '#ffffff',
-  INTERMEDIATE: '#00d846',
-  WET: '#0090ff'
+  HARD: '#f0f0f0',
+  INTER: '#39b54a',
+  INTERMEDIATE: '#39b54a',
+  WET: '#0067ff'
 }
 
 export const STATUS_COLORS = {

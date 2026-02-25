@@ -1,3 +1,9 @@
+/** Typed error shape exposed by stores — preserves HTTP status for 404/500 differentiation. */
+export interface ApiErrorInfo {
+  code: number | null
+  message: string
+}
+
 export interface Season {
   year: number
 }
@@ -31,6 +37,12 @@ export interface LapRow {
   tyreCompound: string
   isValid: boolean
   isDeleted: boolean
+  pitInTimeFormatted?: string | null
+  pitOutTimeFormatted?: string | null
+  pitInSeconds?: number | null
+  pitOutSeconds?: number | null
+  pitInLaneTimeSeconds?: number | null
+  pitOutLaneTimeSeconds?: number | null
   sector1: number | null
   sector2: number | null
   sector3: number | null
@@ -41,6 +53,8 @@ export interface PositionRow {
   driverNumber: number
   x: number
   y: number
+  sourceTimestamp?: number | null
+  quality?: 'ok' | 'stale' | 'invalid' | null
 }
 
 export interface WeatherRow {
@@ -279,6 +293,31 @@ export interface UndercutPredictResponse {
   recommendations: string[]
 }
 
+export interface UndercutEvent {
+  year: number
+  race_name: string
+  session: string
+  driver_name: string
+  pit_lap: number
+  position_before_pit: number
+  position_after_pit: number
+  position_change: number
+  tyre_age: number
+  stint_length: number
+  compound: string
+  compound_ordinal: number
+  track_stress: number
+  undercut_success: number
+}
+
+export interface UndercutEventsResponse {
+  status: string
+  n_events: number
+  returned_events: number
+  success_rate: number
+  events: UndercutEvent[]
+}
+
 export interface StrategyRecommendationItem {
   strategy: string
   avg_finish_position: number
@@ -378,4 +417,120 @@ export interface FiaDocumentEventsResponse {
   events: FiaDocumentEvent[]
   source: string
   fetched_at: string
+}
+
+export interface SeasonDriverStanding {
+  position: number
+  driverNumber: number | null
+  driverName: string
+  teamName: string
+  points: number
+  wins: number
+  podiums: number
+  starts: number
+  bestFinish: number | null
+  seasons: number
+  bestQuali: number | null
+  bestRace: {
+    raceName: string
+    finish: number
+    points: number
+    fastestLapTime: number | null
+    avgLapTime: number | null
+  } | null
+  seasonPointsProgression: Array<{
+    raceName: string
+    finish: number
+    points: number
+  }>
+}
+
+export interface SeasonConstructorStanding {
+  position: number
+  teamName: string
+  points: number
+  wins: number
+  podiums: number
+  starts: number
+  bestFinish: number | null
+  driverCount: number
+}
+
+export interface SeasonStandingsResponse {
+  year: number
+  roundsCount: number
+  lastRace: string
+  drivers: SeasonDriverStanding[]
+  constructors: SeasonConstructorStanding[]
+  sourceFiles: string[]
+  generatedAt: number
+}
+
+export interface DriverCareerProfile {
+  driverNumber: number | null
+  driverName: string
+  fullName?: string | null
+  teamName: string
+  driverImage?: string | null
+  age: number | null
+  nationality?: string | null
+  dateOfBirth?: string | null
+  wikipediaUrl?: string | null
+  starts: number
+  seasons: number
+  seasonYears: number[]
+  poles: number | null
+  wins: number
+  podiums: number
+  points: number
+  championships: number
+  bestFinish: number | null
+  bestQuali: number | null
+  achievements: string[]
+  records: string[]
+  bestRace: {
+    raceName: string
+    year: number
+    finish: number
+    points: number
+  } | null
+  bestMoments: string[]
+}
+
+export interface TeamCareerProfile {
+  teamName: string
+  teamImage?: string | null
+  seasons: number
+  seasonYears: number[]
+  starts: number
+  wins: number
+  podiums: number
+  points: number
+  championships: number
+  bestFinish: number | null
+  records: string[]
+}
+
+export interface ProfilesResponse {
+  drivers: DriverCareerProfile[]
+  teams: TeamCareerProfile[]
+  generatedAt: number
+  availableYears: number[]
+}
+
+export interface CircuitInsightsResponse {
+  year: number
+  race: string
+  circuitName: string | null
+  country: string | null
+  layoutYear: number | null
+  trackWidth: number | null
+  cornerCount: number
+  drsZoneCount: number
+  sectorCount: number
+  pointCount: number
+  facts: Record<string, string>
+  source: string
+  sourceUrl: string | null
+  generatedAt: number
 }

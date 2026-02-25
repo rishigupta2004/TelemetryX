@@ -1,0 +1,30 @@
+{
+  "generatedAt": "2026-02-22T16:13:31.267212Z",
+  "status": "implementation_complete_with_env_blocker",
+  "completed": [
+    "Telemetry uPlot-only with compare and delta-speed",
+    "Track map 2.5D + minimap + start/finish fallback from external circuit layers",
+    "Race control filters + slide-in + live state badges",
+    "Weather compact + sparkline",
+    "Pit strategy UX upgrades + undercut events",
+    "Sidebar driver list with team colors + click select",
+    "Standings click-through + row move animation",
+    "Dedicated Driver and Team profile pages",
+    "Standalone Analytics view with corner speed analysis",
+    "Route-level lazy loading reducing renderer entry chunk to ~876.93kB"
+  ],
+  "dataCoverage": {
+    "startFinishCircuitFolders": 32,
+    "startFinishMapped": 32,
+    "mappingCheckPass": "32/32"
+  },
+  "remainingBlockers": [
+    "Full smoke/release-gate run blocked in this sandbox by localhost bind policy"
+  ],
+  "artifacts": [
+    "docs/qa_sweep_status.json",
+    "frontend-electron/src/data/start_finish_coverage.json",
+    "frontend-electron/src/data/start_finish_mapping_check.json",
+    "frontend-electron/src/data/start_finish_qc_report.json"
+  ]
+}

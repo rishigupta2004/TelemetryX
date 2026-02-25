@@ -1,105 +1,198 @@
 # TelemetryX
 
-**TelemetryX is a desktop‑first Formula 1 telemetry and strategy analysis suite.**  
-It turns full‑session datasets into a broadcast‑grade command center for fans, analysts, and creators.
+<div align="center">
+
+**Desktop‑first Formula 1 telemetry and strategy analysis suite**
+
+*Broadcast-grade race intelligence for fans, analysts, and creators*
+
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue?logo=typescript&logoColor=white)](#)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)](#)
+[![Electron](https://img.shields.io/badge/Electron-40-47848F?logo=electron&logoColor=white)](#)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688?logo=fastapi&logoColor=white)](#)
+[![DuckDB](https://img.shields.io/badge/DuckDB-Embedded-FFC107?logo=duckdb&logoColor=black)](#)
+
+</div>
 
 ---
 
-## Product Snapshot
+## Overview
 
-- **Post‑session precision** with full timing, telemetry, and context
-- **Dense desktop layouts** designed for real analysis
-- **Data‑driven UI** — every panel is computed from the dataset
-- **Evolving platform** — track layouts and features expand season by season
+TelemetryX turns multi-season F1 datasets into a dense, reactive command center. It ships as an **Electron desktop app** connected to a **FastAPI + DuckDB** backend, delivering timing towers, telemetry traces, strategy analytics, and ML-powered insights — all rendered at **90fps** with sub-10ms loading targets.
 
 ---
 
-## What TelemetryX Delivers
+## Architecture
 
-- **Broadcast View**: timing tower + live track + race context
-- **Telemetry View**: lap replay, traces, and delta analysis
-- **Strategy View**: tyre stints, pit windows, undercut/overcut signals
-- **Features View**: live feature feed and visual summaries
-
-TelemetryX is designed like a race‑engineering desk: **dense, readable, and actionable**.
+```
+┌─────────────────────────────────────────────────┐
+│  Electron (main process)                        │
+│  ├── GPU rasterization & hardware overlays     │
+│  ├── Window state persistence                   │
+│  └── CSP security headers                       │
+├─────────────────────────────────────────────────┤
+│  Renderer (React 19 + Vite 7)                   │
+│  ├── Zustand stores (session, playback, driver) │
+│  ├── Web Workers (telemetry, car positions)     │
+│  ├── Canvas 2D (TrackMap)                       │
+│  ├── ECharts + uPlot (charts)                   │
+│  └── Lazy-loaded views + code splitting         │
+├─────────────────────────────────────────────────┤
+│  Backend (FastAPI + DuckDB)                      │
+│  ├── 15+ API routers                            │
+│  ├── In-memory LRU cache (64 entries, 5min TTL) │
+│  ├── GZip compression                           │
+│  └── WebSocket support                          │
+└─────────────────────────────────────────────────┘
+```
 
 ---
 
-## Feature Coverage (80+)
+## Features
 
-TelemetryX ships with **80+ engineered features** across seven categories:
+### Views
+| View | Description |
+|------|-------------|
+| **Timing Tower** | Live classification with gap/interval, sectors, tyre compound, position changes |
+| **Telemetry** | Lap-by-lap traces for speed, throttle, brake, gear, RPM, DRS with driver comparison |
+| **Strategy** | Pit windows, tyre degradation, undercut/overcut predictor, strategy simulations |
+| **Track Map** | Canvas-rendered circuit with live car positions, DRS zones, sector markers, corners |
+| **Features** | Race pace analysis, season standings, clustering, circuit insights, FIA documents |
 
-- **Timing & pace** — lap times, gaps, consistency, stint pace  
-- **Telemetry** — speed, throttle, brake, gear, RPM, DRS  
-- **Strategy** — pit windows, tyre degradation, undercut/overcut  
-- **Race context** — weather, race control, safety phases  
-- **Driver performance** — sector strength, recovery, errors  
-- **Track & circuit** — layout dominance, sector splits, corner behavior  
-- **Comparisons** — teammate deltas, session‑segment analysis  
+### Performance
+- **90fps playback** — RAF-based playback store with 6ms minimum update interval
+- **Lazy loading** — `React.lazy` + `Suspense` for all heavy views
+- **Code splitting** — ECharts, uPlot, Lucide, React, Zustand in separate vendor chunks
+- **Web Workers** — Telemetry data processing and car position interpolation off main thread
+- **API caching** — Client-side response cache (120s TTL) + request deduplication
+- **GPU acceleration** — `will-change`, `contain: layout style paint`, hardware overlays
 
-Full inventory: `features_Catalog.md`
+### UI
+- **Welcome screen** — Animated splash with phased progress bar
+- **Glass morphism** — Metallic panels with gradient backgrounds and subtle borders
+- **Micro-animations** — Modal entrance/exit, sidebar indicator bar, tooltip transitions, shimmer skeletons
+- **Dark theme** — Designed for extended analysis sessions
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Desktop | Electron 40, electron-vite 5 |
+| Frontend | React 19, TypeScript 5.9, Vite 7, Tailwind CSS 4 |
+| State | Zustand 5 |
+| Charts | ECharts 6, uPlot 1.6, Canvas 2D |
+| Icons | Lucide React |
+| Backend | Python, FastAPI, DuckDB, Uvicorn |
+| Data | FastF1 (2018+), Ergast (2000–2017) |
+
+---
+
+## Getting Started
+
+### Prerequisites
+- **Node.js** ≥ 18 and **npm** ≥ 9
+- **Python** ≥ 3.10
+- F1 data files (see `_inputs/DATA_INDEX.md`)
+
+### Backend
+```bash
+cd backend
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+python main.py                    # starts on :8000 by default
+```
+
+### Frontend (Electron)
+```bash
+cd frontend-electron
+npm install
+npm run dev                       # starts electron-vite dev server
+```
+
+### Production Build
+```bash
+cd frontend-electron
+npm run build                     # builds to out/
+```
+
+---
+
+## Project Structure
+
+```
+TelemetryX/
+├── backend/                      # FastAPI backend
+│   ├── api/                      # Routers, cache, utils
+│   │   ├── routers/              # 15+ endpoint modules
+│   │   ├── cache.py              # LRU cache (64 entries, 5min TTL)
+│   │   └── websocket/            # Real-time data streaming
+│   ├── etl/                      # Data ingestion pipeline
+│   ├── main.py                   # App entry + middleware
+│   └── requirements.txt
+├── frontend-electron/            # Electron + React app
+│   ├── electron/                 # Main process + preload
+│   ├── src/
+│   │   ├── api/                  # API client with cache + dedup
+│   │   ├── components/           # 20+ React components
+│   │   ├── hooks/                # Custom hooks (timing, positions)
+│   │   ├── lib/                  # Utilities, constants, colors
+│   │   ├── stores/               # Zustand stores (4)
+│   │   ├── views/                # 5 main views + sub-views
+│   │   ├── workers/              # Web workers (2)
+│   │   ├── App.tsx               # Root with lazy loading
+│   │   └── index.css             # Design system + animations
+│   ├── electron.vite.config.ts   # Build config with chunk splitting
+│   └── package.json
+├── features/                     # Feature definitions
+├── ml/                           # ML models
+├── scripts/                      # Utility scripts
+├── tests/                        # Backend tests
+└── docs/                         # Documentation
+```
 
 ---
 
 ## Data & Coverage
 
-- **FastF1** for 2018+ telemetry, timing, and session metadata  
-- **Ergast** for historical results (2000–2017)  
+- **FastF1** for 2018+ telemetry, timing, and session metadata
+- **Ergast** for historical results (2000–2017)
 
 Coverage varies by season and session due to FIA restrictions.
 
-**Important:** the raw 50GB+ dataset is not included in this repo.  
-TelemetryX connects to a local or remote data backend; data packs are managed separately.
+> **Note:** The raw 50GB+ dataset is not included in this repo. TelemetryX connects to a local or remote data backend; data packs are managed separately.
 
 ---
 
-## How TelemetryX Works (High‑Level)
+## Quality Gate
 
-1. **Ingestion** (FastF1 / Ergast)  
-2. **Normalization** (sessions, drivers, laps, telemetry)  
-3. **Feature generation** (80+ engineered metrics)  
-4. **Playback engine** (time‑aligned replay)  
-5. **Desktop UI** (real‑time reactive panels)
+```bash
+# TypeScript check
+cd frontend-electron && npx tsc --noEmit
 
----
+# Backend tests
+cd backend && python -m pytest tests/ -v
 
-## Releases
-
-TelemetryX is a desktop app. Public releases will be distributed from the Releases page.
-
-## Phase 6 Consistency Gate (Developer)
-
-Use this lightweight gate before release candidates to validate cross-session consistency and key QA workflows.
-
-- Backend matrix gate (R, SR, Q):
-  - `python scripts/diagnose_backend.py --release-gate --sessions R,SR,Q --print-checklist`
-- Regression tests:
-  - `PYTHONPATH=$PWD/backend python -m pytest backend/tests/test_lap_selection_logic.py -q`
-  - `PYTHONPATH=$PWD/frontend:$PWD/frontend/app python -m pytest frontend/tests/ui/test_main_window.py -q`
-- One-command local gate via launcher:
-  - `./scripts/run_desktop_local.sh --gate-only --release-gate --print-qa-matrix`
-
-Manual QA matrix workflow per session type (`R`, `SR`, `Q`):
-
-1. Playback: load session, start/pause timeline, scrub timeline.
-2. Tab switch: move across timing, telemetry, track, strategy, features.
-3. Compare: select primary + compare driver; verify comparison overlays.
-4. Seek: jump to distant timestamps and confirm telemetry/positions refresh.
+# Full release gate
+./scripts/run_desktop_local.sh --gate-only --release-gate
+```
 
 ---
 
-## Docs (for developers)
+## Documentation
 
-- `TelemetryX.md` — product vision + system architecture  
-- `Frontend_ArchitectureOverview.md` — UI system design  
-- `features_Catalog.md` — feature inventory  
-- `_inputs/DATA_INDEX.md` — data package index  
+| Document | Description |
+|----------|-------------|
+| `TelemetryX.md` | Product vision + system architecture |
+| `Frontend_ArchitectureOverview.md` | UI system design |
+| `features_Catalog.md` | 80+ feature inventory |
+| `AGENTS.md` | Agent development guidelines |
 
 ---
 
-## Privacy & Licensing
+## License
 
-TelemetryX is a fan‑driven analytics project.  
-It is not affiliated with Formula 1, FIA, or any team.
+TelemetryX is a fan‑driven analytics project. It is not affiliated with Formula 1, FIA, or any team.
 
 License is not yet specified. Add a `LICENSE` file before public distribution.

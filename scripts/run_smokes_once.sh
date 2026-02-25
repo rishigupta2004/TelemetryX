@@ -1,10 +1,18 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+cd "$(dirname "$0")/.."
+
 LOG_FILE="${1:-playback.log}"
 RUNTIME_S="${RUNTIME_S:-180}"
 BACKEND_MODE="${TELEMETRYX_BACKEND_MODE:-inproc}"
 QPA_PLATFORM="${QT_QPA_PLATFORM:-offscreen}"
+
+if [[ ! -f "frontend/app/main.py" ]]; then
+  echo "[smoke] legacy frontend runner not found; using release-gate + Electron build smoke"
+  bash scripts/run_desktop_local.sh --gate-only --release-gate
+  exit $?
+fi
 
 echo "[smoke] starting app for ${RUNTIME_S}s -> ${LOG_FILE}"
 export TELEMETRYX_SMOKE_TOWER=1
@@ -39,7 +47,7 @@ fi
 
 echo "[smoke] timing tower"
 TOWER_EXIT=0
-python scripts/smoke_timing_tower.py "${LOG_FILE}" --strict || TOWER_EXIT=$?
+python scripts/smoke_timing_tower.py "${LOG_FILE}" --strict --min-tower-ticks 100 --min-pos-samples 100 --max-pos-nearest-dt-p95 0.20 || TOWER_EXIT=$?
 
 echo "[smoke] telemetry binding"
 TEL_EXIT=0

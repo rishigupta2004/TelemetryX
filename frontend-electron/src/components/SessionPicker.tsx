@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSessionStore } from '../stores/sessionStore'
 
 interface SessionPickerProps {
@@ -7,6 +7,16 @@ interface SessionPickerProps {
 }
 
 const SESSION_PRIORITY = ['R', 'Q', 'S', 'SR', 'FP1', 'FP2', 'FP3']
+
+const SESSION_LABELS: Record<string, string> = {
+  R: 'Race',
+  Q: 'Qualifying',
+  S: 'Sprint',
+  SR: 'Sprint Race',
+  FP1: 'Practice 1',
+  FP2: 'Practice 2',
+  FP3: 'Practice 3',
+}
 
 function sortSessions(sessions: string[]): string[] {
   return [...sessions].sort((a, b) => {
@@ -32,9 +42,11 @@ export default function SessionPicker({ open, onClose }: SessionPickerProps) {
   } = useSessionStore()
 
   const [pendingAction, setPendingAction] = useState<'seasons' | 'races' | 'session' | null>(null)
+  const [closing, setClosing] = useState(false)
 
   useEffect(() => {
     if (!open) return
+    setClosing(false)
     void (async () => {
       if (seasons.length === 0) {
         setPendingAction('seasons')
@@ -44,6 +56,24 @@ export default function SessionPicker({ open, onClose }: SessionPickerProps) {
     })()
   }, [open, seasons.length, fetchSeasons])
 
+  // Keyboard: Escape to close
+  useEffect(() => {
+    if (!open) return
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') handleClose()
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [open])
+
+  const handleClose = useCallback(() => {
+    setClosing(true)
+    setTimeout(() => {
+      setClosing(false)
+      onClose()
+    }, 200)
+  }, [onClose])
+
   const selectedRaceObj = useMemo(
     () => races.find((race) => race.name === selectedRace) ?? null,
     [races, selectedRace]
@@ -52,36 +82,60 @@ export default function SessionPicker({ open, onClose }: SessionPickerProps) {
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="w-[840px] max-w-[95vw] rounded-lg border border-border bg-bg-secondary p-4 text-text-primary">
-        <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-lg font-semibold">Select Session</h2>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center"
+      style={{
+        animation: closing ? 'modalOverlayOut 0.2s ease-in forwards' : 'modalOverlayIn 0.25s ease-out',
+      }}
+      onClick={(e) => { if (e.target === e.currentTarget) handleClose() }}
+    >
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+
+      {/* Modal */}
+      <div
+        className="relative z-10 w-[880px] max-w-[95vw] rounded-2xl border border-border/60 bg-bg-secondary p-5 text-text-primary shadow-2xl"
+        style={{
+          animation: closing ? 'modalCardOut 0.2s ease-in forwards' : 'modalCardIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+          boxShadow: '0 25px 80px rgba(0,0,0,0.6), 0 0 1px rgba(255,255,255,0.05) inset',
+        }}
+      >
+        {/* Header */}
+        <div className="mb-4 flex items-center justify-between">
+          <div>
+            <h2 className="text-lg font-bold tracking-[-0.01em]">Select Session</h2>
+            <p className="mt-0.5 text-xs text-text-muted">Choose year → race → session type</p>
+          </div>
           <button
-            className="rounded-sm bg-bg-hover px-3 py-1 text-sm hover:opacity-90"
-            onClick={onClose}
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-bg-card text-text-muted transition-all duration-200 hover:border-accent/40 hover:text-text-primary"
+            onClick={handleClose}
             type="button"
+            title="Close (Esc)"
           >
-            Close
+            ×
           </button>
         </div>
 
         {(loadingState === 'loading' || pendingAction) && (
-          <div className="mb-3 flex items-center gap-2 text-sm text-text-secondary">
-            <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-text-secondary border-t-transparent" />
-            Loading...
+          <div className="mb-3 flex items-center gap-2 text-sm text-text-secondary" style={{ animation: 'fadeInUp 0.2s ease-out' }}>
+            <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-text-secondary border-t-accent" />
+            Loading…
           </div>
         )}
 
         <div className="grid grid-cols-3 gap-4">
+          {/* Year column */}
           <section>
-            <h3 className="mb-2 text-sm text-text-secondary">Year</h3>
-            <div className="max-h-64 space-y-1 overflow-auto rounded-md border border-border p-2">
-              {seasons.map((season) => (
+            <h3 className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-text-muted">Year</h3>
+            <div className="max-h-72 space-y-0.5 overflow-auto rounded-xl border border-border/50 bg-bg-card/30 p-2">
+              {seasons.map((season, i) => (
                 <button
                   key={season.year}
-                  className={`w-full rounded-sm px-2 py-1 text-left text-sm hover:bg-bg-hover ${
-                    selectedYear === season.year ? 'bg-bg-selected' : ''
-                  }`}
+                  className={`w-full rounded-lg px-3 py-2 text-left text-sm font-medium transition-all duration-150 ${selectedYear === season.year
+                      ? 'bg-accent/10 text-white border border-accent/20'
+                      : 'text-text-secondary hover:bg-bg-hover border border-transparent'
+                    }`}
+                  style={{ animationDelay: `${i * 20}ms` }}
                   onClick={() => {
                     setPendingAction('races')
                     void fetchRaces(season.year).finally(() => setPendingAction(null))
@@ -94,19 +148,22 @@ export default function SessionPicker({ open, onClose }: SessionPickerProps) {
             </div>
           </section>
 
+          {/* Race column */}
           <section>
-            <h3 className="mb-2 text-sm text-text-secondary">Race</h3>
-            <div className="max-h-64 space-y-1 overflow-auto rounded-md border border-border p-2">
-              {selectedYear === null && <div className="text-sm text-text-muted">Select a year first</div>}
+            <h3 className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-text-muted">Race</h3>
+            <div className="max-h-72 space-y-0.5 overflow-auto rounded-xl border border-border/50 bg-bg-card/30 p-2">
+              {selectedYear === null && <div className="px-2 py-3 text-center text-xs text-text-muted">Select a year first</div>}
               {selectedYear !== null && races.length === 0 && loadingState !== 'loading' && (
-                <div className="text-sm text-text-muted">No races available</div>
+                <div className="px-2 py-3 text-center text-xs text-text-muted">No races available</div>
               )}
-              {races.map((race) => (
+              {races.map((race, i) => (
                 <button
                   key={race.name}
-                  className={`w-full rounded-sm px-2 py-1 text-left text-sm hover:bg-bg-hover ${
-                    selectedRace === race.name ? 'bg-bg-selected' : ''
-                  }`}
+                  className={`w-full rounded-lg px-3 py-2 text-left text-sm transition-all duration-150 ${selectedRace === race.name
+                      ? 'bg-accent/10 text-white border border-accent/20'
+                      : 'text-text-secondary hover:bg-bg-hover border border-transparent'
+                    }`}
+                  style={{ animation: `fadeInUp 0.2s ease-out ${i * 15}ms both` }}
                   onClick={() => useSessionStore.setState({ selectedRace: race.name, selectedSession: null })}
                   type="button"
                 >
@@ -116,26 +173,29 @@ export default function SessionPicker({ open, onClose }: SessionPickerProps) {
             </div>
           </section>
 
+          {/* Session column */}
           <section>
-            <h3 className="mb-2 text-sm text-text-secondary">Session</h3>
-            <div className="max-h-64 space-y-1 overflow-auto rounded-md border border-border p-2">
-              {!selectedRaceObj && <div className="text-sm text-text-muted">Select a race first</div>}
+            <h3 className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-text-muted">Session</h3>
+            <div className="max-h-72 space-y-1 overflow-auto rounded-xl border border-border/50 bg-bg-card/30 p-2">
+              {!selectedRaceObj && <div className="px-2 py-3 text-center text-xs text-text-muted">Select a race first</div>}
               {selectedRaceObj &&
-                sortSessions(selectedRaceObj.sessions).map((session) => (
+                sortSessions(selectedRaceObj.sessions).map((session, i) => (
                   <button
                     key={session}
-                    className="w-full rounded-sm border border-border px-2 py-1 text-left text-sm hover:bg-bg-hover"
+                    className="group w-full rounded-lg border border-border/40 bg-bg-secondary px-3 py-2.5 text-left transition-all duration-150 hover:border-accent/30 hover:bg-bg-hover"
+                    style={{ animation: `fadeInUp 0.2s ease-out ${i * 30}ms both` }}
                     onClick={() => {
                       if (!selectedYear || !selectedRaceObj) return
                       setPendingAction('session')
                       void loadSession(selectedYear, selectedRaceObj.name, session).then(() => {
                         const state = useSessionStore.getState()
-                        if (state.loadingState === 'ready') onClose()
+                        if (state.loadingState === 'ready') handleClose()
                       }).finally(() => setPendingAction(null))
                     }}
                     type="button"
                   >
-                    {session}
+                    <div className="text-sm font-semibold text-text-primary">{session}</div>
+                    <div className="text-[11px] text-text-muted">{SESSION_LABELS[session] ?? session}</div>
                   </button>
                 ))}
             </div>

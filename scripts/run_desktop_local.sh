@@ -4,7 +4,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 # Run desktop against a local backend.
-export PYTHONPATH="${PYTHONPATH:-}:$PWD/frontend"
+export PYTHONPATH="${PYTHONPATH:-}:$PWD/backend:$PWD"
 
 PY="${PYTHON:-python3}"
 if [[ -x ".venv/bin/python" ]]; then
@@ -21,10 +21,12 @@ fi
 
 export PORT
 export TELEMETRYX_API_BASE_URL="${TELEMETRYX_API_BASE_URL:-http://localhost:${PORT}/api/v1}"
+export VITE_API_BASE_URL="${VITE_API_BASE_URL:-${TELEMETRYX_API_BASE_URL}}"
 health_url="${TELEMETRYX_API_BASE_URL%/api/v1}/health"
 release_gate=0
 gate_only=0
 print_qa_matrix=0
+inproc_requested=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -47,6 +49,10 @@ while [[ $# -gt 0 ]]; do
   shift
 done
 
+if [[ "${TELEMETRYX_BACKEND_MODE:-}" == "inproc" ]]; then
+  inproc_requested=1
+fi
+
 backend_pid=""
 cleanup() {
   if [[ -n "${backend_pid}" ]]; then
@@ -66,26 +72,6 @@ except Exception:
 sys.exit(0 if data.get("status")=="healthy" else 1)
 ' 2>/dev/null <<<"${body}"
 }
-
-can_inproc() {
-  "${PY}" -c 'import sys
-from pathlib import Path
-repo=str(Path.cwd())
-sys.path.insert(0, repo)
-sys.path.insert(0, repo + "/frontend")
-from backend.main import app  # type: ignore
-from starlette.testclient import TestClient  # type: ignore
-c=TestClient(app)
-r=c.get("/health")
-raise SystemExit(0 if getattr(r,"status_code",0)==200 else 1)
-' >/dev/null 2>&1
-}
-
-# If the user explicitly requests in-process mode, skip any local server startup.
-if [[ "${TELEMETRYX_BACKEND_MODE:-}" == "inproc" ]]; then
-  "${PY}" -m app.main
-  exit 0
-fi
 
 if ! is_healthy; then
   # Prefer local uvicorn for dev unless TELEMETRYX_USE_DOCKER=1.
@@ -142,8 +128,9 @@ fi
 
 if ! is_healthy; then
   echo "Backend not reachable at ${health_url}." >&2
-  echo "Falling back to in-process backend (no HTTP server)." >&2
+  echo "Falling back to in-process backend for release-gate only." >&2
   export TELEMETRYX_BACKEND_MODE="inproc"
+  inproc_requested=1
 fi
 
 run_release_gate() {
@@ -157,8 +144,26 @@ run_release_gate() {
 
   echo "[phase6] running regression tests"
   PYTHONPATH="${PWD}/backend${PYTHONPATH:+:${PYTHONPATH}}" "${PY}" -m pytest backend/tests/test_lap_selection_logic.py -q
-  PYTHONPATH="${PWD}/frontend:${PWD}/frontend/app${PYTHONPATH:+:${PYTHONPATH}}" "${PY}" -m pytest frontend/tests/ui/test_main_window.py -q
+  if [[ -f "frontend/tests/ui/test_main_window.py" ]]; then
+    PYTHONPATH="${PWD}/frontend:${PWD}/frontend/app${PYTHONPATH:+:${PYTHONPATH}}" "${PY}" -m pytest frontend/tests/ui/test_main_window.py -q
+  elif [[ -d "frontend-electron" ]]; then
+    npm --prefix frontend-electron run build
+  else
+    echo "[phase6] warning: no frontend gate target found"
+  fi
 }
+
+if [[ "${inproc_requested}" == "1" ]]; then
+  if [[ "${release_gate}" == "1" ]]; then
+    run_release_gate
+    if [[ "${gate_only}" == "1" ]]; then
+      exit 0
+    fi
+  fi
+  echo "TELEMETRYX_BACKEND_MODE=inproc is only supported for release-gate checks."
+  echo "Use HTTP mode (unset TELEMETRYX_BACKEND_MODE) to run frontend-electron against a local backend."
+  exit 1
+fi
 
 if [[ "${release_gate}" == "1" ]]; then
   run_release_gate
@@ -167,4 +172,9 @@ if [[ "${release_gate}" == "1" ]]; then
   fi
 fi
 
-"${PY}" -m app.main
+if [[ -d "frontend-electron" ]]; then
+  npm --prefix frontend-electron run dev
+else
+  echo "frontend-electron directory not found."
+  exit 1
+fi

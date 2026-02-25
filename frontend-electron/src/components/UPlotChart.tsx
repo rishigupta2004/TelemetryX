@@ -1,9 +1,10 @@
-import React, { useEffect, useMemo, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import uPlot from 'uplot'
 import 'uplot/dist/uPlot.min.css'
 
 interface UPlotChartProps {
   title: string
+  subtitle?: string
   timestamps: number[]
   series: {
     label: string
@@ -14,54 +15,158 @@ interface UPlotChartProps {
   height: number
   yRange?: [number, number]
   xRange?: [number, number]
+  xTickMode?: 'time' | 'distance' | 'integer' | 'default'
+  xTickUnit?: string
   yLabel?: string
+  yTickMode?: 'default' | 'percent' | 'integer' | 'rpm' | 'binary'
+  yTickUnit?: string
+  xLabel?: string
   stepped?: boolean
   markers?: { x: number; label?: string }[]
+  shadingData?: { drs?: number[]; brake?: number[] }
+  frame?: boolean
+  showHeader?: boolean
+  onCursor?: (payload: { idx: number | null; x: number | null; values: number[] }) => void
+  /** 0–1 fraction for playback cursor position within X range. Updated at 60fps via DOM ref. */
+  playbackCursorFraction?: number
+  /** Called when user clicks the chart: receives the data-space X value */
+  onSeek?: (dataX: number) => void
 }
 
 export function UPlotChart({
   title,
+  subtitle,
   timestamps,
   series,
   height,
   yRange,
   xRange,
   yLabel,
+  yTickMode = 'default',
+  yTickUnit,
+  xLabel,
+  xTickMode = 'time',
+  xTickUnit,
   stepped,
-  markers
+  markers,
+  shadingData,
+  frame = true,
+  showHeader = true,
+  onCursor,
+  playbackCursorFraction,
+  onSeek
 }: UPlotChartProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const chartRef = useRef<uPlot | null>(null)
   const resizeObserverRef = useRef<ResizeObserver | null>(null)
   const markersRef = useRef<{ x: number; label?: string }[]>(markers ?? [])
+  const shadingDataRef = useRef(shadingData)
+  const onCursorRef = useRef(onCursor)
+  const cursorLineRef = useRef<HTMLDivElement>(null)
+  const onSeekRef = useRef(onSeek)
 
   const structureKey = useMemo(
-    () => [series.length, stepped ? 'stepped' : 'linear', yLabel || title, yRange?.[0], yRange?.[1], xRange?.[0], xRange?.[1]].join('|'),
-    [series.length, stepped, yLabel, title, yRange?.[0], yRange?.[1], xRange?.[0], xRange?.[1]]
+    () =>
+      [
+        series.length,
+        stepped ? 'stepped' : 'linear',
+        yLabel || title,
+        yTickMode,
+        yTickUnit || '',
+        xLabel || '',
+        xTickMode,
+        xTickUnit || '',
+        yRange?.[0],
+        yRange?.[1],
+        xRange?.[0],
+        xRange?.[1]
+      ].join('|'),
+    [series.length, stepped, yLabel, title, yTickMode, yTickUnit, xLabel, xTickMode, xTickUnit, yRange, xRange]
   )
+
+  const formatYTick = (value: number) => {
+    if (yTickMode === 'percent') return `${Math.round(value)}%`
+    if (yTickMode === 'integer') return `${Math.round(value)}`
+    if (yTickMode === 'rpm') return `${Math.round(value).toLocaleString('en-US')}`
+    if (yTickMode === 'binary') return value >= 0.5 ? 'ON' : 'OFF'
+    if (Math.abs(value) >= 1000) return `${Math.round(value)}${yTickUnit ? ` ${yTickUnit}` : ''}`
+    return `${value.toFixed(Number.isInteger(value) ? 0 : 1)}${yTickUnit ? ` ${yTickUnit}` : ''}`
+  }
+
+  const formatXTick = (value: number) => {
+    if (xTickMode === 'distance') {
+      if (!Number.isFinite(value)) return '-'
+      const rounded = Math.round(value)
+      return xTickUnit ? `${rounded}${xTickUnit}` : `${rounded}`
+    }
+    if (xTickMode === 'integer') return `${Math.round(value)}`
+    if (xTickMode === 'default') return `${value.toFixed(Number.isInteger(value) ? 0 : 1)}`
+    if (value < 60) return `${value.toFixed(value < 10 ? 1 : 0)}`
+    const mins = Math.floor(value / 60)
+    const secs = value % 60
+    const wholeSecs = Math.floor(secs)
+    const tenths = Math.floor((secs - wholeSecs) * 10)
+    return `${mins}:${String(wholeSecs).padStart(2, '0')}.${tenths}`
+  }
 
   useEffect(() => {
     markersRef.current = markers ?? []
+    shadingDataRef.current = shadingData
+    onCursorRef.current = onCursor
+    onSeekRef.current = onSeek
     chartRef.current?.redraw()
-  }, [markers])
+  }, [markers, shadingData, onCursor, onSeek])
+
+  // Update playback cursor line position via DOM ref — no React re-render
+  useEffect(() => {
+    const el = cursorLineRef.current
+    if (!el) return
+    if (playbackCursorFraction == null || !Number.isFinite(playbackCursorFraction)) {
+      el.style.display = 'none'
+      return
+    }
+    const pct = Math.max(0, Math.min(1, playbackCursorFraction)) * 100
+    el.style.display = 'block'
+    el.style.left = `${pct}%`
+  }, [playbackCursorFraction])
+
+  // Click handler for seek
+  const handleClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const handler = onSeekRef.current
+    const chart = chartRef.current
+    if (!handler || !chart) return
+    const rect = e.currentTarget.getBoundingClientRect()
+    const clickX = e.clientX - rect.left
+    // uPlot's plot area: chart.bbox is in CSS pixels * devicePixelRatio
+    const dpr = window.devicePixelRatio || 1
+    const plotLeft = chart.bbox.left / dpr
+    const plotWidth = chart.bbox.width / dpr
+    const relX = clickX - plotLeft
+    if (relX < 0 || relX > plotWidth) return
+    const dataX = chart.posToVal(relX, 'x')
+    if (Number.isFinite(dataX)) handler(dataX)
+  }, [])
 
   useEffect(() => {
-    if (!containerRef.current || !timestamps.length) return
+    const el = containerRef.current
+    if (!el || !timestamps.length) return
 
     chartRef.current?.destroy()
     chartRef.current = null
     resizeObserverRef.current?.disconnect()
     resizeObserverRef.current = null
 
+    const measuredWidth = el.getBoundingClientRect().width || el.clientWidth || 800
+
     const opts: uPlot.Options = {
-      width: containerRef.current.clientWidth || 800,
+      width: measuredWidth,
       height,
-      padding: [12, 12, 10, 0],
+      padding: [14, 16, 20, 12],
       cursor: {
         show: true,
         sync: { key: 'telemetry-sync', setSeries: false },
         points: { show: false },
-        y: false,
+        y: true,
         x: true
       },
       scales: {
@@ -74,26 +179,24 @@ export function UPlotChart({
       axes: [
         {
           show: true,
-          stroke: '#7286a7',
-          grid: { stroke: '#33435f', width: 1, dash: [2, 6] },
-          ticks: { stroke: '#5f7392', width: 1 },
-          font: '11px monospace',
-          values: (_self, values) =>
-            values.map((v) => {
-              if (v < 60) return `${v.toFixed(0)}`
-              const mins = Math.floor(v / 60)
-              const secs = Math.floor(v % 60)
-              return `${mins}:${String(secs).padStart(2, '0')}`
-            })
+          label: xLabel,
+          stroke: 'rgba(226,235,245,0.85)',
+          grid: { stroke: 'rgba(255,255,255,0.12)', width: 1, dash: [2, 6] },
+          ticks: { stroke: 'rgba(255,255,255,0.2)', width: 1, size: 4 },
+          font: '13px ui-monospace, monospace',
+          values: (_self, values) => values.map((v) => formatXTick(v))
         },
         {
           show: true,
           label: yLabel || title,
-          stroke: '#7286a7',
-          grid: { stroke: '#2a3952', width: 1, dash: [2, 7] },
-          ticks: { stroke: '#5f7392', width: 1 },
-          font: '11px monospace',
-          size: 56
+          labelSize: 20,
+          labelFont: '13px ui-monospace, monospace',
+          stroke: 'rgba(226,235,245,0.85)',
+          grid: { stroke: 'rgba(255,255,255,0.12)', width: 1, dash: [2, 7] },
+          ticks: { stroke: 'rgba(255,255,255,0.2)', width: 1, size: 4 },
+          font: '13px ui-monospace, monospace',
+          size: 64,
+          values: (_self, values) => values.map((v) => formatYTick(v))
         }
       ],
       series: [
@@ -101,7 +204,7 @@ export function UPlotChart({
         ...series.map((s, i) => ({
           label: s.label,
           stroke: s.color,
-          width: s.width || 2,
+          width: s.width || 2.5,
           dash: i > 0 ? [6, 3] : undefined,
           paths: stepped ? uPlot.paths.stepped!({ align: 1 }) : uPlot.paths.linear!(),
           points: { show: false }
@@ -111,38 +214,69 @@ export function UPlotChart({
         init: [
           (u: uPlot) => {
             const canvas = u.root.querySelector('canvas')
-            if (canvas) canvas.style.background = '#0a1020'
+            if (canvas) {
+              canvas.style.background = '#0a0d12'
+              canvas.style.borderRadius = '10px'
+            }
+          }
+        ],
+        setCursor: [
+          (u: uPlot) => {
+            const handler = onCursorRef.current
+            if (!handler) return
+            const idx = u.cursor.idx
+            if (idx == null || idx < 0) {
+              handler({ idx: null, x: null, values: [] })
+              return
+            }
+            const xVal = Number((u.data?.[0] as ArrayLike<number> | undefined)?.[idx])
+            const values = series.map((_, i) => {
+              const raw = Number((u.data?.[i + 1] as ArrayLike<number> | undefined)?.[idx])
+              return Number.isFinite(raw) ? raw : NaN
+            })
+            handler({ idx, x: Number.isFinite(xVal) ? xVal : null, values })
           }
         ],
         draw: [
           (u: uPlot) => {
             const markerRows = markersRef.current
-            if (!markerRows.length) return
-
+            const shade = shadingDataRef.current
             const ctx = u.ctx
             const top = u.bbox.top
             const bottom = top + u.bbox.height
 
-            ctx.save()
-            ctx.strokeStyle = 'rgba(136, 163, 201, 0.35)'
-            ctx.fillStyle = 'rgba(151, 174, 208, 0.85)'
-            ctx.lineWidth = 1
-            ctx.setLineDash([3, 7])
+            if (shade?.drs?.length && timestamps.length === shade.drs.length) {
+              ctx.save()
+              ctx.fillStyle = 'rgba(160, 170, 185, 0.08)'
+              for (let i = 0; i < shade.drs.length; i += 1) {
+                if ((shade.drs[i] ?? 0) < 0.5) continue
+                const x = u.valToPos(timestamps[i], 'x', true)
+                ctx.fillRect(x - 1, top, 2, bottom - top)
+              }
+              ctx.restore()
+            }
 
+            if (!markerRows.length) return
+            ctx.save()
+            ctx.strokeStyle = 'rgba(130, 145, 160, 0.3)'
+            ctx.fillStyle = 'rgba(200, 210, 220, 0.85)'
+            ctx.lineWidth = 1
+            ctx.setLineDash([3, 6])
             for (const marker of markerRows) {
               const x = u.valToPos(marker.x, 'x', true)
+              ctx.strokeStyle = 'rgba(130, 145, 160, 0.3)'
+              ctx.fillStyle = 'rgba(200, 210, 220, 0.85)'
               ctx.beginPath()
               ctx.moveTo(x, top)
               ctx.lineTo(x, bottom)
               ctx.stroke()
               if (marker.label) {
                 ctx.setLineDash([])
-                ctx.font = '600 12px Plus Jakarta Sans'
-                ctx.fillText(marker.label, x - 9, top + 13)
-                ctx.setLineDash([3, 7])
+                ctx.font = '600 11px ui-monospace, monospace'
+                ctx.fillText(marker.label, x - 8, top + 13)
+                ctx.setLineDash([3, 6])
               }
             }
-
             ctx.restore()
           }
         ]
@@ -154,16 +288,18 @@ export function UPlotChart({
       ...series.map((s) => new Float64Array(s.data))
     ]
 
-    chartRef.current = new uPlot(opts, plotData, containerRef.current)
+    chartRef.current = new uPlot(opts, plotData, el)
 
     resizeObserverRef.current = new ResizeObserver(() => {
       if (!chartRef.current || !containerRef.current) return
-      chartRef.current.setSize({
-        width: containerRef.current.clientWidth,
-        height
+      const w = containerRef.current.getBoundingClientRect().width || containerRef.current.clientWidth
+      if (w <= 0) return
+      requestAnimationFrame(() => {
+        if (!chartRef.current) return
+        chartRef.current.setSize({ width: w, height })
       })
     })
-    resizeObserverRef.current.observe(containerRef.current)
+    resizeObserverRef.current.observe(el)
 
     return () => {
       resizeObserverRef.current?.disconnect()
@@ -171,6 +307,7 @@ export function UPlotChart({
       chartRef.current?.destroy()
       chartRef.current = null
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [structureKey, height, Boolean(timestamps.length)])
 
   useEffect(() => {
@@ -184,16 +321,44 @@ export function UPlotChart({
 
   if (!timestamps.length) {
     return (
-      <div className="flex items-center justify-center text-text-muted text-sm" style={{ height }}>
+      <div className="flex items-center justify-center text-sm text-text-muted" style={{ height }}>
         No {title.toLowerCase()} data
       </div>
     )
   }
 
+  const wrapperClass = frame ? 'glass-panel w-full rounded-[16px] p-3' : 'w-full'
+
   return (
-    <div className="glass-panel w-full rounded-[18px] p-2.5">
-      <div className="mb-1 px-2 text-xs uppercase tracking-[0.18em] text-text-secondary">{title}</div>
-      <div ref={containerRef} className="w-full" />
+    <div className={wrapperClass}>
+      {showHeader && (
+        <>
+          <div className="mb-0.5 px-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-text-secondary">{title}</div>
+          {subtitle && <div className="mb-1.5 px-1 font-mono text-[10px] text-text-muted">{subtitle}</div>}
+        </>
+      )}
+      <div
+        ref={containerRef}
+        className="w-full overflow-hidden rounded-[10px]"
+        style={{ height: `${height}px`, position: 'relative', minWidth: 0 }}
+        onClick={handleClick}
+      >
+        {/* Playback cursor line — positioned via DOM ref at 60fps */}
+        <div
+          ref={cursorLineRef}
+          style={{
+            position: 'absolute',
+            top: 0,
+            bottom: 0,
+            width: '2px',
+            background: 'rgba(239, 68, 68, 0.9)',
+            pointerEvents: 'none',
+            zIndex: 10,
+            display: 'none',
+            willChange: 'left'
+          }}
+        />
+      </div>
     </div>
   )
 }

@@ -176,6 +176,67 @@ async def get_laps_summary(
     }
 
 
+@router.get("/laps/{year}/{round}/head-to-head")
+async def get_head_to_head(
+    year: int,
+    round: str,
+    driver1: str,
+    driver2: str,
+    session_type: Optional[str] = Query(default=None),
+) -> Dict[str, Any]:
+    """Fastest-lap comparison between two drivers."""
+    df = _laps_df(year, round, session_type=session_type)
+    if df.empty:
+        raise HTTPException(status_code=404, detail="Laps data not found")
+    if "lap_time_seconds" not in df.columns:
+        raise HTTPException(status_code=422, detail="Missing lap_time_seconds")
+
+    # Filter to just the two drivers (by name or number) and valid laps if available.
+    mask = pd.Series([False] * len(df))
+    if "driver_name" in df.columns:
+        mask = mask | (df["driver_name"].astype(str) == driver1) | (df["driver_name"].astype(str) == driver2)
+    if "driver_number" in df.columns:
+        mask = mask | (df["driver_number"].astype(str) == str(driver1)) | (df["driver_number"].astype(str) == str(driver2))
+    df = df[mask]
+    if "is_valid_lap" in df.columns:
+        df = df[df["is_valid_lap"] == True]  # noqa: E712
+
+    group_cols = [c for c in ("driver_name", "driver_number") if c in df.columns]
+    if not group_cols:
+        raise HTTPException(status_code=422, detail="Missing driver identity columns")
+
+    fastest = df.groupby(group_cols)["lap_time_seconds"].min().reset_index().sort_values("lap_time_seconds")
+    if len(fastest) < 2:
+        raise HTTPException(status_code=404, detail="Could not find both drivers with valid laps")
+
+    a = fastest.iloc[0].to_dict()
+    b = fastest.iloc[1].to_dict()
+    diff = float(b["lap_time_seconds"]) - float(a["lap_time_seconds"])
+
+    def _fmt(seconds: float) -> str:
+        m = int(seconds // 60)
+        s = seconds % 60
+        return f"{m}:{s:06.3f}"
+
+    return {
+        "driver_1": {
+            "name": str(a.get("driver_name") or ""),
+            "number": int(a.get("driver_number") or 0),
+            "fastest_lap_formatted": _fmt(float(a["lap_time_seconds"])),
+            "fastest_lap_seconds": float(a["lap_time_seconds"]),
+        },
+        "driver_2": {
+            "name": str(b.get("driver_name") or ""),
+            "number": int(b.get("driver_number") or 0),
+            "fastest_lap_formatted": _fmt(float(b["lap_time_seconds"])),
+            "fastest_lap_seconds": float(b["lap_time_seconds"]),
+        },
+        "difference_seconds": diff,
+        "difference": f"{diff:+.3f}",
+        "interpretation": f"{b.get('driver_name') or b.get('driver_number')} is {diff:.3f}s slower than {a.get('driver_name') or a.get('driver_number')}",
+    }
+
+
 @router.get("/laps/{year}/{round}/{driver_id}")
 async def get_driver_laps(
     year: int,
@@ -292,64 +353,3 @@ async def get_gap_analysis(
         out["drivers"].append(key)
         out["data"][key] = ddf[cols].to_dict(orient="records")
     return out
-
-
-@router.get("/laps/{year}/{round}/head-to-head")
-async def get_head_to_head(
-    year: int,
-    round: str,
-    driver1: str,
-    driver2: str,
-    session_type: Optional[str] = Query(default=None),
-) -> Dict[str, Any]:
-    """Fastest-lap comparison between two drivers."""
-    df = _laps_df(year, round, session_type=session_type)
-    if df.empty:
-        raise HTTPException(status_code=404, detail="Laps data not found")
-    if "lap_time_seconds" not in df.columns:
-        raise HTTPException(status_code=422, detail="Missing lap_time_seconds")
-
-    # Filter to just the two drivers (by name or number) and valid laps if available.
-    mask = pd.Series([False] * len(df))
-    if "driver_name" in df.columns:
-        mask = mask | (df["driver_name"].astype(str) == driver1) | (df["driver_name"].astype(str) == driver2)
-    if "driver_number" in df.columns:
-        mask = mask | (df["driver_number"].astype(str) == str(driver1)) | (df["driver_number"].astype(str) == str(driver2))
-    df = df[mask]
-    if "is_valid_lap" in df.columns:
-        df = df[df["is_valid_lap"] == True]  # noqa: E712
-
-    group_cols = [c for c in ("driver_name", "driver_number") if c in df.columns]
-    if not group_cols:
-        raise HTTPException(status_code=422, detail="Missing driver identity columns")
-
-    fastest = df.groupby(group_cols)["lap_time_seconds"].min().reset_index().sort_values("lap_time_seconds")
-    if len(fastest) < 2:
-        raise HTTPException(status_code=404, detail="Could not find both drivers with valid laps")
-
-    a = fastest.iloc[0].to_dict()
-    b = fastest.iloc[1].to_dict()
-    diff = float(b["lap_time_seconds"]) - float(a["lap_time_seconds"])
-
-    def _fmt(seconds: float) -> str:
-        m = int(seconds // 60)
-        s = seconds % 60
-        return f"{m}:{s:06.3f}"
-
-    return {
-        "driver_1": {
-            "name": str(a.get("driver_name") or ""),
-            "number": int(a.get("driver_number") or 0),
-            "fastest_lap_formatted": _fmt(float(a["lap_time_seconds"])),
-            "fastest_lap_seconds": float(a["lap_time_seconds"]),
-        },
-        "driver_2": {
-            "name": str(b.get("driver_name") or ""),
-            "number": int(b.get("driver_number") or 0),
-            "fastest_lap_formatted": _fmt(float(b["lap_time_seconds"])),
-            "fastest_lap_seconds": float(b["lap_time_seconds"]),
-        },
-        "difference_seconds": diff,
-        "difference": f"{diff:+.3f}",
-        "interpretation": f"{b.get('driver_name') or b.get('driver_number')} is {diff:.3f}s slower than {a.get('driver_name') or a.get('driver_number')}",
-    }

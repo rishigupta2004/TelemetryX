@@ -62,6 +62,18 @@ def _parse_season_paths(championship_page_html: str) -> Dict[int, str]:
         if not match:
             continue
         out[int(match.group(1))] = value
+    if out:
+        return out
+    # Fallback: capture season options anywhere in the HTML.
+    for value, label in re.findall(
+        r"<option\s+value=\"([^\"]*/season/season-[^\"]+)\"[^>]*>(.*?)</option>",
+        championship_page_html,
+        flags=re.IGNORECASE | re.DOTALL,
+    ):
+        match = re.search(r"\bSEASON\s+(\d{4})\b", _strip_html(label), flags=re.IGNORECASE)
+        if not match:
+            continue
+        out[int(match.group(1))] = html.unescape(value).strip()
     return out
 
 
@@ -75,6 +87,29 @@ def _parse_event_paths(season_page_html: str) -> List[Tuple[str, str]]:
         if not label or normalize_key(label) == "event":
             continue
         out.append((label, value))
+    if out:
+        return out
+    # Fallback: scan the whole page for event options/links.
+    for value, label in re.findall(
+        r"<option\s+value=\"([^\"]*/event/[^\"]+)\"[^>]*>(.*?)</option>",
+        season_page_html,
+        flags=re.IGNORECASE | re.DOTALL,
+    ):
+        clean_label = _strip_html(label)
+        if not clean_label or normalize_key(clean_label) == "event":
+            continue
+        out.append((clean_label, html.unescape(value).strip()))
+    if out:
+        return out
+    for value, label in re.findall(
+        r"<a[^>]+href=\"([^\"]*/event/[^\"]+)\"[^>]*>(.*?)</a>",
+        season_page_html,
+        flags=re.IGNORECASE | re.DOTALL,
+    ):
+        clean_label = _strip_html(label)
+        if not clean_label:
+            continue
+        out.append((clean_label, html.unescape(value).strip()))
     return out
 
 

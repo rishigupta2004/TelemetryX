@@ -1,6 +1,7 @@
-# Python
+# ── Python ──────────────────────────────────────────────
 __pycache__/
 *.py[cod]
+*.pyo
 *.so
 .Python
 .pytest_cache/
@@ -9,43 +10,70 @@ __pycache__/
 .coverage
 htmlcov/
 .cache/
+*.egg-info/
+pip-log.txt
 
-# Virtual environments
+# ── Virtual Environments ───────────────────────────────
 .venv/
 .venvs/
 venv/
 ENV/
 env/
 
-# Data & artifacts (keep raw datasets out of git)
+# ── Data & Artifacts ───────────────────────────────────
+# Keep raw datasets out of git — these can be 50GB+
 backend/etl/data/
 backend/etl/data/**
 backend/etl/cache/
 backend/etl/output/
 backend/etl/tmp/
+backend/etl/fia_track_pipeline/
 data/
 *.duckdb
 *.db
 *.parquet
 *.sqlite
+*.arrow
+*.feather
 telemetryx*.duckdb
 views*.duckdb
+f1_data.duckdb
 
-# Node / web artifacts (legacy)
+# ── Node / Frontend ───────────────────────────────────
 node_modules/
 dist/
 build/
 coverage/
-frontend/dist/
-frontend/coverage/
+.next/
+.nuxt/
+.turbo/
 
-# FastF1 cache
+# ── Electron Build Output ─────────────────────────────
+frontend-electron/out/
+frontend-electron/dist/
+frontend-electron/release/
+frontend-electron/*.dmg
+frontend-electron/*.AppImage
+frontend-electron/*.exe
+frontend-electron/*.snap
+frontend-electron/*.deb
+frontend-electron/*.rpm
+
+# ── Frontend Baselines (development snapshots) ─────────
+*.baseline-*
+
+# ── FastF1 Cache ──────────────────────────────────────
 .fastf1_cache/
 fastf1_cache/
 
-# Env & secrets
+# ── Temp & Track Data ─────────────────────────────────
+temp_track/
+tmp_*/
+
+# ── Env & Secrets ─────────────────────────────────────
 .env
 .env.*
+!.env.example
 *.env
 .envrc
 .direnv/
@@ -53,14 +81,39 @@ fastf1_cache/
 .tool-versions
 .telemetryx_port
 
-# IDE / OS
+# ── IDE / Editor ──────────────────────────────────────
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
-.DS_Store
-Thumbs.db
+*.sublime-project
+*.sublime-workspace
 
-# Logs
+# ── OS Files ──────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ── Logs ──────────────────────────────────────────────
 *.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# ── Misc ──────────────────────────────────────────────
+.handoff/
+.baseline_snapshots/
+*.zip
+*.tar.gz
+TelemetryX Agent Prompts.md
+Agent 1.md
+Agent 2.md
+Agent 3.md
+AGENTS.md

@@ -7,6 +7,29 @@ export interface RaceControlState {
   isVSC: boolean
 }
 
+const norm = (value: string | null | undefined): string => String(value || '').trim().toUpperCase()
+
+function isSafetyCarCategory(category: string): boolean {
+  return category === 'SAFETYCAR' || category === 'SAFETY CAR'
+}
+
+function isTrackFlagCategory(category: string): boolean {
+  return category === 'FLAG' || category === 'TRACK'
+}
+
+function isGreenishFlag(flag: string): boolean {
+  return flag === 'GREEN' || flag === 'CLEAR' || flag === 'ALL CLEAR'
+}
+
+function trackFlagFromText(text: string): string | null {
+  if (text.includes('DOUBLE YELLOW')) return 'DOUBLE YELLOW'
+  if (text.includes('YELLOW')) return 'YELLOW'
+  if (text.includes('RED')) return 'RED'
+  if (text.includes('CHEQUERED')) return 'CHEQUERED'
+  if (text.includes('GREEN') || text.includes('ALL CLEAR') || text.includes('CLEAR')) return 'GREEN'
+  return null
+}
+
 export function upperBoundRaceControlByTimestamp(
   raceControl: RaceControlMessage[],
   sessionTime: number
@@ -41,42 +64,56 @@ export function getRaceControlStateFromSlice(
 
   for (let i = 0; i < endExclusive; i += 1) {
     const msg = raceControl[i]
-    const category = (msg.category || '').toUpperCase()
-    const scope = (msg.scope || '').toUpperCase()
-    const flag = (msg.flag || '').toUpperCase()
-    const text = (msg.message || '').toUpperCase()
+    const category = norm(msg.category)
+    const scope = norm(msg.scope)
+    const flag = norm(msg.flag)
+    const text = norm(msg.message)
 
     if (raceStartTime != null && msg.timestamp >= raceStartTime) {
-      if (category === 'FLAG' && scope === 'TRACK') inRaceTrackEvents = true
-      if (category === 'SAFETYCAR') inRaceScEvents = true
+      if (isTrackFlagCategory(category) && scope === 'TRACK') inRaceTrackEvents = true
+      if (isSafetyCarCategory(category)) inRaceScEvents = true
     }
 
-    if (category === 'FLAG' && scope === 'TRACK') {
-      if (flag === 'GREEN' || flag === 'CLEAR') trackFlag = 'GREEN'
+    if (isTrackFlagCategory(category) && scope === 'TRACK') {
+      if (isGreenishFlag(flag)) trackFlag = 'GREEN'
       else if (flag) trackFlag = flag
+      else {
+        const inferred = trackFlagFromText(text)
+        if (inferred) trackFlag = inferred
+      }
     }
 
-    if (category === 'FLAG' && scope === 'SECTOR' && msg.sector) {
-      if (flag === 'GREEN' || flag === 'CLEAR') delete sectorFlags[msg.sector]
+    if (isTrackFlagCategory(category) && scope === 'SECTOR' && msg.sector) {
+      if (isGreenishFlag(flag)) delete sectorFlags[msg.sector]
       else if (flag) sectorFlags[msg.sector] = flag
     }
 
-    if (category === 'SAFETYCAR') {
-      if (text.includes('VIRTUAL') && text.includes('DEPLOY')) {
-        isVSC = true
-        isSafetyCar = false
-      } else if (text.includes('SAFETY CAR') && text.includes('DEPLOY')) {
-        isSafetyCar = true
-        isVSC = false
-      }
-
-      if (
+    if (isSafetyCarCategory(category)) {
+      const deployVsc =
+        text.includes('VIRTUAL SAFETY CAR') ||
+        text.includes('VSC DEPLOY') ||
+        (text.includes('VIRTUAL') && text.includes('DEPLOY'))
+      const deploySc =
+        text.includes('SAFETY CAR DEPLOY') ||
+        text.includes('SC DEPLOY') ||
+        (text.includes('SAFETY CAR') && text.includes('DEPLOY'))
+      const clearSc =
         text.includes('ENDING') ||
+        text.includes('ENDED') ||
         text.includes('IN THIS LAP') ||
         text.includes('WITHDRAWN') ||
         text.includes('RESTART') ||
         text.includes('RESUMED')
-      ) {
+
+      if (deployVsc) {
+        isVSC = true
+        isSafetyCar = false
+      } else if (deploySc) {
+        isSafetyCar = true
+        isVSC = false
+      }
+
+      if (clearSc) {
         isSafetyCar = false
         isVSC = false
       }

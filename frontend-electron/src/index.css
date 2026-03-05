@@ -1,34 +1,85 @@
+@import "@fontsource/titillium-web/400.css";
+@import "@fontsource/titillium-web/600.css";
+@import "@fontsource/titillium-web/700.css";
+@import "@fontsource/titillium-web/900.css";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/700.css";
+@import "@fontsource/inter/400.css";
+
 @import "tailwindcss";
 
 @theme {
-  --color-bg-primary: var(--bg-primary);
-  --color-bg-secondary: var(--bg-secondary);
-  --color-bg-card: var(--bg-card);
-  --color-bg-hover: var(--bg-hover);
-  --color-bg-selected: var(--bg-selected);
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  --color-text-muted: var(--text-muted);
-  --color-accent: var(--accent);
-  --color-accent-blue: var(--accent-blue);
-  --color-border: var(--border);
+  --color-bg-void: var(--bg-void);
+  --color-bg-base: var(--bg-base);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-raised: var(--bg-raised);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-bg-inset: var(--bg-inset);
+
+  --color-fg-primary: var(--fg-primary);
+  --color-fg-secondary: var(--fg-secondary);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-ghost: var(--fg-ghost);
+
+  --color-border-hard: var(--border-hard);
+  --color-border-soft: var(--border-soft);
+  --color-border-micro: var(--border-micro);
+
+  --color-red-core: var(--red-core);
+  --color-red-dim: var(--red-dim);
+  --color-red-ghost: var(--red-ghost);
+
+  --color-purple-sb: var(--purple-sb);
+  --color-green-pb: var(--green-pb);
+  --color-amber-slow: var(--amber-slow);
+  --color-blue-sel: var(--blue-sel);
+
+  --color-green-live: var(--green-live);
+  --color-amber-warn: var(--amber-warn);
+  --color-red-danger: var(--red-danger);
+  --color-orange-sc: var(--orange-sc);
+
+  --font-sans: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-heading: 'Titillium Web', sans-serif;
 }
 
 :root {
-  --bg-primary: #0a0a0a;
-  --bg-secondary: #111114;
-  --bg-card: #18181b;
-  --bg-hover: #222226;
-  --bg-selected: #1f262f;
-  --text-primary: #e6ecf3;
-  --text-secondary: #a5b0be;
-  --text-muted: #6f7a88;
-  --accent: #e10600;
-  --accent-blue: #8d98a6;
-  --border: #2a2a2a;
-  --green: #00d85f;
-  --yellow: #ffd200;
-  --purple: #b38cff;
+  --bg-void: #080809;
+  --bg-base: #0D0D10;
+  --bg-surface: #111114;
+  --bg-raised: #161619;
+  --bg-elevated: #1C1C20;
+  --bg-inset: #0A0A0C;
+
+  --fg-primary: #F2F2F2;
+  --fg-secondary: #8A8A96;
+  --fg-muted: #52525E;
+  --fg-ghost: #2E2E36;
+
+  --border-hard: #2A2A30;
+  --border-soft: #1E1E24;
+  --border-micro: #141418;
+
+  --red-core: #E10600;
+  --red-dim: #7A0300;
+  --red-ghost: #E1060010;
+
+  --purple-sb: #7C3AED;
+  --green-pb: #16A34A;
+  --amber-slow: #B45309;
+  --blue-sel: #1D4ED8;
+
+  --green-live: #15803D;
+  --amber-warn: #92400E;
+  --red-danger: #991B1B;
+  --orange-sc: #9A3412;
+
+  /* Required legacy aliases if missed anywhere */
+  --bg-app: var(--bg-base);
+  --bg-panel: var(--bg-surface);
+  --text-primary: var(--fg-primary);
+  --text-secondary: var(--fg-secondary);
 }
 
 * {
@@ -37,252 +88,94 @@
 
 body {
   margin: 0;
-  background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.02), transparent 40%),
-    linear-gradient(160deg, #0a0a0a 0%, #0e0e0e 45%, #0a0a0a 100%);
-  color: var(--text-primary);
-  font-family: Inter, -apple-system, sans-serif;
+  background-color: var(--bg-void);
+  color: var(--fg-primary);
+  font-family: var(--font-sans);
   overflow: hidden;
+  font-size: 13px;
+  /* NO GRADIENTS, NO GLOW */
+}
+
+/* Typography Scale Utilities */
+.text-micro {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  line-height: 1;
+}
+
+.text-col-header {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--fg-muted);
+}
+
+.text-data-sm {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.text-body {
+  font-family: var(--font-sans);
   font-size: 13px;
 }
 
-/* Single reusable container class — metallic, glossy */
-.panel {
-  background: linear-gradient(180deg, rgba(20, 20, 22, 0.92), rgba(10, 10, 10, 0.92));
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 10px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 10px 30px rgba(0, 0, 0, 0.35);
+.text-data {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
 }
 
-/* Keep glass-panel as an alias so existing className references remain valid */
-.glass-panel,
-.glass-panel-strong {
-  background: linear-gradient(180deg, rgba(20, 20, 22, 0.92), rgba(10, 10, 10, 0.92));
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 12px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 10px 30px rgba(0, 0, 0, 0.35);
+.text-heading-sm {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 16px;
 }
 
-/* Glass pill for floating labels */
-.glass-pill {
-  background: rgba(20, 20, 22, 0.85);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 999px;
+.text-heading {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 20px;
 }
 
-/* ── Welcome Screen Animations ─────────────────────────── */
-.welcome-particle {
-  position: absolute;
-  width: 2px;
-  height: 2px;
-  border-radius: 50%;
-  background: rgba(225, 6, 0, 0.25);
-  animation: particleFloat 3s ease-in-out infinite alternate;
+.text-pos {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 28px;
 }
 
-@keyframes particleFloat {
-  0% {
-    opacity: 0.1;
-    transform: translateY(0) scale(1);
-  }
-
-  50% {
-    opacity: 0.4;
-    transform: translateY(-8px) scale(1.4);
-  }
-
-  100% {
-    opacity: 0.15;
-    transform: translateY(4px) scale(0.8);
-  }
+.text-hero {
+  font-family: var(--font-heading);
+  font-weight: 900;
+  font-size: 48px;
 }
 
-.welcome-card {
-  animation: cardEntrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+/* Structural Utilities */
+.panel-border {
+  border: 1px solid var(--border-hard);
 }
 
-@keyframes cardEntrance {
-  from {
-    opacity: 0;
-    transform: translateY(24px) scale(0.96);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+/* Base layouts */
+.carbon-weave {
+  background-color: transparent;
+  background-image: url('/global-carbon.png'), repeating-linear-gradient(45deg,
+      rgba(255, 255, 255, 0.02) 0,
+      rgba(255, 255, 255, 0.02) 1px,
+      transparent 1px,
+      transparent 6px);
+  background-repeat: repeat;
 }
 
-.welcome-logo {
-  animation: logoEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
-@keyframes logoEntrance {
-  from {
-    opacity: 0;
-    transform: scale(0.7);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.welcome-title {
-  animation: titleEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
-}
-
-@keyframes titleEntrance {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.welcome-phase {
-  animation: phaseSwitch 0.3s ease-out;
-}
-
-/* ── Modal Animations ──────────────────────────────────── */
-@keyframes modalOverlayIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes modalOverlayOut {
-  from {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes modalCardIn {
-  from {
-    opacity: 0;
-    transform: scale(0.94) translateY(12px);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-@keyframes modalCardOut {
-  from {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-
-  to {
-    opacity: 0;
-    transform: scale(0.96) translateY(8px);
-  }
-}
-
-/* ── UI Transition Animations ──────────────────────────── */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-6px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-8px) scaleY(0.6);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateX(0) scaleY(1);
-  }
-}
-
-@keyframes tooltipIn {
-  from {
-    opacity: 0;
-    transform: translateX(-4px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes pulseGlow {
-
-  0%,
-  100% {
-    opacity: 1;
-    box-shadow: 0 0 4px currentColor;
-  }
-
-  50% {
-    opacity: 0.6;
-    box-shadow: 0 0 8px currentColor;
-  }
-}
-
-/* ── Skeleton Shimmer ──────────────────────────────────── */
-.skeleton-shimmer {
-  background: linear-gradient(90deg,
-      rgba(255, 255, 255, 0.03) 0%,
-      rgba(255, 255, 255, 0.06) 40%,
-      rgba(255, 255, 255, 0.03) 80%);
-  background-size: 300% 100%;
-  animation: shimmer 1.8s ease-in-out infinite;
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: 300% 0;
-  }
-
-  100% {
-    background-position: -100% 0;
-  }
-}
-
-/* ── Performance: GPU layer promotion ──────────────────── */
-.gpu-layer {
-  will-change: transform;
-  transform: translateZ(0);
-}
-
-.contain-layout {
-  contain: layout style paint;
+.no-scrollbar {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }

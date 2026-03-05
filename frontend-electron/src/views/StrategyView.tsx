@@ -4,6 +4,7 @@ import { PitStrategy } from '../components/PitStrategy'
 import { ViewErrorBoundary } from '../components/ViewErrorBoundary'
 import { api } from '../api/client'
 import { useSessionStore } from '../stores/sessionStore'
+import { strategyCandidates } from '../lib/strategyUtils'
 import type { StrategyRecommendationItem, StrategyRecommendationsResponse } from '../types'
 
 function barWidth(value: number, max: number): string {
@@ -11,14 +12,7 @@ function barWidth(value: number, max: number): string {
   return `${Math.max(2, Math.round((value / max) * 100))}%`
 }
 
-function strategyCandidates(seasonYears: number[], selectedYear: number): number[] {
-  const fromStore = [...seasonYears].sort((a, b) => b - a).filter((year) => year < selectedYear)
-  if (fromStore.length > 0) return fromStore
 
-  const fallback: number[] = []
-  for (let year = selectedYear - 1; year >= Math.max(2020, selectedYear - 2); year -= 1) fallback.push(year)
-  return fallback
-}
 
 export const StrategyView = React.memo(function StrategyView({ active }: { active: boolean }) {
   const selectedYear = useSessionStore((s) => s.selectedYear)
@@ -119,9 +113,9 @@ export const StrategyView = React.memo(function StrategyView({ active }: { activ
           </ViewErrorBoundary>
         </div>
 
-        <div className="min-h-0 rounded-md border border-border bg-bg-card p-3">
+        <div className="min-h-0 rounded-md border border-border bg-bg-surface p-3">
           <div className="mb-2 flex items-center justify-between">
-            <div className="text-xs uppercase tracking-[0.18em] text-text-secondary">Strategy Analytics</div>
+            <div className="text-xs uppercase tracking-[0.18em] text-fg-secondary">Strategy Analytics</div>
             {strategySourceYear != null && selectedYear != null && strategySourceYear !== selectedYear && (
               <span className="rounded bg-amber-500/10 px-2 py-0.5 text-[10px] font-mono text-amber-300">
                 using {strategySourceYear}
@@ -129,11 +123,17 @@ export const StrategyView = React.memo(function StrategyView({ active }: { activ
             )}
           </div>
 
-          {loading && <div className="text-sm text-text-secondary">Loading recommendations...</div>}
+          {loading && <div className="text-sm text-fg-secondary">Loading recommendations...</div>}
 
           {!loading && error && (
-            <div className="rounded border border-red-500/30 bg-red-500/10 p-2 text-xs text-red-300">
-              Strategy model data unavailable for {selectedYear} {selectedRace ?? 'this race'}. Try a different session or check that model data exists for this event.
+            <div className="flex h-full flex-col items-center justify-center gap-1.5 py-6 text-center">
+              <div className="text-[11px] font-semibold text-fg-secondary">No strategy model data available</div>
+              <div className="text-[10px] text-fg-muted">
+                Strategy recommendations haven't been generated for <span className="text-fg-secondary">{selectedYear} {selectedRace}</span>.
+              </div>
+              <div className="mt-1 text-[10px] text-fg-muted/60">
+                Run the strategy model pipeline to generate data for this race.
+              </div>
             </div>
           )}
 
@@ -141,38 +141,38 @@ export const StrategyView = React.memo(function StrategyView({ active }: { activ
             <div className="space-y-2 overflow-y-auto text-xs">
               <div className="grid grid-cols-3 gap-2">
                 <div className="rounded border border-border bg-bg-secondary p-2">
-                  <div className="text-[10px] uppercase text-text-muted">Best Avg Points</div>
-                  <div className="font-mono text-sm text-text-primary">{strategyData.best_strategy?.avg_points?.toFixed(2) || '-'}</div>
+                  <div className="text-[10px] uppercase text-fg-muted">Best Avg Points</div>
+                  <div className="font-mono text-sm text-fg-primary">{strategyData.best_strategy?.avg_points?.toFixed(2) || '-'}</div>
                 </div>
                 <div className="rounded border border-border bg-bg-secondary p-2">
-                  <div className="text-[10px] uppercase text-text-muted">Best Finish</div>
-                  <div className="font-mono text-sm text-text-primary">{strategyData.best_strategy?.avg_finish_position?.toFixed(2) || '-'}</div>
+                  <div className="text-[10px] uppercase text-fg-muted">Best Finish</div>
+                  <div className="font-mono text-sm text-fg-primary">{strategyData.best_strategy?.avg_finish_position?.toFixed(2) || '-'}</div>
                 </div>
                 <div className="rounded border border-border bg-bg-secondary p-2">
-                  <div className="text-[10px] uppercase text-text-muted">Simulations</div>
-                  <div className="font-mono text-sm text-text-primary">{strategyData.n_simulations || '-'}</div>
+                  <div className="text-[10px] uppercase text-fg-muted">Simulations</div>
+                  <div className="font-mono text-sm text-fg-primary">{strategyData.n_simulations || '-'}</div>
                 </div>
               </div>
 
-              {topStrategies.length === 0 && <div className="text-text-muted">No strategy rows returned</div>}
+              {topStrategies.length === 0 && <div className="text-fg-muted">No strategy rows returned</div>}
 
               {topStrategies.map((strategy) => (
                 <div key={strategy.strategy} className="rounded border border-border bg-bg-secondary p-2">
                   <div className="mb-1 flex items-center justify-between gap-2">
-                    <div className="truncate font-mono text-text-primary">{strategy.strategy}</div>
-                    <div className="font-mono text-[10px] text-text-muted">stops {strategy.avg_pit_stops.toFixed(1)}</div>
+                    <div className="truncate font-mono text-fg-primary">{strategy.strategy}</div>
+                    <div className="font-mono text-[10px] text-fg-muted">stops {strategy.avg_pit_stops.toFixed(1)}</div>
                   </div>
 
                   <div className="mb-1">
-                    <div className="mb-0.5 text-[10px] text-text-muted">Avg Points {strategy.avg_points.toFixed(2)}</div>
-                    <div className="h-2 rounded bg-bg-card">
+                    <div className="mb-0.5 text-[10px] text-fg-muted">Avg Points {strategy.avg_points.toFixed(2)}</div>
+                    <div className="h-2 rounded bg-bg-surface">
                       <div className="h-2 rounded bg-green-500/80" style={{ width: barWidth(strategy.avg_points, maxPoints) }} />
                     </div>
                   </div>
 
                   <div>
-                    <div className="mb-0.5 text-[10px] text-text-muted">Podium Probability {(strategy.podium_probability * 100).toFixed(1)}%</div>
-                    <div className="h-2 rounded bg-bg-card">
+                    <div className="mb-0.5 text-[10px] text-fg-muted">Podium Probability {((strategy.podium_probability ?? 0) * 100).toFixed(1)}%</div>
+                    <div className="h-2 rounded bg-bg-surface">
                       <div className="h-2 rounded bg-purple-500/80" style={{ width: barWidth(strategy.podium_probability || 0, maxPodium) }} />
                     </div>
                   </div>

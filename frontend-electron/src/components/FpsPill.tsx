@@ -46,7 +46,7 @@ export function FpsPill() {
 
   return (
     <div
-      className="pointer-events-none fixed right-4 top-[4.8rem] z-[80] rounded-full border border-white/20 bg-white/8 px-3 py-1.5 text-[11px] font-semibold tracking-[0.14em] text-white/75 shadow-[0_8px_28px_rgba(0,0,0,0.55)] backdrop-blur-xl"
+      className="pointer-events-none fixed right-4 top-[4.8rem] z-[80] rounded-sm border border-border-hard bg-bg-surface px-3 py-1.5 text-[11px] font-semibold tracking-[0.14em] text-text-primary"
       aria-live="polite"
     >
       <span className="mr-2 text-white/55">FPS</span>

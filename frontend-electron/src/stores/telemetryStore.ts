@@ -62,6 +62,23 @@ function mergeTelemetryChunks(chunks: TelemetryResponse[]): TelemetryResponse {
   return merged
 }
 
+type TelemetryPayload = TelemetryResponse | { telemetry?: TelemetryResponse; telemetryUnavailableReason?: string }
+
+function normalizeTelemetryPayload(payload: unknown): { data: TelemetryResponse; reason: string | null } {
+  if (!payload || typeof payload !== 'object') return { data: {}, reason: 'Telemetry payload missing' }
+  const obj = payload as Record<string, unknown>
+  const reason = typeof obj.telemetryUnavailableReason === 'string' ? obj.telemetryUnavailableReason : null
+  const base =
+    obj.telemetry && typeof obj.telemetry === 'object'
+      ? (obj.telemetry as Record<string, unknown>)
+      : obj
+  const data: TelemetryResponse = {}
+  for (const [key, value] of Object.entries(base)) {
+    if (Array.isArray(value)) data[key] = value as TelemetryResponse[string]
+  }
+  return { data, reason }
+}
+
 async function fetchTelemetryChunked(
   year: number,
   race: string,
@@ -73,8 +90,12 @@ async function fetchTelemetryChunked(
   let cursor = fetchStart
   while (cursor < fetchEnd) {
     const chunkEnd = Math.min(fetchEnd, cursor + TELEMETRY_CHUNK_S)
-    const data = await api.getTelemetry(year, race, session, cursor, chunkEnd, 1)
-    chunks.push(data)
+    const raw = (await api.getTelemetry(year, race, session, cursor, chunkEnd, 1)) as TelemetryPayload
+    const normalized = normalizeTelemetryPayload(raw)
+    if (normalized.reason && Object.keys(normalized.data).length === 0) {
+      throw new Error(`Telemetry unavailable: ${normalized.reason}`)
+    }
+    chunks.push(normalized.data)
     if (chunkEnd >= fetchEnd) break
     cursor = chunkEnd
   }

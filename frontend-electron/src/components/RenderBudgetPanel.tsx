@@ -99,13 +99,13 @@ export function RenderBudgetPanel() {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="mb-2 ml-auto block rounded-full border border-cyan-200/35 bg-[#0b1d35e6] px-3 py-1 text-[10px] font-semibold tracking-[0.12em] text-cyan-100 shadow-[0_10px_30px_rgba(0,0,0,0.45)] backdrop-blur"
+        className="mb-2 ml-auto block rounded-sm border border-border-hard bg-bg-surface px-3 py-1 text-[10px] font-semibold tracking-[0.12em] text-text-primary hover:bg-bg-hover"
       >
         PERF {open ? 'HIDE' : 'SHOW'}
       </button>
 
       {open && (
-        <div className="w-[250px] rounded-xl border border-cyan-200/30 bg-[#061427e0] p-3 font-mono text-[11px] text-cyan-50 shadow-[0_14px_34px_rgba(0,0,0,0.58)] backdrop-blur-xl">
+        <div className="w-[250px] border border-border-hard bg-bg-surface panel-border p-3 font-mono text-[11px] text-text-primary">
           <div className="mb-1.5 text-[10px] font-semibold tracking-[0.12em] text-cyan-100/95">RENDER BUDGET</div>
           <div className="text-cyan-100/75">mode: {isPlaying ? 'LIVE' : 'PAUSE'}</div>
           <div className={good(checks.fps)}>fps: {snap.fps} (min {snap.fpsFloor})</div>

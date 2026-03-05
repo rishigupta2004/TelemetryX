@@ -1937,8 +1937,8 @@ async def get_session(
     drivers = load_drivers(silver_path, year=year)
     laps = load_laps(silver_path)
     track_geometry = load_track_geometry(race_dir, year=year)
-    weather = []
-    race_control = []
+    weather = load_weather(silver_path)
+    race_control = load_race_control(silver_path)
     
     total_laps = max([lap["lapNumber"] for lap in laps]) if laps else 57
     session_duration = metadata.get("duration", 5400)

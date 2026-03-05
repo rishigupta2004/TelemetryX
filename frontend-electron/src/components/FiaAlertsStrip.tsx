@@ -48,7 +48,7 @@ export const FiaAlertsStrip = React.memo(function FiaAlertsStrip() {
     : null
 
   return (
-    <div className="rounded-md border border-border bg-bg-card p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+    <div className="border border-border-hard bg-bg-surface p-2.5 panel-border">
       <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
         <div>
           <div className="text-[10px] uppercase tracking-[0.18em] text-text-secondary">FIA Alerts</div>

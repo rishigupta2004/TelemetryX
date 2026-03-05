@@ -42,9 +42,9 @@ function formatTime(seconds: number | null | undefined): string {
 
 function Stat({ label, value }: { label: string; value: string | number | null | undefined }) {
   return (
-    <div className="rounded-lg border border-white/10 bg-white/5 p-2 text-center">
-      <div className="font-mono text-sm text-text-primary">{value ?? '-'}</div>
-      <div className="text-[10px] text-text-muted">{label}</div>
+    <div className="rounded-lg border border-border-hard bg-white/5 p-2 text-center">
+      <div className="font-mono text-sm text-fg-primary">{value ?? '-'}</div>
+      <div className="text-[10px] text-fg-muted">{label}</div>
     </div>
   )
 }
@@ -235,25 +235,25 @@ export const DriverProfileView = React.memo(function DriverProfileView() {
     }
   }, [selectedDriver, sessionData, allLaps])
 
-  if (loading && allDrivers.length === 0) return <div className="flex h-full items-center justify-center text-text-muted">Loading driver profiles...</div>
+  if (loading && allDrivers.length === 0) return <div className="flex h-full items-center justify-center text-fg-muted">Loading driver profiles...</div>
   if (error && allDrivers.length === 0) return <div className="flex h-full items-center justify-center text-red-300">{error}</div>
-  if (allDrivers.length === 0) return <div className="flex h-full items-center justify-center text-text-muted">No profile data available</div>
+  if (allDrivers.length === 0) return <div className="flex h-full items-center justify-center text-fg-muted">No profile data available</div>
 
   return (
     <div className="flex h-full min-h-0 flex-col gap-3 p-5 xl:p-6">
-      <div className="glass-panel rounded-2xl px-4 py-3">
-        <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-text-secondary">Driver Profiles</div>
-        <div className="mt-1 text-xl font-semibold text-text-primary">Career + Current Data</div>
+      <div className="bg-bg-surface border border-border-hard px-4 py-3">
+        <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-fg-secondary">Driver Profiles</div>
+        <div className="mt-1 text-xl font-semibold text-fg-primary">Career + Current Data</div>
       </div>
 
       <div className="grid min-h-0 flex-1 grid-cols-1 gap-3 xl:grid-cols-[320px_1fr]">
-        <aside className="glass-panel min-h-0 overflow-hidden rounded-2xl p-2.5">
-          <div className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-text-secondary">Drivers ({filteredDrivers.length})</div>
+        <aside className="bg-bg-surface border border-border-hard min-h-0 overflow-hidden p-2.5">
+          <div className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-fg-secondary">Drivers ({filteredDrivers.length})</div>
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search driver/team/nationality..."
-            className="mb-2 w-full rounded-lg border border-white/12 bg-black/20 px-3 py-1.5 text-sm text-text-primary outline-none"
+            className="mb-2 w-full rounded-lg border border-white/12 bg-black/20 px-3 py-1.5 text-sm text-fg-primary outline-none"
           />
           <div className="max-h-[calc(100%-3.8rem)] space-y-1 overflow-auto pr-1">
             {filteredDrivers.map((driver) => {
@@ -265,7 +265,7 @@ export const DriverProfileView = React.memo(function DriverProfileView() {
                   key={`driver-${driver.driverName}-${driver.driverNumber ?? 'x'}`}
                   type="button"
                   onClick={() => setSelectedDriverName(driver.driverName)}
-                  className={`flex w-full items-center gap-2 rounded-lg border px-2 py-1.5 text-left transition-colors ${selected ? 'border-accent bg-accent/20' : 'border-white/10 bg-black/15 hover:bg-black/30'}`}
+                  className={`flex w-full items-center gap-2 rounded-lg border px-2 py-1.5 text-left transition-colors ${selected ? 'border-accent bg-accent/20' : 'border-border-hard bg-black/15 hover:bg-black/30'}`}
                 >
                   {img ? (
                     <img src={img} alt={driver.driverName} className="h-8 w-8 rounded object-cover" loading="lazy" />
@@ -275,8 +275,8 @@ export const DriverProfileView = React.memo(function DriverProfileView() {
                     </div>
                   )}
                   <div className="min-w-0">
-                    <div className="truncate text-xs font-semibold text-text-primary">{driver.driverName}</div>
-                    <div className="truncate text-[10px] text-text-muted">{driver.teamName}</div>
+                    <div className="truncate text-xs font-semibold text-fg-primary">{driver.driverName}</div>
+                    <div className="truncate text-[10px] text-fg-muted">{driver.teamName}</div>
                   </div>
                 </button>
               )
@@ -284,27 +284,27 @@ export const DriverProfileView = React.memo(function DriverProfileView() {
           </div>
         </aside>
 
-        <section className="glass-panel min-h-0 overflow-auto rounded-2xl p-3.5">
+        <section className="bg-bg-surface border border-border-hard min-h-0 overflow-auto  p-3.5">
           {!selectedDriver ? (
-            <div className="flex h-full items-center justify-center text-text-muted">No driver selected</div>
+            <div className="flex h-full items-center justify-center text-fg-muted">No driver selected</div>
           ) : (
             <div className="space-y-3">
-              <div className="flex flex-wrap items-start gap-3 rounded-xl border border-white/10 bg-black/20 p-3">
+              <div className="flex flex-wrap items-start gap-3 rounded-xl border border-border-hard bg-black/20 p-3">
                 {selectedDriver.driverImage || sessionImages.byDriver.get(selectedDriver.driverName) ? (
                   <img
                     src={selectedDriver.driverImage || sessionImages.byDriver.get(selectedDriver.driverName) || ''}
                     alt={selectedDriver.driverName}
-                    className="h-28 w-28 rounded-lg border border-white/10 object-cover"
+                    className="h-28 w-28 rounded-lg border border-border-hard object-cover"
                     loading="lazy"
                   />
                 ) : (
-                  <div className="flex h-28 w-28 items-center justify-center rounded-lg border border-white/10 bg-black/40 text-2xl font-semibold text-white" style={{ borderColor: selectedDriver.teamColor || '#2a3340' }}>
+                  <div className="flex h-28 w-28 items-center justify-center rounded-lg border border-border-hard bg-black/40 text-2xl font-semibold text-white" style={{ borderColor: selectedDriver.teamColor || '#2a3340' }}>
                     {initials(selectedDriver.driverName)}
                   </div>
                 )}
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <div className="text-lg font-semibold text-text-primary">{selectedDriver.driverName}</div>
+                    <div className="text-lg font-semibold text-fg-primary">{selectedDriver.driverName}</div>
                     {sessionImages.byTeam.get(selectedDriver.teamName) && (
                       <img
                         src={sessionImages.byTeam.get(selectedDriver.teamName)}
@@ -314,9 +314,9 @@ export const DriverProfileView = React.memo(function DriverProfileView() {
                       />
                     )}
                   </div>
-                  <div className="text-sm text-text-secondary">{selectedDriver.fullName || selectedDriver.teamName}</div>
-                  <div className="mt-1 text-xs text-text-muted">#{selectedDriver.driverNumber ?? '-'} · {selectedDriver.nationality || 'Nationality n/a'} · Age {selectedDriver.age ?? '-'}</div>
-                  <div className="mt-1 text-xs text-text-muted">Career span: {fmtYears(selectedDriver.seasonYears)} · Seasons: {selectedDriver.seasons}</div>
+                  <div className="text-sm text-fg-secondary">{selectedDriver.fullName || selectedDriver.teamName}</div>
+                  <div className="mt-1 text-xs text-fg-muted">#{selectedDriver.driverNumber ?? '-'} · {selectedDriver.nationality || 'Nationality n/a'} · Age {selectedDriver.age ?? '-'}</div>
+                  <div className="mt-1 text-xs text-fg-muted">Career span: {fmtYears(selectedDriver.seasonYears)} · Seasons: {selectedDriver.seasons}</div>
                 </div>
               </div>
 
@@ -334,8 +334,8 @@ export const DriverProfileView = React.memo(function DriverProfileView() {
               </div>
 
               {sessionSnapshot && (
-                <div className="rounded-xl border border-white/10 bg-black/15 p-3">
-                  <div className="mb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-text-secondary">Session Snapshot</div>
+                <div className="rounded-xl border border-border-hard bg-black/15 p-3">
+                  <div className="mb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-fg-secondary">Session Snapshot</div>
                   <div className="grid grid-cols-2 gap-2 md:grid-cols-5">
                     <Stat label="Position" value={sessionSnapshot.position != null ? `P${sessionSnapshot.position}` : '-'} />
                     <Stat label="Laps" value={sessionSnapshot.lapsCompleted} />
@@ -348,22 +348,22 @@ export const DriverProfileView = React.memo(function DriverProfileView() {
               )}
 
               <div className="grid grid-cols-1 gap-3 xl:grid-cols-3">
-                <div className="rounded-xl border border-white/10 bg-black/15 p-3">
-                  <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-text-secondary">Achievements</div>
-                  <div className="mt-2 space-y-1 text-xs text-text-primary">{(selectedDriver.achievements || []).map((item) => <div key={`a-${item}`} className="rounded border border-white/10 bg-white/5 px-2 py-1">{item}</div>)}</div>
+                <div className="rounded-xl border border-border-hard bg-black/15 p-3">
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-fg-secondary">Achievements</div>
+                  <div className="mt-2 space-y-1 text-xs text-fg-primary">{(selectedDriver.achievements || []).map((item) => <div key={`a-${item}`} className="rounded border border-border-hard bg-white/5 px-2 py-1">{item}</div>)}</div>
                 </div>
-                <div className="rounded-xl border border-white/10 bg-black/15 p-3">
-                  <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-text-secondary">Records</div>
-                  <div className="mt-2 space-y-1 text-xs text-text-primary">{(selectedDriver.records || []).map((item) => <div key={`r-${item}`} className="rounded border border-white/10 bg-white/5 px-2 py-1">{item}</div>)}</div>
+                <div className="rounded-xl border border-border-hard bg-black/15 p-3">
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-fg-secondary">Records</div>
+                  <div className="mt-2 space-y-1 text-xs text-fg-primary">{(selectedDriver.records || []).map((item) => <div key={`r-${item}`} className="rounded border border-border-hard bg-white/5 px-2 py-1">{item}</div>)}</div>
                 </div>
-                <div className="rounded-xl border border-white/10 bg-black/15 p-3">
-                  <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-text-secondary">Best Moments</div>
-                  <div className="mt-2 space-y-1 text-xs text-text-primary">{(selectedDriver.bestMoments || []).map((item) => <div key={`m-${item}`} className="rounded border border-white/10 bg-white/5 px-2 py-1">{item}</div>)}</div>
+                <div className="rounded-xl border border-border-hard bg-black/15 p-3">
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-fg-secondary">Best Moments</div>
+                  <div className="mt-2 space-y-1 text-xs text-fg-primary">{(selectedDriver.bestMoments || []).map((item) => <div key={`m-${item}`} className="rounded border border-border-hard bg-white/5 px-2 py-1">{item}</div>)}</div>
                 </div>
               </div>
 
-              <div className="rounded-xl border border-white/10 bg-black/15 p-3 text-sm text-text-primary">
-                <div className="mb-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-text-secondary">Best Driven Race</div>
+              <div className="rounded-xl border border-border-hard bg-black/15 p-3 text-sm text-fg-primary">
+                <div className="mb-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-fg-secondary">Best Driven Race</div>
                 {selectedDriver.bestRace
                   ? `${selectedDriver.bestRace.raceName} ${selectedDriver.bestRace.year} · P${selectedDriver.bestRace.finish} · ${selectedDriver.bestRace.points} points`
                   : 'No best race data available'}

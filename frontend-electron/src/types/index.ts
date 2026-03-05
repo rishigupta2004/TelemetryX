@@ -9,9 +9,13 @@ export interface Season {
 }
 
 export interface Race {
-  name: string
+  year?: number
+  round?: number
+  race_name?: string
+  display_name?: string
+  name?: string
   sessions: string[]
-  startDate: string
+  startDate?: string
 }
 
 export interface Driver {
@@ -96,6 +100,13 @@ export interface SessionMetadata {
   sourceVersion: string | null
 }
 
+export interface SessionInfoResponse {
+  year: number
+  race: string
+  n_sessions: number
+  sessions: string[]
+}
+
 export interface TrackGeometry {
   name: string | null
   country: string | null
@@ -126,6 +137,8 @@ export interface SessionVizResponse {
   trackGeometry: TrackGeometry | null
 }
 
+export type SessionResponse = SessionVizResponse
+
 export interface TelemetryRow {
   driverNumber: number
   driverName: string
@@ -143,6 +156,66 @@ export interface TelemetryRow {
 export interface TelemetryResponse {
   [driverCode: string]: TelemetryRow[]
 }
+
+export type FeatureValue = string | number | boolean | null
+export type FeatureRow = Record<string, FeatureValue>
+
+export type LapFeature = FeatureRow & {
+  year: number
+  race_name: string
+  session: string
+  driver_name: string
+  driver_number: number
+  lap_number: number
+}
+
+export type TyreFeature = TyreStint
+
+export type TelemetryFeature = FeatureRow & {
+  year: number
+  race_name: string
+  session: string
+  driver_name: string
+  driver_number: number
+}
+
+export type ComparisonFeature = FeatureRow & {
+  year: number
+  race_name: string
+  session: string
+  driver_name: string
+}
+
+export type PositionFeature = FeatureRow & {
+  year: number
+  race_name: string
+  session: string
+  driver_name: string
+  driver_number: number
+}
+
+export type RaceContextFeature = FeatureRow & {
+  year: number
+  race_name: string
+  session: string
+}
+
+export type TrafficFeature = FeatureRow & {
+  year: number
+  race_name: string
+  session: string
+  driver_name: string
+}
+
+export type OvertakeFeature = FeatureRow & {
+  year: number
+  race_name: string
+  session: string
+  driver_name: string
+}
+
+export type PointsFeature = PointsFeatureRow
+
 
 export interface TyreStint {
   year: number
@@ -322,11 +395,11 @@ export interface StrategyRecommendationItem {
   strategy: string
   avg_finish_position: number
   avg_points: number
-  podium_probability: number
-  points_probability: number
+  podium_probability?: number | null
+  points_probability?: number | null
   avg_pit_stops: number
-  compounds?: string[]
-  pit_laps?: number[]
+  compounds?: string[] | null
+  pit_laps?: number[] | null
 }
 
 export interface StrategyRecommendationsResponse {
@@ -347,6 +420,8 @@ export interface ClusterDriverRow {
   cluster: number
   probabilities?: Record<number, number> | null
 }
+
+export type ClusterResult = ClusterDriverRow
 
 export interface ClusteringResponse {
   status: string

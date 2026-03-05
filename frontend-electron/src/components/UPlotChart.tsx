@@ -29,6 +29,8 @@ interface UPlotChartProps {
   onCursor?: (payload: { idx: number | null; x: number | null; values: number[] }) => void
   /** 0–1 fraction for playback cursor position within X range. Updated at 60fps via DOM ref. */
   playbackCursorFraction?: number
+  /** Optional ref-based cursor control to avoid React re-renders at 60fps. */
+  playbackCursorRef?: React.MutableRefObject<number | null>
   /** Called when user clicks the chart: receives the data-space X value */
   onSeek?: (dataX: number) => void
 }
@@ -54,6 +56,7 @@ export function UPlotChart({
   showHeader = true,
   onCursor,
   playbackCursorFraction,
+  playbackCursorRef,
   onSeek
 }: UPlotChartProps) {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -63,6 +66,7 @@ export function UPlotChart({
   const shadingDataRef = useRef(shadingData)
   const onCursorRef = useRef(onCursor)
   const cursorLineRef = useRef<HTMLDivElement>(null)
+  const tooltipRef = useRef<HTMLDivElement>(null)
   const onSeekRef = useRef(onSeek)
 
   const structureKey = useMemo(
@@ -119,6 +123,7 @@ export function UPlotChart({
 
   // Update playback cursor line position via DOM ref — no React re-render
   useEffect(() => {
+    if (playbackCursorRef) return
     const el = cursorLineRef.current
     if (!el) return
     if (playbackCursorFraction == null || !Number.isFinite(playbackCursorFraction)) {
@@ -128,7 +133,38 @@ export function UPlotChart({
     const pct = Math.max(0, Math.min(1, playbackCursorFraction)) * 100
     el.style.display = 'block'
     el.style.left = `${pct}%`
-  }, [playbackCursorFraction])
+  }, [playbackCursorFraction, playbackCursorRef])
+
+  useEffect(() => {
+    const ref = playbackCursorRef
+    if (!ref) return
+    let rafId: number | null = null
+    let last: number | null = null
+    const tick = () => {
+      const el = cursorLineRef.current
+      if (!el) {
+        rafId = requestAnimationFrame(tick)
+        return
+      }
+      const value = ref.current
+      if (value == null || !Number.isFinite(value)) {
+        if (el.style.display !== 'none') el.style.display = 'none'
+        last = null
+      } else {
+        const clamped = Math.max(0, Math.min(1, value))
+        if (last !== clamped) {
+          el.style.display = 'block'
+          el.style.left = `${clamped * 100}%`
+          last = clamped
+        }
+      }
+      rafId = requestAnimationFrame(tick)
+    }
+    rafId = requestAnimationFrame(tick)
+    return () => {
+      if (rafId != null) cancelAnimationFrame(rafId)
+    }
+  }, [playbackCursorRef])
 
   // Click handler for seek
   const handleClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
@@ -161,7 +197,7 @@ export function UPlotChart({
     const opts: uPlot.Options = {
       width: measuredWidth,
       height,
-      padding: [14, 16, 20, 12],
+      padding: [8, 8, 16, 8],
       cursor: {
         show: true,
         sync: { key: 'telemetry-sync', setSeries: false },
@@ -180,22 +216,22 @@ export function UPlotChart({
         {
           show: true,
           label: xLabel,
-          stroke: 'rgba(226,235,245,0.85)',
-          grid: { stroke: 'rgba(255,255,255,0.12)', width: 1, dash: [2, 6] },
-          ticks: { stroke: 'rgba(255,255,255,0.2)', width: 1, size: 4 },
-          font: '13px ui-monospace, monospace',
+          stroke: 'var(--fg-muted)',
+          grid: { stroke: 'var(--border-micro)', width: 1, dash: [] },
+          ticks: { stroke: 'var(--border-hard)', width: 1, size: 4 },
+          font: '10px var(--font-data), monospace',
           values: (_self, values) => values.map((v) => formatXTick(v))
         },
         {
           show: true,
           label: yLabel || title,
-          labelSize: 20,
-          labelFont: '13px ui-monospace, monospace',
-          stroke: 'rgba(226,235,245,0.85)',
-          grid: { stroke: 'rgba(255,255,255,0.12)', width: 1, dash: [2, 7] },
-          ticks: { stroke: 'rgba(255,255,255,0.2)', width: 1, size: 4 },
-          font: '13px ui-monospace, monospace',
-          size: 64,
+          labelSize: 14,
+          labelFont: '10px var(--font-data), monospace',
+          stroke: 'var(--fg-muted)',
+          grid: { stroke: 'var(--border-micro)', width: 1, dash: [] },
+          ticks: { stroke: 'var(--border-hard)', width: 1, size: 3 },
+          font: '10px var(--font-data), monospace',
+          size: 48,
           values: (_self, values) => values.map((v) => formatYTick(v))
         }
       ],
@@ -215,26 +251,50 @@ export function UPlotChart({
           (u: uPlot) => {
             const canvas = u.root.querySelector('canvas')
             if (canvas) {
-              canvas.style.background = '#0a0d12'
-              canvas.style.borderRadius = '10px'
+              canvas.style.background = 'transparent'
+              canvas.style.borderRadius = '12px'
             }
           }
         ],
         setCursor: [
           (u: uPlot) => {
             const handler = onCursorRef.current
-            if (!handler) return
+            const tooltip = tooltipRef.current
             const idx = u.cursor.idx
+
             if (idx == null || idx < 0) {
-              handler({ idx: null, x: null, values: [] })
+              if (handler) handler({ idx: null, x: null, values: [] })
+              if (tooltip) tooltip.style.display = 'none'
               return
             }
+
             const xVal = Number((u.data?.[0] as ArrayLike<number> | undefined)?.[idx])
             const values = series.map((_, i) => {
               const raw = Number((u.data?.[i + 1] as ArrayLike<number> | undefined)?.[idx])
               return Number.isFinite(raw) ? raw : NaN
             })
-            handler({ idx, x: Number.isFinite(xVal) ? xVal : null, values })
+
+            if (handler) handler({ idx, x: Number.isFinite(xVal) ? xVal : null, values })
+
+            if (tooltip) {
+              const left = u.cursor.left ?? 0
+              const containerRect = u.over.getBoundingClientRect()
+              const tipWidth = 140
+              const xPos = left + 12 > containerRect.width - tipWidth ? left - tipWidth - 12 : left + 12
+
+              tooltip.style.display = 'block'
+              tooltip.style.left = `${xPos}px`
+              tooltip.style.top = '8px'
+
+              let html = `<div style="font-size:10px;color:#a0a0a8;margin-bottom:4px">${formatXTick(xVal)}</div>`
+              series.forEach((s, i) => {
+                const v = values[i]
+                if (Number.isFinite(v)) {
+                  html += `<div style="color:${s.color}">${s.label}: <b>${formatYTick(v)}</b></div>`
+                }
+              })
+              tooltip.innerHTML = html
+            }
           }
         ],
         draw: [
@@ -245,35 +305,74 @@ export function UPlotChart({
             const top = u.bbox.top
             const bottom = top + u.bbox.height
 
+            // Minor grid for dense telemetry texture
+            const xMin = u.scales.x.min
+            const xMax = u.scales.x.max
+            if (typeof xMin === 'number' && typeof xMax === 'number' && Number.isFinite(xMin) && Number.isFinite(xMax)) {
+              const divisions = 14
+              const step = (xMax - xMin) / divisions
+              ctx.save()
+              ctx.strokeStyle = 'var(--border-micro)'
+              ctx.lineWidth = 1
+              ctx.setLineDash([])
+              for (let i = 1; i < divisions; i += 1) {
+                const xVal = xMin + step * i
+                const x = u.valToPos(xVal, 'x', true)
+                ctx.beginPath()
+                ctx.moveTo(x, top)
+                ctx.lineTo(x, bottom)
+                ctx.stroke()
+              }
+              ctx.restore()
+            }
+
             if (shade?.drs?.length && timestamps.length === shade.drs.length) {
               ctx.save()
-              ctx.fillStyle = 'rgba(160, 170, 185, 0.08)'
+              ctx.fillStyle = 'rgba(225, 6, 0, 0.08)'
               for (let i = 0; i < shade.drs.length; i += 1) {
                 if ((shade.drs[i] ?? 0) < 0.5) continue
                 const x = u.valToPos(timestamps[i], 'x', true)
-                ctx.fillRect(x - 1, top, 2, bottom - top)
+                ctx.fillRect(x - 1.6, top, 3.2, bottom - top)
               }
               ctx.restore()
             }
 
             if (!markerRows.length) return
             ctx.save()
-            ctx.strokeStyle = 'rgba(130, 145, 160, 0.3)'
+            ctx.strokeStyle = 'rgba(130, 145, 160, 0.35)'
             ctx.fillStyle = 'rgba(200, 210, 220, 0.85)'
             ctx.lineWidth = 1
             ctx.setLineDash([3, 6])
             for (const marker of markerRows) {
               const x = u.valToPos(marker.x, 'x', true)
-              ctx.strokeStyle = 'rgba(130, 145, 160, 0.3)'
-              ctx.fillStyle = 'rgba(200, 210, 220, 0.85)'
               ctx.beginPath()
               ctx.moveTo(x, top)
               ctx.lineTo(x, bottom)
               ctx.stroke()
               if (marker.label) {
+                const label = marker.label.toUpperCase()
                 ctx.setLineDash([])
-                ctx.font = '600 11px ui-monospace, monospace'
-                ctx.fillText(marker.label, x - 8, top + 13)
+                ctx.font = '600 10px "JetBrains Mono", ui-monospace, monospace'
+                const metrics = ctx.measureText(label)
+                const padX = 5
+                const padY = 2
+                const boxW = metrics.width + padX * 2
+                const boxH = 12
+                const boxX = x - boxW / 2
+                const boxY = top + 6
+                ctx.fillStyle = 'rgba(12, 14, 20, 0.85)'
+                ctx.strokeStyle = 'rgba(255,255,255,0.2)'
+                ctx.lineWidth = 1
+                ctx.beginPath()
+                if (typeof ctx.roundRect === 'function') {
+                  ctx.roundRect(boxX, boxY, boxW, boxH, 4)
+                } else {
+                  ctx.rect(boxX, boxY, boxW, boxH)
+                }
+                ctx.fill()
+                ctx.stroke()
+                ctx.fillStyle = 'rgba(210, 220, 235, 0.9)'
+                ctx.fillText(label, boxX + padX, boxY + boxH - padY - 1)
                 ctx.setLineDash([3, 6])
               }
             }
@@ -327,21 +426,22 @@ export function UPlotChart({
     )
   }
 
-  const wrapperClass = frame ? 'glass-panel w-full rounded-[16px] p-3' : 'w-full'
+  const wrapperClass = frame ? 'w-full p-2 border border-border-hard bg-bg-surface' : 'w-full'
 
   return (
     <div className={wrapperClass}>
       {showHeader && (
         <>
-          <div className="mb-0.5 px-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-text-secondary">{title}</div>
-          {subtitle && <div className="mb-1.5 px-1 font-mono text-[10px] text-text-muted">{subtitle}</div>}
+          <div className="mb-0.5 px-1 text-[10px] font-bold uppercase tracking-widest text-fg-secondary" style={{ fontFamily: 'var(--font-heading)' }}>{title}</div>
+          <div className="mb-1.5 px-1 font-mono text-[10px] text-fg-muted">{subtitle}</div>
         </>
       )}
       <div
         ref={containerRef}
-        className="w-full overflow-hidden rounded-[10px]"
-        style={{ height: `${height}px`, position: 'relative', minWidth: 0 }}
+        className="chart-surface w-full"
+        style={{ height: `${height}px`, position: 'relative', minWidth: 0, overflow: 'visible' }}
         onClick={handleClick}
+        onMouseLeave={() => { if (tooltipRef.current) tooltipRef.current.style.display = 'none' }}
       >
         {/* Playback cursor line — positioned via DOM ref at 60fps */}
         <div
@@ -350,12 +450,31 @@ export function UPlotChart({
             position: 'absolute',
             top: 0,
             bottom: 0,
-            width: '2px',
-            background: 'rgba(239, 68, 68, 0.9)',
+            width: '1px',
+            background: 'var(--brand-core)',
             pointerEvents: 'none',
             zIndex: 10,
             display: 'none',
             willChange: 'left'
+          }}
+        />
+        {/* Hover tooltip */}
+        <div
+          ref={tooltipRef}
+          style={{
+            display: 'none',
+            position: 'absolute',
+            pointerEvents: 'none',
+            background: 'var(--bg-elevated)',
+            border: '1px solid var(--border-hard)',
+            borderRadius: 2,
+            padding: '4px 8px',
+            fontFamily: 'var(--font-data), monospace',
+            fontSize: 10,
+            lineHeight: '16px',
+            color: 'var(--fg-primary)',
+            zIndex: 20,
+            minWidth: 120,
           }}
         />
       </div>

@@ -34,7 +34,7 @@ function createWindow(): void {
       nodeIntegration: false,
       contextIsolation: true,
       sandbox: false,
-      preload: join(__dirname, '../preload/index.js'),
+      preload: join(__dirname, '../preload/preload.mjs'),
       backgroundThrottling: false,        // no throttling during playback
       spellcheck: false,                   // unnecessary for data app
       enableWebSQL: false                  // unused — save memory

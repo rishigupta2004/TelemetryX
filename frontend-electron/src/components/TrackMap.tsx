@@ -59,7 +59,9 @@ function toIndex(value: unknown, length: number): number | null {
   return idx
 }
 
-const START_FINISH_MATCH_THRESHOLD_DEG = 0.2
+// Threshold for matching start-finish to centerline, in the same units as the centerline.
+// F1 centerlines use raw positional units (~meter scale), so threshold is generous.
+const START_FINISH_MATCH_THRESHOLD = Infinity // always accept nearest
 
 function nearestPointIndex(
   points: Array<{ x: number; y: number }>,
@@ -131,8 +133,8 @@ function resolveStartFinishFallbackIndex(
     if (!best || candidate.d2 < best.d2) best = candidate
   }
   if (!best) return null
-  const maxD2 = START_FINISH_MATCH_THRESHOLD_DEG * START_FINISH_MATCH_THRESHOLD_DEG
-  if (best.d2 > maxD2) return null
+  // No hard threshold — always return the best-matching index.
+  // Previously used a 0.2° threshold which was wrong because centerlines are in F1 meter-scale units.
   return best.idx
 }
 
@@ -241,6 +243,67 @@ function blendPoints(
   return { x: lerp(a.x, b.x, weight), y: lerp(a.y, b.y, weight) }
 }
 
+function drawPath(
+  ctx: CanvasRenderingContext2D,
+  pts: { x: number; y: number }[],
+  color: string | CanvasGradient,
+  lineWidth: number,
+  dash: number[] = [],
+  glowColor?: string,
+  glowBlur?: number
+) {
+  if (!pts || pts.length < 2) return
+  ctx.beginPath()
+  ctx.moveTo(pts[0].x, pts[0].y)
+  for (let i = 1; i < pts.length; i++) {
+    ctx.lineTo(pts[i].x, pts[i].y)
+  }
+  ctx.strokeStyle = color
+  ctx.lineWidth = lineWidth
+  ctx.lineCap = 'round'
+  ctx.lineJoin = 'round'
+  if (dash.length) ctx.setLineDash(dash)
+  else ctx.setLineDash([])
+
+  if (glowColor && glowBlur) {
+    ctx.shadowColor = glowColor
+    ctx.shadowBlur = glowBlur
+  } else {
+    ctx.shadowColor = 'transparent'
+    ctx.shadowBlur = 0
+  }
+
+  ctx.stroke()
+  ctx.setLineDash([])
+  ctx.shadowColor = 'transparent'
+  ctx.shadowBlur = 0
+}
+
+function drawLabelPill(ctx: CanvasRenderingContext2D, x: number, y: number, label: string, color: string, bg: string) {
+  ctx.save()
+  const w = label.length * 7 + 14
+  const h = 16
+  ctx.translate(x - w / 2, y - h / 2)
+
+  ctx.beginPath()
+  ctx.roundRect(0, 0, w, h, 8)
+  ctx.fillStyle = bg
+  ctx.fill()
+
+  ctx.lineWidth = 1
+  ctx.strokeStyle = color
+  ctx.globalAlpha = 0.7
+  ctx.stroke()
+
+  ctx.globalAlpha = 1.0
+  ctx.fillStyle = color
+  ctx.font = '700 9px ui-monospace, monospace'
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
+  ctx.fillText(label, w / 2, h / 2 + 0.5)
+  ctx.restore()
+}
+
 export function TrackMap({ compact = false, mode = 'full' }: TrackMapProps) {
   const isMinimap = mode === 'minimap'
   const isCompact = compact || isMinimap
@@ -256,7 +319,8 @@ export function TrackMap({ compact = false, mode = 'full' }: TrackMapProps) {
   const [hoveredDriver, setHoveredDriver] = useState<string | null>(null)
   const [viewport, setViewport] = useState({ width: 1000, height: 620 })
   const containerRef = useRef<HTMLDivElement>(null)
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const staticCanvasRef = useRef<HTMLCanvasElement>(null)
+  const dynamicCanvasRef = useRef<HTMLCanvasElement>(null)
   const hoveredDriverRef = useRef<string | null>(null)
   const primaryDriverRef = useRef<string | null>(null)
   const compareDriverRef = useRef<string | null>(null)
@@ -289,18 +353,23 @@ export function TrackMap({ compact = false, mode = 'full' }: TrackMapProps) {
     const loopCount = loopPoints.length
     if (!loopCount) return null
 
+    // Use fallback first - the coordinate-based matching is more reliable
+    const fallbackStartLoopIndex = resolveStartFinishFallbackIndex(
+      loopPoints,
+      (geo as any)?.name ?? null,
+      sessionData?.metadata?.raceName ?? null
+    )
+
     const explicitStartIndexRaw =
       toIndex((geo as any)?.start_finish?.index, rawCount) ??
       toIndex((geo as any)?.startPositionIndex, rawCount)
-    const fallbackStartLoopIndex =
-      explicitStartIndexRaw == null
-        ? resolveStartFinishFallbackIndex(loopPoints, (geo as any)?.name ?? null, sessionData?.metadata?.raceName ?? null)
-        : null
-    const startIndexRaw =
-      explicitStartIndexRaw ??
-      (fallbackStartLoopIndex != null
-        ? (closed ? Math.min(fallbackStartLoopIndex, Math.max(0, rawCount - 2)) : fallbackStartLoopIndex)
-        : 0)
+
+    // Use fallback if explicit index is 0 or null (0 is often wrong)
+    const useFallback = fallbackStartLoopIndex != null && (explicitStartIndexRaw == null || explicitStartIndexRaw === 0)
+
+    const startIndexRaw = useFallback
+      ? (closed ? Math.min(fallbackStartLoopIndex, Math.max(0, rawCount - 2)) : fallbackStartLoopIndex)
+      : (explicitStartIndexRaw ?? 0)
     const startLoopRaw = closed && startIndexRaw === rawCount - 1 ? 0 : startIndexRaw
     const startLoop = Math.max(0, Math.min(startLoopRaw, loopCount - 1))
 
@@ -607,15 +676,20 @@ export function TrackMap({ compact = false, mode = 'full' }: TrackMapProps) {
           pos = pitPoint
         }
       }
-      // Compute staleness: how many seconds since last position sample
-      const staleness = (car.sourceTimestamp != null && Number.isFinite(car.sourceTimestamp))
+      // Compute staleness: how many seconds since last GPS position sample.
+      // Only applies to cars that have live GPS data (hasLivePosition=true).
+      // Timing-based cars (hasLivePosition=false, sourceTimestamp=null) are NEVER hidden —
+      // they show at the computed lap-progress position.
+      const staleness = (car.hasLivePosition && car.sourceTimestamp != null && Number.isFinite(car.sourceTimestamp))
         ? Math.abs(sessionTime - car.sourceTimestamp)
-        : Infinity
+        : car.hasLivePosition ? 0 : -1   // -1 = timing-based, never stale
       const STALE_THRESHOLD = 3.0
       const HIDE_THRESHOLD = 5.0
-      const hidden = !car.hasLivePosition && staleness > HIDE_THRESHOLD && !usedLivePos
-      const stale = !car.hasLivePosition && staleness > STALE_THRESHOLD && staleness <= HIDE_THRESHOLD
+      // Only hide if we previously had live GPS data but it's now stale
+      const hidden = car.hasLivePosition && staleness > HIDE_THRESHOLD
+      const stale = car.hasLivePosition && staleness >= STALE_THRESHOLD && staleness <= HIDE_THRESHOLD
       return { car, pos, hidden, stale }
+
     })
   }, [displayCars, trackData, sessionTime])
 
@@ -656,11 +730,167 @@ export function TrackMap({ compact = false, mode = 'full' }: TrackMapProps) {
     renderRef.current?.()
   }, [compareDriver])
 
-  // Canvas Drawing
+  // Static canvas (track + labels) — only redraw when track data changes
   useEffect(() => {
-    const canvas = canvasRef.current
+    const canvas = staticCanvasRef.current
     if (!canvas || !trackData) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
 
+    const dpr = window.devicePixelRatio || 1
+    const { width, height, bounds } = trackData
+    canvas.width = width * dpr
+    canvas.height = height * dpr
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+    ctx.translate(-bounds.minX, -bounds.minY)
+    ctx.clearRect(bounds.minX, bounds.minY, width, height)
+
+    // === FLAT 2D BACKGROUND — pure dark, no vignette ===
+    ctx.fillStyle = '#1a1a1a'
+    ctx.fillRect(bounds.minX, bounds.minY, width, height)
+
+    // === TRACK SURFACE — thinner gray road with lighter shoulders ===
+    // Lighter shoulders (outer edge)
+    drawPath(ctx, trackData.points, '#5a5a5a', 20)
+    // Road surface (gray asphalt)
+    drawPath(ctx, trackData.points, '#2d2d2d', 14)
+    // Inner road detail (slightly lighter center)
+    drawPath(ctx, trackData.points, '#3a3a3a', 10)
+    // Center line dashes
+    drawPath(ctx, trackData.points, 'rgba(255,255,255,0.15)', 1.5, [14, 18])
+
+    // === PIT LANE — very subtle, barely-there road with fine centre line ===
+    if (trackData.pitLanePoints && trackData.pitLanePoints.length > 0) {
+      // Pit surface (muted dark road matching main track shoulders)
+      drawPath(ctx, trackData.pitLanePoints, '#383838', 9)
+      drawPath(ctx, trackData.pitLanePoints, '#252525', 6)
+      // Amber pit lane dashes — subdued (activation highlight added in dynamic canvas when driver is in pit)
+      drawPath(ctx, trackData.pitLanePoints, 'rgba(255,175,35,0.25)', 1.5, [7, 9])
+      // Subtle white centre line — like main track but even more transparent
+      drawPath(ctx, trackData.pitLanePoints, 'rgba(255,255,255,0.10)', 0.8, [10, 14])
+    }
+
+    // === DRS ZONES — orange/amber like F1 TV reference ===
+    trackData.drsPolylines.forEach(drs => {
+      if (!drs.segment || drs.segment.length < 2) return
+      drawPath(ctx, drs.segment, 'rgba(255, 160, 40, 0.45)', 22)
+      drawPath(ctx, drs.segment, 'rgba(255, 180, 60, 0.9)', 6)
+      if (drs.midPoint) {
+        drawLabelPill(ctx, drs.midPoint.x, drs.midPoint.y - 20, `DRS`, 'rgba(255,180,40,0.95)', 'rgba(40,25,0,0.85)')
+      }
+    })
+
+    // === START/FINISH — checkered flag pattern like F1 TV ===
+    if (trackData.points[trackData.startIndex]) {
+      const startPoint = trackData.points[trackData.startIndex]
+      const pPrev = trackData.points[(trackData.startIndex - 1 + trackData.points.length) % trackData.points.length]
+      const pNext = trackData.points[(trackData.startIndex + 1) % trackData.points.length]
+      const startAngle = Math.atan2(pNext.y - pPrev.y, pNext.x - pPrev.x)
+
+      ctx.save()
+      ctx.translate(startPoint.x, startPoint.y)
+      ctx.rotate(startAngle)
+
+      // Draw wider checkered pattern
+      const cw = 20
+      const ch = 32
+      ctx.fillStyle = '#ffffff'
+      ctx.beginPath()
+      ctx.roundRect(-cw / 2, -ch / 2, cw, ch, 2)
+      ctx.fill()
+
+      const cellsX = 3
+      const cellsY = 5
+      const cellW = cw / cellsX
+      const cellH = ch / cellsY
+      for (let row = 0; row < cellsY; row++) {
+        for (let col = 0; col < cellsX; col++) {
+          ctx.fillStyle = (row + col) % 2 === 0 ? '#111111' : '#ffffff'
+          ctx.fillRect(-cw / 2 + col * cellW, -ch / 2 + row * cellH, cellW, cellH)
+        }
+      }
+
+      ctx.restore()
+    }
+
+    // === SECTOR BOUNDARY LINES — thick colored marks across track ===
+    trackData.sectorMarkers.forEach(sector => {
+      if (!trackData.points[sector.idx]) return
+      const p = trackData.points[sector.idx]
+      const prev = trackData.points[(sector.idx - 1 + trackData.points.length) % trackData.points.length]
+      const next = trackData.points[(sector.idx + 1) % trackData.points.length]
+      const tx = next.x - prev.x
+      const ty = next.y - prev.y
+      const len = Math.hypot(tx, ty) || 1
+      const nx = (-ty / len) * 18
+      const ny = (tx / len) * 18
+
+      ctx.beginPath()
+      ctx.moveTo(p.x - nx, p.y - ny)
+      ctx.lineTo(p.x + nx, p.y + ny)
+      ctx.strokeStyle = sector.color
+      ctx.lineWidth = 3.5
+      ctx.lineCap = 'round'
+      ctx.globalAlpha = 1.0
+      ctx.stroke()
+
+      // Sector label pill offset outward from track
+      drawLabelPill(ctx, p.x + nx * 2.2, p.y + ny * 2.2, sector.label, sector.color, 'rgba(0,0,0,0.85)')
+    })
+
+    // === PIT ENTRY / EXIT markers ===
+    if (trackData.pitEntryIdx != null && trackData.points[trackData.pitEntryIdx]) {
+      const p = trackData.points[trackData.pitEntryIdx]
+      ctx.beginPath()
+      ctx.arc(p.x, p.y, 5, 0, Math.PI * 2)
+      ctx.fillStyle = 'rgba(255,180,40,0.3)'
+      ctx.fill()
+      ctx.strokeStyle = 'rgba(255,180,40,0.9)'
+      ctx.lineWidth = 2
+      ctx.stroke()
+      drawLabelPill(ctx, p.x + 16, p.y, 'PIT IN', 'rgba(255,180,40,0.95)', 'rgba(35,20,0,0.9)')
+    }
+    if (trackData.pitExitIdx != null && trackData.points[trackData.pitExitIdx]) {
+      const p = trackData.points[trackData.pitExitIdx]
+      ctx.beginPath()
+      ctx.arc(p.x, p.y, 5, 0, Math.PI * 2)
+      ctx.fillStyle = 'rgba(255,180,40,0.3)'
+      ctx.fill()
+      ctx.strokeStyle = 'rgba(255,180,40,0.9)'
+      ctx.lineWidth = 2
+      ctx.stroke()
+      drawLabelPill(ctx, p.x + 16, p.y, 'PIT OUT', 'rgba(255,180,40,0.95)', 'rgba(35,20,0,0.9)')
+    }
+    if (trackData.pitLanePolylinePoints && trackData.pitEntryIdx != null && trackData.pitExitIdx != null) {
+      const midPit = {
+        x: (trackData.points[trackData.pitEntryIdx].x + trackData.points[trackData.pitExitIdx].x) / 2,
+        y: (trackData.points[trackData.pitEntryIdx].y + trackData.points[trackData.pitExitIdx].y) / 2
+      }
+      drawLabelPill(ctx, midPit.x, midPit.y + 22, 'PIT LANE', 'rgba(255,180,40,0.9)', 'rgba(35,20,0,0.9)')
+    }
+
+    // === CORNER BADGES — dark gray circles with white numbers (like reference) ===
+    cornerBadges.forEach(corner => {
+      ctx.beginPath()
+      ctx.arc(corner.x, corner.y, 10, 0, Math.PI * 2)
+      ctx.fillStyle = '#2a2a2a'
+      ctx.fill()
+      ctx.strokeStyle = '#444'
+      ctx.lineWidth = 1.2
+      ctx.stroke()
+
+      ctx.fillStyle = '#ffffff'
+      ctx.font = '700 11px ui-monospace, monospace'
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+      ctx.fillText(String(corner.number), corner.x, corner.y + 0.5)
+    })
+  }, [trackData, cornerBadges])
+
+  // Dynamic canvas (flags + cars) — redraw on live updates
+  useEffect(() => {
+    const canvas = dynamicCanvasRef.current
+    if (!canvas || !trackData) return
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
@@ -673,111 +903,26 @@ export function TrackMap({ compact = false, mode = 'full' }: TrackMapProps) {
 
       canvas.width = width * dpr
       canvas.height = height * dpr
-
-      ctx.scale(dpr, dpr)
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
       ctx.translate(-bounds.minX, -bounds.minY)
       ctx.clearRect(bounds.minX, bounds.minY, width, height)
 
-      const drawPath = (
-        pts: { x: number, y: number }[],
-        color: string | CanvasGradient,
-        lineWidth: number,
-        dash: number[] = [],
-        glowColor?: string,
-        glowBlur?: number
-      ) => {
-        if (!pts || pts.length < 2) return
-        ctx.beginPath()
-        ctx.moveTo(pts[0].x, pts[0].y)
-        for (let i = 1; i < pts.length; i++) {
-          ctx.lineTo(pts[i].x, pts[i].y)
-        }
-        ctx.strokeStyle = color
-        ctx.lineWidth = lineWidth
-        ctx.lineCap = 'round'
-        ctx.lineJoin = 'round'
-        if (dash.length) ctx.setLineDash(dash)
-        else ctx.setLineDash([])
-
-        if (glowColor && glowBlur) {
-          ctx.shadowColor = glowColor
-          ctx.shadowBlur = glowBlur
-        } else {
-          ctx.shadowColor = 'transparent'
-          ctx.shadowBlur = 0
-        }
-
-        ctx.stroke()
-        ctx.setLineDash([])
-        ctx.shadowColor = 'transparent'
-        ctx.shadowBlur = 0
-      }
-
-      const drawLabelPill = (x: number, y: number, label: string, color: string, bg: string) => {
-        ctx.save()
-        const w = label.length * 7 + 14
-        const h = 16
-        ctx.translate(x - w / 2, y - h / 2)
-
-        ctx.beginPath()
-        ctx.roundRect(0, 0, w, h, 8)
-        ctx.fillStyle = bg
-        ctx.fill()
-
-        ctx.lineWidth = 1
-        ctx.strokeStyle = color
-        ctx.globalAlpha = 0.7
-        ctx.stroke()
-
-        ctx.globalAlpha = 1.0
-        ctx.fillStyle = color
-        ctx.font = '700 9px ui-monospace, monospace'
-        ctx.textAlign = 'center'
-        ctx.textBaseline = 'middle'
-        ctx.fillText(label, w / 2, h / 2 + 0.5)
-        ctx.restore()
-      }
-
-      const bgGrad = ctx.createLinearGradient(bounds.minX, bounds.minY, bounds.minX, bounds.minY + height)
-      bgGrad.addColorStop(0, '#0b0f14')
-      bgGrad.addColorStop(0.48, '#141b26')
-      bgGrad.addColorStop(1, '#0b0f14')
-      ctx.fillStyle = bgGrad
-      ctx.fillRect(bounds.minX, bounds.minY, width, height)
-
-      const vignette = ctx.createRadialGradient(
-        bounds.minX + width * 0.5,
-        bounds.minY + height * 0.52,
-        Math.min(width, height) * 0.18,
-        bounds.minX + width * 0.5,
-        bounds.minY + height * 0.52,
-        Math.max(width, height) * 0.7
-      )
-      vignette.addColorStop(0, 'rgba(0,0,0,0)')
-      vignette.addColorStop(1, 'rgba(0,0,0,0.55)')
-      ctx.fillStyle = vignette
-      ctx.fillRect(bounds.minX, bounds.minY, width, height)
-
-      const trackGrad = ctx.createLinearGradient(bounds.minX, bounds.minY, bounds.minX + width, bounds.minY + height)
-      trackGrad.addColorStop(0, '#1f2937')
-      trackGrad.addColorStop(0.4, '#3b4452')
-      trackGrad.addColorStop(0.7, '#4b5563')
-      trackGrad.addColorStop(1, '#1b2330')
-
-      // Track surface (metallic)
-      drawPath(trackData.points, '#0a0d12', 34)
-      drawPath(trackData.points, 'rgba(255,255,255,0.08)', 28)
-      drawPath(trackData.points, trackGrad, 22)
-      drawPath(trackData.points, 'rgba(255,255,255,0.2)', 7)
-      drawPath(trackData.points, 'rgba(120,130,145,0.55)', 3.5, [18, 22])
-
-      // Flag overlays — full track color change for SC/VSC/Red
+      // === FLAG OVERLAYS ===
       if (currentFlags.isRedFlag) {
-        drawPath(trackData.points, 'rgba(255, 30, 30, 0.45)', 26, [], 'rgba(255, 0, 0, 1)', 22)
+        drawPath(ctx, trackData.points, 'rgba(255, 30, 30, 0.5)', 24, [], 'rgba(255, 0, 0, 0.8)', 16)
       } else if (currentFlags.isSafetyCar) {
-        drawPath(trackData.points, 'rgba(255, 165, 0, 0.42)', 26, [], 'rgba(255, 165, 0, 1)', 20)
+        drawPath(ctx, trackData.points, 'rgba(255, 165, 0, 0.45)', 24, [], 'rgba(255, 165, 0, 0.8)', 14)
       } else if (currentFlags.isVSC) {
-        drawPath(trackData.points, 'rgba(255, 220, 0, 0.38)', 26, [], 'rgba(255, 220, 0, 1)', 18)
+        drawPath(ctx, trackData.points, 'rgba(255, 220, 0, 0.4)', 24, [], 'rgba(255, 220, 0, 0.8)', 12)
+      }
+
+      // === PIT LANE ACTIVE HIGHLIGHT — glows amber when any driver is in pit ===
+      const anyInPit = resolvedCars.some(({ car }) => car.isInPit)
+      if (anyInPit && trackData.pitLanePoints && trackData.pitLanePoints.length > 0) {
+        ctx.globalAlpha = 0.55
+        drawPath(ctx, trackData.pitLanePoints, 'rgba(255,175,35,0.5)', 5)
+        drawPath(ctx, trackData.pitLanePoints, 'rgba(255,200,60,0.9)', 1.5, [6, 8])
+        ctx.globalAlpha = 1.0
       }
 
       // Sector-specific yellow flags
@@ -793,157 +938,14 @@ export function TrackMap({ compact = false, mode = 'full' }: TrackMapProps) {
               const yellowColor = sectorFlag === 'DOUBLE YELLOW'
                 ? 'rgba(255, 200, 0, 0.55)'
                 : 'rgba(255, 220, 0, 0.40)'
-              const yellowGlow = sectorFlag === 'DOUBLE YELLOW'
-                ? 'rgba(255, 200, 0, 1)'
-                : 'rgba(255, 220, 0, 1)'
-              drawPath(sectorPts, yellowColor, 24, [], yellowGlow, 16)
+              drawPath(ctx, sectorPts, yellowColor, 22, [], yellowColor, 12)
             }
           }
         }
       }
 
-      // Pit lane
-      if (trackData.pitLanePoints && trackData.pitLanePoints.length > 0) {
-        drawPath(trackData.pitLanePoints, 'rgba(22,28,40,0.95)', 13)
-        drawPath(trackData.pitLanePoints, 'rgba(255,200,50,0.55)', 4.5, [12, 10])
-      }
-
-      // DRS zones
-      trackData.drsPolylines.forEach(drs => {
-        if (!drs.segment || drs.segment.length < 2) return
-        drawPath(drs.segment, 'rgba(0, 230, 100, 0.35)', 14, [], 'rgba(0, 230, 100, 1)', 10)
-        drawPath(drs.segment, 'rgba(0, 220, 90, 0.9)', 5)
-        if (drs.midPoint) {
-          drawLabelPill(drs.midPoint.x, drs.midPoint.y - 18, `DRS ${drs.zone.zoneNumber}`, '#00dc5a', 'rgba(0,30,15,0.8)')
-        }
-      })
-
-      // Start/Finish line
-      if (trackData.points[trackData.startIndex]) {
-        const startPoint = trackData.points[trackData.startIndex]
-        const pPrev = trackData.points[(trackData.startIndex - 1 + trackData.points.length) % trackData.points.length]
-        const pNext = trackData.points[(trackData.startIndex + 1) % trackData.points.length]
-        const startAngle = Math.atan2(pNext.y - pPrev.y, pNext.x - pPrev.x)
-
-        ctx.save()
-        ctx.translate(startPoint.x, startPoint.y)
-        ctx.rotate(startAngle)
-
-        ctx.fillStyle = 'rgba(255,255,255,0.92)'
-        ctx.beginPath()
-        ctx.roundRect(-8, -15, 16, 30, 2)
-        ctx.fill()
-
-        for (let row = 0; row < 4; row++) {
-          for (let col = 0; col < 2; col++) {
-            ctx.fillStyle = (row + col) % 2 === 0 ? '#111111' : '#ffffff'
-            ctx.fillRect(-8 + col * 8, -15 + row * 7.5, 8, 7.5)
-          }
-        }
-
-        ctx.fillStyle = 'rgba(255,255,255,0.8)'
-        ctx.font = '700 9px ui-monospace, monospace'
-        ctx.fillText('S/F', 18, 4)
-        ctx.restore()
-      }
-
-      // Sector boundary lines
-      trackData.sectorMarkers.forEach(sector => {
-        if (!trackData.points[sector.idx]) return
-        const p = trackData.points[sector.idx]
-        const prev = trackData.points[(sector.idx - 1 + trackData.points.length) % trackData.points.length]
-        const next = trackData.points[(sector.idx + 1) % trackData.points.length]
-        const tx = next.x - prev.x
-        const ty = next.y - prev.y
-        const len = Math.hypot(tx, ty) || 1
-        const nx = (-ty / len) * 16
-        const ny = (tx / len) * 16
-
-        ctx.beginPath()
-        ctx.moveTo(p.x - nx, p.y - ny)
-        ctx.lineTo(p.x + nx, p.y + ny)
-        ctx.strokeStyle = sector.color
-        ctx.lineWidth = 2.5
-        ctx.lineCap = 'round'
-        ctx.globalAlpha = 0.9
-        ctx.shadowColor = sector.glowColor
-        ctx.shadowBlur = 8
-        ctx.stroke()
-        ctx.shadowBlur = 0
-        ctx.globalAlpha = 1.0
-
-        drawLabelPill(p.x + nx * 1.8, p.y + ny * 1.8, sector.label, sector.color, 'rgba(0,0,0,0.75)')
-      })
-
-      // Pit entry / exit
-      if (trackData.pitEntryIdx != null && trackData.points[trackData.pitEntryIdx]) {
-        const p = trackData.points[trackData.pitEntryIdx]
-        ctx.beginPath()
-        ctx.arc(p.x, p.y, 6, 0, Math.PI * 2)
-        ctx.fillStyle = 'rgba(255,190,30,0.2)'
-        ctx.fill()
-        ctx.strokeStyle = 'rgba(255,190,30,0.8)'
-        ctx.lineWidth = 1.5
-        ctx.stroke()
-        drawLabelPill(p.x + 18, p.y, 'PIT IN', 'rgba(255,190,30,0.9)', 'rgba(30,20,0,0.8)')
-      }
-      if (trackData.pitExitIdx != null && trackData.points[trackData.pitExitIdx]) {
-        const p = trackData.points[trackData.pitExitIdx]
-        ctx.beginPath()
-        ctx.arc(p.x, p.y, 6, 0, Math.PI * 2)
-        ctx.fillStyle = 'rgba(255,190,30,0.2)'
-        ctx.fill()
-        ctx.strokeStyle = 'rgba(255,190,30,0.8)'
-        ctx.lineWidth = 1.5
-        ctx.stroke()
-        drawLabelPill(p.x + 18, p.y, 'PIT OUT', 'rgba(255,190,30,0.9)', 'rgba(30,20,0,0.8)')
-      }
-      if (trackData.pitLanePolylinePoints && trackData.pitEntryIdx != null && trackData.pitExitIdx != null) {
-        const midPit = {
-          x: (trackData.points[trackData.pitEntryIdx].x + trackData.points[trackData.pitExitIdx].x) / 2,
-          y: (trackData.points[trackData.pitEntryIdx].y + trackData.points[trackData.pitExitIdx].y) / 2
-        }
-        drawLabelPill(midPit.x, midPit.y + 20, 'PIT LANE', 'rgba(255,200,50,0.85)', 'rgba(25,18,0,0.8)')
-      }
-
-      // Corner badges
-      cornerBadges.forEach(corner => {
-        // Outer glow ring
-        ctx.beginPath()
-        ctx.arc(corner.x, corner.y, 14, 0, Math.PI * 2)
-        ctx.strokeStyle = 'rgba(255,255,255,0.08)'
-        ctx.lineWidth = 3
-        ctx.stroke()
-
-        // Background circle
-        ctx.beginPath()
-        ctx.arc(corner.x, corner.y, 11, 0, Math.PI * 2)
-        ctx.fillStyle = 'rgba(8,14,28,0.92)'
-        ctx.fill()
-        ctx.strokeStyle = 'rgba(200,215,240,0.28)'
-        ctx.lineWidth = 1.2
-        ctx.stroke()
-
-        // Corner number
-        ctx.fillStyle = 'rgba(220,235,255,0.95)'
-        ctx.font = '700 11px ui-monospace, monospace'
-        ctx.textAlign = 'center'
-        ctx.textBaseline = 'middle'
-        ctx.fillText(String(corner.number), corner.x, corner.y + 0.5)
-
-        // Corner name label (if available)
-        if (corner.name) {
-          ctx.fillStyle = 'rgba(180,200,230,0.75)'
-          ctx.font = '600 8px ui-monospace, monospace'
-          ctx.textAlign = 'center'
-          ctx.textBaseline = 'top'
-          ctx.fillText(corner.name, corner.x, corner.y + 14)
-        }
-      })
-
       // Driver dots
       resolvedCars.forEach(({ car, pos, hidden, stale }) => {
-        // Skip drivers that have been hidden (no data for >5s)
         if (hidden) return
         const isInPit = Boolean(car.isInPit)
         const isHovered = hoveredCode === car.driverCode
@@ -952,7 +954,6 @@ export function TrackMap({ compact = false, mode = 'full' }: TrackMapProps) {
         const radius = isCompact ? 12 : 16
         const bubbleFill = car.teamColor || '#6b7280'
         const codeColor = textColorForHex(bubbleFill)
-        // Base opacity: 50% if stale, 40% if in pit, 100% otherwise
         const baseAlpha = stale ? 0.5 : isInPit ? 0.4 : 1.0
 
         ctx.save()
@@ -1008,7 +1009,7 @@ export function TrackMap({ compact = false, mode = 'full' }: TrackMapProps) {
         renderRef.current = null
       }
     }
-  }, [trackData, resolvedCars, isCompact, cornerBadges, currentFlags])
+  }, [trackData, resolvedCars, isCompact, currentFlags])
 
   const handlePointerMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (isMinimap) return
@@ -1068,9 +1069,7 @@ export function TrackMap({ compact = false, mode = 'full' }: TrackMapProps) {
       ref={containerRef}
       className="relative h-full w-full overflow-hidden rounded-xl"
       style={{
-        background: 'radial-gradient(1200px 800px at 50% 28%, rgba(80,90,110,0.35), rgba(8,10,14,0.96))',
-        perspective: '1200px',
-        perspectiveOrigin: '50% 36%'
+        background: '#1a1a1a'
       }}
     >
       {!isMinimap && (
@@ -1137,19 +1136,15 @@ export function TrackMap({ compact = false, mode = 'full' }: TrackMapProps) {
         )
       })()}
 
-      <div
-        className="absolute inset-0 will-change-transform"
-        style={{
-          transformStyle: 'preserve-3d',
-          transform: isMinimap
-            ? 'rotateX(36deg) rotateZ(-2deg) scale(0.96)'
-            : 'rotateX(42deg) rotateZ(-3deg) scale(0.94)',
-          transformOrigin: '50% 52%'
-        }}
-      >
+      <div className="absolute inset-0">
         <canvas
-          ref={canvasRef}
-          className="h-full w-full"
+          ref={staticCanvasRef}
+          className="absolute inset-0 h-full w-full"
+          style={{ objectFit: 'contain', pointerEvents: 'none' }}
+        />
+        <canvas
+          ref={dynamicCanvasRef}
+          className="absolute inset-0 h-full w-full"
           style={{ objectFit: 'contain', cursor: isMinimap ? 'default' : hoveredDriver ? 'pointer' : 'default' }}
           onMouseMove={handlePointerMove}
           onClick={handlePointerClick}
@@ -1161,11 +1156,11 @@ export function TrackMap({ compact = false, mode = 'full' }: TrackMapProps) {
         <div className="absolute bottom-2 right-2 z-10 pointer-events-none">
           <div className="glass-pill flex flex-col gap-1 px-2.5 py-1.5 text-[10px]">
             <div className="flex items-center gap-1.5 text-text-muted">
-              <span className="inline-block h-2 w-4 rounded-sm" style={{ background: 'rgba(0,220,90,0.8)' }} />
+              <span className="inline-block h-2 w-4 rounded-sm" style={{ background: 'rgba(255,180,40,0.8)' }} />
               DRS Zone
             </div>
             <div className="flex items-center gap-1.5 text-text-muted">
-              <span className="inline-block h-2 w-4 rounded-sm" style={{ background: 'rgba(255,190,30,0.6)', border: '1px dashed rgba(255,190,30,0.6)' }} />
+              <span className="inline-block h-2 w-4 rounded-sm" style={{ background: 'rgba(255,180,40,0.5)', border: '1px dashed rgba(255,180,40,0.6)' }} />
               Pit Lane
             </div>
             <div className="flex items-center gap-1.5 text-text-muted">

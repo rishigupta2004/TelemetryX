@@ -50,6 +50,13 @@ export const DriverSummary = React.memo(function DriverSummary({ onSummaryLoaded
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  const driverMeta = useMemo(() => {
+    const drivers = sessionData?.drivers ?? []
+    const primary = primaryDriver ? drivers.find((item) => item.code === primaryDriver) : null
+    const compare = compareDriver ? drivers.find((item) => item.code === compareDriver) : null
+    return { primary, compare }
+  }, [sessionData?.drivers, primaryDriver, compareDriver])
+
   const driverQueries = useMemo(() => {
     const drivers = sessionData?.drivers ?? []
     const toQuery = (code: string | null): string | null => {
@@ -150,17 +157,55 @@ export const DriverSummary = React.memo(function DriverSummary({ onSummaryLoaded
   }
 
   return (
-    <div className="flex h-full flex-col rounded-md border border-border bg-bg-card">
-      <div className="border-b border-border px-3 py-2.5">
-        <div className="text-[10px] uppercase tracking-[0.18em] text-text-secondary">Driver Summary</div>
-        <div className="mt-1 flex items-center gap-2 font-mono text-sm text-text-primary">
-          <span>{primaryDriver}</span>
-          {compareDriver && <span className="rounded bg-bg-secondary px-1.5 py-0.5 text-[10px] text-text-secondary">vs {compareDriver}</span>}
+    <div className="feature-card flex h-full flex-col rounded-md border border-border bg-bg-card">
+      <div className="flex items-center justify-between gap-3 border-b border-border px-3 py-3">
+        <div className="flex items-center gap-3">
+          <div
+            className="h-8 w-1 rounded-full"
+            style={{ backgroundColor: driverMeta.primary?.teamColor || '#444' }}
+          />
+          {driverMeta.primary?.driverImage ? (
+            <img
+              src={driverMeta.primary.driverImage}
+              alt={driverMeta.primary.driverName}
+              className="h-8 w-8 rounded-full border border-border object-cover"
+              loading="lazy"
+            />
+          ) : (
+            <div
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-border text-[11px] font-semibold text-text-secondary"
+              style={{ background: 'rgba(255,255,255,0.04)' }}
+            >
+              {primaryDriver?.slice(0, 2) ?? '--'}
+            </div>
+          )}
+          <div>
+            <div className="text-[10px] uppercase tracking-[0.18em] text-text-secondary">Driver Summary</div>
+            <div className="mt-0.5 flex items-center gap-2">
+              <span className="text-[14px] font-semibold text-text-primary" style={{ fontFamily: 'var(--font-display)' }}>
+                {primaryDriver}
+              </span>
+              {driverMeta.primary?.driverName && (
+                <span className="text-[11px] text-text-muted">{driverMeta.primary.driverName}</span>
+              )}
+            </div>
+          </div>
         </div>
+        {compareDriver && (
+          <div
+            className="rounded-full border-2 border-dashed px-2.5 py-1 text-[11px] font-semibold"
+            style={{
+              borderColor: driverMeta.compare?.teamColor || '#888',
+              color: driverMeta.compare?.teamColor || '#bbb'
+            }}
+          >
+            vs {compareDriver}
+          </div>
+        )}
       </div>
 
       <div className="grid flex-1 grid-cols-1 gap-2 overflow-y-auto p-3 text-xs md:grid-cols-2">
-        <div className="rounded border border-border bg-bg-secondary p-2">
+        <div className="feature-card rounded border border-border bg-bg-secondary p-2">
           <div className="mb-1 text-[10px] uppercase tracking-[0.12em] text-text-secondary">Lap</div>
           <MetricRow label="Current lap" value={fmtNumber(summary.lap_analysis.lap_number, 0)} />
           <MetricRow label="Position" value={fmtPosition(summary.lap_analysis.position)} />
@@ -169,7 +214,7 @@ export const DriverSummary = React.memo(function DriverSummary({ onSummaryLoaded
           <MetricRow label="Delta to leader" value={`${fmtSigned(summary.lap_analysis.lap_delta_to_leader, 3)}s`} />
         </div>
 
-        <div className="rounded border border-border bg-bg-secondary p-2">
+        <div className="feature-card rounded border border-border bg-bg-secondary p-2">
           <div className="mb-1 text-[10px] uppercase tracking-[0.12em] text-text-secondary">Performance</div>
           <MetricRow label="Position delta" value={fmtSigned(summary.driver_performance.position_change, 0)} />
           <MetricRow label="Points" value={fmtNumber(summary.driver_performance.points, 1)} />
@@ -177,7 +222,7 @@ export const DriverSummary = React.memo(function DriverSummary({ onSummaryLoaded
           <MetricRow label="Defensive losses" value={fmtNumber(summary.driver_performance.positions_lost_defensive, 0)} />
         </div>
 
-        <div className="rounded border border-border bg-bg-secondary p-2">
+        <div className="feature-card rounded border border-border bg-bg-secondary p-2">
           <div className="mb-1 text-[10px] uppercase tracking-[0.12em] text-text-secondary">Tyres</div>
           <MetricRow label="Current compound" value={summary.tyre_analysis.current_compound || '-'} />
           <MetricRow label="Stint number" value={fmtNumber(summary.tyre_analysis.stint_number, 0)} />
@@ -186,7 +231,7 @@ export const DriverSummary = React.memo(function DriverSummary({ onSummaryLoaded
           <MetricRow label="Life left" value={fmtNumber(summary.tyre_analysis.tyre_life_remaining, 1)} />
         </div>
 
-        <div className="rounded border border-border bg-bg-secondary p-2">
+        <div className="feature-card rounded border border-border bg-bg-secondary p-2">
           <div className="mb-1 text-[10px] uppercase tracking-[0.12em] text-text-secondary">Telemetry</div>
           <MetricRow label="Vmax" value={`${fmtNumber(summary.telemetry_analysis.speed_max, 0)} km/h`} />
           <MetricRow label="Vavg" value={`${fmtNumber(summary.telemetry_analysis.speed_avg, 1)} km/h`} />
@@ -194,7 +239,7 @@ export const DriverSummary = React.memo(function DriverSummary({ onSummaryLoaded
           <MetricRow label="DRS usage" value={fmtPct(summary.telemetry_analysis.drs_usage_pct)} />
         </div>
 
-        <div className="rounded border border-border bg-bg-secondary p-2 md:col-span-2">
+        <div className="feature-card rounded border border-border bg-bg-secondary p-2 md:col-span-2">
           <div className="mb-1 text-[10px] uppercase tracking-[0.12em] text-text-secondary">Race Context</div>
           <div className="grid grid-cols-2 gap-2 text-[11px] lg:grid-cols-4">
             <div className="rounded border border-border/60 bg-bg-card/70 px-2 py-1 text-text-muted">Track <span className="font-mono text-text-primary">{summary.race_context.track_status || '-'}</span></div>

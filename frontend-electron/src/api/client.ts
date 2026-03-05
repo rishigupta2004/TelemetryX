@@ -42,16 +42,23 @@ function uniqueUrls(values: string[]): string[] {
   return out
 }
 
+function normalizeApiBase(value: string): string {
+  const trimmed = value.trim().replace(/\/+$/, '')
+  if (!trimmed) return ''
+  return trimmed.endsWith('/api/v1') ? trimmed : `${trimmed}/api/v1`
+}
+
 function resolveBaseUrls(): string[] {
-  const viteUrl = (import.meta as unknown as { env?: { VITE_API_BASE_URL?: string } })?.env?.VITE_API_BASE_URL
+  const env = (import.meta as unknown as { env?: { VITE_API_BASE?: string; VITE_API_BASE_URL?: string } })?.env
+  const viteBase = env?.VITE_API_BASE || env?.VITE_API_BASE_URL
   const bridgeUrl = (
     globalThis as unknown as { telemetryx?: { apiBaseUrl?: string | null } }
   )?.telemetryx?.apiBaseUrl
   const runtimeUrl = (globalThis as unknown as { TELEMETRYX_API_BASE_URL?: string }).TELEMETRYX_API_BASE_URL
   const dev = isDevMode()
   const urls = dev
-    ? uniqueUrls(['http://localhost:8000/api/v1', viteUrl || '', bridgeUrl || '', runtimeUrl || ''])
-    : uniqueUrls([viteUrl || '', bridgeUrl || '', runtimeUrl || '', ...DEFAULT_BASE_URLS])
+    ? uniqueUrls([normalizeApiBase(viteBase || ''), normalizeApiBase(bridgeUrl || ''), normalizeApiBase(runtimeUrl || ''), ...DEFAULT_BASE_URLS])
+    : uniqueUrls([normalizeApiBase(viteBase || ''), normalizeApiBase(bridgeUrl || ''), normalizeApiBase(runtimeUrl || ''), ...DEFAULT_BASE_URLS])
   const filtered = urls.filter((url) => !/localhost:9010|127\.0\.0\.1:9010/.test(url))
   return filtered.length ? filtered : DEFAULT_BASE_URLS
 }
@@ -59,6 +66,15 @@ function resolveBaseUrls(): string[] {
 const BASE_URLS = resolveBaseUrls()
 const ROOT_URLS = BASE_URLS.map((url) => url.replace(/\/api\/v1\/?$/, ''))
 let pinnedBaseUrl: string | null = null
+
+export function getApiRoot(): string {
+  const base = pinnedBaseUrl || BASE_URLS[0] || DEFAULT_BASE_URLS[0]
+  return base.replace(/\/api\/v1\/?$/, '')
+}
+
+export function getApiBase(): string {
+  return pinnedBaseUrl || BASE_URLS[0] || DEFAULT_BASE_URLS[0]
+}
 
 // ── Response Cache (in-memory, TTL-based) ──────────────────────────
 interface CacheEntry { data: unknown; ts: number }

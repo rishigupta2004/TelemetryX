@@ -22,18 +22,18 @@ export interface CarPosition {
 
 type WorkerMessageIn =
   | {
-      type: 'init'
-      payload: {
-        drivers: Driver[]
-        laps: LapRow[]
-        positions: PositionRow[]
-      }
+    type: 'init'
+    payload: {
+      drivers: Driver[]
+      laps: LapRow[]
+      positions: PositionRow[]
     }
+  }
   | {
-      type: 'tick'
-      sessionTime: number
-      seq: number
-    }
+    type: 'tick'
+    sessionTime: number
+    seq: number
+  }
 
 type WorkerMessageOut =
   | { type: 'ready' }
@@ -247,9 +247,11 @@ export function useCarPositions(): CarPosition[] {
 
   const sampledSessionTime = useMemo(() => {
     const sessionTime = sessionStartTime + currentTime
-    const samplingHz = speed >= 12 ? 60 : speed >= 8 ? 48 : speed >= 4 ? 36 : 30
-    return Math.round(sessionTime * samplingHz) / samplingHz
-  }, [currentTime, sessionStartTime, speed])
+    // Throttle to 15Hz max — car dot movement on screen doesn't need 60fps.
+    // This halves React re-renders and worker message volume.
+    const HZ = 15
+    return Math.round(sessionTime * HZ) / HZ
+  }, [currentTime, sessionStartTime])
 
   const carPositions = useSyncExternalStore(subscribe, getSnapshot, getSnapshot)
 

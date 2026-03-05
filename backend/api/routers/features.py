@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 FEATURE_DATASETS: Dict[str, str] = {
     "lap": "lap_features.parquet",
-    "tyre": "tyre_features.parquet",
+    " tyre": "tyres_features.parquet",
     "telemetry": "telemetry_features.parquet",
     "race_context": "race_context_features.parquet",
     "comparison": "comparison_features.parquet",

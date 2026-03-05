@@ -8,7 +8,33 @@ import { UndercutPredictor } from '../components/UndercutPredictor'
 import { api } from '../api/client'
 import { useDriverStore } from '../stores/driverStore'
 import { useSessionStore } from '../stores/sessionStore'
+import { strategyCandidates } from '../lib/strategyUtils'
 import { FiaDocumentsView } from './FiaDocumentsView'
+import {
+  buildPaceSeries,
+  buildTyreTimeline,
+  colorFromString,
+  formatPct,
+  formatSigned,
+  loadSavedPanel,
+  median,
+  normalizeName,
+  quantile,
+  savePanel,
+  toPath,
+  tyreColor,
+  FEATURE_PANELS,
+  FEATURE_PANEL_IDS,
+  OVERVIEW_SPOTLIGHT,
+} from '../lib/featuresUtils'
+import type {
+  FeaturePanelId,
+  HoverTip,
+  PaceSeries,
+  SeasonStandingsDriver,
+  SeasonStandingsPayload,
+  TyreStintRow,
+} from '../lib/featuresUtils'
 import type {
   ClusteringResponse,
   CircuitInsightsResponse,
@@ -20,299 +46,19 @@ import type {
   StrategyRecommendationsResponse
 } from '../types'
 
-function formatPct(value: number | null | undefined): string {
-  if (value == null || !Number.isFinite(value)) return '-'
-  return `${(Number(value) * 100).toFixed(1)}%`
-}
 
-function formatSigned(value: number | null | undefined, digits = 2): string {
-  if (value == null || !Number.isFinite(value)) return '-'
-  return `${value > 0 ? '+' : ''}${Number(value).toFixed(digits)}`
-}
+const STAT_CARD_STYLE = {
+  background: 'var(--bg-card)',
+  border: '1px solid var(--border)',
+  borderRadius: '2px',
+  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.03)'
+} as const
 
-function normalizeName(value: string): string {
-  return value.toLowerCase().replace(/[^a-z0-9]/g, '')
-}
+const STAT_LABEL_CLASS = 'text-[10px] uppercase tracking-[0.16em] text-fg-muted'
+const STAT_VALUE_CLASS = 'font-display text-[18px] font-bold text-fg-primary'
+const STAT_UNIT_CLASS = 'text-[10px] text-fg-muted'
 
-function strategyCandidates(seasonYears: number[], selectedYear: number): number[] {
-  const fromStore = [...seasonYears].sort((a, b) => b - a).filter((year) => year < selectedYear)
-  if (fromStore.length > 0) return fromStore
-
-  const fallback: number[] = []
-  for (let year = selectedYear - 1; year >= Math.max(2020, selectedYear - 2); year -= 1) fallback.push(year)
-  return fallback
-}
-
-function median(values: number[]): number {
-  if (values.length === 0) return 0
-  const sorted = [...values].sort((a, b) => a - b)
-  const mid = Math.floor(sorted.length / 2)
-  if (sorted.length % 2 === 0) return (sorted[mid - 1] + sorted[mid]) / 2
-  return sorted[mid]
-}
-
-function movingAverage(values: number[], windowSize = 3): number[] {
-  const out: number[] = []
-  for (let i = 0; i < values.length; i += 1) {
-    const start = Math.max(0, i - windowSize + 1)
-    const slice = values.slice(start, i + 1)
-    const avg = slice.reduce((sum, v) => sum + v, 0) / slice.length
-    out.push(avg)
-  }
-  return out
-}
-
-function linearSlope(xs: number[], ys: number[]): number {
-  if (xs.length < 2 || ys.length < 2 || xs.length !== ys.length) return 0
-  const n = xs.length
-  const sumX = xs.reduce((a, b) => a + b, 0)
-  const sumY = ys.reduce((a, b) => a + b, 0)
-  const sumXY = xs.reduce((acc, x, i) => acc + x * ys[i], 0)
-  const sumXX = xs.reduce((acc, x) => acc + x * x, 0)
-  const denom = n * sumXX - sumX * sumX
-  if (Math.abs(denom) < 1e-9) return 0
-  return (n * sumXY - sumX * sumY) / denom
-}
-
-type PaceSeries = {
-  code: string
-  color: string
-  laps: number[]
-  times: number[]
-  smoothed: number[]
-  median: number
-  slope: number
-  latestPosition: number
-  latestLap: number
-}
-
-type HoverTip = {
-  x: number
-  y: number
-  title: string
-  detail?: string
-  color?: string
-}
-
-type SeasonStandingsDriver = {
-  code: string
-  totalPoints: number
-  byRace: number[]
-  cumulative: number[]
-  color: string
-}
-
-type SeasonStandingsPayload = {
-  raceNames: string[]
-  drivers: SeasonStandingsDriver[]
-}
-
-type TyreStintRow = {
-  code: string
-  teamColor: string
-  stints: Array<{ startLap: number; endLap: number; laps: number; compound: string }>
-}
-
-type FeaturePanelId =
-  | 'overview'
-  | 'race-pace'
-  | 'lap-results'
-  | 'strategy-ml'
-  | 'clustering'
-  | 'standings'
-  | 'driver-intel'
-  | 'undercut'
-  | 'fia-docs'
-
-const FEATURE_PANELS: Array<{ id: FeaturePanelId; label: string; hint: string }> = [
-  { id: 'overview', label: 'Overview', hint: 'All critical widgets in one screen' },
-  { id: 'race-pace', label: 'Race Pace', hint: 'Lap evolution and degradation' },
-  { id: 'lap-results', label: 'Lap + Results', hint: 'Scatter, distribution, positions, team pace' },
-  { id: 'strategy-ml', label: 'Strategy ML', hint: 'Scenario map and model ranking' },
-  { id: 'clustering', label: 'Clustering', hint: 'Driver performance clusters' },
-  { id: 'standings', label: 'Standings', hint: 'Season progression and points heatmap' },
-  { id: 'driver-intel', label: 'Driver Intel', hint: 'Driver summary and pit timeline' },
-  { id: 'undercut', label: 'Undercut', hint: 'Predictive undercut model panel' },
-  { id: 'fia-docs', label: 'FIA Docs', hint: 'Official FIA documents analytics' }
-]
-
-const FEATURE_PANEL_IDS = new Set<FeaturePanelId>(FEATURE_PANELS.map((panel) => panel.id))
-const OVERVIEW_SPOTLIGHT = FEATURE_PANELS.filter((panel) => panel.id !== 'overview')
-
-function loadSavedPanel(key: string): FeaturePanelId | null {
-  try {
-    const raw = window.localStorage.getItem(key)
-    if (!raw) return null
-    return FEATURE_PANEL_IDS.has(raw as FeaturePanelId) ? (raw as FeaturePanelId) : null
-  } catch {
-    return null
-  }
-}
-
-function savePanel(key: string, panel: FeaturePanelId): void {
-  try {
-    window.localStorage.setItem(key, panel)
-  } catch {
-    // ignore storage failures
-  }
-}
-
-function quantile(values: number[], q: number): number {
-  if (!values.length) return 0
-  const sorted = [...values].sort((a, b) => a - b)
-  const pos = (sorted.length - 1) * Math.max(0, Math.min(1, q))
-  const lo = Math.floor(pos)
-  const hi = Math.ceil(pos)
-  if (lo === hi) return sorted[lo]
-  const t = pos - lo
-  return sorted[lo] + (sorted[hi] - sorted[lo]) * t
-}
-
-function colorFromString(input: string): string {
-  let hash = 0
-  for (let i = 0; i < input.length; i += 1) hash = (hash * 31 + input.charCodeAt(i)) | 0
-  const hue = Math.abs(hash) % 360
-  return `hsl(${hue}, 75%, 58%)`
-}
-
-function tyreColor(compound: string): string {
-  const c = String(compound || '').toUpperCase()
-  if (c.includes('SOFT')) return '#ef4444'
-  if (c.includes('MEDIUM')) return '#facc15'
-  if (c.includes('HARD')) return '#f5f5f5'
-  if (c.includes('INTER')) return '#22c55e'
-  if (c.includes('WET')) return '#3b82f6'
-  return '#9ca3af'
-}
-
-function buildTyreTimeline(
-  laps: LapRow[],
-  drivers: Array<{ code: string; driverNumber: number; teamColor: string }>
-): TyreStintRow[] {
-  if (!laps.length || !drivers.length) return []
-  const byDriver = new Map<number, LapRow[]>()
-  for (const lap of laps) {
-    const rows = byDriver.get(lap.driverNumber) ?? []
-    rows.push(lap)
-    byDriver.set(lap.driverNumber, rows)
-  }
-
-  const out: TyreStintRow[] = []
-  for (const driver of drivers) {
-    const rows = (byDriver.get(driver.driverNumber) ?? [])
-      .filter((row) => Number.isFinite(row.lapNumber) && row.lapNumber > 0)
-      .sort((a, b) => a.lapNumber - b.lapNumber)
-    if (!rows.length) continue
-
-    const stints: TyreStintRow['stints'] = []
-    let startLap = rows[0].lapNumber
-    let prevLap = rows[0].lapNumber
-    let compound = String(rows[0].tyreCompound || 'UNKNOWN')
-
-    for (let i = 1; i < rows.length; i += 1) {
-      const lap = rows[i]
-      const lapNo = lap.lapNumber
-      const comp = String(lap.tyreCompound || 'UNKNOWN')
-      const contiguous = lapNo === prevLap + 1
-      if (!contiguous || comp !== compound) {
-        stints.push({
-          startLap,
-          endLap: prevLap,
-          laps: prevLap - startLap + 1,
-          compound,
-        })
-        startLap = lapNo
-        compound = comp
-      }
-      prevLap = lapNo
-    }
-
-    stints.push({
-      startLap,
-      endLap: prevLap,
-      laps: prevLap - startLap + 1,
-      compound,
-    })
-
-    out.push({ code: driver.code, teamColor: driver.teamColor || '#8aa7d1', stints })
-  }
-
-  out.sort((a, b) => a.code.localeCompare(b.code))
-  return out
-}
-
-function buildPaceSeries(sessionData: ReturnType<typeof useSessionStore.getState>['sessionData']): PaceSeries[] {
-  if (!sessionData?.laps?.length || !sessionData?.drivers?.length) return []
-
-  const numberToDriver = new Map<number, (typeof sessionData.drivers)[number]>()
-  for (const driver of sessionData.drivers) {
-    numberToDriver.set(driver.driverNumber, driver)
-  }
-
-  const buckets = new Map<string, LapRow[]>()
-  for (const lap of sessionData.laps) {
-    const driver = numberToDriver.get(lap.driverNumber)
-    const code = driver?.code || String(lap.driverName || lap.driverNumber)
-    if (!code) continue
-    const lapTime = Number(lap.lapTime)
-    if (!Number.isFinite(lapTime) || lapTime <= 40 || lapTime >= 200) continue
-    const list = buckets.get(code) ?? []
-    list.push(lap)
-    buckets.set(code, list)
-  }
-
-  const series: PaceSeries[] = []
-  for (const [code, rows] of buckets.entries()) {
-    const sorted = [...rows].sort((a, b) => a.lapNumber - b.lapNumber)
-    const laps = sorted.map((row) => row.lapNumber)
-    const times = sorted.map((row) => Number(row.lapTime))
-    const smoothed = movingAverage(times, 3)
-    const refDriver = numberToDriver.get(sorted[0].driverNumber)
-
-    const latest = sorted[sorted.length - 1]
-
-    series.push({
-      code,
-      color: refDriver?.teamColor || '#8aa7d1',
-      laps,
-      times,
-      smoothed,
-      median: median(times),
-      slope: linearSlope(laps, smoothed),
-      latestPosition: Number.isFinite(latest.position) ? latest.position : 99,
-      latestLap: latest.lapNumber
-    })
-  }
-
-  return series.sort((a, b) => {
-    if (a.latestPosition !== b.latestPosition) return a.latestPosition - b.latestPosition
-    return a.median - b.median
-  })
-}
-
-function toPath(
-  xValues: number[],
-  yValues: number[],
-  xMin: number,
-  xMax: number,
-  yMin: number,
-  yMax: number,
-  width: number,
-  height: number
-): string {
-  if (xValues.length === 0 || yValues.length === 0 || xValues.length !== yValues.length) return ''
-  const xSpan = Math.max(1, xMax - xMin)
-  const ySpan = Math.max(0.001, yMax - yMin)
-
-  const points = xValues.map((x, idx) => {
-    const y = yValues[idx]
-    const px = ((x - xMin) / xSpan) * width
-    const py = height - ((y - yMin) / ySpan) * height
-    return `${px.toFixed(2)},${py.toFixed(2)}`
-  })
-
-  return `M ${points.join(' L ')}`
-}
+const FEATURE_CARD_CLASS = 'feature-card'
 
 export const FeaturesView = React.memo(function FeaturesView({ active }: { active: boolean }) {
   const selectedYear = useSessionStore((s) => s.selectedYear)
@@ -336,6 +82,14 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
   const [tabsCollapsed, setTabsCollapsed] = useState(() => {
     try { return window.localStorage.getItem('telemetryx_features_tabs_collapsed') === 'true' } catch { return false }
   })
+
+  const activePanelMeta = useMemo(
+    () => FEATURE_PANELS.find((p) => p.id === activePanel) ?? FEATURE_PANELS[0],
+    [activePanel]
+  )
+
+  const tabAccent = useMemo(() => colorFromString(activePanelMeta?.label ?? 'Features'), [activePanelMeta])
+
   const [lapScatterHover, setLapScatterHover] = useState<HoverTip | null>(null)
   const [positionHover, setPositionHover] = useState<HoverTip | null>(null)
   const [strategyHover, setStrategyHover] = useState<HoverTip | null>(null)
@@ -355,7 +109,7 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
   const strategyCacheRef = useRef<
     Map<string, { data: StrategyRecommendationsResponse | null; sourceYear: number | null; error: string | null }>
   >(new Map())
-  const clusteringCacheRef = useRef<ClusteringResponse | null>(null)
+  const clusteringCacheRef = useRef<Map<string, ClusteringResponse>>(new Map())
 
   const panelStorageKey = useMemo(
     () => `telemetryx.features.panel.${selectedYear || 'na'}.${selectedRace || 'na'}.${selectedSession || 'na'}`,
@@ -472,9 +226,11 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
       return
     }
 
+    const clusterKey = `${selectedYear}|${selectedRace}|${selectedSession}`
     let cancelled = false
-    if (clusteringCacheRef.current) {
-      setClusterData(clusteringCacheRef.current)
+    const cached = clusteringCacheRef.current.get(clusterKey)
+    if (cached) {
+      setClusterData(cached)
       setClusterLoading(false)
       setClusterError(null)
       return
@@ -487,7 +243,7 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
       .getClustering(true)
       .then((payload) => {
         if (!cancelled) {
-          clusteringCacheRef.current = payload
+          clusteringCacheRef.current.set(clusterKey, payload)
           setClusterData(payload)
         }
       })
@@ -784,10 +540,12 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
 
   const orderedRaces = useMemo(() => {
     return [...(races as Race[])].sort((a, b) => {
-      const at = new Date(a.startDate || 0).getTime()
-      const bt = new Date(b.startDate || 0).getTime()
-      if (Number.isFinite(at) && Number.isFinite(bt) && at !== bt) return at - bt
-      return a.name.localeCompare(b.name)
+      const ar = a.round ?? 0
+      const br = b.round ?? 0
+      if (ar !== br) return ar - br
+      const an = a.display_name ?? a.race_name ?? a.name ?? ''
+      const bn = b.display_name ?? b.race_name ?? b.name ?? ''
+      return an.localeCompare(bn)
     })
   }, [races])
 
@@ -800,7 +558,7 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
       return
     }
 
-    const cacheKey = `${selectedYear}:${orderedRaces.map((race) => race.name).join('|')}`
+    const cacheKey = `${selectedYear}:${orderedRaces.map((race) => race.race_name ?? race.name ?? race.display_name ?? '').join('|')}`
     const cached = standingsCacheRef.current.get(cacheKey)
     if (cached) {
       setSeasonStandings(cached)
@@ -816,11 +574,12 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
 
     Promise.all(
       orderedRaces.map(async (race) => {
+        const raceKey = race.race_name ?? race.name ?? race.display_name ?? ''
         try {
-          const rows = await api.getPointsFeatures(selectedYear, race.name, 'R')
-          return { race: race.name, rows }
+          const rows = await api.getPointsFeatures(selectedYear, raceKey, 'R')
+          return { race: raceKey, rows }
         } catch {
-          return { race: race.name, rows: [] as PointsFeatureRow[] }
+          return { race: raceKey, rows: [] as PointsFeatureRow[] }
         }
       })
     )
@@ -932,13 +691,16 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
 
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <div className="glass-panel flex flex-shrink-0 items-center gap-2 px-3 py-2">
-        <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-text-secondary">
-          Features + ML
+      <div className="bg-bg-surface border border-border-hard flex flex-shrink-0 items-center gap-2 px-3 py-2">
+        <div className="flex items-center gap-2">
+          <div className="h-2 w-2 rounded-full" style={{ background: tabAccent, boxShadow: `0 0 10px ${tabAccent}` }} />
+          <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-fg-secondary">
+            Features + ML
+          </div>
         </div>
         {tabsCollapsed ? (
           <div className="flex min-w-0 flex-1 items-center gap-2">
-            <span className="text-[11px] font-semibold text-text-primary">
+            <span className="text-[11px] font-semibold text-fg-primary">
               {FEATURE_PANELS.find((p) => p.id === activePanel)?.label ?? 'Overview'}
             </span>
           </div>
@@ -956,15 +718,15 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
                   onClick={() => setActivePanel(panel.id)}
                   title={panel.hint}
                   className={`flex-shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition-all duration-150 ${active
-                    ? 'text-text-primary'
-                    : 'text-text-muted hover:text-text-secondary'
+                    ? 'text-fg-primary'
+                    : 'text-fg-muted hover:text-fg-secondary'
                     }`}
                   style={
                     active
                       ? {
-                        background: 'rgba(255,255,255,0.16)',
-                        border: '1px solid rgba(255,255,255,0.24)',
-                        boxShadow: '0 2px 8px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.28)',
+                        background: `linear-gradient(135deg, ${tabAccent}40, rgba(255,255,255,0.12))`,
+                        border: `1px solid ${tabAccent}55`,
+                        boxShadow: `0 6px 18px rgba(0,0,0,0.35), 0 0 12px ${tabAccent}55`,
                       }
                       : {
                         background: 'transparent',
@@ -985,12 +747,12 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
             setTabsCollapsed(next)
             try { window.localStorage.setItem('telemetryx_features_tabs_collapsed', String(next)) } catch { }
           }}
-          className="rounded border border-border bg-bg-secondary px-2 py-0.5 text-[10px] text-text-muted hover:text-text-primary transition-colors"
+          className="rounded border border-border bg-bg-secondary px-2 py-0.5 text-[10px] text-fg-muted hover:text-fg-primary transition-colors"
           title={tabsCollapsed ? 'Expand tab bar' : 'Collapse tab bar'}
         >
           {tabsCollapsed ? '▼' : '▲'}
         </button>
-        <div className="rounded-full border border-border bg-bg-secondary px-2 py-0.5 text-[10px] font-mono text-text-muted">
+        <div className="rounded-full border border-border bg-bg-secondary px-2 py-0.5 text-[10px] font-mono text-fg-muted">
           {selectedYear || '-'} · {selectedRace || '-'} · {selectedSession || '-'}
         </div>
       </div>
@@ -999,77 +761,151 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
         <div className="mx-auto w-full max-w-[1600px] space-y-5">
 
           {activePanel === 'overview' && (
-            <section className="space-y-4 glass-panel p-4">
-              <div>
-                <div className="text-xs uppercase tracking-[0.18em] text-text-secondary">Session Overview</div>
-                <div className="text-[11px] text-text-muted">
-                  {selectedYear || '-'} {selectedRace || '-'} — {selectedSession || '-'}
-                  {sessionData?.drivers?.length ? ` · ${sessionData.drivers.length} drivers` : ''}
-                  {sessionData?.laps?.length ? ` · ${sessionData.laps.length} lap rows` : ''}
+            <section className="space-y-4">
+              {/* Session header */}
+              <div className="bg-bg-surface border border-border-hard flex flex-wrap items-center justify-between gap-3 px-4 py-3 feature-card">
+                <div>
+                  <div className="text-xs uppercase tracking-[0.18em] text-fg-secondary">Session Overview</div>
+                  <div className="mt-0.5 text-[11px] text-fg-muted">
+                    {selectedYear || '-'} · {selectedRace || '-'} · {selectedSession || '-'}
+                    {sessionData?.drivers?.length ? ` · ${sessionData.drivers.length} drivers` : ''}
+                    {sessionData?.laps?.length ? ` · ${sessionData.laps.length} laps` : ''}
+                  </div>
+                </div>
+                {/* API readiness pills */}
+                <div className="flex flex-wrap gap-1.5">
+                  {Object.entries(publishReadiness).map(([key, status]) => (
+                    <div key={key} className="flex items-center gap-1.5 rounded-full border border-border bg-bg-secondary px-2.5 py-1 text-[10px] font-mono">
+                      <span className={`inline-block h-1.5 w-1.5 rounded-full ${status === true ? 'bg-green-400' : status === false ? 'bg-red-400' : 'bg-text-muted animate-pulse'}`} />
+                      <span className="uppercase text-fg-secondary">{key}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
 
-              {/* API Readiness */}
-              <div className="grid grid-cols-2 gap-2 text-[11px] md:grid-cols-4">
-                {Object.entries(publishReadiness).map(([key, status]) => (
-                  <div key={key} className="flex items-center gap-2 rounded border border-border bg-bg-secondary px-2.5 py-2">
-                    <span className={`inline-block h-2 w-2 rounded-full ${status === true ? 'bg-green-400' : status === false ? 'bg-red-400' : 'bg-text-muted animate-pulse'
-                      }`} />
-                    <span className="text-text-primary uppercase font-mono">{key}</span>
-                    <span className="text-text-muted ml-auto">{status === true ? 'Ready' : status === false ? 'Down' : 'Checking…'}</span>
-                  </div>
-                ))}
+              {/* Quick stats */}
+              <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+                <div className={`p-3 ${FEATURE_CARD_CLASS}`} style={{ ...STAT_CARD_STYLE, ['--delay' as any]: '0ms' }}>
+                  <div className={STAT_LABEL_CLASS}>Drivers</div>
+                  <div className={STAT_VALUE_CLASS}>{sessionData?.drivers?.length ?? '—'}</div>
+                  <div className={STAT_UNIT_CLASS}>Active in session</div>
+                </div>
+                <div className={`p-3 ${FEATURE_CARD_CLASS}`} style={{ ...STAT_CARD_STYLE, ['--delay' as any]: '80ms' }}>
+                  <div className={STAT_LABEL_CLASS}>Laps</div>
+                  <div className={STAT_VALUE_CLASS}>{sessionData?.laps?.length ?? '—'}</div>
+                  <div className={STAT_UNIT_CLASS}>Recorded laps</div>
+                </div>
+                <div className={`p-3 ${FEATURE_CARD_CLASS}`} style={{ ...STAT_CARD_STYLE, ['--delay' as any]: '160ms' }}>
+                  <div className={STAT_LABEL_CLASS}>Telemetry</div>
+                  <div className={STAT_VALUE_CLASS}>{sessionData?.metadata?.telemetryAvailable ? 'LIVE' : 'LIMITED'}</div>
+                  <div className={STAT_UNIT_CLASS}>{sessionData?.metadata?.telemetryUnavailableReason ?? 'Available'}</div>
+                </div>
+                <div className={`p-3 ${FEATURE_CARD_CLASS}`} style={{ ...STAT_CARD_STYLE, ['--delay' as any]: '240ms' }}>
+                  <div className={STAT_LABEL_CLASS}>Session Length</div>
+                  <div className={STAT_VALUE_CLASS}>{sessionData?.metadata?.duration ? (sessionData.metadata.duration / 60).toFixed(1) : '—'}<span className="text-[11px] text-fg-muted"> min</span></div>
+                  <div className={STAT_UNIT_CLASS}>Total duration</div>
+                </div>
               </div>
 
-              {/* Track metadata */}
-              {trackOverview && (
-                <div className="grid grid-cols-2 gap-2 text-[11px] md:grid-cols-4">
-                  <div className="rounded border border-border bg-bg-secondary px-2.5 py-2">
-                    <div className="text-[10px] uppercase text-text-muted">Track</div>
-                    <div className="font-mono text-text-primary">{trackOverview.name}</div>
+              {/* Main content: TrackMap + Circuit Info side by side */}
+              <div className="grid grid-cols-1 gap-4 xl:grid-cols-[1fr_280px]">
+                {/* Track Map — full height, prominently displayed */}
+                <div className="bg-bg-surface border border-border-hard overflow-hidden  p-0 feature-card">
+                  <div className="flex items-center justify-between border-b border-border/40 px-4 py-2.5">
+                    <div className="text-[10px] uppercase tracking-[0.18em] text-fg-secondary">
+                      Track Intelligence Map
+                    </div>
+                    <div className="flex items-center gap-2 text-[10px] text-fg-muted font-mono">
+                      {trackOverview?.name && <span className="text-fg-secondary">{trackOverview.name}</span>}
+                      {trackOverview?.country && <span>· {trackOverview.country}</span>}
+                      <span className="text-[10px] text-fg-muted/60">Click driver to select · Ctrl+click to compare</span>
+                    </div>
                   </div>
-                  <div className="rounded border border-border bg-bg-secondary px-2.5 py-2">
-                    <div className="text-[10px] uppercase text-text-muted">Corners</div>
-                    <div className="font-mono text-text-primary">{trackOverview.corners || '-'}</div>
-                  </div>
-                  <div className="rounded border border-border bg-bg-secondary px-2.5 py-2">
-                    <div className="text-[10px] uppercase text-text-muted">DRS Zones</div>
-                    <div className="font-mono text-text-primary">{trackOverview.drsZones || '-'}</div>
-                  </div>
-                  <div className="rounded border border-border bg-bg-secondary px-2.5 py-2">
-                    <div className="text-[10px] uppercase text-text-muted">Sectors</div>
-                    <div className="font-mono text-text-primary">{trackOverview.sectors || '-'}</div>
+                  <div className="h-[480px]">
+                    <TrackMap />
                   </div>
                 </div>
-              )}
 
-              {/* Feature panels as interactive cards */}
-              <div className="grid grid-cols-1 gap-2 text-[11px] md:grid-cols-2 xl:grid-cols-3">
-                {OVERVIEW_SPOTLIGHT.map((panel) => (
-                  <button
-                    key={panel.id}
-                    type="button"
-                    onClick={() => setActivePanel(panel.id)}
-                    className="group rounded-lg border border-white/10 bg-black/25 px-3 py-2.5 text-left transition-all hover:border-white/25 hover:bg-black/35"
-                  >
-                    <div className="font-semibold text-text-primary group-hover:text-white transition-colors">{panel.label}</div>
-                    <div className="mt-0.5 text-[10px] text-text-muted">{panel.hint}</div>
-                  </button>
-                ))}
+                {/* Circuit Info Sidebar */}
+                <div className="space-y-3">
+                  {trackOverview ? (
+                    <>
+                      <div className="bg-bg-surface border border-border-hard p-4 space-y-3 feature-card">
+                        <div className="text-[10px] uppercase tracking-[0.18em] text-fg-secondary">Circuit Data</div>
+                        {[
+                          { label: 'Track', value: trackOverview.name },
+                          { label: 'Country', value: trackOverview.country },
+                          { label: 'Corners', value: trackOverview.corners ? String(trackOverview.corners) : '-' },
+                          { label: 'DRS Zones', value: trackOverview.drsZones ? String(trackOverview.drsZones) : '-' },
+                          { label: 'Sectors', value: trackOverview.sectors ? String(trackOverview.sectors) : '3' },
+                          { label: 'Track Width', value: trackOverview.trackWidth != null ? `${trackOverview.trackWidth.toFixed(1)} m` : '-' },
+                          { label: 'Layout Year', value: trackOverview.layoutYear != null ? String(trackOverview.layoutYear) : '-' },
+                          { label: 'Data Source', value: trackOverview.source },
+                        ].map(({ label, value }) => (
+                          <div key={label} className="flex items-center justify-between gap-2 border-b border-border/30 pb-2 last:border-0 last:pb-0">
+                            <span className="text-[10px] uppercase text-fg-muted">{label}</span>
+                            <span className="font-mono text-[11px] text-fg-primary truncate max-w-[160px] text-right">{value || '-'}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Flag legend */}
+                      <div className="bg-bg-surface border border-border-hard p-3 space-y-1.5 feature-card">
+                        <div className="text-[10px] uppercase tracking-[0.18em] text-fg-secondary mb-2">Track Flags Legend</div>
+                        {[
+                          { color: 'bg-red-500', label: 'Red Flag — Race stopped' },
+                          { color: 'bg-orange-400', label: 'Safety Car deployed' },
+                          { color: 'bg-yellow-400', label: 'VSC / Yellow sector' },
+                          { color: 'bg-green-500', label: 'Green — Track clear' },
+                        ].map(({ color, label }) => (
+                          <div key={label} className="flex items-center gap-2 text-[10px] text-fg-muted">
+                            <span className={`h-2.5 w-4 rounded-sm ${color} opacity-80 flex-shrink-0`} />
+                            {label}
+                          </div>
+                        ))}
+                        <div className="mt-1.5 flex items-center gap-2 text-[10px] text-fg-muted">
+                          <span className="h-2.5 w-4 rounded-sm bg-green-400/70 flex-shrink-0" style={{ background: 'linear-gradient(90deg, rgba(0,220,90,0.8) 0%, rgba(0,200,80,0.2) 100%)' }} />
+                          DRS zone (green overlay)
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="bg-bg-surface border border-border-hard p-4 text-[11px] text-fg-muted feature-card">
+                      Load a session to see circuit data
+                    </div>
+                  )}
+
+                  {/* Feature navigation cards (condensed) */}
+                  <div className="bg-bg-surface border border-border-hard p-3 space-y-1.5 feature-card">
+                    <div className="text-[10px] uppercase tracking-[0.18em] text-fg-secondary mb-2">Analytics Panels</div>
+                    {OVERVIEW_SPOTLIGHT.map((panel) => (
+                      <button
+                        key={panel.id}
+                        type="button"
+                        onClick={() => setActivePanel(panel.id)}
+                        className="group flex w-full items-center justify-between rounded border border-border/40 bg-bg-secondary/60 px-2.5 py-1.5 text-left transition-all hover:border-white/20 hover:bg-bg-secondary"
+                      >
+                        <span className="text-[11px] font-semibold text-fg-secondary group-hover:text-fg-primary">{panel.label}</span>
+                        <span className="text-[10px] text-fg-muted/60 group-hover:text-fg-muted">→</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
             </section>
           )}
 
+
           {activePanel === 'race-pace' && (
-            <section className="glass-panel p-4">
+            <section className="bg-bg-surface border border-border-hard p-4 feature-card" style={{ ["--delay" as any]: "80ms" }}>
               <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
                 <div>
-                  <div className="text-xs uppercase tracking-[0.18em] text-text-secondary">Track Intelligence Map</div>
-                  <div className="text-[11px] text-text-muted">
+                  <div className="text-xs uppercase tracking-[0.18em] text-fg-secondary">Track Intelligence Map</div>
+                  <div className="text-[11px] text-fg-muted">
                     Live map is now inside Features workspace: click for primary, Ctrl/Cmd+click for compare
                   </div>
                 </div>
-                <div className="rounded border border-border bg-bg-secondary px-2 py-1 text-[10px] font-mono text-text-muted">
+                <div className="rounded border border-border bg-bg-secondary px-2 py-1 text-[10px] font-mono text-fg-muted">
                   {trackOverview?.name || 'Track not available'}
                 </div>
               </div>
@@ -1081,53 +917,53 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
                 <div className="space-y-2">
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     <div className="rounded border border-border bg-bg-secondary p-2">
-                      <div className="text-[10px] uppercase text-text-muted">Corners</div>
-                      <div className="font-mono text-sm text-text-primary">{trackOverview?.corners ?? '-'}</div>
+                      <div className="text-[10px] uppercase text-fg-muted">Corners</div>
+                      <div className="font-mono text-sm text-fg-primary">{trackOverview?.corners ?? '-'}</div>
                     </div>
                     <div className="rounded border border-border bg-bg-secondary p-2">
-                      <div className="text-[10px] uppercase text-text-muted">DRS Zones</div>
-                      <div className="font-mono text-sm text-text-primary">{trackOverview?.drsZones ?? '-'}</div>
+                      <div className="text-[10px] uppercase text-fg-muted">DRS Zones</div>
+                      <div className="font-mono text-sm text-fg-primary">{trackOverview?.drsZones ?? '-'}</div>
                     </div>
                     <div className="rounded border border-border bg-bg-secondary p-2">
-                      <div className="text-[10px] uppercase text-text-muted">Sectors</div>
-                      <div className="font-mono text-sm text-text-primary">{trackOverview?.sectors ?? '-'}</div>
+                      <div className="text-[10px] uppercase text-fg-muted">Sectors</div>
+                      <div className="font-mono text-sm text-fg-primary">{trackOverview?.sectors ?? '-'}</div>
                     </div>
                     <div className="rounded border border-border bg-bg-secondary p-2">
-                      <div className="text-[10px] uppercase text-text-muted">Track Width</div>
-                      <div className="font-mono text-sm text-text-primary">
+                      <div className="text-[10px] uppercase text-fg-muted">Track Width</div>
+                      <div className="font-mono text-sm text-fg-primary">
                         {trackOverview?.trackWidth != null ? `${trackOverview.trackWidth.toFixed(1)} m` : '-'}
                       </div>
                     </div>
                   </div>
 
                   <div className="rounded border border-border bg-bg-secondary p-2 text-xs">
-                    <div className="mb-1 text-[10px] uppercase text-text-muted">Context</div>
+                    <div className="mb-1 text-[10px] uppercase text-fg-muted">Context</div>
                     <div className="grid grid-cols-2 gap-1 text-[11px]">
-                      <span className="text-text-muted">Country</span>
-                      <span className="font-mono text-text-primary">{trackOverview?.country || '-'}</span>
-                      <span className="text-text-muted">Layout Year</span>
-                      <span className="font-mono text-text-primary">{trackOverview?.layoutYear ?? '-'}</span>
-                      <span className="text-text-muted">Geometry Source</span>
-                      <span className="truncate font-mono text-text-primary">{trackOverview?.source || '-'}</span>
-                      <span className="text-text-muted">Primary</span>
-                      <span className="font-mono text-text-primary">{primaryDriver || '-'}</span>
-                      <span className="text-text-muted">Compare</span>
-                      <span className="font-mono text-text-primary">{compareDriver || '-'}</span>
+                      <span className="text-fg-muted">Country</span>
+                      <span className="font-mono text-fg-primary">{trackOverview?.country || '-'}</span>
+                      <span className="text-fg-muted">Layout Year</span>
+                      <span className="font-mono text-fg-primary">{trackOverview?.layoutYear ?? '-'}</span>
+                      <span className="text-fg-muted">Geometry Source</span>
+                      <span className="truncate font-mono text-fg-primary">{trackOverview?.source || '-'}</span>
+                      <span className="text-fg-muted">Primary</span>
+                      <span className="font-mono text-fg-primary">{primaryDriver || '-'}</span>
+                      <span className="text-fg-muted">Compare</span>
+                      <span className="font-mono text-fg-primary">{compareDriver || '-'}</span>
                     </div>
                   </div>
 
                   {circuitInsights && (
                     <div className="rounded border border-border bg-bg-secondary p-2 text-xs">
-                      <div className="mb-1 text-[10px] uppercase text-text-muted">Circuit Facts</div>
+                      <div className="mb-1 text-[10px] uppercase text-fg-muted">Circuit Facts</div>
                       <div className="grid grid-cols-2 gap-1 text-[11px]">
-                        <span className="text-text-muted">Length</span>
-                        <span className="font-mono text-text-primary">{circuitInsights.facts['Circuit Length'] || '-'}</span>
-                        <span className="text-text-muted">Race Distance</span>
-                        <span className="font-mono text-text-primary">{circuitInsights.facts['Race Distance'] || '-'}</span>
-                        <span className="text-text-muted">Laps</span>
-                        <span className="font-mono text-text-primary">{circuitInsights.facts['Number of Laps'] || '-'}</span>
-                        <span className="text-text-muted">First GP</span>
-                        <span className="font-mono text-text-primary">{circuitInsights.facts['First Grand Prix'] || '-'}</span>
+                        <span className="text-fg-muted">Length</span>
+                        <span className="font-mono text-fg-primary">{circuitInsights.facts['Circuit Length'] || '-'}</span>
+                        <span className="text-fg-muted">Race Distance</span>
+                        <span className="font-mono text-fg-primary">{circuitInsights.facts['Race Distance'] || '-'}</span>
+                        <span className="text-fg-muted">Laps</span>
+                        <span className="font-mono text-fg-primary">{circuitInsights.facts['Number of Laps'] || '-'}</span>
+                        <span className="text-fg-muted">First GP</span>
+                        <span className="font-mono text-fg-primary">{circuitInsights.facts['First Grand Prix'] || '-'}</span>
                       </div>
                     </div>
                   )}
@@ -1137,13 +973,13 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
           )}
 
           {activePanel === 'race-pace' && (
-            <section className="glass-panel p-4">
+            <section className="bg-bg-surface border border-border-hard p-4 feature-card" style={{ ["--delay" as any]: "80ms" }}>
               <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
                 <div>
-                  <div className="text-xs uppercase tracking-[0.18em] text-text-secondary">Race Pace Explorer</div>
-                  <div className="text-[11px] text-text-muted">Smoothed lap-time evolution (3-lap rolling) with degradation trend</div>
+                  <div className="text-xs uppercase tracking-[0.18em] text-fg-secondary">Race Pace Explorer</div>
+                  <div className="text-[11px] text-fg-muted">Smoothed lap-time evolution (3-lap rolling) with degradation trend</div>
                 </div>
-                <div className="flex flex-wrap gap-1.5 text-[10px] text-text-muted">
+                <div className="flex flex-wrap gap-1.5 text-[10px] text-fg-muted">
                   {weatherSnapshot && (
                     <span className="rounded border border-border bg-bg-secondary px-2 py-0.5">
                       Air {weatherSnapshot.airTemp.toFixed(1)}C | Track {weatherSnapshot.trackTemp.toFixed(1)}C
@@ -1159,12 +995,12 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
               </div>
 
               {visibleRacePaceSeries.length === 0 ? (
-                <div className="flex h-[300px] items-center justify-center text-sm text-text-muted">
+                <div className="flex h-[300px] items-center justify-center text-sm text-fg-muted">
                   No lap-time race pace data available for this session
                 </div>
               ) : (
                 <div className="flex flex-col gap-3">
-                  <div className="rounded border border-border bg-bg-card p-2.5">
+                  <div className="rounded border border-border bg-bg-surface p-2.5">
                     <RacePaceLiteChart
                       series={visibleRacePaceSeries.map((item) => ({
                         code: item.code,
@@ -1177,14 +1013,14 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
 
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     <div className="rounded border border-border bg-bg-secondary p-2">
-                      <div className="text-[10px] uppercase text-text-muted">Best Race Pace</div>
-                      <div className="font-mono text-sm text-text-primary">{paceHighlights.bestMedian?.code || '-'}</div>
-                      <div className="text-[11px] text-text-muted">median {paceHighlights.bestMedian?.median?.toFixed(3) ?? '-'}s</div>
+                      <div className="text-[10px] uppercase text-fg-muted">Best Race Pace</div>
+                      <div className="font-mono text-sm text-fg-primary">{paceHighlights.bestMedian?.code || '-'}</div>
+                      <div className="text-[11px] text-fg-muted">median {paceHighlights.bestMedian?.median?.toFixed(3) ?? '-'}s</div>
                     </div>
                     <div className="rounded border border-border bg-bg-secondary p-2">
-                      <div className="text-[10px] uppercase text-text-muted">Highest Degradation</div>
-                      <div className="font-mono text-sm text-text-primary">{paceHighlights.mostDeg?.code || '-'}</div>
-                      <div className="text-[11px] text-text-muted">slope {formatSigned(paceHighlights.mostDeg?.slope, 3)} s/lap</div>
+                      <div className="text-[10px] uppercase text-fg-muted">Highest Degradation</div>
+                      <div className="font-mono text-sm text-fg-primary">{paceHighlights.mostDeg?.code || '-'}</div>
+                      <div className="text-[11px] text-fg-muted">slope {formatSigned(paceHighlights.mostDeg?.slope, 3)} s/lap</div>
                     </div>
                   </div>
 
@@ -1192,15 +1028,15 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
                     {visibleRacePaceSeries.map((item) => {
                       const highlighted = item.code === primaryDriver || item.code === compareDriver
                       return (
-                        <div key={item.code} className={`rounded px-2 py-1 ${highlighted ? 'bg-bg-card' : ''}`}>
+                        <div key={item.code} className={`rounded px-2 py-1 ${highlighted ? 'bg-bg-surface' : ''}`}>
                           <div className="mb-0.5 flex items-center justify-between">
                             <div className="flex items-center gap-2">
                               <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: item.color }} />
-                              <span className="font-mono text-text-primary">{item.code}</span>
+                              <span className="font-mono text-fg-primary">{item.code}</span>
                             </div>
-                            <span className="font-mono text-[10px] text-text-muted">P{item.latestPosition}</span>
+                            <span className="font-mono text-[10px] text-fg-muted">P{item.latestPosition}</span>
                           </div>
-                          <div className="grid grid-cols-3 gap-1 text-[10px] text-text-muted">
+                          <div className="grid grid-cols-3 gap-1 text-[10px] text-fg-muted">
                             <span>Median {item.median.toFixed(3)}s</span>
                             <span>Trend {formatSigned(item.slope, 3)}</span>
                             <span>Laps {item.laps.length}</span>
@@ -1215,17 +1051,17 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
           )}
 
           {activePanel === 'lap-results' && (
-            <section className="space-y-3 glass-panel p-4">
+            <section className="space-y-3 bg-bg-surface border border-border-hard p-4 feature-card" style={{ ["--delay" as any]: "120ms" }}>
               <div>
-                <div className="text-xs uppercase tracking-[0.18em] text-text-secondary">Lap + Results Analytics</div>
-                <div className="text-[11px] text-text-muted">
+                <div className="text-xs uppercase tracking-[0.18em] text-fg-secondary">Lap + Results Analytics</div>
+                <div className="text-[11px] text-fg-muted">
                   FastF1-style lap scatter, lap distribution, position traces, team pace, and qualifying overview with hover inspection
                 </div>
               </div>
 
               <div className="grid grid-cols-1 gap-3 2xl:grid-cols-[1.2fr_0.8fr]">
-                <div className="rounded border border-border bg-bg-card p-2.5">
-                  <div className="mb-1 text-[10px] uppercase tracking-[0.14em] text-text-secondary">Driver Laptimes Scatterplot</div>
+                <div className="rounded border border-border bg-bg-surface p-2.5">
+                  <div className="mb-1 text-[10px] uppercase tracking-[0.14em] text-fg-secondary">Driver Laptimes Scatterplot</div>
                   <svg viewBox="0 0 1000 340" className="h-[340px] w-full">
                     {lapScatterSeries.flatMap((series) =>
                       series.laps.map((lap, idx) => {
@@ -1279,7 +1115,7 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
                 </div>
 
                 <div className="rounded border border-border bg-bg-secondary p-2.5">
-                  <div className="mb-2 text-[10px] uppercase tracking-[0.14em] text-text-secondary">Lap Time Distribution</div>
+                  <div className="mb-2 text-[10px] uppercase tracking-[0.14em] text-fg-secondary">Lap Time Distribution</div>
                   <div className="space-y-1.5">
                     {lapDistributions.map((row) => {
                       const span = Math.max(0.001, lapScatterBounds.yMax - lapScatterBounds.yMin)
@@ -1290,8 +1126,8 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
                       const lmed = ((row.median - lapScatterBounds.yMin) / span) * 100
                       return (
                         <div key={`dist-${row.code}`} className="grid grid-cols-[52px_1fr_58px] items-center gap-2 text-[10px]">
-                          <span className="font-mono text-text-primary">{row.code}</span>
-                          <div className="relative h-4 rounded bg-bg-card">
+                          <span className="font-mono text-fg-primary">{row.code}</span>
+                          <div className="relative h-4 rounded bg-bg-surface">
                             <div className="absolute left-0 right-0 top-1/2 h-[1px] -translate-y-1/2 bg-border" />
                             <div className="absolute top-1/2 h-[2px] -translate-y-1/2" style={{ left: `${l10}%`, width: `${Math.max(1, l90 - l10)}%`, backgroundColor: row.color }} />
                             <div
@@ -1309,7 +1145,7 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
                             />
                             <div className="absolute top-[1px] h-3 w-[2px] bg-white" style={{ left: `${lmed}%` }} />
                           </div>
-                          <span className="font-mono text-right text-text-muted">{row.median.toFixed(3)}</span>
+                          <span className="font-mono text-right text-fg-muted">{row.median.toFixed(3)}</span>
                         </div>
                       )
                     })}
@@ -1318,8 +1154,8 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
               </div>
 
               <div className="grid grid-cols-1 gap-3 2xl:grid-cols-[1.15fr_0.85fr]">
-                <div className="rounded border border-border bg-bg-card p-2.5">
-                  <div className="mb-1 text-[10px] uppercase tracking-[0.14em] text-text-secondary">Position Changes During Race</div>
+                <div className="rounded border border-border bg-bg-surface p-2.5">
+                  <div className="mb-1 text-[10px] uppercase tracking-[0.14em] text-fg-secondary">Position Changes During Race</div>
                   <svg viewBox="0 0 1000 340" className="h-[340px] w-full">
                     {positionTraces.map((trace) => {
                       const xSpan = Math.max(1, positionTraceBounds.xMax - positionTraceBounds.xMin)
@@ -1378,12 +1214,12 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
 
                 <div className="space-y-3">
                   <div className="rounded border border-border bg-bg-secondary p-2.5">
-                    <div className="mb-2 text-[10px] uppercase tracking-[0.14em] text-text-secondary">Team Pace Comparison</div>
+                    <div className="mb-2 text-[10px] uppercase tracking-[0.14em] text-fg-secondary">Team Pace Comparison</div>
                     <div className="space-y-1.5 text-xs">
                       {teamPaceRows.map((row) => (
                         <div key={`team-${row.team}`} className="grid grid-cols-[108px_1fr_86px] items-center gap-2">
-                          <span className="truncate text-[11px] text-text-primary">{row.team}</span>
-                          <div className="h-2 rounded bg-bg-card">
+                          <span className="truncate text-[11px] text-fg-primary">{row.team}</span>
+                          <div className="h-2 rounded bg-bg-surface">
                             <div
                               className="h-2 rounded"
                               style={{
@@ -1393,7 +1229,7 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
                               title={`${row.team}: ${row.medianLap.toFixed(3)}s (${row.delta > 0 ? '+' : ''}${row.delta.toFixed(3)}s)`}
                             />
                           </div>
-                          <span className="font-mono text-right text-[10px] text-text-muted">
+                          <span className="font-mono text-right text-[10px] text-fg-muted">
                             {row.medianLap.toFixed(3)}s
                           </span>
                         </div>
@@ -1402,13 +1238,13 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
                   </div>
 
                   <div className="rounded border border-border bg-bg-secondary p-2.5">
-                    <div className="mb-2 text-[10px] uppercase tracking-[0.14em] text-text-secondary">Qualifying Results Overview</div>
+                    <div className="mb-2 text-[10px] uppercase tracking-[0.14em] text-fg-secondary">Qualifying Results Overview</div>
                     <div className="space-y-1 text-xs">
                       {qualifyingRows.slice(0, 12).map((row) => (
                         <div key={`quali-${row.code}`} className="grid grid-cols-[26px_42px_1fr_86px] items-center gap-2">
-                          <span className="font-mono text-[10px] text-text-muted">P{row.rank}</span>
-                          <span className="font-mono text-text-primary">{row.code}</span>
-                          <div className="h-2 rounded bg-bg-card">
+                          <span className="font-mono text-[10px] text-fg-muted">P{row.rank}</span>
+                          <span className="font-mono text-fg-primary">{row.code}</span>
+                          <div className="h-2 rounded bg-bg-surface">
                             <div
                               className="h-2 rounded"
                               style={{
@@ -1418,7 +1254,7 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
                               title={`${row.code}: ${row.bestLap.toFixed(3)}s (${row.delta > 0 ? '+' : ''}${row.delta.toFixed(3)}s)`}
                             />
                           </div>
-                          <span className="font-mono text-right text-[10px] text-text-muted">{row.bestLap.toFixed(3)}s</span>
+                          <span className="font-mono text-right text-[10px] text-fg-muted">{row.bestLap.toFixed(3)}s</span>
                         </div>
                       ))}
                     </div>
@@ -1427,15 +1263,15 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
               </div>
 
               <div className="rounded border border-border bg-bg-secondary p-2.5">
-                <div className="mb-2 text-[10px] uppercase tracking-[0.14em] text-text-secondary">Tyre Strategies Timeline</div>
+                <div className="mb-2 text-[10px] uppercase tracking-[0.14em] text-fg-secondary">Tyre Strategies Timeline</div>
                 {tyreTimelineRows.length === 0 ? (
-                  <div className="text-xs text-text-muted">No tyre-compound lap history available</div>
+                  <div className="text-xs text-fg-muted">No tyre-compound lap history available</div>
                 ) : (
                   <div className="space-y-1.5 overflow-x-auto">
                     {tyreTimelineRows.slice(0, 20).map((row) => (
                       <div key={`tyre-${row.code}`} className="grid min-w-[760px] grid-cols-[42px_1fr_56px] items-center gap-2">
-                        <span className="font-mono text-[11px] text-text-primary">{row.code}</span>
-                        <div className="relative h-5 rounded border border-white/10 bg-bg-card/80">
+                        <span className="font-mono text-[11px] text-fg-primary">{row.code}</span>
+                        <div className="relative h-5 rounded border border-border-hard bg-bg-surface/80">
                           {row.stints.map((stint, idx) => {
                             const left = ((stint.startLap - 1) / tyreTimelineMaxLap) * 100
                             const width = (stint.laps / tyreTimelineMaxLap) * 100
@@ -1454,7 +1290,7 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
                             )
                           })}
                         </div>
-                        <span className="font-mono text-right text-[10px] text-text-muted">L{row.stints[row.stints.length - 1]?.endLap || '-'}</span>
+                        <span className="font-mono text-right text-[10px] text-fg-muted">L{row.stints[row.stints.length - 1]?.endLap || '-'}</span>
                       </div>
                     ))}
                   </div>
@@ -1464,9 +1300,9 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
           )}
 
           {activePanel === 'strategy-ml' && (
-            <section className="glass-panel p-4">
+            <section className="bg-bg-surface border border-border-hard p-4 feature-card" style={{ ["--delay" as any]: "80ms" }}>
               <div className="mb-2 flex items-center justify-between gap-2">
-                <div className="text-xs uppercase tracking-[0.18em] text-text-secondary">Strategy Scenario Map</div>
+                <div className="text-xs uppercase tracking-[0.18em] text-fg-secondary">Strategy Scenario Map</div>
                 {strategySourceYear != null && selectedYear != null && strategySourceYear !== selectedYear && (
                   <span className="rounded bg-amber-500/10 px-2 py-0.5 text-[10px] font-mono text-amber-300">
                     using {strategySourceYear} model
@@ -1474,7 +1310,7 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
                 )}
               </div>
 
-              {strategyLoading && <div className="text-sm text-text-secondary">Loading strategy analytics...</div>}
+              {strategyLoading && <div className="text-sm text-fg-secondary">Loading strategy analytics...</div>}
               {!strategyLoading && strategyError && (
                 <div className="rounded border border-red-500/30 bg-red-500/10 p-2 text-xs text-red-300">
                   Strategy model data unavailable for {selectedYear} {selectedRace ?? 'this race'}. Try a different session or check that model data exists.
@@ -1483,7 +1319,7 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
 
               {!strategyLoading && !strategyError && topStrategies.length > 0 && (
                 <div className="space-y-3">
-                  <div className="rounded border border-border bg-bg-card p-2">
+                  <div className="rounded border border-border bg-bg-surface p-2">
                     <svg
                       viewBox="0 0 480 260"
                       className="h-[260px] w-full"
@@ -1547,10 +1383,10 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
                     {topStrategies.slice(0, 8).map((item) => (
                       <div key={item.strategy} className="rounded border border-border bg-bg-secondary px-2 py-1.5 text-xs">
                         <div className="flex items-center justify-between gap-2">
-                          <span className="truncate font-mono text-text-primary">{item.strategy}</span>
-                          <span className="font-mono text-[10px] text-text-muted">Pts {item.avg_points.toFixed(2)}</span>
+                          <span className="truncate font-mono text-fg-primary">{item.strategy}</span>
+                          <span className="font-mono text-[10px] text-fg-muted">Pts {item.avg_points.toFixed(2)}</span>
                         </div>
-                        <div className="mt-0.5 grid grid-cols-3 gap-1 text-[10px] text-text-muted">
+                        <div className="mt-0.5 grid grid-cols-3 gap-1 text-[10px] text-fg-muted">
                           <span>Finish {item.avg_finish_position.toFixed(2)}</span>
                           <span>Podium {formatPct(item.podium_probability)}</span>
                           <span>Stops {item.avg_pit_stops.toFixed(1)}</span>
@@ -1564,25 +1400,25 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
           )}
 
           {activePanel === 'clustering' && (
-            <section className="glass-panel p-4">
-              <div className="mb-2 text-xs uppercase tracking-[0.18em] text-text-secondary">Cluster Intelligence</div>
-              {clusterLoading && <div className="text-sm text-text-secondary">Loading clusters...</div>}
+            <section className="bg-bg-surface border border-border-hard p-4 feature-card" style={{ ["--delay" as any]: "80ms" }}>
+              <div className="mb-2 text-xs uppercase tracking-[0.18em] text-fg-secondary">Cluster Intelligence</div>
+              {clusterLoading && <div className="text-sm text-fg-secondary">Loading clusters...</div>}
               {!clusterLoading && clusterError && <div className="text-xs text-red-400">{clusterError}</div>}
 
               {!clusterLoading && !clusterError && (
                 <div className="space-y-2 text-xs">
                   <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
                     <div className="rounded border border-border bg-bg-secondary p-2">
-                      <div className="text-[10px] uppercase text-text-muted">Silhouette</div>
-                      <div className="font-mono text-sm text-text-primary">{clusterData?.silhouette_score?.toFixed(3) || '-'}</div>
+                      <div className="text-[10px] uppercase text-fg-muted">Silhouette</div>
+                      <div className="font-mono text-sm text-fg-primary">{clusterData?.silhouette_score?.toFixed(3) || '-'}</div>
                     </div>
                     <div className="rounded border border-border bg-bg-secondary p-2">
-                      <div className="text-[10px] uppercase text-text-muted">Clusters</div>
-                      <div className="font-mono text-sm text-text-primary">{clusterData?.n_clusters || '-'}</div>
+                      <div className="text-[10px] uppercase text-fg-muted">Clusters</div>
+                      <div className="font-mono text-sm text-fg-primary">{clusterData?.n_clusters || '-'}</div>
                     </div>
                     <div className="rounded border border-border bg-bg-secondary p-2">
-                      <div className="text-[10px] uppercase text-text-muted">Session Drivers</div>
-                      <div className="font-mono text-sm text-text-primary">{sessionData?.drivers?.length || 0}</div>
+                      <div className="text-[10px] uppercase text-fg-muted">Session Drivers</div>
+                      <div className="font-mono text-sm text-fg-primary">{sessionData?.drivers?.length || 0}</div>
                     </div>
                   </div>
 
@@ -1590,12 +1426,12 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
                     {clustersById.map((cluster) => (
                       <div key={cluster.clusterId} className="rounded border border-border bg-bg-secondary p-2">
                         <div className="mb-1 flex items-center justify-between">
-                          <span className="font-mono text-text-primary">Cluster {cluster.clusterId}</span>
-                          <span className="font-mono text-[10px] text-text-muted">
+                          <span className="font-mono text-fg-primary">Cluster {cluster.clusterId}</span>
+                          <span className="font-mono text-[10px] text-fg-muted">
                             in-session {cluster.sessionCount}/{cluster.totalCount}
                           </span>
                         </div>
-                        <div className="mb-1 h-2 rounded bg-bg-card">
+                        <div className="mb-1 h-2 rounded bg-bg-surface">
                           <div
                             className="h-2 rounded bg-accent-blue/80"
                             style={{ width: `${Math.max(4, Math.round((cluster.sessionCount / Math.max(1, cluster.totalCount)) * 100))}%` }}
@@ -1603,7 +1439,7 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
                         </div>
                         <div className="flex flex-wrap gap-1 text-[10px]">
                           {cluster.topDrivers.map((driver) => (
-                            <span key={`${cluster.clusterId}-${driver.name}`} className="rounded bg-bg-card px-1.5 py-0.5 text-text-muted">
+                            <span key={`${cluster.clusterId}-${driver.name}`} className="rounded bg-bg-surface px-1.5 py-0.5 text-fg-muted">
                               {driver.name}
                             </span>
                           ))}
@@ -1617,25 +1453,25 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
           )}
 
           {activePanel === 'standings' && (
-            <section className="space-y-3 glass-panel p-4">
+            <section className="space-y-3 bg-bg-surface border border-border-hard p-4 feature-card" style={{ ["--delay" as any]: "120ms" }}>
               <div>
-                <div className="text-xs uppercase tracking-[0.18em] text-text-secondary">Season Standings Analytics</div>
-                <div className="text-[11px] text-text-muted">
+                <div className="text-xs uppercase tracking-[0.18em] text-fg-secondary">Season Standings Analytics</div>
+                <div className="text-[11px] text-fg-muted">
                   Race-by-race points progression, standings heatmap, and season summary (FastF1 standings-style coverage)
                 </div>
               </div>
 
-              {seasonStandingsLoading && <div className="text-sm text-text-secondary">Loading season standings from feature files...</div>}
+              {seasonStandingsLoading && <div className="text-sm text-fg-secondary">Loading season standings from feature files...</div>}
               {seasonStandingsError && <div className="text-xs text-red-400">{seasonStandingsError}</div>}
 
               {!seasonStandingsLoading && !seasonStandingsError && topSeasonStandings.length === 0 && (
-                <div className="text-sm text-text-muted">No standings data available for {selectedYear || '-'}.</div>
+                <div className="text-sm text-fg-muted">No standings data available for {selectedYear || '-'}.</div>
               )}
 
               {!seasonStandingsLoading && !seasonStandingsError && topSeasonStandings.length > 0 && (
                 <>
-                  <div className="rounded border border-border bg-bg-card p-2.5">
-                    <div className="mb-1 text-[10px] uppercase tracking-[0.14em] text-text-secondary">Season Summary Visualization</div>
+                  <div className="rounded border border-border bg-bg-surface p-2.5">
+                    <div className="mb-1 text-[10px] uppercase tracking-[0.14em] text-fg-secondary">Season Summary Visualization</div>
                     <SeasonStandingsLiteChart
                       drivers={topSeasonStandings.map((driver) => ({
                         code: driver.code,
@@ -1647,7 +1483,7 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
                   </div>
 
                   <div className="rounded border border-border bg-bg-secondary p-2.5">
-                    <div className="mb-2 text-[10px] uppercase tracking-[0.14em] text-text-secondary">Driver Standings Heatmap</div>
+                    <div className="mb-2 text-[10px] uppercase tracking-[0.14em] text-fg-secondary">Driver Standings Heatmap</div>
                     <StandingsHeatmapLiteChart
                       raceNames={seasonStandings?.raceNames || []}
                       drivers={topSeasonStandings.map((driver) => ({
@@ -1664,23 +1500,23 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
           )}
 
           {activePanel === 'driver-intel' && (
-            <section className="glass-panel p-3">
+            <section className="bg-bg-surface border border-border-hard p-3 feature-card" style={{ ["--delay" as any]: "140ms" }}>
               <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
                 <div>
-                  <div className="text-xs uppercase tracking-[0.18em] text-text-secondary">Driver Intelligence Workspace</div>
-                  <div className="text-[11px] text-text-muted">
+                  <div className="text-xs uppercase tracking-[0.18em] text-fg-secondary">Driver Intelligence Workspace</div>
+                  <div className="text-[11px] text-fg-muted">
                     Snapshot and strategy timeline share the same session window and driver selection.
                   </div>
                 </div>
-                <div className="rounded border border-border bg-bg-secondary px-2 py-1 text-[10px] font-mono text-text-muted">
+                <div className="rounded border border-border bg-bg-secondary px-2 py-1 text-[10px] font-mono text-fg-muted">
                   Real-time data bound
                 </div>
               </div>
               <div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
-                <div className="min-h-[560px] rounded-lg border border-white/10 bg-black/15 p-2">
+                <div className="min-h-[560px] rounded-lg border border-border-hard bg-black/15 p-2">
                   <DriverSummary />
                 </div>
-                <div className="min-h-[560px] rounded-lg border border-white/10 bg-black/15 p-2">
+                <div className="min-h-[560px] rounded-lg border border-border-hard bg-black/15 p-2">
                   <PitStrategy />
                 </div>
               </div>
@@ -1688,15 +1524,15 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
           )}
 
           {(activePanel === 'undercut' || activePanel === 'strategy-ml') && (
-            <section className="min-h-[620px] glass-panel p-3">
+            <section className="min-h-[620px] bg-bg-surface border border-border-hard p-3 feature-card" style={{ ["--delay" as any]: "160ms" }}>
               <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
                 <div>
-                  <div className="text-xs uppercase tracking-[0.18em] text-text-secondary">Undercut Decision Lab</div>
-                  <div className="text-[11px] text-text-muted">
+                  <div className="text-xs uppercase tracking-[0.18em] text-fg-secondary">Undercut Decision Lab</div>
+                  <div className="text-[11px] text-fg-muted">
                     Validate model inputs, run predictions, and review recommendation confidence in one panel.
                   </div>
                 </div>
-                <div className="rounded border border-border bg-bg-secondary px-2 py-1 text-[10px] font-mono text-text-muted">
+                <div className="rounded border border-border bg-bg-secondary px-2 py-1 text-[10px] font-mono text-fg-muted">
                   Manual override enabled
                 </div>
               </div>
@@ -1705,7 +1541,7 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
           )}
 
           {activePanel === 'fia-docs' && (
-            <section className="glass-panel min-h-[980px]">
+            <section className="bg-bg-surface border border-border-hard min-h-[980px] feature-card" style={{ ["--delay" as any]: "180ms" }}>
               <FiaDocumentsView />
             </section>
           )}

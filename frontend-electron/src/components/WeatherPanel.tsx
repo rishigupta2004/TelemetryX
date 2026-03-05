@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef } from 'react'
-import { useSessionTime } from '../lib/timeUtils'
+import { useSessionTime2s } from '../lib/timeUtils'
 import { useSessionStore } from '../stores/sessionStore'
 import type { WeatherRow } from '../types'
 
@@ -34,7 +34,7 @@ interface WeatherPanelProps {
 
 export const WeatherPanel = React.memo(function WeatherPanel({ compact = false }: WeatherPanelProps) {
   const sessionData = useSessionStore((s) => s.sessionData)
-  const sessionTime = useSessionTime()
+  const sessionTime = useSessionTime2s()
 
   const weatherSeries = useMemo(() => {
     const weather = sessionData?.weather
@@ -80,111 +80,112 @@ export const WeatherPanel = React.memo(function WeatherPanel({ compact = false }
 
   if (!weather) {
     return (
-      <div className="glass-panel flex h-full items-center justify-center rounded-xl p-4">
-        <div className="text-center">
-          <div className="text-2xl mb-2">🌤</div>
-          <div className="text-sm font-semibold text-text-secondary">No weather data for this session</div>
-          <div className="mt-1 text-xs text-text-muted">Weather readings will appear here when available</div>
+      <div className="flex h-full items-center justify-center p-2 bg-transparent text-center">
+        <div>
+          <div className="text-[10px] font-bold text-fg-secondary tracking-widest uppercase pb-1" style={{ fontFamily: 'var(--font-heading)' }}>No Data</div>
+          <div className="text-[10px] font-mono text-fg-muted tracking-widest uppercase">Awaiting Weather Stream</div>
         </div>
       </div>
     )
   }
 
   const trackTempColor = (temp: number) => {
-    if (temp < 25) return { bg: 'rgba(0,144,255,0.12)', text: '#60a5fa' }
-    if (temp <= 40) return { bg: 'rgba(160,160,160,0.08)', text: '#a0a0a0' }
-    return { bg: 'rgba(255,100,0,0.12)', text: '#fb923c' }
+    if (temp < 25) return { bg: 'rgba(0,144,255,0.0)', text: '#60a5fa' }
+    if (temp <= 40) return { bg: 'rgba(160,160,160,0.0)', text: '#a0a0a0' }
+    return { bg: 'rgba(255,100,0,0.0)', text: '#fb923c' }
   }
 
   const isRaining = weather.rainfall > 0
   const trackTemp = trackTempColor(weather.trackTemp)
-  const trackName = sessionData?.trackGeometry?.name || sessionData?.metadata?.raceName || 'Circuit'
 
   if (compact) {
     return (
-      <div className="glass-panel flex h-full flex-col rounded-[14px] p-2.5">
-        <div className="mb-2 flex items-center justify-between">
-          <span className="text-[10px] uppercase tracking-[0.14em] text-text-secondary">Weather</span>
+      <div className="flex flex-col p-1 w-full bg-transparent">
+        <div className="mb-2 flex items-center justify-between border-b border-border-micro pb-1">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-fg-secondary" style={{ fontFamily: 'var(--font-heading)' }}>WEATHER</span>
           {isRaining && (
-            <span className="rounded bg-blue-500/15 px-1.5 py-0.5 text-[10px] font-medium text-blue-300">🌧 RAIN</span>
+            <span className="text-[10px] font-mono tracking-widest text-blue-sel uppercase">RAIN DETECTED</span>
           )}
         </div>
-        <div className="grid grid-cols-2 gap-x-2 gap-y-1 text-[11px]">
-          <div className="font-mono text-text-primary">🌡 {weather.airTemp.toFixed(1)}°C</div>
-          <div className="font-mono" style={{ color: trackTemp.text }}>🔥 {weather.trackTemp.toFixed(1)}°C</div>
-          <div className="font-mono text-text-muted">💧 {weather.humidity}%</div>
-          <div className="font-mono text-text-muted">💨 {weather.windSpeed.toFixed(1)} m/s {windCompass(weather.windDirection)}</div>
+        <div className="grid grid-cols-2 gap-x-2 gap-y-1 text-[11px] font-mono">
+          <div className="text-fg-primary flex justify-between">
+            <span className="text-fg-muted">AIR</span> <span>{weather.airTemp.toFixed(1)}°C</span>
+          </div>
+          <div className="flex justify-between" style={{ color: trackTemp.text }}>
+            <span className="text-fg-muted">TRK</span> <span>{weather.trackTemp.toFixed(1)}°C</span>
+          </div>
+          <div className="text-fg-muted flex justify-between">
+            <span>HUM</span> <span className="text-fg-primary">{weather.humidity}%</span>
+          </div>
+          <div className="text-fg-muted flex justify-between">
+            <span>WND</span> <span className="text-fg-primary">{weather.windSpeed.toFixed(1)} <span className="text-[9px]">{windCompass(weather.windDirection)}</span></span>
+          </div>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="glass-panel flex h-full flex-col rounded-[18px] p-4">
+    <div className="flex h-full flex-col p-4 bg-transparent w-full">
       {/* Header */}
-      <div className="mb-4 flex items-center gap-2">
-        <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Weather</span>
-        <span className="text-[10px] text-text-muted">·</span>
-        <span className="text-[11px] text-text-muted truncate">{trackName}</span>
+      <div className="mb-4 flex items-center gap-2 border-b border-border-hard pb-2">
+        <span className="text-[11px] font-bold uppercase tracking-widest text-fg-secondary" style={{ fontFamily: 'var(--font-heading)' }}>WEATHER STATION</span>
       </div>
 
       {/* Main stats grid */}
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-[1px] bg-border-hard border border-border-hard">
         {/* Air Temp */}
-        <div className="rounded-lg border border-border/60 bg-bg-card/50 p-3">
-          <div className="text-[10px] uppercase tracking-[0.12em] text-text-muted mb-1">🌡 Air Temp</div>
-          <div className="font-mono text-lg font-semibold text-text-primary leading-tight">
+        <div className="bg-bg-surface p-3 flex flex-col items-center justify-center">
+          <div className="text-[10px] font-mono tracking-widest text-fg-muted mb-1">AIR TEMP</div>
+          <div className="font-mono text-[16px] font-bold text-fg-primary leading-tight">
             {weather.airTemp.toFixed(1)}°C
           </div>
         </div>
 
         {/* Track Temp */}
-        <div className="rounded-lg border border-border/60 p-3" style={{ backgroundColor: trackTemp.bg }}>
-          <div className="text-[10px] uppercase tracking-[0.12em] text-text-muted mb-1">🔥 Track</div>
-          <div className="font-mono text-lg font-semibold leading-tight" style={{ color: trackTemp.text }}>
+        <div className="bg-bg-surface p-3 flex flex-col items-center justify-center" style={{ backgroundColor: trackTemp.bg }}>
+          <div className="text-[10px] font-mono tracking-widest text-fg-muted mb-1">TRACK TEMP</div>
+          <div className="font-mono text-[16px] font-bold leading-tight" style={{ color: trackTemp.text }}>
             {weather.trackTemp.toFixed(1)}°C
           </div>
         </div>
 
         {/* Humidity */}
-        <div className="rounded-lg border border-border/60 bg-bg-card/50 p-3">
-          <div className="text-[10px] uppercase tracking-[0.12em] text-text-muted mb-1">💧 Humidity</div>
-          <div className="font-mono text-lg font-semibold text-text-primary leading-tight">
+        <div className="bg-bg-surface p-3 flex flex-col items-center justify-center">
+          <div className="text-[10px] font-mono tracking-widest text-fg-muted mb-1">HUMIDITY</div>
+          <div className="font-mono text-[16px] font-bold text-fg-primary leading-tight">
             {weather.humidity}%
           </div>
         </div>
 
         {/* Wind */}
-        <div className="rounded-lg border border-border/60 bg-bg-card/50 p-3">
-          <div className="text-[10px] uppercase tracking-[0.12em] text-text-muted mb-1">💨 Wind</div>
-          <div className="font-mono text-lg font-semibold text-text-primary leading-tight">
-            {weather.windSpeed.toFixed(1)} m/s
+        <div className="bg-bg-surface p-3 flex flex-col items-center justify-center">
+          <div className="text-[10px] font-mono tracking-widest text-fg-muted mb-1">WIND</div>
+          <div className="font-mono text-[16px] font-bold text-fg-primary leading-tight">
+            {weather.windSpeed.toFixed(1)}
           </div>
-          <div className="font-mono text-[11px] text-text-muted mt-0.5">
+          <div className="font-mono text-[10px] text-fg-muted mt-0.5 tracking-widest">
             {windCompass(weather.windDirection)}
           </div>
         </div>
       </div>
 
       {/* Bottom row */}
-      <div className="mt-3 grid grid-cols-2 gap-3">
+      <div className="mt-4 grid grid-cols-2 gap-[1px] bg-border-hard border border-border-hard">
         {/* Rainfall */}
-        <div className="rounded-lg border border-border/60 bg-bg-card/50 px-3 py-2.5 flex items-center gap-2">
-          <div className="text-[10px] uppercase tracking-[0.12em] text-text-muted">🌧 Rainfall</div>
+        <div className="bg-bg-surface px-3 py-2 flex justify-between items-center text-[10px] font-mono tracking-widest uppercase">
+          <span className="text-fg-muted">RAIN</span>
           {isRaining ? (
-            <div className="font-mono text-sm font-semibold text-blue-300">{weather.rainfall.toFixed(1)} mm</div>
+            <span className="text-blue-sel font-bold">{weather.rainfall.toFixed(1)} MM</span>
           ) : (
-            <div className="flex items-center gap-1.5">
-              <span className="inline-block h-2 w-2 rounded-full bg-emerald-400" />
-              <span className="font-mono text-sm text-emerald-300">None</span>
-            </div>
+            <span className="text-green-live">NONE</span>
           )}
         </div>
 
         {/* Pressure */}
-        <div className="rounded-lg border border-border/60 bg-bg-card/50 px-3 py-2.5 flex items-center gap-2">
-          <div className="text-[10px] uppercase tracking-[0.12em] text-text-muted">📊 Pressure</div>
-          <div className="font-mono text-sm font-semibold text-text-primary">{weather.pressure.toFixed(1)} hPa</div>
+        <div className="bg-bg-surface px-3 py-2 flex justify-between items-center text-[10px] font-mono tracking-widest uppercase">
+          <span className="text-fg-muted">PRESS</span>
+          <span className="text-fg-primary">{weather.pressure.toFixed(1)} hPa</span>
         </div>
       </div>
     </div>

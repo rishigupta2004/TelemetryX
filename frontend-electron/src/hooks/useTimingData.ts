@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useCarPositions } from './useCarPositions'
-import { useSessionTime } from '../lib/timeUtils'
+import { useSessionTime30 } from '../lib/timeUtils'
 import { useSessionStore } from '../stores/sessionStore'
 import type { Driver, LapRow } from '../types'
 
@@ -98,7 +98,8 @@ function formatLapTime(seconds: number | null | undefined): string {
 }
 
 function formatDelta(seconds: number): string {
-  if (!Number.isFinite(seconds) || seconds <= 0) return '—'
+  if (!Number.isFinite(seconds) || seconds < 0) return '—'
+  if (seconds === 0) return '+0.000s'
   if (seconds < 60) return `+${seconds.toFixed(3)}s`
   const mins = Math.floor(seconds / 60)
   const secs = (seconds % 60).toFixed(3).padStart(6, '0')
@@ -196,9 +197,15 @@ function buildTimingIndex(drivers: Driver[], allLaps: LapRow[]): TimingIndex {
       const lap = laps[i]
       if (isValidLap(lap)) validCount += 1
       if (i > 0) {
-        const prevComp = normalizeCompound(laps[i - 1].tyreCompound)
-        const curComp = normalizeCompound(lap.tyreCompound)
-        if (prevComp !== '—' && curComp !== '—' && prevComp !== curComp) pitCount += 1
+        // Detect pitstops: use isPitOutLap flag if available (catches same-compound pits),
+        // otherwise fall back to tyre compound change detection
+        if ((lap as any).isPitOutLap === true) {
+          pitCount += 1
+        } else {
+          const prevComp = normalizeCompound(laps[i - 1].tyreCompound)
+          const curComp = normalizeCompound(lap.tyreCompound)
+          if (prevComp !== '—' && curComp !== '—' && prevComp !== curComp) pitCount += 1
+        }
       }
       if ((lap.lapTime || 0) > 0 && isValidLap(lap)) {
         bestLap = bestLap == null ? (lap.lapTime as number) : Math.min(bestLap, lap.lapTime as number)
@@ -273,7 +280,7 @@ export function useTimingData(): UseTimingDataResult {
   const lapsFromStore = useSessionStore((s) => s.laps)
   const loadingState = useSessionStore((s) => s.loadingState)
   const sessionError = useSessionStore((s) => s.error)
-  const sessionTime = useSessionTime()
+  const sessionTime = useSessionTime30()
   const carPositions = useCarPositions()
   // Round to 30Hz to limit timing tower re-computation (30 times/sec vs 60fps)
   const roundedSessionTime = Math.round(sessionTime * 30) / 30
@@ -367,8 +374,13 @@ export function useTimingData(): UseTimingDataResult {
       let displayS2: number | null = null
       let displayS3: number | null = null
       if (currentInProgressLap) {
-        if (lapProgress > 0.33) displayS1 = currentInProgressLap.sector1
-        if (lapProgress > 0.66) displayS2 = currentInProgressLap.sector2
+        // Use actual sector timing ratios when available instead of hardcoded 0.33/0.66
+        const s1Time = currentInProgressLap.sector1
+        const s2Time = currentInProgressLap.sector2
+        const s1Frac = (s1Time && s1Time > 0 && lapDuration > 0) ? s1Time / lapDuration : 0.33
+        const s2Frac = s1Frac + ((s2Time && s2Time > 0 && lapDuration > 0) ? s2Time / lapDuration : 0.33)
+        if (lapProgress > s1Frac) displayS1 = currentInProgressLap.sector1
+        if (lapProgress > s2Frac) displayS2 = currentInProgressLap.sector2
       }
 
       if (lastCompletedLap) {
@@ -419,14 +431,18 @@ export function useTimingData(): UseTimingDataResult {
 
       let status: TimingRow['status'] = 'racing'
 
-      // DNS detection for Lap 1: driver has lap rows but never completed
-      // one AND has no in-progress lap after sufficient time has passed
+      // DNS/DNF detection guards:
+      // - Only mark DNS if enough session time has passed AND driver has had no laps
+      // - At Lap 1 (leaderMaxLap <= 1), don't mark DNS until at least 120s have passed
+      //   (before that, all drivers appear stationary which would false-positive as DNS)
+      const minDNSThreshold = (index.leaderMaxLap ?? 0) <= 1 ? 120 : 8
       if (completedCount === 0 && !currentInProgressLap && laps[0] &&
-        effectiveSessionTime > laps[0].lapStartSeconds + 8) {
+        effectiveSessionTime > laps[0].lapStartSeconds + minDNSThreshold) {
         status = 'dns'
       } else if (completedCount > 0 && !currentInProgressLap) {
         const lastLapDuration = lapDurationSeconds(lastCompletedLap ?? currentLapData)
-        const stallThreshold = Math.min(15, Math.max(5, lastLapDuration * 0.2))
+        // Use a generous threshold to avoid false-flagging slow laps or safety car periods
+        const stallThreshold = Math.max(30, lastLapDuration * 0.5)
         if (effectiveSessionTime - lastLapEnd > stallThreshold) {
           status = 'dnf'
         }
@@ -505,21 +521,23 @@ export function useTimingData(): UseTimingDataResult {
       const leaderCompletedEnd = lastCompletedEndByDriver.get(rows[0].driverNumber) ?? null
       const leaderCompletedLap = completedLapByDriver.get(rows[0].driverNumber) ?? Math.max(0, rows[0].currentLap - 1)
 
+      // Get a reference lap time for distance→time conversion
       const lapSecondsForRow = (row: TimingRow) => {
-        const laps = index.lapsByDriverNumber.get(row.driverNumber) ?? []
-        if (!laps.length) return Number.NaN
-        // Prefer average valid lap time for more accurate gap calculations
-        const avgLapTime = computeAverageValidLapTime(laps)
+        const driverLaps = index.lapsByDriverNumber.get(row.driverNumber) ?? []
+        if (!driverLaps.length) return Number.NaN
+        // Use latest completed lap time for most accurate real-time gap
+        const completedIdx = Math.min(driverLaps.length - 1, Math.max(0, row.currentLap - 2))
+        const latestLap = driverLaps[completedIdx]
+        if (latestLap && isValidLap(latestLap) && latestLap.lapTime && latestLap.lapTime > 0) {
+          return latestLap.lapTime
+        }
+        // Fall back to average
+        const avgLapTime = computeAverageValidLapTime(driverLaps)
         if (avgLapTime != null && avgLapTime > 0) return avgLapTime
-        const idx = Math.max(0, Math.min(laps.length - 1, row.currentLap - 1))
-        const lap = laps[idx]
-        const durationOverride =
-          (Number.isFinite(lapDurationSeconds(lap)) && lapDurationSeconds(lap) > 0
-            ? lapDurationSeconds(lap)
-            : Number.isFinite(row.lapTimeRef)
-              ? Math.max(1, row.lapTimeRef)
-              : Math.max(1, lap.lapEndSeconds - lap.lapStartSeconds))
-        return durationOverride > 0 ? durationOverride : 1
+        const idx = Math.max(0, Math.min(driverLaps.length - 1, row.currentLap - 1))
+        const lap = driverLaps[idx]
+        const dur = lapDurationSeconds(lap)
+        return Number.isFinite(dur) && dur > 0 ? dur : Math.max(1, row.lapTimeRef)
       }
 
       const leaderLapSeconds = lapSecondsForRow(rows[0])
@@ -540,40 +558,76 @@ export function useTimingData(): UseTimingDataResult {
         const aheadDistance = rows[i - 1].lapDistance
         const driverCompletedLap = completedLapByDriver.get(rows[i].driverNumber) ?? Math.max(0, rows[i].currentLap - 1)
         const aheadCompletedLap = completedLapByDriver.get(rows[i - 1].driverNumber) ?? Math.max(0, rows[i - 1].currentLap - 1)
-        const lapDeltaToLeader = Math.max(leaderDistance - driverDistance, leaderCompletedLap - driverCompletedLap)
-        const lapDeltaToAhead = Math.max(aheadDistance - driverDistance, aheadCompletedLap - driverCompletedLap)
         const aheadLapSeconds = lapSecondsForRow(rows[i - 1])
-        let timeGapToLeader = Number.NaN
         const driverCompletedEnd = lastCompletedEndByDriver.get(rows[i].driverNumber) ?? null
-        if (leaderCompletedEnd != null && driverCompletedEnd != null && driverCompletedLap === leaderCompletedLap) {
-          timeGapToLeader = driverCompletedEnd - leaderCompletedEnd
-        }
-        if (!Number.isFinite(timeGapToLeader) || timeGapToLeader <= 0) {
-          timeGapToLeader =
-            Number.isFinite(leaderLapSeconds) && leaderLapSeconds > 0 && lapDeltaToLeader > 0 && lapDeltaToLeader < 1
-              ? lapDeltaToLeader * leaderLapSeconds
-              : Number.NaN
+
+        // --- Live distance delta (changes every tick for real-time feel) ---
+        const distDeltaToLeader = leaderDistance - driverDistance
+        const distDeltaToAhead = aheadDistance - driverDistance
+
+        // Full lap difference: only show +NL when BOTH completed laps differ AND
+        // the distance gap is also >= 0.75 laps — prevents the transient +1L flash
+        // at the lap boundary when the leader crosses before others update
+        const fullLapsBehindLeader = leaderCompletedLap - driverCompletedLap
+        const fullLapsBehindAhead = aheadCompletedLap - driverCompletedLap
+        const trulyLappedByLeader = fullLapsBehindLeader >= 1 && distDeltaToLeader >= 0.75
+        const trulyLappedByAhead = fullLapsBehindAhead >= 1 && distDeltaToAhead >= 0.75
+
+        // --- Gap to leader ---
+        if (trulyLappedByLeader) {
+          // Truly lapped: use completed lap difference (not distance-based which fluctuates)
+          rows[i].gap = `+${fullLapsBehindLeader}L`
+        } else {
+          // Same lap (or within 1 lap) — show live time gap
+          let timeGap = Number.NaN
+          // If both crossed the same completed lap, use actual crossing difference as base
+          if (leaderCompletedEnd != null && driverCompletedEnd != null && driverCompletedLap === leaderCompletedLap) {
+            const crossingGap = driverCompletedEnd - leaderCompletedEnd
+            // Blend crossing gap with live distance progress for smooth real-time updates
+            const progressDelta = (rows[0].lapProgress - rows[i].lapProgress)
+            const progressTimeDelta = progressDelta * leaderLapSeconds
+            // Weight: use crossing time + progress-based delta within current lap
+            if (crossingGap >= 0 && Number.isFinite(progressTimeDelta)) {
+              timeGap = crossingGap + progressTimeDelta
+            } else if (crossingGap >= 0) {
+              timeGap = crossingGap
+            }
+          }
+          // Fallback: pure distance-based gap
+          if (!Number.isFinite(timeGap) || timeGap < 0) {
+            if (Number.isFinite(leaderLapSeconds) && leaderLapSeconds > 0 && distDeltaToLeader >= 0) {
+              timeGap = distDeltaToLeader * leaderLapSeconds
+            }
+          }
+          rows[i].gap = Number.isFinite(timeGap) && timeGap >= 0 ? formatDelta(timeGap) : '—'
         }
 
-        let intervalToAhead = Number.NaN
-        const aheadCompletedEnd = lastCompletedEndByDriver.get(rows[i - 1].driverNumber) ?? null
-        if (aheadCompletedEnd != null && driverCompletedEnd != null && driverCompletedLap === aheadCompletedLap) {
-          intervalToAhead = driverCompletedEnd - aheadCompletedEnd
+        // --- Interval to car ahead ---
+        if (trulyLappedByAhead) {
+          rows[i].interval = `+${fullLapsBehindAhead}L`
+        } else {
+          let intervalTime = Number.NaN
+          const aheadCompletedEnd = lastCompletedEndByDriver.get(rows[i - 1].driverNumber) ?? null
+          if (aheadCompletedEnd != null && driverCompletedEnd != null && driverCompletedLap === aheadCompletedLap) {
+            const crossingInterval = driverCompletedEnd - aheadCompletedEnd
+            const progressDelta = (rows[i - 1].lapProgress - rows[i].lapProgress)
+            const progressTimeDelta = progressDelta * aheadLapSeconds
+            if (crossingInterval >= 0 && Number.isFinite(progressTimeDelta)) {
+              intervalTime = crossingInterval + progressTimeDelta
+            } else if (crossingInterval >= 0) {
+              intervalTime = crossingInterval
+            }
+          }
+          if (!Number.isFinite(intervalTime) || intervalTime < 0) {
+            if (Number.isFinite(aheadLapSeconds) && aheadLapSeconds > 0 && distDeltaToAhead >= 0) {
+              intervalTime = distDeltaToAhead * aheadLapSeconds
+            }
+          }
+          rows[i].interval = Number.isFinite(intervalTime) && intervalTime >= 0 ? formatDelta(intervalTime) : '—'
         }
-        if (!Number.isFinite(intervalToAhead) || intervalToAhead <= 0) {
-          intervalToAhead =
-            Number.isFinite(aheadLapSeconds) && aheadLapSeconds > 0 && lapDeltaToAhead > 0 && lapDeltaToAhead < 1
-              ? lapDeltaToAhead * aheadLapSeconds
-              : Number.NaN
-        }
-
-        if (lapDeltaToLeader >= 0.98) rows[i].gap = `+${Math.max(1, Math.floor(lapDeltaToLeader + 1e-6))}L`
-        else rows[i].gap = Number.isFinite(timeGapToLeader) ? formatDelta(timeGapToLeader) : '—'
-
-        if (lapDeltaToAhead >= 0.98) rows[i].interval = `+${Math.max(1, Math.floor(lapDeltaToAhead + 1e-6))}L`
-        else rows[i].interval = Number.isFinite(intervalToAhead) ? formatDelta(intervalToAhead) : '—'
       }
     }
+
 
     return rows
   }, [index, sampledSessionTime, sessionData?.drivers, carPositionByNumber])

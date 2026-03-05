@@ -92,25 +92,36 @@ export function getRaceControlStateFromSlice(
       const deployVsc =
         text.includes('VIRTUAL SAFETY CAR') ||
         text.includes('VSC DEPLOY') ||
-        (text.includes('VIRTUAL') && text.includes('DEPLOY'))
+        text.includes('VSC PERIOD') ||
+        (text.includes('VIRTUAL') && (text.includes('DEPLOY') || text.includes('PERIOD')))
       const deploySc =
         text.includes('SAFETY CAR DEPLOY') ||
         text.includes('SC DEPLOY') ||
-        (text.includes('SAFETY CAR') && text.includes('DEPLOY'))
+        text.includes('SC OUT') ||
+        text.includes('SAFETY CAR OUT') ||
+        text.includes('SAFETY CAR PERIOD') ||
+        (text.includes('SAFETY CAR') && (text.includes('DEPLOY') || text.includes('OUT') || text.includes('PERIOD'))) ||
+        (text.includes('SC') && (text.includes('DEPLOY') || text.includes('PERIOD')) && !text.includes('VSC') && !text.includes('VIRTUAL'))
       const clearSc =
         text.includes('ENDING') ||
         text.includes('ENDED') ||
         text.includes('IN THIS LAP') ||
         text.includes('WITHDRAWN') ||
         text.includes('RESTART') ||
-        text.includes('RESUMED')
+        text.includes('RESUMED') ||
+        (text.includes('GREEN') && text.includes('TRACK'))
 
-      if (deployVsc) {
+      // VSC takes priority over SC if both match (shouldn't happen, but be safe)
+      if (deployVsc && !deploySc) {
         isVSC = true
         isSafetyCar = false
-      } else if (deploySc) {
+      } else if (deploySc && !deployVsc) {
         isSafetyCar = true
         isVSC = false
+      } else if (deploySc && deployVsc) {
+        // Ambiguous — prefer VSC if text explicitly has 'VIRTUAL'
+        if (text.includes('VIRTUAL')) { isVSC = true; isSafetyCar = false }
+        else { isSafetyCar = true; isVSC = false }
       }
 
       if (clearSc) {
@@ -120,17 +131,23 @@ export function getRaceControlStateFromSlice(
     }
   }
 
+  // Pre-race stale-data suppression:
+  // - Clear yellow sector flags that pre-date race start
+  // - BUT preserve SC/VSC state even if seen before the first timed lap —
+  //   SC can deploy on Lap 1 before race timing begins
   if (raceStartTime != null && sessionTime >= raceStartTime) {
-    if (!inRaceTrackEvents && (trackFlag === 'RED' || trackFlag === 'YELLOW' || trackFlag === 'DOUBLE YELLOW')) {
+    if (!inRaceTrackEvents && (trackFlag === 'YELLOW' || trackFlag === 'DOUBLE YELLOW')) {
       trackFlag = 'GREEN'
     }
     if (!inRaceTrackEvents) {
       for (const k of Object.keys(sectorFlags)) delete sectorFlags[Number(k)]
     }
-    if (!inRaceScEvents) {
-      isSafetyCar = false
-      isVSC = false
+    // Only suppress SC if we've seen race-period SC events and none of them deployed
+    if (inRaceScEvents && !isSafetyCar && !isVSC) {
+      // SC was cleared in-race — correct
     }
+    // Do NOT blanket-clear isSafetyCar/isVSC when inRaceScEvents=false,
+    // because an early Lap-1 SC event may have set these before inRaceScEvents turned true
   }
 
   return { trackFlag, sectorFlags, isSafetyCar, isVSC }

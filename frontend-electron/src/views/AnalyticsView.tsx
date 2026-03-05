@@ -354,11 +354,11 @@ export const AnalyticsView = React.memo(function AnalyticsView() {
       case 'sectors':
         return (
           <div className="h-full overflow-auto">
-            <div className="mb-2 text-xs uppercase tracking-[0.14em] text-text-secondary">Mini-Sector Heatmap</div>
+            <div className="mb-2 text-xs uppercase tracking-[0.14em] text-fg-secondary">Mini-Sector Heatmap</div>
             <div className="space-y-1">
               {miniSectorHeatmap.map((row) => (
                 <div key={row.code} className="grid grid-cols-[46px_1fr_1fr_1fr] items-center gap-1 text-[11px]">
-                  <div className="font-mono text-text-primary">{row.code}</div>
+                  <div className="font-mono text-fg-primary">{row.code}</div>
                   <div className={`rounded px-1.5 py-1 text-center ${HEATMAP_COLORS[row.b1]}`}>S1 {formatTime(row.s1)}</div>
                   <div className={`rounded px-1.5 py-1 text-center ${HEATMAP_COLORS[row.b2]}`}>S2 {formatTime(row.s2)}</div>
                   <div className={`rounded px-1.5 py-1 text-center ${HEATMAP_COLORS[row.b3]}`}>S3 {formatTime(row.s3)}</div>
@@ -370,18 +370,18 @@ export const AnalyticsView = React.memo(function AnalyticsView() {
       case 'efficiency':
         return (
           <div className="h-full overflow-auto">
-            <div className="mb-2 text-xs uppercase tracking-[0.14em] text-text-secondary">Throttle / Brake Efficiency</div>
+            <div className="mb-2 text-xs uppercase tracking-[0.14em] text-fg-secondary">Throttle / Brake Efficiency</div>
             {efficiency.length === 0 ? (
-              <div className="text-xs text-text-muted">Load telemetry in Telemetry view to populate efficiency ranking.</div>
+              <div className="text-xs text-fg-muted">Load telemetry in Telemetry view to populate efficiency ranking.</div>
             ) : (
               <div className="space-y-1.5">
                 {efficiency.map((row) => (
                   <div key={row.code} className="grid grid-cols-[40px_1fr_56px] items-center gap-2 text-[11px]">
-                    <div className="font-mono text-text-primary">{row.code}</div>
+                    <div className="font-mono text-fg-primary">{row.code}</div>
                     <div className="h-2 rounded bg-white/10">
                       <div className="h-2 rounded bg-white/70" style={{ width: `${row.score}%` }} />
                     </div>
-                    <div className="text-right font-mono text-text-secondary">{row.score.toFixed(1)}</div>
+                    <div className="text-right font-mono text-fg-secondary">{row.score.toFixed(1)}</div>
                   </div>
                 ))}
               </div>
@@ -391,21 +391,21 @@ export const AnalyticsView = React.memo(function AnalyticsView() {
       case 'cornerSpeed':
         return (
           <div className="h-full overflow-auto">
-            <div className="mb-1 text-xs uppercase tracking-[0.14em] text-text-secondary">Corner Speed Analysis</div>
+            <div className="mb-1 text-xs uppercase tracking-[0.14em] text-fg-secondary">Corner Speed Analysis</div>
             {cornerSpeedRows.length === 0 ? (
-              <div className="text-xs text-text-muted">Telemetry corner samples unavailable yet for this selection.</div>
+              <div className="text-xs text-fg-muted">Telemetry corner samples unavailable yet for this selection.</div>
             ) : (
               <div className="space-y-1.5">
                 {cornerSpeedRows.map((row) => (
                   <div key={row.label} className="grid grid-cols-[34px_1fr_56px] items-center gap-2 text-[11px]">
-                    <div className="font-mono text-text-primary">{row.label}</div>
+                    <div className="font-mono text-fg-primary">{row.label}</div>
                     <div className="h-2 rounded bg-white/10">
                       <div
                         className="h-2 rounded bg-amber-300/80"
                         style={{ width: `${Math.max(8, Math.min(100, (row.speed / 330) * 100))}%` }}
                       />
                     </div>
-                    <div className="text-right font-mono text-text-secondary">{row.speed.toFixed(1)} km/h</div>
+                    <div className="text-right font-mono text-fg-secondary">{row.speed.toFixed(1)} km/h</div>
                   </div>
                 ))}
               </div>
@@ -437,47 +437,47 @@ export const AnalyticsView = React.memo(function AnalyticsView() {
     : 'Analytics'
 
   return (
-    <div className="flex h-full min-h-0 flex-col gap-3 p-4 xl:p-5">
-      <div className="glass-panel flex flex-wrap items-center gap-2 rounded-xl px-3 py-2">
-        <div className="text-[10px] uppercase tracking-[0.18em] text-text-secondary">Analytics</div>
+    <div className="flex h-full min-h-0 flex-col gap-2 p-2">
+      <div className="bg-bg-surface border border-border-hard flex flex-wrap items-center gap-2 px-3 py-2">
+        <div className="text-[10px] uppercase tracking-[0.18em] text-fg-secondary">Analytics</div>
         <div className="flex min-w-0 flex-1 items-center gap-1.5 overflow-x-auto" style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
           {tabs.map((tab) => (
             <button
               key={tab.key}
               type="button"
               onClick={() => setActivePanel(tab.key)}
-              className={`flex-shrink-0 rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] ${activePanel === tab.key ? 'border-accent bg-accent/30 text-text-primary' : 'border-border bg-bg-card text-text-secondary'
+              className={`flex-shrink-0 rounded-[2px] border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] ${activePanel === tab.key ? 'border-red-core bg-red-ghost text-fg-primary' : 'border-border-hard bg-bg-raised text-fg-secondary'
                 }`}
             >
               {tab.label}
             </button>
           ))}
           {activeLegend.map((series) => (
-            <div key={series.label} className="flex flex-shrink-0 items-center gap-1.5 text-[10px] text-text-secondary">
+            <div key={series.label} className="flex flex-shrink-0 items-center gap-1.5 text-[10px] text-fg-secondary">
               <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: series.color }} />
-              <span className="font-mono text-text-primary">{series.label}</span>
+              <span className="font-mono text-fg-primary">{series.label}</span>
             </div>
           ))}
         </div>
-        <div className="flex flex-wrap items-center gap-2 text-[10px] text-text-muted">
-          <span className="rounded border border-border bg-bg-secondary px-2 py-0.5 font-mono">{sessionLabel}</span>
-          <span className="rounded border border-border bg-bg-secondary px-2 py-0.5 font-mono">
+        <div className="flex flex-wrap items-center gap-2 text-[10px] text-fg-muted">
+          <span className="rounded-[2px] border border-border-hard bg-bg-inset px-2 py-0.5 font-mono">{sessionLabel}</span>
+          <span className="rounded-[2px] border border-border-hard bg-bg-inset px-2 py-0.5 font-mono">
             Driver {selectedCode || '-'} {compareDriver ? `| ${compareDriver}` : ''}
           </span>
           {compareDelta != null && (
-            <span className="rounded border border-border bg-bg-secondary px-2 py-0.5 font-mono">
+            <span className="rounded-[2px] border border-border-hard bg-bg-inset px-2 py-0.5 font-mono">
               Avg Δ {compareDelta >= 0 ? '+' : ''}{compareDelta.toFixed(3)}s
             </span>
           )}
           {cursorText && (
-            <span className="rounded border border-border bg-bg-secondary px-2 py-0.5 font-mono">
+            <span className="rounded-[2px] border border-border-hard bg-bg-inset px-2 py-0.5 font-mono">
               {cursorText}
             </span>
           )}
         </div>
       </div>
 
-      <div className="glass-panel flex-1 overflow-hidden rounded-2xl">
+      <div className="bg-bg-surface border border-border-hard flex-1 overflow-hidden">
         <div ref={panelRef} className="h-full w-full p-3">
           {renderPanel()}
         </div>

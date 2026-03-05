@@ -2,9 +2,10 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { ArrowUpDown, Sparkles } from 'lucide-react'
 import { api } from '../api/client'
 import { COMPOUND_COLORS } from '../lib/colors'
-import { useSessionTime } from '../lib/timeUtils'
+import { useSessionTime2s } from '../lib/timeUtils'
 import { usePlaybackStore } from '../stores/playbackStore'
 import { useSessionStore } from '../stores/sessionStore'
+import { useFeaturesStore } from '../stores/featuresStore'
 import type { TyreStint, UndercutEvent } from '../types'
 
 type SortMode = 'position' | 'result' | 'alpha'
@@ -88,13 +89,13 @@ function deriveCurrentLap(lapBoundaries: Array<{ lap: number; start: number }>, 
 }
 
 export const PitStrategy = React.memo(function PitStrategy() {
-  const tyreStints = useSessionStore((s) => s.tyreStints)
+  const tyreStints = useFeaturesStore((s) => s.tyre)
   const sessionData = useSessionStore((s) => s.sessionData)
   const laps = useSessionStore((s) => s.laps)
   const selectedYear = useSessionStore((s) => s.selectedYear)
   const selectedRace = useSessionStore((s) => s.selectedRace)
   const selectedSession = useSessionStore((s) => s.selectedSession)
-  const sessionTime = useSessionTime()
+  const sessionTime = useSessionTime2s()
   const isPlaying = usePlaybackStore((s) => s.isPlaying)
 
   const [sortMode, setSortMode] = useState<SortMode>('position')
@@ -135,9 +136,13 @@ export const PitStrategy = React.memo(function PitStrategy() {
   }, [selectedYear, selectedRace])
 
   const totalLaps = useMemo(() => {
-    if (!tyreStints || tyreStints.length === 0) return 0
-    return Math.max(...tyreStints.map((s) => s.last_lap))
-  }, [tyreStints])
+    if (tyreStints && tyreStints.length > 0) {
+      return Math.max(...tyreStints.map((s) => s.last_lap))
+    }
+    // Fallback: calculate from laps
+    if (!laps.length) return 0
+    return Math.max(...laps.map((l) => l.lapNumber || 0))
+  }, [tyreStints, laps])
 
   const lapBoundaries = useMemo(() => {
     const startByLap = new Map<number, number>()
@@ -180,8 +185,6 @@ export const PitStrategy = React.memo(function PitStrategy() {
   }, [undercutEvents, selectedSession])
 
   const driverStints = useMemo(() => {
-    if (!tyreStints || tyreStints.length === 0) return []
-
     const lapsByDriver = new Map<string, typeof laps>()
     for (const lap of laps) {
       const key = lap.driverName
@@ -189,6 +192,94 @@ export const PitStrategy = React.memo(function PitStrategy() {
       const list = lapsByDriver.get(key) ?? []
       list.push(lap)
       lapsByDriver.set(key, list)
+    }
+
+    if (!tyreStints || tyreStints.length === 0) {
+      const rows: Array<{
+        driver: string
+        driverNumber: number
+        position: number
+        finalPosition: number
+        strategy: string
+        stints: PreparedStint[]
+      }> = []
+
+      for (const [driver, driverLaps] of lapsByDriver.entries()) {
+        if (!driverLaps.length) continue
+
+        const sortedLaps = [...driverLaps].sort((a, b) => (a.lapNumber || 0) - (b.lapNumber || 0))
+        const firstLap = sortedLaps[0]
+
+        // Detect stint boundaries from compound changes or pitOut laps
+        const stints: PreparedStint[] = []
+        let stintStart = 0
+        let stintCompound = normalizeCompound(sortedLaps[0].tyreCompound || 'UNKNOWN')
+        let stintNum = 1
+
+        for (let i = 1; i <= sortedLaps.length; i++) {
+          const isLast = i === sortedLaps.length
+          const compoundChanged = !isLast && normalizeCompound(sortedLaps[i].tyreCompound || 'UNKNOWN') !== stintCompound
+          const pitOut = !isLast && sortedLaps[i].pitOutSeconds != null
+
+          if (isLast || compoundChanged || pitOut) {
+            const stintLaps = sortedLaps.slice(stintStart, i)
+            const inRange = stintLaps.filter((l) => l.lapTime != null && Number.isFinite(l.lapTime) && !l.isDeleted)
+            const avgLapTimeSec = inRange.length > 0
+              ? inRange.reduce((sum, l) => sum + Number(l.lapTime || 0), 0) / inRange.length
+              : null
+
+            stints.push({
+              year: selectedYear || 2024,
+              race_name: selectedRace || '',
+              session: selectedSession || '',
+              stint_number: stintNum++,
+              driver_name: driver,
+              driver_number: firstLap.driverNumber || 0,
+              tyre_compound: stintCompound,
+              tyre_age_at_stint_start: 0,
+              tyre_age_at_stint_end: stintLaps.length,
+              tyre_laps_in_stint: stintLaps.length,
+              tyre_degradation_rate: 0,
+              pit_stop_count: stintNum - 2,
+              first_lap: stintLaps[0]?.lapNumber || stintStart + 1,
+              last_lap: stintLaps[stintLaps.length - 1]?.lapNumber || i,
+              estimated_tyre_temp: 0,
+              grip_level: 0,
+              traffic_density: 0,
+              position: firstLap.position || 0,
+              is_overtake_lap: 0,
+              tyre_gap_ahead: 0,
+              tyre_gap_behind: 0,
+              tyre_life_remaining: 0,
+              optimal_pit_window: 0,
+              tyre_strategy_sequence: stintCompound[0],
+              avgLapTimeSec
+            })
+
+            if (!isLast) {
+              stintStart = i
+              stintCompound = normalizeCompound(sortedLaps[i].tyreCompound || 'UNKNOWN')
+            }
+          }
+        }
+
+        rows.push({
+          driver,
+          driverNumber: firstLap.driverNumber || 0,
+          position: firstLap.position || 0,
+          finalPosition: finalPositionByDriver.get(driver) ?? firstLap.position ?? 0,
+          strategy: stints.map((s) => s.tyre_compound[0]).join('-'),
+          stints
+        })
+      }
+
+      rows.sort((a, b) => {
+        if (sortMode === 'alpha') return a.driver.localeCompare(b.driver)
+        if (sortMode === 'result') return a.finalPosition - b.finalPosition
+        return a.position - b.position
+      })
+
+      return rows
     }
 
     const grouped = new Map<string, TyreStint[]>()
@@ -247,14 +338,6 @@ export const PitStrategy = React.memo(function PitStrategy() {
   const getTeamColor = (driverCode: string) => {
     const driver = sessionData?.drivers?.find((d) => d.code === driverCode)
     return driver?.teamColor || '#666666'
-  }
-
-  if (selectedSession && !String(selectedSession).toUpperCase().startsWith('R')) {
-    return (
-      <div className="flex h-full items-center justify-center rounded-md border border-border bg-bg-card p-4 text-sm text-text-muted">
-        Not applicable for qualifying sessions.
-      </div>
-    )
   }
 
   if (!driverStints.length) {
@@ -344,25 +427,26 @@ export const PitStrategy = React.memo(function PitStrategy() {
                   return (
                     <div
                       key={`${driver}-${stint.stint_number}`}
-                      className="group absolute bottom-0 top-0 flex cursor-default items-center justify-center overflow-visible border-r border-black/20"
+                      className="group absolute bottom-0 top-0 flex cursor-default items-center justify-center overflow-visible border-r border-border-micro"
                       style={{
                         left: `${leftPct}%`,
                         width: `${widthPct}%`,
-                        background: `linear-gradient(to right, ${color}88, ${color}18)`,
-                        borderTop: `2px solid ${color}`,
+                        background: `${color}1A`,
+                        borderTop: `1px solid ${color}80`,
+                        borderBottom: `1px solid ${color}80`,
                         minWidth: '16px'
                       }}
                     >
                       {isPitBoundary && (
                         <div
-                          className="pointer-events-none absolute -left-[1px] top-[-4px] h-[32px] w-[2px] bg-white/90 shadow-[0_0_10px_rgba(255,255,255,0.55)]"
+                          className="pointer-events-none absolute -left-[1px] top-[-4px] h-[32px] w-[2px] bg-white/90"
                           title={`Pit stop lap ${stint.first_lap}`}
                         />
                       )}
                       <span className="font-mono text-[13px] font-bold" style={{ color: textColor }}>
                         {compound[0]}
                       </span>
-                      <div className="pointer-events-none absolute bottom-[120%] left-1/2 z-20 hidden w-[220px] -translate-x-1/2 rounded border border-border bg-bg-card/95 p-1.5 text-[10px] text-text-secondary shadow-[0_12px_24px_rgba(0,0,0,0.4)] group-hover:block">
+                      <div className="pointer-events-none absolute bottom-[120%] left-1/2 z-20 hidden w-[220px] -translate-x-1/2 border border-border-hard bg-bg-panel p-1.5 text-[10px] text-text-secondary panel-border group-hover:block">
                         {tooltip}
                       </div>
                     </div>

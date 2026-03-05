@@ -1,33 +1,44 @@
 {
-  "name": "frontend-electron",
-  "version": "1.0.0",
-  "private": true,
-  "type": "module",
-  "main": "out/main/index.js",
-  "scripts": {
-    "dev": "electron-vite",
-    "build": "electron-vite build",
-    "preview": "electron-vite preview"
-  },
-  "dependencies": {
-    "@tailwindcss/vite": "^4.1.18",
-    "echarts": "^6.0.0",
-    "echarts-for-react": "^3.0.6",
-    "lucide-react": "^0.564.0",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "tailwindcss": "^4.1.18",
-    "uplot": "^1.6.32",
-    "zustand": "^5.0.11"
-  },
-  "devDependencies": {
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^5.1.4",
-    "electron": "40.4.1",
-    "electron-builder": "^26.7.0",
-    "electron-vite": "^5.0.0",
-    "typescript": "^5.9.3",
-    "vite": "^7.3.1"
-  }
+    "name": "frontend-electron",
+    "version": "1.0.0",
+    "private": true,
+    "type": "module",
+    "main": "out/main/index.js",
+    "scripts": {
+        "dev": "electron-vite",
+        "build": "electron-vite build",
+        "preview": "electron-vite preview",
+        "test": "vitest run",
+        "test:watch": "vitest"
+    },
+    "dependencies": {
+        "@fontsource/inter": "^5.2.8",
+        "@fontsource/jetbrains-mono": "^5.2.8",
+        "@fontsource/titillium-web": "^5.2.8",
+        "@tailwindcss/vite": "^4.1.18",
+        "animejs": "^4.3.6",
+        "echarts": "^6.0.0",
+        "echarts-for-react": "^3.0.6",
+        "lucide-react": "^0.564.0",
+        "react": "^19.2.4",
+        "react-dom": "^19.2.4",
+        "tailwindcss": "^4.1.18",
+        "uplot": "^1.6.32",
+        "zustand": "^5.0.11"
+    },
+    "devDependencies": {
+        "@testing-library/jest-dom": "^6.6.3",
+        "@testing-library/react": "^16.3.0",
+        "@types/animejs": "^3.1.13",
+        "@types/react": "^19.2.14",
+        "@types/react-dom": "^19.2.3",
+        "@vitejs/plugin-react": "^5.1.4",
+        "electron": "40.4.1",
+        "electron-builder": "^26.7.0",
+        "electron-vite": "^5.0.0",
+        "jsdom": "^26.1.0",
+        "typescript": "^5.9.3",
+        "vite": "^7.3.1",
+        "vitest": "^4.0.18"
+    }
 }

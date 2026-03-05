@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSessionStore } from '../stores/sessionStore'
+import { useFeaturesPreloader } from '../hooks/useFeaturesPreloader'
 
 interface SessionPickerProps {
   open: boolean
@@ -33,13 +34,16 @@ export default function SessionPicker({ open, onClose }: SessionPickerProps) {
   const {
     seasons,
     races,
+    sessions,
     selectedYear,
     selectedRace,
     loadingState,
     fetchSeasons,
     fetchRaces,
+    fetchSessions,
     loadSession
   } = useSessionStore()
+  const { preload, loadedCount, totalCount, progress, failedEndpoints } = useFeaturesPreloader()
 
   const [pendingAction, setPendingAction] = useState<'seasons' | 'races' | 'session' | null>(null)
   const [closing, setClosing] = useState(false)
@@ -74,10 +78,10 @@ export default function SessionPicker({ open, onClose }: SessionPickerProps) {
     }, 200)
   }, [onClose])
 
-  const selectedRaceObj = useMemo(
-    () => races.find((race) => race.name === selectedRace) ?? null,
-    [races, selectedRace]
-  )
+  const selectedRaceObj = useMemo(() => {
+    if (!selectedRace) return null
+    return races.find((race) => race.race_name === selectedRace || race.name === selectedRace) ?? null
+  }, [races, selectedRace])
 
   if (!open) return null
 
@@ -90,14 +94,13 @@ export default function SessionPicker({ open, onClose }: SessionPickerProps) {
       onClick={(e) => { if (e.target === e.currentTarget) handleClose() }}
     >
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+      <div className="absolute inset-0 bg-black/60" />
 
       {/* Modal */}
       <div
-        className="relative z-10 w-[880px] max-w-[95vw] rounded-2xl border border-border/60 bg-bg-secondary p-5 text-text-primary shadow-2xl"
+        className="relative z-10 w-[880px] max-w-[95vw] border border-border-hard bg-bg-surface p-5 text-text-primary panel-border"
         style={{
-          animation: closing ? 'modalCardOut 0.2s ease-in forwards' : 'modalCardIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-          boxShadow: '0 25px 80px rgba(0,0,0,0.6), 0 0 1px rgba(255,255,255,0.05) inset',
+          animation: closing ? 'modalCardOut 0.2s ease-in forwards' : 'modalCardIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
         }}
       >
         {/* Header */}
@@ -117,9 +120,25 @@ export default function SessionPicker({ open, onClose }: SessionPickerProps) {
         </div>
 
         {(loadingState === 'loading' || pendingAction) && (
-          <div className="mb-3 flex items-center gap-2 text-sm text-text-secondary" style={{ animation: 'fadeInUp 0.2s ease-out' }}>
-            <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-text-secondary border-t-accent" />
-            Loading…
+          <div className="mb-3 space-y-2" style={{ animation: 'fadeInUp 0.2s ease-out' }}>
+            <div className="flex items-center gap-2 text-sm text-text-secondary">
+              <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-text-secondary border-t-accent" />
+              Loading…
+            </div>
+            {pendingAction === 'session' && (
+              <div className="rounded-lg border border-border/60 bg-bg-card/30 px-3 py-2 text-xs text-text-muted">
+                <div className="mb-1 flex items-center justify-between">
+                  <span>Preloading features</span>
+                  <span>{loadedCount}/{totalCount}</span>
+                </div>
+                <div className="h-2 w-full rounded-full bg-bg-hover">
+                  <div className="h-2 rounded-full bg-accent" style={{ width: `${Math.round(progress * 100)}%` }} />
+                </div>
+                {failedEndpoints.length > 0 && (
+                  <div className="mt-1 text-[11px] text-amber-300">Failed: {failedEndpoints.join(', ')}</div>
+                )}
+              </div>
+            )}
           </div>
         )}
 
@@ -132,8 +151,8 @@ export default function SessionPicker({ open, onClose }: SessionPickerProps) {
                 <button
                   key={season.year}
                   className={`w-full rounded-lg px-3 py-2 text-left text-sm font-medium transition-all duration-150 ${selectedYear === season.year
-                      ? 'bg-accent/10 text-white border border-accent/20'
-                      : 'text-text-secondary hover:bg-bg-hover border border-transparent'
+                    ? 'bg-accent/10 text-white border border-accent/20'
+                    : 'text-text-secondary hover:bg-bg-hover border border-transparent'
                     }`}
                   style={{ animationDelay: `${i * 20}ms` }}
                   onClick={() => {
@@ -158,16 +177,21 @@ export default function SessionPicker({ open, onClose }: SessionPickerProps) {
               )}
               {races.map((race, i) => (
                 <button
-                  key={race.name}
-                  className={`w-full rounded-lg px-3 py-2 text-left text-sm transition-all duration-150 ${selectedRace === race.name
-                      ? 'bg-accent/10 text-white border border-accent/20'
-                      : 'text-text-secondary hover:bg-bg-hover border border-transparent'
+                  key={race.race_name ?? race.name ?? `${race.display_name}-${i}`}
+                  className={`w-full rounded-lg px-3 py-2 text-left text-sm transition-all duration-150 ${selectedRace === (race.race_name ?? race.name)
+                    ? 'bg-accent/10 text-white border border-accent/20'
+                    : 'text-text-secondary hover:bg-bg-hover border border-transparent'
                     }`}
                   style={{ animation: `fadeInUp 0.2s ease-out ${i * 15}ms both` }}
-                  onClick={() => useSessionStore.setState({ selectedRace: race.name, selectedSession: null })}
+                  onClick={() => {
+                    if (!selectedYear) return
+                    const raceKey = race.race_name ?? race.name ?? race.display_name ?? ''
+                    setPendingAction('races')
+                    void fetchSessions(selectedYear, raceKey).finally(() => setPendingAction(null))
+                  }}
                   type="button"
                 >
-                  {race.name}
+                  {race.display_name ?? race.race_name ?? race.name ?? 'Unknown'}
                 </button>
               ))}
             </div>
@@ -179,7 +203,7 @@ export default function SessionPicker({ open, onClose }: SessionPickerProps) {
             <div className="max-h-72 space-y-1 overflow-auto rounded-xl border border-border/50 bg-bg-card/30 p-2">
               {!selectedRaceObj && <div className="px-2 py-3 text-center text-xs text-text-muted">Select a race first</div>}
               {selectedRaceObj &&
-                sortSessions(selectedRaceObj.sessions).map((session, i) => (
+                sortSessions(sessions).map((session, i) => (
                   <button
                     key={session}
                     className="group w-full rounded-lg border border-border/40 bg-bg-secondary px-3 py-2.5 text-left transition-all duration-150 hover:border-accent/30 hover:bg-bg-hover"
@@ -187,7 +211,11 @@ export default function SessionPicker({ open, onClose }: SessionPickerProps) {
                     onClick={() => {
                       if (!selectedYear || !selectedRaceObj) return
                       setPendingAction('session')
-                      void loadSession(selectedYear, selectedRaceObj.name, session).then(() => {
+                      const raceKey = selectedRaceObj.race_name ?? selectedRaceObj.name ?? ''
+                      void Promise.allSettled([
+                        preload(selectedYear, raceKey, session),
+                        loadSession(selectedYear, raceKey, session)
+                      ]).then(() => {
                         const state = useSessionStore.getState()
                         if (state.loadingState === 'ready') handleClose()
                       }).finally(() => setPendingAction(null))

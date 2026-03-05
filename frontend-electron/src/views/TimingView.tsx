@@ -10,38 +10,42 @@ export const TimingView = React.memo(function TimingView() {
   const timing = useTimingData()
 
   return (
-    <div className="h-full w-full p-5 xl:p-6">
-      <div className="mb-4 flex items-center justify-between">
-        <div className="text-xs uppercase tracking-[0.24em] text-text-secondary">Live Classification</div>
-        <div className="rounded-lg border border-border/70 bg-bg-card px-2.5 py-1 text-[11px] text-text-secondary">
-          Timing + Track
+    <div className="flex h-full w-full flex-col overflow-hidden p-1 bg-bg-base">
+      <div className="mb-2 flex items-center justify-between">
+        <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-fg-secondary" style={{ fontFamily: 'var(--font-heading)' }}>Live Classification</div>
+        <div className="border border-border-hard bg-bg-surface px-2 py-1 text-[10px] font-mono tracking-[0.1em] text-fg-secondary uppercase uppercase">
+          Timing · Track · Control
         </div>
       </div>
 
-      <div className="flex h-[calc(100%-2.1rem)] gap-4 xl:gap-5">
-        <div className="h-full min-h-0 min-w-[680px] flex-[1.14]">
+      <div className="flex min-h-0 flex-1 gap-3 overflow-hidden">
+        {/* Left column: Timing Tower — fixed 38%, no min-w */}
+        <div className="min-h-0 min-w-0 flex-[0_0_38%] overflow-hidden">
           <ViewErrorBoundary viewName="Timing Tower">
             <TimingTower rows={timing.rows} status={timing.status} error={timing.error} />
           </ViewErrorBoundary>
         </div>
 
-        <div className="flex min-w-0 flex-1 flex-col">
-          <div className="glass-panel relative min-h-0 flex-1 overflow-hidden rounded-2xl p-2.5">
+        {/* Center column: Track Map — takes remaining space */}
+        <div className="min-h-0 min-w-0 flex-[1_1_0%]">
+          <div className="relative h-full overflow-hidden border border-border-hard bg-bg-surface p-2">
             <ViewErrorBoundary viewName="Track Map">
               <TrackMap />
             </ViewErrorBoundary>
           </div>
-          <div className="flex h-[248px] flex-shrink-0 gap-3 pt-3">
-            <div className="w-[300px] flex-shrink-0">
-              <ViewErrorBoundary viewName="Weather">
-                <WeatherPanel compact />
-              </ViewErrorBoundary>
-            </div>
-            <div className="min-w-0 flex-1">
-              <ViewErrorBoundary viewName="Race Control">
-                <RaceControlFeed />
-              </ViewErrorBoundary>
-            </div>
+        </div>
+
+        {/* Right column: Weather + Race Control — fixed 22% */}
+        <div className="flex min-h-0 min-w-0 flex-[0_0_22%] flex-col gap-3">
+          <div className="flex-shrink-0 border border-border-hard bg-bg-surface p-2">
+            <ViewErrorBoundary viewName="Weather">
+              <WeatherPanel compact />
+            </ViewErrorBoundary>
+          </div>
+          <div className="min-h-0 flex-1 border border-border-hard bg-bg-surface p-2">
+            <ViewErrorBoundary viewName="Race Control">
+              <RaceControlFeed />
+            </ViewErrorBoundary>
           </div>
         </div>
       </div>

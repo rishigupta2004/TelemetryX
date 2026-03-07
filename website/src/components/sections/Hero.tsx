@@ -1,9 +1,8 @@
 "use client";
 import { Button } from "@/components/ui/Button";
-import { Activity, Download, ChevronRight, Terminal } from "lucide-react";
+import { Download, Terminal, Activity } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
-import anime from "animejs";
+import { useEffect, useState } from "react";
 
 function TypewriterEffect({ text }: { text: string }) {
   const [displayed, setDisplayed] = useState("");
@@ -18,7 +17,7 @@ function TypewriterEffect({ text }: { text: string }) {
     return () => clearInterval(interval);
   }, [text]);
 
-  return <span className="font-mono text-[var(--telemetry-green)] text-glow">{displayed}<span className="animate-pulse">_</span></span>;
+  return <span className="font-mono text-[var(--telemetry-green)] text-glow whitespace-pre-line">{displayed}<span className="animate-pulse">_</span></span>;
 }
 
 export function Hero() {
@@ -26,12 +25,29 @@ export function Hero() {
   const y = useTransform(scrollY, [0, 500], [0, 150]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
+  const [speed, setSpeed] = useState(321.4);
+  const [sectorTime, setSectorTime] = useState(28.431);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSpeed(prev => {
+        const newSpeed = prev + (Math.random() * 4 - 2);
+        return newSpeed > 340 ? 340 : newSpeed < 100 ? 100 : newSpeed;
+      });
+      if(Math.random() > 0.8) {
+        setSectorTime(prev => prev + (Math.random() * 0.1 - 0.05));
+      }
+    }, 100);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <section className="relative min-h-screen pt-40 pb-24 overflow-hidden flex flex-col items-center justify-start bg-grid-pattern">
-      {/* Pit-wall subtle vignette */}
-      <div className="absolute inset-0 bg-radial-gradient from-transparent to-black pointer-events-none opacity-80" style={{ background: 'radial-gradient(circle at center, transparent 0%, #000 80%)'}} />
+    <section className="relative min-h-screen pt-32 pb-24 overflow-hidden flex flex-col items-center justify-center bg-black">
+      {/* Pit-wall subtle vignette & grid */}
+      <div className="absolute inset-0 bg-dot-grid opacity-30 pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#000_100%)] pointer-events-none opacity-90 z-0" />
       
-      <div className="max-w-7xl mx-auto px-6 relative z-10 w-full flex flex-col lg:flex-row gap-16 items-center">
+      <div className="max-w-7xl mx-auto px-6 relative z-10 w-full flex flex-col lg:flex-row gap-12 items-center">
         
         {/* Text Side */}
         <motion.div
@@ -41,84 +57,114 @@ export function Hero() {
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
           className="flex-1 w-full"
         >
-          <div className="flex items-center gap-2 px-3 py-1 bg-zinc-900 border border-zinc-800 text-xs font-mono uppercase tracking-widest text-zinc-400 mb-8 w-fit">
-            <span className="w-1.5 h-1.5 bg-[var(--telemetry-red)] animate-pulse" /> Live Data Stream
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-zinc-900 border border-zinc-800 text-xs font-mono uppercase tracking-widest text-zinc-400 mb-8 w-fit panel-border">
+            <span className="w-1.5 h-1.5 bg-[var(--telemetry-red)] animate-pulse" /> LIVE TELEMETRY LINK ESTABLISHED
           </div>
           
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-6 leading-[0.9] text-white">
-            RAW<br/>
-            DATA.<br/>
-            <span className="text-zinc-600">ZERO<br/>DELAY.</span>
+          <h1 
+            className="text-6xl md:text-8xl lg:text-[100px] font-black tracking-tighter mb-4 leading-[0.85] text-white glitch-hover relative inline-block cursor-default"
+            data-text="RAW DATA."
+          >
+            RAW DATA.<br/>
+            <span className="text-zinc-600 block mt-2">ZERO DELAY.</span>
           </h1>
           
-          <div className="text-base md:text-lg text-zinc-400 mb-10 max-w-xl font-mono leading-relaxed border-l border-zinc-800 pl-4">
-            <TypewriterEffect text="> INITIATING TELEMETRYX DESKTOP V1.0\n> CONNECTING TO FAST-PATH DUCKDB LOCAL STORAGE...\n> TARGET LATENCY: < 2MS\n> SYSTEM: READY." />
+          <div className="text-sm md:text-base text-zinc-400 mb-10 max-w-xl font-mono leading-relaxed border-l-2 border-[var(--telemetry-blue)] pl-4 bg-zinc-900/30 py-4 pr-4 panel-border h-[120px]">
+            <TypewriterEffect text="> INITIATING TELEMETRYX DESKTOP V1.0\n> CONNECTING TO FAST-PATH DUCKDB...\n> TARGET LATENCY: < 2MS\n> SYSTEM: READY." />
           </div>
           
           <div className="flex flex-col sm:flex-row gap-4 font-mono">
-            <Button size="lg" className="w-full sm:w-auto px-8">
-              <Download className="mr-2 w-4 h-4" /> Download for macOS
+            <Button size="lg" className="w-full sm:w-auto px-8 panel-border bg-white text-black hover:bg-zinc-200 uppercase tracking-widest font-bold text-xs h-12">
+              <Download className="mr-2 w-4 h-4" /> macOS .dmg
             </Button>
-            <Button size="lg" variant="terminal" className="w-full sm:w-auto px-8">
+            <Button size="lg" variant="terminal" className="w-full sm:w-auto px-8 h-12">
               <Terminal className="mr-2 w-4 h-4" /> Windows .exe
             </Button>
           </div>
         </motion.div>
 
-        {/* Bento Box Floating Side */}
+        {/* Tactical UI Simulation Side */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="flex-1 relative w-full h-[500px]"
+          className="flex-1 relative w-full h-[550px]"
         >
-           {/* Speed Trap Bento */}
-           <div className="absolute top-0 right-0 w-64 glass-bento p-5 border-t-2 border-t-[var(--telemetry-blue)] z-20">
-             <div className="text-xs font-mono text-zinc-500 uppercase tracking-wider mb-2">Speed Trap 1</div>
-             <div className="text-4xl font-mono font-bold text-white flex items-end gap-1">
-               321<span className="text-lg text-zinc-500 pb-1">.4 kph</span>
+           {/* Radar Background */}
+           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full border border-zinc-800/50 flex items-center justify-center opacity-30">
+             <div className="w-[300px] h-[300px] rounded-full border border-zinc-800/50 flex items-center justify-center">
+               <div className="w-[200px] h-[200px] rounded-full border border-zinc-800/50 overflow-hidden relative">
+                 <div className="radar-sweep-bg" />
+                 <div className="absolute top-1/2 left-0 w-full h-[1px] bg-zinc-800/50" />
+                 <div className="absolute left-1/2 top-0 w-[1px] h-full bg-zinc-800/50" />
+               </div>
              </div>
-             <div className="mt-4 h-8 flex items-end gap-1">
-               {[40,70,50,90,100,60,80].map((h,i) => (
+           </div>
+
+           {/* Speed Trap Bento */}
+           <div className="absolute top-10 right-0 w-64 glass-bento p-5 panel-border z-20 bg-black/80">
+             <div className="flex justify-between items-center mb-2">
+                <div className="text-xs font-mono text-zinc-500 uppercase tracking-wider">Speed Trap 1</div>
+                <Activity className="w-4 h-4 text-[var(--telemetry-blue)] animate-pulse" />
+             </div>
+             <div className="text-5xl font-mono font-bold text-white flex items-end gap-1 tracking-tighter">
+               {speed.toFixed(1).split('.')[0]}<span className="text-2xl text-[var(--telemetry-blue)] pb-1">.{speed.toFixed(1).split('.')[1]}</span>
+             </div>
+             <div className="text-[10px] font-mono text-zinc-600 mt-1 uppercase">KPH // TURN 1 APEX</div>
+             <div className="mt-4 h-12 flex items-end gap-1">
+               {[40,70,50,90,100,60,80, 40, 50, 80].map((h,i) => (
                  <motion.div 
                    key={i} 
                    className="w-full bg-[var(--telemetry-blue)] opacity-50"
                    initial={{ height: 0 }}
                    animate={{ height: `${h}%` }}
-                   transition={{ duration: 0.5, delay: i * 0.1, repeat: Infinity, repeatType: 'reverse', repeatDelay: 1 }}
+                   transition={{ duration: 0.2, delay: i * 0.05, repeat: Infinity, repeatType: 'reverse', repeatDelay: Math.random() }}
                  />
                ))}
              </div>
            </div>
 
            {/* Throttle trace Bento */}
-           <div className="absolute top-32 left-0 w-80 glass-bento p-5 border-t-2 border-t-[var(--telemetry-purple)] z-10">
+           <div className="absolute top-48 -left-4 w-80 glass-bento p-5 panel-border z-10 bg-black/80">
              <div className="flex justify-between items-center mb-4">
-               <div className="text-xs font-mono text-zinc-500 uppercase tracking-wider">Throttle Trace</div>
-               <div className="w-2 h-2 rounded-full bg-[var(--telemetry-purple)] shadow-[0_0_10px_var(--telemetry-purple)]" />
+               <div className="text-[10px] font-mono text-[var(--telemetry-purple)] uppercase tracking-widest flex items-center gap-2">
+                 <span className="w-2 h-2 rounded-full bg-[var(--telemetry-purple)] shadow-[0_0_10px_var(--telemetry-purple)] animate-pulse" />
+                 Throttle Trace [LIVE]
+               </div>
              </div>
-             <div className="h-24 relative overflow-hidden bg-black/50 border border-zinc-800">
+             <div className="h-24 relative overflow-hidden bg-[#050505] border border-zinc-800">
+               {/* Grid */}
+               <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:20px_20px]" />
                {/* Pure SVG trace for high performance look */}
-               <svg viewBox="0 0 100 30" className="absolute inset-0 w-full h-full stroke-[var(--telemetry-purple)] fill-none stroke-[2px]">
+               <svg viewBox="0 0 100 30" preserveAspectRatio="none" className="absolute inset-0 w-full h-full stroke-[var(--telemetry-purple)] fill-none stroke-[2px]">
                  <motion.path 
                    d="M0,30 L10,30 L15,5 L40,5 L45,25 L60,25 L65,10 L80,10 L90,28 L100,28" 
                    initial={{ pathLength: 0 }}
                    animate={{ pathLength: 1 }}
-                   transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                   transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
                  />
                </svg>
+               {/* Scanning playhead */}
+               <motion.div 
+                  className="absolute top-0 bottom-0 w-[1px] bg-white shadow-[0_0_10px_white]"
+                  animate={{ left: ['0%', '100%'] }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
+               />
              </div>
            </div>
            
            {/* Sector Time Bento */}
-           <div className="absolute bottom-10 right-10 w-56 glass-bento p-5 z-30">
-              <div className="text-xs font-mono text-zinc-500 uppercase tracking-wider mb-3">Sector 2</div>
-              <div className="text-2xl font-mono text-[var(--telemetry-green)] text-glow mb-1">
-                28.431
+           <div className="absolute bottom-16 right-10 w-56 glass-bento p-5 panel-border z-30 bg-black/80">
+              <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest mb-3 flex items-center gap-2">
+                <span className="w-1.5 h-1.5 bg-[var(--telemetry-green)]" />
+                Sector 2 Split
               </div>
-              <div className="text-xs font-mono text-white/50 border-t border-zinc-800 pt-2 mt-2 flex justify-between">
-                <span>VER</span>
-                <span>-0.124</span>
+              <div key={sectorTime} className="text-4xl font-mono font-bold text-[var(--telemetry-green)] text-glow mb-1 data-value-flash tracking-tighter">
+                {sectorTime.toFixed(3)}
+              </div>
+              <div className="text-[10px] font-mono text-white/50 border-t border-zinc-800 pt-3 mt-3 flex justify-between items-center">
+                <span className="bg-white text-black px-1 font-bold">VER</span>
+                <span className="text-[var(--telemetry-green)]">-0.124 PURPLE</span>
               </div>
            </div>
         </motion.div>

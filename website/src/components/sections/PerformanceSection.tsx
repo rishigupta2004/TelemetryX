@@ -1,91 +1,107 @@
 "use client";
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import anime from "animejs";
+import { Activity } from "lucide-react";
 
-function Counter({ from, to, duration, suffix = "" }: { from: number, to: number, duration: number, suffix?: string }) {
-  const count = useMotionValue(from);
-  const rounded = useTransform(count, (latest) => Math.round(latest) + suffix);
-
-  useEffect(() => {
-    const controls = animate(count, to, { duration: duration, ease: "easeOut" });
-    return controls.stop;
-  }, [count, to, duration]);
-
-  return <motion.span>{rounded}</motion.span>;
+function SystemMetric({ label, target, value, unit, isWarning = false }: any) {
+  return (
+    <div className={`p-4 border ${isWarning ? 'border-[var(--telemetry-yellow)]/30 bg-[var(--telemetry-yellow)]/5' : 'border-zinc-800 bg-zinc-900'} font-mono uppercase text-xs flex justify-between items-end relative overflow-hidden group`}>
+      {/* Background glow on hover */}
+      <div className="absolute inset-0 bg-[var(--telemetry-blue)] opacity-0 group-hover:opacity-[0.03] transition-opacity" />
+      
+      <div className="flex flex-col gap-1 z-10">
+        <span className="text-zinc-500">{label}</span>
+        <span className="text-white text-lg font-bold flex items-baseline gap-1">
+          {value} <span className="text-zinc-600 text-[10px]">{unit}</span>
+        </span>
+      </div>
+      <div className={`z-10 text-right ${isWarning ? 'text-[var(--telemetry-yellow)] text-glow' : 'text-[var(--telemetry-green)] text-glow'}`}>
+        [ {target} ]
+      </div>
+    </div>
+  );
 }
 
 export function PerformanceSection() {
+  const [fps, setFps] = useState(90);
+  const [latency, setLatency] = useState("1.8");
+  
   useEffect(() => {
     anime({
-      targets: '.anime-stagger .stagger-item',
+      targets: '.perf-block',
       translateY: [20, 0],
       opacity: [0, 1],
-      delay: anime.stagger(100),
+      delay: anime.stagger(150),
       easing: 'easeOutExpo',
-      duration: 1000
+      duration: 800
     });
+
+    // Simulate system jitter
+    const interval = setInterval(() => {
+      setFps(Math.floor(Math.random() * 5) + 86); // 86-90
+      setLatency((Math.random() * 0.4 + 1.5).toFixed(2)); // 1.5 - 1.9
+    }, 1000);
+    
+    return () => clearInterval(interval);
   }, []);
 
   return (
-    <section className="py-24 relative overflow-hidden" id="performance">
-      <div className="absolute inset-0 bg-primary/5 blur-[150px] -z-10" />
-      <div className="max-w-7xl mx-auto px-6">
+    <section className="py-24 relative overflow-hidden bg-black border-t border-zinc-900" id="performance">
+      {/* Background radial gradient to give depth */}
+      <div className="absolute inset-0 bg-radial-gradient from-[var(--telemetry-blue)]/5 to-transparent blur-[120px] pointer-events-none" />
+      
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
         
-        <div className="flex flex-col md:flex-row gap-16 items-center">
+        <div className="flex flex-col md:flex-row gap-16 items-start">
           <div className="w-full md:w-1/2">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gradient-primary">
-              The Speed of Light
+            <h2 className="text-4xl md:text-5xl font-black mb-6 uppercase tracking-tighter text-white">
+              System<br/>Diagnostics
             </h2>
-            <p className="text-xl text-muted-foreground mb-8">
-              TelemetryX is heavily profiled and optimized. Every component is tested under rigorous rules. If a single frame drops, the pipeline fails. No visual regression, no flickering.
-            </p>
+            <div className="text-zinc-400 font-mono text-sm mb-10 border-l border-[var(--telemetry-blue)] pl-4">
+              <p className="mb-4">
+                TelemetryX is heavily profiled and optimized. Every component is tested under rigorous engineering rules.
+              </p>
+              <p>
+                If a single frame drops below our targets, the entire pipeline fails. There is zero visual regression and zero flickering permitted.
+              </p>
+            </div>
             
-            <div className="space-y-6 anime-stagger">
-              {[
-                { title: "Sustained FPS", value: "90" },
-                { title: "End-to-End Latency", value: "<2ms" },
-                { title: "Zero Data Discrepancy", value: "100%" }
-              ].map((stat, i) => (
-                <div key={i} className="stagger-item flex items-center justify-between p-6 rounded-2xl bg-muted/20 border border-border/50">
-                  <span className="text-lg font-medium text-muted-foreground">{stat.title}</span>
-                  <span className="text-3xl font-black text-foreground">{stat.value}</span>
-                </div>
-              ))}
+            <div className="grid grid-cols-2 gap-2 w-full">
+               <div className="perf-block"><SystemMetric label="Pipeline Latency" target="< 2ms" value={latency} unit="ms" /></div>
+               <div className="perf-block"><SystemMetric label="Render Engine" target="90 FPS" value={fps} unit="fps" /></div>
+               <div className="perf-block"><SystemMetric label="DOM Thrashing" target="0" value="0" unit="reflows" /></div>
+               <div className="perf-block"><SystemMetric label="Data Integrity" target="100%" value="100" unit="%" /></div>
+               <div className="perf-block col-span-2"><SystemMetric label="Memory Heap" target="STABLE" value="24.4" unit="MB / 30m" isWarning={true} /></div>
             </div>
           </div>
 
-          <div className="w-full md:w-1/2 grid grid-cols-2 gap-6 relative">
-             <div className="glass-panel p-8 rounded-3xl col-span-2 shadow-2xl shadow-primary/10">
-               <div className="text-primary text-sm font-mono uppercase tracking-widest mb-4 flex items-center gap-2">
-                 <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
-                 Target Enforcement
-               </div>
-               <div className="text-7xl font-bold text-foreground mb-2 font-mono">
-                 <Counter from={0} to={2} duration={2} suffix="ms" />
-               </div>
-               <div className="text-muted-foreground">End-to-end data latency</div>
-             </div>
-             
-             <div className="glass-panel p-8 rounded-3xl">
-               <div className="text-primary text-sm font-mono uppercase tracking-widest mb-4 flex items-center gap-2">
-                 <span className="w-2 h-2 rounded-full bg-purple-sector" />
-                 DOM Reflow
-               </div>
-               <div className="text-4xl font-bold text-foreground mb-2 font-mono">
-                 <Counter from={100} to={0} duration={2} />
-               </div>
-               <div className="text-muted-foreground">Thrashing</div>
-             </div>
-
-             <div className="glass-panel p-8 rounded-3xl border-primary/20">
-               <div className="text-primary text-sm font-mono uppercase tracking-widest mb-4 flex items-center gap-2">
-                 <span className="w-2 h-2 rounded-full bg-primary" />
-                 Memory
-               </div>
-               <div className="text-4xl font-bold text-foreground mb-2 font-mono">Stable</div>
-               <div className="text-muted-foreground">30+ min heap</div>
-             </div>
+          <div className="w-full md:w-1/2 bg-[#050505] border border-zinc-800 p-6 font-mono text-xs text-zinc-400 h-[500px] overflow-hidden relative shadow-2xl">
+            <div className="flex items-center gap-2 mb-4 border-b border-zinc-900 pb-2">
+              <Activity className="w-4 h-4 text-[var(--telemetry-blue)] animate-pulse" /> 
+              <span className="uppercase tracking-widest text-zinc-500">System Logs / E10 QA</span>
+            </div>
+            
+            <motion.div 
+              initial={{ y: 200 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 10, ease: "linear", repeat: Infinity }}
+              className="space-y-2 uppercase opacity-80"
+            >
+              {[...Array(20)].map((_, i) => (
+                <div key={i} className="flex gap-4 hover:bg-zinc-900 hover:text-white px-2 py-1 transition-colors">
+                  <span className="text-zinc-600">[{new Date(Date.now() - (20-i)*100).toISOString().slice(11, 23)}]</span>
+                  <span className={i % 5 === 0 ? "text-[var(--telemetry-blue)]" : i % 8 === 0 ? "text-[var(--telemetry-yellow)]" : ""}>
+                    {i % 5 === 0 ? "CHECK: COMPONENT TIMING TOWER RENDER OK" : 
+                     i % 8 === 0 ? "WARN: DUCKDB QUERY TIME 1.1MS" : 
+                     "INFO: WEBSOCKET DATA FRAME PROCESSED"}
+                  </span>
+                </div>
+              ))}
+            </motion.div>
+            
+            {/* Fade out edges */}
+            <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#050505] to-transparent" />
           </div>
         </div>
 

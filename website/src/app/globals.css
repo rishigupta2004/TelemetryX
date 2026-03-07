@@ -1,17 +1,20 @@
 @import "tailwindcss";
 
 :root {
-  --background: #020617; /* Deep Slate 950 */
-  --foreground: #f8fafc; /* Slate 50 */
-  --muted: #1e293b;     /* Slate 800 */
-  --muted-foreground: #94a3b8; /* Slate 400 */
-  --border: #334155;    /* Slate 700 */
-  --primary: #0ea5e9;   /* Sky 500 (Neon Blue Accent) */
-  --primary-foreground: #ffffff;
-  --destructive: #ef4444; /* Red 500 (F1 red/danger accent) */
-  --success: #22c55e;   /* Green 500 (Purple/Green sectors) */
-  --purple-sector: #a855f7; /* Purple 500 */
-  --accent: #facc15;    /* Yellow for flags/highlights */
+  --background: #000000;      /* OLED Black */
+  --foreground: #f4f4f5;      /* Zinc 50 */
+  --muted: #18181b;          /* Zinc 900 */
+  --muted-foreground: #a1a1aa; /* Zinc 400 */
+  --border: #27272a;         /* Zinc 800 */
+  
+  --primary: #ffffff;        /* White text/primary */
+  --primary-foreground: #000;
+  
+  --telemetry-red: #ff2a2a;
+  --telemetry-blue: #00e5ff;
+  --telemetry-purple: #b026ff;
+  --telemetry-green: #00ff00;
+  --telemetry-yellow: #facc15;
 }
 
 @theme inline {
@@ -22,18 +25,21 @@
   --color-border: var(--border);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
-  --color-destructive: var(--destructive);
-  --color-success: var(--success);
-  --color-purple-sector: var(--purple-sector);
-  --color-accent: var(--accent);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  
+  --color-telemetry-red: var(--telemetry-red);
+  --color-telemetry-blue: var(--telemetry-blue);
+  --color-telemetry-purple: var(--telemetry-purple);
+  --color-telemetry-green: var(--telemetry-green);
+  --color-telemetry-yellow: var(--telemetry-yellow);
+
+  --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, monospace;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
   overflow-x: hidden;
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
@@ -42,51 +48,66 @@ body {
 
 /* Base scrollbar styles for a sleek dark feel */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
   background: var(--background);
 }
 ::-webkit-scrollbar-thumb {
   background: var(--border);
-  border-radius: 4px;
+  border-radius: 0px; /* brutalist */
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--muted-foreground);
 }
 
-.text-gradient {
-  background: linear-gradient(135deg, #f8fafc 0%, #94a3b8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+/* Pit Wall / Apple Blend Effects */
+.glass-bento {
+  background: rgba(10, 10, 10, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  transition: border-color 0.3s ease, background 0.3s ease;
 }
 
-.text-gradient-primary {
-  background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.glass-bento:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(20, 20, 20, 0.5);
 }
 
-.glass-panel {
-  background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+.bg-grid-pattern {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
 }
 
-.glow-effect {
-  position: relative;
+.bg-grid-dots {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
 }
-.glow-effect::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: inherit;
-  filter: blur(20px);
-  opacity: 0.5;
-  z-index: -1;
-  border-radius: inherit;
+
+.text-glow {
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.text-glow-blue {
+  text-shadow: 0 0 15px rgba(0, 229, 255, 0.6);
+}
+
+/* uPlot overrides for brutalist dark theme */
+.uplot, .uplot *, .uplot *::before, .uplot *::after {
+  box-sizing: border-box;
+}
+.u-legend {
+  font-family: var(--font-mono);
+  font-size: 11px !important;
+  color: var(--muted-foreground);
+}
+.u-title {
+  font-family: var(--font-sans);
+  color: var(--foreground);
+  font-weight: 600;
 }

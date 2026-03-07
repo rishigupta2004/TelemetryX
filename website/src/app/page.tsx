@@ -7,7 +7,10 @@ import { Footer } from "@/components/sections/Footer";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-background text-foreground flex flex-col font-sans selection:bg-primary/30">
+    <main className="min-h-screen bg-black text-white flex flex-col font-sans selection:bg-[var(--telemetry-blue)] selection:text-black">
+      {/* Global CRT Scanline effect overlaid on entire app */}
+      <div className="fixed inset-0 pointer-events-none z-50 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%)] bg-[length:100%_4px] opacity-20 mix-blend-overlay" />
+      
       <Navbar />
       <Hero />
       <FeatureGrid />

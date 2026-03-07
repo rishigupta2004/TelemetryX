@@ -6,6 +6,7 @@ import { SmoothScrolling } from "@/components/ui/SmoothScrolling";
 import { Preloader } from "@/components/ui/Preloader";
 import { Altimeter } from "@/components/ui/Altimeter";
 import { SystemHUD } from "@/components/ui/SystemHUD";
+import { GlobalLeva } from "@/components/ui/GlobalLeva";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -36,6 +37,7 @@ export default function RootLayout({
       >
         <SmoothScrolling>
           <Preloader />
+          <GlobalLeva />
           <CustomCursor />
           <Altimeter />
           <SystemHUD />

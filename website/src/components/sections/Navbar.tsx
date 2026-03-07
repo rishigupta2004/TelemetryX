@@ -21,6 +21,14 @@ export function Navbar() {
         </Link>
         
         <div className="hidden md:flex items-center gap-8 text-zinc-500">
+          <Link href="/ingestion" className="hover:text-[var(--telemetry-blue)] transition-colors relative group">
+            Ingestion
+            <span className="absolute -bottom-2 left-0 w-full h-[1px] bg-[var(--telemetry-blue)] scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+          </Link>
+          <Link href="/pipeline" className="hover:text-[var(--telemetry-yellow)] transition-colors relative group">
+            Pipeline
+            <span className="absolute -bottom-2 left-0 w-full h-[1px] bg-[var(--telemetry-yellow)] scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+          </Link>
           <Link href="/engine" className="hover:text-white transition-colors relative group">
             Engine
             <span className="absolute -bottom-2 left-0 w-full h-[1px] bg-[var(--telemetry-red)] scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />

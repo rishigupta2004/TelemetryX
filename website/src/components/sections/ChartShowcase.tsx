@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
+import { Zap } from "lucide-react";
 
 export function ChartShowcase() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -94,8 +95,6 @@ export function ChartShowcase() {
         if (isFill) {
           ctx.lineTo(canvas.width, canvas.height);
           ctx.lineTo(0, canvas.height);
-          ctx.fillStyle = color.replace('1)', '0.1)'); // swap opacity if rgba
-          // Custom fill logic for hex (simple hack: just use global alpha)
           ctx.globalAlpha = 0.1;
           ctx.fillStyle = color;
           ctx.fill();
@@ -142,19 +141,19 @@ export function ChartShowcase() {
             transition={{ duration: 0.8 }}
             className="w-full lg:w-1/3 p-6"
           >
-            <div className="flex items-center gap-3 mb-6 border border-[var(--telemetry-blue)]/50 bg-[var(--telemetry-blue)]/10 px-3 py-1 w-fit">
-               <div className="w-2 h-2 bg-[var(--telemetry-blue)] shadow-[0_0_10px_var(--telemetry-blue)] animate-pulse" />
-               <span className="font-mono text-[var(--telemetry-blue)] uppercase tracking-widest text-[10px] font-bold">uPLOT WORKER</span>
+            <div className="flex items-center gap-3 mb-6 border border-[var(--telemetry-blue)]/50 bg-[var(--telemetry-blue)]/10 px-3 py-1 w-fit panel-border shadow-[0_0_15px_rgba(0,229,255,0.1)]">
+               <Zap className="w-3 h-3 text-[var(--telemetry-blue)] animate-pulse" />
+               <span className="font-mono text-[var(--telemetry-blue)] uppercase tracking-widest text-[10px] font-bold">uPLOT CANVAS WORKER</span>
             </div>
             
-            <h2 className="text-4xl font-black mb-6 text-white uppercase tracking-tighter">
+            <h2 className="text-4xl md:text-5xl font-black mb-6 text-white uppercase tracking-tighter">
               Desktop-Class<br/>Rendering
             </h2>
-            <p className="text-zinc-400 font-mono text-xs leading-relaxed mb-8 border-l-2 border-zinc-800 pl-4">
-              We replaced React charting libraries with raw <span className="text-white">uPlot Canvas elements</span>. TelemetryX can plot 100,000+ data points for Throttle, Brake, Speed, and DRS without dropping a single frame or blocking the UI thread.
+            <p className="text-zinc-400 font-mono text-xs md:text-sm leading-relaxed mb-8 border-l-2 border-zinc-800 pl-4 bg-black/50 p-4 backdrop-blur-md panel-border">
+              We replaced React charting libraries with raw <span className="text-white">uPlot Canvas elements</span> offloaded to Web Workers. TelemetryX can plot 100,000+ data points for Throttle, Brake, Speed, and DRS without dropping a single frame or blocking the UI thread.
             </p>
             
-            <div className="space-y-4 font-mono text-[10px] uppercase text-zinc-500">
+            <div className="space-y-4 font-mono text-[10px] uppercase text-zinc-500 bg-black border border-zinc-800 p-4 panel-border">
               <div className="flex justify-between border-b border-zinc-900 pb-2 items-center group">
                 <span className="group-hover:text-white transition-colors">DOM Nodes per chart</span>
                 <span className="text-[var(--telemetry-green)] bg-zinc-900 px-2 py-1">1 (Canvas)</span>
@@ -162,6 +161,10 @@ export function ChartShowcase() {
               <div className="flex justify-between border-b border-zinc-900 pb-2 items-center group">
                 <span className="group-hover:text-white transition-colors">Data Binding</span>
                 <span className="text-[var(--telemetry-yellow)] bg-zinc-900 px-2 py-1">SharedArrayBuffer</span>
+              </div>
+              <div className="flex justify-between items-center group">
+                <span className="group-hover:text-white transition-colors">Thread</span>
+                <span className="text-[var(--telemetry-blue)] bg-zinc-900 px-2 py-1">telemetry.worker.ts</span>
               </div>
             </div>
           </motion.div>
@@ -171,14 +174,27 @@ export function ChartShowcase() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="w-full lg:w-2/3 h-[500px] bg-black border border-zinc-800 relative overflow-hidden shadow-2xl shadow-black panel-border"
+            className="w-full lg:w-2/3 h-[500px] bg-[#0A0A0A] border border-zinc-800 relative overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] panel-border rounded-xl"
           >
+            {/* Window Chrome */}
+            <div className="h-8 bg-[#111] border-b border-zinc-800 flex items-center px-4 justify-between select-none">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-zinc-700" />
+                <div className="w-3 h-3 rounded-full bg-zinc-700" />
+                <div className="w-3 h-3 rounded-full bg-zinc-700" />
+              </div>
+              <div className="font-mono text-[10px] text-zinc-500 uppercase tracking-widest">
+                TelemetryView.tsx
+              </div>
+              <div className="w-12" />
+            </div>
+
             {/* uPlot UI Mimic */}
-            <div className="absolute top-0 left-0 right-0 h-10 border-b border-zinc-800 bg-zinc-950 flex items-center px-4 justify-between z-10 font-mono text-[10px] text-zinc-500">
-              <div className="flex gap-4">
-                <span className="text-white">VER</span>
+            <div className="h-10 border-b border-zinc-800 bg-[#050505] flex items-center px-4 justify-between z-10 font-mono text-[10px] text-zinc-500">
+              <div className="flex gap-4 items-center">
+                <span className="text-white bg-zinc-800 px-2 py-0.5">VER</span>
                 <span className="text-zinc-600">vs</span>
-                <span className="text-[var(--telemetry-green)]">NOR</span>
+                <span className="text-white bg-zinc-800 px-2 py-0.5">NOR</span>
               </div>
               <div className="flex gap-4">
                  <span className="flex items-center gap-1"><div className="w-2 h-2 bg-[var(--telemetry-blue)]" /> SPEED</span>
@@ -187,7 +203,15 @@ export function ChartShowcase() {
               </div>
             </div>
 
-            <canvas ref={canvasRef} className="w-full h-[calc(100%-40px)] mt-10 block" />
+            <canvas ref={canvasRef} className="w-full h-[calc(100%-72px)] block bg-black" />
+            
+            {/* Play/Pause control overlay */}
+            <button 
+              onClick={() => setIsPlaying(!isPlaying)}
+              className="absolute bottom-4 right-4 z-10 border border-zinc-700 bg-black/80 hover:bg-zinc-800 text-zinc-400 px-4 py-2 font-mono text-[10px] uppercase cursor-pointer transition-colors backdrop-blur-sm"
+            >
+              {isPlaying ? 'PAUSE WORKER' : 'RESUME WORKER'}
+            </button>
             
             <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(transparent_50%,rgba(0,0,0,0.25)_50%)] bg-[length:100%_4px] opacity-20" />
           </motion.div>

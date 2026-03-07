@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ParticleTrack } from "../three/ParticleTrack";
 import { ScrambleText } from "../ui/ScrambleText";
+import { AppMockup } from "../ui/AppMockup";
 
 function TypewriterEffect({ text }: { text: string }) {
   const [displayed, setDisplayed] = useState("");
@@ -90,86 +91,16 @@ export function Hero() {
             </Link>
           </div>
         </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="flex-1 relative w-full h-[550px]"
-        >
-           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full border border-[var(--telemetry-blue)]/20 flex items-center justify-center opacity-30 shadow-[0_0_50px_rgba(0,229,255,0.1)]">
-             <div className="w-[300px] h-[300px] rounded-full border border-[var(--telemetry-blue)]/20 flex items-center justify-center">
-               <div className="w-[200px] h-[200px] rounded-full border border-[var(--telemetry-blue)]/30 overflow-hidden relative">
-                 <div className="radar-sweep-bg" />
-                 <div className="absolute top-1/2 left-0 w-full h-[1px] bg-[var(--telemetry-blue)]/30" />
-                 <div className="absolute left-1/2 top-0 w-[1px] h-full bg-[var(--telemetry-blue)]/30" />
-               </div>
-             </div>
-           </div>
-
-           <div className="absolute top-10 right-0 w-64 glass-bento p-5 panel-border z-20 bg-black/80">
-             <div className="flex justify-between items-center mb-2">
-                <div className="text-xs font-mono text-zinc-500 uppercase tracking-wider">Speed Trap 1</div>
-                <Activity className="w-4 h-4 text-[var(--telemetry-blue)] animate-pulse" />
-             </div>
-             <div className="text-5xl font-mono font-bold text-white flex items-end gap-1 tracking-tighter">
-               {speed.toFixed(1).split('.')[0]}<span className="text-2xl text-[var(--telemetry-blue)] pb-1">.{speed.toFixed(1).split('.')[1]}</span>
-             </div>
-             <div className="text-[10px] font-mono text-zinc-600 mt-1 uppercase">KPH // TURN 1 APEX</div>
-             <div className="mt-4 h-12 flex items-end gap-1">
-               {[40,70,50,90,100,60,80, 40, 50, 80].map((h,i) => (
-                 <motion.div 
-                   key={i} 
-                   className="w-full bg-[var(--telemetry-blue)] opacity-50 shadow-[0_0_5px_var(--telemetry-blue)]"
-                   initial={{ height: 0 }}
-                   animate={{ height: `${h}%` }}
-                   transition={{ duration: 0.2, delay: i * 0.05, repeat: Infinity, repeatType: 'reverse', repeatDelay: Math.random() }}
-                 />
-               ))}
-             </div>
-           </div>
-
-           <div className="absolute top-48 -left-4 w-80 glass-bento p-5 panel-border z-10 bg-black/80">
-             <div className="flex justify-between items-center mb-4">
-               <div className="text-[10px] font-mono text-[var(--telemetry-purple)] uppercase tracking-widest flex items-center gap-2">
-                 <span className="w-2 h-2 rounded-full bg-[var(--telemetry-purple)] shadow-[0_0_10px_var(--telemetry-purple)] animate-pulse" />
-                 Throttle Trace [LIVE]
-               </div>
-             </div>
-             <div className="h-24 relative overflow-hidden bg-[#050505] border border-zinc-800">
-               <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:20px_20px]" />
-               <svg viewBox="0 0 100 30" preserveAspectRatio="none" className="absolute inset-0 w-full h-full stroke-[var(--telemetry-purple)] fill-none stroke-[2px] filter drop-shadow(0px 0px 4px rgba(176,38,255,0.5))">
-                 <motion.path 
-                   d="M0,30 L10,30 L15,5 L40,5 L45,25 L60,25 L65,10 L80,10 L90,28 L100,28" 
-                   initial={{ pathLength: 0 }}
-                   animate={{ pathLength: 1 }}
-                   transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-                 />
-               </svg>
-               <motion.div 
-                  className="absolute top-0 bottom-0 w-[1px] bg-white shadow-[0_0_10px_white]"
-                  animate={{ left: ['0%', '100%'] }}
-                  transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
-               />
-             </div>
-           </div>
-           
-           <div className="absolute bottom-16 right-10 w-56 glass-bento p-5 panel-border z-30 bg-black/80">
-              <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest mb-3 flex items-center gap-2">
-                <span className="w-1.5 h-1.5 bg-[var(--telemetry-green)]" />
-                Sector 2 Split
-              </div>
-              <div key={sectorTime} className="text-4xl font-mono font-bold text-[var(--telemetry-green)] text-glow mb-1 data-value-flash tracking-tighter">
-                {sectorTime.toFixed(3)}
-              </div>
-              <div className="text-[10px] font-mono text-white/50 border-t border-zinc-800 pt-3 mt-3 flex justify-between items-center">
-                <span className="bg-white text-black px-1 font-bold">VER</span>
-                <span className="text-[var(--telemetry-green)]">-0.124 PURPLE</span>
-              </div>
-           </div>
-        </motion.div>
-        
       </div>
+
+      <motion.div 
+        initial={{ opacity: 0, y: 100 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, delay: 0.5 }}
+        className="w-full relative z-20 mt-12 px-6"
+      >
+         <AppMockup />
+      </motion.div>
     </section>
   );
 }

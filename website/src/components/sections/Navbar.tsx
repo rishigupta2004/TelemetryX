@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/Button";
 import { Terminal } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import Link from "next/link";
 
 export function Navbar() {
   const { scrollY } = useScroll();
@@ -13,21 +14,26 @@ export function Navbar() {
       style={{ background, borderBottom, backdropFilter: 'blur(16px)' }}
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 h-16"
     >
-      <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between font-mono text-xs uppercase tracking-widest">
-        <div className="flex items-center gap-3 cursor-pointer text-white">
-          <Terminal className="w-4 h-4 text-[var(--telemetry-blue)]" />
+      <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between font-mono text-[10px] md:text-xs uppercase tracking-widest">
+        <Link href="/" className="flex items-center gap-3 cursor-pointer text-white group">
+          <Terminal className="w-4 h-4 text-[var(--telemetry-blue)] group-hover:animate-pulse" />
           <span className="font-bold">TelemetryX</span>
-        </div>
+        </Link>
         
         <div className="hidden md:flex items-center gap-8 text-zinc-500">
-          <a href="#pipeline" className="hover:text-white transition-colors">Pipeline</a>
-          <a href="#telemetry" className="hover:text-white transition-colors">Telemetry</a>
-          <a href="#performance" className="hover:text-white transition-colors">Perf</a>
+          <Link href="/architecture" className="hover:text-white transition-colors relative group">
+            Architecture
+            <span className="absolute -bottom-2 left-0 w-full h-[1px] bg-[var(--telemetry-blue)] scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+          </Link>
+          <Link href="/features" className="hover:text-white transition-colors relative group">
+            Features
+            <span className="absolute -bottom-2 left-0 w-full h-[1px] bg-[var(--telemetry-green)] scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+          </Link>
         </div>
 
         <div className="flex items-center gap-4">
-          <a href="https://github.com/rishigupta/TelemetryX" className="text-zinc-500 hover:text-white transition-colors hidden sm:block">GitHub</a>
-          <Button size="sm" variant="outline" className="h-8">Download</Button>
+          <a href="https://github.com/rishigupta/TelemetryX" className="text-zinc-500 hover:text-[var(--telemetry-purple)] transition-colors hidden sm:block">GitHub</a>
+          <Button size="sm" variant="terminal" className="h-8">Download</Button>
         </div>
       </div>
     </motion.nav>

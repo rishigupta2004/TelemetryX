@@ -20,6 +20,8 @@ function TypewriterEffect({ text }: { text: string }) {
   return <span className="font-mono text-[var(--telemetry-green)] text-glow whitespace-pre-line">{displayed}<span className="animate-pulse">_</span></span>;
 }
 
+import { ParticleTrack } from "../three/ParticleTrack";
+
 export function Hero() {
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 500], [0, 150]);
@@ -45,7 +47,8 @@ export function Hero() {
     <section className="relative min-h-screen pt-32 pb-24 overflow-hidden flex flex-col items-center justify-center bg-black">
       {/* Pit-wall subtle vignette & grid */}
       <div className="absolute inset-0 bg-dot-grid opacity-30 pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#000_100%)] pointer-events-none opacity-90 z-0" />
+      <ParticleTrack />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#000_100%)] pointer-events-none opacity-70 z-10" />
       
       <div className="max-w-7xl mx-auto px-6 relative z-10 w-full flex flex-col lg:flex-row gap-12 items-center">
         

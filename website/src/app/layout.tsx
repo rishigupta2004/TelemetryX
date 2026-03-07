@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { CustomCursor } from "@/components/ui/CustomCursor";
+import { SmoothScrolling } from "@/components/ui/SmoothScrolling";
+import { Preloader } from "@/components/ui/Preloader";
+import { Altimeter } from "@/components/ui/Altimeter";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -25,11 +29,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark scroll-smooth">
       <body
-        className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} font-sans bg-black text-white antialiased`}
+        className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} font-sans bg-black text-white antialiased overflow-x-hidden`}
       >
-        {children}
+        <SmoothScrolling>
+          <Preloader />
+          <CustomCursor />
+          <Altimeter />
+          {children}
+        </SmoothScrolling>
       </body>
     </html>
   );

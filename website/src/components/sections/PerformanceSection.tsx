@@ -30,6 +30,8 @@ export function PerformanceSection() {
   const [fps, setFps] = useState(90);
   const [latency, setLatency] = useState("1.82");
   const [memory, setMemory] = useState("24.4");
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => setIsMounted(true), []);
   
   useEffect(() => {
     anime({
@@ -103,7 +105,7 @@ export function PerformanceSection() {
               {[...Array(40)].map((_, i) => {
                 const isError = i % 15 === 0;
                 const isWarn = i % 7 === 0;
-                const time = new Date(Date.now() - (40-i)*150).toISOString().slice(11, 23);
+                const time = isMounted ? new Date(Date.now() - (40-i)*150).toISOString().slice(11, 23) : "00:00:00.000";
                 
                 let msg = "[OK] DUCKDB QUERY RETURNED IN 1.2MS";
                 if(isError) msg = "[FAIL] INSUFFICIENT DATA POINTS FOR SECTOR 3";

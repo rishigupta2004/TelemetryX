@@ -5,6 +5,7 @@ import { CustomCursor } from "@/components/ui/CustomCursor";
 import { SmoothScrolling } from "@/components/ui/SmoothScrolling";
 import { Preloader } from "@/components/ui/Preloader";
 import { Altimeter } from "@/components/ui/Altimeter";
+import { SystemHUD } from "@/components/ui/SystemHUD";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -37,6 +38,7 @@ export default function RootLayout({
           <Preloader />
           <CustomCursor />
           <Altimeter />
+          <SystemHUD />
           {children}
         </SmoothScrolling>
       </body>

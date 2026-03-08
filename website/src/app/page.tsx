@@ -4,6 +4,7 @@ import { FeatureGrid } from "@/components/sections/FeatureGrid";
 import { ChartShowcase } from "@/components/sections/ChartShowcase";
 import { PerformanceSection } from "@/components/sections/PerformanceSection";
 import { Footer } from "@/components/sections/Footer";
+import { CodeShowcase } from "@/components/sections/CodeShowcase";
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
       <Hero />
       <FeatureGrid />
       <ChartShowcase />
+      <CodeShowcase />
       <PerformanceSection />
       <Footer />
     </main>

@@ -91,11 +91,14 @@ export function CodeShowcase() {
   const [activeTab, setActiveTab] = useState<'duckdb' | 'worker' | 'zustand'>('duckdb');
 
   return (
-    <section className="py-24 relative bg-[#020202] border-t border-zinc-900" id="code" ref={containerRef}>
+    <section className="py-24 relative bg-[#020202] border-t border-zinc-900 overflow-hidden" id="code" ref={containerRef}>
       <div className="absolute inset-0 bg-dot-grid opacity-10" />
+      
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[600px] bg-[radial-gradient(ellipse_at_center,rgba(0,229,255,0.03)_0%,transparent_60%)] pointer-events-none" />
+
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         
-        <div className="flex flex-col lg:flex-row gap-12">
+        <div className="flex flex-col lg:flex-row gap-16">
           
           {/* Left: Philosophy */}
           <div className="w-full lg:w-1/3">
@@ -113,25 +116,31 @@ export function CodeShowcase() {
               <div className="border-l-2 border-[var(--telemetry-red)] pl-4 space-y-4 py-2">
                 <button 
                   onClick={() => setActiveTab('duckdb')}
-                  className={`w-full text-left p-3 border transition-colors ${activeTab === 'duckdb' ? 'bg-zinc-900 border-zinc-700 text-white' : 'border-transparent text-zinc-500 hover:text-zinc-300'}`}
+                  className={`w-full text-left p-4 border transition-colors panel-border ${activeTab === 'duckdb' ? 'bg-zinc-900 border-zinc-700 text-white' : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:border-zinc-800'}`}
                 >
-                  <div className="font-bold uppercase tracking-widest text-[10px] mb-1 flex items-center gap-2"><Database className="w-3 h-3" /> Python FastAPI + DuckDB</div>
+                  <div className="font-bold uppercase tracking-widest text-[10px] mb-2 flex items-center gap-2">
+                    <Database className="w-3 h-3 text-[var(--telemetry-red)]" /> Python FastAPI + DuckDB
+                  </div>
                   <div className="text-xs">Zero-network Parquet queries via local OLAP engine.</div>
                 </button>
 
                 <button 
                   onClick={() => setActiveTab('worker')}
-                  className={`w-full text-left p-3 border transition-colors ${activeTab === 'worker' ? 'bg-zinc-900 border-zinc-700 text-white' : 'border-transparent text-zinc-500 hover:text-zinc-300'}`}
+                  className={`w-full text-left p-4 border transition-colors panel-border ${activeTab === 'worker' ? 'bg-zinc-900 border-zinc-700 text-white' : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:border-zinc-800'}`}
                 >
-                  <div className="font-bold uppercase tracking-widest text-[10px] mb-1 flex items-center gap-2"><Cpu className="w-3 h-3" /> Web Worker IPC</div>
+                  <div className="font-bold uppercase tracking-widest text-[10px] mb-2 flex items-center gap-2">
+                    <Cpu className="w-3 h-3 text-[var(--telemetry-blue)]" /> Web Worker IPC
+                  </div>
                   <div className="text-xs">Binary WebSocket payloads written to SharedArrayBuffers.</div>
                 </button>
 
                 <button 
                   onClick={() => setActiveTab('zustand')}
-                  className={`w-full text-left p-3 border transition-colors ${activeTab === 'zustand' ? 'bg-zinc-900 border-zinc-700 text-white' : 'border-transparent text-zinc-500 hover:text-zinc-300'}`}
+                  className={`w-full text-left p-4 border transition-colors panel-border ${activeTab === 'zustand' ? 'bg-zinc-900 border-zinc-700 text-white' : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:border-zinc-800'}`}
                 >
-                  <div className="font-bold uppercase tracking-widest text-[10px] mb-1 flex items-center gap-2"><Terminal className="w-3 h-3" /> Transient State</div>
+                  <div className="font-bold uppercase tracking-widest text-[10px] mb-2 flex items-center gap-2">
+                    <Terminal className="w-3 h-3 text-[var(--telemetry-green)]" /> Transient State
+                  </div>
                   <div className="text-xs">Zustand selectors firing at 60fps without triggering React renders.</div>
                 </button>
               </div>
@@ -147,21 +156,24 @@ export function CodeShowcase() {
           >
             <div className="bg-[#0A0A0A] border border-zinc-800 rounded-xl overflow-hidden panel-border shadow-[0_0_50px_rgba(0,0,0,0.8)] h-full flex flex-col">
               {/* Editor Tabs */}
-              <div className="flex items-end bg-[#111] border-b border-zinc-800 pt-2 px-2 gap-1 font-mono text-[10px] overflow-x-auto">
-                <div className={`px-4 py-2 rounded-t-md border border-b-0 cursor-pointer whitespace-nowrap ${activeTab === 'duckdb' ? 'bg-[#0A0A0A] border-zinc-800 text-white' : 'border-transparent text-zinc-600 hover:text-zinc-400 hover:bg-zinc-900/50'}`} onClick={() => setActiveTab('duckdb')}>
+              <div className="flex items-end bg-[#111] border-b border-zinc-800 pt-2 px-2 gap-1 font-mono text-[10px] overflow-x-auto select-none">
+                <div className={`px-4 py-2 rounded-t-md border border-b-0 cursor-pointer whitespace-nowrap transition-colors ${activeTab === 'duckdb' ? 'bg-[#0A0A0A] border-zinc-800 text-white' : 'border-transparent text-zinc-600 hover:text-zinc-400 hover:bg-zinc-900/50'}`} onClick={() => setActiveTab('duckdb')}>
                   api/telemetry.py
                 </div>
-                <div className={`px-4 py-2 rounded-t-md border border-b-0 cursor-pointer whitespace-nowrap ${activeTab === 'worker' ? 'bg-[#0A0A0A] border-zinc-800 text-white' : 'border-transparent text-zinc-600 hover:text-zinc-400 hover:bg-zinc-900/50'}`} onClick={() => setActiveTab('worker')}>
+                <div className={`px-4 py-2 rounded-t-md border border-b-0 cursor-pointer whitespace-nowrap transition-colors ${activeTab === 'worker' ? 'bg-[#0A0A0A] border-zinc-800 text-white' : 'border-transparent text-zinc-600 hover:text-zinc-400 hover:bg-zinc-900/50'}`} onClick={() => setActiveTab('worker')}>
                   telemetry.worker.ts
                 </div>
-                <div className={`px-4 py-2 rounded-t-md border border-b-0 cursor-pointer whitespace-nowrap ${activeTab === 'zustand' ? 'bg-[#0A0A0A] border-zinc-800 text-white' : 'border-transparent text-zinc-600 hover:text-zinc-400 hover:bg-zinc-900/50'}`} onClick={() => setActiveTab('zustand')}>
+                <div className={`px-4 py-2 rounded-t-md border border-b-0 cursor-pointer whitespace-nowrap transition-colors ${activeTab === 'zustand' ? 'bg-[#0A0A0A] border-zinc-800 text-white' : 'border-transparent text-zinc-600 hover:text-zinc-400 hover:bg-zinc-900/50'}`} onClick={() => setActiveTab('zustand')}>
                   playbackStore.ts
                 </div>
               </div>
 
               {/* Code Area */}
-              <div className="p-6 overflow-auto flex-1 font-mono text-xs md:text-sm leading-loose">
-                <pre className="text-zinc-300">
+              <div className="p-6 overflow-auto flex-1 font-mono text-xs md:text-sm leading-loose relative">
+                <div className="absolute left-0 top-0 bottom-0 w-12 bg-zinc-950 border-r border-zinc-800 flex flex-col items-center pt-6 text-zinc-700 select-none">
+                  {[...Array(20)].map((_,i) => <div key={i}>{i+1}</div>)}
+                </div>
+                <pre className="text-zinc-300 pl-10">
                   <code 
                     dangerouslySetInnerHTML={{ 
                       __html: CODE_SNIPPETS[activeTab]

@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useRef } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { animate } from 'animejs'
 import { useSessionTime2s } from '../lib/timeUtils'
 import { useSessionStore } from '../stores/sessionStore'
 import type { WeatherRow } from '../types'
@@ -35,6 +36,26 @@ interface WeatherPanelProps {
 export const WeatherPanel = React.memo(function WeatherPanel({ compact = false }: WeatherPanelProps) {
   const sessionData = useSessionStore((s) => s.sessionData)
   const sessionTime = useSessionTime2s()
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const [isAnimatingIn, setIsAnimatingIn] = useState(true)
+
+  useEffect(() => {
+    if (isAnimatingIn && containerRef.current) {
+      animate(containerRef.current, {
+        opacity: [0, 1],
+        translateY: [8, 0],
+        duration: 300,
+        easing: 'easeOutCubic',
+        complete: () => setIsAnimatingIn(false)
+      })
+    }
+  }, [isAnimatingIn])
+
+  useEffect(() => {
+    if (!isAnimatingIn && containerRef.current) {
+      containerRef.current.style.opacity = '1'
+    }
+  }, [isAnimatingIn])
 
   const weatherSeries = useMemo(() => {
     const weather = sessionData?.weather
@@ -126,7 +147,7 @@ export const WeatherPanel = React.memo(function WeatherPanel({ compact = false }
   }
 
   return (
-    <div className="flex h-full flex-col p-4 bg-transparent w-full">
+    <div ref={containerRef} className="flex h-full flex-col p-4 bg-transparent w-full" style={{ opacity: 0 }}>
       {/* Header */}
       <div className="mb-4 flex items-center gap-2 border-b border-border-hard pb-2">
         <span className="text-[11px] font-bold uppercase tracking-widest text-fg-secondary" style={{ fontFamily: 'var(--font-heading)' }}>WEATHER STATION</span>

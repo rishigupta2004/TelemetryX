@@ -1,5 +1,5 @@
 "use client";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 import anime from "animejs";
 import { Activity, Cpu, Database, Network } from "lucide-react";
@@ -31,9 +31,15 @@ export function PerformanceSection() {
   const [latency, setLatency] = useState("1.82");
   const [memory, setMemory] = useState("24.4");
   const [isMounted, setIsMounted] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
+  const reduceMotion = prefersReducedMotion ?? false;
   useEffect(() => setIsMounted(true), []);
   
   useEffect(() => {
+    if (reduceMotion) {
+      return;
+    }
+
     anime({
       targets: '.perf-block',
       translateY: [20, 0],
@@ -52,10 +58,14 @@ export function PerformanceSection() {
     }, 800);
     
     return () => clearInterval(interval);
-  }, []);
+  }, [reduceMotion]);
 
   return (
-    <section className="py-32 relative overflow-hidden bg-[#020202] border-t border-zinc-900" id="performance">
+    <section
+      className="py-32 relative overflow-hidden bg-[#020202] border-t border-zinc-900"
+      id="performance"
+      data-home-section="performance"
+    >
       <div className="absolute inset-0 bg-dot-grid opacity-20 pointer-events-none" />
       
       <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -79,12 +89,12 @@ export function PerformanceSection() {
               </p>
             </div>
             
-            <div className="grid grid-cols-2 gap-4 w-full">
-               <div className="perf-block"><SystemMetric label="Pipeline Latency" target="< 2ms" value={latency} unit="ms" icon={Network} /></div>
-               <div className="perf-block"><SystemMetric label="Render Engine" target="90 FPS" value={fps} unit="fps" icon={Activity} /></div>
-               <div className="perf-block"><SystemMetric label="DOM Thrashing" target="0" value="0" unit="reflows" /></div>
-               <div className="perf-block"><SystemMetric label="Memory Heap" target="STABLE" value={memory} unit="MB / 30m" isWarning={true} icon={Database} /></div>
-            </div>
+             <div className="grid grid-cols-2 gap-4 w-full" data-stagger-group="metrics">
+               <div className="perf-block" data-stagger-item><SystemMetric label="Pipeline Latency" target="< 2ms" value={latency} unit="ms" icon={Network} /></div>
+               <div className="perf-block" data-stagger-item><SystemMetric label="Render Engine" target="90 FPS" value={fps} unit="fps" icon={Activity} /></div>
+               <div className="perf-block" data-stagger-item><SystemMetric label="DOM Thrashing" target="0" value="0" unit="reflows" /></div>
+               <div className="perf-block" data-stagger-item><SystemMetric label="Memory Heap" target="STABLE" value={memory} unit="MB / 30m" isWarning={true} icon={Database} /></div>
+             </div>
           </div>
 
           <div className="w-full md:w-1/2 bg-black border border-zinc-800 p-6 font-mono text-xs text-zinc-400 h-[600px] overflow-hidden relative panel-border shadow-[0_0_30px_rgba(0,0,0,1)]">
@@ -98,8 +108,8 @@ export function PerformanceSection() {
             
             <motion.div 
               initial={{ y: 0 }}
-              animate={{ y: "-50%" }}
-              transition={{ duration: 20, ease: "linear", repeat: Infinity }}
+              animate={reduceMotion ? { y: 0 } : { y: "-50%" }}
+              transition={reduceMotion ? { duration: 0 } : { duration: 20, ease: "linear", repeat: Infinity }}
               className="space-y-3 uppercase opacity-90 tracking-wider text-[10px]"
             >
               {[...Array(40)].map((_, i) => {

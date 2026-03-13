@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useSyncExternalStore } from 'react'
+import { useEffect, useMemo, useRef, useSyncExternalStore } from 'react'
 import { usePlaybackStore } from '../stores/playbackStore'
 import { useSessionStore } from '../stores/sessionStore'
 import type { Driver, LapRow, PositionRow } from '../types'
@@ -91,10 +91,15 @@ function mergeStablePositions(previous: CarPosition[], next: CarPosition[]): Car
   return changed ? merged : previous
 }
 
+export function mergeStablePositionsForTest(previous: CarPosition[], next: CarPosition[]): CarPosition[] {
+  return mergeStablePositions(previous, next)
+}
+
 type Subscriber = () => void
 
 const subscribers = new Set<Subscriber>()
 let sharedPositions: CarPosition[] = []
+let cachedSnapshotRef: CarPosition[] | null = null
 let worker: Worker | null = null
 let workerReady = false
 let seq = 0
@@ -107,6 +112,9 @@ let lastPositions: PositionRow[] | null = null
 let activeSessionKey: string | null = null
 let activeSubscribers = 0
 
+let tickThrottleRef: number | null = null
+const TICK_THROTTLE_MS = 16
+
 function emit() {
   for (const subscriber of subscribers) {
     subscriber()
@@ -117,12 +125,14 @@ function updateSharedPositions(next: CarPosition[]) {
   const merged = mergeStablePositions(sharedPositions, next)
   if (merged === sharedPositions) return
   sharedPositions = merged
+  cachedSnapshotRef = merged
   emit()
 }
 
 function clearSharedPositions() {
   if (!sharedPositions.length) return
   sharedPositions = []
+  cachedSnapshotRef = null
   emit()
 }
 
@@ -134,7 +144,10 @@ function subscribe(listener: Subscriber) {
 }
 
 function getSnapshot(): CarPosition[] {
-  return sharedPositions
+  if (cachedSnapshotRef === null) {
+    cachedSnapshotRef = sharedPositions
+  }
+  return cachedSnapshotRef
 }
 
 function resetWorkerState() {
@@ -143,16 +156,32 @@ function resetWorkerState() {
   lastTickTime = null
 }
 
-function postTick(sessionTime: number, force = false) {
+function flushTick() {
   if (!worker || !workerReady) return
-  if (!force && lastTickTime === sessionTime) return
-  lastTickTime = sessionTime
+  tickThrottleRef = null
+  
+  if (lastTickTime === latestSampledSessionTime) return
+  lastTickTime = latestSampledSessionTime
+  
   const tickMessage: WorkerMessageIn = {
     type: 'tick',
-    sessionTime,
+    sessionTime: latestSampledSessionTime,
     seq: ++seq
   }
   worker.postMessage(tickMessage)
+}
+
+function postTick(sessionTime: number, force = false) {
+  latestSampledSessionTime = sessionTime
+  
+  if (!worker || !workerReady) return
+  if (!force && lastTickTime === sessionTime) return
+  
+  if (tickThrottleRef !== null) return
+  
+  tickThrottleRef = window.setTimeout(() => {
+    flushTick()
+  }, TICK_THROTTLE_MS)
 }
 
 function ensureWorker() {
@@ -178,7 +207,13 @@ function ensureWorker() {
 }
 
 function teardownWorker() {
+  if (tickThrottleRef !== null) {
+    clearTimeout(tickThrottleRef)
+    tickThrottleRef = null
+  }
   if (!worker) return
+  worker.onmessage = null
+  worker.onerror = null
   worker.terminate()
   worker = null
   resetWorkerState()
@@ -217,7 +252,13 @@ function maybeInit(drivers: Driver[] | null, laps: LapRow[] | null, positions: P
 
 function maybeTick(sessionTime: number) {
   latestSampledSessionTime = sessionTime
-  postTick(sessionTime)
+  if (worker && workerReady) {
+    if (tickThrottleRef === null) {
+      tickThrottleRef = window.setTimeout(() => {
+        flushTick()
+      }, TICK_THROTTLE_MS)
+    }
+  }
 }
 
 function updateSessionKey(sessionKey: string | null) {
@@ -236,20 +277,19 @@ export function useCarPositions(): CarPosition[] {
   const sessionLaps = useSessionStore((s) => s.sessionData?.laps ?? null)
   const laps = lapsFromStore.length ? lapsFromStore : sessionLaps
   const positions = useSessionStore((s) => s.sessionData?.positions ?? null)
-  const sessionKey = useSessionStore((s) =>
-    s.selectedYear && s.selectedRace && s.selectedSession
-      ? `${s.selectedYear}|${s.selectedRace}|${s.selectedSession}`
-      : null
-  )
+  const selectedYear = useSessionStore((s) => s.selectedYear)
+  const selectedRace = useSessionStore((s) => s.selectedRace)
+  const selectedSession = useSessionStore((s) => s.selectedSession)
+  const sessionKey = selectedYear && selectedRace && selectedSession
+    ? `${selectedYear}|${selectedRace}|${selectedSession}`
+    : null
   const currentTime = usePlaybackStore((s) => s.currentTime)
   const sessionStartTime = usePlaybackStore((s) => s.sessionStartTime)
   const speed = usePlaybackStore((s) => s.speed)
 
   const sampledSessionTime = useMemo(() => {
     const sessionTime = sessionStartTime + currentTime
-    // Throttle to 15Hz max — car dot movement on screen doesn't need 60fps.
-    // This halves React re-renders and worker message volume.
-    const HZ = 15
+    const HZ = 60
     return Math.round(sessionTime * HZ) / HZ
   }, [currentTime, sessionStartTime])
 

@@ -8,7 +8,11 @@ export function AppPreview() {
   const isInView = useInView(containerRef, { once: true, margin: "-100px" });
 
   return (
-    <section className="py-32 relative bg-[#050505] border-t border-zinc-900 overflow-hidden" ref={containerRef}>
+    <section
+      className="py-32 relative bg-[#050505] border-t border-zinc-900 overflow-hidden"
+      ref={containerRef}
+      data-home-section="app-preview"
+    >
       <div className="absolute inset-0 bg-dot-grid opacity-10 pointer-events-none" />
       
       {/* Huge Background Typography */}
@@ -30,7 +34,8 @@ export function AppPreview() {
         </div>
 
         {/* The Giant Mockup */}
-        <motion.div 
+        <motion.div
+          data-pin-target="app-preview"
           initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
@@ -152,19 +157,19 @@ export function AppPreview() {
         </motion.div>
 
         {/* Technical Callouts below mockup */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 font-mono text-xs">
-           <div className="border border-zinc-800 bg-black p-4 text-zinc-400 panel-border hover:border-zinc-500 transition-colors">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 font-mono text-xs" data-stagger-group="app-preview-callouts">
+           <div className="border border-zinc-800 bg-black p-4 text-zinc-400 panel-border hover:border-zinc-500 transition-colors" data-stagger-item>
              <span className="text-white font-bold block mb-2">1. Layout Virtualization</span>
              The timing tower renders only the visible rows to the DOM. As positions shuffle, memory remains flat.
-           </div>
-           <div className="border border-zinc-800 bg-black p-4 text-zinc-400 panel-border hover:border-zinc-500 transition-colors">
-             <span className="text-white font-bold block mb-2">2. SVG Path Rasterization</span>
-             The track map uses SVG for crisp paths, but car position dots are calculated and pushed via GPU transforms to avoid DOM repaints.
-           </div>
-           <div className="border border-zinc-800 bg-black p-4 text-zinc-400 panel-border hover:border-zinc-500 transition-colors">
-             <span className="text-white font-bold block mb-2">3. Transient Store sync</span>
-             The playback timeline scrubs without triggering React state changes, controlled by Zustand subscribe streams.
-           </div>
+            </div>
+            <div className="border border-zinc-800 bg-black p-4 text-zinc-400 panel-border hover:border-zinc-500 transition-colors" data-stagger-item>
+              <span className="text-white font-bold block mb-2">2. SVG Path Rasterization</span>
+              The track map uses SVG for crisp paths, but car position dots are calculated and pushed via GPU transforms to avoid DOM repaints.
+            </div>
+            <div className="border border-zinc-800 bg-black p-4 text-zinc-400 panel-border hover:border-zinc-500 transition-colors" data-stagger-item>
+              <span className="text-white font-bold block mb-2">3. Transient Store sync</span>
+              The playback timeline scrubs without triggering React state changes, controlled by Zustand subscribe streams.
+            </div>
         </div>
 
       </div>

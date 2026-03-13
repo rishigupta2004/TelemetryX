@@ -1,12 +1,14 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { Zap } from "lucide-react";
 
 export function ChartShowcase() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: "-100px" });
+  const prefersReducedMotion = useReducedMotion();
+  const reduceMotion = prefersReducedMotion ?? false;
   const [isPlaying, setIsPlaying] = useState(true);
 
   useEffect(() => {
@@ -57,7 +59,7 @@ export function ChartShowcase() {
       }
       ctx.stroke();
 
-      if (isPlaying) {
+      if (isPlaying && !reduceMotion) {
         offset += 1;
         if (offset % 2 === 0) {
           speedData.copyWithin(0, 1);
@@ -119,22 +121,30 @@ export function ChartShowcase() {
       ctx.stroke();
       ctx.setLineDash([]);
 
-      animationFrameId = requestAnimationFrame(render);
+      if (!reduceMotion) {
+        animationFrameId = requestAnimationFrame(render);
+      }
     };
 
     render();
 
     return () => cancelAnimationFrame(animationFrameId);
-  }, [isPlaying, isInView]);
+  }, [isPlaying, isInView, reduceMotion]);
 
   return (
-    <section className="py-24 relative overflow-hidden bg-[#050505] border-t border-zinc-900" id="telemetry" ref={containerRef}>
+    <section
+      className="py-24 relative overflow-hidden bg-[#050505] border-t border-zinc-900"
+      id="telemetry"
+      ref={containerRef}
+      data-home-section="chart-showcase"
+    >
       <div className="absolute inset-0 bg-dot-grid opacity-10" />
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         
         <div className="flex flex-col lg:flex-row gap-12 items-center">
           
-          <motion.div 
+          <motion.div
+            data-reveal-item
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -169,7 +179,8 @@ export function ChartShowcase() {
             </div>
           </motion.div>
 
-          <motion.div 
+          <motion.div
+            data-pin-target="chart-showcase"
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
@@ -206,11 +217,12 @@ export function ChartShowcase() {
             <canvas ref={canvasRef} className="w-full h-[calc(100%-72px)] block bg-black" />
             
             {/* Play/Pause control overlay */}
-            <button 
+            <button
               onClick={() => setIsPlaying(!isPlaying)}
+              disabled={reduceMotion}
               className="absolute bottom-4 right-4 z-10 border border-zinc-700 bg-black/80 hover:bg-zinc-800 text-zinc-400 px-4 py-2 font-mono text-[10px] uppercase cursor-pointer transition-colors backdrop-blur-sm"
             >
-              {isPlaying ? 'PAUSE WORKER' : 'RESUME WORKER'}
+              {reduceMotion ? "STATIC VIEW" : isPlaying ? "PAUSE WORKER" : "RESUME WORKER"}
             </button>
             
             <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(transparent_50%,rgba(0,0,0,0.25)_50%)] bg-[length:100%_4px] opacity-20" />

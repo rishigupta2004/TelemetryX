@@ -33,6 +33,21 @@ def test_positions_stream_enforces_window_limit(tmp_path):
     assert "Window exceeds 60s limit" in r.json()["detail"]
 
 
+def test_positions_stream_clickhouse_primary_strict_returns_503(monkeypatch):
+    monkeypatch.setattr(positions_router, "clickhouse_primary", lambda: True)
+    monkeypatch.setattr(positions_router, "clickhouse_primary_strict", lambda: True)
+    monkeypatch.setattr(
+        positions_router, "fetch_positions_stream_clickhouse", lambda **_kwargs: None
+    )
+
+    r = client.get(
+        "/api/v1/positions/2025/Bahrain-Grand-Prix/stream",
+        params={"time_start_ms": 0, "time_end_ms": 5000, "session_type": "R"},
+    )
+    assert r.status_code == 503
+    assert "ClickHouse primary mode" in r.json()["detail"]
+
+
 def test_positions_stream_reads_windowed_data(tmp_path, monkeypatch):
     silver = tmp_path / "silver" / "2025" / "Bahrain Grand Prix" / "R"
     silver.mkdir(parents=True)
@@ -67,7 +82,9 @@ def test_positions_stream_reads_windowed_data(tmp_path, monkeypatch):
     assert len(data) == 2
     assert all(int(x["driver_number"]) == 1 for x in data)
     assert max(float(x["time_ms"]) for x in data) <= 12000.0
-    assert all(set(row.keys()) == {"time_ms", "driver_number", "x", "y"} for row in data)
+    assert all(
+        set(row.keys()) == {"time_ms", "driver_number", "x", "y"} for row in data
+    )
 
 
 def test_positions_stream_filters_out_of_bounds_coordinates(tmp_path, monkeypatch):
@@ -124,7 +141,12 @@ def test_positions_stream_normalizes_epoch_timestamps(tmp_path, monkeypatch):
 
     r = client.get(
         "/api/v1/positions/2025/Bahrain-Grand-Prix/stream",
-        params={"time_start_ms": 0, "time_end_ms": 5500, "session_type": "R", "drivers": [1]},
+        params={
+            "time_start_ms": 0,
+            "time_end_ms": 5500,
+            "session_type": "R",
+            "drivers": [1],
+        },
     )
     assert r.status_code == 200
     data = r.json()
@@ -228,6 +250,31 @@ def test_telemetry_stream_limits_and_channels(tmp_path, monkeypatch):
     assert set(body["data"][0].keys()) == {"time_ms", "speed", "throttle"}
 
 
+def test_telemetry_stream_clickhouse_primary_strict_returns_503(monkeypatch):
+    monkeypatch.setattr(
+        telemetry_router,
+        "get_session_path",
+        lambda *_args, **_kwargs: "/tmp/stream",
+    )
+    monkeypatch.setattr(telemetry_router, "clickhouse_primary", lambda: True)
+    monkeypatch.setattr(telemetry_router, "clickhouse_primary_strict", lambda: True)
+    monkeypatch.setattr(
+        telemetry_router, "fetch_telemetry_stream_clickhouse", lambda **_kwargs: None
+    )
+
+    r = client.get(
+        "/api/v1/telemetry/2025/Bahrain-Grand-Prix/stream",
+        params={
+            "time_start_ms": 0,
+            "time_end_ms": 5000,
+            "driver_number": 1,
+            "session_type": "R",
+        },
+    )
+    assert r.status_code == 503
+    assert "ClickHouse primary mode" in r.json()["detail"]
+
+
 def test_legacy_telemetry_endpoint_is_not_capped_to_5000_rows(tmp_path, monkeypatch):
     silver = tmp_path / "silver" / "2025" / "Bahrain Grand Prix" / "R"
     silver.mkdir(parents=True)
@@ -258,7 +305,9 @@ def test_legacy_telemetry_endpoint_is_not_capped_to_5000_rows(tmp_path, monkeypa
     assert body[-1]["session_time_seconds"] == 600.0
 
 
-def test_telemetry_stream_lap_selection_and_channel_normalization(tmp_path, monkeypatch):
+def test_telemetry_stream_lap_selection_and_channel_normalization(
+    tmp_path, monkeypatch
+):
     silver = tmp_path / "silver" / "2025" / "Bahrain Grand Prix" / "R"
     silver.mkdir(parents=True)
     _write_parquet(
@@ -499,7 +548,12 @@ def test_performance_summary_reports_key_route_payload_stats():
 
     client.get(
         "/api/v1/telemetry/2025/Bahrain-Grand-Prix/stream",
-        params={"time_start_ms": 0, "time_end_ms": 1000, "driver_number": 1, "session_type": "R"},
+        params={
+            "time_start_ms": 0,
+            "time_end_ms": 1000,
+            "driver_number": 1,
+            "session_type": "R",
+        },
     )
     r = client.get("/api/v1/metrics/performance/summary")
     assert r.status_code == 200

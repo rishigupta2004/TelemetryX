@@ -1,8 +1,32 @@
 import { get } from './client'
 import type { LapRow, Race, Season, SessionInfoResponse, SessionResponse } from '../types'
 
+export function normalizeKey(value: string): string {
+  if (value == null) return ''
+  let text = value.replace(/-/g, ' ').replace(/_/g, ' ').trim()
+  text = text.normalize('NFKD')
+  text = Array.from(text).filter((ch) => !/\p{M}/u.test(ch)).join('')
+  text = text.replace(/\s+/g, ' ').trim().toLowerCase()
+  return text
+}
+
 export function slugifyRace(race: string): string {
-  return race.trim().replace(/\s+/g, '-').replace(/-+/g, '-')
+  return normalizeKey(race).replace(/\s+/g, '-')
+}
+
+const SESSION_DISPLAY_TO_CODE: Record<string, string> = {
+  'Race': 'R',
+  'Qualifying': 'Q',
+  'Sprint Qualifying': 'SQ',
+  'Sprint': 'S',
+  'Sprint Race': 'SR',
+  'Practice 1': 'FP1',
+  'Practice 2': 'FP2',
+  'Practice 3': 'FP3',
+}
+
+export function sessionDisplayToCode(display: string): string {
+  return SESSION_DISPLAY_TO_CODE[display] ?? display
 }
 
 export async function fetchSeasons(): Promise<Season[]> {

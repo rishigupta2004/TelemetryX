@@ -108,6 +108,8 @@ python main.py                    # starts on :8000 by default
 ```bash
 cd frontend-electron
 npm install
+# required for sign-in
+export VITE_CLERK_PUBLISHABLE_KEY=pk_test_xxx
 npm run dev                       # starts electron-vite dev server
 ```
 

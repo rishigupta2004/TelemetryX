@@ -26,38 +26,72 @@ function upperBound(values: number[], target: number): number {
   return lo
 }
 
-export function PlaybackBar() {
-  const currentTime = usePlaybackStore((s) => s.currentTime)
-  const isPlaying = usePlaybackStore((s) => s.isPlaying)
-  const speed = usePlaybackStore((s) => s.speed)
-  const duration = usePlaybackStore((s) => s.duration)
-  const sessionStartTime = usePlaybackStore((s) => s.sessionStartTime)
-  const sessionTime = useSessionTime()
-  const togglePlay = usePlaybackStore((s) => s.togglePlay)
-  const seek = usePlaybackStore((s) => s.seek)
-  const setSpeed = usePlaybackStore((s) => s.setSpeed)
-  const loadingState = useSessionStore((s) => s.loadingState)
-  const sessionData = useSessionStore((s) => s.sessionData)
-  const laps = useSessionStore((s) => s.laps)
+const selectPlaybackState = (s: ReturnType<typeof usePlaybackStore.getState>) => ({
+  currentTime: s.currentTime,
+  isPlaying: s.isPlaying,
+  speed: s.speed,
+  duration: s.duration,
+  sessionStartTime: s.sessionStartTime,
+  togglePlay: s.togglePlay,
+  seek: s.seek,
+  setSpeed: s.setSpeed
+})
 
-  const raceControl = useMemo(() => sessionData?.raceControl ?? [], [sessionData])
+const selectSessionData = (s: ReturnType<typeof useSessionStore.getState>) => ({
+  loadingState: s.loadingState,
+  sessionData: s.sessionData,
+  laps: s.laps
+})
+
+const formatTimeCache = new Map<number, string>()
+const CACHE_MAX_SIZE = 1000
+
+function formatTime(seconds: number): string {
+  const cached = formatTimeCache.get(seconds)
+  if (cached) return cached
+  
+  const h = Math.floor(seconds / 3600)
+  const m = Math.floor((seconds % 3600) / 60)
+  const s = Math.floor(seconds % 60)
+  const ms = Math.floor((seconds % 1) * 10)
+  
+  const result = h > 0 
+    ? `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}.${ms}`
+    : `${m}:${String(s).padStart(2, '0')}.${ms}`
+  
+  if (formatTimeCache.size >= CACHE_MAX_SIZE) {
+    formatTimeCache.clear()
+  }
+  formatTimeCache.set(seconds, result)
+  return result
+}
+
+export function PlaybackBar() {
+  const {
+    currentTime,
+    isPlaying,
+    speed,
+    duration,
+    sessionStartTime,
+    togglePlay,
+    seek,
+    setSpeed
+  } = usePlaybackStore(selectPlaybackState)
+  
+  const { loadingState, sessionData, laps: lapsData } = useSessionStore(selectSessionData)
+  
+  const sessionTime = useSessionTime()
+  
   const scrubberRef = useRef<HTMLDivElement>(null)
   const pendingScrubXRef = useRef<number | null>(null)
   const scrubRafRef = useRef<number | null>(null)
   const dragMoveRef = useRef<((event: MouseEvent) => void) | null>(null)
   const dragUpRef = useRef<(() => void) | null>(null)
 
-  const formatTime = (seconds: number) => {
-    const h = Math.floor(seconds / 3600)
-    const m = Math.floor((seconds % 3600) / 60)
-    const s = Math.floor(seconds % 60)
-    const ms = Math.floor((seconds % 1) * 10)
-    if (h > 0) return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}.${ms}`
-    return `${m}:${String(s).padStart(2, '0')}.${ms}`
-  }
+  const raceControl = useMemo(() => sessionData?.raceControl ?? [], [sessionData])
 
   const sessionLapRanges = useMemo(() => {
-    const lapsSource = laps.length ? laps : (sessionData?.laps ?? [])
+    const lapsSource = lapsData.length ? lapsData : (sessionData?.laps ?? [])
     if (!lapsSource.length) return [] as SessionLapRange[]
 
     const byLap = new Map<number, SessionLapRange>()
@@ -76,7 +110,7 @@ export function PlaybackBar() {
     }
 
     return Array.from(byLap.values()).sort((a, b) => a.start - b.start)
-  }, [laps, sessionData?.laps])
+  }, [lapsData, sessionData?.laps])
 
   const lapRangeStarts = useMemo(() => sessionLapRanges.map((lap) => lap.start), [sessionLapRanges])
 
@@ -141,20 +175,22 @@ export function PlaybackBar() {
     }
   }, [])
 
-  const skipBack = () => seek(Math.max(0, currentTime - SKIP_STEP))
-  const skipForward = () => seek(Math.min(duration, currentTime + SKIP_STEP))
-  const stepBack = () => seek(Math.max(0, currentTime - FRAME_STEP))
-  const stepForward = () => seek(Math.min(duration, currentTime + FRAME_STEP))
-  const skipToLapStart = () => {
+  const skipBack = useCallback(() => seek(Math.max(0, currentTime - SKIP_STEP)), [currentTime, seek])
+  const skipForward = useCallback(() => seek(Math.min(duration, currentTime + SKIP_STEP)), [currentTime, duration, seek])
+  const stepBack = useCallback(() => seek(Math.max(0, currentTime - FRAME_STEP)), [currentTime, seek])
+  const stepForward = useCallback(() => seek(Math.min(duration, currentTime + FRAME_STEP)), [currentTime, duration, seek])
+  
+  const skipToLapStart = useCallback(() => {
     if (!sessionLapRanges.length) return
     const idx = upperBound(lapRangeStarts, sessionTime) - 1
     if (idx < 0) return
     const lap = sessionLapRanges[Math.min(idx, sessionLapRanges.length - 1)]
     seek(Math.max(0, lap.start - sessionStartTime))
-  }
+  }, [sessionLapRanges, lapRangeStarts, sessionTime, sessionStartTime, seek])
 
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0
   const isReady = loadingState === 'ready' && duration > 0
+  const formattedTime = formatTime(currentTime)
 
   const flagWindows = useMemo(() => {
     if (!raceControl || !raceControl.length) return [] as Array<{ start: number; end: number; type: 'SC' | 'VSC' | 'YELLOW' | 'RED' }>
@@ -198,6 +234,36 @@ export function PlaybackBar() {
     return out
   }, [raceControl])
 
+  const lapMarkers = useMemo(() => {
+    if (duration <= 0) return []
+    const markers: Array<{ pos: number; lapNumber: number; major: boolean }> = []
+    for (const lap of sessionLapRanges) {
+      const pos = ((lap.start - sessionStartTime) / duration) * 100
+      if (pos <= 0 || pos >= 100) continue
+      markers.push({
+        pos,
+        lapNumber: lap.lapNumber,
+        major: lap.lapNumber % 5 === 0
+      })
+    }
+    return markers
+  }, [sessionLapRanges, sessionStartTime, duration])
+
+  const flagShading = useMemo(() => {
+    if (duration <= 0) return []
+    return flagWindows.map((window, idx) => {
+      const startPct = ((window.start - sessionStartTime) / duration) * 100
+      const endPct = ((window.end - sessionStartTime) / duration) * 100
+      const left = Math.max(0, Math.min(100, startPct))
+      const width = Math.max(0, Math.min(100, endPct) - left)
+      let color = 'var(--amber-warn)'
+      if (window.type === 'SC') color = 'var(--orange-sc)'
+      if (window.type === 'RED') color = 'var(--red-danger)'
+      if (width <= 0) return null
+      return { left, width, color, key: `${window.type}-${idx}` }
+    }).filter(Boolean) as Array<{ left: number; width: number; color: string; key: string }>
+  }, [flagWindows, sessionStartTime, duration])
+
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement | null
@@ -222,48 +288,52 @@ export function PlaybackBar() {
   }, [currentTime, duration, seek, togglePlay])
 
   return (
-    <div className="flex h-[52px] w-full items-center px-[24px] carbon-weave border-t border-border-hard bg-bg-surface shrink-0 gap-[24px]">
+    <div className="flex h-[60px] w-full items-center px-[24px] gradient-header border-t border-border-hard bg-bg-surface shrink-0 gap-[24px] shadow-[0_-4px_12px_rgba(0,0,0,0.15)]">
 
       {/* Transport Controls */}
-      <div className="flex items-center gap-[8px]">
+      <div className="flex items-center gap-[4px]">
         <button
           onClick={skipToLapStart} disabled={!isReady}
-          className="flex h-[24px] w-[24px] items-center justify-center text-fg-secondary hover:text-fg-primary disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          className="flex h-[28px] w-[28px] items-center justify-center text-fg-secondary hover:text-fg-primary hover:bg-bg-elevated rounded-md disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200 scale-hover"
         >
-          <ChevronsLeft size={16} strokeWidth={2} />
+          <ChevronsLeft size={18} strokeWidth={2} />
         </button>
         <button
           onClick={skipBack} disabled={!isReady}
-          className="flex h-[24px] w-[24px] items-center justify-center text-fg-secondary hover:text-fg-primary disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          className="flex h-[28px] w-[28px] items-center justify-center text-fg-secondary hover:text-fg-primary hover:bg-bg-elevated rounded-md disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200 scale-hover"
         >
-          <SkipBack size={16} strokeWidth={2} />
+          <SkipBack size={18} strokeWidth={2} />
         </button>
         <button
           onClick={stepBack} disabled={!isReady}
-          className="flex h-[24px] w-[24px] items-center justify-center text-fg-secondary hover:text-fg-primary disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          className="flex h-[28px] w-[28px] items-center justify-center text-fg-secondary hover:text-fg-primary hover:bg-bg-elevated rounded-md disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200 scale-hover"
         >
-          <StepBack size={16} strokeWidth={2} />
+          <StepBack size={18} strokeWidth={2} />
         </button>
 
-        {/* Play Button - 32x32px square */}
+        {/* Play Button - larger with glow effect */}
         <button
           onClick={togglePlay} disabled={!isReady}
-          className="flex h-[32px] w-[32px] mx-[4px] items-center justify-center border-[2px] border-red-core text-red-core disabled:opacity-30 disabled:cursor-not-allowed hover:bg-red-ghost transition-colors rounded-[2px]"
+          className={`flex h-[40px] w-[40px] mx-[6px] items-center justify-center border-[2px] text-red-core disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-300 rounded-full btn-glow
+            ${isPlaying 
+              ? 'border-red-core bg-red-core/20 shadow-[0_0_20px_rgba(239,68,68,0.6)] glow-pulse' 
+              : 'border-red-core/60 hover:border-red-core hover:bg-red-ghost hover:scale-105 hover:shadow-[0_0_12px_rgba(239,68,68,0.4)]'
+            }`}
         >
-          {isPlaying ? <Pause size={18} fill="currentColor" /> : <Play size={18} fill="currentColor" />}
+          {isPlaying ? <Pause size={20} fill="currentColor" /> : <Play size={20} fill="currentColor" className="ml-0.5" />}
         </button>
 
         <button
           onClick={stepForward} disabled={!isReady}
-          className="flex h-[24px] w-[24px] items-center justify-center text-fg-secondary hover:text-fg-primary disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          className="flex h-[28px] w-[28px] items-center justify-center text-fg-secondary hover:text-fg-primary hover:bg-bg-elevated rounded-md disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200 scale-hover"
         >
-          <StepForward size={16} strokeWidth={2} />
+          <StepForward size={18} strokeWidth={2} />
         </button>
         <button
           onClick={skipForward} disabled={!isReady}
-          className="flex h-[24px] w-[24px] items-center justify-center text-fg-secondary hover:text-fg-primary disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          className="flex h-[28px] w-[28px] items-center justify-center text-fg-secondary hover:text-fg-primary hover:bg-bg-elevated rounded-md disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200 scale-hover"
         >
-          <SkipForward size={16} strokeWidth={2} />
+          <SkipForward size={18} strokeWidth={2} />
         </button>
       </div>
 
@@ -273,61 +343,48 @@ export function PlaybackBar() {
         ref={scrubberRef}
         onMouseDown={handleMouseDown}
       >
-        <div className="absolute left-0 right-0 h-[2px] bg-bg-inset">
+        <div className="absolute left-0 right-0 h-[6px] bg-bg-inset rounded-full shadow-[inset_0_1px_2px_rgba(0,0,0,0.3)] overflow-hidden">
           {/* Flag Shading */}
-          {duration > 0 && flagWindows.map((window, idx) => {
-            const startPct = ((window.start - sessionStartTime) / duration) * 100
-            const endPct = ((window.end - sessionStartTime) / duration) * 100
-            const left = Math.max(0, Math.min(100, startPct))
-            const width = Math.max(0, Math.min(100, endPct) - left)
-            let color = 'var(--amber-warn)'
-            if (window.type === 'SC') color = 'var(--orange-sc)'
-            if (window.type === 'RED') color = 'var(--red-danger)'
-            if (width <= 0) return null
-            return <div key={`${window.type}-${idx}`} className="absolute top-0 bottom-0 opacity-80" style={{ left: `${left}%`, width: `${width}%`, background: color }} />
-          })}
+          {flagShading.map((f) => (
+            f && <div key={f.key} className="absolute top-0 bottom-0 opacity-80 rounded-full" style={{ left: `${f.left}%`, width: `${f.width}%`, background: f.color }} />
+          ))}
 
-          {/* Played Portion */}
-          <div className="absolute left-0 top-0 bottom-0 bg-red-core" style={{ width: `${progress}%` }} />
+          {/* Played Portion with gradient and glow */}
+          <div 
+            className={`absolute left-0 top-0 bottom-0 rounded-full transition-all duration-100 ${isPlaying ? 'shadow-[0_0_12px_rgba(239,68,68,0.6)]' : 'shadow-[0_0_4px_rgba(239,68,68,0.3)]'}`}
+            style={{ 
+              width: `${progress}%`,
+              background: 'linear-gradient(90deg, #dc2626 0%, #ef4444 50%, #f87171 100%)'
+            }} 
+          />
         </div>
 
         {/* Lap Markers */}
-        {duration > 0 && sessionLapRanges.map((lap) => {
-          const pos = ((lap.start - sessionStartTime) / duration) * 100
-          if (pos <= 0 || pos >= 100) return null
-          const major = lap.lapNumber % 5 === 0
-          return (
-            <div key={lap.lapNumber} className="absolute left-0 top-1/2" style={{ transform: `translate(-50%, -50%)`, left: `${pos}%` }}>
-              <div
-                className={`w-[1px] bg-fg-ghost mx-auto ${major ? 'h-[6px]' : 'h-[4px]'}`}
-                style={{ transform: 'translateY(-120%)' }}
-              />
-              {major && (
-                <div className="absolute top-[8px] -left-[10px] w-[20px] text-center text-micro text-fg-muted">
-                  {lap.lapNumber}
-                </div>
-              )}
-            </div>
-          )
-        })}
-
-        {/* Playhead Thumb (12px tall, 2px wide, no circle) */}
-        <div
-          className="absolute top-1/2 w-[2px] h-[12px] bg-fg-primary group-hover:scale-y-150 transition-transform pointer-events-none"
-          style={{ left: `calc(${progress}% - 1px)`, transform: 'translateY(-50%)' }}
-        >
-          <div className="absolute bottom-[-3px] left-[-2px] w-[6px] h-[3px]">
-            <svg width="6" height="3" viewBox="0 0 6 3" fill="var(--fg-primary)">
-              <polygon points="0,0 6,0 3,3" />
-            </svg>
+        {lapMarkers.map((marker) => (
+          <div key={marker.lapNumber} className="absolute left-0 top-1/2" style={{ transform: `translate(-50%, -50%)`, left: `${marker.pos}%` }}>
+            <div
+              className={`w-[2px] bg-fg-muted/50 mx-auto transition-all duration-200 ${marker.major ? 'h-[10px]' : 'h-[6px]'}`}
+              style={{ transform: 'translateY(-140%)' }}
+            />
+            {marker.major && (
+              <div className="absolute top-[10px] -left-[12px] w-[24px] text-center text-[10px] font-medium text-fg-muted">
+                {marker.lapNumber}
+              </div>
+            )}
           </div>
-        </div>
+        ))}
+
+        {/* Playhead Thumb */}
+        <div
+          className={`absolute top-1/2 w-[14px] h-[14px] bg-white rounded-full shadow-[0_0_10px_rgba(239,68,68,0.8),0_2px_4px_rgba(0,0,0,0.3)] group-hover:scale-125 transition-all duration-150 pointer-events-none border-2 ${isPlaying ? 'border-red-500 shadow-[0_0_16px_rgba(239,68,68,1)]' : 'border-red-core'}`}
+          style={{ left: `calc(${progress}% - 7px)`, transform: 'translateY(-50%)' }}
+        />
       </div>
 
       {/* Current Time / Lap Info */}
       <div className="flex items-center gap-[16px] w-[200px] justify-end whitespace-nowrap">
-        <div className="flex items-center gap-2">
-          <span className="text-[13px] font-mono text-fg-primary">{formatTime(currentTime)}</span>
+        <div className="flex items-center gap-3 bg-bg-elevated/80 px-3 py-1.5 rounded-md shadow-sm border border-border-soft/50 transition-all duration-200 hover:bg-bg-elevated hover:border-border-soft">
+          <span className="text-[14px] font-mono font-semibold text-fg-primary">{formattedTime}</span>
           <span className="text-[11px] text-fg-muted" style={{ fontFamily: 'var(--font-heading)' }}>
             LAP {currentLap.current}
             <span className="text-fg-ghost mx-1">/</span>
@@ -336,12 +393,14 @@ export function PlaybackBar() {
         </div>
 
         {/* Speed Dropdown */}
-        <div className="flex items-center border border-border-hard rounded-[2px] overflow-hidden bg-bg-inset">
+        <div className="flex items-center shadow-sm rounded-[6px] overflow-hidden bg-bg-inset border border-border-soft">
           {SPEEDS.map((s) => (
             <button
               key={s}
               onClick={() => setSpeed(s)}
-              className={`h-[24px] w-[24px] text-[10px] font-mono font-bold flex items-center justify-center transition-colors ${speed === s ? 'bg-bg-elevated text-red-core' : 'text-fg-muted hover:text-fg-primary'
+              className={`h-[26px] min-w-[32px] px-2 text-[11px] font-mono font-bold flex items-center justify-center transition-all duration-200 ${speed === s 
+                  ? 'bg-red-core text-white shadow-[0_0_12px_rgba(239,68,68,0.5)]' 
+                  : 'text-fg-muted hover:text-fg-primary hover:bg-bg-elevated'
                 }`}
             >
               {s}x

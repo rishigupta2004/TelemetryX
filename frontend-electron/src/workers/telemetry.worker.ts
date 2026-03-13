@@ -1,5 +1,17 @@
 import type { TelemetryResponse } from '../types'
 
+const MAX_CACHE_ENTRIES = 5
+const MAX_TOTAL_ROWS = 500000
+
+interface CacheEntry {
+  sessionKey: string
+  data: TelemetryResponse
+  totalRows: number
+  timestamp: number
+}
+
+let cache: CacheEntry[] = []
+
 function isNonDecreasing(rows: TelemetryResponse[string]): boolean {
   for (let i = 1; i < rows.length; i += 1) {
     if (rows[i].timestamp < rows[i - 1].timestamp) return false
@@ -74,6 +86,54 @@ function sliceByTimeRange(rows: TelemetryResponse[string], t0: number, t1: numbe
   return rows.slice(startIdx, endIdx)
 }
 
+function getTotalRowCount(telemetry: TelemetryResponse): number {
+  let count = 0
+  for (const rows of Object.values(telemetry)) {
+    count += rows.length
+  }
+  return count
+}
+
+function evictCacheIfNeeded(): void {
+  let totalRows = 0
+  for (const entry of cache) {
+    totalRows += entry.totalRows
+  }
+  
+  while (cache.length > MAX_CACHE_ENTRIES || totalRows > MAX_TOTAL_ROWS) {
+    const oldest = cache.shift()
+    if (oldest) {
+      totalRows -= oldest.totalRows
+    }
+  }
+}
+
+function getFromCache(sessionKey: string): TelemetryResponse | null {
+  for (const entry of cache) {
+    if (entry.sessionKey === sessionKey) {
+      entry.timestamp = Date.now()
+      return entry.data
+    }
+  }
+  return null
+}
+
+function addToCache(sessionKey: string, data: TelemetryResponse): void {
+  const existingIdx = cache.findIndex(e => e.sessionKey === sessionKey)
+  if (existingIdx !== -1) {
+    cache.splice(existingIdx, 1)
+  }
+  
+  cache.push({
+    sessionKey,
+    data,
+    totalRows: getTotalRowCount(data),
+    timestamp: Date.now()
+  })
+  
+  evictCacheIfNeeded()
+}
+
 let currentSessionKey: string | null = null
 let currentTelemetryData: TelemetryResponse | null = null
 
@@ -83,6 +143,7 @@ self.onmessage = (e: MessageEvent) => {
   if (type === 'clear') {
     currentSessionKey = null
     currentTelemetryData = null
+    cache = []
     self.postMessage({ type: 'cleared', msgId })
     return
   }
@@ -90,7 +151,7 @@ self.onmessage = (e: MessageEvent) => {
   if (type === 'process') {
     if (currentSessionKey !== sessionKey) {
       currentSessionKey = sessionKey
-      currentTelemetryData = null
+      currentTelemetryData = getFromCache(sessionKey)
     }
 
     if (data) {
@@ -107,6 +168,7 @@ self.onmessage = (e: MessageEvent) => {
         merged[key] = mergeSortedRows(existingRows, sortedIncoming)
       }
       currentTelemetryData = merged
+      addToCache(sessionKey, merged)
     }
     
     let result = currentTelemetryData || {}

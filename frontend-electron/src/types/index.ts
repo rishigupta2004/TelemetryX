@@ -415,6 +415,102 @@ export interface StrategyRecommendationsWithSource {
   data: StrategyRecommendationsResponse
 }
 
+export interface SimulationDistribution {
+  mean: number
+  p10: number
+  p50: number
+  p90: number
+}
+
+export interface RegulationSimulationStrategyProjection {
+  strategy: string
+  expected_points: number
+  avg_finish_position: number
+  podium_probability: number
+  avg_pit_stops: number
+  confidence: number
+  points_band: SimulationDistribution
+}
+
+export interface RegulationAssumption {
+  mean: number
+  std: number
+  confidence?: 'high' | 'medium' | 'low' | 'unknown'
+  classification?: 'official_fixed' | 'estimated' | 'unknown'
+  source_urls?: string[]
+}
+
+export interface RegulationDiffRow {
+  key: string
+  label: string
+  unit: string
+  baseline: number | string | null
+  target: number | string | null
+  delta: number | null
+  confidence: 'high' | 'medium' | 'low' | 'unknown'
+  classification: 'official_fixed' | 'estimated' | 'unknown'
+  notes: string[]
+  source_urls: string[]
+}
+
+export interface RegulationDiff {
+  baseline_year: number
+  target_year: number
+  baseline_generation?: string | null
+  target_generation?: string | null
+  rows: RegulationDiffRow[]
+  source_urls: string[]
+}
+
+export interface RegulationSimulationResponse {
+  baseline_year: number
+  source_year: number
+  target_year: number
+  race_name: string
+  team_profile: string
+  n_samples: number
+  seed: number
+  assumptions: Record<string, RegulationAssumption>
+  regulation_diff: RegulationDiff
+  metrics: {
+    lap_time_delta_seconds: SimulationDistribution
+    race_time_delta_seconds: SimulationDistribution
+    tyre_degradation_delta: SimulationDistribution
+    pit_loss_delta_seconds: SimulationDistribution
+  }
+  strategy_projection: RegulationSimulationStrategyProjection[]
+  diagnostics?: {
+    elapsed_ms: number
+    cache_hit: boolean
+    assumption_confidence_score?: number
+    fallback_gap_years?: number
+    confidence_scale?: number
+  }
+  notes: string[]
+}
+
+export interface RegulationSimulationCompareFailure {
+  baseline_year: number
+  status_code: number
+  detail: unknown
+}
+
+export interface RegulationSimulationCompareResponse {
+  race_name: string
+  target_year: number
+  team_profile: string
+  n_samples: number
+  selected_baselines: number[]
+  simulations: RegulationSimulationResponse[]
+  failures: RegulationSimulationCompareFailure[]
+  diagnostics?: {
+    elapsed_ms_total: number
+    cache_hit_count: number
+    avg_simulation_elapsed_ms?: number | null
+  }
+  source_urls: string[]
+}
+
 export interface ClusterDriverRow {
   driver_name: string
   cluster: number

@@ -14,6 +14,8 @@ import type {
   SessionVizResponse,
   SeasonStandingsResponse,
   ProfilesResponse,
+  RegulationSimulationCompareResponse,
+  RegulationSimulationResponse,
   StrategyRecommendationsResponse,
   StrategyRecommendationsWithSource,
   TelemetryResponse,
@@ -23,8 +25,9 @@ import type {
   UndercutPredictResponse
 } from '../types'
 import { API_RETRIES, API_TIMEOUT_MS, API_CACHE_TTL_MS, API_CACHE_MAX_ENTRIES } from '../lib/constants'
+import { getAuthToken } from '../lib/authToken'
 
-const DEFAULT_BASE_URLS = ['http://localhost:8000/api/v1']
+const DEFAULT_BASE_URLS = ['http://localhost:9010/api/v1']
 
 function isDevMode(): boolean {
   return (import.meta as unknown as { env?: { DEV?: boolean } })?.env?.DEV === true
@@ -143,15 +146,26 @@ async function parseErrorDetail(res: Response): Promise<unknown> {
   }
 }
 
-async function request<T>(path: string, init: RequestInit, retries = 0): Promise<T> {
+async function request<T>(path: string, init: RequestInit, retries = 0, externalSignal?: AbortSignal): Promise<T> {
   let lastErr: unknown = null
   for (let attempt = 0; attempt <= retries; attempt += 1) {
     const candidates = pinnedBaseUrl ? [pinnedBaseUrl] : BASE_URLS
     for (const baseUrl of candidates) {
       const controller = new AbortController()
       const timeout = globalThis.setTimeout(() => controller.abort(), API_TIMEOUT_MS)
+      const cleanup: Array<() => void> = []
+      if (externalSignal) {
+        if (externalSignal.aborted) controller.abort()
+        const onAbort = () => controller.abort()
+        externalSignal.addEventListener('abort', onAbort)
+        cleanup.push(() => externalSignal.removeEventListener('abort', onAbort))
+      }
+      const token = getAuthToken()
+      const headers = new Headers(init.headers || undefined)
+      if (token) headers.set('Authorization', `Bearer ${token}`)
+
       try {
-        const res = await fetch(`${baseUrl}${path}`, { ...init, signal: controller.signal })
+        const res = await fetch(`${baseUrl}${path}`, { ...init, headers, signal: controller.signal })
         if (!res.ok) {
           throw new ApiError(res.status, path, await parseErrorDetail(res))
         }
@@ -167,25 +181,30 @@ async function request<T>(path: string, init: RequestInit, retries = 0): Promise
         if (baseUrl === pinnedBaseUrl) pinnedBaseUrl = null
       } finally {
         globalThis.clearTimeout(timeout)
+        for (const fn of cleanup) fn()
       }
     }
   }
   throw lastErr ?? new Error(`Request failed: ${path}`)
 }
 
-export async function get<T>(path: string): Promise<T> {
-  // Check cache first
-  if (isCacheable(path)) {
+export async function get<T>(path: string, signal?: AbortSignal): Promise<T> {
+  // Check cache first - skip cache if we have an abort signal since response may be stale
+  if (isCacheable(path) && !signal) {
     const cached = getCached<T>(path)
     if (cached != null) return cached
   }
-  // Deduplicate in-flight requests
-  const existing = _inflightRequests.get(path)
-  if (existing) return existing as Promise<T>
+  // Deduplicate in-flight requests - skip deduplication if we have an abort signal
+  if (!signal) {
+    const existing = _inflightRequests.get(path)
+    if (existing) return existing as Promise<T>
+  }
 
-  const promise = request<T>(path, { method: 'GET' }, API_RETRIES)
+  const promise = request<T>(path, { method: 'GET' }, API_RETRIES, signal)
     .finally(() => _inflightRequests.delete(path))
-  _inflightRequests.set(path, promise)
+  if (!signal) {
+    _inflightRequests.set(path, promise)
+  }
   return promise
 }
 
@@ -250,14 +269,14 @@ export const api = {
     ),
   getLaps: (year: number, race: string, session: string) =>
     get<LapRow[]>(`/sessions/${year}/${encodeURIComponent(race)}/${session}/laps`),
-  getTelemetry: (year: number, race: string, session: string, t0?: number, t1?: number, hz?: number) => {
+  getTelemetry: (year: number, race: string, session: string, t0?: number, t1?: number, hz?: number, signal?: AbortSignal) => {
     let path = `/sessions/${year}/${encodeURIComponent(race)}/${session}/telemetry`
     const params: string[] = []
     if (t0 !== undefined) params.push(`t0=${t0}`)
     if (t1 !== undefined) params.push(`t1=${t1}`)
     if (hz !== undefined) params.push(`hz=${hz}`)
     if (params.length) path += `?${params.join('&')}`
-    return get<TelemetryResponse>(path)
+    return get<TelemetryResponse>(path, signal)
   },
   getTyreStints: (year: number, race: string, session: string) =>
     get<TyreStint[]>(
@@ -321,6 +340,52 @@ export const api = {
       }
     }
     throw lastNotFound ?? new Error('No strategy recommendations available')
+  },
+  getRegulationSimulation: (
+    baselineYear: number,
+    race: string,
+    params?: {
+      targetYear?: number
+      teamProfile?: 'balanced' | 'aggressive' | 'conservative'
+      nSamples?: number
+      seed?: number
+    }
+  ) => {
+    const search = new URLSearchParams()
+    if (params?.targetYear != null) search.set('target_year', String(params.targetYear))
+    if (params?.teamProfile) search.set('team_profile', params.teamProfile)
+    if (params?.nSamples != null) search.set('n_samples', String(params.nSamples))
+    if (params?.seed != null) search.set('seed', String(params.seed))
+    const suffix = search.size ? `?${search.toString()}` : ''
+    return getNoRetry<RegulationSimulationResponse>(
+      `/models/regulation-simulation/${baselineYear}/${encodeURIComponent(race)}${suffix}`
+    )
+  },
+  getRegulationSimulationCompare: (
+    race: string,
+    params?: {
+      baselineYears?: number[]
+      targetYear?: number
+      teamProfile?: 'balanced' | 'aggressive' | 'conservative'
+      nSamples?: number
+      seed?: number
+    }
+  ) => {
+    const search = new URLSearchParams()
+    const years = Array.isArray(params?.baselineYears) ? params?.baselineYears : []
+    for (const year of years) {
+      if (Number.isFinite(year)) {
+        search.append('baselines', String(Math.trunc(year)))
+      }
+    }
+    if (params?.targetYear != null) search.set('target_year', String(params.targetYear))
+    if (params?.teamProfile) search.set('team_profile', params.teamProfile)
+    if (params?.nSamples != null) search.set('n_samples', String(params.nSamples))
+    if (params?.seed != null) search.set('seed', String(params.seed))
+    const suffix = search.size ? `?${search.toString()}` : ''
+    return getNoRetry<RegulationSimulationCompareResponse>(
+      `/models/regulation-simulation-compare/${encodeURIComponent(race)}${suffix}`
+    )
   },
   getFiaDocuments: (year: number, race: string, forceRefresh = false) =>
     get<FiaDocumentsResponse>(

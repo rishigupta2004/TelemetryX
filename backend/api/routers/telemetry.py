@@ -4,6 +4,7 @@ import os
 import builtins
 import json
 import time
+import logging
 from typing import Any, Dict, List, Optional
 import duckdb
 
@@ -11,9 +12,16 @@ from fastapi import APIRouter, HTTPException, Query
 
 from ..config import SILVER_DIR
 from ..utils import normalize_session_code, resolve_dir
+from ..clickhouse import (
+    clickhouse_primary,
+    clickhouse_primary_strict,
+    clickhouse_shadow,
+)
+from ..repositories import fetch_telemetry_stream_clickhouse
 from . import metrics as metrics_router
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 MAX_WINDOW_S = 30.0
 MAX_LAP_WINDOW_S = 180.0
@@ -41,12 +49,16 @@ def _fetchone(sql: str, params: List[Any]) -> Any:
 
 def _estimate_payload_bytes(payload: Any) -> int:
     try:
-        return len(json.dumps(payload, separators=(",", ":"), default=str).encode("utf-8"))
+        return len(
+            json.dumps(payload, separators=(",", ":"), default=str).encode("utf-8")
+        )
     except Exception:
         return 0
 
 
-def get_session_path(year: int, race_name: str, session_type: Optional[str] = None) -> Optional[str]:
+def get_session_path(
+    year: int, race_name: str, session_type: Optional[str] = None
+) -> Optional[str]:
     year_path = os.path.join(SILVER_DIR, str(year))
     race_dir = resolve_dir(year_path, race_name)
     if not race_dir:
@@ -92,12 +104,51 @@ def _normalize_channel_value(channel: str, value: Any) -> Any:
     return builtins.round(numeric, 2)
 
 
+def _row_signature(row: Dict[str, Any], channels: List[str]) -> tuple[Any, ...]:
+    values: List[Any] = []
+    try:
+        values.append(round(float(row.get("time_ms") or 0.0), 3))
+    except Exception:
+        values.append(None)
+    for channel in channels:
+        value = _normalize_channel_value(channel, row.get(channel))
+        if isinstance(value, float):
+            values.append(round(value, 3))
+        else:
+            values.append(value)
+    return tuple(values)
+
+
+def _shadow_sample_mismatch(
+    duck_rows: List[Dict[str, Any]],
+    ch_rows: List[Dict[str, Any]],
+    channels: List[str],
+) -> bool:
+    if len(duck_rows) != len(ch_rows):
+        return True
+    n = len(duck_rows)
+    if n == 0:
+        return False
+    probes = list(range(min(3, n)))
+    tail = list(range(max(0, n - 3), n))
+    for idx in probes + tail:
+        if _row_signature(duck_rows[idx], channels) != _row_signature(
+            ch_rows[idx], channels
+        ):
+            return True
+    return False
+
+
 @router.get("/telemetry/{year}/{round}/stream")
 async def get_telemetry_stream(
     year: int,
     round: str,
-    time_start_ms: Optional[int] = Query(default=None, description="Window start in milliseconds"),
-    time_end_ms: Optional[int] = Query(default=None, description="Window end in milliseconds"),
+    time_start_ms: Optional[int] = Query(
+        default=None, description="Window start in milliseconds"
+    ),
+    time_end_ms: Optional[int] = Query(
+        default=None, description="Window end in milliseconds"
+    ),
     driver_number: int = Query(...),
     channels: List[str] = Query(default=["speed", "throttle", "brake"]),
     session_type: str = Query(default="R"),
@@ -105,11 +156,21 @@ async def get_telemetry_stream(
 ) -> Dict[str, Any]:
     started_at = time.perf_counter()
     if lap_number is None and (time_start_ms is None or time_end_ms is None):
-        raise HTTPException(status_code=422, detail="time_start_ms and time_end_ms are required when lap_number is not provided")
+        raise HTTPException(
+            status_code=422,
+            detail="time_start_ms and time_end_ms are required when lap_number is not provided",
+        )
     if lap_number is None and int(time_end_ms) <= int(time_start_ms):
-        raise HTTPException(status_code=400, detail="time_end_ms must be greater than time_start_ms")
+        raise HTTPException(
+            status_code=400, detail="time_end_ms must be greater than time_start_ms"
+        )
+
+    req_start_ms = int(time_start_ms or 0)
+    req_end_ms = int(time_end_ms or 0)
     if len(channels) > MAX_CHANNELS:
-        raise HTTPException(status_code=413, detail=f"Max {MAX_CHANNELS} channels per request")
+        raise HTTPException(
+            status_code=413, detail=f"Max {MAX_CHANNELS} channels per request"
+        )
 
     requested = [str(c).strip().lower() for c in channels if str(c).strip()]
     if not requested:
@@ -123,7 +184,7 @@ async def get_telemetry_stream(
     if not silver_path:
         payload = {
             "driver_number": driver_number,
-            "time_window": [int(time_start_ms or 0), int(time_end_ms or 0)],
+            "time_window": [req_start_ms, req_end_ms],
             "channels": requested,
             "samples": 0,
             "data": [],
@@ -139,7 +200,9 @@ async def get_telemetry_stream(
     if lap_number is not None:
         laps_file = os.path.join(silver_path, "laps.parquet")
         if not os.path.exists(laps_file):
-            raise HTTPException(status_code=404, detail="Laps data not found for lap selection")
+            raise HTTPException(
+                status_code=404, detail="Laps data not found for lap selection"
+            )
         lap_row = _fetchone(
             """
             SELECT
@@ -155,17 +218,51 @@ async def get_telemetry_stream(
             raise HTTPException(status_code=404, detail="Lap not found")
         end_time = float(lap_row[0] or 0.0)
         duration = float(lap_row[1] or 0.0)
-        time_start_ms = int(max(0.0, end_time - duration) * 1000.0)
-        time_end_ms = int(end_time * 1000.0)
+        req_start_ms = int(max(0.0, end_time - duration) * 1000.0)
+        req_end_ms = int(end_time * 1000.0)
 
-    duration_s = max(0.0, (float(time_end_ms) - float(time_start_ms)) / 1000.0)
+    duration_s = max(0.0, (float(req_end_ms) - float(req_start_ms)) / 1000.0)
     max_window = MAX_LAP_WINDOW_S if lap_number is not None else MAX_WINDOW_S
     if duration_s > max_window:
-        raise HTTPException(status_code=413, detail=f"Window exceeds {int(max_window)}s limit")
+        raise HTTPException(
+            status_code=413, detail=f"Window exceeds {int(max_window)}s limit"
+        )
+
+    ch_payload = fetch_telemetry_stream_clickhouse(
+        year=int(year),
+        race_name=race_name,
+        session_type=session_type,
+        driver_number=int(driver_number),
+        time_start_ms=req_start_ms,
+        time_end_ms=req_end_ms,
+        channels=requested,
+        max_samples=int(MAX_SAMPLES),
+    )
+    if clickhouse_primary():
+        if ch_payload is None:
+            if clickhouse_primary_strict():
+                raise HTTPException(
+                    status_code=503,
+                    detail="ClickHouse primary mode could not serve telemetry stream",
+                )
+        else:
+            metrics_router.record_endpoint_sample(
+                _STREAM_METRICS_ROUTE,
+                (time.perf_counter() - started_at) * 1000.0,
+                _estimate_payload_bytes(ch_payload),
+                int(ch_payload.get("samples") or 0),
+            )
+            return ch_payload
 
     telemetry_file = os.path.join(silver_path, "telemetry.parquet")
     if not os.path.exists(telemetry_file):
-        payload = {"driver_number": driver_number, "time_window": [time_start_ms, time_end_ms], "channels": requested, "samples": 0, "data": []}
+        payload = {
+            "driver_number": driver_number,
+            "time_window": [req_start_ms, req_end_ms],
+            "channels": requested,
+            "samples": 0,
+            "data": [],
+        }
         metrics_router.record_endpoint_sample(
             _STREAM_METRICS_ROUTE,
             (time.perf_counter() - started_at) * 1000.0,
@@ -185,10 +282,18 @@ async def get_telemetry_stream(
     """
     rows = _fetchall(
         sql,
-        [telemetry_file, int(driver_number), int(time_start_ms), int(time_end_ms), int(MAX_SAMPLES + 1)],
+        [
+            telemetry_file,
+            int(driver_number),
+            req_start_ms,
+            req_end_ms,
+            int(MAX_SAMPLES + 1),
+        ],
     )
     if len(rows) > MAX_SAMPLES:
-        raise HTTPException(status_code=413, detail=f"Result exceeds {MAX_SAMPLES} samples")
+        raise HTTPException(
+            status_code=413, detail=f"Result exceeds {MAX_SAMPLES} samples"
+        )
 
     data: List[Dict[str, Any]] = []
     for r in rows:
@@ -198,11 +303,34 @@ async def get_telemetry_stream(
         data.append(item)
     payload = {
         "driver_number": int(driver_number),
-        "time_window": [int(time_start_ms), int(time_end_ms)],
+        "time_window": [req_start_ms, req_end_ms],
         "channels": requested,
         "samples": len(data),
         "data": data,
     }
+    if ch_payload is not None and clickhouse_shadow():
+        try:
+            duck_rows = int(payload.get("samples") or 0)
+            ch_rows = int(ch_payload.get("samples") or 0)
+            mismatch = duck_rows != ch_rows
+            if not mismatch:
+                mismatch = _shadow_sample_mismatch(
+                    list(payload.get("data") or []),
+                    list(ch_payload.get("data") or []),
+                    requested,
+                )
+            if mismatch:
+                logger.warning(
+                    "telemetry_shadow_mismatch year=%s race=%s session=%s driver=%s duck_rows=%s ch_rows=%s",
+                    year,
+                    race_name,
+                    session_type,
+                    driver_number,
+                    duck_rows,
+                    ch_rows,
+                )
+        except Exception:
+            pass
     metrics_router.record_endpoint_sample(
         _STREAM_METRICS_ROUTE,
         (time.perf_counter() - started_at) * 1000.0,

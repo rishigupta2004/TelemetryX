@@ -1,5 +1,5 @@
 import { getApiRoot } from './client'
-import { slugifyRace } from './sessions'
+import { getAuthToken } from '../lib/authToken'
 
 export type TelemetryWsHandler = (data: unknown) => void
 
@@ -20,7 +20,14 @@ export function connectTelemetryWebSocket(params: {
 }): WebSocket {
   const root = getApiRoot()
   const wsBase = toWsUrl(root)
-  const url = `${wsBase}/api/v1/ws/telemetry`
+  const token = getAuthToken()
+  const query = new URLSearchParams()
+  if (token) query.set('token', token)
+  if (params.year != null) query.set('year', String(params.year))
+  if (params.race) query.set('race', params.race)
+  if (params.session) query.set('session', params.session)
+  const suffix = query.size ? `?${query.toString()}` : ''
+  const url = `${wsBase}/api/v1/ws/telemetry${suffix}`
   const ws = new WebSocket(url)
   ws.onopen = () => params.onOpen?.()
   ws.onclose = (event) => params.onClose?.(event)

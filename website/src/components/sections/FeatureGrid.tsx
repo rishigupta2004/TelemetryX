@@ -43,10 +43,11 @@ const features = [
 
 export function FeatureGrid() {
   return (
-    <section className="py-24 bg-black relative border-t border-zinc-900" id="tech">
+    <section className="py-24 bg-black relative border-t border-zinc-900" id="tech" data-home-section="feature-grid">
       <div className="absolute inset-0 bg-dot-grid opacity-10" />
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <motion.div 
+          data-reveal-item
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -60,7 +61,7 @@ export function FeatureGrid() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 p-1 bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden shadow-[0_0_30px_rgba(0,0,0,0.8)]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 p-1 bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden shadow-[0_0_30px_rgba(0,0,0,0.8)]" data-stagger-group="features">
           {features.map((f, i) => (
             <motion.div
               key={i}
@@ -69,6 +70,7 @@ export function FeatureGrid() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.05, duration: 0.3 }}
               className="bg-black p-8 group hover:bg-[#050505] transition-colors cursor-default relative overflow-hidden"
+              data-stagger-item
             >
               <div 
                 className="absolute top-0 left-0 w-full h-[2px] transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"

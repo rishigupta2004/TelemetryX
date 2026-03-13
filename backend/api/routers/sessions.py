@@ -35,14 +35,18 @@ MAX_SESSION_DRIVERS = 8
 MAX_SESSION_TELEMETRY_ROWS = 30_000
 MAX_SESSION_POSITIONS_ROWS = 30_000
 MAX_MANUAL_REMAP_ROWS = 50_000
-ALLOW_SYNTHETIC_POSITIONS = str(os.getenv("TELEMETRYX_ALLOW_SYNTHETIC_POSITIONS", "0")).strip().lower() in {"1", "true", "yes", "on"}
+ALLOW_SYNTHETIC_POSITIONS = str(
+    os.getenv("TELEMETRYX_ALLOW_SYNTHETIC_POSITIONS", "0")
+).strip().lower() in {"1", "true", "yes", "on"}
 _SESSION_TEL_ROUTE = "/api/v1/sessions/{year}/{race}/{session}/telemetry"
 _SESSION_POS_ROUTE = "/api/v1/sessions/{year}/{race}/{session}/positions"
 
 
 def _estimate_payload_bytes(payload: Any) -> int:
     try:
-        return len(json.dumps(payload, separators=(",", ":"), default=str).encode("utf-8"))
+        return len(
+            json.dumps(payload, separators=(",", ":"), default=str).encode("utf-8")
+        )
     except Exception:
         return 0
 
@@ -63,14 +67,20 @@ def _telemetry_row_count(payload: Any) -> int:
     return int(total)
 
 
-def _telemetry_series_stats(payload: Any) -> Tuple[int, Optional[float], Optional[float], List[str]]:
+def _telemetry_series_stats(
+    payload: Any,
+) -> Tuple[int, Optional[float], Optional[float], List[str]]:
     rows_total = 0
     min_ts: Optional[float] = None
     max_ts: Optional[float] = None
     columns: set[str] = set()
     if not isinstance(payload, dict):
         return 0, None, None, []
-    tel_obj = payload.get("telemetry") if isinstance(payload.get("telemetry"), dict) else payload
+    tel_obj = (
+        payload.get("telemetry")
+        if isinstance(payload.get("telemetry"), dict)
+        else payload
+    )
     if not isinstance(tel_obj, dict):
         return 0, None, None, []
     for rows in tel_obj.values():
@@ -95,7 +105,9 @@ def _telemetry_series_stats(payload: Any) -> Tuple[int, Optional[float], Optiona
     return int(rows_total), min_ts, max_ts, sorted(columns)
 
 
-def _positions_series_stats(rows: Any) -> Tuple[int, Optional[float], Optional[float], List[str]]:
+def _positions_series_stats(
+    rows: Any,
+) -> Tuple[int, Optional[float], Optional[float], List[str]]:
     rows_total = 0
     min_ts: Optional[float] = None
     max_ts: Optional[float] = None
@@ -151,8 +163,14 @@ def _request_id() -> str:
     return uuid.uuid4().hex
 
 
-def telemetry_unavailable_reason(year: int, race_name: str, session: str) -> Optional[str]:
-    if year == 2018 and normalize_key(race_name) == normalize_key("Bahrain Grand Prix") and session.upper() == "R":
+def telemetry_unavailable_reason(
+    year: int, race_name: str, session: str
+) -> Optional[str]:
+    if (
+        year == 2018
+        and normalize_key(race_name) == normalize_key("Bahrain Grand Prix")
+        and session.upper() == "R"
+    ):
         return "Telemetry unavailable for this session due to FIA data restrictions."
     return None
 
@@ -203,7 +221,12 @@ def _session_positions_bounds(silver_path: str) -> Optional[Tuple[float, float]]
     try:
         for path in existing:
             try:
-                schema = {r[0] for r in conn.execute("DESCRIBE SELECT * FROM read_parquet(?)", [path]).fetchall()}
+                schema = {
+                    r[0]
+                    for r in conn.execute(
+                        "DESCRIBE SELECT * FROM read_parquet(?)", [path]
+                    ).fetchall()
+                }
             except Exception:
                 continue
             ts_col = None
@@ -239,7 +262,9 @@ def _session_positions_bounds(silver_path: str) -> Optional[Tuple[float, float]]
     return None
 
 
-def _session_race_time_bounds(silver_path: str, session_code: str) -> Optional[Tuple[float, float]]:
+def _session_race_time_bounds(
+    silver_path: str, session_code: str
+) -> Optional[Tuple[float, float]]:
     code = str(session_code or "").upper()
     if code not in {"R", "SR"}:
         return None
@@ -272,9 +297,19 @@ def _session_race_time_bounds(silver_path: str, session_code: str) -> Optional[T
         start_s = _num(lap.get("lapStartSeconds"))
         end_s = _num(lap.get("lapEndSeconds"))
         lap_time_s = _num(lap.get("lapTime"))
-        if start_s is None and end_s is not None and lap_time_s is not None and lap_time_s > 0:
+        if (
+            start_s is None
+            and end_s is not None
+            and lap_time_s is not None
+            and lap_time_s > 0
+        ):
             start_s = float(end_s) - float(lap_time_s)
-        if end_s is None and start_s is not None and lap_time_s is not None and lap_time_s > 0:
+        if (
+            end_s is None
+            and start_s is not None
+            and lap_time_s is not None
+            and lap_time_s > 0
+        ):
             end_s = float(start_s) + float(lap_time_s)
         if start_s is None or end_s is None:
             continue
@@ -352,7 +387,12 @@ def get_team_color(team_name: Optional[str]) -> str:
         return "#C92D2D"
     if "sauber" in key or "kick" in key or "stake" in key:
         return "#00E701"
-    if "alpha tauri" in key or "racing bulls" in key or "visa cash app" in key or key == "rb":
+    if (
+        "alpha tauri" in key
+        or "racing bulls" in key
+        or "visa cash app" in key
+        or key == "rb"
+    ):
         return "#5E8FAA"
     if "renault" in key:
         return "#FFCE00"
@@ -378,7 +418,9 @@ def _resolve_time_window(
     default_window_s: float,
 ) -> Tuple[float, float]:
     if (t0 is None) != (t1 is None):
-        raise HTTPException(status_code=400, detail="Provide both t0 and t1, or neither")
+        raise HTTPException(
+            status_code=400, detail="Provide both t0 and t1, or neither"
+        )
     if t0 is None and t1 is None:
         start = 0.0
         end = float(default_window_s)
@@ -389,7 +431,9 @@ def _resolve_time_window(
         raise HTTPException(status_code=400, detail="t1 must be greater than t0")
     window_s = end - start
     if window_s > MAX_SESSION_WINDOW_S:
-        raise HTTPException(status_code=413, detail=f"Window exceeds {int(MAX_SESSION_WINDOW_S)}s limit")
+        raise HTTPException(
+            status_code=413, detail=f"Window exceeds {int(MAX_SESSION_WINDOW_S)}s limit"
+        )
     return start, end
 
 
@@ -397,15 +441,15 @@ def load_drivers(silver_path: str, year: Optional[int] = None) -> list:
     laps_file = os.path.join(silver_path, "laps.parquet")
     if not os.path.exists(laps_file):
         return []
-    
+
     conn = duckdb.connect()
     try:
         # Check which columns are available (FastF1 vs OpenF1)
         schema_query = f"DESCRIBE SELECT * FROM read_parquet('{laps_file}')"
         columns = {row[0] for row in conn.execute(schema_query).fetchall()}
-        
+
         # FastF1 has driver_name and team_name, OpenF1 only has driver_number
-        if 'driver_name' in columns:
+        if "driver_name" in columns:
             query = f"""
                 SELECT DISTINCT driver_name, driver_number, team_name
                 FROM read_parquet('{laps_file}')
@@ -422,7 +466,9 @@ def load_drivers(silver_path: str, year: Optional[int] = None) -> list:
                 if year:
                     from ..catalog import canonical_driver_info
 
-                    info = canonical_driver_info(int(year), str(driver_number), str(driver_name))
+                    info = canonical_driver_info(
+                        int(year), str(driver_number), str(driver_name)
+                    )
                     if info:
                         driver_name = info.get("driver_name") or driver_name
                         team_name = info.get("team_name") or team_name
@@ -454,7 +500,9 @@ def load_drivers(silver_path: str, year: Optional[int] = None) -> list:
                 if year:
                     from ..catalog import canonical_driver_info
 
-                    info = canonical_driver_info(int(year), str(driver_number), str(driver_name))
+                    info = canonical_driver_info(
+                        int(year), str(driver_number), str(driver_name)
+                    )
                     if info:
                         driver_name = info.get("driver_name") or driver_name
                         team_name = info.get("team_name") or team_name
@@ -476,21 +524,25 @@ def load_laps(silver_path: str, latest_only: bool = False) -> list:
     laps_file = os.path.join(silver_path, "laps.parquet")
     if not os.path.exists(laps_file):
         return []
-    
+
     conn = duckdb.connect()
     try:
         # Check which columns are available (FastF1 vs OpenF1)
         schema_query = f"DESCRIBE SELECT * FROM read_parquet('{laps_file}')"
         columns_in_file = {row[0] for row in conn.execute(schema_query).fetchall()}
-        
+
         # Determine schema type
-        is_fastf1 = 'driver_name' in columns_in_file
-        
+        is_fastf1 = "driver_name" in columns_in_file
+
         if is_fastf1:
             has_pit_in = "pit_in_time_formatted" in columns_in_file
             has_pit_out = "pit_out_time_formatted" in columns_in_file
-            pit_in_expr = "CAST(pit_in_time_formatted AS VARCHAR)" if has_pit_in else "NULL"
-            pit_out_expr = "CAST(pit_out_time_formatted AS VARCHAR)" if has_pit_out else "NULL"
+            pit_in_expr = (
+                "CAST(pit_in_time_formatted AS VARCHAR)" if has_pit_in else "NULL"
+            )
+            pit_out_expr = (
+                "CAST(pit_out_time_formatted AS VARCHAR)" if has_pit_out else "NULL"
+            )
             # FastF1 schema
             if latest_only:
                 session_code = os.path.basename(str(silver_path)).upper()
@@ -647,32 +699,36 @@ def load_laps(silver_path: str, latest_only: bool = False) -> list:
                     ORDER BY lap_number, driver_number
                 """
             result = conn.execute(query).fetchall()
-            
+
             # Build laps with OpenF1 data + driver name mapping
             laps = []
             for row in result:
                 # Format lap time
-                lap_time_formatted = f"{int(row[2] // 60)}:{row[2] % 60:06.3f}" if row[2] else None
-                laps.append({
-                    "driverName": get_driver_name(row[0]),
-                    "driverNumber": row[0],
-                    "lapNumber": row[1],
-                    "lapTime": row[2],
-                    "lapTimeFormatted": lap_time_formatted,
-                    "lapEndSeconds": None,
-                    "lapStartTime": None,
-                    "position": None,
-                    "tyreCompound": None,
-                    "isValid": row[3],
-                    "isDeleted": False,
-                    "pitInTimeFormatted": None,
-                    "pitOutTimeFormatted": None,
-                    "pitInSeconds": None,
-                    "pitOutSeconds": None,
-                    "sector1": row[4],
-                    "sector2": row[5],
-                    "sector3": row[6]
-                })
+                lap_time_formatted = (
+                    f"{int(row[2] // 60)}:{row[2] % 60:06.3f}" if row[2] else None
+                )
+                laps.append(
+                    {
+                        "driverName": get_driver_name(row[0]),
+                        "driverNumber": row[0],
+                        "lapNumber": row[1],
+                        "lapTime": row[2],
+                        "lapTimeFormatted": lap_time_formatted,
+                        "lapEndSeconds": None,
+                        "lapStartTime": None,
+                        "position": None,
+                        "tyreCompound": None,
+                        "isValid": row[3],
+                        "isDeleted": False,
+                        "pitInTimeFormatted": None,
+                        "pitOutTimeFormatted": None,
+                        "pitInSeconds": None,
+                        "pitOutSeconds": None,
+                        "sector1": row[4],
+                        "sector2": row[5],
+                        "sector3": row[6],
+                    }
+                )
             return laps
 
         # Process FastF1 results
@@ -686,7 +742,12 @@ def load_laps(silver_path: str, latest_only: bool = False) -> list:
             except Exception:
                 pass
             if isinstance(value, datetime.time):
-                return float(value.hour * 3600 + value.minute * 60 + value.second + value.microsecond / 1e6)
+                return float(
+                    value.hour * 3600
+                    + value.minute * 60
+                    + value.second
+                    + value.microsecond / 1e6
+                )
             try:
                 numeric = float(value)
             except Exception:
@@ -754,16 +815,20 @@ def load_laps(silver_path: str, latest_only: bool = False) -> list:
                 dur3 = (s3 - s2) if (s3 is not None and s2 is not None) else None
 
                 def _ok(d):
-                    return d if d is not None and pd.notna(d) and d > 0 and d < 600 else None
+                    return (
+                        d
+                        if d is not None and pd.notna(d) and d > 0 and d < 600
+                        else None
+                    )
 
                 record["sector1"] = _ok(dur1)
                 record["sector2"] = _ok(dur2)
                 record["sector3"] = _ok(dur3)
             else:
                 # Avoid surfacing session-time stamps in the UI if we couldn't convert them.
-                if (lap_time is None or (lap_time is not None and lap_time < 600)) and any(
-                    v is not None and v > 600 for v in (s1, s2, s3)
-                ):
+                if (
+                    lap_time is None or (lap_time is not None and lap_time < 600)
+                ) and any(v is not None and v > 600 for v in (s1, s2, s3)):
                     record["sector1"] = None
                     record["sector2"] = None
                     record["sector3"] = None
@@ -772,7 +837,9 @@ def load_laps(silver_path: str, latest_only: bool = False) -> list:
                     record["sector2"] = s2
                     record["sector3"] = s3
             # Normalize lap start/end timestamps to session-time seconds if available.
-            end_s = _coerce_seconds(record.get("lapEndSeconds") or record.get("session_time_seconds"))
+            end_s = _coerce_seconds(
+                record.get("lapEndSeconds") or record.get("session_time_seconds")
+            )
             start_s = _coerce_seconds(record.get("lapStartTime"))
             if start_s is None and end_s is not None and lap_time is not None:
                 start_s = end_s - lap_time
@@ -780,8 +847,12 @@ def load_laps(silver_path: str, latest_only: bool = False) -> list:
                 end_s = start_s + lap_time
             record["lapStartSeconds"] = start_s
             record["lapEndSeconds"] = end_s
-            record["pitInSeconds"] = _parse_formatted_clock(record.get("pitInTimeFormatted"))
-            record["pitOutSeconds"] = _parse_formatted_clock(record.get("pitOutTimeFormatted"))
+            record["pitInSeconds"] = _parse_formatted_clock(
+                record.get("pitInTimeFormatted")
+            )
+            record["pitOutSeconds"] = _parse_formatted_clock(
+                record.get("pitOutTimeFormatted")
+            )
             laps.append(record)
         return laps
     finally:
@@ -802,7 +873,7 @@ def load_telemetry(
         logger.debug(f"Telemetry file not found: {tel_file}")
         return {}
     laps_file = os.path.join(silver_path, "laps.parquet")
-    
+
     conn = duckdb.connect()
     try:
         # Validate schema before querying
@@ -810,13 +881,19 @@ def load_telemetry(
             schema_query = f"DESCRIBE SELECT * FROM read_parquet('{tel_file}')"
             schema_result = conn.execute(schema_query).fetchall()
             columns_in_file = {row[0] for row in schema_result}
-            
+
             # Required columns for telemetry
             required_columns = {
-                'session_time_seconds', 'speed', 'throttle', 'brake', 
-                'rpm', 'gear', 'drs', 'driver_number'
+                "session_time_seconds",
+                "speed",
+                "throttle",
+                "brake",
+                "rpm",
+                "gear",
+                "drs",
+                "driver_number",
             }
-            
+
             if not required_columns.issubset(columns_in_file):
                 missing = required_columns - columns_in_file
                 logger.warning(
@@ -850,7 +927,7 @@ def load_telemetry(
         except Exception as e:
             logger.error(f"Error validating telemetry schema for {tel_file}: {e}")
             return {}
-        
+
         hz = max(0.0, min(50.0, float(hz or 0.0)))
         t0_bound, t1_bound = _resolve_time_window(t0, t1, DEFAULT_TELEMETRY_WINDOW_S)
 
@@ -861,7 +938,9 @@ def load_telemetry(
         ]
         params: List[Any] = [tel_file, float(t0_bound), float(t1_bound)]
         if driver_numbers:
-            where.append("t.driver_number IN (" + ",".join(["?"] * len(driver_numbers)) + ")")
+            where.append(
+                "t.driver_number IN (" + ",".join(["?"] * len(driver_numbers)) + ")"
+            )
             params.extend([int(x) for x in driver_numbers])
         where_sql = " AND ".join(where)
 
@@ -887,8 +966,8 @@ def load_telemetry(
                         ROUND(t.rpm, 0) as rpm,
                         CAST(t.gear AS INTEGER) as gear,
                         CAST(t.drs AS INTEGER) as drs,
-                        {optional_expr['ersDeploy']},
-                        {optional_expr['ersHarvest']},
+                        {optional_expr["ersDeploy"]},
+                        {optional_expr["ersHarvest"]},
                         row_number() OVER (
                             PARTITION BY t.driver_number, {bucket}
                             ORDER BY t.session_time_seconds DESC
@@ -932,8 +1011,8 @@ def load_telemetry(
                     ROUND(t.rpm, 0) as rpm,
                     CAST(t.gear AS INTEGER) as gear,
                     CAST(t.drs AS INTEGER) as drs,
-                    {optional_expr['ersDeploy']},
-                    {optional_expr['ersHarvest']}
+                    {optional_expr["ersDeploy"]},
+                    {optional_expr["ersHarvest"]}
                 FROM read_parquet(?) t
                 WHERE {where_sql}
                 ORDER BY t.driver_number, t.session_time_seconds
@@ -942,7 +1021,9 @@ def load_telemetry(
 
         rows = conn.execute(query, [*params, int(max_rows) + 1]).fetchall()
         if len(rows) > int(max_rows):
-            raise HTTPException(status_code=413, detail=f"Result exceeds {int(max_rows)} rows")
+            raise HTTPException(
+                status_code=413, detail=f"Result exceeds {int(max_rows)} rows"
+            )
 
         driver_name_map: Dict[int, str] = {}
         try:
@@ -993,9 +1074,11 @@ def load_telemetry(
             drv = str(record.get("driverName") or "")
             tel_by_driver.setdefault(drv, []).append(record)
 
-        logger.info(f"Loaded telemetry for {len(tel_by_driver)} drivers from {tel_file}")
+        logger.info(
+            f"Loaded telemetry for {len(tel_by_driver)} drivers from {tel_file}"
+        )
         return tel_by_driver
-        
+
     except HTTPException:
         raise
     except Exception as e:
@@ -1103,6 +1186,7 @@ def load_race_control(silver_path: str, limit: int = 200) -> list:
 
     conn = duckdb.connect()
     try:
+
         def _normalize_seconds_expr(expr: str) -> str:
             return f"""
                 CASE
@@ -1119,7 +1203,9 @@ def load_race_control(silver_path: str, limit: int = 200) -> list:
             if not os.path.exists(laps_file):
                 return None
             try:
-                laps_schema_query = f"DESCRIBE SELECT * FROM read_parquet('{laps_file}')"
+                laps_schema_query = (
+                    f"DESCRIBE SELECT * FROM read_parquet('{laps_file}')"
+                )
                 laps_columns = {
                     str(row[0]).lower(): str(row[0])
                     for row in conn.execute(laps_schema_query).fetchall()
@@ -1134,8 +1220,12 @@ def load_race_control(silver_path: str, limit: int = 200) -> list:
                     return None
 
                 lap_start_date_expr = _laps_col_ref("LapStartDate", "lap_start_date")
-                lap_start_time_expr = _laps_col_ref("LapStartTime", "lap_start_time", "lapStartTime")
-                lap_end_expr = _laps_col_ref("session_time_seconds", "sessionTimeSeconds", "session_time")
+                lap_start_time_expr = _laps_col_ref(
+                    "LapStartTime", "lap_start_time", "lapStartTime"
+                )
+                lap_end_expr = _laps_col_ref(
+                    "session_time_seconds", "sessionTimeSeconds", "session_time"
+                )
                 lap_time_expr = _laps_col_ref("lap_time_seconds", "lapTime", "lap_time")
 
                 if not lap_start_date_expr:
@@ -1143,7 +1233,9 @@ def load_race_control(silver_path: str, limit: int = 200) -> list:
 
                 rel_start_expr: Optional[str] = None
                 if lap_start_time_expr:
-                    rel_start_expr = _normalize_seconds_expr(f"TRY_CAST({lap_start_time_expr} AS DOUBLE)")
+                    rel_start_expr = _normalize_seconds_expr(
+                        f"TRY_CAST({lap_start_time_expr} AS DOUBLE)"
+                    )
                 elif lap_end_expr and lap_time_expr:
                     rel_start_expr = f"""
                         (TRY_CAST({lap_end_expr} AS DOUBLE) - TRY_CAST({lap_time_expr} AS DOUBLE))
@@ -1195,7 +1287,9 @@ def load_race_control(silver_path: str, limit: int = 200) -> list:
 
         session_time_expr = _col_ref("session_time", "SessionTime", "Time", "time")
         if session_time_expr is None:
-            logger.warning(f"Race control schema missing session-time column: {rc_file}")
+            logger.warning(
+                f"Race control schema missing session-time column: {rc_file}"
+            )
             return []
 
         query = f"""
@@ -1267,7 +1361,9 @@ def _centerline_with_dist(geometry: Optional[Dict[str, Any]]) -> List[Dict[str, 
     if not geometry:
         return []
     layout = geometry.get("layout") if isinstance(geometry, dict) else None
-    coords = (layout or {}).get("path_coordinates") if isinstance(layout, dict) else None
+    coords = (
+        (layout or {}).get("path_coordinates") if isinstance(layout, dict) else None
+    )
     pts = coords if isinstance(coords, list) and coords else geometry.get("centerline")
     if not pts:
         return []
@@ -1319,7 +1415,9 @@ def _is_placeholder_layout(geometry: Dict[str, Any]) -> bool:
     """
     try:
         layout = geometry.get("layout") if isinstance(geometry, dict) else None
-        coords = (layout or {}).get("path_coordinates") if isinstance(layout, dict) else None
+        coords = (
+            (layout or {}).get("path_coordinates") if isinstance(layout, dict) else None
+        )
         if not isinstance(coords, list) or len(coords) != 80:
             return False
         xs = [float(p.get("x") or 0.0) for p in coords if isinstance(p, dict)]
@@ -1375,7 +1473,9 @@ def _project_distance(
         return None, last_idx, None
     count = len(pts)
 
-    def _search(iterable: Any) -> Tuple[Optional[float], Optional[int], Optional[float]]:
+    def _search(
+        iterable: Any,
+    ) -> Tuple[Optional[float], Optional[int], Optional[float]]:
         best = None
         best_idx = last_idx
         best_dist = None
@@ -1442,9 +1542,240 @@ def _point_at_distance(pts: List[Dict[str, float]], dist: float) -> Tuple[float,
     return x, y
 
 
-def _remap_positions_to_manual(rows: List[Dict[str, Any]], year: int, race_name: str) -> List[Dict[str, Any]]:
-    # Canonical-only mode: no manual remapping.
-    return rows
+def _rows_bbox(
+    rows: List[Dict[str, Any]],
+) -> Optional[Tuple[float, float, float, float]]:
+    xs: List[float] = []
+    ys: List[float] = []
+    for row in rows:
+        try:
+            x = float(row.get("x"))
+            y = float(row.get("y"))
+        except Exception:
+            continue
+        if not math.isfinite(x) or not math.isfinite(y):
+            continue
+        xs.append(x)
+        ys.append(y)
+    if len(xs) < 8:
+        return None
+    return min(xs), max(xs), min(ys), max(ys)
+
+
+def _centerline_bbox(
+    pts: List[Dict[str, float]],
+) -> Optional[Tuple[float, float, float, float]]:
+    if not pts:
+        return None
+    xs = [float(p.get("x") or 0.0) for p in pts]
+    ys = [float(p.get("y") or 0.0) for p in pts]
+    if not xs or not ys:
+        return None
+    return min(xs), max(xs), min(ys), max(ys)
+
+
+def _build_bbox_transform(
+    src_bbox: Tuple[float, float, float, float],
+    dst_bbox: Tuple[float, float, float, float],
+    *,
+    flip_x: bool,
+    flip_y: bool,
+):
+    sx0, sx1, sy0, sy1 = src_bbox
+    dx0, dx1, dy0, dy1 = dst_bbox
+    src_w = max(1e-9, sx1 - sx0)
+    src_h = max(1e-9, sy1 - sy0)
+    dst_w = dx1 - dx0
+    dst_h = dy1 - dy0
+
+    def _transform(x: float, y: float) -> Tuple[float, float]:
+        xn = (x - sx0) / src_w
+        yn = (y - sy0) / src_h
+        if flip_x:
+            xn = 1.0 - xn
+        if flip_y:
+            yn = 1.0 - yn
+        return dx0 + xn * dst_w, dy0 + yn * dst_h
+
+    return _transform
+
+
+def _projection_rmse(
+    rows: List[Dict[str, Any]],
+    pts: List[Dict[str, float]],
+    transform,
+    *,
+    max_probe: int = 900,
+) -> Tuple[Optional[float], int]:
+    if not rows or not pts:
+        return None, 0
+    stride = max(1, int(len(rows) / max_probe))
+    sum_sq = 0.0
+    used = 0
+    for row in rows[::stride]:
+        try:
+            x = float(row.get("x"))
+            y = float(row.get("y"))
+        except Exception:
+            continue
+        if not math.isfinite(x) or not math.isfinite(y):
+            continue
+        tx, ty = transform(x, y)
+        _, _, sq_err = _project_distance(tx, ty, pts, last_idx=None, window=36)
+        if sq_err is None or not math.isfinite(float(sq_err)):
+            continue
+        sum_sq += float(sq_err)
+        used += 1
+    if used <= 0:
+        return None, 0
+    return math.sqrt(sum_sq / float(used)), used
+
+
+def _remap_positions_to_manual(
+    rows: List[Dict[str, Any]], year: int, race_name: str
+) -> List[Dict[str, Any]]:
+    if not rows or len(rows) < 20 or len(rows) > MAX_MANUAL_REMAP_ROWS:
+        return rows
+
+    geometry = load_track_geometry(str(race_name), year=int(year))
+    if not isinstance(geometry, dict) or _is_placeholder_layout(geometry):
+        return rows
+
+    centerline = _centerline_with_dist(geometry)
+    if len(centerline) < 12:
+        return rows
+
+    src_bbox = _rows_bbox(rows)
+    dst_bbox = _centerline_bbox(centerline)
+    if src_bbox is None or dst_bbox is None:
+        return rows
+
+    sx0, sx1, sy0, sy1 = src_bbox
+    dx0, dx1, dy0, dy1 = dst_bbox
+    src_w = max(1e-9, sx1 - sx0)
+    src_h = max(1e-9, sy1 - sy0)
+    dst_w = max(1e-9, dx1 - dx0)
+    dst_h = max(1e-9, dy1 - dy0)
+    dst_diag = max(1e-9, math.hypot(dst_w, dst_h))
+
+    src_cx = (sx0 + sx1) * 0.5
+    src_cy = (sy0 + sy1) * 0.5
+    dst_cx = (dx0 + dx1) * 0.5
+    dst_cy = (dy0 + dy1) * 0.5
+    scale_x_ratio = src_w / dst_w
+    scale_y_ratio = src_h / dst_h
+    center_offset_norm = math.hypot(src_cx - dst_cx, src_cy - dst_cy) / dst_diag
+    bbox_mismatch = (
+        scale_x_ratio < 0.55
+        or scale_x_ratio > 1.8
+        or scale_y_ratio < 0.55
+        or scale_y_ratio > 1.8
+        or center_offset_norm > 0.45
+    )
+
+    identity = lambda x, y: (x, y)
+    raw_rmse, raw_used = _projection_rmse(rows, centerline, identity)
+    if raw_rmse is None or raw_used < 20:
+        return rows
+
+    # Require obvious mismatch unless current points are very far from centerline.
+    allow_remap_without_bbox_mismatch = raw_rmse > (0.22 * dst_diag)
+    if not bbox_mismatch and not allow_remap_without_bbox_mismatch:
+        return rows
+
+    candidates = [
+        ("identity", identity),
+        ("bbox", _build_bbox_transform(src_bbox, dst_bbox, flip_x=False, flip_y=False)),
+        (
+            "bbox_flip_x",
+            _build_bbox_transform(src_bbox, dst_bbox, flip_x=True, flip_y=False),
+        ),
+        (
+            "bbox_flip_y",
+            _build_bbox_transform(src_bbox, dst_bbox, flip_x=False, flip_y=True),
+        ),
+        (
+            "bbox_flip_xy",
+            _build_bbox_transform(src_bbox, dst_bbox, flip_x=True, flip_y=True),
+        ),
+    ]
+
+    best_name = "identity"
+    best_transform = identity
+    best_rmse = raw_rmse
+    for name, transform in candidates[1:]:
+        rmse, used = _projection_rmse(rows, centerline, transform)
+        if rmse is None or used < 20:
+            continue
+        if rmse < best_rmse:
+            best_rmse = rmse
+            best_name = name
+            best_transform = transform
+
+    max_acceptable_rmse = max(8.0, 0.08 * dst_diag)
+    if best_name == "identity":
+        return rows
+    if best_rmse > max_acceptable_rmse:
+        return rows
+    if best_rmse >= raw_rmse * 0.75:
+        return rows
+
+    max_sq_err = max_acceptable_rmse * max_acceptable_rmse
+    per_driver_last_idx: Dict[int, int] = {}
+    remapped = 0
+    eligible = 0
+    out: List[Dict[str, Any]] = []
+    for row in rows:
+        rec = dict(row)
+        try:
+            x = float(row.get("x"))
+            y = float(row.get("y"))
+        except Exception:
+            out.append(rec)
+            continue
+        if not math.isfinite(x) or not math.isfinite(y):
+            out.append(rec)
+            continue
+
+        eligible += 1
+        tx, ty = best_transform(x, y)
+        drv = int(row.get("driverNumber") or 0)
+        last_idx = per_driver_last_idx.get(drv)
+        dist, idx, sq_err = _project_distance(
+            tx,
+            ty,
+            centerline,
+            last_idx=last_idx,
+            window=36,
+            max_sq_error=max_sq_err,
+        )
+        if idx is not None:
+            per_driver_last_idx[drv] = int(idx)
+        if dist is None or sq_err is None or float(sq_err) > max_sq_err:
+            out.append(rec)
+            continue
+        px, py = _point_at_distance(centerline, float(dist))
+        rec["x"] = float(px)
+        rec["y"] = float(py)
+        out.append(rec)
+        remapped += 1
+
+    if eligible < 20:
+        return rows
+    remap_ratio = remapped / float(max(1, eligible))
+    if remap_ratio < 0.85:
+        return rows
+
+    logger.info(
+        "positions_manual_remap_applied year=%s race=%s rows=%s transform=%s raw_rmse=%.3f remap_rmse=%.3f",
+        int(year),
+        str(race_name),
+        len(rows),
+        best_name,
+        float(raw_rmse),
+        float(best_rmse),
+    )
+    return out
 
 
 def load_positions(year: int, race_name: str, session: str) -> list:
@@ -1491,8 +1822,15 @@ def load_positions(year: int, race_name: str, session: str) -> list:
         try:
             conn = duckdb.connect()
             try:
-                schema = {r[0] for r in conn.execute(f"DESCRIBE SELECT * FROM read_parquet('{fastf1_positions_path}')").fetchall()}
-                if {"x", "y", "driver_number"}.issubset(schema) and ("session_time_seconds" in schema or "date" in schema):
+                schema = {
+                    r[0]
+                    for r in conn.execute(
+                        f"DESCRIBE SELECT * FROM read_parquet('{fastf1_positions_path}')"
+                    ).fetchall()
+                }
+                if {"x", "y", "driver_number"}.issubset(schema) and (
+                    "session_time_seconds" in schema or "date" in schema
+                ):
                     if "session_time_seconds" in schema:
                         query = f"""
                             SELECT
@@ -1548,9 +1886,18 @@ def load_positions(year: int, race_name: str, session: str) -> list:
         try:
             conn = duckdb.connect()
             try:
-                schema = {r[0] for r in conn.execute(f"DESCRIBE SELECT * FROM read_parquet('{silver_openf1_positions_path}')").fetchall()}
-                if {"x", "y", "driver_number"}.issubset(schema) and ("timestamp" in schema or "session_time_seconds" in schema):
-                    t_expr = "timestamp" if "timestamp" in schema else "session_time_seconds"
+                schema = {
+                    r[0]
+                    for r in conn.execute(
+                        f"DESCRIBE SELECT * FROM read_parquet('{silver_openf1_positions_path}')"
+                    ).fetchall()
+                }
+                if {"x", "y", "driver_number"}.issubset(schema) and (
+                    "timestamp" in schema or "session_time_seconds" in schema
+                ):
+                    t_expr = (
+                        "timestamp" if "timestamp" in schema else "session_time_seconds"
+                    )
                     query = f"""
                         SELECT
                             {t_expr} AS timestamp,
@@ -1563,25 +1910,41 @@ def load_positions(year: int, race_name: str, session: str) -> list:
                     """
                     df = conn.execute(query).df()
                 else:
-                    df = conn.execute(f"SELECT * FROM read_parquet('{silver_openf1_positions_path}')").df()
+                    df = conn.execute(
+                        f"SELECT * FROM read_parquet('{silver_openf1_positions_path}')"
+                    ).df()
             finally:
                 conn.close()
-            if df is not None and not df.empty and {"timestamp", "driverNumber", "x", "y"}.issubset(set(df.columns)):
+            if (
+                df is not None
+                and not df.empty
+                and {"timestamp", "driverNumber", "x", "y"}.issubset(set(df.columns))
+            ):
                 df = _clean_positions(df)
                 df = df.dropna(subset=["timestamp", "x", "y", "driverNumber"])
-                rows = df[["timestamp", "driverNumber", "x", "y"]].to_dict(orient="records")
+                rows = df[["timestamp", "driverNumber", "x", "y"]].to_dict(
+                    orient="records"
+                )
                 rows = _remap_positions_to_manual(rows, int(year), str(race_name))
                 if rows:
                     return rows
         except Exception:
             pass
 
-    bronze_path = os.path.join(BRONZE_DIR, str(year), race_name, normalize_session_code(session))
+    bronze_path = os.path.join(
+        BRONZE_DIR, str(year), race_name, normalize_session_code(session)
+    )
     openf1_path = os.path.join(bronze_path, "openf1", "positions.parquet")
-    gold_path = os.path.join(GOLD_DIR, str(year), race_name, normalize_session_code(session), "track_map.parquet")
-    
+    gold_path = os.path.join(
+        GOLD_DIR,
+        str(year),
+        race_name,
+        normalize_session_code(session),
+        "track_map.parquet",
+    )
+
     df = None
-    
+
     if os.path.exists(openf1_path):
         try:
             conn = duckdb.connect()
@@ -1591,7 +1954,7 @@ def load_positions(year: int, race_name: str, session: str) -> list:
                 conn.close()
         except Exception:
             pass
-    
+
     if df is None or df.empty:
         if os.path.exists(gold_path):
             try:
@@ -1602,10 +1965,10 @@ def load_positions(year: int, race_name: str, session: str) -> list:
                     conn.close()
             except Exception:
                 pass
-    
-    if df is not None and not df.empty and 'x' in df.columns and 'y' in df.columns:
+
+    if df is not None and not df.empty and "x" in df.columns and "y" in df.columns:
         df = _clean_positions(df)
-    if df is not None and not df.empty and 'x' in df.columns and 'y' in df.columns:
+    if df is not None and not df.empty and "x" in df.columns and "y" in df.columns:
         out = df[["timestamp", "driver_number", "x", "y"]].copy()
         out.columns = ["timestamp", "driverNumber", "x", "y"]
         out = out.dropna(subset=["timestamp", "x", "y", "driverNumber"])
@@ -1618,6 +1981,7 @@ def load_positions(year: int, race_name: str, session: str) -> list:
     if ALLOW_SYNTHETIC_POSITIONS:
         return derive_positions_from_telemetry(year, race_name, session)
     return []
+
 
 def _downsample_position_rows(rows: list, hz: float) -> list:
     if not isinstance(rows, list) or not rows:
@@ -1632,12 +1996,19 @@ def _downsample_position_rows(rows: list, hz: float) -> list:
             ts = float(row.get("timestamp") or 0.0)
             key = (drv, int(ts * hz_val))
             prev = buckets.get(key)
-            if prev is None or float(row.get("timestamp") or 0.0) >= float(prev.get("timestamp") or 0.0):
+            if prev is None or float(row.get("timestamp") or 0.0) >= float(
+                prev.get("timestamp") or 0.0
+            ):
                 buckets[key] = row
         except Exception:
             continue
     out = list(buckets.values())
-    out.sort(key=lambda r: (int(r.get("driverNumber") or 0), float(r.get("timestamp") or 0.0)))
+    out.sort(
+        key=lambda r: (
+            int(r.get("driverNumber") or 0),
+            float(r.get("timestamp") or 0.0),
+        )
+    )
     max_rows = 50000
     if len(out) <= max_rows:
         return out
@@ -1665,6 +2036,7 @@ def _downsample_position_rows(rows: list, hz: float) -> list:
         stride = max(1, len(out) // max_rows)
         return out[::stride][:max_rows]
 
+
 def _cap_position_rows(rows: list, max_rows: int = 50000) -> list:
     if not isinstance(rows, list) or len(rows) <= max_rows:
         return rows or []
@@ -1687,15 +2059,23 @@ def _cap_position_rows(rows: list, max_rows: int = 50000) -> list:
 
 def derive_positions_from_telemetry(year: int, race_name: str, session: str) -> list:
     """Derive positions from telemetry by integrating speed over time."""
-    telemetry_file = os.path.join(SILVER_DIR, str(year), race_name, normalize_session_code(session), "telemetry.parquet")
+    telemetry_file = os.path.join(
+        SILVER_DIR,
+        str(year),
+        race_name,
+        normalize_session_code(session),
+        "telemetry.parquet",
+    )
     if not os.path.exists(telemetry_file):
         return []
-    
+
     geometry = load_track_geometry(race_name, year=year)
     if not geometry:
         return []
     layout = geometry.get("layout") if isinstance(geometry, dict) else None
-    coords = (layout or {}).get("path_coordinates") if isinstance(layout, dict) else None
+    coords = (
+        (layout or {}).get("path_coordinates") if isinstance(layout, dict) else None
+    )
     if not coords and not geometry.get("centerline"):
         return []
 
@@ -1713,9 +2093,14 @@ def derive_positions_from_telemetry(year: int, race_name: str, session: str) -> 
         finally:
             conn.close()
 
-        if df.empty or "driver_number" not in df.columns or "session_time_seconds" not in df.columns or "speed" not in df.columns:
+        if (
+            df.empty
+            or "driver_number" not in df.columns
+            or "session_time_seconds" not in df.columns
+            or "speed" not in df.columns
+        ):
             return []
-        
+
         # Track length (meters)
         track_length = 0.0
         if geometry.get("length_km"):
@@ -1777,40 +2162,42 @@ def derive_positions_from_telemetry(year: int, race_name: str, session: str) -> 
         for driver_num in df["driver_number"].unique():
             driver_df = df[df["driver_number"] == driver_num].copy()
             driver_df = driver_df.sort_values("session_time_seconds")
-            
+
             times = driver_df["session_time_seconds"].values
             speeds = driver_df["speed"].fillna(0).values
-            
+
             distances = [0.0]
             for i in range(1, len(speeds)):
                 if i < len(times):
-                    dt = times[i] - times[i-1]
+                    dt = times[i] - times[i - 1]
                     if dt > 0:
-                        avg_speed = (speeds[i] + speeds[i-1]) / 2 / 3.6
+                        avg_speed = (speeds[i] + speeds[i - 1]) / 2 / 3.6
                         distances.append(distances[-1] + avg_speed * dt)
                     else:
                         distances.append(distances[-1])
                 else:
                     distances.append(distances[-1])
-            
+
             for i in range(0, len(driver_df), max(1, len(driver_df) // 2000)):
                 if i >= len(distances):
                     break
                 distance = distances[i] % track_length
                 pos = _point_at_distance(distance)
                 driver_row = driver_df.iloc[i]
-                positions.append({
-                    "timestamp": float(driver_row["session_time_seconds"]),
-                    "driverNumber": int(driver_row["driver_number"]),
-                    "driverName": str(int(driver_row["driver_number"])),
-                    "x": float(pos[0]),
-                    "y": float(pos[1]),
-                    "_projected": True,
-                    "_trackDistance": float(distance),
-                })
-        
+                positions.append(
+                    {
+                        "timestamp": float(driver_row["session_time_seconds"]),
+                        "driverNumber": int(driver_row["driver_number"]),
+                        "driverName": str(int(driver_row["driver_number"])),
+                        "x": float(pos[0]),
+                        "y": float(pos[1]),
+                        "_projected": True,
+                        "_trackDistance": float(distance),
+                    }
+                )
+
         return positions
-        
+
     except Exception as e:
         print(f"Error in derive_positions_from_telemetry: {e}")
         return []
@@ -1820,18 +2207,20 @@ def calculate_track_length(centerline: list) -> float:
     """Calculate approximate track length from centerline."""
     if not centerline or len(centerline) < 2:
         return 5412
-    
+
     length = 0.0
     for i in range(1, len(centerline)):
-        dx = centerline[i][0] - centerline[i-1][0]
-        dy = centerline[i][1] - centerline[i-1][1]
-        length += (dx**2 + dy**2)**0.5
-    
+        dx = centerline[i][0] - centerline[i - 1][0]
+        dy = centerline[i][1] - centerline[i - 1][1]
+        length += (dx**2 + dy**2) ** 0.5
+
     return length
 
 
 def load_track_geometry(race_name: str, year: Optional[int] = None) -> Optional[Dict]:
-    geometry_file = resolve_track_geometry_file(str(TRACK_GEOMETRY_DIR), race_name, year=year)
+    geometry_file = resolve_track_geometry_file(
+        str(TRACK_GEOMETRY_DIR), race_name, year=year
+    )
     if geometry_file:
         with open(geometry_file, "r") as f:
             return json.load(f)
@@ -1844,7 +2233,9 @@ def calculate_session_duration(year: int, race_name: str, session: str) -> int:
     race_dir = resolve_dir(year_path, race_name)
     if not race_dir:
         return 5400
-    telemetry_file = os.path.join(year_path, race_dir, normalize_session_code(session), "telemetry.parquet")
+    telemetry_file = os.path.join(
+        year_path, race_dir, normalize_session_code(session), "telemetry.parquet"
+    )
     if not os.path.exists(telemetry_file):
         return 5400
 
@@ -1874,7 +2265,9 @@ def get_total_laps(year: int, race_name: str, session: str) -> int:
     race_dir = resolve_dir(year_path, race_name)
     if not race_dir:
         return 57
-    laps_file = os.path.join(year_path, race_dir, normalize_session_code(session), "laps.parquet")
+    laps_file = os.path.join(
+        year_path, race_dir, normalize_session_code(session), "laps.parquet"
+    )
     if not os.path.exists(laps_file):
         return 57
 
@@ -1894,12 +2287,15 @@ def get_total_laps(year: int, race_name: str, session: str) -> int:
 
 
 def load_metadata(year: int, race_name: str, session: str) -> Dict:
-    gold_session_path = os.path.join(GOLD_DIR, str(year), race_name, normalize_session_code(session))
+    gold_session_path = os.path.join(
+        GOLD_DIR, str(year), race_name, normalize_session_code(session)
+    )
     metadata_file = os.path.join(gold_session_path, "metadata.json")
 
     if os.path.exists(metadata_file):
         import json
-        with open(metadata_file, 'r') as f:
+
+        with open(metadata_file, "r") as f:
             metadata = json.load(f)
             metadata["duration"] = calculate_session_duration(year, race_name, session)
             metadata["totalLaps"] = get_total_laps(year, race_name, session)
@@ -1910,16 +2306,12 @@ def load_metadata(year: int, race_name: str, session: str) -> Dict:
         "raceName": race_name,
         "sessionType": session,
         "duration": calculate_session_duration(year, race_name, session),
-        "totalLaps": get_total_laps(year, race_name, session)
+        "totalLaps": get_total_laps(year, race_name, session),
     }
 
 
 @router.get("/sessions/{year}/{race}/{session}")
-async def get_session(
-    year: int,
-    race: str,
-    session: str
-) -> Dict[str, Any]:
+async def get_session(year: int, race: str, session: str) -> Dict[str, Any]:
     # Keep base endpoint lightweight. Heavy datasets are fetched through
     # dedicated windowed endpoints (`/telemetry`, `/positions`) by the desktop app.
     race_name = race.replace("-", " ")
@@ -1927,24 +2319,28 @@ async def get_session(
     year_path = os.path.join(SILVER_DIR, str(year))
     race_dir = resolve_dir(year_path, race_name)
     if not race_dir:
-        raise HTTPException(status_code=404, detail=f"Session not found: {year} {race_name} {session}")
+        raise HTTPException(
+            status_code=404, detail=f"Session not found: {year} {race_name} {session}"
+        )
     silver_path = get_session_path(year, race_dir, session_code)
-    
+
     if not silver_path:
-        raise HTTPException(status_code=404, detail=f"Session not found: {year} {race_name} {session}")
-    
+        raise HTTPException(
+            status_code=404, detail=f"Session not found: {year} {race_name} {session}"
+        )
+
     metadata = load_metadata(year, race_dir, session_code)
     drivers = load_drivers(silver_path, year=year)
     laps = load_laps(silver_path)
     track_geometry = load_track_geometry(race_dir, year=year)
     weather = load_weather(silver_path)
     race_control = load_race_control(silver_path)
-    
+
     total_laps = max([lap["lapNumber"] for lap in laps]) if laps else 57
     session_duration = metadata.get("duration", 5400)
     reason = telemetry_unavailable_reason(year, race_dir, session_code)
     telemetry_is_available = telemetry_available(silver_path, reason)
-    
+
     return {
         "metadata": {
             "year": year,
@@ -1953,7 +2349,7 @@ async def get_session(
             "duration": session_duration,
             "totalLaps": total_laps,
             "telemetryAvailable": telemetry_is_available,
-            "telemetryUnavailableReason": reason
+            "telemetryUnavailableReason": reason,
         },
         "drivers": drivers,
         "laps": laps,
@@ -1961,7 +2357,7 @@ async def get_session(
         "positions": [],
         "weather": weather,
         "raceControl": race_control,
-        "trackGeometry": track_geometry
+        "trackGeometry": track_geometry,
     }
 
 
@@ -1981,10 +2377,10 @@ async def get_session_viz(
     if not race_dir:
         raise HTTPException(status_code=404, detail=f"Session not found")
     silver_path = get_session_path(year, race_dir, session_code)
-    
+
     if not silver_path:
         raise HTTPException(status_code=404, detail=f"Session not found")
-    
+
     cache_key = (
         "session_viz",
         int(year),
@@ -2001,14 +2397,20 @@ async def get_session_viz(
     metadata = load_metadata(year, race_dir, session_code)
     drivers = load_drivers(silver_path, year=year)
     laps = load_laps(silver_path, latest_only=True)
-    positions = load_positions(year, race_dir, session_code) if include_positions else []
+    positions = (
+        load_positions(year, race_dir, session_code) if include_positions else []
+    )
     track_geometry = load_track_geometry(race_dir, year=year)
     weather = load_weather(silver_path) if include_weather else []
     race_control = load_race_control(silver_path) if include_race_control else []
-    pos_bounds = _positions_bounds(positions) if include_positions else _session_positions_bounds(silver_path)
+    pos_bounds = (
+        _positions_bounds(positions)
+        if include_positions
+        else _session_positions_bounds(silver_path)
+    )
     tel_bounds = _session_telemetry_bounds(silver_path)
     race_bounds = _session_race_time_bounds(silver_path, session_code)
-    
+
     total_laps = max([lap["lapNumber"] for lap in laps]) if laps else 57
     session_duration = metadata.get("duration", 5400)
     reason = telemetry_unavailable_reason(year, race_dir, session_code)
@@ -2019,11 +2421,13 @@ async def get_session_viz(
         session=str(session_code),
         endpoint="session_viz",
         columns=["drivers", "laps", "positions", "weather", "raceControl"],
-        row_count=int(len(drivers) + len(laps) + len(positions) + len(weather) + len(race_control)),
+        row_count=int(
+            len(drivers) + len(laps) + len(positions) + len(weather) + len(race_control)
+        ),
         min_ts=float((tel_bounds or pos_bounds or (0.0, 0.0))[0]),
         max_ts=float((tel_bounds or pos_bounds or (0.0, float(session_duration)))[1]),
     )
-    
+
     payload = {
         "metadata": {
             "year": year,
@@ -2033,11 +2437,17 @@ async def get_session_viz(
             "totalLaps": total_laps,
             "telemetryAvailable": telemetry_is_available,
             "telemetryUnavailableReason": reason,
-            "positionsTimeBounds": [float(pos_bounds[0]), float(pos_bounds[1])] if pos_bounds else None,
-            "telemetryTimeBounds": [float(tel_bounds[0]), float(tel_bounds[1])] if tel_bounds else None,
+            "positionsTimeBounds": [float(pos_bounds[0]), float(pos_bounds[1])]
+            if pos_bounds
+            else None,
+            "telemetryTimeBounds": [float(tel_bounds[0]), float(tel_bounds[1])]
+            if tel_bounds
+            else None,
             "raceStartSeconds": float(race_bounds[0]) if race_bounds else None,
             "raceEndSeconds": float(race_bounds[1]) if race_bounds else None,
-            "raceDurationSeconds": float(race_bounds[1] - race_bounds[0]) if race_bounds else None,
+            "raceDurationSeconds": float(race_bounds[1] - race_bounds[0])
+            if race_bounds
+            else None,
             "sourceVersion": str(source_version),
         },
         "drivers": drivers,
@@ -2045,7 +2455,7 @@ async def get_session_viz(
         "positions": positions,
         "weather": weather,
         "raceControl": race_control,
-        "trackGeometry": track_geometry
+        "trackGeometry": track_geometry,
     }
     return cache_set(cache_key, payload)
 
@@ -2059,10 +2469,10 @@ async def get_session_laps(year: int, race: str, session: str) -> list:
     if not race_dir:
         raise HTTPException(status_code=404, detail=f"Session not found")
     silver_path = get_session_path(year, race_dir, session_code)
-    
+
     if not silver_path:
         raise HTTPException(status_code=404, detail=f"Session not found")
-    
+
     return load_laps(silver_path)
 
 
@@ -2071,7 +2481,9 @@ async def get_session_telemetry(
     year: int,
     race: str,
     session: str,
-    drivers: Optional[str] = Query(default=None, description="Comma-separated driver numbers (e.g. 1,44)"),
+    drivers: Optional[str] = Query(
+        default=None, description="Comma-separated driver numbers (e.g. 1,44)"
+    ),
     hz: float = Query(default=1.0, ge=0.0, le=50.0),
     t0: Optional[float] = Query(default=None),
     t1: Optional[float] = Query(default=None),
@@ -2085,13 +2497,15 @@ async def get_session_telemetry(
     if not race_dir:
         raise HTTPException(status_code=404, detail=f"Session not found")
     silver_path = get_session_path(year, race_dir, session_code)
-    
+
     if not silver_path:
         raise HTTPException(status_code=404, detail=f"Session not found")
 
     driver_numbers = _parse_driver_numbers(drivers)
     if len(driver_numbers) > MAX_SESSION_DRIVERS:
-        raise HTTPException(status_code=413, detail=f"Max {MAX_SESSION_DRIVERS} drivers per request")
+        raise HTTPException(
+            status_code=413, detail=f"Max {MAX_SESSION_DRIVERS} drivers per request"
+        )
     t0_bound, t1_bound = _resolve_time_window(t0, t1, DEFAULT_TELEMETRY_WINDOW_S)
     cache_key = (
         "session_telemetry",
@@ -2114,7 +2528,9 @@ async def get_session_telemetry(
             "rowCount": int(rows_total),
             "rowLimit": int(MAX_SESSION_TELEMETRY_ROWS),
             "truncated": bool(rows_total >= int(MAX_SESSION_TELEMETRY_ROWS)),
-            "timeBounds": [float(min_ts), float(max_ts)] if min_ts is not None and max_ts is not None else None,
+            "timeBounds": [float(min_ts), float(max_ts)]
+            if min_ts is not None and max_ts is not None
+            else None,
             "sourceVersion": _build_source_version(
                 year=int(year),
                 race=str(race_dir),
@@ -2128,9 +2544,7 @@ async def get_session_telemetry(
             "requestId": _request_id(),
         }
         payload_out: Dict[str, Any] = (
-            {"telemetry": cached, "metadata": meta}
-            if with_metadata
-            else cached
+            {"telemetry": cached, "metadata": meta} if with_metadata else cached
         )
         metrics_router.record_endpoint_sample(
             _SESSION_TEL_ROUTE,
@@ -2150,7 +2564,10 @@ async def get_session_telemetry(
     )
     reason = telemetry_unavailable_reason(year, race_dir, session_code)
     if reason and not telemetry:
-        payload: Dict[str, Any] = {"telemetry": {}, "telemetryUnavailableReason": reason}
+        payload: Dict[str, Any] = {
+            "telemetry": {},
+            "telemetryUnavailableReason": reason,
+        }
         if with_metadata:
             payload["metadata"] = {
                 "t0": float(t0_bound),
@@ -2192,7 +2609,9 @@ async def get_session_telemetry(
         "rowCount": int(rows_total),
         "rowLimit": int(MAX_SESSION_TELEMETRY_ROWS),
         "truncated": bool(rows_total >= int(MAX_SESSION_TELEMETRY_ROWS)),
-        "timeBounds": [float(min_ts), float(max_ts)] if min_ts is not None and max_ts is not None else None,
+        "timeBounds": [float(min_ts), float(max_ts)]
+        if min_ts is not None and max_ts is not None
+        else None,
         "sourceVersion": _build_source_version(
             year=int(year),
             race=str(race_dir),
@@ -2205,7 +2624,9 @@ async def get_session_telemetry(
         ),
         "requestId": _request_id(),
     }
-    payload_out: Dict[str, Any] = {"telemetry": payload, "metadata": metadata} if with_metadata else payload
+    payload_out: Dict[str, Any] = (
+        {"telemetry": payload, "metadata": metadata} if with_metadata else payload
+    )
     metrics_router.record_endpoint_sample(
         _SESSION_TEL_ROUTE,
         (time.perf_counter() - started_at) * 1000.0,
@@ -2220,7 +2641,9 @@ async def get_session_positions(
     year: int,
     race: str,
     session: str,
-    drivers: Optional[str] = Query(default=None, description="Comma-separated driver numbers (e.g. 1,44)"),
+    drivers: Optional[str] = Query(
+        default=None, description="Comma-separated driver numbers (e.g. 1,44)"
+    ),
     hz: float = Query(default=2.0, ge=0.0, le=50.0),
     t0: Optional[float] = Query(default=None),
     t1: Optional[float] = Query(default=None),
@@ -2248,7 +2671,9 @@ async def get_session_positions(
 
     driver_numbers = _parse_driver_numbers(drivers)
     if len(driver_numbers) > MAX_SESSION_DRIVERS:
-        raise HTTPException(status_code=413, detail=f"Max {MAX_SESSION_DRIVERS} drivers per request")
+        raise HTTPException(
+            status_code=413, detail=f"Max {MAX_SESSION_DRIVERS} drivers per request"
+        )
     t0_bound, t1_bound = _resolve_time_window(t0, t1, DEFAULT_POSITIONS_WINDOW_S)
     cache_key = (
         "session_positions",
@@ -2275,7 +2700,9 @@ async def get_session_positions(
                     "rowCount": int(rows_total),
                     "rowLimit": int(MAX_SESSION_POSITIONS_ROWS),
                     "truncated": bool(rows_total >= int(MAX_SESSION_POSITIONS_ROWS)),
-                    "timeBounds": [float(min_ts), float(max_ts)] if min_ts is not None and max_ts is not None else None,
+                    "timeBounds": [float(min_ts), float(max_ts)]
+                    if min_ts is not None and max_ts is not None
+                    else None,
                     "sourceVersion": _build_source_version(
                         year=int(year),
                         race=str(race_dir),
@@ -2298,13 +2725,20 @@ async def get_session_positions(
         return payload_cached
 
     silver_path = get_session_path(year, race_dir, session_code)
-    positions_file = os.path.join(silver_path, "positions.parquet") if silver_path else ""
+    positions_file = (
+        os.path.join(silver_path, "positions.parquet") if silver_path else ""
+    )
 
     if silver_path and os.path.exists(positions_file):
         try:
             conn = duckdb.connect()
             try:
-                schema = {r[0] for r in conn.execute("DESCRIBE SELECT * FROM read_parquet(?)", [positions_file]).fetchall()}
+                schema = {
+                    r[0]
+                    for r in conn.execute(
+                        "DESCRIBE SELECT * FROM read_parquet(?)", [positions_file]
+                    ).fetchall()
+                }
                 hz_val = max(0.0, min(50.0, float(hz or 0.0)))
                 row_limit = int(MAX_SESSION_POSITIONS_ROWS)
 
@@ -2315,7 +2749,11 @@ async def get_session_positions(
                 ]
                 params: List[Any] = [positions_file]
                 if driver_numbers:
-                    base_where.append("driver_number IN (" + ",".join(["?"] * len(driver_numbers)) + ")")
+                    base_where.append(
+                        "driver_number IN ("
+                        + ",".join(["?"] * len(driver_numbers))
+                        + ")"
+                    )
                     params.extend([int(x) for x in driver_numbers])
                 base_where_sql = " AND ".join(base_where)
                 query = ""
@@ -2364,7 +2802,9 @@ async def get_session_positions(
                             ORDER BY driverNumber, timestamp
                             LIMIT ?
                         """
-                    params.extend([float(t0_bound), float(t1_bound), int(row_limit) + 1])
+                    params.extend(
+                        [float(t0_bound), float(t1_bound), int(row_limit) + 1]
+                    )
                 elif "date" in schema:
                     if hz_val > 0:
                         query = f"""
@@ -2426,12 +2866,16 @@ async def get_session_positions(
                             ORDER BY driverNumber, timestamp
                             LIMIT ?
                         """
-                    params.extend([float(t0_bound), float(t1_bound), int(row_limit) + 1])
+                    params.extend(
+                        [float(t0_bound), float(t1_bound), int(row_limit) + 1]
+                    )
 
                 if query:
                     rows = conn.execute(query, params).fetchall()
                     if len(rows) > row_limit:
-                        raise HTTPException(status_code=413, detail=f"Result exceeds {row_limit} rows")
+                        raise HTTPException(
+                            status_code=413, detail=f"Result exceeds {row_limit} rows"
+                        )
                     payload_rows = [
                         {
                             "timestamp": float(r[0]),
@@ -2456,8 +2900,12 @@ async def get_session_positions(
                                 "requestedDrivers": [int(x) for x in driver_numbers],
                                 "rowCount": int(rows_total),
                                 "rowLimit": int(MAX_SESSION_POSITIONS_ROWS),
-                                "truncated": bool(rows_total >= int(MAX_SESSION_POSITIONS_ROWS)),
-                                "timeBounds": [float(min_ts), float(max_ts)] if min_ts is not None and max_ts is not None else None,
+                                "truncated": bool(
+                                    rows_total >= int(MAX_SESSION_POSITIONS_ROWS)
+                                ),
+                                "timeBounds": [float(min_ts), float(max_ts)]
+                                if min_ts is not None and max_ts is not None
+                                else None,
                                 "sourceVersion": _build_source_version(
                                     year=int(year),
                                     race=str(race_dir),

@@ -91,7 +91,12 @@ export function CodeShowcase() {
   const [activeTab, setActiveTab] = useState<'duckdb' | 'worker' | 'zustand'>('duckdb');
 
   return (
-    <section className="py-24 relative bg-[#020202] border-t border-zinc-900 overflow-hidden" id="code" ref={containerRef}>
+    <section
+      className="py-24 relative bg-[#020202] border-t border-zinc-900 overflow-hidden"
+      id="code"
+      ref={containerRef}
+      data-home-section="code-showcase"
+    >
       <div className="absolute inset-0 bg-dot-grid opacity-10" />
       
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[600px] bg-[radial-gradient(ellipse_at_center,rgba(0,229,255,0.03)_0%,transparent_60%)] pointer-events-none" />
@@ -101,7 +106,7 @@ export function CodeShowcase() {
         <div className="flex flex-col lg:flex-row gap-16">
           
           {/* Left: Philosophy */}
-          <div className="w-full lg:w-1/3">
+          <div className="w-full lg:w-1/3" data-reveal-item>
             <div className="flex items-center gap-2 px-3 py-1.5 bg-zinc-900/50 border border-zinc-800 text-[10px] font-mono uppercase tracking-widest text-[var(--telemetry-purple)] mb-6 w-fit panel-border shadow-[0_0_15px_rgba(176,38,255,0.1)]">
               <FileCode2 className="w-3 h-3" /> INTERNAL SOURCE CODE
             </div>
@@ -148,7 +153,8 @@ export function CodeShowcase() {
           </div>
 
           {/* Right: Code Editor */}
-          <motion.div 
+          <motion.div
+            data-pin-target="code-showcase"
             initial={{ opacity: 0, x: 50 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
             transition={{ duration: 0.8 }}

@@ -1,221 +1,129 @@
-export interface Point {
-  x: number
-  y: number
-}
+export interface Point { x: number; y: number }
+export interface PathLookup { x: Float32Array; y: Float32Array; sampleCount: number }
 
-export interface PathLookup {
-  x: Float32Array
-  y: Float32Array
-  sampleCount: number
-}
-
-function appearsLonLat(points: Array<{ x: number; y: number }>): boolean {
-  if (!points.length) return false
-  let checks = 0
-  let valid = 0
-  for (const p of points) {
+const isLonLat = (pts: Point[]): boolean => {
+  if (!pts.length) return false
+  let chk = 0, val = 0
+  for (const p of pts) {
     if (!Number.isFinite(p.x) || !Number.isFinite(p.y)) continue
-    checks += 1
-    if (Math.abs(p.x) <= 180 && Math.abs(p.y) <= 90) valid += 1
-    if (checks >= 20) break
+    chk++
+    if (Math.abs(p.x) <= 180 && Math.abs(p.y) <= 90) val++
+    if (chk >= 20) break
   }
-  return checks > 0 && valid / checks >= 0.8
+  return chk > 0 && val / chk >= 0.8
 }
 
-function projectLonLatToMeters(points: Array<{ x: number; y: number }>): Point[] {
-  if (!points.length) return []
-  const lon0 = points[0].x
-  const lat0 = points[0].y
-  const lat0Rad = (lat0 * Math.PI) / 180
-  const metersPerDegLat = 111_320
-  const metersPerDegLon = 111_320 * Math.cos(lat0Rad)
-  return points.map((p) => ({
-    x: (p.x - lon0) * metersPerDegLon,
-    y: (p.y - lat0) * metersPerDegLat
-  }))
+const projectToMeters = (pts: Point[]): Point[] => {
+  if (!pts.length) return []
+  const lon0 = pts[0].x, lat0 = pts[0].y
+  const cos = Math.cos((lat0 * Math.PI) / 180)
+  return pts.map(p => ({ x: (p.x - lon0) * 111_320 * cos, y: (p.y - lat0) * 111_320 }))
 }
 
-/**
- * Takes raw centerline array [[x,y], [x,y], ...]
- * Returns Point[]
- */
-export function parseCenterline(raw: number[][]): Point[] {
+export const parseCenterline = (raw: number[][]): Point[] => {
   const out: Point[] = []
-  for (const item of raw as unknown as Array<unknown>) {
-    let x: number | undefined
-    let y: number | undefined
-    if (Array.isArray(item)) {
-      x = Number(item[0])
-      y = Number(item[1])
-    } else if (item && typeof item === 'object') {
-      x = Number((item as { x?: number }).x)
-      y = Number((item as { y?: number }).y)
-    }
+  for (const item of raw as unknown[]) {
+    let x = 0, y = 0
+    if (Array.isArray(item)) { x = Number(item[0]); y = Number(item[1]) }
+    else if (item && typeof item === 'object') { x = Number((item as { x?: number }).x); y = Number((item as { y?: number }).y) }
+    else continue
     if (!Number.isFinite(x) || !Number.isFinite(y)) continue
-    out.push({ x: x!, y: y! })
+    out.push({ x, y })
   }
-  const projected = appearsLonLat(out) ? projectLonLatToMeters(out) : out
-  return projected.map((p) => ({ x: -p.y, y: -p.x }))
+  return isLonLat(out) ? projectToMeters(out).map(p => ({ x: -p.y, y: -p.x })) : out
 }
 
-/**
- * Compute bounding box of points with padding
- */
-export function getBounds(points: Point[], padding = 60) {
-  if (!points.length) {
-    return { minX: -padding, maxX: padding, minY: -padding, maxY: padding }
-  }
-  let minX = points[0].x
-  let maxX = points[0].x
-  let minY = points[0].y
-  let maxY = points[0].y
-  for (let i = 1; i < points.length; i += 1) {
-    const p = points[i]
+export const getBounds = (pts: Point[], pad = 60) => {
+  if (!pts.length) return { minX: -pad, maxX: pad, minY: -pad, maxY: pad }
+  let minX = pts[0].x, maxX = pts[0].x, minY = pts[0].y, maxY = pts[0].y
+  for (let i = 1; i < pts.length; i++) {
+    const p = pts[i]
     if (p.x < minX) minX = p.x
     if (p.x > maxX) maxX = p.x
     if (p.y < minY) minY = p.y
     if (p.y > maxY) maxY = p.y
   }
-  return {
-    minX: minX - padding,
-    maxX: maxX + padding,
-    minY: minY - padding,
-    maxY: maxY + padding
-  }
+  return { minX: minX - pad, maxX: maxX + pad, minY: minY - pad, maxY: maxY + pad }
 }
 
-/**
- * Convert points to SVG polyline points string
- */
-export function toPolylinePoints(points: Point[]): string {
-  if (!points.length) return ''
-  let out = `${points[0].x},${points[0].y}`
-  for (let i = 1; i < points.length; i += 1) {
-    out += ` ${points[i].x},${points[i].y}`
-  }
+export const toPolylinePoints = (pts: Point[]): string => {
+  if (!pts.length) return ''
+  let out = `${pts[0].x},${pts[0].y}`
+  for (let i = 1; i < pts.length; i++) out += ` ${pts[i].x},${pts[i].y}`
   return out
 }
 
-/**
- * Precompute cumulative arc lengths for the path.
- */
-export function computeArcLengths(points: Point[]): number[] {
-  if (!points.length) return [0]
-  const lengths = [0]
-  for (let i = 1; i < points.length; i++) {
-    const dx = points[i].x - points[i - 1].x
-    const dy = points[i].y - points[i - 1].y
-    lengths.push(lengths[i - 1] + Math.sqrt(dx * dx + dy * dy))
+export const computeArcLengths = (pts: Point[]): number[] => {
+  if (!pts.length) return [0]
+  const lens = [0]
+  for (let i = 1; i < pts.length; i++) {
+    const dx = pts[i].x - pts[i - 1].x
+    const dy = pts[i].y - pts[i - 1].y
+    lens.push(lens[i - 1] + Math.sqrt(dx * dx + dy * dy))
   }
-  return lengths
+  return lens
 }
 
-/**
- * Given progress 0.0-1.0, return interpolated point
- * along the centerline path.
- * progress=0 -> first point, progress=1 -> last point
- */
-export function interpolateAlongPath(points: Point[], progress: number, arcLengths?: number[]): Point {
-  if (points.length === 0) return { x: 0, y: 0 }
-  if (points.length === 1) return points[0]
-
-  const clamped = Math.max(0, Math.min(1, progress))
-  const lengths = arcLengths || computeArcLengths(points)
-  const totalLength = lengths[lengths.length - 1]
-  const targetLength = clamped * totalLength
-
-  let low = 0
-  let high = lengths.length - 1
-  while (low < high - 1) {
-    const mid = Math.floor((low + high) / 2)
-    if (lengths[mid] < targetLength) {
-      low = mid
-    } else {
-      high = mid
-    }
+export const interpolateAlongPath = (pts: Point[], progress: number, arcLens?: number[]): Point => {
+  if (!pts.length) return { x: 0, y: 0 }
+  if (pts.length === 1) return pts[0]
+  const t = Math.max(0, Math.min(1, progress))
+  const lens = arcLens ?? computeArcLengths(pts)
+  const total = lens[lens.length - 1]
+  const target = t * total
+  let lo = 0, hi = lens.length - 1
+  while (lo < hi - 1) {
+    const mid = (lo + hi) >> 1
+    if (lens[mid] < target) lo = mid
+    else hi = mid
   }
-
-  const segmentLength = lengths[high] - lengths[low]
-  if (segmentLength === 0) return points[low]
-
-  const t = (targetLength - lengths[low]) / segmentLength
-  return {
-    x: points[low].x + (points[high].x - points[low].x) * t,
-    y: points[low].y + (points[high].y - points[low].y) * t
-  }
+  const segLen = lens[hi] - lens[lo]
+  if (!segLen) return pts[lo]
+  const f = (target - lens[lo]) / segLen
+  return { x: pts[lo].x + (pts[hi].x - pts[lo].x) * f, y: pts[lo].y + (pts[hi].y - pts[lo].y) * f }
 }
 
-export function buildPathLookup(
-  points: Point[],
-  arcLengths: number[],
-  sampleCount = 10_000
-): PathLookup | null {
-  if (points.length < 2 || arcLengths.length < 2 || sampleCount < 2) return null
-  const x = new Float32Array(sampleCount)
-  const y = new Float32Array(sampleCount)
-  const denom = sampleCount - 1
-  for (let i = 0; i < sampleCount; i += 1) {
-    const p = interpolateAlongPath(points, i / denom, arcLengths)
-    x[i] = p.x
-    y[i] = p.y
+export const buildPathLookup = (pts: Point[], arcLens: number[], n = 10_000): PathLookup | null => {
+  if (pts.length < 2 || arcLens.length < 2 || n < 2) return null
+  const x = new Float32Array(n), y = new Float32Array(n)
+  for (let i = 0; i < n; i++) {
+    const p = interpolateAlongPath(pts, i / (n - 1), arcLens)
+    x[i] = p.x; y[i] = p.y
   }
-  return { x, y, sampleCount }
+  return { x, y, sampleCount: n }
 }
 
-export function interpolateFromLookup(lookup: PathLookup | null, progress: number): Point {
-  if (!lookup || lookup.sampleCount < 2) return { x: 0, y: 0 }
-  const clamped = Math.max(0, Math.min(1, progress))
-  const scaled = clamped * (lookup.sampleCount - 1)
-  const idx = Math.floor(scaled)
-  const next = Math.min(lookup.sampleCount - 1, idx + 1)
-  const t = scaled - idx
-  return {
-    x: lookup.x[idx] + (lookup.x[next] - lookup.x[idx]) * t,
-    y: lookup.y[idx] + (lookup.y[next] - lookup.y[idx]) * t
-  }
+export const interpolateFromLookup = (lk: PathLookup | null, p: number): Point => {
+  if (!lk || lk.sampleCount < 2) return { x: 0, y: 0 }
+  const t = Math.max(0, Math.min(1, p))
+  const idx = Math.floor(t * (lk.sampleCount - 1))
+  const next = Math.min(lk.sampleCount - 1, idx + 1)
+  const f = t * (lk.sampleCount - 1) - idx
+  return { x: lk.x[idx] + (lk.x[next] - lk.x[idx]) * f, y: lk.y[idx] + (lk.y[next] - lk.y[idx]) * f }
 }
 
-/**
- * Compute cumulative path lengths for each segment.
- * Returns total path length.
- */
-export function pathLength(points: Point[]): number {
-  let total = 0
-  for (let i = 1; i < points.length; i++) {
-    const dx = points[i].x - points[i - 1].x
-    const dy = points[i].y - points[i - 1].y
-    total += Math.sqrt(dx * dx + dy * dy)
-  }
-  return total
+export const pathLength = (pts: Point[]): number => {
+  const lens = computeArcLengths(pts)
+  return lens.length ? lens[lens.length - 1] : 0
 }
 
-/**
- * Scale and center points into a viewport while preserving aspect ratio.
- */
-export function normalizeToViewport(
-  points: Point[],
-  viewportWidth: number,
-  viewportHeight: number,
-  padding = 24
-): Point[] {
-  if (!points.length) return []
+export const normalizeToViewport = (pts: Point[], vw: number, vh: number, pad = 24): Point[] => {
+  if (!pts.length) return []
+  const { minX, maxX, minY, maxY } = getBounds(pts, 0)
+  const e = 1e-9
+  const sw = Math.max(e, maxX - minX)
+  const sh = Math.max(e, maxY - minY)
+  const tw = Math.max(1, vw - pad * 2)
+  const th = Math.max(1, vh - pad * 2)
+  const sc = Math.min(tw / sw, th / sh)
+  return pts.map(p => ({ x: (vw - sw * sc) / 2 + (p.x - minX) * sc, y: (vh - sh * sc) / 2 + (p.y - minY) * sc }))
+}
 
-  const { minX, maxX, minY, maxY } = getBounds(points, 0)
-  const epsilon = 1e-9
-  const sourceWidth = Math.max(epsilon, maxX - minX)
-  const sourceHeight = Math.max(epsilon, maxY - minY)
+export interface CornerData { number: number; idx: number; name: string | null }
 
-  const targetWidth = Math.max(1, viewportWidth - padding * 2)
-  const targetHeight = Math.max(1, viewportHeight - padding * 2)
-  const scale = Math.min(targetWidth / sourceWidth, targetHeight / sourceHeight)
-
-  const scaledWidth = sourceWidth * scale
-  const scaledHeight = sourceHeight * scale
-  const offsetX = (viewportWidth - scaledWidth) / 2
-  const offsetY = (viewportHeight - scaledHeight) / 2
-
-  return points.map((p) => ({
-    x: offsetX + (p.x - minX) * scale,
-    y: offsetY + (p.y - minY) * scale
-  }))
+export const validateAndSortCorners = (corners: CornerData[]): CornerData[] => {
+  if (!corners.length) return []
+  const valid = corners.filter((c): c is CornerData => c != null && Number.isFinite(c.idx) && Number.isFinite(c.number))
+  valid.sort((a, b) => a.idx - b.idx)
+  return valid.map((c, i) => ({ ...c, number: Number.isFinite(c.number) && c.number > 0 ? c.number : i + 1 }))
 }

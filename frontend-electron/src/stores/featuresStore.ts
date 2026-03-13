@@ -96,7 +96,7 @@ export const useFeaturesStore = create<FeaturesState>((set) => ({
         .finally(bump),
       fetchTyreFeatures(year, race, session)
         .then((data) => set({ tyre: data }))
-        .catch(() => failures.push('tyre'))
+        .catch(() => failures.push(' tyre'))
         .finally(bump),
       fetchTelemetryFeatures(year, race, session)
         .then((data) => set({ telemetry: data }))

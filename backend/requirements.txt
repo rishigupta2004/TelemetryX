@@ -10,9 +10,10 @@ duckdb>=1.0.0
 pandas>=2.0.0
 polars>=1.0.0
 numpy>=1.24.0
+clickhouse-connect>=0.7.16
 
 # ML model serving (undercut predictor, clustering)
 scikit-learn>=1.4.0
 xgboost>=2.0.0
 scipy>=1.11.0
-
+PyJWT[crypto]>=2.9.0

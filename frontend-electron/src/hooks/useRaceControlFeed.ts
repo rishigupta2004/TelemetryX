@@ -1,20 +1,17 @@
 import { useMemo } from 'react'
 import { usePlaybackStore } from '../stores/playbackStore'
 import { useSessionStore } from '../stores/sessionStore'
-import type { RaceControlMessage } from '../types'
 
 export function useRaceControlFeed() {
   const currentTime = usePlaybackStore((s) => s.currentTime)
-  const raceControl = useSessionStore((s) => s.sessionData?.raceControl ?? [])
+  const sessionData = useSessionStore((s) => s.sessionData)
+  const raceControl = sessionData?.raceControl ?? null
 
   const messages = useMemo(() => {
-    return (raceControl ?? []).filter((msg) => msg.timestamp <= currentTime)
+    if (!raceControl) return []
+    return raceControl.filter((msg) => msg.timestamp <= currentTime)
   }, [raceControl, currentTime])
+  const activeFlag = messages[messages.length - 1]?.flag ?? null
 
-  const activeFlag = useMemo(() => {
-    const last = messages[messages.length - 1]
-    return last?.flag ?? null
-  }, [messages])
-
-  return { messages: messages as RaceControlMessage[], activeFlag }
+  return { messages, activeFlag }
 }

@@ -4,7 +4,7 @@ from typing import List, Dict, Any, Optional, Iterator
 import urllib.parse
 import urllib.request
 
-from api.routers.auth import require_user, require_active_subscription
+from api.routers.auth import require_user
 
 router = APIRouter()
 
@@ -15,44 +15,22 @@ DEMO_STREAMS: List[Dict[str, Any]] = [
         "name": "Demo HLS (Big Buck Bunny)",
         "type": "hls",
         "url": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-        "requires_subscription": False,
     },
     {
         "id": "demo-elephants-hls",
         "name": "Demo HLS (Elephants Dream)",
         "type": "hls",
         "url": "https://test-streams.mux.dev/pts_shift/master.m3u8",
-        "requires_subscription": False,
     },
 ]
 
 
 @router.get("/streams/list")
-async def list_streams(authorization: Optional[str] = Header(default=None)) -> List[Dict[str, Any]]:
-    user = None
-    sub_active = False
-    if authorization:
-        try:
-            user = require_user(authorization)
-            require_active_subscription(user)
-            sub_active = True
-        except Exception:
-            sub_active = False
-
-    out = []
-    for s in DEMO_STREAMS:
-        out.append(s)
-    out.append(
-        {
-            "id": "protected-placeholder",
-            "name": "Protected Stream Slot (requires subscription)",
-            "type": "hls",
-            "url": "",
-            "requires_subscription": True,
-            "unlocked": sub_active,
-        }
-    )
-    return out
+async def list_streams(
+    authorization: Optional[str] = Header(default=None),
+) -> List[Dict[str, Any]]:
+    _ = authorization
+    return list(DEMO_STREAMS)
 
 
 @router.get("/streams/proxy")
@@ -71,8 +49,9 @@ async def proxy_stream(
         raise HTTPException(status_code=403, detail="Host not allowed")
 
     if "/protected" in parsed.path:
-        user = require_user(authorization)
-        require_active_subscription(user)
+        if not authorization:
+            raise HTTPException(status_code=401, detail="Missing bearer token")
+        _ = require_user(authorization)
 
     req = urllib.request.Request(url, headers={"User-Agent": "TelemetryX/1.0"})
     resp = urllib.request.urlopen(req, timeout=15)

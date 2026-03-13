@@ -1,6 +1,19 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react'
 import uPlot from 'uplot'
 import 'uplot/dist/uPlot.min.css'
+import { animate } from 'animejs'
+
+function hexToRgba(hex: string, alpha: number): string {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+  if (!result) return `rgba(128, 128, 128, ${alpha})`
+  const r = parseInt(result[1], 16)
+  const g = parseInt(result[2], 16)
+  const b = parseInt(result[3], 16)
+  return `${r}, ${g}, ${b}, ${alpha}`
+}
+
+const MAX_DATA_POINTS = 2000
+const CURSOR_RAF_INTERVAL = 16
 
 interface UPlotChartProps {
   title: string
@@ -35,7 +48,7 @@ interface UPlotChartProps {
   onSeek?: (dataX: number) => void
 }
 
-export function UPlotChart({
+export const UPlotChart = React.memo(function UPlotChart({
   title,
   subtitle,
   timestamps,
@@ -68,25 +81,7 @@ export function UPlotChart({
   const cursorLineRef = useRef<HTMLDivElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
   const onSeekRef = useRef(onSeek)
-
-  const structureKey = useMemo(
-    () =>
-      [
-        series.length,
-        stepped ? 'stepped' : 'linear',
-        yLabel || title,
-        yTickMode,
-        yTickUnit || '',
-        xLabel || '',
-        xTickMode,
-        xTickUnit || '',
-        yRange?.[0],
-        yRange?.[1],
-        xRange?.[0],
-        xRange?.[1]
-      ].join('|'),
-    [series.length, stepped, yLabel, title, yTickMode, yTickUnit, xLabel, xTickMode, xTickUnit, yRange, xRange]
-  )
+  const [isAnimatingIn, setIsAnimatingIn] = useState(true)
 
   const formatYTick = (value: number) => {
     if (yTickMode === 'percent') return `${Math.round(value)}%`
@@ -113,6 +108,136 @@ export function UPlotChart({
     return `${mins}:${String(wholeSecs).padStart(2, '0')}.${tenths}`
   }
 
+  const structureKey = useMemo(
+    () =>
+      [
+        series.length,
+        stepped ? 'stepped' : 'linear',
+        yLabel || title,
+        yTickMode,
+        yTickUnit || '',
+        xLabel || '',
+        xTickMode,
+        xTickUnit || '',
+        yRange?.[0],
+        yRange?.[1],
+        xRange?.[0],
+        xRange?.[1]
+      ].join('|'),
+    [series.length, stepped, yLabel, title, yTickMode, yTickUnit, xLabel, xTickMode, xTickUnit, yRange, xRange]
+  )
+
+  const downsampledTimestamps = useMemo(() => {
+    if (timestamps.length <= MAX_DATA_POINTS) return timestamps
+    const step = timestamps.length / MAX_DATA_POINTS
+    const result: number[] = new Array(MAX_DATA_POINTS)
+    for (let i = 0; i < MAX_DATA_POINTS; i++) {
+      result[i] = timestamps[Math.floor(i * step)]
+    }
+    return result
+  }, [timestamps])
+
+  const downsampledSeries = useMemo(() => {
+    if (series.length === 0) return series
+    return series.map(s => {
+      if (s.data.length <= MAX_DATA_POINTS) return s
+      const step = s.data.length / MAX_DATA_POINTS
+      const result: number[] = new Array(MAX_DATA_POINTS)
+      for (let i = 0; i < MAX_DATA_POINTS; i++) {
+        result[i] = s.data[Math.floor(i * step)]
+      }
+      return { ...s, data: result }
+    })
+  }, [series])
+
+  const plotData = useMemo((): uPlot.AlignedData => {
+    return [
+      new Float64Array(downsampledTimestamps),
+      ...downsampledSeries.map((s) => new Float64Array(s.data))
+    ]
+  }, [downsampledTimestamps, downsampledSeries])
+
+  const chartOptions = useMemo(() => {
+    const measuredWidth = 800
+    return {
+      width: measuredWidth,
+      height,
+      padding: [12, 12, 20, 56],
+      cursor: {
+        show: true,
+        sync: { key: 'telemetry-sync', setSeries: false },
+        points: { show: false },
+        y: true,
+        x: true
+      },
+      scales: {
+        x: {
+          time: false,
+          range: xRange ? () => xRange : undefined
+        },
+        y: yRange ? { range: () => yRange } : {}
+      },
+      axes: [
+        {
+          show: true,
+          label: xLabel,
+          stroke: 'var(--fg-secondary)',
+          grid: { stroke: 'var(--chart-grid)', width: 1, dash: [] },
+          ticks: { stroke: 'var(--border-hard)', width: 1, size: 6 },
+          font: '11px var(--font-data), monospace',
+          values: (_self, values) => values.map((v) => formatXTick(v)),
+          labelSize: 12,
+          labelFont: '600 11px var(--font-heading), sans-serif',
+        },
+        {
+          show: true,
+          label: yLabel || title,
+          labelSize: 13,
+          labelFont: '600 11px var(--font-heading), sans-serif',
+          stroke: 'var(--fg-secondary)',
+          grid: { stroke: 'var(--chart-grid)', width: 1, dash: [] },
+          ticks: { stroke: 'var(--border-hard)', width: 1, size: 4 },
+          font: '11px var(--font-data), monospace',
+          size: 52,
+          values: (_self, values) => values.map((v) => formatYTick(v))
+        }
+      ],
+      series: [
+        { label: 'Time' },
+        ...downsampledSeries.map((s, i) => ({
+          label: s.label,
+          stroke: s.color,
+          width: s.width || 2.5,
+          fill: `rgba(${hexToRgba(s.color, 0.15)})`,
+          dash: i > 0 ? [6, 3] : undefined,
+          paths: stepped ? uPlot.paths.stepped!({ align: 1 }) : uPlot.paths.linear!(),
+          points: { show: false }
+        }))
+      ]
+    } as uPlot.Options
+  }, [height, xRange, xLabel, yLabel, title, yRange, downsampledSeries, stepped])
+
+  const downsampledTimestampsRef = useRef(downsampledTimestamps)
+  downsampledTimestampsRef.current = downsampledTimestamps
+
+  useEffect(() => {
+    if (isAnimatingIn && containerRef.current) {
+      animate(containerRef.current, {
+        opacity: [0, 1],
+        translateY: [8, 0],
+        duration: 400,
+        easing: 'easeOutCubic',
+        complete: () => setIsAnimatingIn(false)
+      })
+    }
+  }, [structureKey, isAnimatingIn])
+
+  useEffect(() => {
+    if (!isAnimatingIn && containerRef.current) {
+      containerRef.current.style.opacity = '1'
+    }
+  }, [isAnimatingIn])
+
   useEffect(() => {
     markersRef.current = markers ?? []
     shadingDataRef.current = shadingData
@@ -121,7 +246,8 @@ export function UPlotChart({
     chartRef.current?.redraw()
   }, [markers, shadingData, onCursor, onSeek])
 
-  // Update playback cursor line position via DOM ref — no React re-render
+  const lastDataRef = useRef<string>('')
+
   useEffect(() => {
     if (playbackCursorRef) return
     const el = cursorLineRef.current
@@ -140,7 +266,13 @@ export function UPlotChart({
     if (!ref) return
     let rafId: number | null = null
     let last: number | null = null
+    let frameCount = 0
     const tick = () => {
+      frameCount++
+      if (frameCount % 2 !== 0) {
+        rafId = requestAnimationFrame(tick)
+        return
+      }
       const el = cursorLineRef.current
       if (!el) {
         rafId = requestAnimationFrame(tick)
@@ -154,7 +286,8 @@ export function UPlotChart({
         const clamped = Math.max(0, Math.min(1, value))
         if (last !== clamped) {
           el.style.display = 'block'
-          el.style.left = `${clamped * 100}%`
+          el.style.transform = `translateX(${clamped * 100}%)`
+          el.style.left = '0'
           last = clamped
         }
       }
@@ -183,209 +316,174 @@ export function UPlotChart({
     if (Number.isFinite(dataX)) handler(dataX)
   }, [])
 
+  const seriesRef = useRef(series)
+  seriesRef.current = series
+  const downsampledSeriesRef = useRef(downsampledSeries)
+  downsampledSeriesRef.current = downsampledSeries
+
+  const formatXTickRef = useRef(formatXTick)
+  formatXTickRef.current = formatXTick
+  const formatYTickRef = useRef(formatYTick)
+  formatYTickRef.current = formatYTick
+
   useEffect(() => {
     const el = containerRef.current
     if (!el || !timestamps.length) return
+
+    const measuredWidth = el.getBoundingClientRect().width || el.clientWidth || 800
+
+    const hooks: uPlot.Options['hooks'] = {
+      init: [
+        (u: uPlot) => {
+          const canvas = u.root.querySelector('canvas')
+          if (canvas) {
+            canvas.style.background = 'transparent'
+            canvas.style.borderRadius = '8px'
+          }
+        }
+      ],
+      setCursor: [
+        (u: uPlot) => {
+          const handler = onCursorRef.current
+          const tooltip = tooltipRef.current
+          const idx = u.cursor.idx
+
+          if (idx == null || idx < 0) {
+            if (handler) handler({ idx: null, x: null, values: [] })
+            if (tooltip) tooltip.style.display = 'none'
+            return
+          }
+
+          const currentSeries = downsampledSeriesRef.current
+          const fmtX = formatXTickRef.current
+          const fmtY = formatYTickRef.current
+          const xVal = Number((u.data?.[0] as ArrayLike<number> | undefined)?.[idx])
+          const values = currentSeries.map((_, i) => {
+            const raw = Number((u.data?.[i + 1] as ArrayLike<number> | undefined)?.[idx])
+            return Number.isFinite(raw) ? raw : NaN
+          })
+
+          if (handler) handler({ idx, x: Number.isFinite(xVal) ? xVal : null, values })
+
+          if (tooltip) {
+            const left = u.cursor.left ?? 0
+            const containerRect = u.over.getBoundingClientRect()
+            const tipWidth = 160
+            const xPos = left + 16 > containerRect.width - tipWidth ? left - tipWidth - 16 : left + 16
+
+            tooltip.style.display = 'block'
+            tooltip.style.left = `${xPos}px`
+            tooltip.style.top = '12px'
+
+            let html = `<div style="font-size:11px;color:var(--fg-muted);margin-bottom:8px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase">${fmtX(xVal)}m</div>`
+            currentSeries.forEach((s, i) => {
+              const v = values[i]
+              if (Number.isFinite(v)) {
+                html += `<div style="display:flex;align-items:center;gap:8px;margin:6px 0">
+                  <span style="width:10px;height:10px;border-radius:3px;background:${s.color};box-shadow:0 0 8px ${s.color}60"></span>
+                  <span style="color:var(--fg-secondary);font-size:11px;font-weight:500">${s.label}</span>
+                  <span style="color:var(--fg-primary);font-weight:600;margin-left:auto;font-size:12px">${fmtY(v)}</span>
+                </div>`
+              }
+            })
+            tooltip.innerHTML = html
+          }
+        }
+      ],
+      draw: [
+        (u: uPlot) => {
+          const markerRows = markersRef.current
+          const shade = shadingDataRef.current
+          const ctx = u.ctx
+          const top = u.bbox.top
+          const bottom = top + u.bbox.height
+          const ts = downsampledTimestampsRef.current
+
+          const xMin = u.scales.x.min
+          const xMax = u.scales.x.max
+          if (typeof xMin === 'number' && typeof xMax === 'number' && Number.isFinite(xMin) && Number.isFinite(xMax)) {
+            const divisions = 12
+            const step = (xMax - xMin) / divisions
+            ctx.save()
+            ctx.strokeStyle = 'rgba(42,42,48,0.4)'
+            ctx.lineWidth = 1
+            ctx.setLineDash([])
+            for (let i = 1; i < divisions; i += 1) {
+              const xVal = xMin + step * i
+              const x = u.valToPos(xVal, 'x', true)
+              ctx.beginPath()
+              ctx.moveTo(x, top)
+              ctx.lineTo(x, bottom)
+              ctx.stroke()
+            }
+            ctx.restore()
+          }
+
+          if (shade?.drs?.length && ts.length === shade.drs.length) {
+            ctx.save()
+            ctx.fillStyle = 'rgba(225, 6, 0, 0.12)'
+            for (let i = 0; i < shade.drs.length; i += 1) {
+              if ((shade.drs[i] ?? 0) < 0.5) continue
+              const x = u.valToPos(ts[i], 'x', true)
+              ctx.fillRect(x - 1.6, top, 3.2, bottom - top)
+            }
+            ctx.restore()
+          }
+
+          if (!markerRows.length) return
+          ctx.save()
+          ctx.strokeStyle = 'rgba(130, 145, 160, 0.4)'
+          ctx.fillStyle = 'rgba(200, 210, 220, 0.9)'
+          ctx.lineWidth = 1
+          ctx.setLineDash([4, 6])
+          for (const marker of markerRows) {
+            const x = u.valToPos(marker.x, 'x', true)
+            ctx.beginPath()
+            ctx.moveTo(x, top)
+            ctx.lineTo(x, bottom)
+            ctx.stroke()
+            if (marker.label) {
+              const label = marker.label.toUpperCase()
+              ctx.setLineDash([])
+              ctx.font = '600 10px "JetBrains Mono", ui-monospace, monospace'
+              const metrics = ctx.measureText(label)
+              const padX = 6
+              const padY = 3
+              const boxW = metrics.width + padX * 2
+              const boxH = 14
+              const boxX = x - boxW / 2
+              const boxY = top + 8
+              ctx.fillStyle = 'rgba(18, 18, 24, 0.92)'
+              ctx.strokeStyle = 'rgba(255,255,255,0.15)'
+              ctx.lineWidth = 1
+              ctx.beginPath()
+              if (typeof ctx.roundRect === 'function') {
+                ctx.roundRect(boxX, boxY, boxW, boxH, 4)
+              } else {
+                ctx.rect(boxX, boxY, boxW, boxH)
+              }
+              ctx.fill()
+              ctx.stroke()
+              ctx.fillStyle = 'rgba(200, 210, 230, 0.95)'
+              ctx.fillText(label, boxX + padX, boxY + boxH - padY - 1)
+              ctx.setLineDash([4, 6])
+            }
+          }
+          ctx.restore()
+        }
+      ]
+    }
+
+    const opts: uPlot.Options = {
+      ...chartOptions,
+      hooks,
+      width: measuredWidth
+    }
 
     chartRef.current?.destroy()
     chartRef.current = null
     resizeObserverRef.current?.disconnect()
     resizeObserverRef.current = null
-
-    const measuredWidth = el.getBoundingClientRect().width || el.clientWidth || 800
-
-    const opts: uPlot.Options = {
-      width: measuredWidth,
-      height,
-      padding: [8, 8, 16, 8],
-      cursor: {
-        show: true,
-        sync: { key: 'telemetry-sync', setSeries: false },
-        points: { show: false },
-        y: true,
-        x: true
-      },
-      scales: {
-        x: {
-          time: false,
-          range: xRange ? () => xRange : undefined
-        },
-        y: yRange ? { range: () => yRange } : {}
-      },
-      axes: [
-        {
-          show: true,
-          label: xLabel,
-          stroke: 'var(--fg-muted)',
-          grid: { stroke: 'var(--border-micro)', width: 1, dash: [] },
-          ticks: { stroke: 'var(--border-hard)', width: 1, size: 4 },
-          font: '10px var(--font-data), monospace',
-          values: (_self, values) => values.map((v) => formatXTick(v))
-        },
-        {
-          show: true,
-          label: yLabel || title,
-          labelSize: 14,
-          labelFont: '10px var(--font-data), monospace',
-          stroke: 'var(--fg-muted)',
-          grid: { stroke: 'var(--border-micro)', width: 1, dash: [] },
-          ticks: { stroke: 'var(--border-hard)', width: 1, size: 3 },
-          font: '10px var(--font-data), monospace',
-          size: 48,
-          values: (_self, values) => values.map((v) => formatYTick(v))
-        }
-      ],
-      series: [
-        { label: 'Time' },
-        ...series.map((s, i) => ({
-          label: s.label,
-          stroke: s.color,
-          width: s.width || 2.5,
-          dash: i > 0 ? [6, 3] : undefined,
-          paths: stepped ? uPlot.paths.stepped!({ align: 1 }) : uPlot.paths.linear!(),
-          points: { show: false }
-        }))
-      ],
-      hooks: {
-        init: [
-          (u: uPlot) => {
-            const canvas = u.root.querySelector('canvas')
-            if (canvas) {
-              canvas.style.background = 'transparent'
-              canvas.style.borderRadius = '12px'
-            }
-          }
-        ],
-        setCursor: [
-          (u: uPlot) => {
-            const handler = onCursorRef.current
-            const tooltip = tooltipRef.current
-            const idx = u.cursor.idx
-
-            if (idx == null || idx < 0) {
-              if (handler) handler({ idx: null, x: null, values: [] })
-              if (tooltip) tooltip.style.display = 'none'
-              return
-            }
-
-            const xVal = Number((u.data?.[0] as ArrayLike<number> | undefined)?.[idx])
-            const values = series.map((_, i) => {
-              const raw = Number((u.data?.[i + 1] as ArrayLike<number> | undefined)?.[idx])
-              return Number.isFinite(raw) ? raw : NaN
-            })
-
-            if (handler) handler({ idx, x: Number.isFinite(xVal) ? xVal : null, values })
-
-            if (tooltip) {
-              const left = u.cursor.left ?? 0
-              const containerRect = u.over.getBoundingClientRect()
-              const tipWidth = 140
-              const xPos = left + 12 > containerRect.width - tipWidth ? left - tipWidth - 12 : left + 12
-
-              tooltip.style.display = 'block'
-              tooltip.style.left = `${xPos}px`
-              tooltip.style.top = '8px'
-
-              let html = `<div style="font-size:10px;color:#a0a0a8;margin-bottom:4px">${formatXTick(xVal)}</div>`
-              series.forEach((s, i) => {
-                const v = values[i]
-                if (Number.isFinite(v)) {
-                  html += `<div style="color:${s.color}">${s.label}: <b>${formatYTick(v)}</b></div>`
-                }
-              })
-              tooltip.innerHTML = html
-            }
-          }
-        ],
-        draw: [
-          (u: uPlot) => {
-            const markerRows = markersRef.current
-            const shade = shadingDataRef.current
-            const ctx = u.ctx
-            const top = u.bbox.top
-            const bottom = top + u.bbox.height
-
-            // Minor grid for dense telemetry texture
-            const xMin = u.scales.x.min
-            const xMax = u.scales.x.max
-            if (typeof xMin === 'number' && typeof xMax === 'number' && Number.isFinite(xMin) && Number.isFinite(xMax)) {
-              const divisions = 14
-              const step = (xMax - xMin) / divisions
-              ctx.save()
-              ctx.strokeStyle = 'var(--border-micro)'
-              ctx.lineWidth = 1
-              ctx.setLineDash([])
-              for (let i = 1; i < divisions; i += 1) {
-                const xVal = xMin + step * i
-                const x = u.valToPos(xVal, 'x', true)
-                ctx.beginPath()
-                ctx.moveTo(x, top)
-                ctx.lineTo(x, bottom)
-                ctx.stroke()
-              }
-              ctx.restore()
-            }
-
-            if (shade?.drs?.length && timestamps.length === shade.drs.length) {
-              ctx.save()
-              ctx.fillStyle = 'rgba(225, 6, 0, 0.08)'
-              for (let i = 0; i < shade.drs.length; i += 1) {
-                if ((shade.drs[i] ?? 0) < 0.5) continue
-                const x = u.valToPos(timestamps[i], 'x', true)
-                ctx.fillRect(x - 1.6, top, 3.2, bottom - top)
-              }
-              ctx.restore()
-            }
-
-            if (!markerRows.length) return
-            ctx.save()
-            ctx.strokeStyle = 'rgba(130, 145, 160, 0.35)'
-            ctx.fillStyle = 'rgba(200, 210, 220, 0.85)'
-            ctx.lineWidth = 1
-            ctx.setLineDash([3, 6])
-            for (const marker of markerRows) {
-              const x = u.valToPos(marker.x, 'x', true)
-              ctx.beginPath()
-              ctx.moveTo(x, top)
-              ctx.lineTo(x, bottom)
-              ctx.stroke()
-              if (marker.label) {
-                const label = marker.label.toUpperCase()
-                ctx.setLineDash([])
-                ctx.font = '600 10px "JetBrains Mono", ui-monospace, monospace'
-                const metrics = ctx.measureText(label)
-                const padX = 5
-                const padY = 2
-                const boxW = metrics.width + padX * 2
-                const boxH = 12
-                const boxX = x - boxW / 2
-                const boxY = top + 6
-                ctx.fillStyle = 'rgba(12, 14, 20, 0.85)'
-                ctx.strokeStyle = 'rgba(255,255,255,0.2)'
-                ctx.lineWidth = 1
-                ctx.beginPath()
-                if (typeof ctx.roundRect === 'function') {
-                  ctx.roundRect(boxX, boxY, boxW, boxH, 4)
-                } else {
-                  ctx.rect(boxX, boxY, boxW, boxH)
-                }
-                ctx.fill()
-                ctx.stroke()
-                ctx.fillStyle = 'rgba(210, 220, 235, 0.9)'
-                ctx.fillText(label, boxX + padX, boxY + boxH - padY - 1)
-                ctx.setLineDash([3, 6])
-              }
-            }
-            ctx.restore()
-          }
-        ]
-      }
-    }
-
-    const plotData: uPlot.AlignedData = [
-      new Float64Array(timestamps),
-      ...series.map((s) => new Float64Array(s.data))
-    ]
 
     chartRef.current = new uPlot(opts, plotData, el)
 
@@ -406,17 +504,15 @@ export function UPlotChart({
       chartRef.current?.destroy()
       chartRef.current = null
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [structureKey, height, Boolean(timestamps.length)])
+  }, [structureKey, height, timestamps.length])
+
+  const dataRef = useRef(plotData)
+  dataRef.current = plotData
 
   useEffect(() => {
     if (!chartRef.current || !timestamps.length) return
-    const plotData: uPlot.AlignedData = [
-      new Float64Array(timestamps),
-      ...series.map((s) => new Float64Array(s.data))
-    ]
-    chartRef.current.setData(plotData)
-  }, [timestamps, series])
+    chartRef.current.setData(dataRef.current)
+  }, [plotData])
 
   if (!timestamps.length) {
     return (
@@ -426,20 +522,20 @@ export function UPlotChart({
     )
   }
 
-  const wrapperClass = frame ? 'w-full p-2 border border-border-hard bg-bg-surface' : 'w-full'
+  const wrapperClass = frame ? 'w-full rounded-xl border border-border-soft bg-gradient-to-b from-bg-surface to-bg-raised overflow-hidden' : 'w-full'
 
   return (
     <div className={wrapperClass}>
       {showHeader && (
         <>
-          <div className="mb-0.5 px-1 text-[10px] font-bold uppercase tracking-widest text-fg-secondary" style={{ fontFamily: 'var(--font-heading)' }}>{title}</div>
-          <div className="mb-1.5 px-1 font-mono text-[10px] text-fg-muted">{subtitle}</div>
+          <div className="mb-0.5 px-3 pt-3 text-[11px] font-bold uppercase tracking-widest text-fg-secondary" style={{ fontFamily: 'var(--font-heading)' }}>{title}</div>
+          <div className="mb-2 px-3 font-mono text-[10px] text-fg-muted">{subtitle}</div>
         </>
       )}
       <div
         ref={containerRef}
         className="chart-surface w-full"
-        style={{ height: `${height}px`, position: 'relative', minWidth: 0, overflow: 'visible' }}
+        style={{ height: `${height}px`, position: 'relative', minWidth: 0, overflow: 'visible', opacity: 0, transition: 'opacity 0.3s ease' }}
         onClick={handleClick}
         onMouseLeave={() => { if (tooltipRef.current) tooltipRef.current.style.display = 'none' }}
       >
@@ -450,12 +546,13 @@ export function UPlotChart({
             position: 'absolute',
             top: 0,
             bottom: 0,
-            width: '1px',
-            background: 'var(--brand-core)',
+            width: '2px',
+            background: 'linear-gradient(180deg, var(--glow-blue) 0%, rgba(29,78,216,0.15) 100%)',
             pointerEvents: 'none',
             zIndex: 10,
             display: 'none',
-            willChange: 'left'
+            willChange: 'left',
+            boxShadow: '0 0 12px var(--glow-blue), 0 0 24px rgba(29,78,216,0.2)'
           }}
         />
         {/* Hover tooltip */}
@@ -465,19 +562,23 @@ export function UPlotChart({
             display: 'none',
             position: 'absolute',
             pointerEvents: 'none',
-            background: 'var(--bg-elevated)',
-            border: '1px solid var(--border-hard)',
-            borderRadius: 2,
-            padding: '4px 8px',
+            background: 'var(--chart-tooltip-bg)',
+            border: '1px solid var(--chart-tooltip-border)',
+            borderRadius: 10,
+            padding: '10px 14px',
             fontFamily: 'var(--font-data), monospace',
-            fontSize: 10,
-            lineHeight: '16px',
+            fontSize: 11,
+            lineHeight: '18px',
             color: 'var(--fg-primary)',
             zIndex: 20,
-            minWidth: 120,
+            minWidth: 140,
+            boxShadow: 'var(--shadow-elevated)',
+            backdropFilter: 'blur(12px)',
+            transform: 'translateY(-2px)',
+            transition: 'opacity 0.15s ease, transform 0.15s ease'
           }}
         />
       </div>
     </div>
   )
-}
+})

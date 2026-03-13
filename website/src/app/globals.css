@@ -15,6 +15,10 @@
   --telemetry-purple: #b026ff;
   --telemetry-green: #00ff00;
   --telemetry-yellow: #facc15;
+
+  --motion-duration-fast: 0.45s;
+  --motion-duration-base: 0.8s;
+  --motion-distance-base: 32px;
 }
 
 @theme inline {
@@ -197,4 +201,31 @@ body {
 .bg-dot-grid {
   background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px);
   background-size: 16px 16px;
+}
+
+[data-reveal-item],
+[data-stagger-item],
+[data-pin-target],
+[data-hero-copy],
+[data-hero-visual] {
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html,
+  body {
+    scroll-behavior: auto;
+  }
+
+  [data-reveal-item],
+  [data-stagger-item],
+  [data-pin-target],
+  [data-hero-copy],
+  [data-hero-visual] {
+    animation: none !important;
+    transition-duration: 0s !important;
+    transform: none !important;
+    opacity: 1 !important;
+    will-change: auto;
+  }
 }

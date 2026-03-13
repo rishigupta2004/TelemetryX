@@ -14,25 +14,15 @@ interface MLState {
 }
 
 export const useMLStore = create<MLState>((set) => ({
-  clustering: null,
-  undercut: null,
-  strategyRecs: null,
-  loading: false,
-  failedEndpoints: [],
+  clustering: null, undercut: null, strategyRecs: null, loading: false, failedEndpoints: [],
 
   preloadML: async (year, race) => {
     set({ loading: true, failedEndpoints: [], clustering: null, strategyRecs: null })
     const failures: string[] = []
-
     await Promise.allSettled([
-      fetchClustering()
-        .then((data) => set({ clustering: data }))
-        .catch(() => failures.push('clustering')),
-      fetchStrategyRecommendations(year, race)
-        .then((data) => set({ strategyRecs: data }))
-        .catch(() => failures.push('strategy-recs'))
+      fetchClustering().then((data) => set({ clustering: data })).catch(() => failures.push('clustering')),
+      fetchStrategyRecommendations(year, race).then((data) => set({ strategyRecs: data })).catch(() => failures.push('strategy-recs'))
     ])
-
     set({ loading: false, failedEndpoints: failures })
   },
 
@@ -41,9 +31,7 @@ export const useMLStore = create<MLState>((set) => ({
     try {
       const result = await postUndercutPredict(payload)
       set({ undercut: result, loading: false })
-    } catch {
-      set((state) => ({ loading: false, failedEndpoints: [...state.failedEndpoints, 'undercut'] }))
-    }
+    } catch { set((s) => ({ loading: false, failedEndpoints: [...s.failedEndpoints, 'undercut'] })) }
   },
 
   clear: () => set({ clustering: null, undercut: null, strategyRecs: null, loading: false, failedEndpoints: [] })

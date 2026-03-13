@@ -10,5 +10,20 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom'],
+          'vendor-animejs': ['animejs'],
+          'vendor-echarts': ['echarts', 'echarts-for-react'],
+          'vendor-zustand': ['zustand']
+        }
+      }
+    }
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'animejs', 'zustand']
   }
 })

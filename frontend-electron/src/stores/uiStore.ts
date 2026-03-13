@@ -16,30 +16,23 @@ interface UIState {
 }
 
 export const useUIStore = create<UIState>((set) => ({
-  activeView: 'timing',
-  sidebarCollapsed: false,
-  primaryDriver: null,
-  compareDriver: null,
+  activeView: 'timing', sidebarCollapsed: false, primaryDriver: null, compareDriver: null,
 
   setActiveView: (view) => set({ activeView: view }),
   setSidebarCollapsed: (collapsed) => set({ sidebarCollapsed: collapsed }),
-  toggleSidebar: () => set((state) => ({ sidebarCollapsed: !state.sidebarCollapsed })),
+  toggleSidebar: () => set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),
 
-  selectPrimary: (driverCode) =>
-    set((state) => {
-      if (!driverCode) return { primaryDriver: null }
-      if (state.compareDriver === driverCode) {
-        return { primaryDriver: driverCode, compareDriver: null }
-      }
-      return { primaryDriver: driverCode }
-    }),
+  selectPrimary: (driverCode) => set((s) => {
+    if (!driverCode) return { primaryDriver: null }
+    if (s.compareDriver === driverCode) return { primaryDriver: driverCode, compareDriver: null }
+    return { primaryDriver: driverCode }
+  }),
 
-  selectCompare: (driverCode) =>
-    set((state) => {
-      if (!driverCode) return { compareDriver: null }
-      if (state.primaryDriver === driverCode) return state
-      return { compareDriver: driverCode }
-    }),
+  selectCompare: (driverCode) => set((s) => {
+    if (!driverCode) return { compareDriver: null }
+    if (s.primaryDriver === driverCode) return s
+    return { compareDriver: driverCode }
+  }),
 
   clearSelection: () => set({ primaryDriver: null, compareDriver: null })
 }))

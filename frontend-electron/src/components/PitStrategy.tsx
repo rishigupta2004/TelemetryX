@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { animate } from 'animejs'
 import { ArrowUpDown, Sparkles } from 'lucide-react'
 import { api } from '../api/client'
 import { COMPOUND_COLORS } from '../lib/colors'
@@ -97,6 +98,26 @@ export const PitStrategy = React.memo(function PitStrategy() {
   const selectedSession = useSessionStore((s) => s.selectedSession)
   const sessionTime = useSessionTime2s()
   const isPlaying = usePlaybackStore((s) => s.isPlaying)
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const [isAnimatingIn, setIsAnimatingIn] = useState(true)
+
+  useEffect(() => {
+    if (isAnimatingIn && containerRef.current) {
+      animate(containerRef.current, {
+        opacity: [0, 1],
+        translateY: [10, 0],
+        duration: 350,
+        easing: 'easeOutCubic',
+        complete: () => setIsAnimatingIn(false)
+      })
+    }
+  }, [isAnimatingIn])
+
+  useEffect(() => {
+    if (!isAnimatingIn && containerRef.current) {
+      containerRef.current.style.opacity = '1'
+    }
+  }, [isAnimatingIn])
 
   const [sortMode, setSortMode] = useState<SortMode>('position')
   const [undercutEvents, setUndercutEvents] = useState<UndercutEvent[]>([])
@@ -349,7 +370,7 @@ export const PitStrategy = React.memo(function PitStrategy() {
   }
 
   return (
-    <div className="flex h-full flex-col rounded-md border border-border bg-bg-card">
+    <div ref={containerRef} className="flex h-full flex-col rounded-md border border-border bg-bg-card" style={{ opacity: 0 }}>
       <div className="flex flex-wrap items-end justify-between gap-2 border-b border-border px-3 py-2.5">
         <div>
           <div className="text-[10px] uppercase tracking-[0.16em] text-text-secondary">Pit Strategy</div>

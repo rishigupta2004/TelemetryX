@@ -309,6 +309,37 @@ function buildIndex(drivers: DriverLite[], allLaps: LapLite[], allPositions: Pos
   })
 }
 
+const positionPool: CarPosition[] = []
+const MAX_POOL_SIZE = 30
+
+function getPooledPosition(): CarPosition {
+  if (positionPool.length > 0) {
+    return positionPool.pop()!
+  }
+  return {
+    driverCode: '',
+    driverNumber: 0,
+    teamColor: '',
+    progress: 0,
+    currentLap: 0,
+    position: 0,
+    x: null,
+    y: null,
+    hasLivePosition: false,
+    isInPit: false,
+    pitProgress: null,
+    progressSource: 'timing',
+    mappingConfidence: 0,
+    sourceTimestamp: null
+  }
+}
+
+function recyclePositions(positions: CarPosition[]) {
+  for (let i = 0; i < positions.length && positionPool.length < MAX_POOL_SIZE; i++) {
+    positionPool.push(positions[i])
+  }
+}
+
 function computePositions(sessionTime: number): CarPosition[] {
   if (!indexed.length) return []
 
@@ -431,22 +462,24 @@ function computePositions(sessionTime: number): CarPosition[] {
     mappingConfidence = clamp01(mappingConfidence)
 
     activeDriverNumbers.add(driver.driverNumber)
-    out.push({
-      driverCode: driver.code,
-      driverNumber: driver.driverNumber,
-      teamColor: driver.teamColor || '#fff',
-      progress,
-      currentLap: lap.lapNumber,
-      position: lap.position || 99,
-      x,
-      y,
-      hasLivePosition,
-      isInPit,
-      pitProgress,
-      progressSource: hasLivePosition ? 'fused' : 'timing',
-      mappingConfidence,
-      sourceTimestamp
-    })
+    
+    const pos = getPooledPosition()
+    pos.driverCode = driver.code
+    pos.driverNumber = driver.driverNumber
+    pos.teamColor = driver.teamColor || '#fff'
+    pos.progress = progress
+    pos.currentLap = lap.lapNumber
+    pos.position = lap.position || 99
+    pos.x = x
+    pos.y = y
+    pos.hasLivePosition = hasLivePosition
+    pos.isInPit = isInPit
+    pos.pitProgress = pitProgress
+    pos.progressSource = hasLivePosition ? 'fused' : 'timing'
+    pos.mappingConfidence = mappingConfidence
+    pos.sourceTimestamp = sourceTimestamp
+    
+    out.push(pos)
   }
 
   for (const driverNumber of filteredUnwrappedProgress.keys()) {
@@ -460,6 +493,16 @@ self.onmessage = (event: MessageEvent<InMessage>) => {
   try {
     const message = event.data
     if (message.type === 'init') {
+      if (indexed.length > 0) {
+        for (const item of indexed) {
+          for (const pos of item.positions) {
+            if (positionPool.length < MAX_POOL_SIZE) {
+              positionPool.push(pos as unknown as CarPosition)
+            }
+          }
+        }
+      }
+      
       indexed = buildIndex(message.payload.drivers ?? [], message.payload.laps ?? [], message.payload.positions ?? [])
       prevTime = null
       lapHint.clear()
@@ -479,6 +522,8 @@ self.onmessage = (event: MessageEvent<InMessage>) => {
         positions
       }
       self.postMessage(out as OutMessage)
+      
+      setTimeout(() => recyclePositions(positions), 0)
     }
   } catch (err) {
     const out: ErrorMessage = {

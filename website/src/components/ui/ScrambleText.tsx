@@ -18,6 +18,13 @@ export function ScrambleText({ text, className, speed = 50, scrambles = 10 }: Sc
   
   useEffect(() => {
     if (!isInView) return;
+    if (typeof window !== "undefined") {
+      const visualMode = Boolean((window as { __TELEMETRYX_VISUAL_TEST__?: boolean }).__TELEMETRYX_VISUAL_TEST__)
+      if (visualMode) {
+        setDisplayText(text)
+        return
+      }
+    }
     
     let frame = 0;
     const interval = setInterval(() => {

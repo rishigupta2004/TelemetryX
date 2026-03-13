@@ -2,12 +2,12 @@ import { Terminal } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="py-16 border-t border-zinc-900 bg-black relative z-10">
+    <footer className="py-16 border-t border-zinc-900 bg-black relative z-10" data-home-section="footer">
       <div className="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none" />
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-12 mb-12" data-stagger-group="footer">
           
-          <div className="md:col-span-2">
+          <div className="md:col-span-2" data-stagger-item>
             <div className="flex items-center gap-2 mb-6 text-white font-bold text-xl font-mono uppercase tracking-widest">
               <Terminal className="text-[var(--telemetry-blue)] w-5 h-5" /> TelemetryX
             </div>
@@ -19,7 +19,7 @@ export function Footer() {
             </div>
           </div>
 
-          <div>
+          <div data-stagger-item>
             <h4 className="font-bold text-white mb-6 uppercase tracking-widest text-[10px] bg-zinc-900 px-2 py-1 border border-zinc-800 w-fit">Deep Dives</h4>
             <ul className="space-y-4 font-mono text-xs text-zinc-500">
               <li><a href="/architecture" className="hover:text-[var(--telemetry-blue)] hover:pl-2 transition-all block">Architecture Overview</a></li>
@@ -29,7 +29,7 @@ export function Footer() {
             </ul>
           </div>
 
-          <div>
+          <div data-stagger-item>
             <h4 className="font-bold text-white mb-6 uppercase tracking-widest text-[10px] bg-zinc-900 px-2 py-1 border border-zinc-800 w-fit">Interactive</h4>
             <ul className="space-y-4 font-mono text-xs text-zinc-500">
               <li><a href="/cockpit" className="hover:text-white hover:pl-2 transition-all block text-glow">Live 3D Cockpit HUD</a></li>
@@ -39,7 +39,7 @@ export function Footer() {
             </ul>
           </div>
 
-          <div>
+          <div data-stagger-item>
             <h4 className="font-bold text-white mb-6 uppercase tracking-widest text-[10px] bg-zinc-900 px-2 py-1 border border-zinc-800 w-fit">Terminal</h4>
             <ul className="space-y-4 font-mono text-xs text-zinc-500">
               <li><a href="https://github.com/rishigupta/TelemetryX" className="hover:text-[var(--telemetry-blue)] hover:pl-2 transition-all block">&gt; GitHub_Repo</a></li>

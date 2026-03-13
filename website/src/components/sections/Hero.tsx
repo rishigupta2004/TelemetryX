@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/Button";
-import { Download, Terminal, Activity } from "lucide-react";
+import { Download, Terminal } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -8,10 +8,19 @@ import { ParticleTrack } from "../three/ParticleTrack";
 import { ScrambleText } from "../ui/ScrambleText";
 import { AppMockup } from "../ui/AppMockup";
 
+function isVisualTestMode(): boolean {
+  if (typeof window === "undefined") return false;
+  return Boolean((window as { __TELEMETRYX_VISUAL_TEST__?: boolean }).__TELEMETRYX_VISUAL_TEST__);
+}
+
 function TypewriterEffect({ text }: { text: string }) {
   const [displayed, setDisplayed] = useState("");
   
   useEffect(() => {
+    if (isVisualTestMode()) {
+      setDisplayed(text);
+      return;
+    }
     let i = 0;
     const interval = setInterval(() => {
       setDisplayed(text.slice(0, i));
@@ -29,24 +38,11 @@ export function Hero() {
   const y = useTransform(scrollY, [0, 500], [0, 150]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
-  const [speed, setSpeed] = useState(321.4);
-  const [sectorTime, setSectorTime] = useState(28.431);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setSpeed(prev => {
-        const newSpeed = prev + (Math.random() * 4 - 2);
-        return newSpeed > 340 ? 340 : newSpeed < 100 ? 100 : newSpeed;
-      });
-      if(Math.random() > 0.8) {
-        setSectorTime(prev => prev + (Math.random() * 0.1 - 0.05));
-      }
-    }, 100);
-    return () => clearInterval(interval);
-  }, []);
-
   return (
-    <section className="relative min-h-screen pt-32 pb-24 overflow-hidden flex flex-col items-center justify-center bg-black">
+    <section
+      className="relative min-h-screen pt-32 pb-24 overflow-hidden flex flex-col items-center justify-center bg-black"
+      data-home-section="hero"
+    >
       <div className="absolute inset-0 bg-dot-grid opacity-30 pointer-events-none" />
       <ParticleTrack />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#000_100%)] pointer-events-none opacity-80 z-10" />
@@ -54,6 +50,7 @@ export function Hero() {
       <div className="max-w-7xl mx-auto px-6 relative z-10 w-full flex flex-col lg:flex-row gap-12 items-center">
         
         <motion.div
+          data-hero-copy
           style={{ y, opacity }}
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
@@ -93,7 +90,8 @@ export function Hero() {
         </motion.div>
       </div>
 
-      <motion.div 
+      <motion.div
+        data-hero-visual
         initial={{ opacity: 0, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 0.5 }}

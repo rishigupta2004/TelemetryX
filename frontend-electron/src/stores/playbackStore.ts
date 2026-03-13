@@ -20,55 +20,110 @@ interface PlaybackState {
 
 let _animFrameId: number | null = null
 let _lastTimestamp: number | null = null
+let _lastPerfTime = 0
 let _internalTime = 0
+let _targetTime = 0
+let _cachedState: { isPlaying: boolean; speed: number; duration: number } | null = null
+let _setState: ((partial: Partial<PlaybackState>) => void) | null = null
+let _pendingTimeUpdate = false
+let _batchFrameId: number | null = null
 
 const MIN_UPDATE_INTERVAL_MS = 6
 const MAX_UPDATE_INTERVAL_MS = 85
 const MIN_STORE_TIME_DELTA = 1 / 90
 const MAX_DELTA_S = 0.5
+const TIME_SMOOTHING_FACTOR = 0.85
+const BATCH_INTERVAL_MS = 8
 
 function stopLoop() {
   if (_animFrameId !== null) {
     cancelAnimationFrame(_animFrameId)
     _animFrameId = null
   }
+  if (_batchFrameId !== null) {
+    cancelAnimationFrame(_batchFrameId)
+    _batchFrameId = null
+  }
   _lastTimestamp = null
+  _lastPerfTime = 0
+  _cachedState = null
+  _pendingTimeUpdate = false
+}
+
+function flushTimeUpdate() {
+  if (!_pendingTimeUpdate || !_setState) return
+  _pendingTimeUpdate = false
+  _setState({ currentTime: _internalTime })
+}
+
+function scheduleBatchUpdate() {
+  if (_batchFrameId !== null || !_setState) return
+  _batchFrameId = requestAnimationFrame(() => {
+    _batchFrameId = null
+    flushTimeUpdate()
+  })
+}
+
+function enqueueTimeUpdate() {
+  _pendingTimeUpdate = true
+  scheduleBatchUpdate()
 }
 
 function startLoop(getState: () => PlaybackState, set: (partial: Partial<PlaybackState>) => void) {
   stopLoop()
+  _setState = set
+  _targetTime = _internalTime
 
   const tick = (timestamp: number) => {
-    const state = getState()
+    if (!_cachedState) {
+      const s = getState()
+      _cachedState = { isPlaying: s.isPlaying, speed: s.speed, duration: s.duration }
+    }
 
-    if (!state.isPlaying) {
+    if (!_cachedState.isPlaying) {
       _lastTimestamp = null
       return
     }
 
+    const perfNow = performance.now()
+    
     if (_lastTimestamp === null) {
       _lastTimestamp = timestamp
+      _lastPerfTime = perfNow
       _animFrameId = requestAnimationFrame(tick)
       return
     }
 
-    const elapsed = (timestamp - _lastTimestamp) / 1000
+    const rawElapsed = (timestamp - _lastTimestamp) / 1000
+    const perfElapsed = (perfNow - _lastPerfTime) / 1000
+    
+    const smoothedElapsed = rawElapsed * (1 - TIME_SMOOTHING_FACTOR) + perfElapsed * TIME_SMOOTHING_FACTOR
+    
     _lastTimestamp = timestamp
+    _lastPerfTime = perfNow
 
-    const delta = Math.min(elapsed * state.speed, MAX_DELTA_S)
-    _internalTime = Math.min(_internalTime + delta, state.duration)
+    const delta = Math.min(smoothedElapsed * _cachedState.speed, MAX_DELTA_S)
+    _targetTime = Math.min(_targetTime + delta, _cachedState.duration)
+    
+    _internalTime = _targetTime
 
-    set({ currentTime: _internalTime })
+    enqueueTimeUpdate()
 
-    if (_internalTime >= state.duration) {
+    if (_internalTime >= _cachedState.duration) {
       set({ isPlaying: false, currentTime: _internalTime })
       _lastTimestamp = null
+      _cachedState = null
       return
     }
 
     _animFrameId = requestAnimationFrame(tick)
   }
 
+  _cachedState = {
+    isPlaying: true,
+    speed: getState().speed,
+    duration: getState().duration
+  }
   _animFrameId = requestAnimationFrame(tick)
 }
 
@@ -89,12 +144,15 @@ export const usePlaybackStore = create<PlaybackState>((set, get) => ({
     }
 
     _internalTime = state.currentTime
+    _targetTime = state.currentTime
     set({ isPlaying: true })
     startLoop(get, set)
   },
 
   pause: () => {
     stopLoop()
+    _setState = null
+    _internalTime = _targetTime
     set({ isPlaying: false, currentTime: _internalTime })
   },
 
@@ -105,6 +163,7 @@ export const usePlaybackStore = create<PlaybackState>((set, get) => ({
     } else {
       if (s.currentTime >= s.duration) {
         _internalTime = 0
+        _targetTime = 0
         set({ currentTime: 0 })
       }
       get().play()
@@ -116,6 +175,7 @@ export const usePlaybackStore = create<PlaybackState>((set, get) => ({
     stopLoop()
     const clamped = Math.max(0, Math.min(time, get().duration))
     _internalTime = clamped
+    _targetTime = clamped
     set({ currentTime: clamped, isPlaying: false })
     if (wasPlaying) {
       get().play()
@@ -125,14 +185,19 @@ export const usePlaybackStore = create<PlaybackState>((set, get) => ({
   setCurrentTime: (time: number) => {
     const clamped = Math.max(0, Math.min(time, get().duration))
     _internalTime = clamped
+    _targetTime = clamped
     set({ currentTime: clamped })
   },
 
-  setSpeed: (speed: number) => set({ speed }),
+  setSpeed: (speed: number) => {
+    set({ speed })
+    if (_cachedState) _cachedState.speed = speed
+  },
 
   setDuration: (duration: number, sessionStartTime: number) => {
     stopLoop()
     _internalTime = 0
+    _targetTime = 0
     set({ duration, sessionStartTime, currentTime: 0, isPlaying: false })
   },
 
@@ -144,6 +209,7 @@ export const usePlaybackStore = create<PlaybackState>((set, get) => ({
   reset: () => {
     stopLoop()
     _internalTime = 0
+    _targetTime = 0
     set({
       currentTime: 0,
       isPlaying: false,

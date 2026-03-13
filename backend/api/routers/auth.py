@@ -8,6 +8,7 @@ import json
 import os
 import secrets
 import sqlite3
+import sys
 import time
 import urllib.parse
 import httpx
@@ -40,17 +41,6 @@ def _init_db() -> None:
             )
             """
         )
-        conn.execute(
-            """
-            CREATE TABLE IF NOT EXISTS subscriptions (
-                user_id INTEGER PRIMARY KEY,
-                plan TEXT NOT NULL,
-                status TEXT NOT NULL,
-                expires_at INTEGER,
-                FOREIGN KEY(user_id) REFERENCES users(id)
-            )
-            """
-        )
         conn.commit()
     finally:
         conn.close()
@@ -60,7 +50,15 @@ _init_db()
 
 
 def _secret() -> bytes:
-    return (os.getenv("AUTH_SECRET") or "dev-secret-change-me").encode("utf-8")
+    configured = str(os.getenv("AUTH_SECRET", "")).strip()
+    if configured and configured != "dev-secret-change-me":
+        return configured.encode("utf-8")
+    allow_insecure = os.getenv("TELEMETRYX_ALLOW_INSECURE_AUTH_SECRET", "0") == "1"
+    if allow_insecure or "pytest" in sys.modules:
+        return b"dev-secret-change-me"
+    raise RuntimeError(
+        "AUTH_SECRET must be set to a non-default value or TELEMETRYX_ALLOW_INSECURE_AUTH_SECRET=1"
+    )
 
 
 def _b64url_encode(data: bytes) -> str:
@@ -74,8 +72,12 @@ def _b64url_decode(data: str) -> bytes:
 
 def _sign(payload: Dict[str, Any]) -> str:
     header = {"alg": "HS256", "typ": "JWT"}
-    header_b64 = _b64url_encode(json.dumps(header, separators=(",", ":")).encode("utf-8"))
-    payload_b64 = _b64url_encode(json.dumps(payload, separators=(",", ":")).encode("utf-8"))
+    header_b64 = _b64url_encode(
+        json.dumps(header, separators=(",", ":")).encode("utf-8")
+    )
+    payload_b64 = _b64url_encode(
+        json.dumps(payload, separators=(",", ":")).encode("utf-8")
+    )
     msg = f"{header_b64}.{payload_b64}".encode("utf-8")
     sig = hmac.new(_secret(), msg, hashlib.sha256).digest()
     return f"{header_b64}.{payload_b64}.{_b64url_encode(sig)}"
@@ -107,18 +109,9 @@ def _hash_password(password: str, salt_hex: str) -> str:
 def _get_user_by_email(email: str) -> Optional[sqlite3.Row]:
     conn = _db()
     try:
-        return conn.execute("SELECT * FROM users WHERE email = ?", (email.lower().strip(),)).fetchone()
-    finally:
-        conn.close()
-
-
-def _get_subscription(user_id: int) -> Dict[str, Any]:
-    conn = _db()
-    try:
-        row = conn.execute("SELECT plan, status, expires_at FROM subscriptions WHERE user_id = ?", (user_id,)).fetchone()
-        if not row:
-            return {"plan": "free", "status": "inactive", "expires_at": None}
-        return {"plan": row["plan"], "status": row["status"], "expires_at": row["expires_at"]}
+        return conn.execute(
+            "SELECT * FROM users WHERE email = ?", (email.lower().strip(),)
+        ).fetchone()
     finally:
         conn.close()
 
@@ -135,15 +128,6 @@ def require_user(authorization: Optional[str] = Header(default=None)) -> Dict[st
     return {"user_id": int(user_id), "email": str(email)}
 
 
-def require_active_subscription(user: Dict[str, Any]) -> Dict[str, Any]:
-    sub = _get_subscription(user["user_id"])
-    if sub["status"] != "active":
-        raise HTTPException(status_code=402, detail="Subscription required")
-    if sub["expires_at"] is not None and int(sub["expires_at"]) < int(time.time()):
-        raise HTTPException(status_code=402, detail="Subscription expired")
-    return sub
-
-
 def _ensure_user(email: str) -> Tuple[int, str]:
     normalized = email.lower().strip()
     user = _get_user_by_email(normalized)
@@ -158,11 +142,10 @@ def _ensure_user(email: str) -> Tuple[int, str]:
             "INSERT INTO users(email, password_hash, salt, created_at) VALUES(?, ?, ?, ?)",
             (normalized, password_hash, salt_hex, now),
         )
-        user_id = int(cur.lastrowid)
-        conn.execute(
-            "INSERT OR REPLACE INTO subscriptions(user_id, plan, status, expires_at) VALUES(?, ?, ?, ?)",
-            (user_id, "free", "inactive", None),
-        )
+        last_row_id = cur.lastrowid
+        if last_row_id is None:
+            raise HTTPException(status_code=500, detail="Failed to create user")
+        user_id = int(last_row_id)
         conn.commit()
         return user_id, normalized
     finally:
@@ -173,8 +156,11 @@ def _issue_token(user_id: int, email: str) -> Dict[str, Any]:
     now = int(time.time())
     exp = now + 24 * 60 * 60
     token = _sign({"sub": user_id, "email": email, "iat": now, "exp": exp})
-    sub = _get_subscription(user_id)
-    return {"access_token": token, "token_type": "bearer", "expires_in": exp - now, "subscription": sub}
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "expires_in": exp - now,
+    }
 
 
 def _oauth_config(provider: str) -> Dict[str, str]:
@@ -182,7 +168,9 @@ def _oauth_config(provider: str) -> Dict[str, str]:
         raise HTTPException(status_code=404, detail="Unknown provider")
     client_id = os.getenv("GOOGLE_CLIENT_ID", "")
     client_secret = os.getenv("GOOGLE_CLIENT_SECRET", "")
-    redirect_uri = os.getenv("GOOGLE_REDIRECT_URI", "http://localhost:9010/api/v1/auth/oauth/google/callback")
+    redirect_uri = os.getenv(
+        "GOOGLE_REDIRECT_URI", "http://localhost:9010/api/v1/auth/oauth/google/callback"
+    )
     return {
         "client_id": client_id,
         "client_secret": client_secret,
@@ -195,7 +183,9 @@ def _oauth_config(provider: str) -> Dict[str, str]:
 
 async def _verify_google_id_token(id_token: str, client_id: str) -> Dict[str, Any]:
     async with httpx.AsyncClient(timeout=10) as client:
-        res = await client.get("https://oauth2.googleapis.com/tokeninfo", params={"id_token": id_token})
+        res = await client.get(
+            "https://oauth2.googleapis.com/tokeninfo", params={"id_token": id_token}
+        )
     if res.status_code != 200:
         raise HTTPException(status_code=401, detail="Invalid Google id_token")
     payload = res.json()
@@ -204,7 +194,9 @@ async def _verify_google_id_token(id_token: str, client_id: str) -> Dict[str, An
     return payload
 
 
-def _store_oauth_state(provider: str, origin: str, extra: Optional[Dict[str, Any]] = None) -> str:
+def _store_oauth_state(
+    provider: str, origin: str, extra: Optional[Dict[str, Any]] = None
+) -> str:
     state = secrets.token_urlsafe(24)
     OAUTH_STATE[state] = {
         "provider": provider,
@@ -303,11 +295,8 @@ async def register(payload: Dict[str, Any]) -> Dict[str, Any]:
             "INSERT INTO users(email, password_hash, salt, created_at) VALUES(?, ?, ?, ?)",
             (email, password_hash, salt_hex, now),
         )
-        user_id = int(cur.lastrowid)
-        conn.execute(
-            "INSERT OR REPLACE INTO subscriptions(user_id, plan, status, expires_at) VALUES(?, ?, ?, ?)",
-            (user_id, "free", "inactive", None),
-        )
+        if cur.lastrowid is None:
+            raise HTTPException(status_code=500, detail="Failed to create user")
         conn.commit()
     finally:
         conn.close()
@@ -330,12 +319,17 @@ async def login(payload: Dict[str, Any]) -> Dict[str, Any]:
     now = int(time.time())
     exp = now + 24 * 60 * 60
     token = _sign({"sub": user["id"], "email": user["email"], "iat": now, "exp": exp})
-    sub = _get_subscription(int(user["id"]))
-    return {"access_token": token, "token_type": "bearer", "expires_in": exp - now, "subscription": sub}
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "expires_in": exp - now,
+    }
 
 
 @router.get("/auth/oauth/{provider}/start")
-async def oauth_start(provider: str, origin: Optional[str] = Query(default="")) -> Dict[str, Any]:
+async def oauth_start(
+    provider: str, origin: Optional[str] = Query(default="")
+) -> Dict[str, Any]:
     config = _oauth_config(provider)
     if not config.get("client_id"):
         raise HTTPException(status_code=500, detail=f"{provider} OAuth not configured")
@@ -394,25 +388,4 @@ async def oauth_google_callback(code: str, state: str) -> HTMLResponse:
 @router.get("/auth/me")
 async def me(authorization: Optional[str] = Header(default=None)) -> Dict[str, Any]:
     user = require_user(authorization)
-    sub = _get_subscription(user["user_id"])
-    return {"email": user["email"], "subscription": sub}
-
-
-@router.post("/auth/subscribe")
-async def subscribe(payload: Dict[str, Any], authorization: Optional[str] = Header(default=None)) -> Dict[str, Any]:
-    user = require_user(authorization)
-    plan = str(payload.get("plan") or "pro").lower().strip()
-    if plan not in {"pro", "ultimate"}:
-        raise HTTPException(status_code=400, detail="Invalid plan")
-    now = int(time.time())
-    expires_at = now + 30 * 24 * 60 * 60
-    conn = _db()
-    try:
-        conn.execute(
-            "INSERT OR REPLACE INTO subscriptions(user_id, plan, status, expires_at) VALUES(?, ?, ?, ?)",
-            (user["user_id"], plan, "active", expires_at),
-        )
-        conn.commit()
-    finally:
-        conn.close()
-    return {"plan": plan, "status": "active", "expires_at": expires_at}
+    return {"email": user["email"]}

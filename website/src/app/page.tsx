@@ -6,6 +6,7 @@ import { ChartShowcase } from "@/components/sections/ChartShowcase";
 import { CodeShowcase } from "@/components/sections/CodeShowcase";
 import { PerformanceSection } from "@/components/sections/PerformanceSection";
 import { Footer } from "@/components/sections/Footer";
+import { HomeScrollAnimations } from "@/components/sections/HomeScrollAnimations";
 
 export default function Home() {
   return (
@@ -20,6 +21,7 @@ export default function Home() {
       <CodeShowcase />
       <PerformanceSection />
       <Footer />
+      <HomeScrollAnimations />
     </main>
   );
 }

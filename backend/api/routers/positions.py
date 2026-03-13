@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import json
 import time
+import logging
 from typing import Any, Dict, List, Optional, Tuple
 
 import duckdb
@@ -10,9 +11,16 @@ from fastapi import APIRouter, HTTPException, Query
 
 from ..config import BRONZE_DIR, GOLD_DIR, SILVER_DIR
 from ..utils import normalize_session_code, resolve_dir
+from ..clickhouse import (
+    clickhouse_primary,
+    clickhouse_primary_strict,
+    clickhouse_shadow,
+)
+from ..repositories import fetch_positions_stream_clickhouse
 from . import metrics as metrics_router
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 MAX_WINDOW_S = 60.0
 MAX_ROWS = 10_000
@@ -31,9 +39,47 @@ def _fetchall(sql: str, params: List[Any]) -> List[Any]:
 
 def _estimate_payload_bytes(payload: Any) -> int:
     try:
-        return len(json.dumps(payload, separators=(",", ":"), default=str).encode("utf-8"))
+        return len(
+            json.dumps(payload, separators=(",", ":"), default=str).encode("utf-8")
+        )
     except Exception:
         return 0
+
+
+def _row_signature(row: Dict[str, Any]) -> tuple[Any, Any, Any, Any]:
+    try:
+        time_ms = round(float(row.get("time_ms") or 0.0), 3)
+    except Exception:
+        time_ms = None
+    try:
+        x = round(float(row.get("x") or 0.0), 3)
+    except Exception:
+        x = None
+    try:
+        y = round(float(row.get("y") or 0.0), 3)
+    except Exception:
+        y = None
+    try:
+        driver = int(row.get("driver_number") or 0)
+    except Exception:
+        driver = None
+    return time_ms, driver, x, y
+
+
+def _shadow_rows_mismatch(
+    duck_rows: List[Dict[str, Any]], ch_rows: List[Dict[str, Any]]
+) -> bool:
+    if len(duck_rows) != len(ch_rows):
+        return True
+    n = len(duck_rows)
+    if n == 0:
+        return False
+    probes = list(range(min(3, n)))
+    tail = list(range(max(0, n - 3), n))
+    for idx in probes + tail:
+        if _row_signature(duck_rows[idx]) != _row_signature(ch_rows[idx]):
+            return True
+    return False
 
 
 def _candidate_position_files(year: int, race_name: str, session: str) -> List[str]:
@@ -78,7 +124,11 @@ def _shape(path: str) -> Optional[Tuple[str, str, str, str]]:
     cols = _column_set(path)
     x_col = "position_x" if "position_x" in cols else ("x" if "x" in cols else "")
     y_col = "position_y" if "position_y" in cols else ("y" if "y" in cols else "")
-    d_col = "driver_number" if "driver_number" in cols else ("driver" if "driver" in cols else "")
+    d_col = (
+        "driver_number"
+        if "driver_number" in cols
+        else ("driver" if "driver" in cols else "")
+    )
     if not x_col or not y_col or not d_col:
         return None
     if "session_time_seconds" in cols:
@@ -102,14 +152,46 @@ async def get_positions_stream(
 ) -> List[Dict[str, Any]]:
     started_at = time.perf_counter()
     if int(time_end_ms) <= int(time_start_ms):
-        raise HTTPException(status_code=400, detail="time_end_ms must be greater than time_start_ms")
+        raise HTTPException(
+            status_code=400, detail="time_end_ms must be greater than time_start_ms"
+        )
 
     race_name = round.replace("-", " ")
     duration_s = max(0.0, (float(time_end_ms) - float(time_start_ms)) / 1000.0)
     if duration_s > MAX_WINDOW_S:
-        raise HTTPException(status_code=413, detail=f"Window exceeds {int(MAX_WINDOW_S)}s limit")
+        raise HTTPException(
+            status_code=413, detail=f"Window exceeds {int(MAX_WINDOW_S)}s limit"
+        )
     if drivers and len(drivers) > MAX_DRIVERS:
-        raise HTTPException(status_code=413, detail=f"Max {MAX_DRIVERS} drivers per request")
+        raise HTTPException(
+            status_code=413, detail=f"Max {MAX_DRIVERS} drivers per request"
+        )
+
+    ch_payload = fetch_positions_stream_clickhouse(
+        year=int(year),
+        race_name=race_name,
+        session_type=session_type,
+        time_start_ms=int(time_start_ms),
+        time_end_ms=int(time_end_ms),
+        drivers=[int(x) for x in drivers] if drivers else None,
+        sample_rate=int(sample_rate),
+        max_rows=int(MAX_ROWS),
+    )
+    if clickhouse_primary():
+        if ch_payload is None:
+            if clickhouse_primary_strict():
+                raise HTTPException(
+                    status_code=503,
+                    detail="ClickHouse primary mode could not serve positions stream",
+                )
+        else:
+            metrics_router.record_endpoint_sample(
+                _STREAM_METRICS_ROUTE,
+                (time.perf_counter() - started_at) * 1000.0,
+                _estimate_payload_bytes(ch_payload),
+                len(ch_payload),
+            )
+            return ch_payload
 
     candidates = _candidate_position_files(year, race_name, session_type)
     if not candidates:
@@ -137,7 +219,9 @@ async def get_positions_stream(
             ]
             params: List[Any] = [int(time_start_ms), int(time_end_ms)]
             if drivers:
-                where.append("driver_number IN (" + ",".join(["?"] * len(drivers)) + ")")
+                where.append(
+                    "driver_number IN (" + ",".join(["?"] * len(drivers)) + ")"
+                )
                 params.extend([int(x) for x in drivers])
 
             if time_col == "date":
@@ -191,7 +275,9 @@ async def get_positions_stream(
             query_params = [path, *params, int(sample_rate), int(MAX_ROWS + 1)]
             rows = _fetchall(sql, query_params)
             if len(rows) > MAX_ROWS:
-                raise HTTPException(status_code=413, detail=f"Result exceeds {MAX_ROWS} rows")
+                raise HTTPException(
+                    status_code=413, detail=f"Result exceeds {MAX_ROWS} rows"
+                )
             payload = [
                 {
                     "time_ms": float(r[0]),
@@ -201,6 +287,19 @@ async def get_positions_stream(
                 }
                 for r in rows
             ]
+            if (
+                ch_payload is not None
+                and clickhouse_shadow()
+                and _shadow_rows_mismatch(payload, ch_payload)
+            ):
+                logger.warning(
+                    "positions_shadow_mismatch year=%s race=%s session=%s duck_rows=%s ch_rows=%s",
+                    year,
+                    race_name,
+                    session_type,
+                    len(payload),
+                    len(ch_payload),
+                )
             metrics_router.record_endpoint_sample(
                 _STREAM_METRICS_ROUTE,
                 (time.perf_counter() - started_at) * 1000.0,

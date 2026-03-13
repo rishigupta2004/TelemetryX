@@ -7,6 +7,15 @@ import math
 import re
 import logging
 
+from ..clickhouse import (
+    clickhouse_database,
+    clickhouse_enabled,
+    clickhouse_host,
+    clickhouse_port,
+    data_source_mode,
+    get_clickhouse_client,
+)
+
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
@@ -18,16 +27,32 @@ _timings_ms: Dict[str, float] = {
 }
 _latency_samples: Dict[str, Deque[float]] = defaultdict(lambda: deque(maxlen=1000))
 _payload_samples: Dict[str, Deque[int]] = defaultdict(lambda: deque(maxlen=1000))
-_endpoint_latency_samples: Dict[str, Deque[float]] = defaultdict(lambda: deque(maxlen=1000))
-_endpoint_payload_samples: Dict[str, Deque[int]] = defaultdict(lambda: deque(maxlen=1000))
+_endpoint_latency_samples: Dict[str, Deque[float]] = defaultdict(
+    lambda: deque(maxlen=1000)
+)
+_endpoint_payload_samples: Dict[str, Deque[int]] = defaultdict(
+    lambda: deque(maxlen=1000)
+)
 _endpoint_row_samples: Dict[str, Deque[int]] = defaultdict(lambda: deque(maxlen=1000))
 _endpoint_sample_counts: Dict[str, int] = defaultdict(int)
 
 _KEY_ROUTE_PATTERNS = [
-    (re.compile(r"^/api/v1/sessions/\d+/[^/]+/[^/]+/telemetry$"), "/api/v1/sessions/{year}/{race}/{session}/telemetry"),
-    (re.compile(r"^/api/v1/sessions/\d+/[^/]+/[^/]+/positions$"), "/api/v1/sessions/{year}/{race}/{session}/positions"),
-    (re.compile(r"^/api/v1/telemetry/\d+/[^/]+/stream$"), "/api/v1/telemetry/{year}/{round}/stream"),
-    (re.compile(r"^/api/v1/positions/\d+/[^/]+/stream$"), "/api/v1/positions/{year}/{round}/stream"),
+    (
+        re.compile(r"^/api/v1/sessions/\d+/[^/]+/[^/]+/telemetry$"),
+        "/api/v1/sessions/{year}/{race}/{session}/telemetry",
+    ),
+    (
+        re.compile(r"^/api/v1/sessions/\d+/[^/]+/[^/]+/positions$"),
+        "/api/v1/sessions/{year}/{race}/{session}/positions",
+    ),
+    (
+        re.compile(r"^/api/v1/telemetry/\d+/[^/]+/stream$"),
+        "/api/v1/telemetry/{year}/{round}/stream",
+    ),
+    (
+        re.compile(r"^/api/v1/positions/\d+/[^/]+/stream$"),
+        "/api/v1/positions/{year}/{round}/stream",
+    ),
 ]
 
 
@@ -42,14 +67,18 @@ def _bucket_path(path: str) -> str:
 def record_request(path: str, duration_ms: float, payload_bytes: int = 0) -> None:
     route = _bucket_path(path)
     _counters["http_requests_total"] = _counters.get("http_requests_total", 0) + 1
-    key = f"http_requests_total{{path=\"{route}\"}}"
+    key = f'http_requests_total{{path="{route}"}}'
     _counters[key] = _counters.get(key, 0) + 1
-    _timings_ms["http_request_duration_ms_sum"] = _timings_ms.get("http_request_duration_ms_sum", 0.0) + float(duration_ms)
+    _timings_ms["http_request_duration_ms_sum"] = _timings_ms.get(
+        "http_request_duration_ms_sum", 0.0
+    ) + float(duration_ms)
     _latency_samples[route].append(float(duration_ms))
     _payload_samples[route].append(max(0, int(payload_bytes)))
 
 
-def record_endpoint_sample(path: str, duration_ms: float, payload_bytes: int, row_count: int) -> None:
+def record_endpoint_sample(
+    path: str, duration_ms: float, payload_bytes: int, row_count: int
+) -> None:
     route = _bucket_path(path)
     lat = float(duration_ms)
     size = max(0, int(payload_bytes))
@@ -73,6 +102,13 @@ def record_endpoint_sample(path: str, duration_ms: float, payload_bytes: int, ro
             int(round(_percentile(row_sorted, 50))) if row_sorted else 0,
             int(round(_percentile(row_sorted, 95))) if row_sorted else 0,
         )
+
+
+def increment_counter(name: str, delta: int = 1) -> None:
+    key = str(name or "").strip()
+    if not key:
+        return
+    _counters[key] = int(_counters.get(key, 0)) + int(delta)
 
 
 def _percentile(values: list[float], p: float) -> float:
@@ -148,5 +184,90 @@ async def performance_metrics() -> Dict[str, Any]:
 @router.get("/metrics/performance/summary")
 async def performance_summary() -> Dict[str, Any]:
     routes = await performance_metrics()
-    key_routes: Dict[str, Any] = {bucket: routes[bucket] for _, bucket in _KEY_ROUTE_PATTERNS if bucket in routes}
+    key_routes: Dict[str, Any] = {
+        bucket: routes[bucket] for _, bucket in _KEY_ROUTE_PATTERNS if bucket in routes
+    }
     return {"routes": routes, "key_routes": key_routes}
+
+
+@router.get("/health/data-source")
+async def data_source_health() -> Dict[str, Any]:
+    mode = data_source_mode()
+    payload: Dict[str, Any] = {
+        "mode": mode,
+        "clickhouse": {
+            "enabled": bool(clickhouse_enabled()),
+            "configured": {
+                "host": clickhouse_host(),
+                "port": int(clickhouse_port()),
+                "database": clickhouse_database(),
+            },
+            "connected": False,
+            "watermarks": {
+                "total": 0,
+                "latest_updated_at": None,
+                "latest_age_seconds": None,
+                "datasets": {},
+            },
+            "error": None,
+        },
+    }
+
+    client = get_clickhouse_client()
+    if client is None:
+        payload["clickhouse"]["error"] = "clickhouse_client_unavailable"
+        return payload
+
+    try:
+        ping_ok = bool(client.ping())
+        payload["clickhouse"]["connected"] = ping_ok
+        if not ping_ok:
+            payload["clickhouse"]["error"] = "clickhouse_ping_failed"
+            return payload
+
+        total_rows = client.query(
+            "SELECT COUNT(*) FROM latest_ingest_watermarks"
+        ).result_rows
+        payload["clickhouse"]["watermarks"]["total"] = (
+            int(total_rows[0][0]) if total_rows else 0
+        )
+
+        latest_row = client.query(
+            "SELECT max(updated_at) FROM latest_ingest_watermarks"
+        ).result_rows
+        latest_ts = latest_row[0][0] if latest_row else None
+        if latest_ts is not None:
+            try:
+                latest_epoch = float(latest_ts.timestamp())
+                age_s = max(0.0, time.time() - latest_epoch)
+                payload["clickhouse"]["watermarks"]["latest_updated_at"] = str(
+                    latest_ts
+                )
+                payload["clickhouse"]["watermarks"]["latest_age_seconds"] = round(
+                    age_s, 2
+                )
+            except Exception:
+                payload["clickhouse"]["watermarks"]["latest_updated_at"] = str(
+                    latest_ts
+                )
+
+        by_dataset = client.query(
+            """
+            SELECT dataset, COUNT(*) AS n, max(updated_at) AS updated_at
+            FROM latest_ingest_watermarks
+            GROUP BY dataset
+            ORDER BY dataset
+            """
+        ).result_rows
+        ds_payload: Dict[str, Any] = {}
+        for row in by_dataset:
+            ds_name = str(row[0])
+            ds_payload[ds_name] = {
+                "paths": int(row[1]),
+                "latest_updated_at": str(row[2]) if row[2] is not None else None,
+            }
+        payload["clickhouse"]["watermarks"]["datasets"] = ds_payload
+        return payload
+    except Exception as exc:
+        payload["clickhouse"]["error"] = str(exc)
+        return payload

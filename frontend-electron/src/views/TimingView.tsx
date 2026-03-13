@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { RaceControlFeed } from '../components/RaceControlFeed'
 import { TrackMap } from '../components/TrackMap'
 import { ViewErrorBoundary } from '../components/ViewErrorBoundary'
@@ -6,7 +6,7 @@ import { WeatherPanel } from '../components/WeatherPanel'
 import TimingTower from '../components/TimingTower'
 import { useTimingData } from '../hooks/useTimingData'
 
-export const TimingView = React.memo(function TimingView() {
+export const TimingView = memo(function TimingView() {
   const timing = useTimingData()
 
   return (
@@ -22,7 +22,7 @@ export const TimingView = React.memo(function TimingView() {
         {/* Left column: Timing Tower — fixed 38%, no min-w */}
         <div className="min-h-0 min-w-0 flex-[0_0_38%] overflow-hidden">
           <ViewErrorBoundary viewName="Timing Tower">
-            <TimingTower rows={timing.rows} status={timing.status} error={timing.error} />
+            <TimingTower rows={timing.rows} sessionBestLap={timing.sessionBestLap} status={timing.status} error={timing.error} />
           </ViewErrorBoundary>
         </div>
 

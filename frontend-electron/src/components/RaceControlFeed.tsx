@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState, useRef } from 'react'
+import React, { useEffect, useMemo, useState, useRef, memo, useCallback } from 'react'
 import { animate } from 'animejs'
-import { getRaceControlStateFromSlice, upperBoundRaceControlByTimestamp } from '../lib/raceControlState'
+import { getRaceControlState, upperBoundRaceControlByTimestamp } from '../lib/raceControlState'
 import { useSessionTime2s } from '../lib/timeUtils'
 import { useSessionStore } from '../stores/sessionStore'
 import type { RaceControlMessage } from '../types'
@@ -106,15 +106,23 @@ const stateBadge = (
   return { label: flag, cls: `${base} bg-bg-elevated text-fg-secondary border-border-hard` }
 }
 
-const RaceControlMessageRow = React.memo(function RaceControlMessageRow({
+interface RaceControlMessageRowProps {
+  m: OrderedRaceControl
+  i: number
+  accent: ReturnType<typeof msgAccent>
+  tag: ReturnType<typeof eventTag>
+  rowKey: string
+}
+
+const RaceControlMessageRow = memo(function RaceControlMessageRow({
   m, i, accent, tag, rowKey
-}: {
-  m: OrderedRaceControl; i: number; accent: ReturnType<typeof msgAccent>; tag: ReturnType<typeof eventTag>; rowKey: string
-}) {
+}: RaceControlMessageRowProps) {
   const ref = useRef<HTMLDivElement>(null)
+  const hasAnimatedRef = useRef(false)
 
   useEffect(() => {
-    if (ref.current) {
+    if (ref.current && !hasAnimatedRef.current) {
+      hasAnimatedRef.current = true
       animate(ref.current, {
         translateX: [20, 0],
         opacity: [0, 1],
@@ -155,9 +163,16 @@ const RaceControlMessageRow = React.memo(function RaceControlMessageRow({
       <div className="pl-2 font-mono text-[11px] uppercase tracking-wide text-fg-primary leading-tight mt-1">{m.message}</div>
     </div>
   )
+}, (prev, next) => {
+  return (
+    prev.m === next.m &&
+    prev.i === next.i &&
+    prev.accent.bar === next.accent.bar &&
+    prev.accent.bg === next.accent.bg
+  )
 })
 
-export function RaceControlFeed() {
+export const RaceControlFeed = memo(function RaceControlFeed() {
   const sessionData = useSessionStore((s) => s.sessionData)
   const sessionTime = useSessionTime2s()
   const [filter, setFilter] = useState<FilterKey>('all')
@@ -188,14 +203,34 @@ export function RaceControlFeed() {
   const badge = useMemo(() => {
     if (!messages.length) return null
     const e = upperBoundRaceControlByTimestamp(messages, sessionTime)
-    const s = getRaceControlStateFromSlice(
-      messages,
-      e,
+    const visible = messages.slice(0, e)
+    const s = getRaceControlState(
+      visible,
       sessionTime,
       sessionData?.metadata?.raceStartSeconds ?? null
     )
     return stateBadge(s.trackFlag, s.isSafetyCar, s.isVSC)
   }, [messages, sessionTime, sessionData?.metadata?.raceStartSeconds])
+
+  const handleSetFilter = useCallback((key: FilterKey) => {
+    setFilter(key)
+  }, [])
+
+  const renderItem = useCallback((m: OrderedRaceControl, i: number) => {
+    const accent = msgAccent(m)
+    const tag = eventTag(m)
+    const rowKey = messageKey(m)
+    return (
+      <RaceControlMessageRow
+        key={rowKey}
+        rowKey={rowKey}
+        m={m}
+        i={i}
+        accent={accent}
+        tag={tag}
+      />
+    )
+  }, [])
 
   if (!visible.length) {
     return (
@@ -231,7 +266,7 @@ export function RaceControlFeed() {
             <button
               key={item.key}
               type="button"
-              onClick={() => setFilter(item.key)}
+              onClick={() => handleSetFilter(item.key)}
               className={`px-2 py-[2px] text-[9px] font-bold tracking-widest uppercase border transition-colors ${filter === item.key
                 ? 'border-blue-sel bg-blue-sel/10 text-blue-sel'
                 : 'border-border-hard bg-bg-surface text-fg-muted hover:text-fg-primary'
@@ -248,23 +283,9 @@ export function RaceControlFeed() {
         {visible
           .slice()
           .reverse()
-          .map((m, i) => {
-            const accent = msgAccent(m)
-            const tag = eventTag(m)
-            const rowKey = messageKey(m)
-
-            return (
-              <RaceControlMessageRow
-                key={rowKey}
-                rowKey={rowKey}
-                m={m}
-                i={i}
-                accent={accent}
-                tag={tag}
-              />
-            )
-          })}
+          .map((m, i) => renderItem(m, i))
+        }
       </div>
     </div>
   )
-}
+})

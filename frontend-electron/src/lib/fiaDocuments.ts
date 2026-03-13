@@ -1,18 +1,16 @@
 import { ApiError } from '../api/client'
 import type { FiaDocumentItem } from '../types'
 
-export function normalizeFiaText(value: string): string {
-  return String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '')
-}
+export const normalizeFiaText = (value: string): string => String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '')
 
-export function availableEventsFromApiError(err: unknown): string[] {
+export const availableEventsFromApiError = (err: unknown): string[] => {
   if (!(err instanceof ApiError) || !err.detail || typeof err.detail !== 'object') return []
   const detail = err.detail as { available_events?: unknown }
   if (!Array.isArray(detail.available_events)) return []
   return detail.available_events.map((item) => String(item)).filter(Boolean)
 }
 
-export function apiErrorText(err: unknown): string {
+export const apiErrorText = (err: unknown): string => {
   if (err instanceof ApiError && err.detail && typeof err.detail === 'object') {
     const detailMessage = (err.detail as { message?: unknown }).message
     if (typeof detailMessage === 'string' && detailMessage.trim()) return detailMessage
@@ -20,7 +18,7 @@ export function apiErrorText(err: unknown): string {
   return String(err)
 }
 
-export function parseFiaPublishedDate(value: FiaDocumentItem): Date | null {
+const parseFiaPublishedDate = (value: FiaDocumentItem): Date | null => {
   if (value.published_at) {
     const parsed = new Date(value.published_at)
     if (!Number.isNaN(parsed.getTime())) return parsed
@@ -34,19 +32,19 @@ export function parseFiaPublishedDate(value: FiaDocumentItem): Date | null {
   return Number.isNaN(parsed.getTime()) ? null : parsed
 }
 
-export function formatFiaPublishedCompact(value: FiaDocumentItem): string {
+export const formatFiaPublishedCompact = (value: FiaDocumentItem): string => {
   const date = parseFiaPublishedDate(value)
   if (!date) return value.published_raw || '-'
   return date.toLocaleString([], { month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })
 }
 
-export function formatFiaPublishedLong(value: FiaDocumentItem): string {
+export const formatFiaPublishedLong = (value: FiaDocumentItem): string => {
   const date = parseFiaPublishedDate(value)
   if (!date) return value.published_raw || '-'
   return `${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
 }
 
-export function fiaTimelineBucket(value: FiaDocumentItem): string {
+export const fiaTimelineBucket = (value: FiaDocumentItem): string => {
   const date = parseFiaPublishedDate(value)
   if (!date) return 'Unknown'
   const year = date.getFullYear()

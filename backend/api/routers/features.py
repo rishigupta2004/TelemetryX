@@ -4,17 +4,32 @@ import pandas as pd
 import os
 import duckdb
 import logging
-from ..utils import resolve_dir, read_parquet_df, read_parquet_records, normalize_session_code, display_session_code
+import datetime
+import math
+from functools import lru_cache
+from ..utils import (
+    resolve_dir,
+    read_parquet_df,
+    read_parquet_records,
+    normalize_session_code,
+    display_session_code,
+)
+from ..clickhouse import (
+    clickhouse_primary,
+    clickhouse_primary_strict,
+    clickhouse_shadow,
+)
 from ..config import FEATURES_DIR
 from ..catalog import calendar_order
 from ..utils import normalize_key
+from ..repositories import fetch_feature_rows_clickhouse
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
 FEATURE_DATASETS: Dict[str, str] = {
     "lap": "lap_features.parquet",
-    " tyre": "tyres_features.parquet",
+    "tyre": "tyre_features.parquet",
     "telemetry": "telemetry_features.parquet",
     "race_context": "race_context_features.parquet",
     "comparison": "comparison_features.parquet",
@@ -25,25 +40,120 @@ FEATURE_DATASETS: Dict[str, str] = {
 }
 
 
-def find_features_path(year: int, race_name: str, session: str) -> Optional[str]:
-    """Find path to feature files for a race session."""
-    year_path = os.path.join(FEATURES_DIR, str(year))
+def _stable_feature_value(value: Any) -> Any:
+    if isinstance(value, dict):
+        return {str(k): _stable_feature_value(v) for k, v in value.items()}
+    if isinstance(value, list):
+        return [_stable_feature_value(v) for v in value]
+    if isinstance(value, tuple):
+        return [_stable_feature_value(v) for v in value]
+    if isinstance(value, datetime.datetime):
+        return value.isoformat()
+    if isinstance(value, datetime.date):
+        return value.isoformat()
+    if value is None:
+        return None
+    if isinstance(value, float) and not math.isfinite(value):
+        return None
+    try:
+        if pd.isna(value):
+            return None
+    except Exception:
+        pass
+    try:
+        item = value.item()  # numpy scalar
+        if item is not value:
+            return _stable_feature_value(item)
+    except Exception:
+        pass
+    return value
+
+
+def _normalize_feature_rows(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    out: List[Dict[str, Any]] = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        out.append({str(k): _stable_feature_value(v) for k, v in row.items()})
+    return out
+
+
+def _feature_row_signature(row: Dict[str, Any]) -> str:
+    stable = {str(k): _stable_feature_value(v) for k, v in row.items()}
+    keys = sorted(stable.keys())[:20]
+    snap = {k: stable.get(k) for k in keys}
+    return str(snap)
+
+
+def _feature_shadow_mismatch(
+    duck_rows: List[Dict[str, Any]], ch_rows: List[Dict[str, Any]]
+) -> bool:
+    if len(duck_rows) != len(ch_rows):
+        return True
+    n = len(duck_rows)
+    if n == 0:
+        return False
+    probes = list(range(min(2, n)))
+    tail = list(range(max(0, n - 2), n))
+    for idx in probes + tail:
+        if _feature_row_signature(duck_rows[idx]) != _feature_row_signature(
+            ch_rows[idx]
+        ):
+            return True
+    return False
+
+
+@lru_cache(maxsize=1024)
+def _find_features_path_cached(
+    features_root: str,
+    year: int,
+    race_key: str,
+    session_code: str,
+    year_mtime_ns: int,
+) -> Optional[str]:
+    _ = year_mtime_ns
+    year_path = os.path.join(features_root, str(int(year)))
     if not os.path.exists(year_path):
         return None
-    race_dir = resolve_dir(year_path, race_name)
+    race_dir = None
+    for entry in os.listdir(year_path):
+        if not os.path.isdir(os.path.join(year_path, entry)):
+            continue
+        if normalize_key(entry) == race_key:
+            race_dir = entry
+            break
     if not race_dir:
         return None
-    path = os.path.join(year_path, race_dir, normalize_session_code(session))
-    if os.path.exists(path):
-        return path
-    return None
+    path = os.path.join(year_path, race_dir, session_code)
+    return path if os.path.exists(path) else None
+
+
+def find_features_path(year: int, race_name: str, session: str) -> Optional[str]:
+    """Find path to feature files for a race session."""
+    features_root = str(FEATURES_DIR)
+    year_path = os.path.join(features_root, str(year))
+    if not os.path.exists(year_path):
+        return None
+    try:
+        year_mtime_ns = int(os.stat(year_path).st_mtime_ns)
+    except Exception:
+        year_mtime_ns = 0
+    return _find_features_path_cached(
+        features_root,
+        int(year),
+        normalize_key(race_name),
+        normalize_session_code(session),
+        year_mtime_ns,
+    )
 
 
 DEFAULT_FEATURE_LIMIT = 2000
 MAX_FEATURE_LIMIT = 20000
 
 
-def load_feature_records(session_path: Optional[str], filename: str, limit: int = DEFAULT_FEATURE_LIMIT) -> List[Dict[str, Any]]:
+def load_feature_records(
+    session_path: Optional[str], filename: str, limit: int = DEFAULT_FEATURE_LIMIT
+) -> List[Dict[str, Any]]:
     if not session_path:
         logger.warning("features_missing_session_path filename=%s", str(filename))
         return []
@@ -53,7 +163,8 @@ def load_feature_records(session_path: Optional[str], filename: str, limit: int 
         return []
     try:
         use_limit = max(1, min(int(limit), MAX_FEATURE_LIMIT))
-        return read_parquet_records(feature_file, limit=use_limit)
+        rows = read_parquet_records(feature_file, limit=use_limit)
+        return _normalize_feature_rows(rows)
     except Exception as e:
         logger.warning("features_read_failed path=%s error=%s", feature_file, str(e))
         return []
@@ -71,7 +182,39 @@ def _load_named_feature(
     filename = FEATURE_DATASETS.get(feature_name)
     if not filename:
         return []
-    return load_feature_records(session_path, filename, limit=limit)
+    ch_rows = fetch_feature_rows_clickhouse(
+        year=int(year),
+        race_name=race_name,
+        session_type=normalize_session_code(session),
+        feature_type=feature_name,
+        limit=int(limit),
+    )
+    if clickhouse_primary():
+        if ch_rows is None:
+            if clickhouse_primary_strict():
+                raise HTTPException(
+                    status_code=503,
+                    detail="ClickHouse primary mode could not serve feature rows",
+                )
+        else:
+            return _normalize_feature_rows(ch_rows)
+
+    duck_rows = load_feature_records(session_path, filename, limit=limit)
+    if (
+        ch_rows is not None
+        and clickhouse_shadow()
+        and _feature_shadow_mismatch(duck_rows, ch_rows)
+    ):
+        logger.warning(
+            "features_shadow_mismatch year=%s race=%s session=%s feature=%s duck_rows=%s ch_rows=%s",
+            year,
+            race_name,
+            session,
+            feature_name,
+            len(duck_rows),
+            len(ch_rows),
+        )
+    return _normalize_feature_rows(duck_rows)
 
 
 def _filter_driver(df: pd.DataFrame, driver: str) -> pd.DataFrame:
@@ -131,12 +274,16 @@ def get_available_races(year: int) -> List[str]:
     year_path = os.path.join(FEATURES_DIR, str(year))
     if not os.path.exists(year_path):
         return []
-    races = [d for d in os.listdir(year_path) if os.path.isdir(os.path.join(year_path, d))]
+    races = [
+        d for d in os.listdir(year_path) if os.path.isdir(os.path.join(year_path, d))
+    ]
     order = calendar_order(year)
     order_map = {normalize_key(name): idx for idx, name in enumerate(order)}
+
     def _sort_key(name: str):
         key = normalize_key(name)
         return (0, order_map[key]) if key in order_map else (1, name)
+
     return sorted(races, key=_sort_key)
 
 
@@ -145,7 +292,9 @@ def get_available_sessions(year: int, race_name: str) -> List[str]:
     race_path = os.path.join(FEATURES_DIR, str(year), race_name)
     if not os.path.exists(race_path):
         return []
-    sessions = [d for d in os.listdir(race_path) if os.path.isdir(os.path.join(race_path, d))]
+    sessions = [
+        d for d in os.listdir(race_path) if os.path.isdir(os.path.join(race_path, d))
+    ]
     return sorted([display_session_code(s) for s in sessions])
 
 
@@ -155,37 +304,39 @@ async def get_features_summary() -> Dict[str, Any]:
     try:
         total_features = 0
         by_year = {}
-        
+
         for year_dir in os.listdir(FEATURES_DIR):
             if not year_dir.isdigit():
                 continue
             year = int(year_dir)
             year_path = os.path.join(FEATURES_DIR, year_dir)
-            
+
             n_races = 0
             n_sessions = 0
             n_files = 0
-            
+
             for race_dir in os.listdir(year_path):
                 race_path = os.path.join(year_path, race_dir)
                 if not os.path.isdir(race_path):
                     continue
                 n_races += 1
-                
+
                 for session_dir in os.listdir(race_path):
                     session_path = os.path.join(race_path, session_dir)
                     if not os.path.isdir(session_path):
                         continue
                     n_sessions += 1
-                    n_files += len([f for f in os.listdir(session_path) if f.endswith(".parquet")])
-            
+                    n_files += len(
+                        [f for f in os.listdir(session_path) if f.endswith(".parquet")]
+                    )
+
             by_year[year] = {
                 "n_races": n_races,
                 "n_sessions": n_sessions,
                 "n_feature_files": n_files,
             }
             total_features += n_files
-        
+
         return {
             "total_feature_files": total_features,
             "by_year": by_year,
@@ -230,32 +381,46 @@ async def get_session_features(
     """Get feature data for a race session."""
     race_name = race.replace("-", " ")
     session_path = find_features_path(year, race_name, session)
-    
+
     if not session_path:
-        raise HTTPException(status_code=404, detail=f"No features found for {year} {race_name} {session}")
-    
+        raise HTTPException(
+            status_code=404,
+            detail=f"No features found for {year} {race_name} {session}",
+        )
+
     try:
         feature_files = [f for f in os.listdir(session_path) if f.endswith(".parquet")]
-        
+
         if feature_type:
-            feature_files = [f for f in feature_files if feature_type.lower() in f.lower()]
-        
+            feature_files = [
+                f for f in feature_files if feature_type.lower() in f.lower()
+            ]
+
         features = {}
         for fname in feature_files:
             fpath = os.path.join(session_path, fname)
             conn = duckdb.connect()
             try:
-                n_rows = int(conn.execute("SELECT COUNT(*) FROM read_parquet(?)", [fpath]).fetchone()[0] or 0)
-                sample_df = conn.execute("SELECT * FROM read_parquet(?) LIMIT ?", [fpath, int(sample_limit)]).df()
+                n_rows = int(
+                    conn.execute(
+                        "SELECT COUNT(*) FROM read_parquet(?)", [fpath]
+                    ).fetchone()[0]
+                    or 0
+                )
+                sample_df = conn.execute(
+                    "SELECT * FROM read_parquet(?) LIMIT ?", [fpath, int(sample_limit)]
+                ).df()
             finally:
                 conn.close()
             fname_key = fname.replace("_features.parquet", "")
             features[fname_key] = {
                 "n_rows": n_rows,
                 "columns": list(sample_df.columns),
-                "sample": sample_df.to_dict(orient="records") if len(sample_df) > 0 else [],
+                "sample": sample_df.to_dict(orient="records")
+                if len(sample_df) > 0
+                else [],
             }
-        
+
         return {
             "year": year,
             "race": race_name,
@@ -280,39 +445,53 @@ async def get_tyre_features(year: int, race: str, session: str) -> List[Dict[str
 
 
 @router.get("/features/{year}/{race}/{session}/comparison")
-async def get_comparison_features(year: int, race: str, session: str) -> List[Dict[str, Any]]:
+async def get_comparison_features(
+    year: int, race: str, session: str
+) -> List[Dict[str, Any]]:
     """Get comparison features (head-to-head) for a race session."""
     return _load_named_feature(year, race, session, "comparison")
 
 
 @router.get("/features/{year}/{race}/{session}/telemetry")
-async def get_telemetry_features(year: int, race: str, session: str) -> List[Dict[str, Any]]:
+async def get_telemetry_features(
+    year: int, race: str, session: str
+) -> List[Dict[str, Any]]:
     """Get telemetry features for a race session."""
     return _load_named_feature(year, race, session, "telemetry")
 
 
 @router.get("/features/{year}/{race}/{session}/traffic")
-async def get_traffic_features(year: int, race: str, session: str) -> List[Dict[str, Any]]:
+async def get_traffic_features(
+    year: int, race: str, session: str
+) -> List[Dict[str, Any]]:
     return _load_named_feature(year, race, session, "traffic")
 
 
 @router.get("/features/{year}/{race}/{session}/overtakes")
-async def get_overtakes_features(year: int, race: str, session: str) -> List[Dict[str, Any]]:
+async def get_overtakes_features(
+    year: int, race: str, session: str
+) -> List[Dict[str, Any]]:
     return _load_named_feature(year, race, session, "overtakes")
 
 
 @router.get("/features/{year}/{race}/{session}/position")
-async def get_position_features(year: int, race: str, session: str) -> List[Dict[str, Any]]:
+async def get_position_features(
+    year: int, race: str, session: str
+) -> List[Dict[str, Any]]:
     return _load_named_feature(year, race, session, "position")
 
 
 @router.get("/features/{year}/{race}/{session}/points")
-async def get_points_features(year: int, race: str, session: str) -> List[Dict[str, Any]]:
+async def get_points_features(
+    year: int, race: str, session: str
+) -> List[Dict[str, Any]]:
     return _load_named_feature(year, race, session, "points")
 
 
 @router.get("/features/{year}/{race}/{session}/race-context")
-async def get_race_context_features(year: int, race: str, session: str) -> List[Dict[str, Any]]:
+async def get_race_context_features(
+    year: int, race: str, session: str
+) -> List[Dict[str, Any]]:
     return _load_named_feature(year, race, session, "race_context")
 
 
@@ -326,7 +505,10 @@ async def get_session_feature_catalog(
     race_name = race.replace("-", " ")
     session_path = find_features_path(year, race_name, session)
     if not session_path:
-        raise HTTPException(status_code=404, detail=f"No features found for {year} {race_name} {session}")
+        raise HTTPException(
+            status_code=404,
+            detail=f"No features found for {year} {race_name} {session}",
+        )
 
     catalog: Dict[str, Any] = {}
     for feature_type, filename in FEATURE_DATASETS.items():
@@ -335,8 +517,15 @@ async def get_session_feature_catalog(
             continue
         conn = duckdb.connect()
         try:
-            n_rows = int(conn.execute("SELECT COUNT(*) FROM read_parquet(?)", [fpath]).fetchone()[0] or 0)
-            sample_df = conn.execute("SELECT * FROM read_parquet(?) LIMIT ?", [fpath, int(sample_limit)]).df()
+            n_rows = int(
+                conn.execute(
+                    "SELECT COUNT(*) FROM read_parquet(?)", [fpath]
+                ).fetchone()[0]
+                or 0
+            )
+            sample_df = conn.execute(
+                "SELECT * FROM read_parquet(?) LIMIT ?", [fpath, int(sample_limit)]
+            ).df()
         finally:
             conn.close()
         catalog[feature_type] = {
@@ -365,7 +554,10 @@ async def get_driver_summary(
     race_name = race.replace("-", " ")
     session_path = find_features_path(year, race_name, session)
     if not session_path:
-        raise HTTPException(status_code=404, detail=f"No features found for {year} {race_name} {session}")
+        raise HTTPException(
+            status_code=404,
+            detail=f"No features found for {year} {race_name} {session}",
+        )
 
     def _load(name: str) -> pd.DataFrame:
         fpath = os.path.join(session_path, name)
@@ -374,7 +566,9 @@ async def get_driver_summary(
         try:
             return read_parquet_df(fpath)
         except Exception as exc:
-            logger.warning("driver_summary_load_failed path=%s error=%s", fpath, str(exc))
+            logger.warning(
+                "driver_summary_load_failed path=%s error=%s", fpath, str(exc)
+            )
             return pd.DataFrame()
 
     lap_all_df = _load("lap_features.parquet")
@@ -482,7 +676,11 @@ async def get_driver_summary(
             "lap_number": lap_row.get("lap_number"),
             "position": lap_row.get("position"),
             "last_lap_time": lap_row.get("lap_time_formatted"),
-            "sector_times": [lap_row.get("sector_1_time"), lap_row.get("sector_2_time"), lap_row.get("sector_3_time")],
+            "sector_times": [
+                lap_row.get("sector_1_time"),
+                lap_row.get("sector_2_time"),
+                lap_row.get("sector_3_time"),
+            ],
             "is_valid": lap_row.get("is_valid_lap"),
             "lap_quality_score": lap_row.get("lap_quality_score"),
             "lap_delta_to_leader": lap_row.get("lap_delta_to_leader"),
@@ -522,7 +720,8 @@ async def get_driver_summary(
             "gear_changes": _mean(tel_df, "gear_changes"),
         },
         "race_context": {
-            "track_status": race_row.get("track_status_at_lap") or race_row.get("track_status"),
+            "track_status": race_row.get("track_status_at_lap")
+            or race_row.get("track_status"),
             "weather": race_row.get("weather_conditions"),
             "air_temp": race_row.get("air_temperature"),
             "track_temp": race_row.get("track_temperature"),
@@ -548,10 +747,16 @@ async def get_driver_summary(
         if not comp_df.empty:
             d = str(driver).upper()
             c = str(compare).upper()
-            match = comp_df[(comp_df["driver_1"].str.upper() == d) & (comp_df["driver_2"].str.upper() == c)]
+            match = comp_df[
+                (comp_df["driver_1"].str.upper() == d)
+                & (comp_df["driver_2"].str.upper() == c)
+            ]
             invert = False
             if match.empty:
-                match = comp_df[(comp_df["driver_1"].str.upper() == c) & (comp_df["driver_2"].str.upper() == d)]
+                match = comp_df[
+                    (comp_df["driver_1"].str.upper() == c)
+                    & (comp_df["driver_2"].str.upper() == d)
+                ]
                 invert = True
             if not match.empty:
                 row = match.iloc[0]

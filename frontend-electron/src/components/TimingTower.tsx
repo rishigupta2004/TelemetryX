@@ -1,4 +1,5 @@
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react'
+import { animate } from 'animejs'
 import { COMPOUND_COLORS } from '../lib/colors'
 import { useDriverStore } from '../stores/driverStore'
 import { useF1Flip } from '../hooks/useF1Flip'
@@ -7,12 +8,17 @@ import type { TimingRow } from '../hooks/useTimingData'
 
 interface TimingTowerProps {
   rows: TimingRow[]
+  sessionBestLap?: number | null
   status: 'loading' | 'ready' | 'empty' | 'error'
   error: string | null
 }
 
 const ROW_HEIGHT = 32
 const OVERSCAN = 10
+const ITEM_KEY_PREFIX = 'timing-row-'
+
+const STABLE_EMPTY_OBJ = {}
+const STABLE_NULL: null = null
 
 function cellLap(value: number | null): string {
   if (value == null || !Number.isFinite(value)) return ''
@@ -30,7 +36,7 @@ function areRowsEqual(a: TimingRow, b: TimingRow): boolean {
     a.lastLap === b.lastLap &&
     a.bestLap === b.bestLap &&
     a.bestLapTime === b.bestLapTime &&
-    a.tyreCompound === b.tyreCompound &&
+    a. tyreCompound === b. tyreCompound &&
     a.pits === b.pits &&
     a.sector1 === b.sector1 &&
     a.sector2 === b.sector2 &&
@@ -41,6 +47,11 @@ function areRowsEqual(a: TimingRow, b: TimingRow): boolean {
     a.status === b.status &&
     a.lapsCompleted === b.lapsCompleted
   )
+}
+
+const timingRowCache = new Map<string, TimingRow>()
+const getStableRowKey = (row: TimingRow): string => {
+  return `${row.driverNumber}-${row.position}-${row.lastLap}-${row.bestLapTime ?? 'null'}`
 }
 
 function statePanel(label: string, detail: string, tone: 'muted' | 'error' = 'muted') {
@@ -89,7 +100,6 @@ const TimingRowItem = memo(function TimingRowItem({
 
   const bgClass = isSelected ? 'bg-bg-elevated' : 'bg-transparent hover:bg-bg-elevated'
 
-  // Format LAP TIME conditional coloring based on bestLapTime
   let lapTimeStyle = 'bg-transparent text-fg-primary'
   let bestFlashColor = ''
   if (row.bestLapTime != null && row.lastLap != null) {
@@ -116,15 +126,31 @@ const TimingRowItem = memo(function TimingRowItem({
   const s2Ref = useFlashObserver(row.sector2, !!s2FlashColor, s2FlashColor)
   const s3Ref = useFlashObserver(row.sector3, !!s3FlashColor, s3FlashColor)
 
+  const handleClick = useCallback(() => {
+    onSelect(row.driverCode, false)
+  }, [onSelect, row.driverCode])
+
+  const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      onSelect(row.driverCode, event.ctrlKey || event.metaKey)
+    }
+  }, [onSelect, row.driverCode])
+
   return (
     <div
-      className={`absolute left-0 top-0 flex w-full cursor-pointer items-center border-b border-border-micro transition-colors ${bgClass}`}
+      className={`absolute left-0 top-0 flex w-full cursor-pointer items-center border-b border-border-micro ${bgClass}`}
       style={{
         height: ROW_HEIGHT,
-        transform: `translateY(${idx * ROW_HEIGHT}px)`,
+        transform: `translate3d(0, ${idx * ROW_HEIGHT}px, 0)`,
         opacity: isRetired ? 0.4 : 1,
+        willChange: 'transform',
+        contain: 'layout paint',
       }}
-      onClick={(event) => onSelect(row.driverCode, event.ctrlKey || event.metaKey)}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={0}
+      aria-label={`${row.driverCode} position ${row.position}`}
     >
       <div className="flex items-center min-w-max mx-auto px-2">
         {/* 1. POS */}
@@ -172,46 +198,68 @@ const TimingRowItem = memo(function TimingRowItem({
         </div>
 
         {/* 8. S1 */}
-        <div ref={s1Ref} className={`w-[56px] h-full shrink-0 flex items-center justify-center font-mono text-[12px] ${getSectorBlockStyle(row.s1Color)}`}>
+        <div ref={s1Ref as any} className={`w-[56px] h-full shrink-0 flex items-center justify-center font-mono text-[12px] ${getSectorBlockStyle(row.s1Color)}`}>
           {cellLap(row.sector1)}
         </div>
 
         {/* 8. S2 */}
-        <div ref={s2Ref} className={`w-[56px] h-full shrink-0 flex items-center justify-center font-mono text-[12px] ${getSectorBlockStyle(row.s2Color)} border-l border-border-micro`}>
+        <div ref={s2Ref as any} className={`w-[56px] h-full shrink-0 flex items-center justify-center font-mono text-[12px] ${getSectorBlockStyle(row.s2Color)} border-l border-border-micro`}>
           {cellLap(row.sector2)}
         </div>
 
         {/* 8. S3 */}
-        <div ref={s3Ref} className={`w-[56px] h-full shrink-0 flex items-center justify-center font-mono text-[12px] ${getSectorBlockStyle(row.s3Color)} border-l border-border-micro`}>
+        <div ref={s3Ref as any} className={`w-[56px] h-full shrink-0 flex items-center justify-center font-mono text-[12px] ${getSectorBlockStyle(row.s3Color)} border-l border-border-micro`}>
           {cellLap(row.sector3)}
         </div>
 
         {/* 9. LAP TIME */}
-        <div ref={lapTimeFlashRef} className={`w-[72px] h-full shrink-0 flex items-center justify-end pr-2 font-mono text-[13px] font-bold border-l border-border-micro ${lapTimeStyle}`}>
-          <div ref={lastLapRef}>{row.lastLap || ''}</div>
+        <div ref={lapTimeFlashRef as any} className={`w-[72px] h-full shrink-0 flex items-center justify-end pr-2 font-mono text-[13px] font-bold border-l border-border-micro ${lapTimeStyle}`}>
+          <div ref={lastLapRef as any}>{row.lastLap || ''}</div>
         </div>
       </div>
     </div>
   )
 }, (prev, next) => {
-  return (
-    prev.idx === next.idx &&
-    prev.primaryDriver === next.primaryDriver &&
-    prev.compareDriver === next.compareDriver &&
-    prev.sessionBestLap === next.sessionBestLap &&
-    areRowsEqual(prev.row, next.row)
-  )
+  if (prev.idx !== next.idx) return false
+  if (prev.primaryDriver !== next.primaryDriver) return false
+  if (prev.compareDriver !== next.compareDriver) return false
+  if (prev.sessionBestLap !== next.sessionBestLap) return false
+  if (prev.onSelect !== next.onSelect) return false
+  return areRowsEqual(prev.row, next.row)
 })
 
 export default function TimingTower({ rows, status, error }: TimingTowerProps) {
+  const [isPending, startTransition] = useTransition()
   const primaryDriver = useDriverStore((s) => s.primaryDriver)
   const compareDriver = useDriverStore((s) => s.compareDriver)
   const selectPrimary = useDriverStore((s) => s.selectPrimary)
   const selectCompare = useDriverStore((s) => s.selectCompare)
   const containerRef = useRef<HTMLDivElement | null>(null)
+  const wrapperRef = useRef<HTMLDivElement | null>(null)
   const [scrollTop, setScrollTop] = useState(0)
   const [viewportHeight, setViewportHeight] = useState(560)
+  const [isAnimatingIn, setIsAnimatingIn] = useState(true)
   const frameRef = useRef<number | null>(null)
+  const prevRowsRef = useRef<TimingRow[]>([])
+  const rowsStableRef = useRef<TimingRow[]>(rows)
+
+  useEffect(() => {
+    if (isAnimatingIn && wrapperRef.current) {
+      animate(wrapperRef.current, {
+        opacity: [0, 1],
+        translateY: [10, 0],
+        duration: 350,
+        easing: 'cubicBezier(0.16, 1, 0.3, 1)',
+        complete: () => setIsAnimatingIn(false)
+      })
+    }
+  }, [isAnimatingIn])
+
+  useEffect(() => {
+    if (!isAnimatingIn && wrapperRef.current) {
+      wrapperRef.current.style.opacity = '1'
+    }
+  }, [isAnimatingIn])
 
   const sessionBestLap = useMemo(() => {
     let min: number | null = null
@@ -226,10 +274,12 @@ export default function TimingTower({ rows, status, error }: TimingTowerProps) {
     const node = containerRef.current
     if (!node) return
 
+    let ticking = false
     const onScroll = () => {
-      if (frameRef.current != null) return
+      if (ticking) return
+      ticking = true
       frameRef.current = window.requestAnimationFrame(() => {
-        frameRef.current = null
+        ticking = false
         setScrollTop(node.scrollTop)
       })
     }
@@ -265,14 +315,16 @@ export default function TimingTower({ rows, status, error }: TimingTowerProps) {
     }
   }, [rows, viewportHeight, scrollTop])
 
-  const onSelect = useCallback(
+  const stableOnSelect = useCallback(
     (driverCode: string, toggleCompare: boolean) => {
-      if (toggleCompare) {
-        const isCompare = compareDriver === driverCode
-        selectCompare(isCompare ? null : driverCode)
-        return
-      }
-      selectPrimary(driverCode)
+      startTransition(() => {
+        if (toggleCompare) {
+          const isCompare = compareDriver === driverCode
+          selectCompare(isCompare ? null : driverCode)
+          return
+        }
+        selectPrimary(driverCode)
+      })
     },
     [compareDriver, selectCompare, selectPrimary]
   )
@@ -287,10 +339,9 @@ export default function TimingTower({ rows, status, error }: TimingTowerProps) {
     return statePanel('NO DATA', 'STANDBY FOR SESSION ACTIVITY')
   }
 
-  // Calculate header padding to center it over the table
   return (
-    <div ref={containerRef} className="h-full overflow-x-auto overflow-y-auto w-full border border-border-hard bg-bg-surface flex flex-col items-center">
-      <div className="w-full relative min-w-max pb-[24px]">
+    <div ref={containerRef} className="h-full overflow-x-auto overflow-y-auto w-full border border-border-hard bg-bg-surface flex flex-col items-center" style={{ contain: 'strict layout paint style size' }}>
+      <div ref={wrapperRef} className="w-full relative min-w-max pb-[24px]" style={{ willChange: 'contents', opacity: 0 }}>
         {/* Table Header */}
         <div className="sticky top-0 z-10 flex h-6 w-full items-center border-b border-border-hard bg-bg-surface text-[10px] font-bold text-fg-muted tracking-widest px-2" style={{ fontFamily: 'var(--font-heading)' }}>
           <div className="flex items-center mx-auto">
@@ -312,13 +363,13 @@ export default function TimingTower({ rows, status, error }: TimingTowerProps) {
         <div className="relative w-full" style={{ height: rows.length * ROW_HEIGHT }}>
           {virtualWindow.visibleRows.map((row, visibleIdx) => (
             <TimingRowItem
-              key={row.driverNumber}
+              key={`${ITEM_KEY_PREFIX}${row.driverNumber}`}
               row={row}
               idx={virtualWindow.startIndex + visibleIdx}
               primaryDriver={primaryDriver}
               compareDriver={compareDriver}
               sessionBestLap={sessionBestLap}
-              onSelect={onSelect}
+              onSelect={stableOnSelect}
             />
           ))}
         </div>

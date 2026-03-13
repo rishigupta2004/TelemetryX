@@ -47,7 +47,9 @@ def process_fastf1_telemetry(df, year, race, session):
         "driver_number": "driver_number",
         "SessionTime": "session_time",
     }
-    missing = [c for c in ["Date", "SessionTime", "driver_number"] if c not in df.columns]
+    missing = [
+        c for c in ["Date", "SessionTime", "driver_number"] if c not in df.columns
+    ]
     if missing:
         return pd.DataFrame()
     out = df.rename(columns={k: v for k, v in cols.items() if k in df.columns}).copy()
@@ -167,7 +169,9 @@ def ensure_silver_telemetry(year, race, session):
     silver_file = silver_path / "telemetry.parquet"
     if silver_file.exists():
         return True
-    bronze_fastf1 = BRONZE_DIR / str(year) / race / session / "fastf1" / "telemetry.parquet"
+    bronze_fastf1 = (
+        BRONZE_DIR / str(year) / race / session / "fastf1" / "telemetry.parquet"
+    )
     if bronze_fastf1.exists():
         df = pd.read_parquet(bronze_fastf1)
         out = process_fastf1_telemetry(df, year, race, session)
@@ -175,7 +179,9 @@ def ensure_silver_telemetry(year, race, session):
             silver_path.mkdir(parents=True, exist_ok=True)
             out.to_parquet(silver_file, index=False)
             return True
-    bronze_openf1 = BRONZE_DIR / str(year) / race / session / "openf1" / "telemetry.parquet"
+    bronze_openf1 = (
+        BRONZE_DIR / str(year) / race / session / "openf1" / "telemetry.parquet"
+    )
     if bronze_openf1.exists():
         df = pd.read_parquet(bronze_openf1)
         out = process_openf1_telemetry(df, year, race, session)
@@ -237,17 +243,27 @@ def main():
                 if not (laps_ok and tel_ok):
                     missing.append((year.name, race.name, session, laps_ok, tel_ok))
 
+    # Safety-first: never delete medallion data by default.
+    # Set TELEMETRYX_ALLOW_DESTRUCTIVE_BACKFILL=1 only for explicit maintenance windows.
+    allow_destructive = (
+        os.getenv("TELEMETRYX_ALLOW_DESTRUCTIVE_BACKFILL", "0").strip() == "1"
+    )
     to_delete = [m for m in missing if m[2] in {"S", "SS"} and not (m[3] and m[4])]
-    for year, race, session, _, _ in to_delete:
-        path = SILVER_DIR / str(year) / race / session
-        if path.exists():
-            for p in path.rglob("*"):
-                if p.is_file():
-                    p.unlink()
-            for p in sorted(path.rglob("*"), reverse=True):
-                if p.is_dir():
-                    p.rmdir()
-            path.rmdir()
+    if allow_destructive:
+        for year, race, session, _, _ in to_delete:
+            path = SILVER_DIR / str(year) / race / session
+            if path.exists():
+                for p in path.rglob("*"):
+                    if p.is_file():
+                        p.unlink()
+                for p in sorted(path.rglob("*"), reverse=True):
+                    if p.is_dir():
+                        p.rmdir()
+                path.rmdir()
+    elif to_delete:
+        print(
+            f"[SAFE MODE] Skipping deletion of {len(to_delete)} incomplete sprint session directories"
+        )
 
     print("Missing after backfill:", len(missing))
     if missing:

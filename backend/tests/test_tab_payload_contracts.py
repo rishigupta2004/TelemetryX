@@ -167,27 +167,43 @@ def test_session_viz_contract_for_timing_track_tabs(monkeypatch):
     assert isinstance(payload["trackGeometry"], dict)
 
 
-def test_stream_contracts_for_telemetry_and_positions_tabs(monkeypatch):
-    monkeypatch.setattr(
-        telemetry_router,
-        "get_session_path",
-        lambda *_args, **_kwargs: "/tmp/stream",
-    )
-    monkeypatch.setattr(telemetry_router, "clickhouse_primary", lambda: True)
-    monkeypatch.setattr(
-        telemetry_router,
-        "fetch_telemetry_stream_clickhouse",
-        lambda **_kwargs: {
-            "driver_number": 1,
-            "time_window": [0, 1000],
-            "channels": ["speed", "throttle", "brake"],
-            "samples": 2,
-            "data": [
-                {"time_ms": 100.0, "speed": 281.1, "throttle": 99.0, "brake": 0.0},
-                {"time_ms": 200.0, "speed": 279.4, "throttle": 97.0, "brake": 0.0},
-            ],
-        },
-    )
+def test_stream_contracts_for_telemetry_and_positions_tabs(monkeypatch, tmp_path: Path):
+    import duckdb
+
+    silver = tmp_path / "silver" / "2024" / "Test GP" / "R"
+    silver.mkdir(parents=True)
+
+    conn = duckdb.connect()
+    try:
+        conn.execute(
+            f"""
+            COPY (
+                SELECT * FROM (
+                    VALUES
+                        (1, 0.1::DOUBLE, 281.1::DOUBLE, 0.99::DOUBLE, 0.0::DOUBLE),
+                        (1, 0.2::DOUBLE, 279.4::DOUBLE, 0.97::DOUBLE, 0.0::DOUBLE)
+                ) AS t(driver_number, session_time_seconds, speed, throttle, brake)
+            ) TO '{(silver / "telemetry.parquet").as_posix()}' (FORMAT PARQUET)
+            """
+        )
+        conn.execute(
+            f"""
+            COPY (
+                SELECT * FROM (
+                    VALUES
+                        (1, 0.0::DOUBLE, 100.0::DOUBLE, 200.0::DOUBLE),
+                        (1, 0.1::DOUBLE, 101.0::DOUBLE, 201.0::DOUBLE)
+                ) AS t(driver_number, session_time_seconds, x, y)
+            ) TO '{(silver / "positions.parquet").as_posix()}' (FORMAT PARQUET)
+            """
+        )
+    finally:
+        conn.close()
+
+    monkeypatch.setattr(telemetry_router, "SILVER_DIR", str(tmp_path / "silver"))
+    monkeypatch.setattr(positions_router, "SILVER_DIR", str(tmp_path / "silver"))
+    monkeypatch.setattr(positions_router, "BRONZE_DIR", str(tmp_path / "bronze"))
+    monkeypatch.setattr(positions_router, "GOLD_DIR", str(tmp_path / "gold"))
 
     telem = client.get(
         "/api/v1/telemetry/2024/Test-GP/stream",
@@ -204,16 +220,6 @@ def test_stream_contracts_for_telemetry_and_positions_tabs(monkeypatch):
     assert payload["samples"] == len(payload["data"])
     assert {"time_ms", "speed", "throttle", "brake"}.issubset(
         set(payload["data"][0].keys())
-    )
-
-    monkeypatch.setattr(positions_router, "clickhouse_primary", lambda: True)
-    monkeypatch.setattr(
-        positions_router,
-        "fetch_positions_stream_clickhouse",
-        lambda **_kwargs: [
-            {"time_ms": 0.0, "driver_number": 1, "x": 100.0, "y": 200.0},
-            {"time_ms": 100.0, "driver_number": 1, "x": 101.0, "y": 201.0},
-        ],
     )
 
     pos = client.get(

@@ -4,8 +4,6 @@ from typing import Dict, List
 
 import pandas as pd
 import numpy as np
-import pytest
-from fastapi import HTTPException
 
 from backend.api.routers import features as features_router
 
@@ -143,23 +141,20 @@ def test_driver_summary_works_with_partial_feature_files(tmp_path, monkeypatch):
     assert summary["strategic_analysis"]["current_position"] == 1
 
 
-def test_lap_features_clickhouse_first_updates_without_stale_cache(monkeypatch):
-    state = {
-        "rows": [
-            {"driver_name": "Driver A", "lap_number": 1, "lap_duration": 90.1},
-        ]
-    }
+def test_lap_features_refresh_without_stale_cache(tmp_path, monkeypatch):
+    session_dir = tmp_path / "2024" / "Any GP" / "R"
+    session_dir.mkdir(parents=True, exist_ok=True)
+    monkeypatch.setattr(features_router, "FEATURES_DIR", tmp_path)
 
-    def _fake_fetch(**_kwargs):
-        return state["rows"]
-
-    monkeypatch.setattr(features_router, "fetch_feature_rows_clickhouse", _fake_fetch)
-    monkeypatch.setattr(features_router, "clickhouse_primary", lambda: True)
-
+    pd.DataFrame(
+        [{"driver_name": "Driver A", "lap_number": 1, "lap_duration": 90.1}]
+    ).to_parquet(session_dir / "lap_features.parquet", index=False)
     first = asyncio.run(features_router.get_lap_features(2024, "Any-GP", "R"))
     assert first[0]["lap_number"] == 1
 
-    state["rows"] = [{"driver_name": "Driver A", "lap_number": 2, "lap_duration": 89.9}]
+    pd.DataFrame(
+        [{"driver_name": "Driver A", "lap_number": 2, "lap_duration": 89.9}]
+    ).to_parquet(session_dir / "lap_features.parquet", index=False)
     second = asyncio.run(features_router.get_lap_features(2024, "Any-GP", "R"))
     assert second[0]["lap_number"] == 2
 
@@ -183,14 +178,3 @@ def test_load_feature_records_normalizes_nan_for_stable_payload(tmp_path, monkey
     assert rows[0]["lap_duration"] is None
     assert rows[1]["lap_duration"] == 91.2
 
-
-def test_lap_features_clickhouse_primary_strict_raises(monkeypatch):
-    monkeypatch.setattr(features_router, "clickhouse_primary", lambda: True)
-    monkeypatch.setattr(features_router, "clickhouse_primary_strict", lambda: True)
-    monkeypatch.setattr(
-        features_router, "fetch_feature_rows_clickhouse", lambda **_kwargs: None
-    )
-
-    with pytest.raises(HTTPException) as exc:
-        asyncio.run(features_router.get_lap_features(2024, "Any-GP", "R"))
-    assert exc.value.status_code == 503

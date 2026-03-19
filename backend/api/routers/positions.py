@@ -3,24 +3,36 @@ from __future__ import annotations
 import os
 import json
 import time
-import logging
 from typing import Any, Dict, List, Optional, Tuple
 
-import duckdb
 from fastapi import APIRouter, HTTPException, Query
 
 from ..config import BRONZE_DIR, GOLD_DIR, SILVER_DIR
 from ..utils import normalize_session_code, resolve_dir
-from ..clickhouse import (
-    clickhouse_primary,
-    clickhouse_primary_strict,
-    clickhouse_shadow,
-)
-from ..repositories import fetch_positions_stream_clickhouse
+from db.connection import get_db_connection
 from . import metrics as metrics_router
 
 router = APIRouter()
-logger = logging.getLogger(__name__)
+
+VALID_SESSIONS = {
+    "R",
+    "Q",
+    "SQ",
+    "S",
+    "FP1",
+    "FP2",
+    "FP3",
+    "SS",
+    "FP",
+    "SQ1",
+    "SQ2",
+    "SQ3",
+    "Q1",
+    "Q2",
+    "Q3",
+}
+VALID_YEARS = set(range(2018, 2026))
+MAX_ROUND_LENGTH = 200
 
 MAX_WINDOW_S = 60.0
 MAX_ROWS = 10_000
@@ -29,8 +41,35 @@ COORD_ABS_LIMIT = 1_000_000.0
 _STREAM_METRICS_ROUTE = "/api/v1/positions/{year}/{round}/stream"
 
 
+def _validate_year(year: int) -> int:
+    if year not in VALID_YEARS:
+        raise HTTPException(400, f"Invalid year. Must be one of: {sorted(VALID_YEARS)}")
+    return year
+
+
+def _validate_session(session: Optional[str]) -> Optional[str]:
+    if session is None:
+        return session
+    normalized = session.upper().strip()
+    if normalized and normalized not in VALID_SESSIONS:
+        raise HTTPException(
+            400, f"Invalid session type. Must be one of: {sorted(VALID_SESSIONS)}"
+        )
+    return normalized
+
+
+def _validate_round(round: str) -> str:
+    if ".." in round or "/" in round or "\\" in round:
+        raise HTTPException(400, "Invalid round parameter: path traversal not allowed")
+    if len(round) > MAX_ROUND_LENGTH:
+        raise HTTPException(
+            400, f"Round parameter exceeds maximum length of {MAX_ROUND_LENGTH}"
+        )
+    return round
+
+
 def _fetchall(sql: str, params: List[Any]) -> List[Any]:
-    conn = duckdb.connect()
+    conn = get_db_connection().parquet_conn
     try:
         return conn.execute(sql, params).fetchall()
     finally:
@@ -44,42 +83,6 @@ def _estimate_payload_bytes(payload: Any) -> int:
         )
     except Exception:
         return 0
-
-
-def _row_signature(row: Dict[str, Any]) -> tuple[Any, Any, Any, Any]:
-    try:
-        time_ms = round(float(row.get("time_ms") or 0.0), 3)
-    except Exception:
-        time_ms = None
-    try:
-        x = round(float(row.get("x") or 0.0), 3)
-    except Exception:
-        x = None
-    try:
-        y = round(float(row.get("y") or 0.0), 3)
-    except Exception:
-        y = None
-    try:
-        driver = int(row.get("driver_number") or 0)
-    except Exception:
-        driver = None
-    return time_ms, driver, x, y
-
-
-def _shadow_rows_mismatch(
-    duck_rows: List[Dict[str, Any]], ch_rows: List[Dict[str, Any]]
-) -> bool:
-    if len(duck_rows) != len(ch_rows):
-        return True
-    n = len(duck_rows)
-    if n == 0:
-        return False
-    probes = list(range(min(3, n)))
-    tail = list(range(max(0, n - 3), n))
-    for idx in probes + tail:
-        if _row_signature(duck_rows[idx]) != _row_signature(ch_rows[idx]):
-            return True
-    return False
 
 
 def _candidate_position_files(year: int, race_name: str, session: str) -> List[str]:
@@ -112,7 +115,7 @@ def _candidate_position_files(year: int, race_name: str, session: str) -> List[s
 
 
 def _column_set(path: str) -> set[str]:
-    conn = duckdb.connect()
+    conn = get_db_connection().parquet_conn
     try:
         rows = conn.execute("DESCRIBE SELECT * FROM read_parquet(?)", [path]).fetchall()
         return {str(r[0]) for r in rows}
@@ -151,6 +154,9 @@ async def get_positions_stream(
     session_type: str = Query(default="R"),
 ) -> List[Dict[str, Any]]:
     started_at = time.perf_counter()
+    _validate_year(year)
+    _validate_round(round)
+    session_type = _validate_session(session_type)
     if int(time_end_ms) <= int(time_start_ms):
         raise HTTPException(
             status_code=400, detail="time_end_ms must be greater than time_start_ms"
@@ -166,32 +172,6 @@ async def get_positions_stream(
         raise HTTPException(
             status_code=413, detail=f"Max {MAX_DRIVERS} drivers per request"
         )
-
-    ch_payload = fetch_positions_stream_clickhouse(
-        year=int(year),
-        race_name=race_name,
-        session_type=session_type,
-        time_start_ms=int(time_start_ms),
-        time_end_ms=int(time_end_ms),
-        drivers=[int(x) for x in drivers] if drivers else None,
-        sample_rate=int(sample_rate),
-        max_rows=int(MAX_ROWS),
-    )
-    if clickhouse_primary():
-        if ch_payload is None:
-            if clickhouse_primary_strict():
-                raise HTTPException(
-                    status_code=503,
-                    detail="ClickHouse primary mode could not serve positions stream",
-                )
-        else:
-            metrics_router.record_endpoint_sample(
-                _STREAM_METRICS_ROUTE,
-                (time.perf_counter() - started_at) * 1000.0,
-                _estimate_payload_bytes(ch_payload),
-                len(ch_payload),
-            )
-            return ch_payload
 
     candidates = _candidate_position_files(year, race_name, session_type)
     if not candidates:
@@ -287,19 +267,6 @@ async def get_positions_stream(
                 }
                 for r in rows
             ]
-            if (
-                ch_payload is not None
-                and clickhouse_shadow()
-                and _shadow_rows_mismatch(payload, ch_payload)
-            ):
-                logger.warning(
-                    "positions_shadow_mismatch year=%s race=%s session=%s duck_rows=%s ch_rows=%s",
-                    year,
-                    race_name,
-                    session_type,
-                    len(payload),
-                    len(ch_payload),
-                )
             metrics_router.record_endpoint_sample(
                 _STREAM_METRICS_ROUTE,
                 (time.perf_counter() - started_at) * 1000.0,
@@ -333,6 +300,9 @@ async def get_positions(
 
     Legacy endpoint intentionally does not enforce stream window/row caps.
     """
+    _validate_year(year)
+    _validate_round(round)
+    session_type = _validate_session(session_type)
     race_name = round.replace("-", " ")
     candidates = _candidate_position_files(year, race_name, session_type)
     if not candidates:

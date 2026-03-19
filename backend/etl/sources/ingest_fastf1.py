@@ -9,13 +9,15 @@ from .name_utils import canonicalize_race_name
 
 def get_available_data_types() -> List[str]:
     """Return list of available data types from FastF1."""
-    return ['laps', 'race_control', 'weather', 'telemetry', 'position', 'stints']
+    return ["laps", "race_control", "weather", "telemetry", "position", "stints"]
 
 
-def ingest_fastf1(year, race, session_type="R", types: Optional[List[str]] = None, cache_dir=None):
+def ingest_fastf1(
+    year, race, session_type="R", types: Optional[List[str]] = None, cache_dir=None
+):
     """
     Download data from FastF1 API.
-    
+
     Args:
         year: F1 season year
         race: Race name
@@ -23,16 +25,16 @@ def ingest_fastf1(year, race, session_type="R", types: Optional[List[str]] = Non
         types: Optional list of specific data types to download
                Options: ['laps', 'race_control', 'weather', 'telemetry', 'position', 'stints']
         cache_dir: Cache directory path
-    
+
     Returns:
         dict of DataFrames or None if failed
     """
     if cache_dir is None:
         cache_dir = os.path.expanduser("~/.cache/fastf1")
-    
+
     Path(cache_dir).mkdir(parents=True, exist_ok=True)
     fastf1.Cache.enable_cache(cache_dir)
-    
+
     if types is None:
         types = get_available_data_types()
 
@@ -42,78 +44,78 @@ def ingest_fastf1(year, race, session_type="R", types: Optional[List[str]] = Non
             "SS": "SQ",
         }
         session_type = session_type_map.get(str(session_type).upper(), session_type)
-        # Use Ergast backend for schedule stability
-        session = fastf1.get_session(year, race_name, session_type, backend="ergast")
+        # Use FastF1 backend (default, uses OpenF1 for 2023+ data)
+        session = fastf1.get_session(year, race_name, session_type, backend="fastf1")
         # Load only what we need for this request
         types_set = set(t.lower() for t in (types or []))
-        laps_flag = 'laps' in types_set or 'stints' in types_set
-        telemetry_flag = 'telemetry' in types_set or 'position' in types_set
-        weather_flag = 'weather' in types_set
-        messages_flag = 'race_control' in types_set
+        laps_flag = "laps" in types_set or "stints" in types_set
+        telemetry_flag = "telemetry" in types_set or "position" in types_set
+        weather_flag = "weather" in types_set
+        messages_flag = "race_control" in types_set
         session.load(
             laps=laps_flag,
             telemetry=telemetry_flag,
             weather=weather_flag,
-            messages=messages_flag
+            messages=messages_flag,
         )
     except Exception as e:
         print(f"  Failed to load session: {e}")
         return None
-    
+
     result = {}
-    
+
     # laps - always available
-    if 'laps' in types:
+    if "laps" in types:
         laps = session.laps
         if laps is not None and not laps.empty:
-            result['laps'] = laps
-    
+            result["laps"] = laps
+
     # weather - always available after load
-    if 'weather' in types:
+    if "weather" in types:
         weather = session.weather_data
         if weather is not None and not weather.empty:
-            result['weather'] = weather
-    
+            result["weather"] = weather
+
     # race_control - available after load
-    if 'race_control' in types:
+    if "race_control" in types:
         rc = session.race_control_messages
         if rc is not None and not rc.empty:
-            result['race_control'] = rc
-    
+            result["race_control"] = rc
+
     # telemetry (car_data) - available after load
-    if 'telemetry' in types:
-        car_data = getattr(session, 'car_data', None)
+    if "telemetry" in types:
+        car_data = getattr(session, "car_data", None)
         if car_data is not None and car_data:
             # Combine all driver car data into single DataFrame
             all_telemetry = []
             for drv_num, drv_data in car_data.items():
                 if drv_data is not None and not drv_data.empty:
                     drv_data = drv_data.copy()
-                    drv_data['driver_number'] = drv_num
+                    drv_data["driver_number"] = drv_num
                     all_telemetry.append(drv_data)
             if all_telemetry:
-                result['telemetry'] = pd.concat(all_telemetry, ignore_index=True)
-    
+                result["telemetry"] = pd.concat(all_telemetry, ignore_index=True)
+
     # position data - available after load
-    if 'position' in types:
-        pos_data = getattr(session, 'pos_data', None)
+    if "position" in types:
+        pos_data = getattr(session, "pos_data", None)
         if pos_data is not None and pos_data:
             # Combine all driver position data into single DataFrame
             all_positions = []
             for drv_num, drv_data in pos_data.items():
                 if drv_data is not None and not drv_data.empty:
                     drv_data = drv_data.copy()
-                    drv_data['driver_number'] = drv_num
+                    drv_data["driver_number"] = drv_num
                     all_positions.append(drv_data)
             if all_positions:
-                result['position'] = pd.concat(all_positions, ignore_index=True)
-    
+                result["position"] = pd.concat(all_positions, ignore_index=True)
+
     # tyre stints - available after load
-    if 'stints' in types:
-        stints = getattr(session, 'stints', None)
+    if "stints" in types:
+        stints = getattr(session, "stints", None)
         if stints is not None and not stints.empty:
-            result['stints'] = stints
-    
+            result["stints"] = stints
+
     return result
 
 
@@ -122,12 +124,15 @@ if __name__ == "__main__":
     parser.add_argument("--year", type=int, required=True)
     parser.add_argument("--race", type=str, required=True)
     parser.add_argument("--session", type=str, default="R")
-    parser.add_argument("--types", nargs="+", 
-                        choices=['laps', 'race_control', 'weather', 'telemetry', 'position', 'stints'],
-                        help="Specific data types to download")
-    
+    parser.add_argument(
+        "--types",
+        nargs="+",
+        choices=["laps", "race_control", "weather", "telemetry", "position", "stints"],
+        help="Specific data types to download",
+    )
+
     args = parser.parse_args()
-    
+
     data = ingest_fastf1(args.year, args.race, args.session, args.types)
     if data:
         print(f"Downloaded: {list(data.keys())}")

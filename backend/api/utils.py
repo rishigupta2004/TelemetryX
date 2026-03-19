@@ -6,6 +6,7 @@ from typing import Any, Dict, List, Optional, Sequence
 
 import duckdb
 import pandas as pd
+from db.connection import db_connection, get_db_connection
 
 
 def normalize_key(value: str) -> str:
@@ -50,12 +51,17 @@ def resolve_dir(base_dir: str, name: str) -> Optional[str]:
         return name
     target = normalize_key(name)
     for entry in _list_dir_entries(base_dir):
-        if os.path.isdir(os.path.join(base_dir, entry)) and normalize_key(entry) == target:
+        if (
+            os.path.isdir(os.path.join(base_dir, entry))
+            and normalize_key(entry) == target
+        ):
             return entry
     return None
 
 
-def resolve_track_geometry_file(track_dir: str, race_name: str, year: Optional[int] = None) -> Optional[str]:
+def resolve_track_geometry_file(
+    track_dir: str, race_name: str, year: Optional[int] = None
+) -> Optional[str]:
     canonical_match = _resolve_canonical_track_geometry_file(track_dir, race_name, year)
     if canonical_match:
         return canonical_match
@@ -165,7 +171,7 @@ def read_parquet_df(path: str, columns: Optional[Sequence[str]] = None) -> pd.Da
     cols = "*"
     if columns:
         cols = ", ".join([f'"{c}"' for c in columns])
-    conn = duckdb.connect()
+    conn = get_db_connection().parquet_conn
     try:
         return conn.execute(f"SELECT {cols} FROM read_parquet('{path}')").df()
     finally:
@@ -196,7 +202,7 @@ def read_parquet_records(
     if limit is not None:
         sql += " LIMIT ?"
         query_params.append(int(limit))
-    conn = duckdb.connect()
+    conn = get_db_connection().parquet_conn
     try:
         rows = conn.execute(sql, query_params).fetchall()
         cols_meta = [str(d[0]) for d in conn.description] if conn.description else []

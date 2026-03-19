@@ -59,6 +59,64 @@ export function useTelemetryData(
   const drivers = sessionData?.drivers || []
   const laps = fullLaps.length ? fullLaps : sessionData?.laps || []
 
+  const telemetryByCode = useMemo(() => {
+    const byCode = new Map<string, TelemetryRow[]>()
+    if (!telemetryData || !drivers.length) return byCode
+
+    const rowsByKey = telemetryData as Record<string, TelemetryRow[] | undefined>
+    const rowsEntries = Object.entries(rowsByKey).map(([key, rows]) => [key, rows ?? []] as const)
+
+    const lookup = (key: string): TelemetryRow[] | null => {
+      const exact = rowsByKey[key]
+      if (Array.isArray(exact) && exact.length) return exact
+      const upper = rowsByKey[key.toUpperCase()]
+      if (Array.isArray(upper) && upper.length) return upper
+      const lower = rowsByKey[key.toLowerCase()]
+      if (Array.isArray(lower) && lower.length) return lower
+      return null
+    }
+
+    for (const driver of drivers) {
+      const candidates = [
+        driver.code,
+        driver.code.toUpperCase(),
+        String(driver.driverNumber),
+        String(driver.driverName || ''),
+        String(driver.driverName || '').toUpperCase(),
+      ].filter(Boolean)
+
+      let resolved: TelemetryRow[] | null = null
+      for (const candidate of candidates) {
+        const rows = lookup(candidate)
+        if (rows && rows.length) {
+          resolved = rows
+          break
+        }
+      }
+
+      if (!resolved) {
+        for (const [, rows] of rowsEntries) {
+          if (!rows.length) continue
+          const first = rows[0]
+          const rowNumber = Number(first.driverNumber)
+          const rowName = String(first.driverName || '').toUpperCase()
+          if (
+            (Number.isFinite(rowNumber) && rowNumber === driver.driverNumber) ||
+            rowName === driver.code.toUpperCase() ||
+            rowName === String(driver.driverName || '').toUpperCase()
+          ) {
+            resolved = rows
+            break
+          }
+        }
+      }
+
+      if (resolved) byCode.set(driver.code, resolved)
+    }
+
+    return byCode
+  }, [telemetryData, drivers])
+
   const lapsByDriver = useMemo(() => {
     const byNum = new Map<number, LapRow[]>()
     const byCode = new Map<string, LapRow[]>()
@@ -94,7 +152,7 @@ export function useTelemetryData(
 
   const lapTimeWindow = useMemo((): LapTimeWindow | null => {
     if (!selectedDriver) return null
-    const telemetryRows = (telemetryData?.[selectedDriver] || []) as TelemetryRow[]
+    const telemetryRows = telemetryByCode.get(selectedDriver) ?? []
     const hasDataForLap = (lap: LapRow): boolean => {
       if (!telemetryRows.length) return true
       const lo = lbTs(telemetryRows, lap.lapStartSeconds)
@@ -129,7 +187,7 @@ export function useTelemetryData(
           duration: nearest.lapTime || nearest.lapEndSeconds - nearest.lapStartSeconds,
         }
       : null
-  }, [driverLaps, selectedLap, selectedDriver, telemetryData])
+  }, [driverLaps, selectedLap, selectedDriver, telemetryByCode])
 
   const fetchWindow = useMemo(() => {
     if (!driverLaps.length) return null
@@ -143,9 +201,9 @@ export function useTelemetryData(
   }, [driverLaps, sampledSessionTime, lapTimeWindow])
 
   const windowedTelemetry = useMemo((): Windowed | null => {
-    if (!telemetryData || !selectedDriver || !lapTimeWindow) return null
-    const primary = (telemetryData[selectedDriver] || []) as TelemetryRow[]
-    const compare = compareDriver ? ((telemetryData[compareDriver] || []) as TelemetryRow[]) : []
+    if (!selectedDriver || !lapTimeWindow) return null
+    const primary = telemetryByCode.get(selectedDriver) ?? []
+    const compare = compareDriver ? telemetryByCode.get(compareDriver) ?? [] : []
     if (!primary.length) return null
 
     const { t0: lapT0, t1: lapT1 } = lapTimeWindow
@@ -219,12 +277,12 @@ export function useTelemetryData(
       rpm: { primary: alignedPrimary('rpm'), compare: alignedCompare('rpm') },
       drs: { primary: alignedPrimary('drs'), compare: alignedCompare('drs') },
     }
-  }, [telemetryData, selectedDriver, compareDriver, lapTimeWindow])
+  }, [telemetryByCode, selectedDriver, compareDriver, lapTimeWindow])
 
   const liveTelemetry = useMemo((): { primary: Partial<TelemetryRow>; compare: Partial<TelemetryRow> } | null => {
-    if (!telemetryData || !selectedDriver) return null
-    const primaryRows = telemetryData[selectedDriver] as TelemetryRow[]
-    const compareRows = compareDriver ? (telemetryData[compareDriver] as TelemetryRow[]) : []
+    if (!selectedDriver) return null
+    const primaryRows = telemetryByCode.get(selectedDriver) ?? []
+    const compareRows = compareDriver ? telemetryByCode.get(compareDriver) ?? [] : []
 
     if (!primaryRows?.length) return null
 
@@ -257,7 +315,7 @@ export function useTelemetryData(
       primary: closestPrimary || {},
       compare: closestCompare || {},
     }
-  }, [telemetryData, selectedDriver, compareDriver, sampledSessionTime])
+  }, [telemetryByCode, selectedDriver, compareDriver, sampledSessionTime])
 
   return {
     windowedTelemetry,

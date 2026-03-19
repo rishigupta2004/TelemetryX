@@ -1,0 +1,1 @@
+WAVE 2 COMPLETE: Resolved E9 data binding violation in ChartShowcase.tsx

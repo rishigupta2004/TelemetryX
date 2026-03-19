@@ -597,8 +597,8 @@ export const UPlotChart = React.memo(function UPlotChart({
     <div className={wrapperClass}>
       {showHeader && (
         <>
-          <div className="mb-0.5 px-3 pt-3 text-[11px] font-bold uppercase tracking-widest text-fg-secondary" style={{ fontFamily: 'var(--font-heading)' }}>{title}</div>
-          <div className="mb-2 px-3 font-mono text-[10px] text-fg-muted">{subtitle}</div>
+          <div className="mb-0.5 px-3 pt-3 text-[11px] font-bold uppercase tracking-[0.2em] text-fg-secondary" style={{ fontFamily: 'var(--font-heading)' }}>{title}</div>
+          <div className="mb-2 px-3 tracking-widest font-mono text-[9px] text-fg-muted uppercase">{subtitle}</div>
         </>
       )}
       <div
@@ -616,12 +616,12 @@ export const UPlotChart = React.memo(function UPlotChart({
             top: 0,
             bottom: 0,
             width: '2px',
-            background: 'linear-gradient(180deg, var(--glow-blue) 0%, rgba(29,78,216,0.15) 100%)',
+            background: 'linear-gradient(180deg, var(--color-accent) 0%, rgba(225,6,0,0.15) 100%)',
             pointerEvents: 'none',
             zIndex: 10,
             display: 'none',
             willChange: 'left',
-            boxShadow: '0 0 12px var(--glow-blue), 0 0 24px rgba(29,78,216,0.2)'
+            boxShadow: '0 0 12px var(--color-accent), 0 0 24px rgba(225,6,0,0.5), inset 0 0 2px rgba(255,255,255,0.8)'
           }}
         />
         {/* Hover tooltip */}
@@ -631,9 +631,9 @@ export const UPlotChart = React.memo(function UPlotChart({
             display: 'none',
             position: 'absolute',
             pointerEvents: 'none',
-            background: 'var(--chart-tooltip-bg)',
-            border: '1px solid var(--chart-tooltip-border)',
-            borderRadius: 10,
+            background: 'rgba(10,10,12,0.95)',
+            border: '1px solid var(--color-accent)',
+            borderRadius: 4,
             padding: '10px 14px',
             fontFamily: 'var(--font-data), monospace',
             fontSize: 11,
@@ -641,8 +641,8 @@ export const UPlotChart = React.memo(function UPlotChart({
             color: 'var(--fg-primary)',
             zIndex: 20,
             minWidth: 140,
-            boxShadow: 'var(--shadow-elevated)',
-            backdropFilter: 'blur(12px)',
+            boxShadow: '0 4px 24px rgba(0,0,0,0.9), 0 0 16px rgba(225,6,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.1)',
+            backdropFilter: 'blur(16px)',
             transform: 'translateY(-2px)',
             transition: 'opacity 0.15s ease, transform 0.15s ease'
           }}

@@ -14,15 +14,9 @@ from ..utils import (
     normalize_session_code,
     display_session_code,
 )
-from ..clickhouse import (
-    clickhouse_primary,
-    clickhouse_primary_strict,
-    clickhouse_shadow,
-)
 from ..config import FEATURES_DIR
 from ..catalog import calendar_order
 from ..utils import normalize_key
-from ..repositories import fetch_feature_rows_clickhouse
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -76,31 +70,6 @@ def _normalize_feature_rows(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
             continue
         out.append({str(k): _stable_feature_value(v) for k, v in row.items()})
     return out
-
-
-def _feature_row_signature(row: Dict[str, Any]) -> str:
-    stable = {str(k): _stable_feature_value(v) for k, v in row.items()}
-    keys = sorted(stable.keys())[:20]
-    snap = {k: stable.get(k) for k in keys}
-    return str(snap)
-
-
-def _feature_shadow_mismatch(
-    duck_rows: List[Dict[str, Any]], ch_rows: List[Dict[str, Any]]
-) -> bool:
-    if len(duck_rows) != len(ch_rows):
-        return True
-    n = len(duck_rows)
-    if n == 0:
-        return False
-    probes = list(range(min(2, n)))
-    tail = list(range(max(0, n - 2), n))
-    for idx in probes + tail:
-        if _feature_row_signature(duck_rows[idx]) != _feature_row_signature(
-            ch_rows[idx]
-        ):
-            return True
-    return False
 
 
 @lru_cache(maxsize=1024)
@@ -182,38 +151,7 @@ def _load_named_feature(
     filename = FEATURE_DATASETS.get(feature_name)
     if not filename:
         return []
-    ch_rows = fetch_feature_rows_clickhouse(
-        year=int(year),
-        race_name=race_name,
-        session_type=normalize_session_code(session),
-        feature_type=feature_name,
-        limit=int(limit),
-    )
-    if clickhouse_primary():
-        if ch_rows is None:
-            if clickhouse_primary_strict():
-                raise HTTPException(
-                    status_code=503,
-                    detail="ClickHouse primary mode could not serve feature rows",
-                )
-        else:
-            return _normalize_feature_rows(ch_rows)
-
     duck_rows = load_feature_records(session_path, filename, limit=limit)
-    if (
-        ch_rows is not None
-        and clickhouse_shadow()
-        and _feature_shadow_mismatch(duck_rows, ch_rows)
-    ):
-        logger.warning(
-            "features_shadow_mismatch year=%s race=%s session=%s feature=%s duck_rows=%s ch_rows=%s",
-            year,
-            race_name,
-            session,
-            feature_name,
-            len(duck_rows),
-            len(ch_rows),
-        )
     return _normalize_feature_rows(duck_rows)
 
 

@@ -30,6 +30,9 @@ export function SmoothScrolling({ children }: { children: React.ReactNode }) {
       autoRaf: false,
     });
 
+    // Expose Lenis instance globally for scroll velocity access
+    (window as any).lenis = lenis;
+
     const onLenisScroll = () => ScrollTrigger.update();
     lenis.on("scroll", onLenisScroll);
 
@@ -44,6 +47,8 @@ export function SmoothScrolling({ children }: { children: React.ReactNode }) {
       gsap.ticker.remove(updateLenis);
       lenis.off("scroll", onLenisScroll);
       lenis.destroy();
+      // Clean up global reference
+      (window as any).lenis = null;
     };
   }, [prefersReducedMotion]);
 

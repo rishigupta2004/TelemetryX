@@ -1,0 +1,271 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  # =============================================================================
+  # macOS Universal Build (Intel + Apple Silicon)
+  # =============================================================================
+  build-mac:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        include:
+          - platform: mac
+            arch: x64
+          - platform: mac
+            arch: arm64
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend-electron/package-lock.json
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install Python dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+      
+      - name: Install npm dependencies
+        run: |
+          cd frontend-electron
+          npm ci
+      
+      - name: Build Electron app
+        run: |
+          cd frontend-electron
+          npm run build
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Code signing (optional - add your certificates)
+          # APPLE_ID: ${{ secrets.APPLE_ID }}
+          # APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          # APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      
+      - name: Build macOS DMG
+        run: |
+          cd frontend-electron
+          npx electron-builder --mac --config electron-builder.yml
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # APPLE_ID: ${{ secrets.APPLE_ID }}
+          # APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          # APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dmg-${{ matrix.platform }}-${{ matrix.arch }}
+          path: frontend-electron/release/*.dmg
+          retention-days: 5
+
+  # =============================================================================
+  # Windows Build (NSIS + Portable)
+  # =============================================================================
+  build-windows:
+    runs-on: windows-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend-electron/package-lock.json
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install Python dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+      
+      - name: Install npm dependencies
+        run: |
+          cd frontend-electron
+          npm ci
+      
+      - name: Build Electron app
+        run: |
+          cd frontend-electron
+          npm run build
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Build Windows NSIS + Portable
+        run: |
+          cd frontend-electron
+          npx electron-builder --win --config electron-builder.yml
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: win-release
+          path: |
+            frontend-electron/release/*.exe
+            frontend-electron/release/*.zip
+          retention-days: 5
+
+  # =============================================================================
+  # Linux Build (AppImage + DEB)
+  # =============================================================================
+  build-linux:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend-electron/package-lock.json
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libgtk-3-0 \
+            libnotify4 \
+            libnss3 \
+            libxss1 \
+            libasound2 \
+            libxtst6 \
+            xauth
+      
+      - name: Install Python dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+      
+      - name: Install npm dependencies
+        run: |
+          cd frontend-electron
+          npm ci
+      
+      - name: Build Electron app
+        run: |
+          cd frontend-electron
+          npm run build
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Build Linux AppImage + DEB
+        run: |
+          cd frontend-electron
+          npx electron-builder --linux --config electron-builder.yml
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-release
+          path: |
+            frontend-electron/release/*.AppImage
+            frontend-electron/release/*.deb
+          retention-days: 5
+
+  # =============================================================================
+  # Create GitHub Release
+  # =============================================================================
+  create-release:
+    runs-on: ubuntu-latest
+    needs: [build-mac, build-windows, build-linux]
+    if: startsWith(github.ref, 'refs/tags/v')
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Get version tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+      
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      
+      - name: Generate checksums
+        run: |
+          cd artifacts
+          sha256sum */* > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+      
+      - name: Extract changelog
+        run: |
+          if [ -f CHANGELOG.md ]; then
+            # Extract content between current version tag and previous tag
+            VERSION=${{ steps.version.outputs.VERSION }}
+            echo "## What's Changed" > release_notes.md
+            echo "" >> release_notes.md
+            # Simple extraction - get all content after the version header
+            awk -v ver="## $VERSION" '$0~ver{found=1} found' CHANGELOG.md >> release_notes.md || true
+          else
+            echo "## Changes" > release_notes.md
+            echo "" >> release_notes.md
+            echo "See commit history for details." >> release_notes.md
+          fi
+      
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.version.outputs.VERSION }}
+          name: TelemetryX ${{ steps.version.outputs.VERSION }}
+          body_path: release_notes.md
+          files: |
+            artifacts/**/*.dmg
+            artifacts/**/*.exe
+            artifacts/**/*.zip
+            artifacts/**/*.AppImage
+            artifacts/**/*.deb
+            artifacts/**/SHA256SUMS.txt
+          draft: false
+          prerelease: ${{ contains(steps.version.outputs.VERSION, 'beta') || contains(steps.version.outputs.VERSION, 'rc') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Upload SHA256 checksums
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.version.outputs.VERSION }}
+          body_path: release_notes.md
+          files: |
+            artifacts/SHA256SUMS.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

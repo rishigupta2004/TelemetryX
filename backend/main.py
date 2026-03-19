@@ -8,6 +8,8 @@ import os
 from fastapi import Depends, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 from api.routers import (
     seasons,
     races,
@@ -42,6 +44,9 @@ app = FastAPI(
     description="Real-time F1 telemetry data API",
     version="1.0.0",
 )
+
+limiter = Limiter(key_func=get_remote_address)
+app.state.limiter = limiter
 
 _cors_origins_raw = os.getenv("TELEMETRYX_CORS_ORIGINS", "*")
 _cors_origins = _parse_csv_env(_cors_origins_raw) or ["*"]
@@ -171,9 +176,11 @@ if __name__ == "__main__":
 
     # Port configuration: Use PORT env var, fallback to 9000
     port = int(os.getenv("PORT", "9000"))
+    reload_enabled = str(os.getenv("TELEMETRYX_RELOAD", "0")).strip() in {"1", "true", "yes", "on"}
 
     print(f"🚀 Starting TelemetryX Backend on port {port}")
     print(f"📡 API Docs: http://localhost:{port}/docs")
     print(f"💡 To use different port: PORT=8080 python main.py")
+    print(f"🔁 Hot reload: {'enabled' if reload_enabled else 'disabled'}")
 
-    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True, log_level="info")
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=reload_enabled, log_level="info")

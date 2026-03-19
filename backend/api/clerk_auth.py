@@ -31,6 +31,16 @@ def _decode_clerk_token(token: str) -> Dict[str, Any]:
         str(os.getenv("CLERK_JWKS_URL", "")).strip()
         or f"{issuer}/.well-known/jwks.json"
     )
+    signing_key = _jwk_client(jwks_url).get_signing_key_from_jwt(token)
+    options = {"verify_aud": audience is not None}
+    return jwt_decode(
+        token,
+        signing_key.key,
+        algorithms=["RS256"],
+        issuer=issuer,
+        audience=audience,
+        options=options,
+    )
 
 
 def verify_clerk_token(token: str) -> Dict[str, str]:
@@ -51,16 +61,6 @@ def verify_clerk_token(token: str) -> Dict[str, str]:
         "email": str(email),
         "org_id": str(org_id or ""),
     }
-    signing_key = _jwk_client(jwks_url).get_signing_key_from_jwt(token)
-    options = {"verify_aud": audience is not None}
-    return jwt_decode(
-        token,
-        signing_key.key,
-        algorithms=["RS256"],
-        issuer=issuer,
-        audience=audience,
-        options=options,
-    )
 
 
 def require_user(authorization: Optional[str] = Header(default=None)) -> Dict[str, Any]:

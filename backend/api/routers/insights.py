@@ -13,6 +13,7 @@ from typing import Any, Dict, List, Optional, Tuple
 import duckdb
 import requests
 from fastapi import APIRouter, HTTPException, Query
+from fastapi.concurrency import run_in_threadpool
 
 from ..config import GOLD_DIR, MEDIA_CACHE_DIR, TRACK_GEOMETRY_DIR
 from ..utils import normalize_key, resolve_track_geometry_file
@@ -731,15 +732,18 @@ def _collect_profile_stats(refresh_remote: bool = False) -> Dict[str, Any]:
     for row in driver_totals.values():
         seasons = sorted(int(y) for y in row["seasonsSet"])
         lookup_key_num = f"num:{row['driverNumber']}" if row["driverNumber"] is not None else ""
+        raw_driver_name = str(row["driverName"] or "").strip().upper()
         lookup_key_code = ""
+        if raw_driver_name.isalpha() and 2 <= len(raw_driver_name) <= 4:
+            lookup_key_code = f"code:{raw_driver_name}"
         row_key = str(row["driverNumber"]) if row["driverNumber"] is not None else str(row["driverName"])
-        if row_key in driver_codes:
+        if not lookup_key_code and row_key in driver_codes:
             lookup_key_code = f"code:{driver_codes[row_key]}"
         lookup_key_name = f"name:{normalize_key(str(row['driverName']))}"
         meta = (
-            external_meta.get(lookup_key_num)
-            or external_meta.get(lookup_key_code)
+            external_meta.get(lookup_key_code)
             or external_meta.get(lookup_key_name)
+            or external_meta.get(lookup_key_num)
             or {}
         )
         driver_id = str(meta.get("driverId") or "").strip() or str(_extract_driver_id_from_url(meta.get("wikipediaUrl")) or "").strip()
@@ -911,7 +915,7 @@ async def get_season_standings(year: int, refresh: bool = Query(default=False)) 
         if cached:
             return cached
 
-    payload = _build_season_standings(year)
+    payload = await run_in_threadpool(_build_season_standings, year)
     _write_json(cache_file, payload)
     return payload
 
@@ -925,7 +929,7 @@ async def get_profiles(refresh: bool = Query(default=False)) -> Dict[str, Any]:
         if cached:
             return cached
 
-    payload = _collect_profile_stats(refresh_remote=refresh)
+    payload = await run_in_threadpool(_collect_profile_stats, refresh)
     _write_json(cache_file, payload)
     return payload
 
@@ -941,7 +945,7 @@ async def get_circuit_insights(year: int, race: str, refresh: bool = Query(defau
         if cached:
             return cached
 
-    geometry = _load_track_geometry(year, race_name)
+    geometry = await run_in_threadpool(_load_track_geometry, year, race_name)
     points = geometry.get("centerline") if isinstance(geometry, dict) else []
     corners = geometry.get("corners") if isinstance(geometry, dict) else []
     drs_zones = geometry.get("drsZones") if isinstance(geometry, dict) else []

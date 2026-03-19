@@ -53,15 +53,15 @@ export function Hero() {
   const reduceMotion = prefersReducedMotion ?? false;
 
   useEffect(() => {
-    let copyTween;
-    let mockupTween;
-    let scrollTween;
+    let copyTween: gsap.core.Tween | null;
+    let mockupTween: gsap.core.Tween | null;
+    let scrollTween: gsap.core.Tween | null;
 
     // Initial animation for the copy
     if (!reduceMotion && copyRef.current) {
       copyTween = gsap.fromTo(copyRef.current, 
         { opacity: 0, x: -30 }, 
-        { opacity: 1, x: 0, duration: 1, ease: [0.16, 1, 0.3, 1] }
+        { opacity: 1, x: 0, duration: 1, ease: "cubic-bezier(0.16, 1, 0.3, 1)" }
       );
     } else if (copyRef.current) {
       // Set to final state immediately for reduced motion
@@ -102,7 +102,7 @@ export function Hero() {
       if (copyTween) copyTween.kill();
       if (mockupTween) mockupTween.kill();
       if (scrollTween) scrollTween.kill();
-      ScrollTrigger.getAll().forEach(t => t.kill());
+      ScrollTrigger.getAll().forEach((t: ScrollTrigger) => t.kill());
     };
   }, [reduceMotion]);
 

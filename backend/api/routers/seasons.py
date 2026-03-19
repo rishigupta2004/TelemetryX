@@ -8,6 +8,7 @@ router = APIRouter()
 from ..config import SILVER_DIR
 from ..utils import display_session_code, normalize_key
 from ..catalog import calendar_order
+from db.connection import db_connection, get_db_connection
 
 
 def get_years():
@@ -34,12 +35,14 @@ async def get_season(year: int) -> Dict[str, Any]:
 
 
 @router.get("/seasons/{year}/races")
-async def get_races_by_year(year: int, include_timestamps: bool = False) -> List[Dict[str, Any]]:
+async def get_races_by_year(
+    year: int, include_timestamps: bool = False
+) -> List[Dict[str, Any]]:
     """Get list of races for a specific year."""
     year_path = os.path.join(str(SILVER_DIR), str(year))
     if not os.path.exists(year_path):
         return []
-    
+
     races = []
 
     def _read_sort_date(race_dir: str) -> str:
@@ -53,7 +56,7 @@ async def get_races_by_year(year: int, include_timestamps: bool = False) -> List
             if not os.path.exists(laps_file):
                 continue
             try:
-                conn = duckdb.connect()
+                conn = get_db_connection().parquet_conn
                 try:
                     row = conn.execute(
                         f"SELECT MIN(LapStartDate) FROM read_parquet('{laps_file}') WHERE LapStartDate IS NOT NULL"
@@ -73,21 +76,27 @@ async def get_races_by_year(year: int, include_timestamps: bool = False) -> List
             for session in ["Q", "R", "S", "SS"]:
                 if os.path.exists(os.path.join(year_path, race_dir, session)):
                     sessions.append(display_session_code(session))
-            
-            races.append({
-                "name": race_dir,
-                "sessions": sessions,
-                "startDate": _read_sort_date(race_dir) if include_timestamps else "",
-            })
-    
+
+            races.append(
+                {
+                    "name": race_dir,
+                    "sessions": sessions,
+                    "startDate": _read_sort_date(race_dir)
+                    if include_timestamps
+                    else "",
+                }
+            )
+
     # Sort by calendar round when available; fall back to name.
     order = calendar_order(year)
     order_map = {normalize_key(name): idx for idx, name in enumerate(order)}
+
     def _sort_key(r):
         name = str(r.get("name") or "")
         key = normalize_key(name)
         if key in order_map:
             return (0, order_map[key])
         return (1, str(r.get("startDate") or "9999"), name)
+
     races.sort(key=_sort_key)
     return races

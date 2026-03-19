@@ -1,32 +1,42 @@
 services:
-  telemetryx-clickhouse:
-    image: clickhouse/clickhouse-server:24.12
+  # Redis for caching (required for optimal performance)
+  telemetryx-redis:
+    image: redis:7-alpine
     ports:
-      - "8123:8123"
-      - "9001:9000"
-    environment:
-      CLICKHOUSE_DB: ${CLICKHOUSE_DATABASE:-telemetryx}
-      CLICKHOUSE_USER: ${CLICKHOUSE_USER:-default}
-      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD:-}
+      - "6379:6379"
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
     volumes:
-      - telemetryx_clickhouse:/var/lib/clickhouse
+      - telemetryx_redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    profiles:
+      - analytics
+      - full
 
+  # FastAPI Backend
   telemetryx-backend:
     build:
       context: .
       dockerfile: backend/Dockerfile
     depends_on:
-      - telemetryx-clickhouse
+      telemetryx-redis:
+        condition: service_healthy
+        required: false
     ports:
-      - "9010:9000"
+      - "9000:9000"
     environment:
+      # Demo mode - disable auth, use mock data
+      DEMO_MODE: ${DEMO_MODE:-true}
+      TELEMETRYX_REQUIRE_AUTH: ${TELEMETRYX_REQUIRE_AUTH:-0}
+      
       # Data + models
       TELEMETRYX_DATA_ROOT: /data
       TELEMETRYX_MODELS_DIR: /app/scripts/models
-      TELEMETRYX_DATA_SOURCE: ${TELEMETRYX_DATA_SOURCE:-duckdb}
 
-      # Auth
-      TELEMETRYX_REQUIRE_AUTH: ${TELEMETRYX_REQUIRE_AUTH:-1}
+      # Auth (disabled in demo mode)
       AUTH_SECRET: ${AUTH_SECRET:-dev-secret-change-me}
       TELEMETRYX_ALLOW_INSECURE_AUTH_SECRET: ${TELEMETRYX_ALLOW_INSECURE_AUTH_SECRET:-1}
       TELEMETRYX_AUTH_DB_PATH: /state/auth.db
@@ -34,19 +44,42 @@ services:
       # Google OAuth (optional; configure in prod)
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
-      GOOGLE_REDIRECT_URI: ${GOOGLE_REDIRECT_URI:-http://localhost:9010/api/v1/auth/oauth/google/callback}
+      GOOGLE_REDIRECT_URI: ${GOOGLE_REDIRECT_URI:-http://localhost:9000/api/v1/auth/oauth/google/callback}
 
-      # ClickHouse
-      CLICKHOUSE_HOST: telemetryx-clickhouse
-      CLICKHOUSE_PORT: 8123
-      CLICKHOUSE_DATABASE: ${CLICKHOUSE_DATABASE:-telemetryx}
-      CLICKHOUSE_USER: ${CLICKHOUSE_USER:-default}
-      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD:-}
+      # Redis (caching layer)
+      REDIS_HOST: telemetryx-redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+      REDIS_DB: ${REDIS_DB:-0}
+      REDIS_TTL_SESSION: ${REDIS_TTL_SESSION:-60}
+      REDIS_TTL_TELEMETRY: ${REDIS_TTL_TELEMETRY:-30}
+      REDIS_TTL_POSITIONS: ${REDIS_TTL_POSITIONS:-5}
     volumes:
       # Local dev default: use repo data. In prod, mount your 45–50GB dataset here instead.
       - ./backend/etl/data:/data:ro
       - telemetryx_state:/state
 
+  # Electron Frontend (Linux only - requires X11 display)
+  telemetryx-frontend:
+    build:
+      context: .
+      dockerfile: frontend-electron/Dockerfile
+    ports:
+      - "5173:5173"
+    environment:
+      # Connect to backend container
+      VITE_API_BASE_URL: http://telemetryx-backend:9000
+      # Demo mode
+      DEMO_MODE: ${DEMO_MODE:-true}
+      # Electron needs display
+      DISPLAY: :0
+    depends_on:
+      - telemetryx-backend
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    profiles:
+      - frontend
+
 volumes:
   telemetryx_state:
-  telemetryx_clickhouse:
+  telemetryx_redis:

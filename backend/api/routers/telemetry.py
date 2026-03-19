@@ -4,24 +4,36 @@ import os
 import builtins
 import json
 import time
-import logging
 from typing import Any, Dict, List, Optional
-import duckdb
 
 from fastapi import APIRouter, HTTPException, Query
 
 from ..config import SILVER_DIR
 from ..utils import normalize_session_code, resolve_dir
-from ..clickhouse import (
-    clickhouse_primary,
-    clickhouse_primary_strict,
-    clickhouse_shadow,
-)
-from ..repositories import fetch_telemetry_stream_clickhouse
+from db.connection import get_db_connection
 from . import metrics as metrics_router
 
 router = APIRouter()
-logger = logging.getLogger(__name__)
+
+VALID_SESSIONS = {
+    "R",
+    "Q",
+    "SQ",
+    "S",
+    "FP1",
+    "FP2",
+    "FP3",
+    "SS",
+    "FP",
+    "SQ1",
+    "SQ2",
+    "SQ3",
+    "Q1",
+    "Q2",
+    "Q3",
+}
+VALID_YEARS = set(range(2018, 2026))
+MAX_ROUND_LENGTH = 200
 
 MAX_WINDOW_S = 30.0
 MAX_LAP_WINDOW_S = 180.0
@@ -31,8 +43,35 @@ ALLOWED_CHANNELS = {"speed", "throttle", "brake", "rpm", "gear", "drs"}
 _STREAM_METRICS_ROUTE = "/api/v1/telemetry/{year}/{round}/stream"
 
 
+def _validate_year(year: int) -> int:
+    if year not in VALID_YEARS:
+        raise HTTPException(400, f"Invalid year. Must be one of: {sorted(VALID_YEARS)}")
+    return year
+
+
+def _validate_session(session: Optional[str]) -> Optional[str]:
+    if session is None:
+        return session
+    normalized = session.upper().strip()
+    if normalized and normalized not in VALID_SESSIONS:
+        raise HTTPException(
+            400, f"Invalid session type. Must be one of: {sorted(VALID_SESSIONS)}"
+        )
+    return normalized
+
+
+def _validate_round(round: str) -> str:
+    if ".." in round or "/" in round or "\\" in round:
+        raise HTTPException(400, "Invalid round parameter: path traversal not allowed")
+    if len(round) > MAX_ROUND_LENGTH:
+        raise HTTPException(
+            400, f"Round parameter exceeds maximum length of {MAX_ROUND_LENGTH}"
+        )
+    return round
+
+
 def _fetchall(sql: str, params: List[Any]) -> List[Any]:
-    conn = duckdb.connect()
+    conn = get_db_connection().parquet_conn
     try:
         return conn.execute(sql, params).fetchall()
     finally:
@@ -40,7 +79,7 @@ def _fetchall(sql: str, params: List[Any]) -> List[Any]:
 
 
 def _fetchone(sql: str, params: List[Any]) -> Any:
-    conn = duckdb.connect()
+    conn = get_db_connection().parquet_conn
     try:
         return conn.execute(sql, params).fetchone()
     finally:
@@ -104,41 +143,6 @@ def _normalize_channel_value(channel: str, value: Any) -> Any:
     return builtins.round(numeric, 2)
 
 
-def _row_signature(row: Dict[str, Any], channels: List[str]) -> tuple[Any, ...]:
-    values: List[Any] = []
-    try:
-        values.append(round(float(row.get("time_ms") or 0.0), 3))
-    except Exception:
-        values.append(None)
-    for channel in channels:
-        value = _normalize_channel_value(channel, row.get(channel))
-        if isinstance(value, float):
-            values.append(round(value, 3))
-        else:
-            values.append(value)
-    return tuple(values)
-
-
-def _shadow_sample_mismatch(
-    duck_rows: List[Dict[str, Any]],
-    ch_rows: List[Dict[str, Any]],
-    channels: List[str],
-) -> bool:
-    if len(duck_rows) != len(ch_rows):
-        return True
-    n = len(duck_rows)
-    if n == 0:
-        return False
-    probes = list(range(min(3, n)))
-    tail = list(range(max(0, n - 3), n))
-    for idx in probes + tail:
-        if _row_signature(duck_rows[idx], channels) != _row_signature(
-            ch_rows[idx], channels
-        ):
-            return True
-    return False
-
-
 @router.get("/telemetry/{year}/{round}/stream")
 async def get_telemetry_stream(
     year: int,
@@ -155,6 +159,9 @@ async def get_telemetry_stream(
     lap_number: Optional[int] = Query(default=None, ge=1),
 ) -> Dict[str, Any]:
     started_at = time.perf_counter()
+    _validate_year(year)
+    _validate_round(round)
+    session_type = _validate_session(session_type)
     if lap_number is None and (time_start_ms is None or time_end_ms is None):
         raise HTTPException(
             status_code=422,
@@ -228,32 +235,6 @@ async def get_telemetry_stream(
             status_code=413, detail=f"Window exceeds {int(max_window)}s limit"
         )
 
-    ch_payload = fetch_telemetry_stream_clickhouse(
-        year=int(year),
-        race_name=race_name,
-        session_type=session_type,
-        driver_number=int(driver_number),
-        time_start_ms=req_start_ms,
-        time_end_ms=req_end_ms,
-        channels=requested,
-        max_samples=int(MAX_SAMPLES),
-    )
-    if clickhouse_primary():
-        if ch_payload is None:
-            if clickhouse_primary_strict():
-                raise HTTPException(
-                    status_code=503,
-                    detail="ClickHouse primary mode could not serve telemetry stream",
-                )
-        else:
-            metrics_router.record_endpoint_sample(
-                _STREAM_METRICS_ROUTE,
-                (time.perf_counter() - started_at) * 1000.0,
-                _estimate_payload_bytes(ch_payload),
-                int(ch_payload.get("samples") or 0),
-            )
-            return ch_payload
-
     telemetry_file = os.path.join(silver_path, "telemetry.parquet")
     if not os.path.exists(telemetry_file):
         payload = {
@@ -308,29 +289,6 @@ async def get_telemetry_stream(
         "samples": len(data),
         "data": data,
     }
-    if ch_payload is not None and clickhouse_shadow():
-        try:
-            duck_rows = int(payload.get("samples") or 0)
-            ch_rows = int(ch_payload.get("samples") or 0)
-            mismatch = duck_rows != ch_rows
-            if not mismatch:
-                mismatch = _shadow_sample_mismatch(
-                    list(payload.get("data") or []),
-                    list(ch_payload.get("data") or []),
-                    requested,
-                )
-            if mismatch:
-                logger.warning(
-                    "telemetry_shadow_mismatch year=%s race=%s session=%s driver=%s duck_rows=%s ch_rows=%s",
-                    year,
-                    race_name,
-                    session_type,
-                    driver_number,
-                    duck_rows,
-                    ch_rows,
-                )
-        except Exception:
-            pass
     metrics_router.record_endpoint_sample(
         _STREAM_METRICS_ROUTE,
         (time.perf_counter() - started_at) * 1000.0,
@@ -349,13 +307,16 @@ async def get_telemetry(
     session_type: Optional[str] = None,
 ) -> List[Dict[str, Any]]:
     """Backward-compatible endpoint."""
+    _validate_year(year)
+    _validate_round(round)
+    session_type = _validate_session(session_type)
     race_name = round.replace("-", " ")
     silver_path = get_session_path(year, race_name, session_type=session_type)
     if not silver_path:
-        return []
+        raise HTTPException(status_code=404, detail="Session not found")
     telemetry_file = os.path.join(silver_path, "telemetry.parquet")
     if not os.path.exists(telemetry_file):
-        return []
+        raise HTTPException(status_code=404, detail="Telemetry data not found")
 
     if not driver:
         sql = """
@@ -388,12 +349,12 @@ async def get_telemetry(
 
     driver_number = _resolve_driver_number(silver_path, str(driver))
     if driver_number is None:
-        return []
+        raise HTTPException(status_code=404, detail="Driver not found")
 
     if lap is not None:
         laps_file = os.path.join(silver_path, "laps.parquet")
         if not os.path.exists(laps_file):
-            return []
+            raise HTTPException(status_code=404, detail="Laps data not found")
         lap_row = _fetchone(
             """
             SELECT
@@ -406,7 +367,7 @@ async def get_telemetry(
             [laps_file, int(driver_number), int(lap)],
         )
         if not lap_row:
-            return []
+            raise HTTPException(status_code=404, detail="Lap not found")
         end_time = float(lap_row[0] or 0.0)
         duration = float(lap_row[1] or 0.0)
         start_ms = int(max(0.0, end_time - duration) * 1000.0)
@@ -483,6 +444,9 @@ async def get_lap_telemetry(
     lap_number: int,
     session_type: Optional[str] = None,
 ) -> Dict[str, Any]:
+    _validate_year(year)
+    _validate_round(round)
+    session_type = _validate_session(session_type)
     race_name = round.replace("-", " ")
     silver_path = get_session_path(year, race_name, session_type=session_type)
     if not silver_path:

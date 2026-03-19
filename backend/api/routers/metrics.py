@@ -6,15 +6,9 @@ import time
 import math
 import re
 import logging
+from pathlib import Path
 
-from ..clickhouse import (
-    clickhouse_database,
-    clickhouse_enabled,
-    clickhouse_host,
-    clickhouse_port,
-    data_source_mode,
-    get_clickhouse_client,
-)
+from ..config import DATA_ROOT, FEATURES_DIR, SILVER_DIR
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -192,82 +186,22 @@ async def performance_summary() -> Dict[str, Any]:
 
 @router.get("/health/data-source")
 async def data_source_health() -> Dict[str, Any]:
-    mode = data_source_mode()
-    payload: Dict[str, Any] = {
-        "mode": mode,
-        "clickhouse": {
-            "enabled": bool(clickhouse_enabled()),
-            "configured": {
-                "host": clickhouse_host(),
-                "port": int(clickhouse_port()),
-                "database": clickhouse_database(),
-            },
-            "connected": False,
-            "watermarks": {
-                "total": 0,
-                "latest_updated_at": None,
-                "latest_age_seconds": None,
-                "datasets": {},
-            },
-            "error": None,
+    def _dir_summary(path: Path) -> Dict[str, Any]:
+        exists = path.exists() and path.is_dir()
+        subdirs = 0
+        if exists:
+            try:
+                subdirs = len([p for p in path.iterdir() if p.is_dir()])
+            except Exception:
+                subdirs = 0
+        return {"path": str(path), "exists": bool(exists), "subdirs": int(subdirs)}
+
+    return {
+        "mode": "duckdb",
+        "duckdb": {
+            "enabled": True,
+            "data_root": str(DATA_ROOT),
+            "silver": _dir_summary(SILVER_DIR),
+            "features": _dir_summary(FEATURES_DIR),
         },
     }
-
-    client = get_clickhouse_client()
-    if client is None:
-        payload["clickhouse"]["error"] = "clickhouse_client_unavailable"
-        return payload
-
-    try:
-        ping_ok = bool(client.ping())
-        payload["clickhouse"]["connected"] = ping_ok
-        if not ping_ok:
-            payload["clickhouse"]["error"] = "clickhouse_ping_failed"
-            return payload
-
-        total_rows = client.query(
-            "SELECT COUNT(*) FROM latest_ingest_watermarks"
-        ).result_rows
-        payload["clickhouse"]["watermarks"]["total"] = (
-            int(total_rows[0][0]) if total_rows else 0
-        )
-
-        latest_row = client.query(
-            "SELECT max(updated_at) FROM latest_ingest_watermarks"
-        ).result_rows
-        latest_ts = latest_row[0][0] if latest_row else None
-        if latest_ts is not None:
-            try:
-                latest_epoch = float(latest_ts.timestamp())
-                age_s = max(0.0, time.time() - latest_epoch)
-                payload["clickhouse"]["watermarks"]["latest_updated_at"] = str(
-                    latest_ts
-                )
-                payload["clickhouse"]["watermarks"]["latest_age_seconds"] = round(
-                    age_s, 2
-                )
-            except Exception:
-                payload["clickhouse"]["watermarks"]["latest_updated_at"] = str(
-                    latest_ts
-                )
-
-        by_dataset = client.query(
-            """
-            SELECT dataset, COUNT(*) AS n, max(updated_at) AS updated_at
-            FROM latest_ingest_watermarks
-            GROUP BY dataset
-            ORDER BY dataset
-            """
-        ).result_rows
-        ds_payload: Dict[str, Any] = {}
-        for row in by_dataset:
-            ds_name = str(row[0])
-            ds_payload[ds_name] = {
-                "paths": int(row[1]),
-                "latest_updated_at": str(row[2]) if row[2] is not None else None,
-            }
-        payload["clickhouse"]["watermarks"]["datasets"] = ds_payload
-        return payload
-    except Exception as exc:
-        payload["clickhouse"]["error"] = str(exc)
-        return payload

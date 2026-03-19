@@ -316,3 +316,116 @@ def test_regulation_simulation_compare_rejects_invalid_baseline(monkeypatch, tmp
     )
 
     assert response.status_code == 422
+
+
+def test_regulation_simulation_with_track_type(monkeypatch, tmp_path):
+    features_dir = tmp_path / "features"
+    strategy_dir = features_dir / "strategy_recommendations"
+    strategy_dir.mkdir(parents=True, exist_ok=True)
+    strategy_payload = {
+        "year": 2025,
+        "race_name": "Monaco Grand Prix",
+        "n_simulations": 1000,
+        "all_strategies": {
+            "SOFT→HARD (Pits: 1)": {
+                "strategy": "SOFT→HARD (Pits: 1)",
+                "avg_points": 18.1,
+                "avg_finish_position": 3.1,
+                "podium_probability": 0.56,
+                "avg_pit_stops": 1.0,
+            }
+        },
+    }
+    (strategy_dir / "2025_Monaco_Grand_Prix.json").write_text(
+        json.dumps(strategy_payload), encoding="utf-8"
+    )
+    monkeypatch.setattr(models_router, "FEATURES_DIR", str(features_dir))
+
+    response = client.get(
+        "/api/v1/models/regulation-simulation/2025/Monaco%20Grand%20Prix",
+        params={
+            "target_year": 2026,
+            "team_profile": "balanced",
+            "n_samples": 200,
+            "track_type": "high_downforce",
+        },
+    )
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["track_type"] == "high_downforce"
+
+
+def test_regulation_backtest_endpoint_2018_2021(monkeypatch, tmp_path):
+    features_dir = tmp_path / "features"
+    strategy_dir = features_dir / "strategy_recommendations"
+    strategy_dir.mkdir(parents=True, exist_ok=True)
+
+    payload_2021 = {
+        "year": 2021,
+        "race_name": "Backtest",
+        "n_simulations": 500,
+        "all_strategies": {
+            "MEDIUM→HARD (Pits: 1)": {
+                "strategy": "MEDIUM→HARD (Pits: 1)",
+                "avg_points": 15.0,
+                "avg_finish_position": 4.0,
+                "podium_probability": 0.35,
+                "avg_pit_stops": 1.0,
+            }
+        },
+    }
+    (strategy_dir / "2021_Backtest.json").write_text(
+        json.dumps(payload_2021), encoding="utf-8"
+    )
+    monkeypatch.setattr(models_router, "FEATURES_DIR", str(features_dir))
+
+    response = client.get(
+        "/api/v1/models/regulation-simulation-backtest",
+        params={
+            "baseline_year": 2018,
+            "target_year": 2021,
+            "team_profile": "balanced",
+            "n_samples": 200,
+        },
+    )
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["baseline_year"] == 2018
+    assert payload["target_year"] == 2021
+    assert payload["shift_label"] == "2018→2021"
+    assert "backtest_results" in payload
+    assert "accuracy_summary" in payload
+    assert isinstance(payload["backtest_results"], list)
+    assert isinstance(payload["accuracy_summary"], dict)
+
+
+def test_regulation_backtest_endpoint_validates_baseline_less_than_target(
+    monkeypatch, tmp_path
+):
+    response = client.get(
+        "/api/v1/models/regulation-simulation-backtest",
+        params={
+            "baseline_year": 2022,
+            "target_year": 2018,
+        },
+    )
+    assert response.status_code == 422
+
+
+def test_regulation_backtest_endpoint_unsupported_shift(monkeypatch, tmp_path):
+    features_dir = tmp_path / "features"
+    strategy_dir = features_dir / "strategy_recommendations"
+    strategy_dir.mkdir(parents=True, exist_ok=True)
+    monkeypatch.setattr(models_router, "FEATURES_DIR", str(features_dir))
+
+    response = client.get(
+        "/api/v1/models/regulation-simulation-backtest",
+        params={
+            "baseline_year": 2020,
+            "target_year": 2023,
+        },
+    )
+    assert response.status_code == 200
+    payload = response.json()
+    assert "available_shifts" in payload
+    assert "2018→2021" in payload["available_shifts"]

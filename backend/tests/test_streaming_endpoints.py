@@ -33,21 +33,6 @@ def test_positions_stream_enforces_window_limit(tmp_path):
     assert "Window exceeds 60s limit" in r.json()["detail"]
 
 
-def test_positions_stream_clickhouse_primary_strict_returns_503(monkeypatch):
-    monkeypatch.setattr(positions_router, "clickhouse_primary", lambda: True)
-    monkeypatch.setattr(positions_router, "clickhouse_primary_strict", lambda: True)
-    monkeypatch.setattr(
-        positions_router, "fetch_positions_stream_clickhouse", lambda **_kwargs: None
-    )
-
-    r = client.get(
-        "/api/v1/positions/2025/Bahrain-Grand-Prix/stream",
-        params={"time_start_ms": 0, "time_end_ms": 5000, "session_type": "R"},
-    )
-    assert r.status_code == 503
-    assert "ClickHouse primary mode" in r.json()["detail"]
-
-
 def test_positions_stream_reads_windowed_data(tmp_path, monkeypatch):
     silver = tmp_path / "silver" / "2025" / "Bahrain Grand Prix" / "R"
     silver.mkdir(parents=True)
@@ -248,31 +233,6 @@ def test_telemetry_stream_limits_and_channels(tmp_path, monkeypatch):
     assert body["samples"] == 2
     assert body["channels"] == ["speed", "throttle"]
     assert set(body["data"][0].keys()) == {"time_ms", "speed", "throttle"}
-
-
-def test_telemetry_stream_clickhouse_primary_strict_returns_503(monkeypatch):
-    monkeypatch.setattr(
-        telemetry_router,
-        "get_session_path",
-        lambda *_args, **_kwargs: "/tmp/stream",
-    )
-    monkeypatch.setattr(telemetry_router, "clickhouse_primary", lambda: True)
-    monkeypatch.setattr(telemetry_router, "clickhouse_primary_strict", lambda: True)
-    monkeypatch.setattr(
-        telemetry_router, "fetch_telemetry_stream_clickhouse", lambda **_kwargs: None
-    )
-
-    r = client.get(
-        "/api/v1/telemetry/2025/Bahrain-Grand-Prix/stream",
-        params={
-            "time_start_ms": 0,
-            "time_end_ms": 5000,
-            "driver_number": 1,
-            "session_type": "R",
-        },
-    )
-    assert r.status_code == 503
-    assert "ClickHouse primary mode" in r.json()["detail"]
 
 
 def test_legacy_telemetry_endpoint_is_not_capped_to_5000_rows(tmp_path, monkeypatch):

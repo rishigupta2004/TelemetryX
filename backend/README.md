@@ -1,30 +1,26 @@
-# TelemetryX Backend (Docker)
+# TelemetryX Backend
 
 ## Run (local dev)
 
-From repo root:
+No Docker required:
+
+```bash
+cd backend
+./start_local.sh
+```
+
+API defaults:
+- API: `http://127.0.0.1:9000`
+- Swagger: `http://127.0.0.1:9000/docs`
+- Data source: DuckDB + parquet
+
+## Docker (optional)
+
+Docker is optional and intended for deployment/runtime isolation:
 
 ```bash
 docker compose up --build telemetryx-backend
 ```
-
-To start backend + local ClickHouse together:
-
-```bash
-docker compose up --build telemetryx-clickhouse telemetryx-backend
-```
-
-Defaults:
-- API: `http://localhost:9010`
-- Swagger: `http://localhost:9010/docs`
-- Data mount: `./backend/etl/data` → `/data` (read-only)
-- Session codes on disk: `Q`, `R`, `S`, `SS` (API also accepts `SR` as alias for `SS`)
-
-## Production notes
-
-- Mount your full dataset into the container and set `TELEMETRYX_DATA_ROOT=/data`.
-- Set `TELEMETRYX_REQUIRE_AUTH=1` + a strong `AUTH_SECRET`.
-- Configure Google OAuth via `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REDIRECT_URI`.
 
 ### Clerk-only auth (current)
 
@@ -57,23 +53,8 @@ Clerk integration notes:
   2) `X-Clerk-Org-Id` header -> `org:<id>`
   3) fallback personal workspace -> `user:<clerk_user_id>`
 
-## Data Source Modes
-
-Set `TELEMETRYX_DATA_SOURCE`:
-- `duckdb` (default): serve directly from Parquet via DuckDB
-- `clickhouse`: serve telemetry/positions from ClickHouse only
-- `shadow`: serve from DuckDB and compare row counts with ClickHouse in logs
-
 Runtime data-source health endpoint:
-- `GET /api/v1/health/data-source` (mode, ClickHouse connectivity, watermark freshness)
-
-### ClickHouse bootstrap
-
-```bash
-python scripts/clickhouse/init_clickhouse.py
-python scripts/clickhouse/ingest_silver.py
-python scripts/clickhouse/ingest_features.py
-```
+- `GET /api/v1/health/data-source` (DuckDB runtime/data directory status)
 
 ### Medallion safety/reconciliation
 

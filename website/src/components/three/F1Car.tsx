@@ -1,19 +1,22 @@
 "use client";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { useRef, useMemo, useEffect } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { useRef, useMemo, useEffect, useState } from "react";
 import * as THREE from "three";
 import { OrbitControls, Environment, ContactShadows, Float } from "@react-three/drei";
 import { EffectComposer, Bloom, ChromaticAberration, DepthOfField } from "@react-three/postprocessing";
 import { BlendFunction } from "postprocessing";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 // Procedural wireframe F1 Car concept (since we don't have an external GLTF asset yet)
-function WireframeCar() {
+function WireframeCar({ scrollProgress, prefersReducedMotion = false }: { scrollProgress: number; prefersReducedMotion?: boolean }) {
   const groupRef = useRef<THREE.Group>(null);
-  
+    
   useFrame((state) => {
     if(!groupRef.current) return;
-    // Simulate slight suspension vibration
-    groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 20) * 0.02 + 0.5;
+    // Simulate slight suspension vibration (disabled for reduced motion)
+    if (!prefersReducedMotion) {
+      groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 20) * 0.02 + 0.5;
+    }
   });
 
   const wireframeMaterial = useMemo(() => new THREE.MeshStandardMaterial({ 
@@ -32,6 +35,14 @@ function WireframeCar() {
   }), []);
 
   const redTireRing = useMemo(() => new THREE.MeshBasicMaterial({ color: "#ff2a2a" }), []);
+
+  // Update wireframe opacity based on scroll progress
+  useFrame(() => {
+    if (wireframeMaterial) {
+      // Fade out wireframe as we scroll down (more visible at top)
+      wireframeMaterial.opacity = 0.8 * (1 - scrollProgress);
+    }
+  });
 
   return (
     <group ref={groupRef} scale={1.5}>
@@ -109,11 +120,14 @@ function WireframeCar() {
   );
 }
 
-function WindTunnelLines() {
+function WindTunnelLines({ prefersReducedMotion = false }: { prefersReducedMotion?: boolean }) {
   const linesRef = useRef<THREE.Group>(null);
-  
+   
   useFrame((state, delta) => {
     if(!linesRef.current) return;
+    // Skip animation for reduced motion
+    if (prefersReducedMotion) return;
+    
     linesRef.current.children.forEach(child => {
       child.position.z += delta * 20; // Move lines backward fast
       if (child.position.z > 5) {
@@ -141,21 +155,67 @@ function WindTunnelLines() {
   );
 }
 
-export function F1CarModel() {
+function CameraRig({ scrollProgress }: { scrollProgress: number }) {
+  const { camera } = useThree();
+
+  useFrame(() => {
+    camera.position.y = 3 + scrollProgress * 4;
+    camera.position.z = -6 - scrollProgress * 3;
+    camera.position.x = 5 + Math.sin(scrollProgress * Math.PI) * 1;
+  });
+
+  return null;
+}
+
+export function F1CarModel({ className }: { className?: string }) {
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    // Create a ScrollTrigger that updates scrollProgress from 0 to 1
+    const scrollTrigger = ScrollTrigger.create({
+      start: 0,
+      end: "max",
+      onUpdate: (self) => {
+        setScrollProgress(self.progress);
+      }
+    });
+    
+    return () => {
+      scrollTrigger.kill();
+    };
+  }, []);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updatePreference = () => setPrefersReducedMotion(mediaQuery.matches);
+    updatePreference();
+
+    mediaQuery.addEventListener("change", updatePreference);
+    return () => mediaQuery.removeEventListener("change", updatePreference);
+  }, []);
+
   return (
-    <div className="absolute inset-0 z-0 bg-[#020202]">
+    <div className={`absolute inset-0 z-0 bg-[#020202] ${className || ''}`}>
       <Canvas dpr={[1, 2]} camera={{ position: [5, 3, -6], fov: 45 }}>
+        <CameraRig scrollProgress={scrollProgress} />
         <fog attach="fog" args={['#020202', 5, 15]} />
         <ambientLight intensity={1} />
         <directionalLight position={[10, 10, 5]} intensity={2} color="#ffffff" />
         <spotLight position={[0, 10, 0]} intensity={50} angle={0.6} penumbra={1} color="#00e5ff" castShadow />
         
-        <Float speed={1.5} rotationIntensity={0.1} floatIntensity={0.2}>
-          <WireframeCar />
-        </Float>
+        {!prefersReducedMotion && (
+          <Float speed={1.5} rotationIntensity={0.1} floatIntensity={0.2}>
+            <WireframeCar scrollProgress={scrollProgress} prefersReducedMotion={prefersReducedMotion} />
+          </Float>
+        )}
         
-        <WindTunnelLines />
-
+        {prefersReducedMotion && (
+          <WireframeCar scrollProgress={scrollProgress} prefersReducedMotion={prefersReducedMotion} />
+        )}
+        
+        <WindTunnelLines prefersReducedMotion={prefersReducedMotion} />
+        
         <ContactShadows position={[0, -0.1, 0]} opacity={0.8} scale={10} blur={2} far={4} color="#000" />
         
         <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={-1} maxPolarAngle={Math.PI / 2 - 0.1} />

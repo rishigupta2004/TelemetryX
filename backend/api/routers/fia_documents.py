@@ -2,14 +2,18 @@ from __future__ import annotations
 
 import datetime as dt
 import html
+import json
 import logging
 import re
+import time
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 import httpx
 from fastapi import APIRouter, HTTPException, Query
 
 from ..cache import cache_get, cache_set
+from ..config import MEDIA_CACHE_DIR
 from ..utils import normalize_key
 
 router = APIRouter()
@@ -17,7 +21,43 @@ logger = logging.getLogger(__name__)
 
 _FIA_BASE_URL = "https://www.fia.com"
 _F1_CHAMPIONSHIP_DOCS_PATH = "/documents/championships/fia-formula-one-world-championship-14"
-_DEFAULT_TIMEOUT_S = 20.0
+_DEFAULT_TIMEOUT_S = 6.0
+_SEASONS_TTL_S = 24 * 60 * 60
+_EVENTS_TTL_S = 6 * 60 * 60
+_DOCS_TTL_S = 2 * 60 * 60
+
+
+def _file_cache_dir() -> Path:
+    path = Path(MEDIA_CACHE_DIR) / "fia_documents"
+    path.mkdir(parents=True, exist_ok=True)
+    return path
+
+
+def _file_cache_path(key: str) -> Path:
+    safe = re.sub(r"[^a-zA-Z0-9_.-]+", "_", key).strip("_")
+    return _file_cache_dir() / f"{safe}.json"
+
+
+def _read_file_cache(key: str, ttl_s: int) -> Optional[Dict[str, Any]]:
+    path = _file_cache_path(key)
+    if not path.exists():
+        return None
+    try:
+        age = time.time() - path.stat().st_mtime
+        if age > ttl_s:
+            return None
+        payload = json.loads(path.read_text())
+        return payload if isinstance(payload, dict) else None
+    except Exception:
+        return None
+
+
+def _write_file_cache(key: str, payload: Dict[str, Any]) -> None:
+    path = _file_cache_path(key)
+    try:
+        path.write_text(json.dumps(payload, ensure_ascii=True))
+    except Exception:
+        pass
 
 
 def _abs_url(path_or_url: str) -> str:
@@ -247,14 +287,21 @@ async def _fetch_text(url: str) -> str:
 
 async def _get_season_paths(force_refresh: bool = False) -> Dict[int, str]:
     cache_key = ("fia_document_seasons",)
+    file_key = "seasons"
     if not force_refresh:
         cached = cache_get(cache_key)
         if isinstance(cached, dict):
             return cached
+        file_cached = _read_file_cache(file_key, _SEASONS_TTL_S)
+        if isinstance(file_cached, dict):
+            cache_set(cache_key, file_cached)
+            return file_cached
 
     championship_html = await _fetch_text(_abs_url(_F1_CHAMPIONSHIP_DOCS_PATH))
     season_paths = _parse_season_paths(championship_html)
-    return cache_set(cache_key, season_paths)
+    cache_set(cache_key, season_paths)
+    _write_file_cache(file_key, season_paths)
+    return season_paths
 
 
 async def _resolve_season_path(year: int, force_refresh: bool = False) -> Optional[str]:
@@ -264,10 +311,15 @@ async def _resolve_season_path(year: int, force_refresh: bool = False) -> Option
 
 async def _get_events_for_year(year: int, force_refresh: bool = False) -> Dict[str, Any]:
     cache_key = ("fia_document_events", int(year))
+    file_key = f"events_{int(year)}"
     if not force_refresh:
         cached = cache_get(cache_key)
         if isinstance(cached, dict):
             return cached
+        file_cached = _read_file_cache(file_key, _EVENTS_TTL_S)
+        if isinstance(file_cached, dict):
+            cache_set(cache_key, file_cached)
+            return file_cached
 
     season_path = await _resolve_season_path(year, force_refresh=force_refresh)
     if not season_path:
@@ -283,7 +335,9 @@ async def _get_events_for_year(year: int, force_refresh: bool = False) -> Dict[s
         "source": _abs_url(season_path),
         "fetched_at": dt.datetime.now(dt.timezone.utc).isoformat(),
     }
-    return cache_set(cache_key, payload)
+    cache_set(cache_key, payload)
+    _write_file_cache(file_key, payload)
+    return payload
 
 
 @router.get("/fia-documents/seasons")
@@ -311,11 +365,16 @@ async def get_fia_documents(
 ) -> Dict[str, Any]:
     race_name = race.replace("-", " ").strip()
     cache_key = ("fia_documents", int(year), normalize_key(race_name))
+    file_key = f"docs_{int(year)}_{normalize_key(race_name).replace(' ', '_')}"
 
     if not force_refresh:
         cached = cache_get(cache_key)
         if cached is not None:
             return cached
+        file_cached = _read_file_cache(file_key, _DOCS_TTL_S)
+        if isinstance(file_cached, dict):
+            cache_set(cache_key, file_cached)
+            return file_cached
 
     season_path = await _resolve_season_path(year, force_refresh=force_refresh)
     if not season_path:
@@ -356,4 +415,6 @@ async def get_fia_documents(
         "latest_published_at": latest,
         "documents": documents,
     }
-    return cache_set(cache_key, payload)
+    cache_set(cache_key, payload)
+    _write_file_cache(file_key, payload)
+    return payload

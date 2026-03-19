@@ -11,8 +11,57 @@ from ..utils import normalize_session_code, read_parquet_df, resolve_dir
 
 router = APIRouter()
 
+VALID_SESSIONS = {
+    "R",
+    "Q",
+    "SQ",
+    "S",
+    "FP1",
+    "FP2",
+    "FP3",
+    "SS",
+    "FP",
+    "SQ1",
+    "SQ2",
+    "SQ3",
+    "Q1",
+    "Q2",
+    "Q3",
+}
+VALID_YEARS = set(range(2018, 2026))
+MAX_ROUND_LENGTH = 200
 
-def _resolve_session_dir(year: int, race_name: str, session_type: Optional[str]) -> Optional[Tuple[str, str]]:
+
+def _validate_year(year: int) -> int:
+    if year not in VALID_YEARS:
+        raise HTTPException(400, f"Invalid year. Must be one of: {sorted(VALID_YEARS)}")
+    return year
+
+
+def _validate_session(session: Optional[str]) -> Optional[str]:
+    if session is None:
+        return session
+    normalized = session.upper().strip()
+    if normalized and normalized not in VALID_SESSIONS:
+        raise HTTPException(
+            400, f"Invalid session type. Must be one of: {sorted(VALID_SESSIONS)}"
+        )
+    return normalized
+
+
+def _validate_round(round: str) -> str:
+    if ".." in round or "/" in round or "\\" in round:
+        raise HTTPException(400, "Invalid round parameter: path traversal not allowed")
+    if len(round) > MAX_ROUND_LENGTH:
+        raise HTTPException(
+            400, f"Round parameter exceeds maximum length of {MAX_ROUND_LENGTH}"
+        )
+    return round
+
+
+def _resolve_session_dir(
+    year: int, race_name: str, session_type: Optional[str]
+) -> Optional[Tuple[str, str]]:
     year_path = os.path.join(SILVER_DIR, str(year))
     race_dir = resolve_dir(year_path, race_name)
     if not race_dir:
@@ -47,10 +96,16 @@ def _is_quali_like(session_type: Optional[str]) -> bool:
 
 
 def _segment_labels(session_type: Optional[str]) -> List[str]:
-    return ["SQ1", "SQ2", "SQ3"] if normalize_session_code(session_type) == "S" else ["Q1", "Q2", "Q3"]
+    return (
+        ["SQ1", "SQ2", "SQ3"]
+        if normalize_session_code(session_type) == "S"
+        else ["Q1", "Q2", "Q3"]
+    )
 
 
-def _assign_segment(end_time_s: float, cuts: Tuple[float, float], labels: List[str]) -> str:
+def _assign_segment(
+    end_time_s: float, cuts: Tuple[float, float], labels: List[str]
+) -> str:
     if end_time_s < cuts[0]:
         return labels[0]
     if end_time_s < cuts[1]:
@@ -108,7 +163,9 @@ def _lap_sort(df: pd.DataFrame) -> pd.DataFrame:
     return df.sort_values(by, na_position="last")
 
 
-def _pick_selected_lap(df: pd.DataFrame, lap_number: Optional[int]) -> Optional[Dict[str, Any]]:
+def _pick_selected_lap(
+    df: pd.DataFrame, lap_number: Optional[int]
+) -> Optional[Dict[str, Any]]:
     if df.empty:
         return None
     selected = df
@@ -131,6 +188,9 @@ async def get_laps(
     limit: int = Query(default=2000, ge=1, le=20000),
 ) -> List[Dict[str, Any]]:
     """Return lap rows (schema depends on source/parquet)."""
+    _validate_year(year)
+    _validate_round(round)
+    session_type = _validate_session(session_type)
     df = _laps_df(year, round, session_type)
     if df.empty:
         return []
@@ -148,6 +208,9 @@ async def get_laps_summary(
     session_type: Optional[str] = Query(default=None),
 ) -> Dict[str, Any]:
     """Lightweight lap summary for fast initial table render."""
+    _validate_year(year)
+    _validate_round(round)
+    session_type = _validate_session(session_type)
     df = _laps_df(year, round, session_type)
     if df.empty:
         return {"session_info": {"total_laps": 0, "drivers": 0}, "laps": []}
@@ -166,9 +229,15 @@ async def get_laps_summary(
     else:
         summary = df
     if "lap_number" in summary.columns:
-        summary = summary.sort_values(["driver_number", "lap_number"], na_position="last")
+        summary = summary.sort_values(
+            ["driver_number", "lap_number"], na_position="last"
+        )
 
-    total_laps = int(df["lap_number"].max()) if "lap_number" in df.columns and not df["lap_number"].isna().all() else 0
+    total_laps = (
+        int(df["lap_number"].max())
+        if "lap_number" in df.columns and not df["lap_number"].isna().all()
+        else 0
+    )
     drivers = int(df["driver_number"].nunique()) if "driver_number" in df.columns else 0
     return {
         "session_info": {"total_laps": total_laps, "drivers": drivers},
@@ -185,6 +254,9 @@ async def get_head_to_head(
     session_type: Optional[str] = Query(default=None),
 ) -> Dict[str, Any]:
     """Fastest-lap comparison between two drivers."""
+    _validate_year(year)
+    _validate_round(round)
+    session_type = _validate_session(session_type)
     df = _laps_df(year, round, session_type=session_type)
     if df.empty:
         raise HTTPException(status_code=404, detail="Laps data not found")
@@ -194,9 +266,17 @@ async def get_head_to_head(
     # Filter to just the two drivers (by name or number) and valid laps if available.
     mask = pd.Series([False] * len(df))
     if "driver_name" in df.columns:
-        mask = mask | (df["driver_name"].astype(str) == driver1) | (df["driver_name"].astype(str) == driver2)
+        mask = (
+            mask
+            | (df["driver_name"].astype(str) == driver1)
+            | (df["driver_name"].astype(str) == driver2)
+        )
     if "driver_number" in df.columns:
-        mask = mask | (df["driver_number"].astype(str) == str(driver1)) | (df["driver_number"].astype(str) == str(driver2))
+        mask = (
+            mask
+            | (df["driver_number"].astype(str) == str(driver1))
+            | (df["driver_number"].astype(str) == str(driver2))
+        )
     df = df[mask]
     if "is_valid_lap" in df.columns:
         df = df[df["is_valid_lap"] == True]  # noqa: E712
@@ -205,9 +285,16 @@ async def get_head_to_head(
     if not group_cols:
         raise HTTPException(status_code=422, detail="Missing driver identity columns")
 
-    fastest = df.groupby(group_cols)["lap_time_seconds"].min().reset_index().sort_values("lap_time_seconds")
+    fastest = (
+        df.groupby(group_cols)["lap_time_seconds"]
+        .min()
+        .reset_index()
+        .sort_values("lap_time_seconds")
+    )
     if len(fastest) < 2:
-        raise HTTPException(status_code=404, detail="Could not find both drivers with valid laps")
+        raise HTTPException(
+            status_code=404, detail="Could not find both drivers with valid laps"
+        )
 
     a = fastest.iloc[0].to_dict()
     b = fastest.iloc[1].to_dict()
@@ -303,7 +390,9 @@ async def get_driver_lap_selection(
     selected = _pick_selected_lap(sorted_df, lap_number)
     segments = []
     if "segment" in sorted_df.columns:
-        segments = sorted({str(s) for s in sorted_df["segment"].dropna().tolist() if str(s)})
+        segments = sorted(
+            {str(s) for s in sorted_df["segment"].dropna().tolist() if str(s)}
+        )
 
     return {
         "driver": str(driver_id),
@@ -321,23 +410,34 @@ async def get_gap_analysis(
     session_type: str = Query(default="R"),
 ) -> Dict[str, Any]:
     """Gap-to-leader per lap (race trace style)."""
+    _validate_year(year)
+    _validate_round(round)
+    session_type = _validate_session(session_type)
     df = _laps_df(year, round, session_type=session_type)
     if df.empty:
         raise HTTPException(status_code=404, detail="Laps data not found")
     required = {"driver_number", "lap_number", "lap_time_seconds"}
     if not required.issubset(set(df.columns)):
-        raise HTTPException(status_code=422, detail="Missing required lap columns for gap analysis")
+        raise HTTPException(
+            status_code=422, detail="Missing required lap columns for gap analysis"
+        )
 
     df = df.dropna(subset=["driver_number", "lap_number", "lap_time_seconds"])
     df = df.sort_values(["driver_number", "lap_number"])
     df["race_time"] = df.groupby("driver_number")["lap_time_seconds"].cumsum()
 
-    leader = df.groupby("lap_number")["race_time"].min().rename("leader_time").reset_index()
+    leader = (
+        df.groupby("lap_number")["race_time"].min().rename("leader_time").reset_index()
+    )
     merged = df.merge(leader, on="lap_number", how="left")
     merged["gap_to_leader"] = merged["race_time"] - merged["leader_time"]
 
     name_col = "driver_name" if "driver_name" in merged.columns else None
-    driver_keys = merged[name_col].unique().tolist() if name_col else merged["driver_number"].unique().tolist()
+    driver_keys = (
+        merged[name_col].unique().tolist()
+        if name_col
+        else merged["driver_number"].unique().tolist()
+    )
 
     out: Dict[str, Any] = {"drivers": [], "data": {}}
     for drv in driver_keys:

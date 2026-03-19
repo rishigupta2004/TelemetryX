@@ -12,6 +12,7 @@ import duckdb
 import logging
 from ..driver_mapping import get_driver_name, get_team_name
 from ..cache import cache_get, cache_set
+from db.connection import db_connection, get_db_connection
 from ..utils import (
     resolve_dir,
     resolve_track_geometry_file,
@@ -25,6 +26,54 @@ from . import metrics as metrics_router
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
+
+VALID_SESSIONS = {
+    "R",
+    "Q",
+    "SQ",
+    "S",
+    "FP1",
+    "FP2",
+    "FP3",
+    "SS",
+    "FP",
+    "SQ1",
+    "SQ2",
+    "SQ3",
+    "Q1",
+    "Q2",
+    "Q3",
+}
+VALID_YEARS = set(range(2018, 2026))
+MAX_ROUND_LENGTH = 200
+
+
+def _validate_year(year: int) -> int:
+    if year not in VALID_YEARS:
+        raise HTTPException(400, f"Invalid year. Must be one of: {sorted(VALID_YEARS)}")
+    return year
+
+
+def _validate_session(session: Optional[str]) -> Optional[str]:
+    if session is None:
+        return session
+    normalized = session.upper().strip()
+    if normalized and normalized not in VALID_SESSIONS:
+        raise HTTPException(
+            400, f"Invalid session type. Must be one of: {sorted(VALID_SESSIONS)}"
+        )
+    return normalized
+
+
+def _validate_round(round: str) -> str:
+    if ".." in round or "/" in round or "\\" in round:
+        raise HTTPException(400, "Invalid round parameter: path traversal not allowed")
+    if len(round) > MAX_ROUND_LENGTH:
+        raise HTTPException(
+            400, f"Round parameter exceeds maximum length of {MAX_ROUND_LENGTH}"
+        )
+    return round
+
 
 _track_geometry_cache = {}
 
@@ -184,7 +233,7 @@ def _session_telemetry_bounds(silver_path: str) -> Optional[Tuple[float, float]]
     telemetry_file = os.path.join(silver_path, "telemetry.parquet")
     if not os.path.exists(telemetry_file):
         return None
-    conn = duckdb.connect()
+    conn = get_db_connection().parquet_conn
     try:
         row = conn.execute(
             """
@@ -217,7 +266,7 @@ def _session_positions_bounds(silver_path: str) -> Optional[Tuple[float, float]]
     existing = [p for p in candidates if os.path.exists(p)]
     if not existing:
         return None
-    conn = duckdb.connect()
+    conn = get_db_connection().parquet_conn
     try:
         for path in existing:
             try:
@@ -442,7 +491,7 @@ def load_drivers(silver_path: str, year: Optional[int] = None) -> list:
     if not os.path.exists(laps_file):
         return []
 
-    conn = duckdb.connect()
+    conn = get_db_connection().parquet_conn
     try:
         # Check which columns are available (FastF1 vs OpenF1)
         schema_query = f"DESCRIBE SELECT * FROM read_parquet('{laps_file}')"
@@ -525,7 +574,8 @@ def load_laps(silver_path: str, latest_only: bool = False) -> list:
     if not os.path.exists(laps_file):
         return []
 
-    conn = duckdb.connect()
+    # Use pooled connection instead of creating new one each time
+    conn = get_db_connection().parquet_conn
     try:
         # Check which columns are available (FastF1 vs OpenF1)
         schema_query = f"DESCRIBE SELECT * FROM read_parquet('{laps_file}')"
@@ -874,7 +924,7 @@ def load_telemetry(
         return {}
     laps_file = os.path.join(silver_path, "laps.parquet")
 
-    conn = duckdb.connect()
+    conn = get_db_connection().parquet_conn
     try:
         # Validate schema before querying
         try:
@@ -1093,7 +1143,7 @@ def load_weather(silver_path: str, limit: int = 240) -> list:
     if not os.path.exists(weather_file):
         return []
 
-    conn = duckdb.connect()
+    conn = get_db_connection().parquet_conn
     try:
         schema_query = f"DESCRIBE SELECT * FROM read_parquet('{weather_file}')"
         columns = {
@@ -1184,7 +1234,7 @@ def load_race_control(silver_path: str, limit: int = 200) -> list:
     if not os.path.exists(rc_file):
         return []
 
-    conn = duckdb.connect()
+    conn = get_db_connection().parquet_conn
     try:
 
         def _normalize_seconds_expr(expr: str) -> str:
@@ -1792,7 +1842,7 @@ def load_positions(year: int, race_name: str, session: str) -> list:
     laps_file = os.path.join(silver_path, "laps.parquet")
     if os.path.exists(laps_file):
         try:
-            conn = duckdb.connect()
+            conn = get_db_connection().parquet_conn
             try:
                 query = f"""
                     SELECT DISTINCT driver_name, driver_number
@@ -1820,7 +1870,7 @@ def load_positions(year: int, race_name: str, session: str) -> list:
 
     if os.path.exists(fastf1_positions_path):
         try:
-            conn = duckdb.connect()
+            conn = get_db_connection().parquet_conn
             try:
                 schema = {
                     r[0]
@@ -1884,7 +1934,7 @@ def load_positions(year: int, race_name: str, session: str) -> list:
 
     if os.path.exists(silver_openf1_positions_path):
         try:
-            conn = duckdb.connect()
+            conn = get_db_connection().parquet_conn
             try:
                 schema = {
                     r[0]
@@ -1947,7 +1997,7 @@ def load_positions(year: int, race_name: str, session: str) -> list:
 
     if os.path.exists(openf1_path):
         try:
-            conn = duckdb.connect()
+            conn = get_db_connection().parquet_conn
             try:
                 df = conn.execute(f"SELECT * FROM read_parquet('{openf1_path}')").df()
             finally:
@@ -1958,7 +2008,7 @@ def load_positions(year: int, race_name: str, session: str) -> list:
     if df is None or df.empty:
         if os.path.exists(gold_path):
             try:
-                conn = duckdb.connect()
+                conn = get_db_connection().parquet_conn
                 try:
                     df = conn.execute(f"SELECT * FROM read_parquet('{gold_path}')").df()
                 finally:
@@ -2080,7 +2130,7 @@ def derive_positions_from_telemetry(year: int, race_name: str, session: str) -> 
         return []
 
     try:
-        conn = duckdb.connect()
+        conn = get_db_connection().parquet_conn
         try:
             df = conn.execute(
                 f"""
@@ -2240,7 +2290,7 @@ def calculate_session_duration(year: int, race_name: str, session: str) -> int:
         return 5400
 
     try:
-        conn = duckdb.connect()
+        conn = get_db_connection().parquet_conn
         try:
             query = f"""
                 SELECT MIN(session_time_seconds), MAX(session_time_seconds)
@@ -2272,7 +2322,7 @@ def get_total_laps(year: int, race_name: str, session: str) -> int:
         return 57
 
     try:
-        conn = duckdb.connect()
+        conn = get_db_connection().parquet_conn
         try:
             query = f"SELECT MAX(lap_number) FROM read_parquet('{laps_file}')"
             result = conn.execute(query).fetchone()
@@ -2314,6 +2364,9 @@ def load_metadata(year: int, race_name: str, session: str) -> Dict:
 async def get_session(year: int, race: str, session: str) -> Dict[str, Any]:
     # Keep base endpoint lightweight. Heavy datasets are fetched through
     # dedicated windowed endpoints (`/telemetry`, `/positions`) by the desktop app.
+    _validate_year(year)
+    _validate_round(race)
+    session = _validate_session(session) or session
     race_name = race.replace("-", " ")
     session_code = normalize_session_code(session)
     year_path = os.path.join(SILVER_DIR, str(year))
@@ -2329,6 +2382,20 @@ async def get_session(year: int, race: str, session: str) -> Dict[str, Any]:
             status_code=404, detail=f"Session not found: {year} {race_name} {session}"
         )
 
+    # Build cache key for Redis
+    cache_key = (
+        "session",
+        int(year),
+        str(race_dir),
+        str(session_code),
+    )
+
+    # Try to get from Redis cache first
+    cached = cache_get(cache_key)
+    if cached is not None:
+        return cached
+
+    # Load data from disk
     metadata = load_metadata(year, race_dir, session_code)
     drivers = load_drivers(silver_path, year=year)
     laps = load_laps(silver_path)
@@ -2341,7 +2408,7 @@ async def get_session(year: int, race: str, session: str) -> Dict[str, Any]:
     reason = telemetry_unavailable_reason(year, race_dir, session_code)
     telemetry_is_available = telemetry_available(silver_path, reason)
 
-    return {
+    result = {
         "metadata": {
             "year": year,
             "raceName": race_dir,
@@ -2360,6 +2427,11 @@ async def get_session(year: int, race: str, session: str) -> Dict[str, Any]:
         "trackGeometry": track_geometry,
     }
 
+    # Cache the result in Redis
+    cache_set(cache_key, result)
+
+    return result
+
 
 @router.get("/sessions/{year}/{race}/{session}/viz")
 async def get_session_viz(
@@ -2370,6 +2442,9 @@ async def get_session_viz(
     include_weather: bool = True,
     include_race_control: bool = True,
 ) -> Dict[str, Any]:
+    _validate_year(year)
+    _validate_round(race)
+    session = _validate_session(session) or session
     race_name = race.replace("-", " ")
     session_code = normalize_session_code(session)
     year_path = os.path.join(SILVER_DIR, str(year))
@@ -2457,11 +2532,15 @@ async def get_session_viz(
         "raceControl": race_control,
         "trackGeometry": track_geometry,
     }
-    return cache_set(cache_key, payload)
+    cache_set(cache_key, payload)
+    return payload
 
 
 @router.get("/sessions/{year}/{race}/{session}/laps")
 async def get_session_laps(year: int, race: str, session: str) -> list:
+    _validate_year(year)
+    _validate_round(race)
+    session = _validate_session(session) or session
     race_name = race.replace("-", " ")
     session_code = normalize_session_code(session)
     year_path = os.path.join(SILVER_DIR, str(year))
@@ -2473,7 +2552,26 @@ async def get_session_laps(year: int, race: str, session: str) -> list:
     if not silver_path:
         raise HTTPException(status_code=404, detail=f"Session not found")
 
-    return load_laps(silver_path)
+    # Cache key for Redis
+    cache_key = (
+        "laps",
+        int(year),
+        str(race_dir),
+        str(session_code),
+    )
+
+    # Try to get from Redis cache first
+    cached = cache_get(cache_key)
+    if cached is not None:
+        return cached
+
+    # Load from disk
+    laps = load_laps(silver_path)
+
+    # Cache the result
+    cache_set(cache_key, laps)
+
+    return laps
 
 
 @router.get("/sessions/{year}/{race}/{session}/telemetry")
@@ -2490,6 +2588,9 @@ async def get_session_telemetry(
     with_metadata: bool = Query(default=False),
 ) -> dict:
     started_at = time.perf_counter()
+    _validate_year(year)
+    _validate_round(race)
+    session = _validate_session(session) or session
     race_name = race.replace("-", " ")
     session_code = normalize_session_code(session)
     year_path = os.path.join(SILVER_DIR, str(year))
@@ -2599,7 +2700,7 @@ async def get_session_telemetry(
         return payload
     payload = telemetry
     if _telemetry_row_count(telemetry) > 0:
-        payload = cache_set(cache_key, telemetry)
+        cache_set(cache_key, telemetry)
     rows_total, min_ts, max_ts, cols = _telemetry_series_stats(payload)
     metadata = {
         "t0": float(t0_bound),
@@ -2650,24 +2751,15 @@ async def get_session_positions(
     with_metadata: bool = Query(default=False),
 ) -> Any:
     started_at = time.perf_counter()
+    _validate_year(year)
+    _validate_round(race)
+    session = _validate_session(session) or session
     race_name = race.replace("-", " ")
     session_code = normalize_session_code(session)
     year_path = os.path.join(SILVER_DIR, str(year))
     race_dir = resolve_dir(year_path, race_name)
     if not race_dir:
-        logger.warning(
-            "session_positions_missing_race year=%s race=%s session=%s",
-            str(year),
-            str(race_name),
-            str(session_code),
-        )
-        metrics_router.record_endpoint_sample(
-            _SESSION_POS_ROUTE,
-            (time.perf_counter() - started_at) * 1000.0,
-            2,
-            0,
-        )
-        return []
+        raise HTTPException(status_code=404, detail="Session not found")
 
     driver_numbers = _parse_driver_numbers(drivers)
     if len(driver_numbers) > MAX_SESSION_DRIVERS:
@@ -2731,7 +2823,7 @@ async def get_session_positions(
 
     if silver_path and os.path.exists(positions_file):
         try:
-            conn = duckdb.connect()
+            conn = get_db_connection().parquet_conn
             try:
                 schema = {
                     r[0]
@@ -2887,7 +2979,7 @@ async def get_session_positions(
                     ]
                     payload = payload_rows
                     if payload_rows:
-                        payload = cache_set(cache_key, payload_rows)
+                        cache_set(cache_key, payload_rows)
                     rows_total, min_ts, max_ts, cols = _positions_series_stats(payload)
                     payload_out: Any = payload
                     if with_metadata:

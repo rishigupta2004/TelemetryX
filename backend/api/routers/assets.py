@@ -297,31 +297,29 @@ async def get_identity_assets(
             return cached
 
     if year < _ALLOWED_YEAR_MIN or year > _ALLOWED_YEAR_MAX:
-        return cache_set(
-            cache_key,
-            {
-                "year": int(year),
-                "race": race_name,
-                "session": display_session_code(session_code),
-                "enabled": False,
-                "reason": f"Image enrichment is allowed only for {_ALLOWED_YEAR_MIN}-{_ALLOWED_YEAR_MAX}",
-                "drivers": [],
-            },
-        )
+        payload = {
+            "year": int(year),
+            "race": race_name,
+            "session": display_session_code(session_code),
+            "enabled": False,
+            "reason": f"Image enrichment is allowed only for {_ALLOWED_YEAR_MIN}-{_ALLOWED_YEAR_MAX}",
+            "drivers": [],
+        }
+        cache_set(cache_key, payload)
+        return payload
 
     api_key = _get_api_key()
     if not api_key:
-        return cache_set(
-            cache_key,
-            {
-                "year": int(year),
-                "race": race_name,
-                "session": display_session_code(session_code),
-                "enabled": False,
-                "reason": "Missing API-Sports key (set APISPORTS_API_KEY)",
-                "drivers": [],
-            },
-        )
+        payload = {
+            "year": int(year),
+            "race": race_name,
+            "session": display_session_code(session_code),
+            "enabled": False,
+            "reason": "Missing API-Sports key (set APISPORTS_API_KEY)",
+            "drivers": [],
+        }
+        cache_set(cache_key, payload)
+        return payload
 
     session_path = sessions_router.get_session_path(int(year), race_name, session_code)
     if not session_path:
@@ -329,17 +327,16 @@ async def get_identity_assets(
 
     session_drivers = sessions_router.load_drivers(session_path, year=int(year))
     if not session_drivers:
-        return cache_set(
-            cache_key,
-            {
-                "year": int(year),
-                "race": race_name,
-                "session": display_session_code(session_code),
-                "enabled": True,
-                "reason": "No session drivers available",
-                "drivers": [],
-            },
-        )
+        payload = {
+            "year": int(year),
+            "race": race_name,
+            "session": display_session_code(session_code),
+            "enabled": True,
+            "reason": "No session drivers available",
+            "drivers": [],
+        }
+        cache_set(cache_key, payload)
+        return payload
 
     root = _catalog_root(int(year))
     drivers_catalog_file = root / "drivers_catalog.json"
@@ -404,29 +401,27 @@ async def get_identity_assets(
                     }
                 )
     except HTTPException as exc:
-        return cache_set(
-            cache_key,
-            {
-                "year": int(year),
-                "race": race_name,
-                "session": display_session_code(session_code),
-                "enabled": False,
-                "reason": str(exc.detail),
-                "drivers": [],
-            },
-        )
+        payload = {
+            "year": int(year),
+            "race": race_name,
+            "session": display_session_code(session_code),
+            "enabled": False,
+            "reason": str(exc.detail),
+            "drivers": [],
+        }
+        cache_set(cache_key, payload)
+        return payload
     except Exception as exc:
-        return cache_set(
-            cache_key,
-            {
-                "year": int(year),
-                "race": race_name,
-                "session": display_session_code(session_code),
-                "enabled": False,
-                "reason": f"Image enrichment failed: {exc}",
-                "drivers": [],
-            },
-        )
+        payload = {
+            "year": int(year),
+            "race": race_name,
+            "session": display_session_code(session_code),
+            "enabled": False,
+            "reason": f"Image enrichment failed: {exc}",
+            "drivers": [],
+        }
+        cache_set(cache_key, payload)
+        return payload
 
     payload = {
         "year": int(year),
@@ -439,7 +434,8 @@ async def get_identity_assets(
         "n_driver_images": sum(1 for item in enriched if item.get("driverImage")),
         "n_team_images": sum(1 for item in enriched if item.get("teamImage")),
     }
-    return cache_set(cache_key, payload)
+    cache_set(cache_key, payload)
+    return payload
 
 
 @router.get("/assets/media/{year}/{kind}/{filename}")

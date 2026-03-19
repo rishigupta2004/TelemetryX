@@ -248,7 +248,7 @@ export const TelemetryView = React.memo(function TelemetryView({ active = true }
         compareDriverObj={compareDriverObj}
       />
 
-      <div className="flex flex-col gap-2 border-b border-border-soft bg-gradient-to-r from-bg-surface via-bg-raised to-bg-surface px-4 pb-3">
+      <div className="flex flex-col gap-2 border-b border-border bg-bg-surface px-4 pb-3 shadow-[0_4px_24px_rgba(0,0,0,0.4)] relative z-10">
         <div className="flex items-center justify-between">
           <TelemetryControls
             selectedDriver={selectedDriver}
@@ -293,13 +293,13 @@ export const TelemetryView = React.memo(function TelemetryView({ active = true }
         )}
       </div>
 
-      <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden bg-gradient-to-b from-bg-base via-bg-void to-bg-base">
+      <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden bg-bg-base">
         {viewMode === 'multi' ? (
           <MultiDriverTelemetry height={chartHeight} />
         ) : isLoading || String(loadingState) === 'loading' ? (
           <div className="flex h-full flex-col gap-2 p-3">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="relative overflow-hidden rounded-xl border border-border-soft bg-bg-surface p-3">
+              <div key={i} className="relative overflow-hidden rounded-md border border-border bg-bg-surface p-3">
                 <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/5 to-transparent" />
                 <div className="mb-2 h-3 w-24 rounded bg-bg-inset" />
                 <div className="h-32 w-full rounded-lg bg-bg-inset" />

@@ -1,0 +1,57 @@
+🚀 Starting TelemetryX...
+Checking prerequisites...
+[0;32m✓[0m Python 3.12 found
+[0;32m✓[0m Node.js v25.6.1 found
+Setting up backend...
+Using existing Python virtual environment
+Setting up frontend...
+Starting FastAPI backend on port 9000...
+Starting Electron app...
+
+[0;32m🎉 TelemetryX is running![0m
+   - Backend: http://localhost:9000
+   - Frontend: Electron app
+
+Press Ctrl+C to stop
+
+> frontend-electron@1.0.0 dev
+> electron-vite
+
+vite v7.3.1 building ssr environment for development...
+transforming...
+✓ 1 modules transformed.
+rendering chunks...
+out/main/index.js  3.67 kB
+✓ built in 2.23s
+
+electron main process built successfully
+
+-----
+
+vite v7.3.1 building ssr environment for development...
+transforming...
+✓ 1 modules transformed.
+rendering chunks...
+out/preload/index.js  0.50 kB
+✓ built in 56ms
+
+electron preload scripts built successfully
+
+-----
+
+Port 5173 is in use, trying another one...
+Port 5174 is in use, trying another one...
+dev server running for the electron renderer process at:
+
+  ➜  Local:   http://localhost:5175/
+  ➜  Network: use --host to expose
+
+starting electron app...
+
+INFO:     Will watch for changes in these directories: ['/Volumes/Space/PROJECTS/TelemetryX/backend']
+ERROR:    [Errno 48] Address already in use
+🚀 Starting TelemetryX Backend on port 9000
+📡 API Docs: http://localhost:9000/docs
+💡 To use different port: PORT=8080 python main.py
+./start.sh: line 136: 77520 Hangup: 1               VITE_DEMO_MODE=true npm run dev  (wd: /Volumes/Space/PROJECTS/TelemetryX/frontend-electron)
+./start.sh: line 137: NT: command not found

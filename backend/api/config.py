@@ -63,8 +63,30 @@ MODELS_DIR = (
     .resolve()
 )
 
-# Serving data source mode:
-# - duckdb: Parquet + DuckDB only
-# - clickhouse: ClickHouse primary for hot endpoints
-# - shadow: DuckDB response with ClickHouse comparison logging
-DATA_SOURCE_MODE = str(os.getenv("TELEMETRYX_DATA_SOURCE", "duckdb")).strip().lower()
+# Data source: DuckDB + parquet only.
+
+# Redis configuration (caching layer)
+REDIS_HOST = str(os.getenv("REDIS_HOST", "localhost")).strip()
+REDIS_PORT = int(os.getenv("REDIS_PORT", "6379"))
+REDIS_PASSWORD = os.getenv("REDIS_PASSWORD") or None
+REDIS_DB = int(os.getenv("REDIS_DB", "0"))
+REDIS_ENABLED = str(os.getenv("REDIS_ENABLED", "1")).strip().lower() in {
+    "1",
+    "true",
+    "yes",
+    "on",
+}
+
+# Redis TTL configuration (seconds)
+REDIS_TTL_SESSION = int(os.getenv("REDIS_TTL_SESSION", "60"))  # Session metadata
+REDIS_TTL_TELEMETRY = int(os.getenv("REDIS_TTL_TELEMETRY", "30"))  # Telemetry data
+REDIS_TTL_POSITIONS = int(
+    os.getenv("REDIS_TTL_POSITIONS", "5")
+)  # Position data (fast-changing)
+REDIS_TTL_STATIC = int(
+    os.getenv("REDIS_TTL_STATIC", "3600")
+)  # Static data (seasons, races)
+
+# Performance tuning
+REDIS_POOL_MAX_CONNECTIONS = int(os.getenv("REDIS_POOL_MAX_CONNECTIONS", "20"))
+REDIS_MAX_MEMORY_MB = int(os.getenv("REDIS_MAX_MEMORY_MB", "512"))

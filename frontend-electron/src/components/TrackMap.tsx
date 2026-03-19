@@ -266,6 +266,7 @@ export function TrackMap({ compact = false, mode = 'full' }: TrackMapProps) {
 
   const dynamicCanvasRef = useDynamicTrackRenderer(
     trackData,
+    containerRef,
     resolvedCarsRef,
     currentFlagsRef,
     needsRenderRef,

@@ -16,9 +16,10 @@ import type {
   ProfilesResponse,
   RegulationSimulationCompareResponse,
   RegulationSimulationResponse,
+  RegulationSimulationBacktestResponse,
   StrategyRecommendationsResponse,
-  StrategyRecommendationsWithSource,
   TelemetryResponse,
+  TelemetryRow,
   TyreStint,
   UndercutEventsResponse,
   UndercutPredictRequest,
@@ -27,7 +28,7 @@ import type {
 import { API_RETRIES, API_TIMEOUT_MS, API_CACHE_TTL_MS, API_CACHE_MAX_ENTRIES } from '../lib/constants'
 import { getAuthToken } from '../lib/authToken'
 
-const DEFAULT_BASE_URLS = ['http://localhost:9010/api/v1']
+const DEFAULT_BASE_URLS = ['http://127.0.0.1:9000/api/v1', 'http://localhost:9000/api/v1']
 
 function isDevMode(): boolean {
   return (import.meta as unknown as { env?: { DEV?: boolean } })?.env?.DEV === true
@@ -116,29 +117,62 @@ export class ApiError extends Error {
   status: number
   path: string
   detail: unknown
+  code: string | undefined
 
   constructor(status: number, path: string, detail: unknown) {
-    const detailMsg =
-      typeof detail === 'string'
-        ? detail
-        : typeof (detail as { message?: unknown })?.message === 'string'
-          ? String((detail as { message?: unknown }).message)
-          : ''
-    super(`API error ${status}: ${path}${detailMsg ? ` - ${detailMsg}` : ''}`)
+    let detailMsg = ''
+    let errorCode: string | undefined
+
+    if (detail && typeof detail === 'object' && 'message' in detail) {
+      detailMsg = String((detail as { message: unknown }).message)
+      errorCode = (detail as { code?: string }).code
+    } else if (typeof detail === 'string') {
+      detailMsg = detail
+    } else if (detail && typeof detail === 'object' && 'message' in detail) {
+      detailMsg = String((detail as { message: unknown }).message)
+    }
+
+    if (status === 404 && !detailMsg) {
+      detailMsg = 'Session not found'
+    }
+
+    const detailPrefix = detailMsg ? ` - ${detailMsg}` : ''
+    super(`API error ${status}: ${path}${detailPrefix}`)
     this.name = 'ApiError'
     this.status = status
     this.path = path
     this.detail = detail
+    this.code = errorCode
   }
 }
 
-async function parseErrorDetail(res: Response): Promise<unknown> {
+export function isAbortLikeError(err: unknown): boolean {
+  if (err instanceof DOMException) {
+    return err.name === 'AbortError' || err.name === 'TimeoutError'
+  }
+  if (err instanceof Error) {
+    const text = `${err.name} ${err.message}`.toLowerCase()
+    return text.includes('abort') || text.includes('aborted')
+  }
+  return false
+}
+
+async function parseErrorDetail(res: Response): Promise<{ code?: string; message: string; detail: unknown } | unknown> {
   const contentType = res.headers.get('content-type') || ''
   if (!contentType.includes('application/json')) return null
   try {
     const payload = await res.json()
-    if (payload && typeof payload === 'object' && 'detail' in payload) {
-      return (payload as { detail?: unknown }).detail ?? null
+    if (payload && typeof payload === 'object') {
+      if (payload.error === true && 'message' in payload) {
+        return {
+          code: typeof payload.code === 'string' ? payload.code : undefined,
+          message: String(payload.message),
+          detail: payload.detail ?? null
+        }
+      }
+      if ('detail' in payload) {
+        return (payload as { detail?: unknown }).detail ?? null
+      }
     }
     return payload
   } catch {
@@ -152,7 +186,11 @@ async function request<T>(path: string, init: RequestInit, retries = 0, external
     const candidates = pinnedBaseUrl ? [pinnedBaseUrl] : BASE_URLS
     for (const baseUrl of candidates) {
       const controller = new AbortController()
-      const timeout = globalThis.setTimeout(() => controller.abort(), API_TIMEOUT_MS)
+      let didTimeout = false
+      const timeout = globalThis.setTimeout(() => {
+        didTimeout = true
+        controller.abort()
+      }, API_TIMEOUT_MS)
       const cleanup: Array<() => void> = []
       if (externalSignal) {
         if (externalSignal.aborted) controller.abort()
@@ -177,7 +215,11 @@ async function request<T>(path: string, init: RequestInit, retries = 0, external
         }
         return data
       } catch (err) {
-        lastErr = err
+        if (didTimeout && isAbortLikeError(err)) {
+          lastErr = new Error(`Request timed out after ${API_TIMEOUT_MS}ms`)
+        } else {
+          lastErr = err
+        }
         if (baseUrl === pinnedBaseUrl) pinnedBaseUrl = null
       } finally {
         globalThis.clearTimeout(timeout)
@@ -233,13 +275,13 @@ export async function post<T>(path: string, body: unknown): Promise<T> {
 /** Convert any caught error to a typed { code, message } shape for stores. */
 export function toApiErrorInfo(err: unknown): ApiErrorInfo {
   if (err instanceof ApiError) {
-    return { code: err.status, message: err.message }
+    let message = err.message
+    if (err.status === 404 && !err.code) {
+      message = 'Session not found'
+    }
+    return { code: err.status, message }
   }
   return { code: null, message: String(err) }
-}
-
-function isNotFoundError(err: unknown): boolean {
-  return err instanceof ApiError && err.status === 404
 }
 
 export const api = {
@@ -278,6 +320,11 @@ export const api = {
     if (params.length) path += `?${params.join('&')}`
     return get<TelemetryResponse>(path, signal)
   },
+  getTelemetryByDriverAndLap: (year: number, race: string, session: string, driverCode: string, lapNumber: number) => {
+    return get<TelemetryRow[]>(
+      `/telemetry/${year}/${encodeURIComponent(race)}/${encodeURIComponent(driverCode)}/laps/${lapNumber}`
+    )
+  },
   getTyreStints: (year: number, race: string, session: string) =>
     get<TyreStint[]>(
       `/features/${year}/${encodeURIComponent(race)}/${session}/tyre`
@@ -309,38 +356,6 @@ export const api = {
   },
   getStrategyRecommendations: (year: number, race: string) =>
     get<StrategyRecommendationsResponse>(`/models/strategy-recommendations/${year}/${encodeURIComponent(race)}`),
-  getStrategyRecommendationsWithFallback: async (
-    year: number,
-    race: string,
-    fallbackYears: number[]
-  ): Promise<StrategyRecommendationsWithSource> => {
-    const candidates: number[] = []
-    const pushYear = (value: number) => {
-      const n = Number(value)
-      if (!Number.isFinite(n)) return
-      const y = Math.trunc(n)
-      if (!candidates.includes(y)) candidates.push(y)
-    }
-    pushYear(year)
-    for (const y of fallbackYears) pushYear(y)
-
-    let lastNotFound: unknown = null
-    for (const y of candidates) {
-      try {
-        const data = await getNoRetry<StrategyRecommendationsResponse>(
-          `/models/strategy-recommendations/${y}/${encodeURIComponent(race)}`
-        )
-        return { sourceYear: y, data }
-      } catch (err) {
-        if (isNotFoundError(err)) {
-          lastNotFound = err
-          continue
-        }
-        throw err
-      }
-    }
-    throw lastNotFound ?? new Error('No strategy recommendations available')
-  },
   getRegulationSimulation: (
     baselineYear: number,
     race: string,
@@ -369,6 +384,8 @@ export const api = {
       teamProfile?: 'balanced' | 'aggressive' | 'conservative'
       nSamples?: number
       seed?: number
+      trackType?: string
+      asyncMode?: boolean
     }
   ) => {
     const search = new URLSearchParams()
@@ -382,15 +399,40 @@ export const api = {
     if (params?.teamProfile) search.set('team_profile', params.teamProfile)
     if (params?.nSamples != null) search.set('n_samples', String(params.nSamples))
     if (params?.seed != null) search.set('seed', String(params.seed))
+    if (params?.trackType) search.set('track_type', params.trackType)
+    if (params?.asyncMode) search.set('async_mode', 'true')
     const suffix = search.size ? `?${search.toString()}` : ''
     return getNoRetry<RegulationSimulationCompareResponse>(
       `/models/regulation-simulation-compare/${encodeURIComponent(race)}${suffix}`
+    )
+  },
+  getSimulationStatus: (jobId: string) => {
+    return getNoRetry<{ status: string; result?: RegulationSimulationCompareResponse }>(
+      `/models/simulation/status/${encodeURIComponent(jobId)}`
     )
   },
   getFiaDocuments: (year: number, race: string, forceRefresh = false) =>
     get<FiaDocumentsResponse>(
       `/fia-documents/${year}/${encodeURIComponent(race)}?force_refresh=${forceRefresh ? '1' : '0'}`
     ),
+  getRegulationSimulationBacktest: (
+    params?: {
+      baselineYear?: number
+      targetYear?: number
+      teamProfile?: 'balanced' | 'aggressive' | 'conservative'
+      nSamples?: number
+    }
+  ) => {
+    const search = new URLSearchParams()
+    if (params?.baselineYear != null) search.set('baseline_year', String(params.baselineYear))
+    if (params?.targetYear != null) search.set('target_year', String(params.targetYear))
+    if (params?.teamProfile) search.set('team_profile', params.teamProfile)
+    if (params?.nSamples != null) search.set('n_samples', String(params.nSamples))
+    const suffix = search.size ? `?${search.toString()}` : ''
+    return getNoRetry<RegulationSimulationBacktestResponse>(
+      `/models/regulation-simulation-backtest${suffix}`
+    )
+  },
   getFiaDocumentSeasons: (forceRefresh = false) =>
     get<FiaDocumentSeasonsResponse>(`/fia-documents/seasons?force_refresh=${forceRefresh ? '1' : '0'}`),
   getFiaDocumentEvents: (year: number) =>

@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useDriverStore } from '../stores/driverStore'
 import { useSessionStore } from '../stores/sessionStore'
-import { strategyCandidates } from '../lib/strategyUtils'
 import { api } from '../api/client'
 import {
   buildPaceSeries,
@@ -74,13 +73,11 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
   const selectedRace = useSessionStore((s) => s.selectedRace)
   const selectedSession = useSessionStore((s) => s.selectedSession)
   const sessionData = useSessionStore((s) => s.sessionData)
-  const seasons = useSessionStore((s) => s.seasons)
   const races = useSessionStore((s) => s.races)
   const primaryDriver = useDriverStore((s) => s.primaryDriver)
   const compareDriver = useDriverStore((s) => s.compareDriver)
 
   const [strategyData, setStrategyData] = useState<StrategyRecommendationsResponse | null>(null)
-  const [strategySourceYear, setStrategySourceYear] = useState<number | null>(null)
   const [strategyLoading, setStrategyLoading] = useState(false)
   const [strategyError, setStrategyError] = useState<string | null>(null)
 
@@ -111,7 +108,7 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
 
   const standingsCacheRef = useRef<Map<string, SeasonStandingsPayload>>(new Map())
   const readinessCacheRef = useRef<Map<string, Record<string, boolean | null>>>(new Map())
-  const strategyCacheRef = useRef<Map<string, { data: StrategyRecommendationsResponse | null; sourceYear: number | null; error: string | null }>>(new Map())
+  const strategyCacheRef = useRef<Map<string, { data: StrategyRecommendationsResponse | null; error: string | null }>>(new Map())
   const clusteringCacheRef = useRef<Map<string, ClusteringResponse>>(new Map())
 
   const panelStorageKey = useMemo(
@@ -128,11 +125,6 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
   useEffect(() => {
     savePanel(panelStorageKey, activePanel)
   }, [panelStorageKey, activePanel])
-
-  const fallbackYears = useMemo(() => {
-    if (!selectedYear) return []
-    return strategyCandidates(seasons.map((season) => season.year), selectedYear)
-  }, [seasons, selectedYear])
 
   useEffect(() => {
     const readinessKey = `${selectedYear || 'na'}|${selectedRace || 'na'}`
@@ -151,31 +143,31 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
       void run()
     }, 60)
     return () => { cancelled = true; window.clearTimeout(timer) }
-  }, [selectedYear, selectedRace, fallbackYears])
+  }, [selectedYear, selectedRace])
 
   useEffect(() => {
-    if (!active || !selectedYear || !selectedRace) { setStrategyData(null); setStrategySourceYear(null); setStrategyError(null); return }
+    if (!active || !selectedYear || !selectedRace) { setStrategyData(null); setStrategyError(null); return }
     let cancelled = false
-    const strategyKey = `${selectedYear}|${selectedRace}|${fallbackYears.join(',')}`
+    const strategyKey = `${selectedYear}|${selectedRace}`
     const cached = strategyCacheRef.current.get(strategyKey)
-    if (cached) { setStrategyData(cached.data); setStrategySourceYear(cached.sourceYear); setStrategyLoading(false); setStrategyError(cached.error); return }
-    setStrategyLoading(true); setStrategyError(null); setStrategyData(null); setStrategySourceYear(null)
+    if (cached) { setStrategyData(cached.data); setStrategyLoading(false); setStrategyError(cached.error); return }
+    setStrategyLoading(true); setStrategyError(null); setStrategyData(null)
 
-    api.getStrategyRecommendationsWithFallback(selectedYear, selectedRace, fallbackYears)
-      .then(({ data, sourceYear }) => {
+    api.getStrategyRecommendations(selectedYear, selectedRace)
+      .then((data) => {
         if (cancelled) return
-        withCacheEviction(strategyCacheRef.current, strategyKey, { data, sourceYear, error: null })
-        setStrategyData(data); setStrategySourceYear(sourceYear)
+        withCacheEviction(strategyCacheRef.current, strategyKey, { data, error: null })
+        setStrategyData(data)
       })
       .catch((err) => {
         if (cancelled) return
         const message = String(err)
-        setStrategyData(null); setStrategySourceYear(null); setStrategyError(message)
-        withCacheEviction(strategyCacheRef.current, strategyKey, { data: null, sourceYear: null, error: message })
+        setStrategyData(null); setStrategyError(message)
+        withCacheEviction(strategyCacheRef.current, strategyKey, { data: null, error: message })
       })
       .finally(() => { if (!cancelled) setStrategyLoading(false) })
     return () => { cancelled = true }
-  }, [active, selectedYear, selectedRace, fallbackYears])
+  }, [active, selectedYear, selectedRace])
 
   useEffect(() => {
     if (!selectedYear || !selectedRace || !selectedSession) { setClusterData(null); setClusterLoading(false); setClusterError(null); return }
@@ -472,9 +464,9 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
 
   return (
     <div className="flex h-full min-h-0 flex-col relative">
-      <div className="bg-gradient-to-r from-bg-surface via-[#12121a] to-bg-surface border-b border-border-hard/60 flex flex-shrink-0 items-center gap-3 px-4 py-2.5" style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.03)' }}>
+      <div className="bg-bg-surface border-b border-border flex flex-shrink-0 items-center gap-3 px-4 py-2.5">
         <div className="flex items-center gap-2.5">
-          <div className="h-2.5 w-2.5 rounded-full" style={{ background: tabAccent, boxShadow: `0 0 12px ${tabAccent}, 0 0 24px ${tabAccent}60`, animation: 'pulse 2s ease-in-out infinite' }} />
+          <div className="h-2.5 w-2.5 rounded-full bg-accent" />
           <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-fg-secondary">Features + ML</div>
         </div>
         {tabsCollapsed ? (
@@ -486,7 +478,7 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
             {FEATURE_PANELS.map((panel) => {
               const active = activePanel === panel.id
               return (
-                <button key={panel.id} type="button" onClick={() => setActivePanel(panel.id)} title={panel.hint} className={`flex-shrink-0 flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[11px] font-semibold transition-all duration-200 ${active ? 'text-fg-primary shadow-lg' : 'text-fg-muted hover:text-fg-secondary hover:bg-white/5'}`} style={active ? { background: `linear-gradient(135deg, ${tabAccent}25, rgba(255,255,255,0.08))`, border: `1px solid ${tabAccent}40`, boxShadow: `0 8px 24px rgba(0,0,0,0.4), 0 0 20px ${tabAccent}30, inset 0 1px 0 rgba(255,255,255,0.1)` } : { background: 'transparent', border: '1px solid transparent' }}>
+                <button key={panel.id} type="button" onClick={() => setActivePanel(panel.id)} title={panel.hint} className={`flex-shrink-0 flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[11px] font-semibold transition-all duration-200 border ${active ? 'border-accent bg-accent/10 text-fg-primary' : 'border-transparent text-fg-muted hover:text-fg-secondary hover:bg-white/5'}`}>
                   {PanelIcons[panel.id] && <span className="opacity-80">{PanelIcons[panel.id]}</span>}
                   {panel.label}
                 </button>
@@ -502,8 +494,8 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
         </div>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4" style={{ background: 'radial-gradient(ellipse at top, rgba(30,30,45,0.4) 0%, transparent 60%), linear-gradient(180deg, #08090c 0%, #0c0d12 50%, #090a0f 100%)' }}>
-        <div className="mx-auto w-full max-w-[1600px] space-y-5">
+      <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4 bg-bg-base">
+        <div className="mx-auto w-full space-y-5">
 
           {activePanel === 'overview' && (
             <OverviewPanel selectedYear={selectedYear} selectedRace={selectedRace} selectedSession={selectedSession} sessionData={sessionData} publishReadiness={publishReadiness} setActivePanel={setActivePanel} />
@@ -521,7 +513,7 @@ export const FeaturesView = React.memo(function FeaturesView({ active }: { activ
           )}
 
           {(activePanel === 'strategy-ml' || activePanel === 'undercut') && (
-            <StrategyMLPanel tabAccent={tabAccent} selectedYear={selectedYear} selectedRace={selectedRace} strategyData={strategyData} strategySourceYear={strategySourceYear} strategyLoading={strategyLoading} strategyError={strategyError} topStrategies={topStrategies} strategyExtents={strategyExtents} />
+            <StrategyMLPanel tabAccent={tabAccent} selectedYear={selectedYear} selectedRace={selectedRace} strategyData={strategyData} strategyLoading={strategyLoading} strategyError={strategyError} topStrategies={topStrategies} strategyExtents={strategyExtents} />
           )}
 
           {activePanel === 'clustering' && (

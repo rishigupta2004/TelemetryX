@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState, useTransition
 import uPlot from 'uplot'
 import 'uplot/dist/uPlot.min.css'
 import { animate } from 'animejs'
+import { rafManager } from '../utils/rafManager'
 
 function hexToRgba(hex: string, alpha: number): string {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
@@ -46,6 +47,12 @@ interface UPlotChartProps {
   playbackCursorRef?: React.MutableRefObject<number | null>
   /** Called when user clicks the chart: receives the data-space X value */
   onSeek?: (dataX: number) => void
+  /** Mini-sector regions for background colouring: purple (personal best), green (session best), yellow (slower) */
+  sectorRegions?: {
+    startTime: number
+    endTime: number
+    color: 'purple' | 'green' | 'yellow'
+  }[]
 }
 
 export const UPlotChart = React.memo(function UPlotChart({
@@ -70,18 +77,23 @@ export const UPlotChart = React.memo(function UPlotChart({
   onCursor,
   playbackCursorFraction,
   playbackCursorRef,
-  onSeek
+  onSeek,
+  sectorRegions
 }: UPlotChartProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const chartRef = useRef<uPlot | null>(null)
   const resizeObserverRef = useRef<ResizeObserver | null>(null)
   const markersRef = useRef<{ x: number; label?: string }[]>(markers ?? [])
   const shadingDataRef = useRef(shadingData)
+  const sectorRegionsRef = useRef(sectorRegions)
   const onCursorRef = useRef(onCursor)
   const cursorLineRef = useRef<HTMLDivElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
   const onSeekRef = useRef(onSeek)
   const [isAnimatingIn, setIsAnimatingIn] = useState(true)
+  const isFirstRenderRef = useRef(true)
+  const prevStructureKeyRef = useRef<string>('')
+  const chartIdRef = useRef<string>(`uplot-${Math.random().toString(36).slice(2, 9)}`)
 
   const formatYTick = (value: number) => {
     if (yTickMode === 'percent') return `${Math.round(value)}%`
@@ -109,9 +121,17 @@ export const UPlotChart = React.memo(function UPlotChart({
   }
 
   const structureKey = useMemo(
-    () =>
-      [
+    () => {
+      const seriesDataSample = series.length > 0 && series[0].data.length > 0
+        ? series.map(s => {
+            const len = s.data.length
+            if (len <= 3) return s.data.join(',')
+            return `${s.data[0]},${s.data[Math.floor(len / 2)]},${s.data[len - 1]}`
+          }).join(';')
+        : ''
+      return [
         series.length,
+        seriesDataSample,
         stepped ? 'stepped' : 'linear',
         yLabel || title,
         yTickMode,
@@ -123,8 +143,9 @@ export const UPlotChart = React.memo(function UPlotChart({
         yRange?.[1],
         xRange?.[0],
         xRange?.[1]
-      ].join('|'),
-    [series.length, stepped, yLabel, title, yTickMode, yTickUnit, xLabel, xTickMode, xTickUnit, yRange, xRange]
+      ].join('|')
+    },
+    [series, stepped, yLabel, title, yTickMode, yTickUnit, xLabel, xTickMode, xTickUnit, yRange, xRange]
   )
 
   const downsampledTimestamps = useMemo(() => {
@@ -151,9 +172,13 @@ export const UPlotChart = React.memo(function UPlotChart({
   }, [series])
 
   const plotData = useMemo((): uPlot.AlignedData => {
+    // Guard against empty series
+    if (!downsampledTimestamps.length || !downsampledSeries.length) {
+      return [new Float64Array()]
+    }
     return [
       new Float64Array(downsampledTimestamps),
-      ...downsampledSeries.map((s) => new Float64Array(s.data))
+      ...downsampledSeries.map((s) => new Float64Array(s.data?.length ? s.data : []))
     ]
   }, [downsampledTimestamps, downsampledSeries])
 
@@ -241,10 +266,11 @@ export const UPlotChart = React.memo(function UPlotChart({
   useEffect(() => {
     markersRef.current = markers ?? []
     shadingDataRef.current = shadingData
+    sectorRegionsRef.current = sectorRegions
     onCursorRef.current = onCursor
     onSeekRef.current = onSeek
     chartRef.current?.redraw()
-  }, [markers, shadingData, onCursor, onSeek])
+  }, [markers, shadingData, sectorRegions, onCursor, onSeek])
 
   const lastDataRef = useRef<string>('')
 
@@ -264,20 +290,17 @@ export const UPlotChart = React.memo(function UPlotChart({
   useEffect(() => {
     const ref = playbackCursorRef
     if (!ref) return
-    let rafId: number | null = null
+    
     let last: number | null = null
     let frameCount = 0
+    
     const tick = () => {
       frameCount++
-      if (frameCount % 2 !== 0) {
-        rafId = requestAnimationFrame(tick)
-        return
-      }
+      if (frameCount % 2 !== 0) return
+      
       const el = cursorLineRef.current
-      if (!el) {
-        rafId = requestAnimationFrame(tick)
-        return
-      }
+      if (!el) return
+      
       const value = ref.current
       if (value == null || !Number.isFinite(value)) {
         if (el.style.display !== 'none') el.style.display = 'none'
@@ -291,11 +314,12 @@ export const UPlotChart = React.memo(function UPlotChart({
           last = clamped
         }
       }
-      rafId = requestAnimationFrame(tick)
     }
-    rafId = requestAnimationFrame(tick)
+    
+    rafManager.register(chartIdRef.current, tick)
+    
     return () => {
-      if (rafId != null) cancelAnimationFrame(rafId)
+      rafManager.unregister(chartIdRef.current)
     }
   }, [playbackCursorRef])
 
@@ -328,7 +352,18 @@ export const UPlotChart = React.memo(function UPlotChart({
 
   useEffect(() => {
     const el = containerRef.current
-    if (!el || !timestamps.length) return
+    // Guard against empty data
+    if (!el || !timestamps.length || !series.length) return
+
+    const isInitialCreate = isFirstRenderRef.current && !chartRef.current
+    const structureKeyChanged = structureKey !== prevStructureKeyRef.current
+    
+    if (isFirstRenderRef.current) {
+      isFirstRenderRef.current = false
+    }
+    prevStructureKeyRef.current = structureKey
+
+    if (!isInitialCreate && !structureKeyChanged) return
 
     const measuredWidth = el.getBoundingClientRect().width || el.clientWidth || 800
 
@@ -430,6 +465,40 @@ export const UPlotChart = React.memo(function UPlotChart({
             ctx.restore()
           }
 
+          const sectorRegions = sectorRegionsRef.current
+          if (sectorRegions && sectorRegions.length > 0 && sectorRegions.length <= 50) {
+            const xMin = u.scales.x.min
+            const xMax = u.scales.x.max
+            if (typeof xMin === 'number' && typeof xMax === 'number' && Number.isFinite(xMin) && Number.isFinite(xMax)) {
+              const colorMap: Record<string, string> = {
+                purple: 'rgba(167, 139, 250, 0.1)',
+                green: 'rgba(52, 211, 153, 0.1)',
+                yellow: 'rgba(251, 191, 36, 0.1)'
+              }
+              const sortedRegions = [...sectorRegions].sort((a, b) => a.startTime - b.startTime)
+              ctx.save()
+              let lastColor: string | null = null
+              for (const region of sortedRegions) {
+                if (region.endTime < xMin || region.startTime > xMax) continue
+                const color = colorMap[region.color]
+                if (!color) continue
+                const startX = Math.max(region.startTime, xMin)
+                const endX = Math.min(region.endTime, xMax)
+                if (startX >= endX) continue
+                const px = u.valToPos(startX, 'x', true)
+                const pxEnd = u.valToPos(endX, 'x', true)
+                const width = pxEnd - px
+                if (width <= 0) continue
+                if (color !== lastColor) {
+                  ctx.fillStyle = color
+                  lastColor = color
+                }
+                ctx.fillRect(px, top, width, bottom - top)
+              }
+              ctx.restore()
+            }
+          }
+
           if (!markerRows.length) return
           ctx.save()
           ctx.strokeStyle = 'rgba(130, 145, 160, 0.4)'
@@ -504,7 +573,7 @@ export const UPlotChart = React.memo(function UPlotChart({
       chartRef.current?.destroy()
       chartRef.current = null
     }
-  }, [structureKey, height, timestamps.length])
+  }, [structureKey, height])
 
   const dataRef = useRef(plotData)
   dataRef.current = plotData
@@ -514,7 +583,7 @@ export const UPlotChart = React.memo(function UPlotChart({
     chartRef.current.setData(dataRef.current)
   }, [plotData])
 
-  if (!timestamps.length) {
+  if (!timestamps.length || !series.length) {
     return (
       <div className="flex items-center justify-center text-sm text-text-muted" style={{ height }}>
         No {title.toLowerCase()} data

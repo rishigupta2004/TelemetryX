@@ -25,7 +25,8 @@ export default defineConfig({
       },
       rollupOptions: {
         output: {
-          entryFileNames: 'index.js'
+          entryFileNames: 'index.js',
+          format: 'cjs'
         }
       }
     }
@@ -39,17 +40,24 @@ export default defineConfig({
         '@': fileURLToPath(new URL('./src', import.meta.url))
       }
     },
+    optimizeDeps: {
+      include: ['animejs']
+    },
     build: {
       outDir: 'out/renderer',
       cssCodeSplit: true,
+      chunkSizeWarningLimit: 1000,
       rollupOptions: {
         input: 'index.html',
         output: {
-          manualChunks: {
-            'vendor-charts': ['echarts', 'echarts-for-react', 'uplot'],
-            'vendor-icons': ['lucide-react'],
-            'vendor-react': ['react', 'react-dom'],
-            'vendor-state': ['zustand']
+          manualChunks: (id) => {
+            if (!id.includes('src/')) {
+              if (id.includes('uplot')) return 'vendor-uplot'
+              if (id.includes('react-dom') || id.includes('/react/')) return 'vendor-react'
+              if (id.includes('zustand')) return 'vendor-zustand'
+              if (id.includes('animejs')) return 'vendor-animejs'
+              if (id.includes('lucide')) return 'vendor-icons'
+            }
           }
         }
       }

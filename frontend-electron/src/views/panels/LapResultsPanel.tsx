@@ -159,7 +159,7 @@ export function LapResultsPanel({ primaryDriver, compareDriver, lapScatterSeries
         ) : (
           <div className="space-y-2 overflow-x-auto">
             { tyreTimelineRows.slice(0, 20).map((row) => (
-              <div key={` tyre-${row.code}`} className="grid min-w-[760px] grid-cols-[44px_1fr_60px] items-center gap-3">
+              <div key={`${row.code}`} className="grid min-w-[760px] grid-cols-[44px_1fr_60px] items-center gap-3">
                 <span className="font-mono text-[11px] text-fg-primary font-semibold">{row.code}</span>
                 <div className="relative h-6 rounded-lg border border-border/40 bg-bg-surface/80">
                   {row.stints.map((stint, idx) => {

@@ -1,0 +1,447 @@
+{
+  "year": 2024,
+  "race": "Monaco",
+  "session": "Race",
+  "sessionType": "Race",
+  "totalLaps": 78,
+  "weather": {
+    "airTemp": 21.7,
+    "trackTemp": 40.3,
+    "humidity": 62.0,
+    "pressure": 1018.5,
+    "windSpeed": 0.6,
+    "windDirection": 168.0,
+    "rainfall": 0.0
+  },
+  "timing": [
+    {
+      "position": 1,
+      "driverNumber": 16,
+      "driverName": "Charles Leclerc",
+      "teamName": "Ferrari",
+      "teamColor": "E80020",
+      "code": "LEC",
+      "gridPosition": 1,
+      "classified": true,
+      "status": "Finished",
+      "points": 25.0,
+      "laps": 78,
+      "finalCompound": "HARD",
+      "pitCount": 1,
+      "pitStops": [
+        {
+          "lap": 1,
+          "compound": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "position": 2,
+      "driverNumber": 81,
+      "driverName": "Oscar Piastri",
+      "teamName": "McLaren",
+      "teamColor": "FF8000",
+      "code": "PIA",
+      "gridPosition": 2,
+      "classified": true,
+      "status": "Finished",
+      "points": 18.0,
+      "laps": 78,
+      "finalCompound": "HARD",
+      "pitCount": 1,
+      "pitStops": [
+        {
+          "lap": 1,
+          "compound": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "position": 3,
+      "driverNumber": 55,
+      "driverName": "Carlos Sainz",
+      "teamName": "Ferrari",
+      "teamColor": "E80020",
+      "code": "SAI",
+      "gridPosition": 3,
+      "classified": true,
+      "status": "Finished",
+      "points": 15.0,
+      "laps": 78,
+      "finalCompound": "HARD",
+      "pitCount": 1,
+      "pitStops": [
+        {
+          "lap": 1,
+          "compound": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "position": 4,
+      "driverNumber": 4,
+      "driverName": "Lando Norris",
+      "teamName": "McLaren",
+      "teamColor": "FF8000",
+      "code": "NOR",
+      "gridPosition": 4,
+      "classified": true,
+      "status": "Finished",
+      "points": 12.0,
+      "laps": 78,
+      "finalCompound": "HARD",
+      "pitCount": 1,
+      "pitStops": [
+        {
+          "lap": 1,
+          "compound": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "position": 5,
+      "driverNumber": 63,
+      "driverName": "George Russell",
+      "teamName": "Mercedes",
+      "teamColor": "27F4D2",
+      "code": "RUS",
+      "gridPosition": 5,
+      "classified": true,
+      "status": "Finished",
+      "points": 10.0,
+      "laps": 78,
+      "finalCompound": "MEDIUM",
+      "pitCount": 1,
+      "pitStops": [
+        {
+          "lap": 1,
+          "compound": "HARD"
+        }
+      ]
+    },
+    {
+      "position": 6,
+      "driverNumber": 1,
+      "driverName": "Max Verstappen",
+      "teamName": "Red Bull Racing",
+      "teamColor": "3671C6",
+      "code": "VER",
+      "gridPosition": 6,
+      "classified": true,
+      "status": "Finished",
+      "points": 8.0,
+      "laps": 78,
+      "finalCompound": "HARD",
+      "pitCount": 2,
+      "pitStops": [
+        {
+          "lap": 1,
+          "compound": "HARD"
+        },
+        {
+          "lap": 52,
+          "compound": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "position": 7,
+      "driverNumber": 44,
+      "driverName": "Lewis Hamilton",
+      "teamName": "Mercedes",
+      "teamColor": "27F4D2",
+      "code": "HAM",
+      "gridPosition": 7,
+      "classified": true,
+      "status": "Finished",
+      "points": 7.0,
+      "laps": 78,
+      "finalCompound": "HARD",
+      "pitCount": 2,
+      "pitStops": [
+        {
+          "lap": 1,
+          "compound": "HARD"
+        },
+        {
+          "lap": 51,
+          "compound": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "position": 8,
+      "driverNumber": 22,
+      "driverName": "Yuki Tsunoda",
+      "teamName": "RB",
+      "teamColor": "6692FF",
+      "code": "TSU",
+      "gridPosition": 8,
+      "classified": false,
+      "status": "Lapped",
+      "points": 4.0,
+      "laps": 77,
+      "finalCompound": "HARD",
+      "pitCount": 1,
+      "pitStops": [
+        {
+          "lap": 1,
+          "compound": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "position": 9,
+      "driverNumber": 23,
+      "driverName": "Alexander Albon",
+      "teamName": "Williams",
+      "teamColor": "64C4FF",
+      "code": "ALB",
+      "gridPosition": 9,
+      "classified": false,
+      "status": "Lapped",
+      "points": 2.0,
+      "laps": 77,
+      "finalCompound": "HARD",
+      "pitCount": 1,
+      "pitStops": [
+        {
+          "lap": 1,
+          "compound": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "position": 10,
+      "driverNumber": 10,
+      "driverName": "Pierre Gasly",
+      "teamName": "Alpine",
+      "teamColor": "0093cc",
+      "code": "GAS",
+      "gridPosition": 10,
+      "classified": false,
+      "status": "Lapped",
+      "points": 1.0,
+      "laps": 77,
+      "finalCompound": "MEDIUM",
+      "pitCount": 1,
+      "pitStops": [
+        {
+          "lap": 1,
+          "compound": "HARD"
+        }
+      ]
+    },
+    {
+      "position": 11,
+      "driverNumber": 14,
+      "driverName": "Fernando Alonso",
+      "teamName": "Aston Martin",
+      "teamColor": "229971",
+      "code": "ALO",
+      "gridPosition": 14,
+      "classified": false,
+      "status": "Lapped",
+      "points": 0.0,
+      "laps": 76,
+      "finalCompound": "MEDIUM",
+      "pitCount": 1,
+      "pitStops": [
+        {
+          "lap": 1,
+          "compound": "HARD"
+        }
+      ]
+    },
+    {
+      "position": 12,
+      "driverNumber": 3,
+      "driverName": "Daniel Ricciardo",
+      "teamName": "RB",
+      "teamColor": "6692FF",
+      "code": "RIC",
+      "gridPosition": 12,
+      "classified": false,
+      "status": "Lapped",
+      "points": 0.0,
+      "laps": 76,
+      "finalCompound": "HARD",
+      "pitCount": 1,
+      "pitStops": [
+        {
+          "lap": 1,
+          "compound": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "position": 13,
+      "driverNumber": 77,
+      "driverName": "Valtteri Bottas",
+      "teamName": "Kick Sauber",
+      "teamColor": "52e252",
+      "code": "BOT",
+      "gridPosition": 17,
+      "classified": false,
+      "status": "Lapped",
+      "points": 0.0,
+      "laps": 76,
+      "finalCompound": "HARD",
+      "pitCount": 2,
+      "pitStops": [
+        {
+          "lap": 1,
+          "compound": "HARD"
+        },
+        {
+          "lap": 15,
+          "compound": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "position": 14,
+      "driverNumber": 18,
+      "driverName": "Lance Stroll",
+      "teamName": "Aston Martin",
+      "teamColor": "229971",
+      "code": "STR",
+      "gridPosition": 13,
+      "classified": false,
+      "status": "Lapped",
+      "points": 0.0,
+      "laps": 76,
+      "finalCompound": "SOFT",
+      "pitCount": 3,
+      "pitStops": [
+        {
+          "lap": 1,
+          "compound": "HARD"
+        },
+        {
+          "lap": 42,
+          "compound": "MEDIUM"
+        },
+        {
+          "lap": 48,
+          "compound": "HARD"
+        }
+      ]
+    },
+    {
+      "position": 15,
+      "driverNumber": 2,
+      "driverName": "Logan Sargeant",
+      "teamName": "Williams",
+      "teamColor": "64C4FF",
+      "code": "SAR",
+      "gridPosition": 15,
+      "classified": false,
+      "status": "Lapped",
+      "points": 0.0,
+      "laps": 76,
+      "finalCompound": "MEDIUM",
+      "pitCount": 2,
+      "pitStops": [
+        {
+          "lap": 1,
+          "compound": "HARD"
+        },
+        {
+          "lap": 57,
+          "compound": "HARD"
+        }
+      ]
+    },
+    {
+      "position": 16,
+      "driverNumber": 24,
+      "driverName": "Guanyu Zhou",
+      "teamName": "Kick Sauber",
+      "teamColor": "52e252",
+      "code": "ZHO",
+      "gridPosition": 18,
+      "classified": false,
+      "status": "Lapped",
+      "points": 0.0,
+      "laps": 76,
+      "finalCompound": "SOFT",
+      "pitCount": 2,
+      "pitStops": [
+        {
+          "lap": 1,
+          "compound": "MEDIUM"
+        },
+        {
+          "lap": 70,
+          "compound": "HARD"
+        }
+      ]
+    },
+    {
+      "position": 17,
+      "driverNumber": 31,
+      "driverName": "Esteban Ocon",
+      "teamName": "Alpine",
+      "teamColor": "0093cc",
+      "code": "OCO",
+      "gridPosition": 11,
+      "classified": false,
+      "status": "Retired",
+      "points": 0.0,
+      "laps": 0,
+      "finalCompound": "HARD",
+      "pitCount": 0,
+      "pitStops": []
+    },
+    {
+      "position": 18,
+      "driverNumber": 11,
+      "driverName": "Sergio Perez",
+      "teamName": "Red Bull Racing",
+      "teamColor": "3671C6",
+      "code": "PER",
+      "gridPosition": 16,
+      "classified": false,
+      "status": "Retired",
+      "points": 0.0,
+      "laps": 0,
+      "finalCompound": "HARD",
+      "pitCount": 0,
+      "pitStops": []
+    },
+    {
+      "position": 19,
+      "driverNumber": 27,
+      "driverName": "Nico Hulkenberg",
+      "teamName": "Haas F1 Team",
+      "teamColor": "B6BABD",
+      "code": "HUL",
+      "gridPosition": 19,
+      "classified": false,
+      "status": "Retired",
+      "points": 0.0,
+      "laps": 0,
+      "finalCompound": "MEDIUM",
+      "pitCount": 0,
+      "pitStops": []
+    },
+    {
+      "position": 20,
+      "driverNumber": 20,
+      "driverName": "Kevin Magnussen",
+      "teamName": "Haas F1 Team",
+      "teamColor": "B6BABD",
+      "code": "MAG",
+      "gridPosition": 20,
+      "classified": false,
+      "status": "Retired",
+      "points": 0.0,
+      "laps": 0,
+      "finalCompound": "HARD",
+      "pitCount": 0,
+      "pitStops": []
+    }
+  ],
+  "raceControl": []
+}

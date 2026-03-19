@@ -6,6 +6,7 @@ import {
   useMemo,
   RefObject,
 } from 'react'
+import { animate } from 'animejs'
 
 export interface PaginationState {
   page: number
@@ -621,17 +622,13 @@ export function useResizeObserver(): [RefObject<HTMLDivElement | null>, ResizeOb
  */
 export function useAnimate(
   target: string | Element | null,
-  animation: object,
+  animation: Record<string, unknown>,
   dependencies: unknown[] = []
 ): void {
   useEffect(() => {
     if (!target) return
 
-    const anime = require('animejs')
-    anime({
-      targets: target,
-      ...animation,
-    })
+    animate(target, animation as any)
   }, [target, ...dependencies])
 }
 
@@ -644,24 +641,19 @@ export function useAnimate(
  */
 export function useAnimatePresence(
   isVisible: boolean,
-  enterAnimation: object,
-  exitAnimation: object
+  enterAnimation: Record<string, unknown>,
+  exitAnimation: Record<string, unknown>
 ): RefObject<HTMLDivElement | null> {
   const targetRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const anime = require('animejs')
     const element = targetRef.current
     if (!element) return
 
     if (isVisible) {
-      anime({
-        targets: element,
-        ...enterAnimation,
-      })
+      animate(element, enterAnimation as any)
     } else {
-      anime({
-        targets: element,
+      animate(element, {
         ...exitAnimation,
         complete: () => {
           if (!isVisible) {

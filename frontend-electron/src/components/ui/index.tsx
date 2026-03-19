@@ -702,3 +702,24 @@ export const Flex = React.memo(function Flex({
    ═══════════════════════════════════════════════════════════════════════════ */
 
 export { Badge as TextBadge }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   F1-SPECIFIC COMPONENTS (Design System)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+export { StatusBadge } from './F1Components'
+export { TyreChip } from './F1Components'
+export { DeltaArrow } from './F1Components'
+export { DRSIndicator } from './F1Components'
+export { ErrorBanner } from './F1Components'
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CORE LIBRARY COMPONENTS (Design System)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+export { DataValue } from './CoreComponents'
+export { DriverBadge } from './CoreComponents'
+export { TyreIndicator } from './CoreComponents'
+export { DeltaBadge } from './CoreComponents'
+export { StatusFlag } from './CoreComponents'
+export { PanelShell } from './CoreComponents'

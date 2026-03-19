@@ -11,6 +11,9 @@ export const availableEventsFromApiError = (err: unknown): string[] => {
 }
 
 export const apiErrorText = (err: unknown): string => {
+  if (err instanceof ApiError && err.status === 404) {
+    return 'No FIA documents are available for the selected season/event.'
+  }
   if (err instanceof ApiError && err.detail && typeof err.detail === 'object') {
     const detailMessage = (err.detail as { message?: unknown }).message
     if (typeof detailMessage === 'string' && detailMessage.trim()) return detailMessage

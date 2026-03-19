@@ -11,6 +11,7 @@ import { usePlaybackCursor } from '../hooks/usePlaybackCursor'
 import { TelemetryHeader } from '../components/TelemetryHeader'
 import { TelemetryControls } from '../components/TelemetryControls'
 import { TelemetryLegend } from '../components/TelemetryLegend'
+import { MultiDriverTelemetry } from '../components/MultiDriverTelemetry'
 
 const DEFAULT_CHART_HEIGHT = 500
 
@@ -37,10 +38,11 @@ export const TelemetryView = React.memo(function TelemetryView({ active = true }
   const [stackedChannels, setStackedChannels] = useState<ChannelKey[]>(['speed', 'throttle', 'brake', 'rpm', 'gear', 'drs'])
   const [cursorByKey, setCursorByKey] = useState<Record<string, { x: number | null; values: number[] }>>({})
   const [isLoading, setIsLoading] = useState(true)
+  const [viewMode, setViewMode] = useState<'single' | 'multi'>('single')
+  const telemetryError = useTelemetryStore((s) => s.error)
 
   const previousDriverRef = useRef<string | null>(null)
   const lastFetchRef = useRef<{ year: number; race: string; session: string; t0: number; t1: number } | null>(null)
-  const abortControllerRef = useRef<AbortController | null>(null)
 
   const sessionTime = useSessionTime()
   const speed = usePlaybackStore((s) => s.speed)
@@ -74,6 +76,7 @@ export const TelemetryView = React.memo(function TelemetryView({ active = true }
     lapTimeWindow,
     lapNumbers,
     activeLapNumber,
+    effectiveLapNumber,
     telemetryWindowStart,
     telemetryWindowEnd,
   } = useTelemetryData(sampledSessionTime, selectedLap, selectedDriver, compareDriver)
@@ -114,6 +117,12 @@ export const TelemetryView = React.memo(function TelemetryView({ active = true }
   }, [lapNumbers, selectedLap])
 
   useEffect(() => {
+    if (effectiveLapNumber != null && selectedLap !== effectiveLapNumber) {
+      setSelectedLap(effectiveLapNumber)
+    }
+  }, [effectiveLapNumber, selectedLap])
+
+  useEffect(() => {
     if (!selectedDriver) {
       previousDriverRef.current = null
       return
@@ -138,36 +147,34 @@ export const TelemetryView = React.memo(function TelemetryView({ active = true }
   }, [loadingState])
 
   useEffect(() => {
-    if (selectedYear && selectedRace && selectedSession && fetchWindow) {
-      const next = {
-        year: selectedYear,
-        race: selectedRace,
-        session: selectedSession,
-        t0: fetchWindow.t0,
-        t1: fetchWindow.t1,
-      }
-      const prev = lastFetchRef.current
-      if (prev && prev.year === next.year && prev.race === next.race && prev.session === next.session && prev.t0 === next.t0 && prev.t1 === next.t1) {
-        return
-      }
+    if (!active) return
+    if (!selectedYear || !selectedRace || !selectedSession || !fetchWindow) return
 
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort()
-      }
-      abortControllerRef.current = new AbortController()
-
-      const timer = window.setTimeout(() => {
-        lastFetchRef.current = next
-        void loadTelemetry(next.year, next.race, next.session, next.t0, next.t1, abortControllerRef.current!.signal)
-      }, 70)
-      return () => {
-        window.clearTimeout(timer)
-        if (abortControllerRef.current) {
-          abortControllerRef.current.abort()
-        }
-      }
+    const next = {
+      year: selectedYear,
+      race: selectedRace,
+      session: selectedSession,
+      t0: fetchWindow.t0,
+      t1: fetchWindow.t1,
     }
-  }, [selectedYear, selectedRace, selectedSession, fetchWindow, loadTelemetry])
+    const prev = lastFetchRef.current
+    if (
+      prev &&
+      prev.year === next.year &&
+      prev.race === next.race &&
+      prev.session === next.session &&
+      prev.t0 === next.t0 &&
+      prev.t1 === next.t1
+    ) {
+      return
+    }
+
+    lastFetchRef.current = next
+    const timer = window.setTimeout(() => {
+      void loadTelemetry(next.year, next.race, next.session, next.t0, next.t1)
+    }, 90)
+    return () => window.clearTimeout(timer)
+  }, [active, selectedYear, selectedRace, selectedSession, fetchWindow, loadTelemetry])
 
   const handleCursor = useCallback(
     (key: string) =>
@@ -242,26 +249,54 @@ export const TelemetryView = React.memo(function TelemetryView({ active = true }
       />
 
       <div className="flex flex-col gap-2 border-b border-border-soft bg-gradient-to-r from-bg-surface via-bg-raised to-bg-surface px-4 pb-3">
-        <TelemetryControls
-          selectedDriver={selectedDriver}
-          compareDriver={compareDriver}
-          followPlayback={followPlayback}
-          selectedLap={selectedLap}
-          lapNumbers={lapNumbers}
-          lapTimeWindow={lapTimeWindow}
-          activeLapNumber={activeLapNumber}
-          telemetryWindowStart={telemetryWindowStart}
-          telemetryWindowEnd={telemetryWindowEnd}
-          loadingState={loadingState}
-          compareDriverHasData={compareDriverHasData}
-          onFollowPlaybackToggle={() => setFollowPlayback((v) => !v)}
-          onSelectLap={handleSelectLap}
-        />
-        <TelemetryLegend primaryDriverObj={primaryDriverObj ?? undefined} compareDriverObj={compareDriverObj} />
+        <div className="flex items-center justify-between">
+          <TelemetryControls
+            selectedDriver={selectedDriver}
+            compareDriver={compareDriver}
+            followPlayback={followPlayback}
+            selectedLap={selectedLap}
+            lapNumbers={lapNumbers}
+            lapTimeWindow={lapTimeWindow}
+            activeLapNumber={activeLapNumber}
+            telemetryWindowStart={telemetryWindowStart}
+            telemetryWindowEnd={telemetryWindowEnd}
+            loadingState={loadingState}
+            compareDriverHasData={compareDriverHasData}
+            onFollowPlaybackToggle={() => setFollowPlayback((v) => !v)}
+            onSelectLap={handleSelectLap}
+          />
+          <div className="flex items-center gap-1 rounded-lg bg-bg-surface p-0.5 border border-border-micro">
+            <button
+              onClick={() => setViewMode('single')}
+              className={`rounded-md px-3 py-1 text-[11px] font-medium transition-all ${
+                viewMode === 'single' 
+                  ? 'bg-bg-raised text-fg-primary shadow-sm' 
+                  : 'text-fg-muted hover:text-fg-secondary'
+              }`}
+            >
+              Single
+            </button>
+            <button
+              onClick={() => setViewMode('multi')}
+              className={`rounded-md px-3 py-1 text-[11px] font-medium transition-all ${
+                viewMode === 'multi' 
+                  ? 'bg-bg-raised text-fg-primary shadow-sm' 
+                  : 'text-fg-muted hover:text-fg-secondary'
+              }`}
+            >
+              Multi-Driver
+            </button>
+          </div>
+        </div>
+        {viewMode === 'single' && (
+          <TelemetryLegend primaryDriverObj={primaryDriverObj ?? undefined} compareDriverObj={compareDriverObj} />
+        )}
       </div>
 
       <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden bg-gradient-to-b from-bg-base via-bg-void to-bg-base">
-        {isLoading || String(loadingState) === 'loading' ? (
+        {viewMode === 'multi' ? (
+          <MultiDriverTelemetry height={chartHeight} />
+        ) : isLoading || String(loadingState) === 'loading' ? (
           <div className="flex h-full flex-col gap-2 p-3">
             {[1, 2, 3, 4].map((i) => (
               <div key={i} className="relative overflow-hidden rounded-xl border border-border-soft bg-bg-surface p-3">
@@ -323,7 +358,7 @@ export const TelemetryView = React.memo(function TelemetryView({ active = true }
               </div>
               <div className="mt-1 text-[11px] text-fg-muted font-mono">
                 {String(loadingState) === 'error'
-                  ? 'Failed to load telemetry data'
+                  ? telemetryError || 'Failed to load telemetry data'
                   : String(loadingState) === 'loading'
                   ? `Loading overlay data for lap ${selectedLap}...`
                   : 'No telemetry stream for this lap yet'}

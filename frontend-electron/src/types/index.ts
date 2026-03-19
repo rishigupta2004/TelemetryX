@@ -6,6 +6,8 @@ export interface ApiErrorInfo {
 
 export interface Season {
   year: number
+  startDate?: string
+  endDate?: string
 }
 
 export interface Race {
@@ -14,7 +16,11 @@ export interface Race {
   race_name?: string
   display_name?: string
   name?: string
-  sessions: string[]
+  slug?: string
+  country?: string
+  city?: string
+  date?: string
+  sessions?: string[]
   startDate?: string
 }
 
@@ -410,11 +416,6 @@ export interface StrategyRecommendationsResponse {
   all_strategies: Record<string, StrategyRecommendationItem>
 }
 
-export interface StrategyRecommendationsWithSource {
-  sourceYear: number
-  data: StrategyRecommendationsResponse
-}
-
 export interface SimulationDistribution {
   mean: number
   p10: number
@@ -468,6 +469,7 @@ export interface RegulationSimulationResponse {
   target_year: number
   race_name: string
   team_profile: string
+  track_type: string
   n_samples: number
   seed: number
   assumptions: Record<string, RegulationAssumption>
@@ -509,6 +511,34 @@ export interface RegulationSimulationCompareResponse {
     avg_simulation_elapsed_ms?: number | null
   }
   source_urls: string[]
+}
+
+export interface BacktestResultRow {
+  metric: string
+  predicted: number
+  actual: number
+  error: number
+}
+
+export interface BacktestAccuracySummary {
+  mae_points: number | null
+  mae_position: number | null
+  has_comparison: boolean
+}
+
+export interface RegulationSimulationBacktestResponse {
+  baseline_year: number
+  target_year: number
+  shift_label: string
+  team_profile: string
+  n_samples: number
+  simulation?: RegulationSimulationResponse
+  backtest_results: BacktestResultRow[]
+  accuracy_summary: BacktestAccuracySummary
+  diagnostics?: {
+    elapsed_ms: number
+  }
+  notes: string[]
 }
 
 export interface ClusterDriverRow {

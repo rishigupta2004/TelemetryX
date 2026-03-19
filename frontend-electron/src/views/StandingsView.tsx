@@ -113,15 +113,15 @@ export const StandingsView = React.memo(function StandingsView() {
 
   return (
     <div className="flex h-full min-h-0 flex-col gap-2 p-2">
-      <div className="bg-bg-surface border border-border-hard px-4 py-3">
+      <div className="bg-bg-surface border border-border rounded-md px-4 py-3">
         <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-fg-secondary">Standings</div>
         <div className="mt-1 text-xl font-semibold text-fg-primary">{payload.year} Championship</div>
         <div className="mt-1 text-xs text-fg-muted">{payload.roundsCount} races · latest: {payload.lastRace}</div>
       </div>
 
       <div className="grid min-h-0 flex-1 grid-cols-1 gap-3 xl:grid-cols-[1.15fr_0.85fr]">
-        <div className="bg-bg-surface border border-border-hard min-h-0 overflow-hidden">
-          <div className="border-b border-border-hard px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-fg-secondary">Driver Standings</div>
+        <div className="bg-bg-surface border border-border rounded-md min-h-0 overflow-hidden">
+          <div className="border-b border-border px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-fg-secondary">Driver Standings</div>
           <div className="max-h-full overflow-auto">
             <table className="w-full border-collapse text-left text-sm">
               <thead className="sticky top-0 bg-bg-surface text-[11px] uppercase tracking-[0.12em] text-fg-muted">
@@ -163,8 +163,8 @@ export const StandingsView = React.memo(function StandingsView() {
         </div>
 
         <div className="grid min-h-0 grid-rows-[0.95fr_1.05fr] gap-3">
-          <div className="bg-bg-surface border border-border-hard min-h-0 overflow-hidden">
-            <div className="border-b border-border-hard px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-fg-secondary">Constructor Standings</div>
+          <div className="bg-bg-surface border border-border rounded-md min-h-0 overflow-hidden">
+            <div className="border-b border-border px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-fg-secondary">Constructor Standings</div>
             <div className="max-h-full overflow-auto">
               <table className="w-full border-collapse text-left text-sm">
                 <thead className="sticky top-0 bg-bg-surface text-[11px] uppercase tracking-[0.12em] text-fg-muted">
@@ -198,18 +198,18 @@ export const StandingsView = React.memo(function StandingsView() {
             </div>
           </div>
 
-          <div className="bg-bg-surface border border-border-hard min-h-0 px-4 py-3">
+          <div className="bg-bg-surface border border-border rounded-md min-h-0 px-4 py-3">
             <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-fg-secondary">Top Driver Progression</div>
             <div className="mt-2 space-y-2 overflow-auto pr-1 text-xs">
               {topProgress.map((driver) => (
-                <div key={`${driver.driverName}-${driver.driverNumber ?? 'x'}-progress`} className="rounded-lg border border-border-hard bg-black/20 px-2.5 py-2">
+                <div key={`${driver.driverName}-${driver.driverNumber ?? 'x'}-progress`} className="rounded-md border border-border bg-bg-panel px-2.5 py-2">
                   <div className="mb-1 flex items-center justify-between">
                     <span className="font-semibold text-fg-primary">{driver.driverName}</span>
                     <span className="font-mono text-fg-secondary">{driver.points} pts</span>
                   </div>
                   <div className="grid grid-cols-6 gap-1">
                     {driver.seasonPointsProgression.slice(-6).map((race) => (
-                      <div key={`${driver.driverName}-${race.raceName}`} className="rounded border border-border-hard bg-white/5 px-1 py-1 text-center">
+                      <div key={`${driver.driverName}-${race.raceName}`} className="rounded border border-border bg-white/5 px-1 py-1 text-center">
                         <div className="text-[9px] text-fg-muted">{asRaceLabel(race.raceName).slice(0, 4)}</div>
                         <div className="font-mono text-[10px] text-fg-primary">+{race.points}</div>
                       </div>

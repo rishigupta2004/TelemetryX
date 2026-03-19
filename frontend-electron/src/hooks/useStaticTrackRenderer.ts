@@ -1,4 +1,5 @@
 import { useEffect, useRef, useMemo } from 'react'
+import type { RefObject } from 'react'
 import { animate } from 'animejs'
 import { Point } from '../lib/trackGeometry'
 import { buildCornerBadges, CornerBadge } from '../lib/trackHelpers'
@@ -39,7 +40,7 @@ interface TrackData {
 export const useStaticTrackRenderer = (
   trackData: TrackData | null,
   isCompact: boolean,
-  containerRef: React.RefObject<HTMLDivElement | null>
+  containerRef: RefObject<HTMLDivElement | null>
 ) => {
   const staticCanvasRef = useRef<HTMLCanvasElement>(null)
   const offscreenCanvasRef = useRef<OffscreenCanvas | null>(null)
@@ -69,22 +70,25 @@ export const useStaticTrackRenderer = (
     if (!ctx) return
 
     const dpr = window.devicePixelRatio || 1
+    const containerWidth = Math.max(1, Math.floor(containerRef.current?.clientWidth ?? trackData.width))
+    const containerHeight = Math.max(1, Math.floor(containerRef.current?.clientHeight ?? trackData.height))
     const { width, height, bounds } = trackData
-    canvas.width = width * dpr
-    canvas.height = height * dpr
-    canvas.style.width = `${width}px`
-    canvas.style.height = `${height}px`
+    canvas.width = containerWidth * dpr
+    canvas.height = containerHeight * dpr
+    canvas.style.width = '100%'
+    canvas.style.height = '100%'
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+    ctx.clearRect(0, 0, containerWidth, containerHeight)
     ctx.translate(-bounds.minX, -bounds.minY)
-    ctx.clearRect(bounds.minX, bounds.minY, width, height)
 
     let offscreenCtx: OffscreenCanvasRenderingContext2D | null = null
     if (typeof OffscreenCanvas !== 'undefined') {
       try {
-        const offscreen = new OffscreenCanvas(width * dpr, height * dpr)
+        const offscreen = new OffscreenCanvas(containerWidth * dpr, containerHeight * dpr)
         offscreenCtx = offscreen.getContext('2d', { alpha: true })
         if (offscreenCtx) {
           offscreenCtx.setTransform(dpr, 0, 0, dpr, 0, 0)
+          offscreenCtx.clearRect(0, 0, containerWidth, containerHeight)
           offscreenCtx.translate(-bounds.minX, -bounds.minY)
           offscreenCanvasRef.current = offscreen
         }
@@ -125,7 +129,7 @@ export const useStaticTrackRenderer = (
     if (offscreenCtx && offscreenCanvasRef.current) {
       ctx.drawImage(offscreenCanvasRef.current, 0, 0)
     }
-  }, [trackData, cornerBadges, isCompact])
+  }, [trackData, cornerBadges, isCompact, containerRef])
 
   return { staticCanvasRef, offscreenCanvasRef, isAnimatingIn: isAnimatingInRef.current }
 }

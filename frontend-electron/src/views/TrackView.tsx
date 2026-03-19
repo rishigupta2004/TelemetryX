@@ -33,14 +33,14 @@ export const TrackView = React.memo(function TrackView() {
   return (
     <div className="flex h-full min-h-0 flex-col gap-1 overflow-hidden p-1">
       {/* Map fills most of the view */}
-      <div className="relative min-h-0 min-w-0 flex-[1_1_0%] border border-border-hard bg-bg-base panel-border p-1.5">
+      <div className="relative min-h-0 min-w-0 flex-[1_1_0%] rounded-md border border-border bg-bg-base p-1.5">
         <ViewErrorBoundary viewName="Track Map">
           <TrackMap />
         </ViewErrorBoundary>
 
         {/* HUD overlay - position order on track */}
         <div className="pointer-events-none absolute inset-0">
-          <div className="pointer-events-auto absolute left-3 top-3 w-[190px] border border-border-hard bg-bg-panel p-2">
+          <div className="pointer-events-auto absolute left-3 top-3 w-[190px] rounded-md border border-border bg-bg-panel p-2 shadow-md">
             <div className="mb-1.5 flex items-center gap-2">
               <div className="h-1.5 w-1.5 rounded-full bg-accent" />
               <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-fg-secondary">Order</span>
@@ -64,7 +64,7 @@ export const TrackView = React.memo(function TrackView() {
 
           {/* Bottom: lap counter */}
           <div className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2">
-            <div className="border border-border-hard bg-bg-panel px-4 py-1.5 text-[12px] font-semibold text-fg-secondary">
+            <div className="rounded border border-border bg-bg-panel px-4 py-1.5 text-[12px] font-semibold text-fg-secondary">
               Lap {currentLap ?? '—'} / {sessionMeta?.totalLaps ?? '—'}
             </div>
           </div>

@@ -22,7 +22,7 @@ interface UseFiaDocumentsResult {
   docsError: string | null
   setActiveYear: (value: number | null) => void
   setActiveRace: (value: string) => void
-  refreshDocs: (forceRefresh?: boolean) => Promise<void>
+  refreshDocs: (forceRefresh?: boolean, raceOverride?: string) => Promise<void>
 }
 
 export function useFiaDocuments({
@@ -42,6 +42,18 @@ export function useFiaDocuments({
   const [docs, setDocs] = useState<FiaDocumentsResponse | null>(null)
   const [docsLoading, setDocsLoading] = useState(false)
   const [docsError, setDocsError] = useState<string | null>(null)
+
+  const applyRaceSelection = useCallback((available: string[]) => {
+    if (!available.length) {
+      setActiveRace('')
+      return
+    }
+    setActiveRace((prev) => {
+      if (prev && available.includes(prev)) return prev
+      const preferred = available.find((event) => normalizeFiaText(event) === normalizeFiaText(selectedRace || ''))
+      return preferred || available[0] || ''
+    })
+  }, [selectedRace])
 
   const yearOptions = useMemo(() => {
     const set = new Set<number>()
@@ -105,8 +117,7 @@ export function useFiaDocuments({
         if (cancelled) return
         const nextEvents = payload.events.map((event) => event.name)
         setEvents(nextEvents)
-        const preferred = nextEvents.find((event) => normalizeFiaText(event) === normalizeFiaText(selectedRace || ''))
-        setActiveRace((prev) => (preferred ? preferred : prev && nextEvents.includes(prev) ? prev : nextEvents[0] ?? ''))
+        applyRaceSelection(nextEvents)
       })
       .catch((err) => {
         if (cancelled) return
@@ -120,37 +131,46 @@ export function useFiaDocuments({
     return () => {
       cancelled = true
     }
-  }, [activeYear, selectedRace])
+  }, [activeYear, selectedRace, applyRaceSelection])
 
   const refreshDocs = useCallback(
-    async (forceRefresh = false) => {
-      if (!activeYear || !activeRace) {
+    async (forceRefresh = false, raceOverride?: string) => {
+      if (!activeYear || !(raceOverride ?? activeRace)) {
         setDocs(null)
         setDocsError(null)
         return
       }
+      const raceToLoad = raceOverride ?? activeRace
       setDocsLoading(true)
       setDocsError(null)
       try {
-        const payload = await api.getFiaDocuments(activeYear, activeRace, forceRefresh)
+        const payload = await api.getFiaDocuments(activeYear, raceToLoad, forceRefresh)
         setDocs(payload)
       } catch (err) {
         const availableEvents = availableEventsFromApiError(err)
         if (availableEvents.length > 0) {
           setEvents(availableEvents)
-          setActiveRace((prev) => {
-            if (prev && availableEvents.includes(prev)) return prev
-            const preferred = availableEvents.find((event) => normalizeFiaText(event) === normalizeFiaText(selectedRace || ''))
-            return preferred || availableEvents[0] || ''
-          })
+          const nextRace = availableEvents.includes(raceToLoad) ? raceToLoad : (availableEvents[0] ?? '')
+          if (nextRace) {
+            setActiveRace(nextRace)
+            if (nextRace !== raceToLoad) {
+              try {
+                const retryPayload = await api.getFiaDocuments(activeYear, nextRace, forceRefresh)
+                setDocs(retryPayload)
+                return
+              } catch {
+                // fall through to a user-visible error below.
+              }
+            }
+          }
         }
         setDocs(null)
-        setDocsError(apiErrorText(err))
+        setDocsError(`${apiErrorText(err)} (${activeYear} ${raceToLoad || 'n/a'})`)
       } finally {
         setDocsLoading(false)
       }
     },
-    [activeYear, activeRace, selectedRace]
+    [activeYear, activeRace]
   )
 
   useEffect(() => {

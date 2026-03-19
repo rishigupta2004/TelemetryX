@@ -3,9 +3,18 @@ import { fetchRaces, fetchSeasons, fetchSession, fetchSessions, fetchLaps, fetch
 import { usePlaybackStore } from './playbackStore'
 import { useDriverStore } from './driverStore'
 import type { ApiErrorInfo, Driver, LapRow, Race, Season, SessionInfoResponse, SessionMetadata, SessionResponse } from '../types'
-import { toApiErrorInfo } from '../api/client'
+import { isAbortLikeError, toApiErrorInfo } from '../api/client'
 
 let latestSessionRequestId = 0
+let latestSeasonsRequestId = 0
+let latestRacesRequestId = 0
+let latestSessionsRequestId = 0
+
+const idleOrReadyState = (state: SessionState): Pick<SessionState, 'loadingState' | 'error' | 'apiError'> => ({
+  loadingState: state.sessionMeta ? 'ready' : 'idle',
+  error: null,
+  apiError: null
+})
 
 const selectSessionMeta = (s: SessionState) => s.sessionMeta
 const selectDrivers = (s: SessionState) => s.drivers
@@ -27,9 +36,9 @@ export const useSeasons = () => useSessionStore(selectSeasons)
 export const useRaces = () => useSessionStore(selectRaces)
 export const useSessions = () => useSessionStore(selectSessions)
 
-export const useSessionSelection = () => useSessionStore(
-  (s) => ({ year: s.selectedYear, race: s.selectedRace, session: s.selectedSession })
-)
+export const useSelectedYear = () => useSessionStore(s => s.selectedYear)
+export const useSelectedRace = () => useSessionStore(s => s.selectedRace)
+export const useSelectedSession = () => useSessionStore(s => s.selectedSession)
 
 interface SessionState {
   seasons: Season[]
@@ -68,33 +77,54 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   apiError: null,
 
   fetchSeasons: async () => {
+    const requestId = ++latestSeasonsRequestId
     set({ loadingState: 'loading', error: null, apiError: null })
     try {
       const seasons = await fetchSeasons()
+      if (requestId !== latestSeasonsRequestId) return
       set(s => ({ seasons, loadingState: s.sessionMeta ? 'ready' : 'idle' }))
     } catch (err) {
+      if (requestId !== latestSeasonsRequestId) return
+      if (isAbortLikeError(err)) {
+        set((s) => idleOrReadyState(s))
+        return
+      }
       const apiError = toApiErrorInfo(err)
       set({ error: apiError.message, apiError, loadingState: 'error' })
     }
   },
 
   fetchRaces: async (year) => {
+    const requestId = ++latestRacesRequestId
     set({ loadingState: 'loading', error: null, apiError: null, selectedYear: year, selectedRace: null, selectedSession: null, sessions: [] })
     try {
       const races = await fetchRaces(year)
+      if (requestId !== latestRacesRequestId) return
       set(s => ({ races, loadingState: s.sessionMeta ? 'ready' : 'idle' }))
     } catch (err) {
+      if (requestId !== latestRacesRequestId) return
+      if (isAbortLikeError(err)) {
+        set((s) => idleOrReadyState(s))
+        return
+      }
       const apiError = toApiErrorInfo(err)
       set({ error: apiError.message, apiError, loadingState: 'error' })
     }
   },
 
   fetchSessions: async (year, race) => {
+    const requestId = ++latestSessionsRequestId
     set({ loadingState: 'loading', error: null, apiError: null, selectedRace: race, selectedSession: null })
     try {
-      const data: SessionInfoResponse = await fetchSessions(year, race)
+      const data = await fetchSessions(year, race)
+      if (requestId !== latestSessionsRequestId) return
       set(s => ({ sessions: data.sessions ?? [], loadingState: s.sessionMeta ? 'ready' : 'idle' }))
     } catch (err) {
+      if (requestId !== latestSessionsRequestId) return
+      if (isAbortLikeError(err)) {
+        set((s) => idleOrReadyState(s))
+        return
+      }
       const apiError = toApiErrorInfo(err)
       set({ error: apiError.message, apiError, loadingState: 'error' })
     }
@@ -179,6 +209,9 @@ export const useSessionStore = create<SessionState>((set, get) => ({
 
   clearSession: () => {
     latestSessionRequestId++
+    latestSeasonsRequestId++
+    latestRacesRequestId++
+    latestSessionsRequestId++
     const { seasons, races } = get()
     usePlaybackStore.getState().reset()
     useDriverStore.getState().clearSelection()

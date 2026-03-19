@@ -7,6 +7,8 @@ interface PlaybackState {
   duration: number
   sessionStartTime: number
   externalClock: boolean
+  replayPosition: number
+  totalRaceDistance: number
   play: () => void
   pause: () => void
   togglePlay: () => void
@@ -15,6 +17,9 @@ interface PlaybackState {
   setSpeed: (speed: number) => void
   setDuration: (duration: number, sessionStartTime: number) => void
   setExternalClock: (enabled: boolean) => void
+  setReplayPosition: (position: number) => void
+  getReplayPosition: () => number
+  setTotalRaceDistance: (laps: number) => void
   reset: () => void
 }
 
@@ -110,7 +115,8 @@ function startLoop(getState: () => PlaybackState, set: (partial: Partial<Playbac
     enqueueTimeUpdate()
 
     if (_internalTime >= _cachedState.duration) {
-      set({ isPlaying: false, currentTime: _internalTime })
+      const replayPos = _cachedState.duration > 0 ? _internalTime / _cachedState.duration : 0
+      set({ isPlaying: false, currentTime: _internalTime, replayPosition: replayPos })
       _lastTimestamp = null
       _cachedState = null
       return
@@ -134,6 +140,8 @@ export const usePlaybackStore = create<PlaybackState>((set, get) => ({
   duration: 0,
   sessionStartTime: 0,
   externalClock: false,
+  replayPosition: 0,
+  totalRaceDistance: 0,
 
   play: () => {
     const state = get()
@@ -153,7 +161,8 @@ export const usePlaybackStore = create<PlaybackState>((set, get) => ({
     stopLoop()
     _setState = null
     _internalTime = _targetTime
-    set({ isPlaying: false, currentTime: _internalTime })
+    const replayPos = get().duration > 0 ? _internalTime / get().duration : 0
+    set({ isPlaying: false, currentTime: _internalTime, replayPosition: replayPos })
   },
 
   togglePlay: () => {
@@ -176,7 +185,8 @@ export const usePlaybackStore = create<PlaybackState>((set, get) => ({
     const clamped = Math.max(0, Math.min(time, get().duration))
     _internalTime = clamped
     _targetTime = clamped
-    set({ currentTime: clamped, isPlaying: false })
+    const replayPos = get().duration > 0 ? clamped / get().duration : 0
+    set({ currentTime: clamped, replayPosition: replayPos, isPlaying: false })
     if (wasPlaying) {
       get().play()
     }
@@ -186,7 +196,8 @@ export const usePlaybackStore = create<PlaybackState>((set, get) => ({
     const clamped = Math.max(0, Math.min(time, get().duration))
     _internalTime = clamped
     _targetTime = clamped
-    set({ currentTime: clamped })
+    const replayPos = get().duration > 0 ? clamped / get().duration : 0
+    set({ currentTime: clamped, replayPosition: replayPos })
   },
 
   setSpeed: (speed: number) => {
@@ -198,12 +209,35 @@ export const usePlaybackStore = create<PlaybackState>((set, get) => ({
     stopLoop()
     _internalTime = 0
     _targetTime = 0
-    set({ duration, sessionStartTime, currentTime: 0, isPlaying: false })
+    set({ duration, sessionStartTime, currentTime: 0, isPlaying: false, replayPosition: 0 })
   },
 
   setExternalClock: (enabled: boolean) => {
     if (enabled) stopLoop()
     set({ externalClock: enabled })
+  },
+
+  setReplayPosition: (position: number) => {
+    const state = get()
+    const clamped = Math.max(0, Math.min(1, position))
+    const time = clamped * state.duration
+    const wasPlaying = state.isPlaying
+    stopLoop()
+    _internalTime = time
+    _targetTime = time
+    set({ currentTime: time, replayPosition: clamped, isPlaying: false })
+    if (wasPlaying) {
+      get().play()
+    }
+  },
+
+  getReplayPosition: () => {
+    const state = get()
+    return state.duration > 0 ? state.currentTime / state.duration : 0
+  },
+
+  setTotalRaceDistance: (laps: number) => {
+    set({ totalRaceDistance: laps })
   },
 
   reset: () => {
@@ -215,7 +249,9 @@ export const usePlaybackStore = create<PlaybackState>((set, get) => ({
       isPlaying: false,
       speed: 1,
       duration: 0,
-      sessionStartTime: 0
+      sessionStartTime: 0,
+      replayPosition: 0,
+      totalRaceDistance: 0
     })
   }
 }))

@@ -5,7 +5,6 @@ import { PitStrategy } from '../components/PitStrategy'
 import { ViewErrorBoundary } from '../components/ViewErrorBoundary'
 import { api } from '../api/client'
 import { useSessionStore } from '../stores/sessionStore'
-import { strategyCandidates } from '../lib/strategyUtils'
 import type { StrategyRecommendationItem, StrategyRecommendationsResponse } from '../types'
 
 function barWidth(value: number, max: number): string {
@@ -35,39 +34,46 @@ const FadeInPanel = ({ children, delay = 0, className = '' }: { children: React.
   )
 }
 
-export const StrategyView = React.memo(function StrategyView({ active }: { active: boolean }) {
+export const StrategyView = React.memo(function StrategyView({ active = true }: { active?: boolean }) {
+  const sessionData = useSessionStore((s) => s.sessionData)
   const selectedYear = useSessionStore((s) => s.selectedYear)
   const selectedRace = useSessionStore((s) => s.selectedRace)
-  const seasons = useSessionStore((s) => s.seasons)
+
+  if (!sessionData) {
+    return (
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+        color: 'rgba(255,255,255,0.3)',
+        fontSize: '13px'
+      }}>
+        Select a session to begin
+      </div>
+    )
+  }
 
   const [strategyData, setStrategyData] = useState<StrategyRecommendationsResponse | null>(null)
-  const [strategySourceYear, setStrategySourceYear] = useState<number | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const strategyCacheRef = useRef<
-    Map<string, { data: StrategyRecommendationsResponse | null; sourceYear: number | null; error: string | null; timestamp: number }>
+    Map<string, { data: StrategyRecommendationsResponse | null; error: string | null; timestamp: number }>
   >(new Map())
   const CACHE_TTL_MS = 5 * 60 * 1000
-
-  const fallbackYears = useMemo(() => {
-    if (!selectedYear) return []
-    return strategyCandidates(seasons.map((season) => season.year), selectedYear)
-  }, [seasons, selectedYear])
 
   useEffect(() => {
     if (!active) return
     if (!selectedYear || !selectedRace) {
       setStrategyData(null)
-      setStrategySourceYear(null)
       setError(null)
       return
     }
 
-    const strategyKey = `${selectedYear}|${selectedRace}|${fallbackYears.join(',')}`
+    const strategyKey = `${selectedYear}|${selectedRace}`
     const cached = strategyCacheRef.current.get(strategyKey)
     if (cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
       setStrategyData(cached.data)
-      setStrategySourceYear(cached.sourceYear)
       setError(cached.error)
       setLoading(false)
       return
@@ -78,20 +84,18 @@ export const StrategyView = React.memo(function StrategyView({ active }: { activ
     setError(null)
 
     api
-      .getStrategyRecommendationsWithFallback(selectedYear, selectedRace, fallbackYears)
-      .then(({ data, sourceYear }) => {
+      .getStrategyRecommendations(selectedYear, selectedRace)
+      .then((data) => {
         if (cancelled) return
         setStrategyData(data)
-        setStrategySourceYear(sourceYear)
-        strategyCacheRef.current.set(strategyKey, { data, sourceYear, error: null, timestamp: Date.now() })
+        strategyCacheRef.current.set(strategyKey, { data, error: null, timestamp: Date.now() })
       })
       .catch((err) => {
         if (cancelled) return
         const message = String(err)
         setStrategyData(null)
-        setStrategySourceYear(null)
         setError(message)
-        strategyCacheRef.current.set(strategyKey, { data: null, sourceYear: null, error: message, timestamp: Date.now() })
+        strategyCacheRef.current.set(strategyKey, { data: null, error: message, timestamp: Date.now() })
       })
       .finally(() => {
         if (!cancelled) setLoading(false)
@@ -100,7 +104,7 @@ export const StrategyView = React.memo(function StrategyView({ active }: { activ
     return () => {
       cancelled = true
     }
-  }, [active, selectedYear, selectedRace, fallbackYears])
+  }, [active, selectedYear, selectedRace])
 
   const topStrategies = useMemo(() => {
     if (!strategyData?.all_strategies) return []
@@ -119,6 +123,8 @@ export const StrategyView = React.memo(function StrategyView({ active }: { activ
     if (!topStrategies.length) return 0
     return Math.max(...topStrategies.map((strategy) => strategy.podium_probability || 0))
   }, [topStrategies])
+
+  const hasStrategySimulations = (strategyData?.n_simulations ?? 0) > 0 && topStrategies.length > 0
 
   return (
     <div className="flex h-full flex-col gap-3 p-3">
@@ -139,26 +145,21 @@ export const StrategyView = React.memo(function StrategyView({ active }: { activ
           </div>
         </FadeInPanel>
 
-        <FadeInPanel delay={200} className="min-h-0">
-          <div className="h-full rounded-xl border border-white/5 bg-gradient-to-br from-[#151518] via-[#0f0f12] to-[#18181c] p-4 shadow-xl">
+        <FadeInPanel delay={200} className="min-h-0 flex-1">
+          <div className="h-full rounded-md border border-border bg-bg-surface p-4">
             <div className="mb-3 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="h-px w-6 bg-gradient-to-r from-transparent via-amber-500/60 to-transparent" />
                 <span className="text-[10px] uppercase tracking-[0.18em] text-fg-secondary">Strategy Analytics</span>
                 <div className="h-px w-6 bg-gradient-to-r from-transparent via-amber-500/60 to-transparent" />
               </div>
-              {strategySourceYear != null && selectedYear != null && strategySourceYear !== selectedYear && (
-                <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 text-[10px] font-mono text-amber-400 shadow-[0_0_12px_rgba(245,158,11,0.2)]">
-                  {strategySourceYear}
-                </span>
-              )}
             </div>
 
             {loading && (
               <div className="space-y-2">
                 <div className="mb-3 grid grid-cols-3 gap-2">
                   {[1, 2, 3].map((i) => (
-                    <div key={i} className="animate-pulse rounded-lg border border-white/5 bg-white/5 p-2.5">
+                    <div key={i} className="animate-pulse rounded-md border border-border bg-bg-panel p-2.5">
                       <div className="mb-1 h-2 w-16 rounded bg-white/10" />
                       <div className="h-4 w-12 rounded bg-white/20" />
                     </div>
@@ -193,20 +194,29 @@ export const StrategyView = React.memo(function StrategyView({ active }: { activ
               </div>
             )}
 
-            {!loading && !error && strategyData && (
+            {!loading && !error && strategyData && !hasStrategySimulations && (
+              <div className="flex h-full flex-col items-center justify-center gap-2 rounded-lg border border-border bg-bg-secondary py-8 text-center">
+                <div className="text-[11px] font-semibold text-fg-secondary">Strategy model has no usable runs yet</div>
+                <div className="text-[10px] text-fg-muted">
+                  No simulated strategy output was returned for <span className="text-fg-secondary">{selectedYear} {selectedRace}</span>.
+                </div>
+              </div>
+            )}
+
+            {!loading && !error && strategyData && hasStrategySimulations && (
               <div className="space-y-2 overflow-y-auto pr-1 text-xs">
                 <div className="grid grid-cols-3 gap-2">
-                  <FadeInPanel delay={250} className="rounded-lg border border-white/5 bg-white/[0.02] p-2.5 backdrop-blur-sm">
+                  <FadeInPanel delay={250} className="rounded-md border border-border bg-bg-panel p-2.5">
                     <div className="mb-1 text-[9px] uppercase tracking-[0.1em] text-fg-muted">Best Avg Points</div>
-                    <div className="font-mono text-base font-bold text-green-400">{strategyData.best_strategy?.avg_points?.toFixed(2) || '-'}</div>
+                    <div className="font-mono text-base font-bold text-fg-primary">{strategyData.best_strategy?.avg_points?.toFixed(2) || '-'}</div>
                   </FadeInPanel>
-                  <FadeInPanel delay={300} className="rounded-lg border border-white/5 bg-white/[0.02] p-2.5 backdrop-blur-sm">
+                  <FadeInPanel delay={300} className="rounded-md border border-border bg-bg-panel p-2.5">
                     <div className="mb-1 text-[9px] uppercase tracking-[0.1em] text-fg-muted">Best Finish</div>
-                    <div className="font-mono text-base font-bold text-blue-400">{strategyData.best_strategy?.avg_finish_position?.toFixed(2) || '-'}</div>
+                    <div className="font-mono text-base font-bold text-fg-primary">{strategyData.best_strategy?.avg_finish_position?.toFixed(2) || '-'}</div>
                   </FadeInPanel>
-                  <FadeInPanel delay={350} className="rounded-lg border border-white/5 bg-white/[0.02] p-2.5 backdrop-blur-sm">
+                  <FadeInPanel delay={350} className="rounded-md border border-border bg-bg-panel p-2.5">
                     <div className="mb-1 text-[9px] uppercase tracking-[0.1em] text-fg-muted">Simulations</div>
-                    <div className="font-mono text-base font-bold text-purple-400">{strategyData.n_simulations || '-'}</div>
+                    <div className="font-mono text-base font-bold text-fg-primary">{strategyData.n_simulations || '-'}</div>
                   </FadeInPanel>
                 </div>
 
@@ -214,7 +224,7 @@ export const StrategyView = React.memo(function StrategyView({ active }: { activ
 
                 {topStrategies.map((strategy, idx) => (
                   <FadeInPanel key={strategy.strategy} delay={400 + idx * 50}>
-                    <div className="group rounded-lg border border-white/5 bg-white/[0.02] p-2.5 transition-all duration-200 hover:border-white/10 hover:bg-white/[0.04]">
+                    <div className="group rounded-md border border-border bg-bg-panel p-2.5 transition-all duration-200 hover:border-border-hard hover:bg-bg-hover">
                       <div className="mb-1.5 flex items-center justify-between gap-2">
                         <div className="truncate font-mono text-xs font-semibold text-fg-primary">{strategy.strategy}</div>
                         <div className="rounded border border-white/10 bg-white/5 px-1.5 py-0.5 font-mono text-[10px] text-fg-muted">
@@ -238,11 +248,11 @@ export const StrategyView = React.memo(function StrategyView({ active }: { activ
                       <div>
                         <div className="mb-1 flex items-center justify-between text-[10px]">
                           <span className="text-fg-muted">Podium Probability</span>
-                          <span className="font-mono font-semibold text-purple-400">{((strategy.podium_probability ?? 0) * 100).toFixed(1)}%</span>
+                          <span className="font-mono font-semibold text-red-300">{((strategy.podium_probability ?? 0) * 100).toFixed(1)}%</span>
                         </div>
                         <div className="relative h-2.5 overflow-hidden rounded-full bg-white/5">
                           <div 
-                            className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-purple-600 to-purple-400 shadow-[0_0_10px_rgba(168,85,247,0.4)]"
+                            className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-red-700 to-red-400 shadow-[0_0_10px_rgba(225,6,0,0.35)]"
                             style={{ width: barWidth(strategy.podium_probability || 0, maxPodium) }}
                           />
                         </div>

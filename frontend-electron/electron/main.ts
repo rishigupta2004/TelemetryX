@@ -1,4 +1,4 @@
-import { app, BrowserWindow, nativeTheme, session } from 'electron'
+import { app, BrowserWindow, nativeTheme, screen, session } from 'electron'
 import { join } from 'node:path'
 
 const isDev = !app.isPackaged
@@ -33,11 +33,14 @@ function createWindow(): void {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      sandbox: false,
-      preload: join(__dirname, '../preload/preload.mjs'),
-      backgroundThrottling: false,        // no throttling during playback
-      spellcheck: false,                   // unnecessary for data app
-      enableWebSQL: false                  // unused — save memory
+      sandbox: true,
+      preload: join(__dirname, '../preload/index.js'),
+      backgroundThrottling: false,
+      spellcheck: false,
+      enableWebSQL: false,
+      webSecurity: true,
+      allowRunningInsecureContent: false,
+      experimentalFeatures: false
     }
   })
 
@@ -56,7 +59,7 @@ function createWindow(): void {
         responseHeaders: {
           ...details.responseHeaders,
           'Content-Security-Policy': [
-            "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' http://localhost:* ws://localhost:*; img-src 'self' data: blob:;"
+            "default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' http://localhost:* ws://localhost:* http://127.0.0.1:9000 ws://127.0.0.1:9000 https://*.clerk.accounts.dev https://*.clerk.com; img-src 'self' data: blob:; worker-src 'self' blob:;"
           ]
         }
       })
@@ -82,21 +85,29 @@ function createWindow(): void {
     const stateFile = join(app.getPath('userData'), 'window-state.json')
     const data = JSON.parse(require('node:fs').readFileSync(stateFile, 'utf-8'))
     if (data.bounds) {
-      mainWindow.setBounds(data.bounds)
+      const b = data.bounds
+      const displays = screen.getAllDisplays()
+      const visibleOnSomeDisplay = displays.some((d) => {
+        const db = d.workArea
+        const intersectsX = b.x < db.x + db.width && b.x + b.width > db.x
+        const intersectsY = b.y < db.y + db.height && b.y + b.height > db.y
+        return intersectsX && intersectsY
+      })
+      if (visibleOnSomeDisplay) {
+        mainWindow.setBounds(b)
+      }
     }
     if (data.isMaximized) {
       mainWindow.maximize()
     }
   } catch { /* no saved state */ }
 
-  // ── Load content ──
-  const rendererUrl = process.env.ELECTRON_RENDERER_URL
-
-  if (rendererUrl) {
-    void mainWindow.loadURL(rendererUrl)
-  } else if (isDev) {
-    void mainWindow.loadURL('http://localhost:5173')
+  // ── Load content ───────────────────────────────────────────────────
+  if (isDev && process.env.ELECTRON_RENDERER_URL) {
+    // Dev mode — load Vite dev server
+    void mainWindow.loadURL(process.env.ELECTRON_RENDERER_URL)
   } else {
+    // Production/preview mode — load built files
     void mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
 }

@@ -1,0 +1,209 @@
+{
+  "year": 2024,
+  "race": "Monaco",
+  "circuitType": "street",
+  "n_samples": 3000,
+  "winner": "Charles Leclerc",
+  "winningStrategy": "1-stop Medium-Hard",
+  "winnerCompound": "HARD",
+  "finalGaps": [
+    {
+      "driver": "LEC",
+      "position": 1,
+      "gap": "Leader"
+    },
+    {
+      "driver": "PIA",
+      "position": 2,
+      "gap": null
+    },
+    {
+      "driver": "SAI",
+      "position": 3,
+      "gap": null
+    },
+    {
+      "driver": "NOR",
+      "position": 4,
+      "gap": null
+    },
+    {
+      "driver": "RUS",
+      "position": 5,
+      "gap": null
+    },
+    {
+      "driver": "VER",
+      "position": 6,
+      "gap": null
+    },
+    {
+      "driver": "HAM",
+      "position": 7,
+      "gap": null
+    },
+    {
+      "driver": "TSU",
+      "position": 8,
+      "gap": null
+    },
+    {
+      "driver": "ALB",
+      "position": 9,
+      "gap": null
+    },
+    {
+      "driver": "GAS",
+      "position": 10,
+      "gap": null
+    }
+  ],
+  "assumptions": {
+    "vsc_probability": 0.18,
+    "sc_probability": 0.12,
+    "driver_error_probability": 0.04,
+    "pit_stop_time_mean": 22.5,
+    "pit_stop_time_std": 1.2,
+    "traffic_penalty_mean": 0.8,
+    "traffic_penalty_std": 0.3,
+    "tyre_degradation_factor": 0.85
+  },
+  "strategies": [
+    {
+      "strategy": "1-stop Medium-Hard",
+      "pit_laps": [
+        46
+      ],
+      "compounds": [
+        "MEDIUM",
+        "HARD"
+      ],
+      "probability": 0.42,
+      "avg_finish_position": 3.2,
+      "avg_points": 12.8,
+      "podium_probability": 0.35,
+      "win_probability": 0.18,
+      "sc_sensitivity": "high",
+      "vsc_sensitivity": "medium",
+      "risk_assessment": "Optimal strategy for Monaco. Low degradation on this circuit favors longer stints.",
+      "expected_tyre_life": 46,
+      "actual_result": true
+    },
+    {
+      "strategy": "1-stop Soft-Hard",
+      "pit_laps": [
+        35
+      ],
+      "compounds": [
+        "SOFT",
+        "HARD"
+      ],
+      "probability": 0.23,
+      "avg_finish_position": 4.8,
+      "avg_points": 9.2,
+      "podium_probability": 0.22,
+      "win_probability": 0.08,
+      "sc_sensitivity": "high",
+      "vsc_sensitivity": "high",
+      "risk_assessment": "Aggressive but risky. Soft tyre degrades quickly at Monaco.",
+      "expected_tyre_life": 35,
+      "actual_result": false
+    },
+    {
+      "strategy": "2-stop Hard-Medium-Hard",
+      "pit_laps": [
+        28,
+        55
+      ],
+      "compounds": [
+        "HARD",
+        "MEDIUM",
+        "HARD"
+      ],
+      "probability": 0.19,
+      "avg_finish_position": 5.1,
+      "avg_points": 8.8,
+      "podium_probability": 0.19,
+      "win_probability": 0.06,
+      "sc_sensitivity": "low",
+      "vsc_sensitivity": "low",
+      "risk_assessment": "Safe option but traffic can negate the extra stop advantage.",
+      "expected_tyre_life": 28,
+      "actual_result": false
+    },
+    {
+      "strategy": "2-stop Medium-Medium-Hard",
+      "pit_laps": [
+        30,
+        58
+      ],
+      "compounds": [
+        "MEDIUM",
+        "MEDIUM",
+        "HARD"
+      ],
+      "probability": 0.16,
+      "avg_finish_position": 5.5,
+      "avg_points": 7.9,
+      "podium_probability": 0.15,
+      "win_probability": 0.05,
+      "sc_sensitivity": "medium",
+      "vsc_sensitivity": "low",
+      "risk_assessment": "Conservative approach with good tyre management.",
+      "expected_tyre_life": 30,
+      "actual_result": false
+    }
+  ],
+  "optimal_strategy": {
+    "strategy": "1-stop Medium-Hard",
+    "pit_laps": [
+      46
+    ],
+    "compounds": [
+      "MEDIUM",
+      "HARD"
+    ],
+    "recommended_for": [
+      "Ferrari",
+      "McLaren",
+      "Mercedes"
+    ],
+    "avg_finish_position": 3.2,
+    "confidence": "high",
+    "rationale": "Monaco's low degradation and high traffic make single-stop optimal. Medium stint of 46 laps maximizes track position before final hard tyre stint.",
+    "actual_winner_used": true
+  },
+  "sc_vsc_analysis": {
+    "sc_probability": 0.12,
+    "vsc_probability": 0.18,
+    "expected_lap_of_sc": 42,
+    "expected_lap_of_vsc": 38,
+    "sc_impact_on_1stop": -2.3,
+    "sc_impact_on_2stop": 0.8,
+    "vsc_impact_on_1stop": -1.1,
+    "vsc_impact_on_2stop": 1.5,
+    "recommendation": "1-stop strategy more vulnerable to SC/VSC. Consider 2-stop as hedge."
+  },
+  "overtake_difficulty": {
+    "rating": "Very Hard",
+    "drs_effectiveness": 0.15,
+    "track_position_premium": "extremely_high",
+    "undercut_effectiveness": 0.72,
+    "overcut_effectiveness": 0.18,
+    "recommendation": "Track position is critical. Qualifying performance heavily weighted."
+  },
+  "historical_comparison": {
+    "2023_strategy_winner": "1-stop",
+    "2023_compound_winner": "Medium-Hard",
+    "2023_avg_pit_stops": 1.2,
+    "2024_projected_avg_pit_stops": 1.3,
+    "rmse_vs_historical": 0.42
+  },
+  "generated_at": "2024-05-26T18:00:00Z",
+  "model_version": "2.4.0",
+  "data_sources": [
+    "FastF1",
+    "Jolpica-F1",
+    "OpenF1"
+  ]
+}

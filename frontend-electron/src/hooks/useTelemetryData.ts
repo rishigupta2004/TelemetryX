@@ -7,6 +7,7 @@ import {
   ubTs,
   lapAtTime,
   CHANNELS,
+  metricSubtitle,
 } from '../lib/telemetryUtils'
 import type {
   BuiltChart,
@@ -20,6 +21,7 @@ import { ubNum } from '../lib/telemetryUtils'
 
 const MAX_TELEMETRY_POINTS = 3000
 const HALF_WINDOW = 60
+const WINDOW_BUCKET_SECONDS = 15
 
 export interface LapTimeWindow {
   lap: LapRow
@@ -37,6 +39,7 @@ export interface UseTelemetryDataResult {
   driverLaps: LapRow[]
   lapNumbers: number[]
   activeLapNumber: number | null
+  effectiveLapNumber: number | null
   telemetryWindowStart: number
   telemetryWindowEnd: number
 }
@@ -90,25 +93,52 @@ export function useTelemetryData(
   }, [driverLaps, sampledSessionTime])
 
   const lapTimeWindow = useMemo((): LapTimeWindow | null => {
-    const lap = driverLaps.find((l) => l.lapNumber === selectedLap)
+    if (!selectedDriver) return null
+    const telemetryRows = (telemetryData?.[selectedDriver] || []) as TelemetryRow[]
+    const hasDataForLap = (lap: LapRow): boolean => {
+      if (!telemetryRows.length) return true
+      const lo = lbTs(telemetryRows, lap.lapStartSeconds)
+      const hi = ubTs(telemetryRows, lap.lapEndSeconds)
+      return hi - lo > 4
+    }
+    let lap = driverLaps.find((l) => l.lapNumber === selectedLap) || null
+    if (lap && hasDataForLap(lap)) {
+      return {
+        lap,
+        t0: Math.floor(lap.lapStartSeconds),
+        t1: Math.ceil(lap.lapEndSeconds),
+        duration: lap.lapTime || lap.lapEndSeconds - lap.lapStartSeconds,
+      }
+    }
+    const candidates = driverLaps.filter(hasDataForLap)
+    if (!candidates.length) return lap ? {
+      lap,
+      t0: Math.floor(lap.lapStartSeconds),
+      t1: Math.ceil(lap.lapEndSeconds),
+      duration: lap.lapTime || lap.lapEndSeconds - lap.lapStartSeconds,
+    } : null
+    if (!lap) lap = candidates[0]
+    const nearest = candidates.reduce((best, item) =>
+      Math.abs(item.lapNumber - lap.lapNumber) < Math.abs(best.lapNumber - lap.lapNumber) ? item : best
+    )
     return lap
       ? {
-          lap,
-          t0: Math.floor(lap.lapStartSeconds),
-          t1: Math.ceil(lap.lapEndSeconds),
-          duration: lap.lapTime || lap.lapEndSeconds - lap.lapStartSeconds,
+          lap: nearest,
+          t0: Math.floor(nearest.lapStartSeconds),
+          t1: Math.ceil(nearest.lapEndSeconds),
+          duration: nearest.lapTime || nearest.lapEndSeconds - nearest.lapStartSeconds,
         }
       : null
-  }, [driverLaps, selectedLap])
+  }, [driverLaps, selectedLap, selectedDriver, telemetryData])
 
   const fetchWindow = useMemo(() => {
     if (!driverLaps.length) return null
     if (lapTimeWindow) {
       return { t0: lapTimeWindow.t0, t1: lapTimeWindow.t1 }
     }
-    const t = sampledSessionTime
-    const t0 = Math.max(0, Math.floor(t - HALF_WINDOW))
-    const t1 = Math.ceil(t + HALF_WINDOW)
+    const bucketCenter = Math.floor(sampledSessionTime / WINDOW_BUCKET_SECONDS) * WINDOW_BUCKET_SECONDS
+    const t0 = Math.max(0, Math.floor(bucketCenter - HALF_WINDOW))
+    const t1 = Math.ceil(bucketCenter + HALF_WINDOW)
     return { t0, t1 }
   }, [driverLaps, sampledSessionTime, lapTimeWindow])
 
@@ -238,6 +268,7 @@ export function useTelemetryData(
     driverLaps,
     lapNumbers,
     activeLapNumber,
+    effectiveLapNumber: lapTimeWindow?.lap.lapNumber ?? null,
     telemetryWindowStart,
     telemetryWindowEnd,
   }
@@ -320,8 +351,6 @@ export function useTelemetryCharts(
     const primaryColor = driverObj?.teamColor || '#82cfff'
     const compareObj = compareDriver ? drivers.find((d) => d.code === compareDriver) : null
     const compareColor = compareObj?.teamColor || '#a6b0bf'
-
-    const { metricSubtitle } = require('../lib/telemetryUtils')
 
     const mappedCharts = CHANNELS.map((cfg) => {
       const pair = chartData[cfg.key]

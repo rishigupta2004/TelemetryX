@@ -1,16 +1,17 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { ClerkProvider, useAuth, useClerk } from '@clerk/react'
+import { ClerkProvider } from '@clerk/react'
 import App from './App'
 import { GlobalErrorBoundary } from './components/GlobalErrorBoundary'
-import { AuthGate } from './components/AuthGate'
+import { AUTH_ENABLED, useCurrentAuth } from './lib/auth'
 import { setAuthToken } from './lib/authToken'
 import './index.css'
 
 const clerkPublishableKey = (import.meta as unknown as { env?: { VITE_CLERK_PUBLISHABLE_KEY?: string } })?.env?.VITE_CLERK_PUBLISHABLE_KEY
 
 function ClerkTokenBridge() {
-  const { isSignedIn, getToken } = useAuth()
+  // Use safe auth hook - imported statically
+  const { isSignedIn, getToken } = useCurrentAuth()
 
   React.useEffect(() => {
     let active = true
@@ -18,7 +19,7 @@ function ClerkTokenBridge() {
       setAuthToken(null)
       return
     }
-    void getToken().then((token) => {
+    void getToken().then((token: string | null) => {
       if (!active) return
       setAuthToken(token ?? null)
     })
@@ -30,37 +31,31 @@ function ClerkTokenBridge() {
   return null
 }
 
-function AppAuthBridge() {
-  const clerk = useClerk()
-
-  return (
-    <App onSignOut={() => clerk.signOut()} />
-  )
+function AuthenticatedApp() {
+  return <App />
 }
 
-function MissingClerkKey() {
+function AppWithAuth() {
+  if (AUTH_ENABLED && clerkPublishableKey) {
+    return (
+      <ClerkProvider publishableKey={clerkPublishableKey}>
+        <ClerkTokenBridge />
+        <GlobalErrorBoundary>
+          <AuthenticatedApp />
+        </GlobalErrorBoundary>
+      </ClerkProvider>
+    )
+  }
+  // No Clerk — render app directly, no provider needed
   return (
-    <div className="flex h-screen w-screen items-center justify-center bg-black text-white">
-      <div className="rounded-xl border border-border-hard bg-bg-surface p-6 text-sm text-fg-secondary">
-        Missing `VITE_CLERK_PUBLISHABLE_KEY`. OAuth login cannot start.
-      </div>
-    </div>
+    <GlobalErrorBoundary>
+      <App />
+    </GlobalErrorBoundary>
   )
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    {clerkPublishableKey ? (
-      <ClerkProvider publishableKey={clerkPublishableKey} afterSignOutUrl="/">
-        <ClerkTokenBridge />
-        <GlobalErrorBoundary>
-          <AuthGate>
-            <AppAuthBridge />
-          </AuthGate>
-        </GlobalErrorBoundary>
-      </ClerkProvider>
-    ) : (
-      <MissingClerkKey />
-    )}
+    <AppWithAuth />
   </React.StrictMode>
 )

@@ -112,6 +112,10 @@ export default function SessionPicker({ open, onClose }: SessionPickerProps) {
     }) ?? null
   }, [races, selectedRace])
 
+  const sortedRaces = useMemo(() => {
+    return [...races].sort((a, b) => (a.round ?? 0) - (b.round ?? 0))
+  }, [races])
+
   if (!open) return null
 
   return (
@@ -127,7 +131,7 @@ export default function SessionPicker({ open, onClose }: SessionPickerProps) {
       
       {/* Ambient glow effects */}
       <div className="absolute top-1/4 left-1/4 h-96 w-96 rounded-full bg-accent/5 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-purple-500/5 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-accent/8 blur-[120px] pointer-events-none" />
 
       {/* Modal */}
       <div
@@ -138,7 +142,7 @@ export default function SessionPicker({ open, onClose }: SessionPickerProps) {
       >
         {/* Gradient border container */}
         <div className="relative rounded-3xl bg-gradient-to-br from-white/20 via-white/10 to-white/5 p-[1px]">
-          <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-accent/30 via-transparent to-purple-500/20 opacity-50" />
+          <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-accent/30 via-transparent to-accent/10 opacity-50" />
           
           {/* Inner modal content */}
           <div
@@ -163,7 +167,7 @@ export default function SessionPicker({ open, onClose }: SessionPickerProps) {
                 <p className="mt-1.5 text-sm text-text-muted/70">Choose year → race → session type</p>
                 
                 {/* Animated underline */}
-                <div className="absolute -bottom-1 left-0 h-0.5 w-0 animate-underline-expand bg-gradient-to-r from-accent to-purple-400 rounded-full" />
+                <div className="absolute -bottom-1 left-0 h-0.5 w-0 animate-underline-expand bg-gradient-to-r from-accent to-red-400 rounded-full" />
               </div>
               
               <button
@@ -197,7 +201,7 @@ export default function SessionPicker({ open, onClose }: SessionPickerProps) {
                     {/* Enhanced progress bar */}
                     <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-white/10">
                       <div 
-                        className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-accent via-purple-400 to-accent transition-all duration-500 ease-out"
+                        className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-accent via-red-500 to-accent transition-all duration-500 ease-out"
                         style={{ width: `${Math.round(progress * 100)}%` }}
                       >
                         <div className="absolute inset-0 bg-gradient-to-b from-white/30 to-transparent" />
@@ -250,7 +254,7 @@ export default function SessionPicker({ open, onClose }: SessionPickerProps) {
                         key={season.year}
                         className={`group/item relative w-full rounded-xl px-4 py-3.5 text-left text-sm font-semibold transition-all duration-300 ${
                           selectedYear === season.year
-                            ? 'bg-gradient-to-r from-accent/30 via-accent/20 to-purple-500/20 text-white border border-accent/40 shadow-lg shadow-accent/20'
+                            ? 'bg-gradient-to-r from-accent/30 via-accent/20 to-accent/10 text-white border border-accent/40 shadow-lg shadow-accent/20'
                             : 'text-text-secondary hover:bg-white/10 hover:text-white border border-transparent hover:border-white/10'
                         }`}
                         style={{ 
@@ -264,7 +268,7 @@ export default function SessionPicker({ open, onClose }: SessionPickerProps) {
                       >
                         {/* Glow effect for selected */}
                         {selectedYear === season.year && (
-                          <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-accent/20 to-purple-500/20 blur-xl transition-all duration-300 group-hover/item:blur-2xl" />
+                          <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-accent/20 to-red-500/10 blur-xl transition-all duration-300 group-hover/item:blur-2xl" />
                         )}
                         <span className="relative z-10">{season.year}</span>
                       </button>
@@ -309,12 +313,12 @@ export default function SessionPicker({ open, onClose }: SessionPickerProps) {
                       <SessionItemSkeleton key={i} />
                     ))
                   )}
-                  {races.map((race, i) => (
+                  {sortedRaces.map((race, i) => (
                     <button
                       key={race.race_name ?? race.name ?? `${race.display_name}-${i}`}
                       className={`group/item relative w-full rounded-xl px-4 py-3.5 text-left text-sm transition-all duration-300 ${
                         selectedRace === (race.race_name ?? race.name)
-                          ? 'bg-gradient-to-r from-accent/30 via-accent/20 to-purple-500/20 text-white border border-accent/40 shadow-lg shadow-accent/20'
+                          ? 'bg-gradient-to-r from-accent/30 via-accent/20 to-accent/10 text-white border border-accent/40 shadow-lg shadow-accent/20'
                           : 'text-text-secondary hover:bg-white/10 hover:text-white border border-transparent hover:border-white/10'
                       }`}
                       style={{ animation: `fadeInUp 0.3s ease-out ${i * 25}ms both` }}
@@ -327,7 +331,7 @@ export default function SessionPicker({ open, onClose }: SessionPickerProps) {
                       type="button"
                     >
                       {selectedRace === (race.race_name ?? race.name) && (
-                        <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-accent/20 to-purple-500/20 blur-xl transition-all duration-300 group-hover/item:blur-2xl" />
+                        <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-accent/20 to-red-500/10 blur-xl transition-all duration-300 group-hover/item:blur-2xl" />
                       )}
                       <span className="relative z-10 font-medium">{race.display_name ?? race.race_name ?? race.name ?? 'Unknown'}</span>
                     </button>
@@ -372,13 +376,14 @@ export default function SessionPicker({ open, onClose }: SessionPickerProps) {
                           if (!selectedYear || !selectedRaceObj) return
                           setPendingAction('session')
                           const raceKey = selectedRaceObj.race_name ?? selectedRaceObj.name ?? ''
-                          void Promise.allSettled([
-                            preload(selectedYear, raceKey, session),
-                            loadSession(selectedYear, raceKey, session)
-                          ]).then(() => {
-                            const state = useSessionStore.getState()
-                            if (state.loadingState === 'ready') handleClose()
-                          }).finally(() => setPendingAction(null))
+                          // Do not block the primary flow on feature preloading.
+                          void preload(selectedYear, raceKey, session).catch(() => {})
+                          void loadSession(selectedYear, raceKey, session)
+                            .then(() => {
+                              const state = useSessionStore.getState()
+                              if (state.loadingState === 'ready') handleClose()
+                            })
+                            .finally(() => setPendingAction(null))
                         }}
                         type="button"
                       >
@@ -405,80 +410,10 @@ export default function SessionPicker({ open, onClose }: SessionPickerProps) {
         </div>
       </div>
 
-      <style>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes shimmer {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(100%); }
-        }
-
-        @keyframes shimmer-progress {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(100%); }
-        }
-
-        @keyframes underline-expand {
-          from { width: 0; }
-          to { width: 60%; }
-        }
-
-        @keyframes gradient {
-          0% { background-position: 0% center; }
-          50% { background-position: 100% center; }
-          100% { background-position: 0% center; }
-        }
-
-        .animate-shimmer {
-          animation: shimmer 1.5s infinite;
-        }
-
-        .animate-shimmer-progress {
-          animation: shimmer-progress 1s infinite linear;
-        }
-
-        .animate-underline-expand {
-          animation: underline-expand 0.5s ease-out 0.3s forwards;
-          width: 0;
-        }
-
-        .animate-gradient {
-          animation: gradient 3s ease infinite;
-          background-size: 200% auto;
-        }
-
-        .scrollbar-custom {
-          scrollbar-width: thin;
-          scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
-        }
-
-        .scrollbar-custom::-webkit-scrollbar {
-          width: 6px;
-          height: 6px;
-        }
-
-        .scrollbar-custom::-webkit-scrollbar-track {
-          background: transparent;
-        }
-
-        .scrollbar-custom::-webkit-scrollbar-thumb {
-          background: rgba(255, 255, 255, 0.15);
-          border-radius: 3px;
-        }
-
-        .scrollbar-custom::-webkit-scrollbar-thumb:hover {
-          background: rgba(255, 255, 255, 0.25);
-        }
-      `}</style>
+      {/* Performance optimization: Move animations to CSS classes */}
+      <div className="sr-only" aria-hidden="true">
+        Session picker animations loaded
+      </div>
     </div>
   )
 }

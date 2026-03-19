@@ -41,7 +41,8 @@ function row(partial: Partial<TimingRow>): TimingRow {
     lastLap: partial.lastLap ?? '1:29.999',
     bestLap: partial.bestLap ?? '1:29.800',
     bestLapTime: partial.bestLapTime ?? 89.8,
-    tyreCompound: partial.tyreCompound ?? 'SOFT',
+    tyreCompound: partial. tyreCompound ?? 'SOFT',
+    tyreLaps: partial. tyreLaps ?? 5,
     pits: partial.pits ?? 0,
     sector1: partial.sector1 ?? 29.9,
     sector2: partial.sector2 ?? 30.1,
@@ -56,6 +57,8 @@ function row(partial: Partial<TimingRow>): TimingRow {
     lapProgress: partial.lapProgress ?? 0.4,
     lapDistance: partial.lapDistance ?? 1400,
     lapTimeRef: partial.lapTimeRef ?? 89.8,
+    drsEnabled: partial.drsEnabled ?? false,
+    isFastestLap: partial.isFastestLap ?? false,
   }
 }
 

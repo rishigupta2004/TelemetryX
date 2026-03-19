@@ -18,17 +18,13 @@ const extractTime = (payload: unknown): number | null => {
   return null
 }
 
-const selectPlaybackActions = (s: ReturnType<typeof usePlaybackStore.getState>) => ({
-  setCurrentTime: s.setCurrentTime,
-  setExternalClock: s.setExternalClock
-})
-
 export function usePlaybackTick() {
   const selectedYear = useSessionStore((s) => s.selectedYear)
   const selectedRace = useSessionStore((s) => s.selectedRace)
   const selectedSession = useSessionStore((s) => s.selectedSession)
 
-  const { setCurrentTime, setExternalClock } = usePlaybackStore(selectPlaybackActions)
+  const setCurrentTime = usePlaybackStore(s => s.setCurrentTime)
+  const setExternalClock = usePlaybackStore(s => s.setExternalClock)
 
   const lastTimeRef = useRef<number | null>(null)
   const pendingIdleRef = useRef<number | null>(null)

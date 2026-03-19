@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { api } from '../api/client'
+import { api, isAbortLikeError } from '../api/client'
 import type { TelemetryResponse } from '../types'
 
 let latestTelemetryRequestId = 0
@@ -122,6 +122,7 @@ export const useTelemetryStore = create<TelemetryState>((set, get) => ({
 
   loadTelemetry: async (year, race, session, t0, t1, signal) => {
     const sessionKey = `${year}|${race}|${session}`
+
     const reqStart = Math.max(0, Math.floor(t0))
     const reqEnd = Math.max(reqStart, Math.ceil(t1))
     const state = get()
@@ -163,6 +164,10 @@ export const useTelemetryStore = create<TelemetryState>((set, get) => ({
       set({ telemetryData: workerResult, loadingState: 'ready', windowStart: nextStart, windowEnd: nextEnd, renderedStart: fetchStart, renderedEnd: fetchEnd, sessionKey })
     } catch (e) {
       if (reqId !== latestTelemetryRequestId) return
+      if (isAbortLikeError(e)) {
+        set((s) => ({ loadingState: s.telemetryData ? 'ready' : 'idle', error: null, sessionKey }))
+        return
+      }
       set({ loadingState: 'error', error: String(e), sessionKey })
     }
   },

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useCallback } from 'react'
+import type { RefObject } from 'react'
 import { Point } from '../lib/trackGeometry'
 import { drawPath } from '../lib/trackRendering'
 import { buildZonePoints } from '../lib/trackHelpers'
@@ -170,6 +171,7 @@ const drawCar = (
 
 export const useDynamicTrackRenderer = (
   trackData: TrackData | null,
+  containerRef: RefObject<HTMLDivElement | null>,
   resolvedCarsRef: React.MutableRefObject<ResolvedCar[]>,
   currentFlagsRef: React.MutableRefObject<CurrentFlags>,
   needsRenderRef: React.MutableRefObject<boolean>,
@@ -206,17 +208,17 @@ export const useDynamicTrackRenderer = (
     if (!ctx) return
 
     const { width, height, bounds } = trackData
+    const containerWidth = Math.max(1, Math.floor(containerRef.current?.clientWidth ?? width))
+    const containerHeight = Math.max(1, Math.floor(containerRef.current?.clientHeight ?? height))
     const dpr = window.devicePixelRatio || 1
 
-    canvas.width = width * dpr
-    canvas.height = height * dpr
-    canvas.style.width = `${width}px`
-    canvas.style.height = `${height}px`
+    canvas.width = containerWidth * dpr
+    canvas.height = containerHeight * dpr
+    canvas.style.width = '100%'
+    canvas.style.height = '100%'
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-    ctx.translate(-bounds.minX, bounds.minY)
-    ctx.scale(1, -1)
+    ctx.clearRect(0, 0, containerWidth, containerHeight)
     ctx.translate(-bounds.minX, -bounds.minY)
-    ctx.clearRect(bounds.minX, bounds.minY, width, height)
 
     const currentFlags = currentFlagsRef.current
     const cars = resolvedCarsRef.current
@@ -276,7 +278,7 @@ export const useDynamicTrackRenderer = (
     }
 
     rafRef.current = requestAnimationFrame(render)
-  }, [trackData, isCompact, resolvedCarsRef, currentFlagsRef, needsRenderRef, hoveredDriverRef, primaryDriverRef, compareDriverRef])
+  }, [trackData, containerRef, isCompact, resolvedCarsRef, currentFlagsRef, needsRenderRef, hoveredDriverRef, primaryDriverRef, compareDriverRef])
 
   useEffect(() => {
     rafRef.current = requestAnimationFrame(render)

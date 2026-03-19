@@ -1,265 +1,59 @@
-import { memo, useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react'
-import { animate } from 'animejs'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { COMPOUND_COLORS } from '../lib/colors'
-import { useDriverStore } from '../stores/driverStore'
-import { useF1Flip } from '../hooks/useF1Flip'
-import { useFlashObserver } from '../hooks/useFlashObserver'
 import type { TimingRow } from '../hooks/useTimingData'
 
 interface TimingTowerProps {
   rows: TimingRow[]
-  sessionBestLap?: number | null
-  status: 'loading' | 'ready' | 'empty' | 'error'
-  error: string | null
+  status?: 'loading' | 'ready' | 'empty' | 'error'
+  error?: string | null
 }
 
-const ROW_HEIGHT = 32
-const OVERSCAN = 10
-const ITEM_KEY_PREFIX = 'timing-row-'
-
-const STABLE_EMPTY_OBJ = {}
-const STABLE_NULL: null = null
+const SECTOR_COLORS = {
+  purple: '#a855f7',
+  green: '#00d846',
+  yellow: '#ffd700',
+  white: '#a0a0a0'
+} as const
 
 function cellLap(value: number | null): string {
-  if (value == null || !Number.isFinite(value)) return ''
+  if (value == null || !Number.isFinite(value)) return '—'
   return value.toFixed(3)
 }
 
-function areRowsEqual(a: TimingRow, b: TimingRow): boolean {
-  return (
-    a.position === b.position &&
-    a.driverCode === b.driverCode &&
-    a.driverNumber === b.driverNumber &&
-    a.teamColor === b.teamColor &&
-    a.gap === b.gap &&
-    a.interval === b.interval &&
-    a.lastLap === b.lastLap &&
-    a.bestLap === b.bestLap &&
-    a.bestLapTime === b.bestLapTime &&
-    a. tyreCompound === b. tyreCompound &&
-    a.pits === b.pits &&
-    a.sector1 === b.sector1 &&
-    a.sector2 === b.sector2 &&
-    a.sector3 === b.sector3 &&
-    a.s1Color === b.s1Color &&
-    a.s2Color === b.s2Color &&
-    a.s3Color === b.s3Color &&
-    a.status === b.status &&
-    a.lapsCompleted === b.lapsCompleted
-  )
-}
+export default function TimingTower({ rows, status = 'ready', error = null }: TimingTowerProps) {
+  const [selectedDriver, setSelectedDriver] = useState<number | null>(null)
+  const [bufferedGapInterval, setBufferedGapInterval] = useState<Map<number, { gap: string; interval: string }>>(new Map())
+  const prevSignatureRef = useRef('')
 
-const timingRowCache = new Map<string, TimingRow>()
-const getStableRowKey = (row: TimingRow): string => {
-  return `${row.driverNumber}-${row.position}-${row.lastLap}-${row.bestLapTime ?? 'null'}`
-}
-
-function statePanel(label: string, detail: string, tone: 'muted' | 'error' = 'muted') {
-  const accentClass = tone === 'error' ? 'text-red-danger border-red-danger bg-red-ghost' : 'text-fg-muted border-border-hard bg-bg-panel'
-  return (
-    <div className={`flex h-full items-center justify-center rounded-[2px] border p-4 ${accentClass}`}>
-      <div className="text-center">
-        <div className="text-sm font-bold tracking-wide" style={{ fontFamily: 'var(--font-heading)' }}>{label}</div>
-        <div className="mt-1 text-xs">{detail}</div>
-      </div>
-    </div>
-  )
-}
-
-function getSectorBlockStyle(colorCode: string) {
-  if (colorCode === 'purple') return 'bg-purple-best text-purple-core'
-  if (colorCode === 'green') return 'bg-green-best text-green-live'
-  return 'bg-transparent text-fg-primary'
-}
-
-interface TimingRowItemProps {
-  row: TimingRow
-  idx: number
-  primaryDriver: string | null
-  compareDriver: string | null
-  sessionBestLap: number | null
-  onSelect: (driverCode: string, toggleCompare: boolean) => void
-}
-
-const TimingRowItem = memo(function TimingRowItem({
-  row,
-  idx,
-  primaryDriver,
-  compareDriver,
-  sessionBestLap,
-  onSelect
-}: TimingRowItemProps) {
-  const isPrimary = primaryDriver === row.driverCode
-  const isCompare = compareDriver === row.driverCode
-  const isSelected = isPrimary || isCompare
-
-  const tyreKey = row.tyreCompound?.toUpperCase()
-  const tyreColor = COMPOUND_COLORS[tyreKey] ?? '#666666'
-
-  const isRetired = row.status === 'dnf' || row.status === 'dns' || row.status === 'out'
-
-  const bgClass = isSelected ? 'bg-bg-elevated' : 'bg-transparent hover:bg-bg-elevated'
-
-  let lapTimeStyle = 'bg-transparent text-fg-primary'
-  let bestFlashColor = ''
-  if (row.bestLapTime != null && row.lastLap != null) {
-    if (sessionBestLap != null && Math.abs(row.bestLapTime - sessionBestLap) < 1e-6) {
-      lapTimeStyle = 'bg-purple-best text-purple-core'
-      bestFlashColor = '#B138FF'
-    } else {
-      lapTimeStyle = 'bg-green-best text-green-live'
-      bestFlashColor = '#00FF00'
-    }
+  if (status === 'loading' || !rows || !Array.isArray(rows)) {
+    return <div className="p-3 text-text-muted">Loading timing data...</div>
   }
 
-  const posRef = useF1Flip(row.position)
-  const gapRef = useF1Flip(row.gap)
-  const intervalRef = useF1Flip(row.interval)
-  const lastLapRef = useF1Flip(row.lastLap)
-  const lapTimeFlashRef = useFlashObserver(row.lastLap, !!bestFlashColor, bestFlashColor)
+  if (status === 'error') {
+    return <div className="p-3 text-red-400">{error ?? 'Failed to load timing data'}</div>
+  }
 
-  const s1FlashColor = row.s1Color === 'purple' ? '#B138FF' : row.s1Color === 'green' ? '#00FF00' : ''
-  const s2FlashColor = row.s2Color === 'purple' ? '#B138FF' : row.s2Color === 'green' ? '#00FF00' : ''
-  const s3FlashColor = row.s3Color === 'purple' ? '#B138FF' : row.s3Color === 'green' ? '#00FF00' : ''
-
-  const s1Ref = useFlashObserver(row.sector1, !!s1FlashColor, s1FlashColor)
-  const s2Ref = useFlashObserver(row.sector2, !!s2FlashColor, s2FlashColor)
-  const s3Ref = useFlashObserver(row.sector3, !!s3FlashColor, s3FlashColor)
-
-  const handleClick = useCallback(() => {
-    onSelect(row.driverCode, false)
-  }, [onSelect, row.driverCode])
-
-  const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      onSelect(row.driverCode, event.ctrlKey || event.metaKey)
-    }
-  }, [onSelect, row.driverCode])
-
-  return (
-    <div
-      className={`absolute left-0 top-0 flex w-full cursor-pointer items-center border-b border-border-micro ${bgClass}`}
-      style={{
-        height: ROW_HEIGHT,
-        transform: `translate3d(0, ${idx * ROW_HEIGHT}px, 0)`,
-        opacity: isRetired ? 0.4 : 1,
-        willChange: 'transform',
-        contain: 'layout paint',
-      }}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
-      role="button"
-      tabIndex={0}
-      aria-label={`${row.driverCode} position ${row.position}`}
-    >
-      <div className="flex items-center min-w-max mx-auto px-2">
-        {/* 1. POS */}
-        <div className="w-[32px] text-center shrink-0">
-          <span ref={posRef} className="font-mono text-[12px] font-bold text-fg-secondary inline-block">
-            {row.position}
-          </span>
-        </div>
-
-        {/* 2. PIT */}
-        <div className="w-[16px] text-center shrink-0 text-red-core font-bold text-[10px]">
-          {row.pits > 0 ? 'P' : ''}
-        </div>
-
-        {/* 3. TEAM COLOR */}
-        <div className="w-[4px] h-[20px] shrink-0 ml-1 rounded-[1px]" style={{ backgroundColor: row.teamColor }} />
-
-        {/* 4. DRIVER CODE */}
-        <div className="w-[48px] shrink-0 pl-2">
-          <span className="text-[14px] font-bold text-fg-primary leading-none" style={{ fontFamily: 'var(--font-heading)' }}>
-            {row.driverCode}
-          </span>
-        </div>
-
-        {/* 5. TYRE */}
-        <div className="w-[24px] shrink-0 flex items-center justify-center gap-[2px]">
-          <div className="w-[4px] h-[4px] rounded-full" style={{ backgroundColor: tyreColor }} />
-          <span className="text-[11px] font-bold text-fg-muted" style={{ fontFamily: 'var(--font-heading)' }}>
-            {tyreKey?.[0] ?? '?'}
-          </span>
-        </div>
-
-        {/* 6. GAP TO LEADER */}
-        <div className="w-[64px] shrink-0 text-right pr-2">
-          <span ref={gapRef} className="font-mono text-[13px] text-fg-secondary inline-block">
-            {row.gap === 'LEADER' ? '' : row.gap}
-          </span>
-        </div>
-
-        {/* 7. GAP TO AHEAD */}
-        <div className="w-[64px] shrink-0 text-right pr-2">
-          <span ref={intervalRef} className="font-mono text-[13px] text-fg-muted inline-block">
-            {row.interval === '—' || row.interval === '+0.000s' ? '' : row.interval}
-          </span>
-        </div>
-
-        {/* 8. S1 */}
-        <div ref={s1Ref as any} className={`w-[56px] h-full shrink-0 flex items-center justify-center font-mono text-[12px] ${getSectorBlockStyle(row.s1Color)}`}>
-          {cellLap(row.sector1)}
-        </div>
-
-        {/* 8. S2 */}
-        <div ref={s2Ref as any} className={`w-[56px] h-full shrink-0 flex items-center justify-center font-mono text-[12px] ${getSectorBlockStyle(row.s2Color)} border-l border-border-micro`}>
-          {cellLap(row.sector2)}
-        </div>
-
-        {/* 8. S3 */}
-        <div ref={s3Ref as any} className={`w-[56px] h-full shrink-0 flex items-center justify-center font-mono text-[12px] ${getSectorBlockStyle(row.s3Color)} border-l border-border-micro`}>
-          {cellLap(row.sector3)}
-        </div>
-
-        {/* 9. LAP TIME */}
-        <div ref={lapTimeFlashRef as any} className={`w-[72px] h-full shrink-0 flex items-center justify-end pr-2 font-mono text-[13px] font-bold border-l border-border-micro ${lapTimeStyle}`}>
-          <div ref={lastLapRef as any}>{row.lastLap || ''}</div>
-        </div>
-      </div>
-    </div>
-  )
-}, (prev, next) => {
-  if (prev.idx !== next.idx) return false
-  if (prev.primaryDriver !== next.primaryDriver) return false
-  if (prev.compareDriver !== next.compareDriver) return false
-  if (prev.sessionBestLap !== next.sessionBestLap) return false
-  if (prev.onSelect !== next.onSelect) return false
-  return areRowsEqual(prev.row, next.row)
-})
-
-export default function TimingTower({ rows, status, error }: TimingTowerProps) {
-  const [isPending, startTransition] = useTransition()
-  const primaryDriver = useDriverStore((s) => s.primaryDriver)
-  const compareDriver = useDriverStore((s) => s.compareDriver)
-  const selectPrimary = useDriverStore((s) => s.selectPrimary)
-  const selectCompare = useDriverStore((s) => s.selectCompare)
-  const containerRef = useRef<HTMLDivElement | null>(null)
-  const wrapperRef = useRef<HTMLDivElement | null>(null)
-  const [scrollTop, setScrollTop] = useState(0)
-  const [viewportHeight, setViewportHeight] = useState(560)
-  const [isAnimatingIn, setIsAnimatingIn] = useState(true)
-  const frameRef = useRef<number | null>(null)
-  const prevRowsRef = useRef<TimingRow[]>([])
-  const rowsStableRef = useRef<TimingRow[]>(rows)
+  if (!rows.length) {
+    return <div className="p-3 text-text-muted">No timing data available</div>
+  }
 
   useEffect(() => {
-    if (isAnimatingIn && wrapperRef.current) {
-      animate(wrapperRef.current, {
-        opacity: [0, 1],
-        translateY: [10, 0],
-        duration: 350,
-        easing: 'cubicBezier(0.16, 1, 0.3, 1)',
-        complete: () => setIsAnimatingIn(false)
-      })
-    }
-  }, [isAnimatingIn])
+    const signature = rows.map((r) => `${r.driverNumber}:${r.position}:${r.pits}`).join('|')
+    const eventChanged = signature !== prevSignatureRef.current
+    prevSignatureRef.current = signature
 
-  useEffect(() => {
-    if (!isAnimatingIn && wrapperRef.current) {
-      wrapperRef.current.style.opacity = '1'
+    const commit = () => {
+      setBufferedGapInterval(new Map(rows.map((r) => [r.driverNumber, { gap: r.gap, interval: r.interval }])))
     }
-  }, [isAnimatingIn])
+
+    if (!bufferedGapInterval.size || eventChanged) {
+      commit()
+      return
+    }
+
+    const id = window.setTimeout(commit, 2500)
+    return () => window.clearTimeout(id)
+  }, [rows, bufferedGapInterval.size])
 
   const sessionBestLap = useMemo(() => {
     let min: number | null = null
@@ -270,110 +64,77 @@ export default function TimingTower({ rows, status, error }: TimingTowerProps) {
     return min
   }, [rows])
 
-  useEffect(() => {
-    const node = containerRef.current
-    if (!node) return
-
-    let ticking = false
-    const onScroll = () => {
-      if (ticking) return
-      ticking = true
-      frameRef.current = window.requestAnimationFrame(() => {
-        ticking = false
-        setScrollTop(node.scrollTop)
-      })
-    }
-    node.addEventListener('scroll', onScroll, { passive: true })
-    onScroll()
-
-    const ro = new ResizeObserver((entries) => {
-      const next = entries[0]?.contentRect.height ?? node.clientHeight
-      setViewportHeight(next)
-    })
-    ro.observe(node)
-
-    return () => {
-      node.removeEventListener('scroll', onScroll)
-      ro.disconnect()
-      if (frameRef.current != null) {
-        window.cancelAnimationFrame(frameRef.current)
-        frameRef.current = null
-      }
-    }
-  }, [])
-
-  const virtualWindow = useMemo(() => {
-    const totalRows = rows.length
-    const visibleCount = Math.max(10, Math.ceil(viewportHeight / ROW_HEIGHT))
-    const startIndex = Math.max(0, Math.floor(scrollTop / ROW_HEIGHT) - OVERSCAN)
-    const endIndex = Math.min(totalRows, startIndex + visibleCount + OVERSCAN * 2)
-    return {
-      totalRows,
-      startIndex,
-      endIndex,
-      visibleRows: rows.slice(startIndex, endIndex),
-    }
-  }, [rows, viewportHeight, scrollTop])
-
-  const stableOnSelect = useCallback(
-    (driverCode: string, toggleCompare: boolean) => {
-      startTransition(() => {
-        if (toggleCompare) {
-          const isCompare = compareDriver === driverCode
-          selectCompare(isCompare ? null : driverCode)
-          return
-        }
-        selectPrimary(driverCode)
-      })
-    },
-    [compareDriver, selectCompare, selectPrimary]
-  )
-
-  if (status === 'error') {
-    return statePanel('DATA ERROR', error || 'UNABLE TO RENDER CLASSIFICATION', 'error')
-  }
-  if (status === 'loading') {
-    return statePanel('INITIALIZING SYSTEM', 'AWAITING TELEMETRY STREAM...')
-  }
-  if (!rows.length || status === 'empty') {
-    return statePanel('NO DATA', 'STANDBY FOR SESSION ACTIVITY')
-  }
-
   return (
-    <div ref={containerRef} className="h-full overflow-x-auto overflow-y-auto w-full border border-border-hard bg-bg-surface flex flex-col items-center" style={{ contain: 'strict layout paint style size' }}>
-      <div ref={wrapperRef} className="w-full relative min-w-max pb-[24px]" style={{ willChange: 'contents', opacity: 0 }}>
-        {/* Table Header */}
-        <div className="sticky top-0 z-10 flex h-6 w-full items-center border-b border-border-hard bg-bg-surface text-[10px] font-bold text-fg-muted tracking-widest px-2" style={{ fontFamily: 'var(--font-heading)' }}>
-          <div className="flex items-center mx-auto">
-            <div className="w-[32px] text-center">POS</div>
-            <div className="w-[16px] text-center">PT</div>
-            <div className="w-[4px] ml-1" />
-            <div className="w-[48px] pl-2 text-left">DVR</div>
-            <div className="w-[24px] text-center">TYR</div>
-            <div className="w-[64px] text-center pr-2">LEADER</div>
-            <div className="w-[64px] text-center pr-2">AHEAD</div>
-            <div className="w-[56px] text-center border-border-micro">S1</div>
-            <div className="w-[56px] text-center border-l border-border-micro">S2</div>
-            <div className="w-[56px] text-center border-l border-border-micro">S3</div>
-            <div className="w-[72px] text-center border-l border-border-micro pr-2">LAP</div>
-          </div>
-        </div>
+    <div className="h-full overflow-x-auto overflow-y-auto rounded-md border border-border bg-bg-secondary shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]">
+      <table className="min-w-[676px] table-fixed text-xs">
+        <thead className="sticky top-0 z-10 bg-bg-secondary/95 backdrop-blur-sm">
+          <tr className="h-7 border-b border-border text-text-secondary">
+            <th className="w-9 px-1 text-left">POS</th>
+            <th className="w-[60px] px-1 text-left">DRIVER</th>
+            <th className="w-[72px] px-1 text-right">GAP</th>
+            <th className="w-[72px] px-1 text-right">INT</th>
+            <th className="w-[80px] px-1 text-right">LAST</th>
+            <th className="w-[80px] px-1 text-right">BEST</th>
+            <th className="w-9 px-1 text-left">TYRE</th>
+            <th className="w-9 px-1 text-right">PITS</th>
+            <th className="w-16 px-1 text-right">S1</th>
+            <th className="w-16 px-1 text-right">S2</th>
+            <th className="w-16 px-1 text-right">S3</th>
+          </tr>
+        </thead>
 
-        {/* Rows Container */}
-        <div className="relative w-full" style={{ height: rows.length * ROW_HEIGHT }}>
-          {virtualWindow.visibleRows.map((row, visibleIdx) => (
-            <TimingRowItem
-              key={`${ITEM_KEY_PREFIX}${row.driverNumber}`}
-              row={row}
-              idx={virtualWindow.startIndex + visibleIdx}
-              primaryDriver={primaryDriver}
-              compareDriver={compareDriver}
-              sessionBestLap={sessionBestLap}
-              onSelect={stableOnSelect}
-            />
-          ))}
-        </div>
-      </div>
+        <tbody>
+          {rows.map((row, idx) => {
+            const tyreKey = row.tyreCompound?.toUpperCase()
+            const tyreColor = COMPOUND_COLORS[tyreKey] ?? '#666666'
+            const tyreTextColor = tyreKey === 'HARD' ? '#000000' : '#ffffff'
+            const bestIsSessionBest =
+              row.bestLapTime != null && sessionBestLap != null && Math.abs(row.bestLapTime - sessionBestLap) < 1e-6
+
+            const baseBg = idx % 2 === 0 ? 'var(--bg-card)' : 'var(--bg-secondary)'
+            const selectedBg = selectedDriver === row.driverNumber ? 'var(--bg-selected)' : baseBg
+
+            return (
+              <tr
+                key={row.driverNumber}
+                aria-label={`${row.driverCode} position ${row.position}`}
+                className="h-7 cursor-pointer border-b border-border/40 hover:bg-bg-hover"
+                style={{ backgroundColor: selectedBg }}
+                onClick={() => {
+                  setSelectedDriver(row.driverNumber)
+                }}
+                title={`${row.teamName} - Lap ${row.lapsCompleted}`}
+              >
+                <td className="px-1 font-bold">{row.position}</td>
+                <td className="px-1">
+                  <div
+                    className="truncate border-l-[3px] pl-1.5 font-semibold"
+                    style={{ borderLeftColor: row.teamColor }}
+                  >
+                    {row.driverCode}
+                  </div>
+                </td>
+                <td className="px-1 text-right font-mono">{bufferedGapInterval.get(row.driverNumber)?.gap ?? row.gap}</td>
+                <td className="px-1 text-right font-mono">{bufferedGapInterval.get(row.driverNumber)?.interval ?? row.interval}</td>
+                <td className="px-1 text-right font-mono">{row.lastLap}</td>
+                <td className={`px-1 text-right font-mono ${bestIsSessionBest ? 'text-[#a855f7]' : ''}`}>{row.bestLap}</td>
+                <td className="px-1">
+                  <div
+                    className="flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold"
+                    style={{ backgroundColor: tyreColor, color: tyreTextColor }}
+                  >
+                    {tyreKey?.[0] ?? '?'}
+                  </div>
+                </td>
+                <td className="px-1 text-right font-mono">{row.pits > 0 ? row.pits : '—'}</td>
+                <td className="px-1 text-right font-mono" style={{ color: SECTOR_COLORS[row.s1Color] }}>{cellLap(row.sector1)}</td>
+                <td className="px-1 text-right font-mono" style={{ color: SECTOR_COLORS[row.s2Color] }}>{cellLap(row.sector2)}</td>
+                <td className="px-1 text-right font-mono" style={{ color: SECTOR_COLORS[row.s3Color] }}>{cellLap(row.sector3)}</td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
     </div>
   )
 }

@@ -4,6 +4,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { describe, expect, it, vi, beforeEach } from 'vitest'
 
 const compareMock = vi.fn()
+const backtestMock = vi.fn()
 
 function makeComparePayload(baselines: number[], targetYear: number) {
   return {
@@ -25,6 +26,7 @@ function makeComparePayload(baselines: number[], targetYear: number) {
       target_year: targetYear,
       race_name: 'Test GP',
       team_profile: 'balanced',
+      track_type: 'medium',
       n_samples: 1200,
       seed: baseline + targetYear,
       diagnostics: {
@@ -79,9 +81,31 @@ function makeComparePayload(baselines: number[], targetYear: number) {
   }
 }
 
+function makeBacktestPayload() {
+  return {
+    baseline_year: 2018,
+    target_year: 2021,
+    shift_label: '2018→2021',
+    team_profile: 'balanced',
+    n_samples: 1200,
+    backtest_results: [
+      { metric: 'Points', predicted: 15.5, actual: 14.2, error: 1.3 },
+      { metric: 'Finish Position', predicted: 4.2, actual: 4.5, error: -0.3 },
+    ],
+    accuracy_summary: {
+      mae_points: 1.3,
+      mae_position: 0.3,
+      has_comparison: true,
+    },
+    diagnostics: { elapsed_ms: 45.2 },
+    notes: ['Backtest comparison complete'],
+  }
+}
+
 vi.mock('../../api/client', () => ({
   api: {
     getRegulationSimulationCompare: (...args: unknown[]) => compareMock(...args),
+    getRegulationSimulationBacktest: (...args: unknown[]) => backtestMock(...args),
   },
 }))
 
@@ -95,11 +119,13 @@ import { SimulationView } from '../../views/SimulationView'
 describe('SimulationView', () => {
   beforeEach(() => {
     compareMock.mockReset()
+    backtestMock.mockReset()
     compareMock.mockImplementation((_race: string, params?: { baselineYears?: number[]; targetYear?: number }) => {
       const baselines = (params?.baselineYears || [2025]).slice().sort((a, b) => a - b)
       const target = params?.targetYear ?? 2026
       return Promise.resolve(makeComparePayload(baselines, target))
     })
+    backtestMock.mockImplementation(() => Promise.resolve(makeBacktestPayload()))
   })
 
   it('loads with 2025 vs 2026 as default', async () => {
@@ -152,5 +178,50 @@ describe('SimulationView', () => {
         nSamples: 1200,
       })
     })
+  })
+
+  it('shows backtest panel and runs backtest', async () => {
+    render(<SimulationView active />)
+    await waitFor(() => expect(compareMock).toHaveBeenCalled())
+
+    expect(await screen.findByText('Accuracy Backtest')).toBeTruthy()
+    expect(await screen.findByText('Historical regulation shift validation')).toBeTruthy()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Run Backtest' }))
+
+    await waitFor(() => expect(backtestMock).toHaveBeenCalled())
+    const backtestCall = backtestMock.mock.calls[0]
+    expect(backtestCall[0]).toMatchObject({
+      baselineYear: 2018,
+      targetYear: 2021,
+      teamProfile: 'balanced',
+      nSamples: 1200,
+    })
+
+    expect(await screen.findByText('Accuracy Metrics')).toBeTruthy()
+    expect(await screen.findByText(/MAE Points:/)).toBeTruthy()
+    expect(await screen.findByText(/MAE Position:/)).toBeTruthy()
+  })
+
+  it('allows changing regulation shift in backtest', async () => {
+    render(<SimulationView active />)
+    await waitFor(() => expect(compareMock).toHaveBeenCalled())
+
+    fireEvent.change(screen.getByLabelText('Regulation shift'), { target: { value: '2021-2022' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Run Backtest' }))
+
+    await waitFor(() => expect(backtestMock).toHaveBeenCalled())
+    const backtestCall = backtestMock.mock.calls[0]
+    expect(backtestCall[0]).toMatchObject({
+      baselineYear: 2021,
+      targetYear: 2022,
+    })
+  })
+
+  it('shows track type in simulation results', async () => {
+    render(<SimulationView active />)
+    await waitFor(() => expect(compareMock).toHaveBeenCalled())
+
+    expect(await screen.findByText('medium')).toBeTruthy()
   })
 })

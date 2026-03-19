@@ -6,9 +6,11 @@ import type { DriverCareerProfile, ProfilesResponse, TeamCareerProfile } from '.
 
 type Mode = 'drivers' | 'teams'
 
-function imageOrFallback(value: string | null | undefined, label: string): string {
-  if (value && value.trim()) return value
-  return `https://placehold.co/640x640/0b1428/c8dcff?text=${encodeURIComponent(label || 'F1')}`
+function initials(label: string): string {
+  const parts = label.trim().split(/\s+/)
+  if (!parts.length) return '?'
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase()
+  return `${parts[0][0] ?? ''}${parts[parts.length - 1][0] ?? ''}`.toUpperCase()
 }
 
 function fmtYears(years: number[]): string {
@@ -19,7 +21,7 @@ function fmtYears(years: number[]): string {
 
 function Stat({ label, value }: { label: string; value: string | number | null | undefined }) {
   return (
-    <div className="rounded-lg border border-border-hard bg-white/5 p-2 text-center">
+    <div className="rounded-md border border-border bg-white/5 p-2 text-center">
       <div className="font-mono text-sm text-fg-primary">{value ?? '-'}</div>
       <div className="text-[10px] text-fg-muted">{label}</div>
     </div>
@@ -45,7 +47,7 @@ export const ProfilesView = React.memo(function ProfilesView() {
     setLoading(true)
     setError(null)
     api
-      .getProfiles(true)
+      .getProfiles(false)
       .then((res) => {
         if (!active) return
         setPayload(res)
@@ -147,7 +149,7 @@ export const ProfilesView = React.memo(function ProfilesView() {
 
   return (
     <div className="flex h-full min-h-0 flex-col gap-3 p-5 xl:p-6">
-      <div className="bg-bg-surface border border-border-hard px-4 py-3">
+      <div className="bg-bg-surface border border-border rounded-md px-4 py-3">
         <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-fg-secondary">Profiles</div>
         <div className="mt-1 text-xl font-semibold text-fg-primary">Driver + Team Dossiers</div>
         <div className="mt-1 text-xs text-fg-muted">
@@ -159,14 +161,14 @@ export const ProfilesView = React.memo(function ProfilesView() {
         <button
           type="button"
           onClick={() => setMode('drivers')}
-          className={`rounded-lg border px-3 py-1.5 text-xs font-semibold ${mode === 'drivers' ? 'border-accent bg-accent/20 text-fg-primary' : 'border-white/12 bg-black/15 text-fg-secondary'}`}
+          className={`rounded-md border px-3 py-1.5 text-xs font-semibold ${mode === 'drivers' ? 'border-accent bg-accent/20 text-fg-primary' : 'border-border bg-black/15 text-fg-secondary'}`}
         >
           Drivers
         </button>
         <button
           type="button"
           onClick={() => setMode('teams')}
-          className={`rounded-lg border px-3 py-1.5 text-xs font-semibold ${mode === 'teams' ? 'border-accent bg-accent/20 text-fg-primary' : 'border-white/12 bg-black/15 text-fg-secondary'}`}
+          className={`rounded-md border px-3 py-1.5 text-xs font-semibold ${mode === 'teams' ? 'border-accent bg-accent/20 text-fg-primary' : 'border-border bg-black/15 text-fg-secondary'}`}
         >
           Teams
         </button>
@@ -174,12 +176,12 @@ export const ProfilesView = React.memo(function ProfilesView() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder={mode === 'drivers' ? 'Search driver/team/nationality...' : 'Search team...'}
-          className="ml-auto w-[320px] max-w-full rounded-lg border border-white/12 bg-black/20 px-3 py-1.5 text-sm text-fg-primary outline-none"
+          className="ml-auto w-[320px] max-w-full rounded-md border border-border bg-bg-inset px-3 py-1.5 text-sm text-fg-primary outline-none focus:border-accent focus:shadow-[0_0_0_1px_rgba(225,6,0,0.2)]"
         />
       </div>
 
       <div className="grid min-h-0 flex-1 grid-cols-1 gap-3 xl:grid-cols-[320px_1fr]">
-        <aside className="bg-bg-surface border border-border-hard min-h-0 overflow-hidden p-2.5">
+        <aside className="bg-bg-surface border border-border rounded-md min-h-0 overflow-hidden p-2.5">
           <div className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-fg-secondary">
             {mode === 'drivers' ? `Drivers (${filteredDrivers.length})` : `Teams (${filteredTeams.length})`}
           </div>
@@ -195,7 +197,13 @@ export const ProfilesView = React.memo(function ProfilesView() {
                       onClick={() => setSelectedDriverName(driver.driverName)}
                       className={`flex w-full items-center gap-2 rounded-lg border px-2 py-1.5 text-left transition-colors ${selected ? 'border-accent bg-accent/20' : 'border-border-hard bg-black/15 hover:bg-black/30'}`}
                     >
-                      <img src={imageOrFallback(img, driver.driverName)} alt={driver.driverName} className="h-8 w-8 rounded object-cover" loading="lazy" />
+                      {img ? (
+                        <img src={img} alt={driver.driverName} className="h-8 w-8 rounded object-cover" loading="lazy" />
+                      ) : (
+                        <div className="flex h-8 w-8 items-center justify-center rounded bg-black/40 text-[10px] font-semibold text-white">
+                          {initials(driver.driverName)}
+                        </div>
+                      )}
                       <div className="min-w-0">
                         <div className="truncate text-xs font-semibold text-fg-primary">{driver.driverName}</div>
                         <div className="truncate text-[10px] text-fg-muted">{driver.teamName}</div>
@@ -213,7 +221,13 @@ export const ProfilesView = React.memo(function ProfilesView() {
                       onClick={() => setSelectedTeamName(team.teamName)}
                       className={`flex w-full items-center gap-2 rounded-lg border px-2 py-1.5 text-left transition-colors ${selected ? 'border-accent bg-accent/20' : 'border-border-hard bg-black/15 hover:bg-black/30'}`}
                     >
-                      <img src={imageOrFallback(img, team.teamName)} alt={team.teamName} className="h-8 w-8 rounded object-cover" loading="lazy" />
+                      {img ? (
+                        <img src={img} alt={team.teamName} className="h-8 w-8 rounded object-cover" loading="lazy" />
+                      ) : (
+                        <div className="flex h-8 w-8 items-center justify-center rounded bg-black/40 text-[10px] font-semibold text-white">
+                          {initials(team.teamName)}
+                        </div>
+                      )}
                       <div className="min-w-0">
                         <div className="truncate text-xs font-semibold text-fg-primary">{team.teamName}</div>
                         <div className="truncate text-[10px] text-fg-muted">{team.seasons} seasons</div>
@@ -224,17 +238,23 @@ export const ProfilesView = React.memo(function ProfilesView() {
           </div>
         </aside>
 
-        <section className="bg-bg-surface border border-border-hard min-h-0 overflow-auto  p-3.5">
+        <section className="bg-bg-surface border border-border rounded-md min-h-0 overflow-auto p-3.5">
           {mode === 'drivers' ? (
             selectedDriver ? (
               <div className="space-y-3">
-                <div className="flex flex-wrap items-start gap-3 rounded-xl border border-border-hard bg-black/20 p-3">
-                  <img
-                    src={imageOrFallback(selectedDriver.driverImage || sessionImages.byDriver.get(selectedDriver.driverName), selectedDriver.driverName)}
-                    alt={selectedDriver.driverName}
-                    className="h-28 w-28 rounded-lg border border-border-hard object-cover"
-                    loading="lazy"
-                  />
+                <div className="flex flex-wrap items-start gap-3 rounded-md border border-border bg-bg-panel p-3">
+                  {selectedDriver.driverImage || sessionImages.byDriver.get(selectedDriver.driverName) ? (
+                    <img
+                      src={selectedDriver.driverImage || sessionImages.byDriver.get(selectedDriver.driverName) || ''}
+                      alt={selectedDriver.driverName}
+                      className="h-28 w-28 rounded-md border border-border object-cover"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="flex h-28 w-28 items-center justify-center rounded-md border border-border bg-black/40 text-base font-semibold text-white">
+                      {initials(selectedDriver.driverName)}
+                    </div>
+                  )}
                   <div className="min-w-0 flex-1">
                     <div className="text-lg font-semibold text-fg-primary">{selectedDriver.driverName}</div>
                     <div className="text-sm text-fg-secondary">{selectedDriver.fullName || selectedDriver.teamName}</div>
@@ -266,33 +286,33 @@ export const ProfilesView = React.memo(function ProfilesView() {
                 </div>
 
                 <div className="grid grid-cols-1 gap-3 xl:grid-cols-3">
-                  <div className="rounded-xl border border-border-hard bg-black/15 p-3">
+                  <div className="rounded-md border border-border bg-bg-panel p-3">
                     <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-fg-secondary">Achievements</div>
                     <div className="mt-2 space-y-1 text-xs text-fg-primary">
                       {(selectedDriver.achievements || []).map((item) => (
-                        <div key={`a-${item}`} className="rounded border border-border-hard bg-white/5 px-2 py-1">{item}</div>
+                        <div key={`a-${item}`} className="rounded border border-border bg-white/5 px-2 py-1">{item}</div>
                       ))}
                     </div>
                   </div>
-                  <div className="rounded-xl border border-border-hard bg-black/15 p-3">
+                  <div className="rounded-md border border-border bg-bg-panel p-3">
                     <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-fg-secondary">Records</div>
                     <div className="mt-2 space-y-1 text-xs text-fg-primary">
                       {(selectedDriver.records || []).map((item) => (
-                        <div key={`r-${item}`} className="rounded border border-border-hard bg-white/5 px-2 py-1">{item}</div>
+                        <div key={`r-${item}`} className="rounded border border-border bg-white/5 px-2 py-1">{item}</div>
                       ))}
                     </div>
                   </div>
-                  <div className="rounded-xl border border-border-hard bg-black/15 p-3">
+                  <div className="rounded-md border border-border bg-bg-panel p-3">
                     <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-fg-secondary">Best Moments</div>
                     <div className="mt-2 space-y-1 text-xs text-fg-primary">
                       {(selectedDriver.bestMoments || []).map((item) => (
-                        <div key={`m-${item}`} className="rounded border border-border-hard bg-white/5 px-2 py-1">{item}</div>
+                        <div key={`m-${item}`} className="rounded border border-border bg-white/5 px-2 py-1">{item}</div>
                       ))}
                     </div>
                   </div>
                 </div>
 
-                <div className="rounded-xl border border-border-hard bg-black/15 p-3 text-sm text-fg-primary">
+                <div className="rounded-md border border-border bg-bg-panel p-3 text-sm text-fg-primary">
                   <div className="mb-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-fg-secondary">Best Driven Race</div>
                   {selectedDriver.bestRace
                     ? `${selectedDriver.bestRace.raceName} ${selectedDriver.bestRace.year} · P${selectedDriver.bestRace.finish} · ${selectedDriver.bestRace.points} points`
@@ -304,13 +324,19 @@ export const ProfilesView = React.memo(function ProfilesView() {
             )
           ) : selectedTeam ? (
             <div className="space-y-3">
-              <div className="flex flex-wrap items-start gap-3 rounded-xl border border-border-hard bg-black/20 p-3">
-                <img
-                  src={imageOrFallback(selectedTeam.teamImage || sessionImages.byTeam.get(selectedTeam.teamName), selectedTeam.teamName)}
-                  alt={selectedTeam.teamName}
-                  className="h-24 w-24 rounded-lg border border-border-hard object-cover"
-                  loading="lazy"
-                />
+              <div className="flex flex-wrap items-start gap-3 rounded-md border border-border bg-bg-panel p-3">
+                {selectedTeam.teamImage || sessionImages.byTeam.get(selectedTeam.teamName) ? (
+                  <img
+                    src={selectedTeam.teamImage || sessionImages.byTeam.get(selectedTeam.teamName) || ''}
+                    alt={selectedTeam.teamName}
+                    className="h-24 w-24 rounded-md border border-border object-cover"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="flex h-24 w-24 items-center justify-center rounded-md border border-border bg-black/40 text-base font-semibold text-white">
+                    {initials(selectedTeam.teamName)}
+                  </div>
+                )}
                 <div className="min-w-0 flex-1">
                   <div className="text-lg font-semibold text-fg-primary">{selectedTeam.teamName}</div>
                   <div className="mt-1 text-xs text-fg-muted">
@@ -329,11 +355,11 @@ export const ProfilesView = React.memo(function ProfilesView() {
                 <Stat label="Seasons" value={selectedTeam.seasons} />
               </div>
 
-              <div className="rounded-xl border border-border-hard bg-black/15 p-3">
+              <div className="rounded-md border border-border bg-bg-panel p-3">
                 <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-fg-secondary">Team Records + Achievements</div>
                 <div className="mt-2 space-y-1 text-xs text-fg-primary">
                   {(selectedTeam.records || []).map((item) => (
-                    <div key={`tr-${item}`} className="rounded border border-border-hard bg-white/5 px-2 py-1">{item}</div>
+                    <div key={`tr-${item}`} className="rounded border border-border bg-white/5 px-2 py-1">{item}</div>
                   ))}
                 </div>
               </div>

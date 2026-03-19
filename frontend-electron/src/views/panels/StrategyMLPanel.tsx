@@ -24,21 +24,17 @@ interface StrategyMLPanelProps {
   selectedYear: number | null
   selectedRace: string | null
   strategyData: any
-  strategySourceYear: number | null
   strategyLoading: boolean
   strategyError: string | null
   topStrategies: StrategyRecommendationItem[]
   strategyExtents: { finishMin: number; finishMax: number; pointsMin: number; pointsMax: number }
 }
 
-export function StrategyMLPanel({ tabAccent, selectedYear, selectedRace, strategyData, strategySourceYear, strategyLoading, strategyError, topStrategies, strategyExtents }: StrategyMLPanelProps) {
+export function StrategyMLPanel({ tabAccent, selectedYear, selectedRace, strategyData, strategyLoading, strategyError, topStrategies, strategyExtents }: StrategyMLPanelProps) {
   return (
     <section className="bg-gradient-to-br from-bg-surface/80 to-bg-surface/60 border border-border-hard/50 p-5 feature-card" style={{ borderRadius: '16px', boxShadow: '0 8px 32px rgba(0,0,0,0.35)' }}>
       <div className="mb-4 flex items-center justify-between gap-3">
         <PanelHeader title="Strategy Scenario Map" subtitle="ML-powered strategy recommendations with probability estimates" icon={PanelIcons['strategy-ml']} accentColor={tabAccent} />
-        {strategySourceYear != null && selectedYear != null && strategySourceYear !== selectedYear && (
-          <span className="rounded-lg bg-amber-500/15 px-3 py-1.5 text-[10px] font-mono text-amber-300 border border-amber-500/30">using {strategySourceYear} model</span>
-        )}
       </div>
 
       {strategyLoading && (

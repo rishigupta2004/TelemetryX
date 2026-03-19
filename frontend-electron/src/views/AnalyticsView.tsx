@@ -16,7 +16,13 @@ function formatTime(seconds: number | null | undefined): string {
 }
 
 function validLap(lap: LapRow): boolean {
-  return (lap.lapTime || 0) > 0 && lap.isDeleted !== true && lap.isValid !== false
+  const lapTime = Number(lap.lapTime || 0)
+  return (
+    lapTime >= 45 &&
+    lapTime <= 200 &&
+    lap.isDeleted !== true &&
+    lap.isValid !== false
+  )
 }
 
 function quantileBucket(value: number, sorted: number[]): number {
@@ -78,15 +84,40 @@ export const AnalyticsView = React.memo(function AnalyticsView() {
   const [activePanel, setActivePanel] = useState<AnalyticsPanel>('lapTime')
   const [panelHeight, setPanelHeight] = useState(520)
   const panelRef = useRef<HTMLDivElement>(null)
-  const [cursorInfo, setCursorInfo] = useState<{ x: number | null; values: number[]; labels: string[] } | null>(null)
+  const [cursorInfo, setCursorInfo] = useState<{ x: null | number; values: number[]; labels: string[] } | null>(null)
+
+  if (!sessionData) {
+    return (
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+        color: 'rgba(255,255,255,0.3)',
+        fontSize: '13px'
+      }}>
+        Select a session to begin
+      </div>
+    )
+  }
 
   const laps = lapsStore.length ? lapsStore : sessionData?.laps ?? []
   const drivers = sessionData?.drivers ?? []
 
   const lapsByCode = useMemo(() => {
     const byCode = new Map<string, LapRow[]>()
+    const codeByNumber = new Map<number, string>()
+    const codeByName = new Map<string, string>()
+    for (const driver of drivers) {
+      codeByNumber.set(driver.driverNumber, driver.code)
+      codeByName.set(String(driver.driverName || '').toUpperCase(), driver.code)
+      codeByName.set(String(driver.code || '').toUpperCase(), driver.code)
+    }
     for (const lap of laps) {
-      const key = lap.driverName
+      const key =
+        codeByNumber.get(lap.driverNumber) ||
+        codeByName.get(String(lap.driverName || '').toUpperCase()) ||
+        String(lap.driverName || '').toUpperCase()
       if (!key) continue
       const list = byCode.get(key) ?? []
       list.push(lap)
@@ -97,7 +128,7 @@ export const AnalyticsView = React.memo(function AnalyticsView() {
       byCode.set(key, rows)
     }
     return byCode
-  }, [laps])
+  }, [drivers, laps])
 
   const maxLap = useMemo(() => Math.max(1, ...laps.map((lap) => lap.lapNumber || 0)), [laps])
   const lapAxis = useMemo(() => Array.from({ length: maxLap }, (_, i) => i + 1), [maxLap])
@@ -438,7 +469,7 @@ export const AnalyticsView = React.memo(function AnalyticsView() {
 
   return (
     <div className="flex h-full min-h-0 flex-col gap-2 p-2">
-      <div className="bg-bg-surface border border-border-hard flex flex-wrap items-center gap-2 px-3 py-2">
+      <div className="bg-bg-surface border border-border rounded-md flex flex-wrap items-center gap-2 px-3 py-2">
         <div className="text-[10px] uppercase tracking-[0.18em] text-fg-secondary">Analytics</div>
         <div className="flex min-w-0 flex-1 items-center gap-1.5 overflow-x-auto" style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
           {tabs.map((tab) => (
@@ -446,7 +477,7 @@ export const AnalyticsView = React.memo(function AnalyticsView() {
               key={tab.key}
               type="button"
               onClick={() => setActivePanel(tab.key)}
-              className={`flex-shrink-0 rounded-[2px] border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] ${activePanel === tab.key ? 'border-red-core bg-red-ghost text-fg-primary' : 'border-border-hard bg-bg-raised text-fg-secondary'
+              className={`flex-shrink-0 rounded-md border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] ${activePanel === tab.key ? 'border-accent bg-accent/10 text-fg-primary' : 'border-border bg-bg-secondary text-fg-secondary'
                 }`}
             >
               {tab.label}
@@ -460,24 +491,24 @@ export const AnalyticsView = React.memo(function AnalyticsView() {
           ))}
         </div>
         <div className="flex flex-wrap items-center gap-2 text-[10px] text-fg-muted">
-          <span className="rounded-[2px] border border-border-hard bg-bg-inset px-2 py-0.5 font-mono">{sessionLabel}</span>
-          <span className="rounded-[2px] border border-border-hard bg-bg-inset px-2 py-0.5 font-mono">
+          <span className="rounded-md border border-border bg-bg-inset px-2 py-0.5 font-mono">{sessionLabel}</span>
+          <span className="rounded-md border border-border bg-bg-inset px-2 py-0.5 font-mono">
             Driver {selectedCode || '-'} {compareDriver ? `| ${compareDriver}` : ''}
           </span>
           {compareDelta != null && (
-            <span className="rounded-[2px] border border-border-hard bg-bg-inset px-2 py-0.5 font-mono">
+            <span className="rounded-md border border-border bg-bg-inset px-2 py-0.5 font-mono">
               Avg Δ {compareDelta >= 0 ? '+' : ''}{compareDelta.toFixed(3)}s
             </span>
           )}
           {cursorText && (
-            <span className="rounded-[2px] border border-border-hard bg-bg-inset px-2 py-0.5 font-mono">
+            <span className="rounded-md border border-border bg-bg-inset px-2 py-0.5 font-mono">
               {cursorText}
             </span>
           )}
         </div>
       </div>
 
-      <div className="bg-bg-surface border border-border-hard flex-1 overflow-hidden">
+      <div className="bg-bg-surface rounded-md border border-border flex-1 overflow-hidden">
         <div ref={panelRef} className="h-full w-full p-3">
           {renderPanel()}
         </div>

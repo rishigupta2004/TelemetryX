@@ -6,19 +6,6 @@ import type { DriverCareerProfile, ProfilesResponse } from '../types'
 
 type SelectedDriver = DriverCareerProfile & { teamColor?: string }
 
-const POINTS_TABLE: Record<number, number> = {
-  1: 25,
-  2: 18,
-  3: 15,
-  4: 12,
-  5: 10,
-  6: 8,
-  7: 6,
-  8: 4,
-  9: 2,
-  10: 1
-}
-
 function initials(label: string): string {
   const parts = label.trim().split(/\s+/)
   if (!parts.length) return '?'
@@ -66,7 +53,7 @@ export const DriverProfileView = React.memo(function DriverProfileView() {
     setLoading(true)
     setError(null)
     api
-      .getProfiles(true)
+      .getProfiles(false)
       .then((res) => {
         if (!active) return
         setPayload(res)
@@ -104,64 +91,7 @@ export const DriverProfileView = React.memo(function DriverProfileView() {
   }, [sessionData?.drivers])
 
   const allLaps = lapsStore.length ? lapsStore : sessionData?.laps ?? []
-
-  const fallbackDrivers = useMemo<DriverCareerProfile[]>(() => {
-    if (!sessionData?.drivers?.length) return []
-    const year = sessionData.metadata.year
-    return sessionData.drivers.map((driver) => {
-      const dLaps = allLaps
-        .filter((lap) => lap.driverNumber === driver.driverNumber || lap.driverName === driver.code)
-        .sort((a, b) => a.lapNumber - b.lapNumber)
-      const finalLap = dLaps[dLaps.length - 1]
-      const finalPos = finalLap?.position ?? null
-      const bestLap = dLaps
-        .filter((lap) => (lap.lapTime || 0) > 0 && lap.isDeleted !== true)
-        .sort((a, b) => Number(a.lapTime || 1e9) - Number(b.lapTime || 1e9))[0]
-      const points = finalPos != null ? POINTS_TABLE[finalPos] ?? 0 : 0
-      return {
-        driverNumber: driver.driverNumber,
-        driverName: driver.code || driver.driverName,
-        fullName: driver.driverName,
-        teamName: driver.teamName,
-        driverImage: driver.driverImage ?? null,
-        age: null,
-        nationality: null,
-        dateOfBirth: null,
-        wikipediaUrl: null,
-        starts: dLaps.length > 0 ? 1 : 0,
-        seasons: 1,
-        seasonYears: [year],
-        poles: null,
-        wins: finalPos === 1 ? 1 : 0,
-        podiums: finalPos != null && finalPos <= 3 ? 1 : 0,
-        points,
-        championships: 0,
-        bestFinish: finalPos,
-        bestQuali: null,
-        achievements: finalPos === 1 ? [`Won ${sessionData.metadata.raceName}`] : [],
-        records: [],
-        bestRace:
-          finalPos != null
-            ? {
-                raceName: sessionData.metadata.raceName,
-                year,
-                finish: finalPos,
-                points: 0
-              }
-            : null,
-        bestMoments: bestLap ? [`Best lap: ${formatTime(bestLap.lapTime)}`] : []
-      }
-    })
-  }, [sessionData, allLaps])
-
-  const allDrivers = payload?.drivers?.length ? payload.drivers : fallbackDrivers
-  const fallbackByCode = useMemo(() => {
-    const map = new Map<string, DriverCareerProfile>()
-    for (const driver of fallbackDrivers) {
-      map.set(driver.driverName, driver)
-    }
-    return map
-  }, [fallbackDrivers])
+  const allDrivers = payload?.drivers ?? []
 
   useEffect(() => {
     if (!allDrivers.length) return
@@ -186,25 +116,22 @@ export const DriverProfileView = React.memo(function DriverProfileView() {
   const selectedDriver = useMemo<SelectedDriver | null>(() => {
     const primary = allDrivers.find((driver) => driver.driverName === selectedDriverName) ?? null
     if (!primary) return null
-    const fallback = fallbackByCode.get(primary.driverName)
     const sessionMatch = sessionData?.drivers?.find(
       (driver) => driver.code === primary.driverName || driver.driverName === primary.fullName
     )
     return {
-      ...fallback,
       ...primary,
-      driverNumber: primary.driverNumber ?? sessionMatch?.driverNumber ?? fallback?.driverNumber ?? null,
-      teamName: primary.teamName || sessionMatch?.teamName || fallback?.teamName || '',
+      driverNumber: primary.driverNumber ?? sessionMatch?.driverNumber ?? null,
+      teamName: primary.teamName || sessionMatch?.teamName || '',
       driverImage:
         primary.driverImage ??
         sessionMatch?.driverImage ??
         sessionImages.byDriver.get(primary.driverName) ??
-        fallback?.driverImage ??
         null,
-      fullName: primary.fullName || fallback?.fullName || sessionMatch?.driverName || primary.driverName,
+      fullName: primary.fullName || sessionMatch?.driverName || primary.driverName,
       teamColor: sessionMatch?.teamColor || teamColorByName.get(primary.teamName) || '#2a3340'
     }
-  }, [allDrivers, selectedDriverName, fallbackByCode, sessionData?.drivers, sessionImages.byDriver, teamColorByName])
+  }, [allDrivers, selectedDriverName, sessionData?.drivers, sessionImages.byDriver, teamColorByName])
 
   const sessionSnapshot = useMemo(() => {
     if (!selectedDriver || !sessionData) return null

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { api } from '../api/client'
 import { useProfileStore } from '../stores/profileStore'
 import { useSessionStore } from '../stores/sessionStore'
-import type { ProfilesResponse, TeamCareerProfile } from '../types'
+import type { ProfilesResponse } from '../types'
 
 function initials(label: string): string {
   const parts = label.trim().split(/\s+/)
@@ -28,7 +28,6 @@ function Stat({ label, value }: { label: string; value: string | number | null |
 
 export const TeamProfileView = React.memo(function TeamProfileView() {
   const sessionData = useSessionStore((s) => s.sessionData)
-  const lapsStore = useSessionStore((s) => s.laps)
   const intentTeamName = useProfileStore((s) => s.teamName)
   const clearIntent = useProfileStore((s) => s.clearIntent)
 
@@ -43,7 +42,7 @@ export const TeamProfileView = React.memo(function TeamProfileView() {
     setLoading(true)
     setError(null)
     api
-      .getProfiles(true)
+      .getProfiles(false)
       .then((res) => {
         if (!active) return
         setPayload(res)
@@ -78,69 +77,7 @@ export const TeamProfileView = React.memo(function TeamProfileView() {
     return map
   }, [sessionData?.drivers])
 
-  const allLaps = lapsStore.length ? lapsStore : sessionData?.laps ?? []
-
-  const fallbackTeams = useMemo<TeamCareerProfile[]>(() => {
-    if (!sessionData?.drivers?.length) return []
-    const byTeam = new Map<string, { drivers: typeof sessionData.drivers; image: string | null; finalPos: number | null }>()
-    const pointsTable: Record<number, number> = {
-      1: 25,
-      2: 18,
-      3: 15,
-      4: 12,
-      5: 10,
-      6: 8,
-      7: 6,
-      8: 4,
-      9: 2,
-      10: 1
-    }
-    for (const driver of sessionData.drivers) {
-      const dLaps = allLaps
-        .filter((lap) => lap.driverNumber === driver.driverNumber || lap.driverName === driver.code)
-        .sort((a, b) => a.lapNumber - b.lapNumber)
-      const finalPos = dLaps[dLaps.length - 1]?.position ?? null
-      const existing = byTeam.get(driver.teamName)
-      if (!existing) {
-        byTeam.set(driver.teamName, { drivers: [driver], image: driver.teamImage ?? null, finalPos })
-      } else {
-        existing.drivers.push(driver)
-        if (existing.image == null && driver.teamImage) existing.image = driver.teamImage
-        if (finalPos != null && (existing.finalPos == null || finalPos < existing.finalPos)) existing.finalPos = finalPos
-      }
-    }
-    return Array.from(byTeam.entries()).map(([teamName, row]) => {
-      let points = 0
-      let wins = 0
-      let podiums = 0
-      for (const driver of row.drivers) {
-        const dLaps = allLaps
-          .filter((lap) => lap.driverNumber === driver.driverNumber || lap.driverName === driver.code)
-          .sort((a, b) => a.lapNumber - b.lapNumber)
-        const finalPos = dLaps[dLaps.length - 1]?.position ?? null
-        if (finalPos != null) {
-          points += pointsTable[finalPos] ?? 0
-          if (finalPos === 1) wins += 1
-          if (finalPos <= 3) podiums += 1
-        }
-      }
-      return {
-        teamName,
-        teamImage: row.image,
-        seasons: 1,
-        seasonYears: [sessionData.metadata.year],
-        starts: row.drivers.length > 0 ? 1 : 0,
-      wins,
-      podiums,
-      points,
-        championships: 0,
-        bestFinish: row.finalPos,
-        records: row.finalPos === 1 ? [`Won ${sessionData.metadata.raceName}`] : []
-    }
-    })
-  }, [sessionData, allLaps])
-
-  const allTeams = payload?.teams?.length ? payload.teams : fallbackTeams
+  const allTeams = payload?.teams ?? []
 
   useEffect(() => {
     if (!allTeams.length) return

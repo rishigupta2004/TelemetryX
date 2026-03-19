@@ -1,0 +1,88 @@
+appId: com.telemetryx.app
+productName: TelemetryX
+copyright: Copyright © 2024 TelemetryX
+directories:
+  output: release
+  buildResources: build
+files:
+  - out/**/*
+  - "!node_modules/**/*"
+extraMetadata:
+  main: out/main/index.js
+asar: true
+compression: maximum
+
+# macOS configuration
+mac:
+  category: public.app-category.sports
+  target:
+    - target: dmg
+      arch:
+        - x64
+        - arm64
+  artifactName: ${productName}-${version}-${os}-${arch}.${ext}
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  # Code signing (uncomment and configure for production)
+  # entitlements: build/entitlements.mac.plist
+  # entitlementsInherit: build/entitlements.mac.plist
+  # signingIdentity: "Developer ID Application: Your Name (TEAM_ID)"
+
+# Windows configuration
+win:
+  category: public.app-category.sports
+  target:
+    - target: nsis
+      arch:
+        - x64
+    - target: portable
+      arch:
+        - x64
+  artifactName: ${productName}-${version}-${os}-${arch}.${ext}
+  # Code signing (uncomment and configure for production)
+  # signingIdentity: "Your Windows Code Signing Certificate"
+  # certificatePassword: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  deleteAppDataOnUninstall: false
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: TelemetryX
+
+portable:
+  artifactName: ${productName}-${version}-${os}-portable.${ext}
+
+# Linux configuration
+linux:
+  category: Utility
+  target:
+    - target: AppImage
+      arch:
+        - x64
+    - target: deb
+      arch:
+        - x64
+  artifactName: ${productName}-${version}-${os}-${arch}.${ext}
+  maintainer: TelemetryX
+  vendor: TelemetryX
+
+appImage:
+  artifactName: ${productName}-${version}-${os}.${ext}
+
+deb:
+  depends:
+    - libgtk-3-0
+    - libnotify4
+    - libnss3
+    - libxss1
+    - libasound2
+    - libxtst6
+
+# Publish configuration (for auto-updates - optional)
+# publish:
+#   provider: github
+#   owner: your-username
+#   repo: TelemetryX

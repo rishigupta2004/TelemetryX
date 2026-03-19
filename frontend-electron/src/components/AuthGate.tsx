@@ -1,13 +1,32 @@
 import React, { useMemo } from 'react'
-import { useAuth, useClerk } from '@clerk/react'
+import { useClerk } from '@clerk/react'
+import { AUTH_ENABLED, useCurrentAuth } from '../lib/auth'
 
 interface AuthGateProps {
   children: React.ReactNode
 }
 
-export function AuthGate({ children }: AuthGateProps) {
-  const { isLoaded, isSignedIn } = useAuth()
+function ClerkSignInButton() {
   const clerk = useClerk()
+  return (
+    <button
+      type="button"
+      className="w-full rounded-lg bg-red-core px-4 py-2 text-sm font-semibold text-white hover:opacity-90"
+      onClick={() => clerk.openSignIn()}
+    >
+      Continue with OAuth
+    </button>
+  )
+}
+
+export function AuthGate({ children }: AuthGateProps) {
+  // Use safe auth hook that never throws
+  const { isLoaded, isSignedIn } = useCurrentAuth()
+
+  // If auth is disabled, always render children
+  if (!AUTH_ENABLED) {
+    return <>{children}</>
+  }
 
   const callbackUrl = useMemo(() => {
     if (typeof window === 'undefined') return 'http://localhost:5173'
@@ -32,13 +51,7 @@ export function AuthGate({ children }: AuthGateProps) {
           <div className="mb-6 text-sm text-fg-secondary">
             OAuth is now powered by Clerk. Continue with Google to access the app.
           </div>
-          <button
-            type="button"
-            className="w-full rounded-lg bg-red-core px-4 py-2 text-sm font-semibold text-white hover:opacity-90"
-            onClick={() => void clerk.openSignIn()}
-          >
-            Continue with OAuth
-          </button>
+          <ClerkSignInButton />
           <div className="mt-3 text-[11px] text-fg-muted">
             Configure Clerk redirect URL to <span className="font-mono text-fg-secondary">{callbackUrl}</span>
           </div>

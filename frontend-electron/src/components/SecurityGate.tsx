@@ -26,7 +26,6 @@ export const SecurityGate = React.memo(function SecurityGate({
     const config = currentConfig()
 
     // Find the minimum level needed for this view
-    const { SECURITY_LEVELS } = require('../stores/securityStore')
     const minLevel = SECURITY_LEVELS.find((l: { views: string[] }) => l.views.includes(view))
 
     if (fallback) return <>{fallback}</>

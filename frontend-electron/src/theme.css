@@ -1,0 +1,65 @@
+@theme {
+  /* ═══════════════════════════════════════════════════════════════════════════
+     TYPOGRAPHY
+     ═══════════════════════════════════════════════════════════════════════════ */
+  --font-sans: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-heading: 'Orbitron', sans-serif;
+  --font-display: 'Titillium Web', sans-serif;
+  --font-ui: 'Titillium Web', sans-serif;
+  --font-data: 'JetBrains Mono', monospace;
+  --font-body: 'Inter', sans-serif;
+  --font-label: 'Rajdhani', sans-serif;
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     F1 BRAND COLORS
+     ═══════════════════════════════════════════════════════════════════════════ */
+  --color-f1-red: #E10600;
+
+  /* Status & Delta Colors */
+  --color-delta-positive: #00FF00;
+  --color-delta-negative: #FF2D2D;
+  --color-delta-neutral: #8A8A96;
+
+  /* Safety Car & Flags */
+  --color-safety-car: #FFB800;
+  --color-red-flag: #FF2D2D;
+  --color-vsc: #FFB800;
+  --color-sc: #FF9600;
+
+  /* Best/Purple Sector */
+  --color-purple-best: #B138FF;
+  --color-purple-core: #B138FF;
+
+  /* Live/Green */
+  --color-green-best: #00FF00;
+  --color-green-live: #15803D;
+
+  /* DRS/Orange */
+  --color-orange-drs: #FF9600;
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     TYRE COMPOUND COLORS (F1 Standard)
+     ═══════════════════════════════════════════════════════════════════════════ */
+  --color-tyresoft: #FF3333;
+  --color-tyrmedium: #FFDD00;
+  --color-tyrhard: #FFFFFF;
+  --color-tyrinter: #33FF33;
+  --color-tyrwet: #0066FF;
+  --color-tyrtest: #FF00FF;
+  --color-tyrunknown: #666666;
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     ANIMATIONS & TRANSITIONS
+     ═══════════════════════════════════════════════════════════════════════════ */
+  --transition-fast: 150ms ease-out;
+  --transition-normal: 300ms ease-out;
+  --transition-slow: 500ms ease-out;
+  
+  --animation-fade-in: fadeInUp 0.3s ease-out;
+  --animation-scale-in: scaleIn 0.2s ease-out;
+  --animation-slide-in: slideIn 0.3s ease-out;
+  
+  --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.3);
+  --shadow-deep: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+}

@@ -43,6 +43,12 @@ function bucketKey(value: FiaDocumentItem): string {
   return fiaTimelineBucket(value)
 }
 
+function isNoDocumentsError(value: string | null): boolean {
+  if (!value) return false
+  const normalized = value.toLowerCase()
+  return normalized.includes('no fia documents') || normalized.includes('404')
+}
+
 export const FiaDocumentsView = React.memo(function FiaDocumentsView() {
   const selectedYear = useSessionStore((s) => s.selectedYear)
   const selectedRace = useSessionStore((s) => s.selectedRace)
@@ -150,7 +156,14 @@ export const FiaDocumentsView = React.memo(function FiaDocumentsView() {
 
         {loading && <div className="text-sm text-text-secondary">Loading official FIA documents...</div>}
 
-        {!loading && error && (
+        {!loading && error && isNoDocumentsError(error) && (
+          <div className="rounded border border-border bg-bg-secondary p-3 text-xs text-text-secondary">
+            <div className="font-semibold text-text-primary">No FIA documents available for this selection.</div>
+            <div className="mt-1 text-text-muted">Try a different race in {activeYear ?? 'selected year'} or use Refresh after selecting another event.</div>
+          </div>
+        )}
+
+        {!loading && error && !isNoDocumentsError(error) && (
           <div className="rounded border border-red-500/30 bg-red-500/10 p-2 text-xs text-red-300">{error}</div>
         )}
 
@@ -206,7 +219,7 @@ export const FiaDocumentsView = React.memo(function FiaDocumentsView() {
                   {timelineRows.map(([day, count]) => (
                     <div key={day} className="flex flex-col items-center justify-end gap-1">
                       <div
-                        className="w-full rounded-sm bg-accent-blue/70"
+                        className="w-full rounded-sm bg-accent/70"
                         style={{ height: `${Math.max(8, Math.round((count / Math.max(1, maxTimelineCount)) * 90))}%` }}
                         title={`${day}: ${count}`}
                       />
@@ -233,7 +246,7 @@ export const FiaDocumentsView = React.memo(function FiaDocumentsView() {
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             placeholder="Search by doc title, number, or filename"
-            className="rounded border border-border bg-bg-secondary px-2 py-1.5 text-xs text-text-primary outline-none focus:border-accent-blue"
+            className="rounded border border-border bg-bg-secondary px-2 py-1.5 text-xs text-text-primary outline-none focus:border-accent"
           />
           <select
             value={categoryFilter}
@@ -257,7 +270,7 @@ export const FiaDocumentsView = React.memo(function FiaDocumentsView() {
                 href={doc.url}
                 target="_blank"
                 rel="noreferrer"
-                className="block rounded border border-border bg-bg-secondary p-2 transition hover:border-accent-blue/70 hover:bg-bg-hover/70"
+                className="block rounded border border-border bg-bg-secondary p-2 transition hover:border-accent/70 hover:bg-bg-hover/70"
               >
                 <div className="mb-1 flex items-start justify-between gap-2">
                   <div className="min-w-0">

@@ -208,9 +208,9 @@ export const useTelemetryStore = create<TelemetryState>((set, get) => ({
       // only fires when race_time_offset>1000 which is wrong (lap 1 ends at ~90s
       // so MIN(session_time_seconds WHERE lap=1) ≈ 90, not 1000).
       //
-      // FIX: if the first fetch returns 0 rows for a new session, retry with a
-      // much wider window [0, 600] to guarantee we land somewhere in the data.
-      if (isSessionChange && !hasAnyRows(data)) {
+      // FIX: if the first fetch returns 0 rows, retry with wider windows
+      // to guarantee we land somewhere in the data.
+      if (!hasAnyRows(data)) {
         const RECOVERY_END = Math.max(fetchEnd + 300, 600)
         try {
           const wider = await fetchChunked(year, race, session, 0, RECOVERY_END, signal)
@@ -224,7 +224,7 @@ export const useTelemetryStore = create<TelemetryState>((set, get) => ({
       }
 
       // Second recovery pass: try the full first hour of data
-      if (isSessionChange && !hasAnyRows(data)) {
+      if (!hasAnyRows(data)) {
         try {
           const fullRange = await fetchChunked(year, race, session, 0, 3600, signal)
           if (reqId !== latestTelemetryRequestId) return

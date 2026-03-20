@@ -1,0 +1,16 @@
+{
+"type": "FeatureCollection",
+"_circuit": "turkey_v1",
+"_layer": "sectors",
+"_label": "Istanbul Park",
+"_note": "S1=end of sector 1. S2=end of sector 2. T=speed trap. S3 ends at start\/finish — no point needed.",
+"name": "sectors",
+"features": [
+{ "type": "Feature", "id": "S1", "properties": { "sector": "S1", "ref": "see PDF", "circuit": "turkey_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "S2", "properties": { "sector": "S2", "ref": "see PDF", "circuit": "turkey_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "T", "properties": { "sector": "T", "ref": "see PDF", "circuit": "turkey_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "properties": { "id": null, "sector": "SPEED TRAP", "ref": null, "circuit": "ISTANBUL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 29.400606342428357, 40.953291475720761 ] } },
+{ "type": "Feature", "properties": { "id": "1", "sector": "SECTOR 1", "ref": null, "circuit": "ISTANBUL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 29.412521816759824, 40.95976689549736 ] } },
+{ "type": "Feature", "properties": { "id": "2", "sector": "SECTOR 2", "ref": null, "circuit": "ISTANBUL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 29.408327710183652, 40.957485582296933 ] } }
+]
+}

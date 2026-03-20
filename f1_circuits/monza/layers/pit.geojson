@@ -1,0 +1,48 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "italy_v1",
+  "_layer": "pit",
+  "_label": "Monza",
+  "_note": "pit_entry and pit_exit are Points at where cars enter/leave pit lane. pit_lane is a LineString along pit road centreline.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "pit_entry",
+      "properties": {
+        "type": "pit_entry",
+        "circuit": "italy_v1",
+        "notes": "Point where cars leave main track into pit lane"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pit_exit",
+      "properties": {
+        "type": "pit_exit",
+        "circuit": "italy_v1",
+        "notes": "Point where cars rejoin main track from pit lane"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pit_lane",
+      "properties": {
+        "type": "pit_lane",
+        "circuit": "italy_v1",
+        "notes": "LineString \u2014 trace full pit lane centreline"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": []
+      }
+    }
+  ]
+}

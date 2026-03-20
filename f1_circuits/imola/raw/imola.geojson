@@ -1,0 +1,4539 @@
+{
+  "type": "FeatureCollection",
+  "generator": "overpass-turbo",
+  "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
+  "timestamp": "2026-02-19T15:11:01Z",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/7920430",
+        "highway": "raceway",
+        "name": "Piratella",
+        "oneway": "yes",
+        "ref": "10",
+        "source:name": "https://www.autodromoimola.it/tracciato/",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "source:ref": "https://www.autodromoimola.it/tracciato/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.710274,
+            44.33727
+          ],
+          [
+            11.7103537,
+            44.3373847
+          ],
+          [
+            11.7104096,
+            44.3374816
+          ],
+          [
+            11.7104673,
+            44.3375957
+          ],
+          [
+            11.7105039,
+            44.3376977
+          ],
+          [
+            11.7105408,
+            44.337812
+          ],
+          [
+            11.7105653,
+            44.3379361
+          ],
+          [
+            11.7105713,
+            44.3380517
+          ],
+          [
+            11.7105732,
+            44.3381522
+          ],
+          [
+            11.7105659,
+            44.3382492
+          ],
+          [
+            11.7105378,
+            44.3383796
+          ],
+          [
+            11.7105072,
+            44.3384933
+          ],
+          [
+            11.7104642,
+            44.3386147
+          ]
+        ]
+      },
+      "id": "way/7920430"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/176764793",
+        "highway": "raceway",
+        "name": "Variante Bassa",
+        "oneway": "yes",
+        "source:name": "https://www.autodromoimola.it/tracciato/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "wikidata": "Q122205661",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7177447,
+            44.3438199
+          ],
+          [
+            11.716687,
+            44.3439957
+          ],
+          [
+            11.7163452,
+            44.3440525
+          ]
+        ]
+      },
+      "id": "way/176764793"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/196368195",
+        "highway": "raceway",
+        "name": "Pit Lane",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "wikimedia_commons": "File:Imola-pitlane.jpg",
+        "@relations": [
+          {
+            "role": "pit_lane",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7233113,
+            44.3447972
+          ],
+          [
+            11.7228251,
+            44.3446726
+          ],
+          [
+            11.7226074,
+            44.344629
+          ],
+          [
+            11.7216789,
+            44.3444446
+          ],
+          [
+            11.7214674,
+            44.3443958
+          ],
+          [
+            11.7210964,
+            44.3442965
+          ],
+          [
+            11.7208857,
+            44.344244
+          ],
+          [
+            11.72071,
+            44.3442058
+          ],
+          [
+            11.7204504,
+            44.3441683
+          ],
+          [
+            11.7203173,
+            44.3441604
+          ],
+          [
+            11.72017,
+            44.3441587
+          ],
+          [
+            11.7196425,
+            44.3441648
+          ],
+          [
+            11.7163466,
+            44.3442032
+          ],
+          [
+            11.7162501,
+            44.3442072
+          ],
+          [
+            11.7161536,
+            44.3442161
+          ],
+          [
+            11.7140256,
+            44.3445402
+          ],
+          [
+            11.7139621,
+            44.3445435
+          ],
+          [
+            11.7138995,
+            44.3445437
+          ],
+          [
+            11.713855,
+            44.3445437
+          ],
+          [
+            11.7138022,
+            44.3445451
+          ],
+          [
+            11.7137351,
+            44.3445473
+          ],
+          [
+            11.7136117,
+            44.3445528
+          ],
+          [
+            11.7134401,
+            44.3445605
+          ],
+          [
+            11.7132697,
+            44.3445691
+          ],
+          [
+            11.7130243,
+            44.3445759
+          ],
+          [
+            11.7127789,
+            44.3445874
+          ],
+          [
+            11.7126407,
+            44.3445912
+          ],
+          [
+            11.7125093,
+            44.3445912
+          ],
+          [
+            11.7123081,
+            44.3445787
+          ],
+          [
+            11.7120466,
+            44.3445605
+          ],
+          [
+            11.7118698,
+            44.344548
+          ],
+          [
+            11.711678,
+            44.3445317
+          ],
+          [
+            11.7113333,
+            44.3444991
+          ],
+          [
+            11.7105749,
+            44.3444218
+          ]
+        ]
+      },
+      "id": "way/196368195"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021771393",
+        "highway": "raceway",
+        "oneway": "yes",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7104642,
+            44.3386147
+          ],
+          [
+            11.7100679,
+            44.3399101
+          ]
+        ]
+      },
+      "id": "way/1021771393"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021771394",
+        "highway": "raceway",
+        "oneway": "yes",
+        "ref": "8",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "source:ref": "https://www.autodromoimola.it/tracciato/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7053331,
+            44.3367432
+          ],
+          [
+            11.7063115,
+            44.3368316
+          ],
+          [
+            11.7064511,
+            44.336844
+          ],
+          [
+            11.706654,
+            44.336853
+          ],
+          [
+            11.7068777,
+            44.3368584
+          ],
+          [
+            11.7070592,
+            44.3368546
+          ],
+          [
+            11.7072399,
+            44.3368493
+          ],
+          [
+            11.7074324,
+            44.3368352
+          ],
+          [
+            11.7076327,
+            44.3368165
+          ]
+        ]
+      },
+      "id": "way/1021771394"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021771395",
+        "highway": "raceway",
+        "name": "Tosa",
+        "oneway": "yes",
+        "ref": "7",
+        "source:name": "https://www.autodromoimola.it/tracciato/",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "source:ref": "https://www.autodromoimola.it/tracciato/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7023758,
+            44.3371538
+          ],
+          [
+            11.7022637,
+            44.3370746
+          ],
+          [
+            11.7021763,
+            44.3370073
+          ],
+          [
+            11.7021205,
+            44.3369602
+          ],
+          [
+            11.7020814,
+            44.3369036
+          ],
+          [
+            11.7020598,
+            44.336853
+          ],
+          [
+            11.7020531,
+            44.336795
+          ],
+          [
+            11.7020634,
+            44.3367435
+          ],
+          [
+            11.7020812,
+            44.3366979
+          ],
+          [
+            11.7021099,
+            44.3366481
+          ],
+          [
+            11.7021517,
+            44.336598
+          ],
+          [
+            11.7022062,
+            44.3365517
+          ],
+          [
+            11.7022584,
+            44.336521
+          ],
+          [
+            11.702318,
+            44.3364994
+          ],
+          [
+            11.7023815,
+            44.3364794
+          ],
+          [
+            11.7024558,
+            44.33647
+          ],
+          [
+            11.7025201,
+            44.3364665
+          ],
+          [
+            11.7026365,
+            44.3364682
+          ]
+        ]
+      },
+      "id": "way/1021771395"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021771396",
+        "highway": "raceway",
+        "oneway": "yes",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7043276,
+            44.3383353
+          ],
+          [
+            11.7037073,
+            44.337967
+          ],
+          [
+            11.703191,
+            44.3376506
+          ],
+          [
+            11.7023758,
+            44.3371538
+          ]
+        ]
+      },
+      "id": "way/1021771396"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021771397",
+        "highway": "raceway",
+        "name": "Variante Villeneuve",
+        "name:etymology:wikidata": "Q172845",
+        "name:etymology:wikipedia": "it:Gilles Villeneuve",
+        "oneway": "yes",
+        "ref": "6",
+        "source:name": "https://www.autodromoimola.it/tracciato/",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "source:ref": "https://www.autodromoimola.it/tracciato/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7044987,
+            44.33894
+          ],
+          [
+            11.7045809,
+            44.3387186
+          ],
+          [
+            11.7045902,
+            44.3386944
+          ],
+          [
+            11.7045999,
+            44.3386549
+          ],
+          [
+            11.7045976,
+            44.3386164
+          ],
+          [
+            11.7045921,
+            44.3385852
+          ],
+          [
+            11.7045849,
+            44.3385503
+          ],
+          [
+            11.704566,
+            44.338516
+          ],
+          [
+            11.7045394,
+            44.3384817
+          ],
+          [
+            11.7045063,
+            44.338453
+          ],
+          [
+            11.7044573,
+            44.338417
+          ],
+          [
+            11.7044129,
+            44.3383881
+          ],
+          [
+            11.7043723,
+            44.3383641
+          ],
+          [
+            11.7043276,
+            44.3383353
+          ]
+        ]
+      },
+      "id": "way/1021771397"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021771398",
+        "highway": "raceway",
+        "oneway": "yes",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7062831,
+            44.3427341
+          ],
+          [
+            11.7044264,
+            44.3394473
+          ]
+        ]
+      },
+      "id": "way/1021771398"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021771399",
+        "highway": "raceway",
+        "oneway": "yes",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7119187,
+            44.340722
+          ],
+          [
+            11.716967,
+            44.3407493
+          ]
+        ]
+      },
+      "id": "way/1021771399"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021771400",
+        "highway": "raceway",
+        "name": "Acque Minerali",
+        "oneway": "yes",
+        "ref": "12",
+        "source:name": "https://www.autodromoimola.it/tracciato/",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "source:ref": "https://www.autodromoimola.it/tracciato/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7104566,
+            44.3405289
+          ],
+          [
+            11.7107306,
+            44.3408375
+          ],
+          [
+            11.7107552,
+            44.3408609
+          ],
+          [
+            11.7107912,
+            44.3408819
+          ],
+          [
+            11.7108285,
+            44.3408959
+          ],
+          [
+            11.7108699,
+            44.3409041
+          ],
+          [
+            11.7109034,
+            44.340907
+          ],
+          [
+            11.7109556,
+            44.3409051
+          ],
+          [
+            11.7110001,
+            44.3408986
+          ],
+          [
+            11.7110679,
+            44.3408818
+          ],
+          [
+            11.7112535,
+            44.3408254
+          ]
+        ]
+      },
+      "id": "way/1021771400"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021771401",
+        "highway": "raceway",
+        "oneway": "yes",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7212115,
+            44.3419437
+          ],
+          [
+            11.7213583,
+            44.3420469
+          ],
+          [
+            11.7227665,
+            44.3430493
+          ]
+        ]
+      },
+      "id": "way/1021771401"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021771402",
+        "highway": "raceway",
+        "name": "Gresini",
+        "name:etymology": "Fausto Gresini",
+        "name:etymology:wikidata": "Q1382825",
+        "name:etymology:wikipedia": "it:Fausto Gresini",
+        "old_name": "Variante Alta",
+        "oneway": "yes",
+        "ref": "14",
+        "source:name": "https://www.autodromoimola.it/tracciato/",
+        "source:name:etymology": "https://www.gpone.com/it/2021/09/08/news/la-variante-alta-dellautodromo-di-imola-intitolata-a-fausto-gresini.html",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "source:ref": "https://www.autodromoimola.it/tracciato/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.716967,
+            44.3407493
+          ],
+          [
+            11.7170651,
+            44.3407439
+          ],
+          [
+            11.7171105,
+            44.3407387
+          ],
+          [
+            11.7171417,
+            44.3407279
+          ],
+          [
+            11.71717,
+            44.3407087
+          ],
+          [
+            11.7171941,
+            44.3406764
+          ],
+          [
+            11.7172382,
+            44.3405726
+          ]
+        ]
+      },
+      "id": "way/1021771402"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021771403",
+        "highway": "raceway",
+        "oneway": "yes",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7196069,
+            44.3440178
+          ],
+          [
+            11.7181493,
+            44.3440422
+          ],
+          [
+            11.7166872,
+            44.3440478
+          ],
+          [
+            11.7163452,
+            44.3440525
+          ],
+          [
+            11.7161929,
+            44.3440716
+          ],
+          [
+            11.7160728,
+            44.344091
+          ],
+          [
+            11.7140173,
+            44.3444055
+          ]
+        ]
+      },
+      "id": "way/1021771403"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021771404",
+        "highway": "raceway",
+        "name": "Rivazza",
+        "oneway": "yes",
+        "ref": "19",
+        "source:name": "https://www.autodromoimola.it/tracciato/",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "source:ref": "https://www.autodromoimola.it/tracciato/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7249592,
+            44.3445459
+          ],
+          [
+            11.7247662,
+            44.3448633
+          ],
+          [
+            11.7247256,
+            44.3449082
+          ],
+          [
+            11.7246888,
+            44.3449437
+          ],
+          [
+            11.7246343,
+            44.3449791
+          ],
+          [
+            11.7245683,
+            44.3450102
+          ],
+          [
+            11.7245157,
+            44.3450278
+          ],
+          [
+            11.7244572,
+            44.3450406
+          ],
+          [
+            11.7243917,
+            44.3450492
+          ],
+          [
+            11.7243349,
+            44.3450495
+          ],
+          [
+            11.724272,
+            44.3450448
+          ],
+          [
+            11.7242156,
+            44.3450354
+          ],
+          [
+            11.7241362,
+            44.3450163
+          ]
+        ]
+      },
+      "id": "way/1021771404"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021771405",
+        "highway": "raceway",
+        "name": "Variante Tamburello",
+        "oneway": "yes",
+        "ref": "4",
+        "source:name": "https://www.autodromoimola.it/tracciato/",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "source:ref": "https://www.autodromoimola.it/tracciato/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "wikidata": "Q177416",
+        "wikipedia": "fr:Tamburello",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7072461,
+            44.3432476
+          ],
+          [
+            11.7067687,
+            44.3430915
+          ],
+          [
+            11.7067,
+            44.3430666
+          ],
+          [
+            11.7066346,
+            44.3430417
+          ],
+          [
+            11.7065873,
+            44.3430226
+          ],
+          [
+            11.7065291,
+            44.3429912
+          ],
+          [
+            11.7064739,
+            44.3429562
+          ],
+          [
+            11.7064277,
+            44.3429265
+          ],
+          [
+            11.7063908,
+            44.3428937
+          ],
+          [
+            11.7063685,
+            44.3428678
+          ],
+          [
+            11.7063436,
+            44.3428348
+          ],
+          [
+            11.7063176,
+            44.3427963
+          ],
+          [
+            11.7062831,
+            44.3427341
+          ]
+        ]
+      },
+      "id": "way/1021771405"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616638",
+        "highway": "raceway",
+        "name": "Variante Tamburello",
+        "oneway": "yes",
+        "ref": "2",
+        "source:name": "https://www.autodromoimola.it/tracciato/",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "source:ref": "https://www.autodromoimola.it/tracciato/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "wikidata": "Q177416",
+        "wikipedia": "fr:Tamburello",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7083671,
+            44.3441367
+          ],
+          [
+            11.7083063,
+            44.3441245
+          ],
+          [
+            11.7082368,
+            44.3441038
+          ],
+          [
+            11.708193,
+            44.3440812
+          ],
+          [
+            11.7081576,
+            44.344054
+          ],
+          [
+            11.7081266,
+            44.3440252
+          ],
+          [
+            11.7081046,
+            44.3439926
+          ],
+          [
+            11.7080902,
+            44.343963
+          ],
+          [
+            11.7080728,
+            44.3439095
+          ],
+          [
+            11.7080471,
+            44.3438118
+          ]
+        ]
+      },
+      "id": "way/1025616638"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616639",
+        "highway": "raceway",
+        "name": "Variante Tamburello",
+        "oneway": "yes",
+        "ref": "3",
+        "source:name": "https://www.autodromoimola.it/tracciato/",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "source:ref": "https://www.autodromoimola.it/tracciato/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "wikidata": "Q177416",
+        "wikipedia": "fr:Tamburello",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7080471,
+            44.3438118
+          ],
+          [
+            11.7080214,
+            44.3437141
+          ],
+          [
+            11.7079912,
+            44.3436331
+          ],
+          [
+            11.7079618,
+            44.3435799
+          ],
+          [
+            11.7079311,
+            44.3435386
+          ],
+          [
+            11.7078907,
+            44.3435025
+          ],
+          [
+            11.7078461,
+            44.3434757
+          ],
+          [
+            11.707795,
+            44.3434462
+          ],
+          [
+            11.70773,
+            44.3434122
+          ],
+          [
+            11.7072461,
+            44.3432476
+          ]
+        ]
+      },
+      "id": "way/1025616639"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616640",
+        "highway": "raceway",
+        "name": "Variante Villeneuve",
+        "name:etymology:wikidata": "Q172845",
+        "name:etymology:wikipedia": "it:Gilles Villeneuve",
+        "oneway": "yes",
+        "ref": "5",
+        "source:name": "https://www.autodromoimola.it/tracciato/",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "source:ref": "https://www.autodromoimola.it/tracciato/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7044264,
+            44.3394473
+          ],
+          [
+            11.7044139,
+            44.3394274
+          ],
+          [
+            11.7043992,
+            44.3393913
+          ],
+          [
+            11.7043897,
+            44.3393612
+          ],
+          [
+            11.704385,
+            44.3393273
+          ],
+          [
+            11.7043824,
+            44.3392867
+          ],
+          [
+            11.7043902,
+            44.3392438
+          ],
+          [
+            11.7044017,
+            44.3392033
+          ],
+          [
+            11.7044165,
+            44.3391614
+          ],
+          [
+            11.7044987,
+            44.33894
+          ]
+        ]
+      },
+      "id": "way/1025616640"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616641",
+        "highway": "raceway",
+        "name": "Piratella",
+        "oneway": "yes",
+        "ref": "9",
+        "source:name": "https://www.autodromoimola.it/tracciato/",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "source:ref": "https://www.autodromoimola.it/tracciato/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7091341,
+            44.3366229
+          ],
+          [
+            11.7093245,
+            44.3366026
+          ],
+          [
+            11.709425,
+            44.3366007
+          ],
+          [
+            11.7095086,
+            44.3366062
+          ],
+          [
+            11.7095888,
+            44.3366217
+          ],
+          [
+            11.7096641,
+            44.3366474
+          ],
+          [
+            11.7097425,
+            44.3366803
+          ],
+          [
+            11.7098335,
+            44.3367299
+          ],
+          [
+            11.70991,
+            44.3367872
+          ],
+          [
+            11.7099676,
+            44.3368431
+          ],
+          [
+            11.7100098,
+            44.3368918
+          ],
+          [
+            11.7100623,
+            44.3369544
+          ],
+          [
+            11.710274,
+            44.33727
+          ]
+        ]
+      },
+      "id": "way/1025616641"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616642",
+        "highway": "raceway",
+        "oneway": "yes",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7026365,
+            44.3364682
+          ],
+          [
+            11.7046442,
+            44.3366695
+          ],
+          [
+            11.7053331,
+            44.3367432
+          ]
+        ]
+      },
+      "id": "way/1025616642"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616643",
+        "highway": "raceway",
+        "oneway": "yes",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7076327,
+            44.3368165
+          ],
+          [
+            11.7091341,
+            44.3366229
+          ]
+        ]
+      },
+      "id": "way/1025616643"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616644",
+        "highway": "raceway",
+        "oneway": "yes",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7116757,
+            44.3444882
+          ],
+          [
+            11.7109381,
+            44.3444442
+          ],
+          [
+            11.7105749,
+            44.3444218
+          ],
+          [
+            11.7097098,
+            44.3443639
+          ],
+          [
+            11.7096199,
+            44.3443523
+          ],
+          [
+            11.7095209,
+            44.3443366
+          ],
+          [
+            11.7083671,
+            44.3441367
+          ]
+        ]
+      },
+      "id": "way/1025616644"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616645",
+        "highway": "raceway",
+        "oneway": "yes",
+        "ref": "1",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "source:ref": "https://www.autodromoimola.it/tracciato/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7140173,
+            44.3444055
+          ],
+          [
+            11.7137606,
+            44.3444448
+          ],
+          [
+            11.7135885,
+            44.3444639
+          ],
+          [
+            11.7134215,
+            44.3444822
+          ],
+          [
+            11.7132666,
+            44.3444934
+          ],
+          [
+            11.7131108,
+            44.3445048
+          ],
+          [
+            11.7129055,
+            44.3445149
+          ],
+          [
+            11.7127227,
+            44.3445216
+          ],
+          [
+            11.7125819,
+            44.3445248
+          ],
+          [
+            11.7124,
+            44.3445248
+          ],
+          [
+            11.7121963,
+            44.34452
+          ],
+          [
+            11.7116757,
+            44.3444882
+          ]
+        ]
+      },
+      "id": "way/1025616645"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616646",
+        "highway": "raceway",
+        "name": "Variante Bassa",
+        "oneway": "yes",
+        "ref": "21",
+        "source:name": "https://www.autodromoimola.it/tracciato/",
+        "source:ref": "https://www.autodromoimola.it/tracciato/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "wikidata": "Q122205661",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7180414,
+            44.343902
+          ],
+          [
+            11.7180394,
+            44.3438465
+          ],
+          [
+            11.7180292,
+            44.3438124
+          ],
+          [
+            11.7180061,
+            44.3437945
+          ],
+          [
+            11.717975,
+            44.3437867
+          ],
+          [
+            11.7179448,
+            44.3437871
+          ],
+          [
+            11.71789,
+            44.3437958
+          ],
+          [
+            11.7177447,
+            44.3438199
+          ]
+        ]
+      },
+      "id": "way/1025616646"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616647",
+        "highway": "raceway",
+        "name": "Variante Bassa",
+        "oneway": "yes",
+        "source:name": "https://www.autodromoimola.it/tracciato/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "wikidata": "Q122205661",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7181493,
+            44.3440422
+          ],
+          [
+            11.7180895,
+            44.344029
+          ],
+          [
+            11.7180675,
+            44.3440182
+          ],
+          [
+            11.718054,
+            44.3440044
+          ],
+          [
+            11.7180438,
+            44.3439844
+          ],
+          [
+            11.7180433,
+            44.3439574
+          ],
+          [
+            11.7180414,
+            44.343902
+          ]
+        ]
+      },
+      "id": "way/1025616647"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616648",
+        "highway": "raceway",
+        "oneway": "yes",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7241362,
+            44.3450163
+          ],
+          [
+            11.7233113,
+            44.3447972
+          ],
+          [
+            11.7212555,
+            44.3442033
+          ]
+        ]
+      },
+      "id": "way/1025616648"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616649",
+        "highway": "raceway",
+        "oneway": "yes",
+        "ref": "20",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "source:ref": "https://www.autodromoimola.it/tracciato/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7212555,
+            44.3442033
+          ],
+          [
+            11.7210266,
+            44.3441439
+          ],
+          [
+            11.7208262,
+            44.3441026
+          ],
+          [
+            11.7206584,
+            44.3440712
+          ],
+          [
+            11.7205744,
+            44.3440606
+          ],
+          [
+            11.7204781,
+            44.3440489
+          ],
+          [
+            11.7203696,
+            44.3440368
+          ],
+          [
+            11.7202748,
+            44.3440266
+          ],
+          [
+            11.7201756,
+            44.3440173
+          ],
+          [
+            11.7200623,
+            44.3440103
+          ],
+          [
+            11.7196069,
+            44.3440178
+          ]
+        ]
+      },
+      "id": "way/1025616649"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616650",
+        "highway": "raceway",
+        "name": "Rivazza",
+        "oneway": "yes",
+        "ref": "18",
+        "source:name": "https://www.autodromoimola.it/tracciato/",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "source:ref": "https://www.autodromoimola.it/tracciato/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7248707,
+            44.3438363
+          ],
+          [
+            11.7249878,
+            44.3438728
+          ],
+          [
+            11.7250334,
+            44.3438935
+          ],
+          [
+            11.7250845,
+            44.3439147
+          ],
+          [
+            11.725122,
+            44.3439391
+          ],
+          [
+            11.7251547,
+            44.3439755
+          ],
+          [
+            11.7251776,
+            44.3440071
+          ],
+          [
+            11.7251883,
+            44.3440299
+          ],
+          [
+            11.7251976,
+            44.3440551
+          ],
+          [
+            11.725198,
+            44.3440885
+          ],
+          [
+            11.7251946,
+            44.3441218
+          ],
+          [
+            11.725191,
+            44.3441492
+          ],
+          [
+            11.7251775,
+            44.3441824
+          ],
+          [
+            11.7251522,
+            44.3442284
+          ],
+          [
+            11.7249592,
+            44.3445459
+          ]
+        ]
+      },
+      "id": "way/1025616650"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616651",
+        "highway": "raceway",
+        "oneway": "yes",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7236193,
+            44.3434514
+          ],
+          [
+            11.7237027,
+            44.3434774
+          ],
+          [
+            11.7242815,
+            44.3436587
+          ],
+          [
+            11.7248707,
+            44.3438363
+          ]
+        ]
+      },
+      "id": "way/1025616651"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616652",
+        "highway": "raceway",
+        "oneway": "yes",
+        "ref": "17",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "source:ref": "https://www.autodromoimola.it/tracciato/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7227665,
+            44.3430493
+          ],
+          [
+            11.7228519,
+            44.3431089
+          ],
+          [
+            11.723017,
+            44.3432047
+          ],
+          [
+            11.7232001,
+            44.3432967
+          ],
+          [
+            11.723298,
+            44.3433395
+          ],
+          [
+            11.7233868,
+            44.3433723
+          ],
+          [
+            11.7236193,
+            44.3434514
+          ]
+        ]
+      },
+      "id": "way/1025616652"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616653",
+        "highway": "raceway",
+        "oneway": "yes",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.717515,
+            44.3404942
+          ],
+          [
+            11.7194698,
+            44.3410668
+          ]
+        ]
+      },
+      "id": "way/1025616653"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616654",
+        "highway": "raceway",
+        "oneway": "yes",
+        "ref": "16",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "source:ref": "https://www.autodromoimola.it/tracciato/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7194698,
+            44.3410668
+          ],
+          [
+            11.7195934,
+            44.3411073
+          ],
+          [
+            11.7197253,
+            44.3411548
+          ],
+          [
+            11.7198757,
+            44.3412177
+          ],
+          [
+            11.7200118,
+            44.3412776
+          ],
+          [
+            11.7201335,
+            44.3413364
+          ],
+          [
+            11.7206745,
+            44.3416183
+          ],
+          [
+            11.7208342,
+            44.3417086
+          ],
+          [
+            11.7209986,
+            44.3418066
+          ],
+          [
+            11.721082,
+            44.3418591
+          ],
+          [
+            11.7212115,
+            44.3419437
+          ]
+        ]
+      },
+      "id": "way/1025616654"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616655",
+        "highway": "raceway",
+        "name": "Gresini",
+        "name:etymology": "Fausto Gresini",
+        "name:etymology:wikidata": "Q1382825",
+        "name:etymology:wikipedia": "it:Fausto Gresini",
+        "old_name": "Variante Alta",
+        "oneway": "yes",
+        "ref": "15",
+        "source:name": "https://www.autodromoimola.it/tracciato/",
+        "source:name:etymology": "https://www.gpone.com/it/2021/09/08/news/la-variante-alta-dellautodromo-di-imola-intitolata-a-fausto-gresini.html",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "source:ref": "https://www.autodromoimola.it/tracciato/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7172382,
+            44.3405726
+          ],
+          [
+            11.7172546,
+            44.3405366
+          ],
+          [
+            11.7172825,
+            44.3405115
+          ],
+          [
+            11.7173047,
+            44.3404946
+          ],
+          [
+            11.7173334,
+            44.340481
+          ],
+          [
+            11.7173752,
+            44.3404749
+          ],
+          [
+            11.7174198,
+            44.3404717
+          ],
+          [
+            11.7174626,
+            44.3404786
+          ],
+          [
+            11.717515,
+            44.3404942
+          ]
+        ]
+      },
+      "id": "way/1025616655"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616656",
+        "highway": "raceway",
+        "name": "Acque Minerali",
+        "oneway": "yes",
+        "ref": "13",
+        "source:name": "https://www.autodromoimola.it/tracciato/",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "source:ref": "https://www.autodromoimola.it/tracciato/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7112535,
+            44.3408254
+          ],
+          [
+            11.7114391,
+            44.3407691
+          ],
+          [
+            11.7115057,
+            44.340749
+          ],
+          [
+            11.7115776,
+            44.3407344
+          ],
+          [
+            11.7116612,
+            44.3407232
+          ],
+          [
+            11.7117478,
+            44.3407198
+          ],
+          [
+            11.7119187,
+            44.340722
+          ]
+        ]
+      },
+      "id": "way/1025616656"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616657",
+        "highway": "raceway",
+        "name": "Acque Minerali",
+        "oneway": "yes",
+        "ref": "11",
+        "source:name": "https://www.autodromoimola.it/tracciato/",
+        "source:oneway": "http://www.autodromoimola.it/regolamento/",
+        "source:ref": "https://www.autodromoimola.it/tracciato/",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7100679,
+            44.3399101
+          ],
+          [
+            11.7100582,
+            44.3399526
+          ],
+          [
+            11.7100566,
+            44.3400028
+          ],
+          [
+            11.7100657,
+            44.3400539
+          ],
+          [
+            11.7100831,
+            44.340094
+          ],
+          [
+            11.7101017,
+            44.3401267
+          ],
+          [
+            11.710136,
+            44.3401688
+          ],
+          [
+            11.7101825,
+            44.3402202
+          ],
+          [
+            11.7104566,
+            44.3405289
+          ]
+        ]
+      },
+      "id": "way/1025616657"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616649",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7212555,
+            44.3442033
+          ],
+          [
+            11.7210266,
+            44.3441439
+          ],
+          [
+            11.7208262,
+            44.3441026
+          ],
+          [
+            11.7206584,
+            44.3440712
+          ],
+          [
+            11.7205744,
+            44.3440606
+          ],
+          [
+            11.7204781,
+            44.3440489
+          ],
+          [
+            11.7203696,
+            44.3440368
+          ],
+          [
+            11.7202748,
+            44.3440266
+          ],
+          [
+            11.7201756,
+            44.3440173
+          ],
+          [
+            11.7200623,
+            44.3440103
+          ],
+          [
+            11.7196069,
+            44.3440178
+          ]
+        ]
+      },
+      "id": "way/1025616649"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616648",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7241362,
+            44.3450163
+          ],
+          [
+            11.7233113,
+            44.3447972
+          ],
+          [
+            11.7212555,
+            44.3442033
+          ]
+        ]
+      },
+      "id": "way/1025616648"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021771404",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7249592,
+            44.3445459
+          ],
+          [
+            11.7247662,
+            44.3448633
+          ],
+          [
+            11.7247256,
+            44.3449082
+          ],
+          [
+            11.7246888,
+            44.3449437
+          ],
+          [
+            11.7246343,
+            44.3449791
+          ],
+          [
+            11.7245683,
+            44.3450102
+          ],
+          [
+            11.7245157,
+            44.3450278
+          ],
+          [
+            11.7244572,
+            44.3450406
+          ],
+          [
+            11.7243917,
+            44.3450492
+          ],
+          [
+            11.7243349,
+            44.3450495
+          ],
+          [
+            11.724272,
+            44.3450448
+          ],
+          [
+            11.7242156,
+            44.3450354
+          ],
+          [
+            11.7241362,
+            44.3450163
+          ]
+        ]
+      },
+      "id": "way/1021771404"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616650",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7248707,
+            44.3438363
+          ],
+          [
+            11.7249878,
+            44.3438728
+          ],
+          [
+            11.7250334,
+            44.3438935
+          ],
+          [
+            11.7250845,
+            44.3439147
+          ],
+          [
+            11.725122,
+            44.3439391
+          ],
+          [
+            11.7251547,
+            44.3439755
+          ],
+          [
+            11.7251776,
+            44.3440071
+          ],
+          [
+            11.7251883,
+            44.3440299
+          ],
+          [
+            11.7251976,
+            44.3440551
+          ],
+          [
+            11.725198,
+            44.3440885
+          ],
+          [
+            11.7251946,
+            44.3441218
+          ],
+          [
+            11.725191,
+            44.3441492
+          ],
+          [
+            11.7251775,
+            44.3441824
+          ],
+          [
+            11.7251522,
+            44.3442284
+          ],
+          [
+            11.7249592,
+            44.3445459
+          ]
+        ]
+      },
+      "id": "way/1025616650"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616651",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7236193,
+            44.3434514
+          ],
+          [
+            11.7237027,
+            44.3434774
+          ],
+          [
+            11.7242815,
+            44.3436587
+          ],
+          [
+            11.7248707,
+            44.3438363
+          ]
+        ]
+      },
+      "id": "way/1025616651"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616652",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7227665,
+            44.3430493
+          ],
+          [
+            11.7228519,
+            44.3431089
+          ],
+          [
+            11.723017,
+            44.3432047
+          ],
+          [
+            11.7232001,
+            44.3432967
+          ],
+          [
+            11.723298,
+            44.3433395
+          ],
+          [
+            11.7233868,
+            44.3433723
+          ],
+          [
+            11.7236193,
+            44.3434514
+          ]
+        ]
+      },
+      "id": "way/1025616652"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021771401",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7212115,
+            44.3419437
+          ],
+          [
+            11.7213583,
+            44.3420469
+          ],
+          [
+            11.7227665,
+            44.3430493
+          ]
+        ]
+      },
+      "id": "way/1021771401"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616654",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7194698,
+            44.3410668
+          ],
+          [
+            11.7195934,
+            44.3411073
+          ],
+          [
+            11.7197253,
+            44.3411548
+          ],
+          [
+            11.7198757,
+            44.3412177
+          ],
+          [
+            11.7200118,
+            44.3412776
+          ],
+          [
+            11.7201335,
+            44.3413364
+          ],
+          [
+            11.7206745,
+            44.3416183
+          ],
+          [
+            11.7208342,
+            44.3417086
+          ],
+          [
+            11.7209986,
+            44.3418066
+          ],
+          [
+            11.721082,
+            44.3418591
+          ],
+          [
+            11.7212115,
+            44.3419437
+          ]
+        ]
+      },
+      "id": "way/1025616654"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616653",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.717515,
+            44.3404942
+          ],
+          [
+            11.7194698,
+            44.3410668
+          ]
+        ]
+      },
+      "id": "way/1025616653"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616655",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7172382,
+            44.3405726
+          ],
+          [
+            11.7172546,
+            44.3405366
+          ],
+          [
+            11.7172825,
+            44.3405115
+          ],
+          [
+            11.7173047,
+            44.3404946
+          ],
+          [
+            11.7173334,
+            44.340481
+          ],
+          [
+            11.7173752,
+            44.3404749
+          ],
+          [
+            11.7174198,
+            44.3404717
+          ],
+          [
+            11.7174626,
+            44.3404786
+          ],
+          [
+            11.717515,
+            44.3404942
+          ]
+        ]
+      },
+      "id": "way/1025616655"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021771402",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.716967,
+            44.3407493
+          ],
+          [
+            11.7170651,
+            44.3407439
+          ],
+          [
+            11.7171105,
+            44.3407387
+          ],
+          [
+            11.7171417,
+            44.3407279
+          ],
+          [
+            11.71717,
+            44.3407087
+          ],
+          [
+            11.7171941,
+            44.3406764
+          ],
+          [
+            11.7172382,
+            44.3405726
+          ]
+        ]
+      },
+      "id": "way/1021771402"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021771399",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7119187,
+            44.340722
+          ],
+          [
+            11.716967,
+            44.3407493
+          ]
+        ]
+      },
+      "id": "way/1021771399"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616656",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7112535,
+            44.3408254
+          ],
+          [
+            11.7114391,
+            44.3407691
+          ],
+          [
+            11.7115057,
+            44.340749
+          ],
+          [
+            11.7115776,
+            44.3407344
+          ],
+          [
+            11.7116612,
+            44.3407232
+          ],
+          [
+            11.7117478,
+            44.3407198
+          ],
+          [
+            11.7119187,
+            44.340722
+          ]
+        ]
+      },
+      "id": "way/1025616656"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616657",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7100679,
+            44.3399101
+          ],
+          [
+            11.7100582,
+            44.3399526
+          ],
+          [
+            11.7100566,
+            44.3400028
+          ],
+          [
+            11.7100657,
+            44.3400539
+          ],
+          [
+            11.7100831,
+            44.340094
+          ],
+          [
+            11.7101017,
+            44.3401267
+          ],
+          [
+            11.710136,
+            44.3401688
+          ],
+          [
+            11.7101825,
+            44.3402202
+          ],
+          [
+            11.7104566,
+            44.3405289
+          ]
+        ]
+      },
+      "id": "way/1025616657"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021771400",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7104566,
+            44.3405289
+          ],
+          [
+            11.7107306,
+            44.3408375
+          ],
+          [
+            11.7107552,
+            44.3408609
+          ],
+          [
+            11.7107912,
+            44.3408819
+          ],
+          [
+            11.7108285,
+            44.3408959
+          ],
+          [
+            11.7108699,
+            44.3409041
+          ],
+          [
+            11.7109034,
+            44.340907
+          ],
+          [
+            11.7109556,
+            44.3409051
+          ],
+          [
+            11.7110001,
+            44.3408986
+          ],
+          [
+            11.7110679,
+            44.3408818
+          ],
+          [
+            11.7112535,
+            44.3408254
+          ]
+        ]
+      },
+      "id": "way/1021771400"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021771393",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7104642,
+            44.3386147
+          ],
+          [
+            11.7100679,
+            44.3399101
+          ]
+        ]
+      },
+      "id": "way/1021771393"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/7920430",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.710274,
+            44.33727
+          ],
+          [
+            11.7103537,
+            44.3373847
+          ],
+          [
+            11.7104096,
+            44.3374816
+          ],
+          [
+            11.7104673,
+            44.3375957
+          ],
+          [
+            11.7105039,
+            44.3376977
+          ],
+          [
+            11.7105408,
+            44.337812
+          ],
+          [
+            11.7105653,
+            44.3379361
+          ],
+          [
+            11.7105713,
+            44.3380517
+          ],
+          [
+            11.7105732,
+            44.3381522
+          ],
+          [
+            11.7105659,
+            44.3382492
+          ],
+          [
+            11.7105378,
+            44.3383796
+          ],
+          [
+            11.7105072,
+            44.3384933
+          ],
+          [
+            11.7104642,
+            44.3386147
+          ]
+        ]
+      },
+      "id": "way/7920430"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616641",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7091341,
+            44.3366229
+          ],
+          [
+            11.7093245,
+            44.3366026
+          ],
+          [
+            11.709425,
+            44.3366007
+          ],
+          [
+            11.7095086,
+            44.3366062
+          ],
+          [
+            11.7095888,
+            44.3366217
+          ],
+          [
+            11.7096641,
+            44.3366474
+          ],
+          [
+            11.7097425,
+            44.3366803
+          ],
+          [
+            11.7098335,
+            44.3367299
+          ],
+          [
+            11.70991,
+            44.3367872
+          ],
+          [
+            11.7099676,
+            44.3368431
+          ],
+          [
+            11.7100098,
+            44.3368918
+          ],
+          [
+            11.7100623,
+            44.3369544
+          ],
+          [
+            11.710274,
+            44.33727
+          ]
+        ]
+      },
+      "id": "way/1025616641"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616643",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7076327,
+            44.3368165
+          ],
+          [
+            11.7091341,
+            44.3366229
+          ]
+        ]
+      },
+      "id": "way/1025616643"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021771394",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7053331,
+            44.3367432
+          ],
+          [
+            11.7063115,
+            44.3368316
+          ],
+          [
+            11.7064511,
+            44.336844
+          ],
+          [
+            11.706654,
+            44.336853
+          ],
+          [
+            11.7068777,
+            44.3368584
+          ],
+          [
+            11.7070592,
+            44.3368546
+          ],
+          [
+            11.7072399,
+            44.3368493
+          ],
+          [
+            11.7074324,
+            44.3368352
+          ],
+          [
+            11.7076327,
+            44.3368165
+          ]
+        ]
+      },
+      "id": "way/1021771394"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616642",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7026365,
+            44.3364682
+          ],
+          [
+            11.7046442,
+            44.3366695
+          ],
+          [
+            11.7053331,
+            44.3367432
+          ]
+        ]
+      },
+      "id": "way/1025616642"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021771395",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7023758,
+            44.3371538
+          ],
+          [
+            11.7022637,
+            44.3370746
+          ],
+          [
+            11.7021763,
+            44.3370073
+          ],
+          [
+            11.7021205,
+            44.3369602
+          ],
+          [
+            11.7020814,
+            44.3369036
+          ],
+          [
+            11.7020598,
+            44.336853
+          ],
+          [
+            11.7020531,
+            44.336795
+          ],
+          [
+            11.7020634,
+            44.3367435
+          ],
+          [
+            11.7020812,
+            44.3366979
+          ],
+          [
+            11.7021099,
+            44.3366481
+          ],
+          [
+            11.7021517,
+            44.336598
+          ],
+          [
+            11.7022062,
+            44.3365517
+          ],
+          [
+            11.7022584,
+            44.336521
+          ],
+          [
+            11.702318,
+            44.3364994
+          ],
+          [
+            11.7023815,
+            44.3364794
+          ],
+          [
+            11.7024558,
+            44.33647
+          ],
+          [
+            11.7025201,
+            44.3364665
+          ],
+          [
+            11.7026365,
+            44.3364682
+          ]
+        ]
+      },
+      "id": "way/1021771395"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021771396",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7043276,
+            44.3383353
+          ],
+          [
+            11.7037073,
+            44.337967
+          ],
+          [
+            11.703191,
+            44.3376506
+          ],
+          [
+            11.7023758,
+            44.3371538
+          ]
+        ]
+      },
+      "id": "way/1021771396"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021771397",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7044987,
+            44.33894
+          ],
+          [
+            11.7045809,
+            44.3387186
+          ],
+          [
+            11.7045902,
+            44.3386944
+          ],
+          [
+            11.7045999,
+            44.3386549
+          ],
+          [
+            11.7045976,
+            44.3386164
+          ],
+          [
+            11.7045921,
+            44.3385852
+          ],
+          [
+            11.7045849,
+            44.3385503
+          ],
+          [
+            11.704566,
+            44.338516
+          ],
+          [
+            11.7045394,
+            44.3384817
+          ],
+          [
+            11.7045063,
+            44.338453
+          ],
+          [
+            11.7044573,
+            44.338417
+          ],
+          [
+            11.7044129,
+            44.3383881
+          ],
+          [
+            11.7043723,
+            44.3383641
+          ],
+          [
+            11.7043276,
+            44.3383353
+          ]
+        ]
+      },
+      "id": "way/1021771397"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616640",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7044264,
+            44.3394473
+          ],
+          [
+            11.7044139,
+            44.3394274
+          ],
+          [
+            11.7043992,
+            44.3393913
+          ],
+          [
+            11.7043897,
+            44.3393612
+          ],
+          [
+            11.704385,
+            44.3393273
+          ],
+          [
+            11.7043824,
+            44.3392867
+          ],
+          [
+            11.7043902,
+            44.3392438
+          ],
+          [
+            11.7044017,
+            44.3392033
+          ],
+          [
+            11.7044165,
+            44.3391614
+          ],
+          [
+            11.7044987,
+            44.33894
+          ]
+        ]
+      },
+      "id": "way/1025616640"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021771398",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7062831,
+            44.3427341
+          ],
+          [
+            11.7044264,
+            44.3394473
+          ]
+        ]
+      },
+      "id": "way/1021771398"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021771405",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7072461,
+            44.3432476
+          ],
+          [
+            11.7067687,
+            44.3430915
+          ],
+          [
+            11.7067,
+            44.3430666
+          ],
+          [
+            11.7066346,
+            44.3430417
+          ],
+          [
+            11.7065873,
+            44.3430226
+          ],
+          [
+            11.7065291,
+            44.3429912
+          ],
+          [
+            11.7064739,
+            44.3429562
+          ],
+          [
+            11.7064277,
+            44.3429265
+          ],
+          [
+            11.7063908,
+            44.3428937
+          ],
+          [
+            11.7063685,
+            44.3428678
+          ],
+          [
+            11.7063436,
+            44.3428348
+          ],
+          [
+            11.7063176,
+            44.3427963
+          ],
+          [
+            11.7062831,
+            44.3427341
+          ]
+        ]
+      },
+      "id": "way/1021771405"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616639",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7080471,
+            44.3438118
+          ],
+          [
+            11.7080214,
+            44.3437141
+          ],
+          [
+            11.7079912,
+            44.3436331
+          ],
+          [
+            11.7079618,
+            44.3435799
+          ],
+          [
+            11.7079311,
+            44.3435386
+          ],
+          [
+            11.7078907,
+            44.3435025
+          ],
+          [
+            11.7078461,
+            44.3434757
+          ],
+          [
+            11.707795,
+            44.3434462
+          ],
+          [
+            11.70773,
+            44.3434122
+          ],
+          [
+            11.7072461,
+            44.3432476
+          ]
+        ]
+      },
+      "id": "way/1025616639"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616638",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7083671,
+            44.3441367
+          ],
+          [
+            11.7083063,
+            44.3441245
+          ],
+          [
+            11.7082368,
+            44.3441038
+          ],
+          [
+            11.708193,
+            44.3440812
+          ],
+          [
+            11.7081576,
+            44.344054
+          ],
+          [
+            11.7081266,
+            44.3440252
+          ],
+          [
+            11.7081046,
+            44.3439926
+          ],
+          [
+            11.7080902,
+            44.343963
+          ],
+          [
+            11.7080728,
+            44.3439095
+          ],
+          [
+            11.7080471,
+            44.3438118
+          ]
+        ]
+      },
+      "id": "way/1025616638"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616644",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7116757,
+            44.3444882
+          ],
+          [
+            11.7109381,
+            44.3444442
+          ],
+          [
+            11.7105749,
+            44.3444218
+          ],
+          [
+            11.7097098,
+            44.3443639
+          ],
+          [
+            11.7096199,
+            44.3443523
+          ],
+          [
+            11.7095209,
+            44.3443366
+          ],
+          [
+            11.7083671,
+            44.3441367
+          ]
+        ]
+      },
+      "id": "way/1025616644"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616645",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7140173,
+            44.3444055
+          ],
+          [
+            11.7137606,
+            44.3444448
+          ],
+          [
+            11.7135885,
+            44.3444639
+          ],
+          [
+            11.7134215,
+            44.3444822
+          ],
+          [
+            11.7132666,
+            44.3444934
+          ],
+          [
+            11.7131108,
+            44.3445048
+          ],
+          [
+            11.7129055,
+            44.3445149
+          ],
+          [
+            11.7127227,
+            44.3445216
+          ],
+          [
+            11.7125819,
+            44.3445248
+          ],
+          [
+            11.7124,
+            44.3445248
+          ],
+          [
+            11.7121963,
+            44.34452
+          ],
+          [
+            11.7116757,
+            44.3444882
+          ]
+        ]
+      },
+      "id": "way/1025616645"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021771403",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7196069,
+            44.3440178
+          ],
+          [
+            11.7181493,
+            44.3440422
+          ],
+          [
+            11.7166872,
+            44.3440478
+          ],
+          [
+            11.7163452,
+            44.3440525
+          ],
+          [
+            11.7161929,
+            44.3440716
+          ],
+          [
+            11.7160728,
+            44.344091
+          ],
+          [
+            11.7140173,
+            44.3444055
+          ]
+        ]
+      },
+      "id": "way/1021771403"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/176764793",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7177447,
+            44.3438199
+          ],
+          [
+            11.716687,
+            44.3439957
+          ],
+          [
+            11.7163452,
+            44.3440525
+          ]
+        ]
+      },
+      "id": "way/176764793"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616646",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7180414,
+            44.343902
+          ],
+          [
+            11.7180394,
+            44.3438465
+          ],
+          [
+            11.7180292,
+            44.3438124
+          ],
+          [
+            11.7180061,
+            44.3437945
+          ],
+          [
+            11.717975,
+            44.3437867
+          ],
+          [
+            11.7179448,
+            44.3437871
+          ],
+          [
+            11.71789,
+            44.3437958
+          ],
+          [
+            11.7177447,
+            44.3438199
+          ]
+        ]
+      },
+      "id": "way/1025616646"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1025616647",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7181493,
+            44.3440422
+          ],
+          [
+            11.7180895,
+            44.344029
+          ],
+          [
+            11.7180675,
+            44.3440182
+          ],
+          [
+            11.718054,
+            44.3440044
+          ],
+          [
+            11.7180438,
+            44.3439844
+          ],
+          [
+            11.7180433,
+            44.3439574
+          ],
+          [
+            11.7180414,
+            44.343902
+          ]
+        ]
+      },
+      "id": "way/1025616647"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/196368195",
+        "@relations": [
+          {
+            "role": "pit_lane",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            11.7233113,
+            44.3447972
+          ],
+          [
+            11.7228251,
+            44.3446726
+          ],
+          [
+            11.7226074,
+            44.344629
+          ],
+          [
+            11.7216789,
+            44.3444446
+          ],
+          [
+            11.7214674,
+            44.3443958
+          ],
+          [
+            11.7210964,
+            44.3442965
+          ],
+          [
+            11.7208857,
+            44.344244
+          ],
+          [
+            11.72071,
+            44.3442058
+          ],
+          [
+            11.7204504,
+            44.3441683
+          ],
+          [
+            11.7203173,
+            44.3441604
+          ],
+          [
+            11.72017,
+            44.3441587
+          ],
+          [
+            11.7196425,
+            44.3441648
+          ],
+          [
+            11.7163466,
+            44.3442032
+          ],
+          [
+            11.7162501,
+            44.3442072
+          ],
+          [
+            11.7161536,
+            44.3442161
+          ],
+          [
+            11.7140256,
+            44.3445402
+          ],
+          [
+            11.7139621,
+            44.3445435
+          ],
+          [
+            11.7138995,
+            44.3445437
+          ],
+          [
+            11.713855,
+            44.3445437
+          ],
+          [
+            11.7138022,
+            44.3445451
+          ],
+          [
+            11.7137351,
+            44.3445473
+          ],
+          [
+            11.7136117,
+            44.3445528
+          ],
+          [
+            11.7134401,
+            44.3445605
+          ],
+          [
+            11.7132697,
+            44.3445691
+          ],
+          [
+            11.7130243,
+            44.3445759
+          ],
+          [
+            11.7127789,
+            44.3445874
+          ],
+          [
+            11.7126407,
+            44.3445912
+          ],
+          [
+            11.7125093,
+            44.3445912
+          ],
+          [
+            11.7123081,
+            44.3445787
+          ],
+          [
+            11.7120466,
+            44.3445605
+          ],
+          [
+            11.7118698,
+            44.344548
+          ],
+          [
+            11.711678,
+            44.3445317
+          ],
+          [
+            11.7113333,
+            44.3444991
+          ],
+          [
+            11.7105749,
+            44.3444218
+          ]
+        ]
+      },
+      "id": "way/196368195"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1872449434",
+        "raceway": "finish"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.7166872,
+          44.3440478
+        ]
+      },
+      "id": "node/1872449434"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/2067102257",
+        "amenity": "clock",
+        "display": "digital",
+        "highway": "traffic_signals",
+        "support": "billboard",
+        "traffic_signals": "signal",
+        "visibility": "area"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.7132666,
+          44.3444934
+        ]
+      },
+      "id": "node/2067102257"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/5106325593",
+        "raceway": "start",
+        "@relations": [
+          {
+            "role": "start",
+            "rel": "9291096",
+            "reltags": {
+              "area": "no",
+              "name": "Autodromo Internazionale Enzo e Dino Ferrari",
+              "type": "circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.7140173,
+          44.3444055
+        ]
+      },
+      "id": "node/5106325593"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/5167232891",
+        "raceway": "finish"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.716687,
+          44.3439957
+        ]
+      },
+      "id": "node/5167232891"
+    }
+  ]
+}

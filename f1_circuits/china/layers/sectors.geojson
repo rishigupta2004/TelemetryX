@@ -1,0 +1,16 @@
+{
+"type": "FeatureCollection",
+"_circuit": "china_v1",
+"_layer": "sectors",
+"_label": "Shanghai International Circuit",
+"_note": "S1=end of sector 1. S2=end of sector 2. T=speed trap. S3 ends at start\/finish — no point needed.",
+"name": "sectors",
+"features": [
+{ "type": "Feature", "id": "S1", "properties": { "sector": "S1", "ref": "150m before T6", "circuit": "china_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "S2", "properties": { "sector": "S2", "ref": "143m before T11", "circuit": "china_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "T", "properties": { "sector": "T", "ref": "240m before T14", "circuit": "china_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "properties": { "id": null, "sector": "SPEED TRAP", "ref": null, "circuit": "CHINA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 121.227105932446804, 31.336960735468086 ] } },
+{ "type": "Feature", "properties": { "id": null, "sector": "SECTOR 1", "ref": null, "circuit": "CHINA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 121.215509378574467, 31.340703653042556 ] } },
+{ "type": "Feature", "properties": { "id": null, "sector": "SECTOR 2", "ref": null, "circuit": "CHINA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 121.220810042191488, 31.343548703106386 ] } }
+]
+}

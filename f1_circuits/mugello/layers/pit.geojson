@@ -1,0 +1,14 @@
+{
+"type": "FeatureCollection",
+"_circuit": "mugello_v1",
+"_layer": "pit",
+"_label": "Mugello Circuit",
+"_note": "pit_entry and pit_exit are Points at where cars enter\/leave pit lane. pit_lane is a LineString along pit road centreline.",
+"name": "pit",
+"features": [
+{ "type": "Feature", "id": "pit_entry", "properties": { "type": "pit_entry", "circuit": "mugello_v1", "notes": "Point where cars leave main track into pit lane" }, "geometry": null },
+{ "type": "Feature", "id": "pit_exit", "properties": { "type": "pit_exit", "circuit": "mugello_v1", "notes": "Point where cars rejoin main track from pit lane" }, "geometry": null },
+{ "type": "Feature", "id": "pit_lane", "properties": { "type": "pit_lane", "circuit": "mugello_v1", "notes": "LineString — trace full pit lane centreline" }, "geometry": { "type": "LineString", "coordinates": [ ] } },
+{ "type": "Feature", "properties": { "id": null, "type": "PIT LANE", "circuit": "TUSCAN", "notes": null }, "geometry": { "type": "LineString", "coordinates": [ [ 11.369202651239721, 43.993950983547471 ], [ 11.369291074191308, 43.993980457864666 ], [ 11.370510857472164, 43.995402026855551 ], [ 11.370553935320373, 43.995483648041635 ], [ 11.370585676892738, 43.995712640813686 ], [ 11.370603814934089, 43.995826003572141 ], [ 11.371295327760597, 43.996914286053197 ], [ 11.372023116669807, 43.998075120699653 ], [ 11.372798517937563, 43.999204213773751 ], [ 11.374029637494264, 44.00094319848828 ], [ 11.374566976969289, 44.001922652721234 ], [ 11.374610054817499, 44.002097231369241 ] ] } }
+]
+}

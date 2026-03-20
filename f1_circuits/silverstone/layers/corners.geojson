@@ -1,0 +1,279 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "britain_v1",
+  "_layer": "corners",
+  "_label": "Silverstone",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "Copse",
+        "circuit": "britain_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "",
+        "circuit": "britain_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "Maggotts",
+        "circuit": "britain_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "Becketts",
+        "circuit": "britain_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "",
+        "circuit": "britain_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "Chapel",
+        "circuit": "britain_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "",
+        "circuit": "britain_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "",
+        "circuit": "britain_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "Stowe",
+        "circuit": "britain_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "",
+        "circuit": "britain_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "corner_number": 11,
+        "name": "",
+        "circuit": "britain_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "properties": {
+        "corner_number": 12,
+        "name": "",
+        "circuit": "britain_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "properties": {
+        "corner_number": 13,
+        "name": "",
+        "circuit": "britain_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "properties": {
+        "corner_number": 14,
+        "name": "",
+        "circuit": "britain_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 15,
+      "properties": {
+        "corner_number": 15,
+        "name": "Club",
+        "circuit": "britain_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 16,
+      "properties": {
+        "corner_number": 16,
+        "name": "",
+        "circuit": "britain_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 17,
+      "properties": {
+        "corner_number": 17,
+        "name": "",
+        "circuit": "britain_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 18,
+      "properties": {
+        "corner_number": 18,
+        "name": "",
+        "circuit": "britain_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "SILVERSTONE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -1.019565211702128, 52.07122805 ] } },
+{ "type": "Feature", "properties": { "corner_number": 2, "name": null, "circuit": "SILVERSTONE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -1.016636577393617, 52.07117636821809 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "SILVERSTONE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -1.013242807047873, 52.072502867287234 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "SILVERSTONE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -1.012278080452128, 52.07136586808511 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "SILVERSTONE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -1.01145117194149, 52.073036912367023 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "SILVERSTONE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -1.019771938829787, 52.077016409574469 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "SILVERSTONE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -1.021270710505319, 52.075862183111703 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "SILVERSTONE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -1.019272348271277, 52.078446272207451 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "SILVERSTONE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -1.0119507625, 52.078876953723409 ] } },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": "SILVERSTONE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -1.010176354654255, 52.07429450239362 ] } },
+{ "type": "Feature", "properties": { "corner_number": 11, "name": null, "circuit": "SILVERSTONE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -1.009504491489362, 52.073484821143616 ] } },
+{ "type": "Feature", "properties": { "corner_number": 12, "name": null, "circuit": "SILVERSTONE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -1.010090218351064, 52.072054958510641 ] } },
+{ "type": "Feature", "properties": { "corner_number": 13, "name": null, "circuit": "SILVERSTONE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -1.009297764361702, 52.070986868351063 ] } },
+{ "type": "Feature", "properties": { "corner_number": 14, "name": null, "circuit": "SILVERSTONE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -1.011072172207447, 52.069918778191493 ] } },
+{ "type": "Feature", "properties": { "corner_number": 15, "name": null, "circuit": "SILVERSTONE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -1.017532394946808, 52.063510237234041 ] } },
+{ "type": "Feature", "properties": { "corner_number": 16, "name": null, "circuit": "SILVERSTONE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -1.022218209840426, 52.066507780585106 ] } },
+{ "type": "Feature", "properties": { "corner_number": 17, "name": null, "circuit": "SILVERSTONE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -1.022890073005319, 52.066249371675532 ] } },
+{ "type": "Feature", "properties": { "corner_number": 18, "name": null, "circuit": "SILVERSTONE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -1.024302708377659, 52.067575870744683 ] } }
+]
+}

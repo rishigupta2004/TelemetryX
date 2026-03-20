@@ -184,11 +184,11 @@ export const FiaDocumentsView = React.memo(function FiaDocumentsView() {
               </div>
               <div className="rounded border border-border bg-bg-secondary p-2">
                 <div className="text-[10px] uppercase text-text-muted">Stewards Decisions</div>
-                <div className="font-mono text-sm text-text-primary">{data.category_counts.stewards_decision ?? 0}</div>
+                <div className="font-mono text-sm text-text-primary">{data.category_counts?.stewards_decision ?? 0}</div>
               </div>
               <div className="rounded border border-border bg-bg-secondary p-2">
                 <div className="text-[10px] uppercase text-text-muted">Race Director Notes</div>
-                <div className="font-mono text-sm text-text-primary">{data.category_counts.race_director_note ?? 0}</div>
+                <div className="font-mono text-sm text-text-primary">{data.category_counts?.race_director_note ?? 0}</div>
               </div>
             </div>
 

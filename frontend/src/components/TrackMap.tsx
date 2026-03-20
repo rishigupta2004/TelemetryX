@@ -214,18 +214,24 @@ export function TrackMap({ compact = false, mode = 'full' }: TrackMapProps) {
             ? (rawProgress / 5500)
             : rawProgress
       const mainProgress = normalizeLoopProgress(normalizedProgress)
-      const MIN_VALID_PROGRESS = 0.001
+      const hasCoordinatePosition =
+        car.x != null &&
+        car.y != null &&
+        Number.isFinite(car.x) &&
+        Number.isFinite(car.y) &&
+        (car.x !== 0 || car.y !== 0)
+      const hasRenderableProgress = Number.isFinite(mainProgress)
       const hasRealPosition =
-        (car.sourceTimestamp ?? 0) > 0 &&
-        Math.abs(mainProgress) > MIN_VALID_PROGRESS
+        ((car.sourceTimestamp ?? 0) > 0 || car.progressSource === 'timing') &&
+        hasRenderableProgress
       let pos = interpolateFromLookup(trackLookup, mainProgress)
 
-      if (car.x != null && car.y != null && Number.isFinite(car.x) && Number.isFinite(car.y) && (car.x !== 0 || car.y !== 0)) {
-        const swapped = { x: -car.y, y: -car.x }
-        const inRawBounds = swapped.x >= rawBounds.minX - rawMarginX && swapped.x <= rawBounds.maxX + rawMarginX &&
-                            swapped.y >= rawBounds.minY - rawMarginY && swapped.y <= rawBounds.maxY + rawMarginY
+      if (hasCoordinatePosition) {
+        const mappedCar = { x: car.x!, y: -(car.y!) }
+        const inRawBounds = mappedCar.x >= rawBounds.minX - rawMarginX && mappedCar.x <= rawBounds.maxX + rawMarginX &&
+                            mappedCar.y >= rawBounds.minY - rawMarginY && mappedCar.y <= rawBounds.maxY + rawMarginY
         if (inRawBounds) {
-          const viewportPos = toViewport(swapped)
+          const viewportPos = toViewport(mappedCar)
           const inViewportBounds = viewportPos.x >= viewportMinX && viewportPos.x <= viewportMaxX &&
                                    viewportPos.y >= viewportMinY && viewportPos.y <= viewportMaxY
           const nearTrack = nearestTrackDistance(viewportPos) <= 70
@@ -252,7 +258,7 @@ export function TrackMap({ compact = false, mode = 'full' }: TrackMapProps) {
       const STALE_THRESHOLD = 3.0
       const HIDE_THRESHOLD = 5.0
       const hiddenByStaleness = car.hasLivePosition && staleness > HIDE_THRESHOLD
-      const hiddenByMissingProgress = !hasRealPosition
+      const hiddenByMissingProgress = !hasRealPosition && !hasCoordinatePosition && !hasRenderableProgress
       const hidden = hiddenByStaleness || hiddenByMissingProgress
       const stale = car.hasLivePosition && staleness >= STALE_THRESHOLD && staleness <= HIDE_THRESHOLD
       return { car, pos, hidden, stale }
@@ -321,10 +327,15 @@ export function TrackMap({ compact = false, mode = 'full' }: TrackMapProps) {
     const cy = my + trackData.bounds.minY
 
     let found: string | null = null
-    const radius = isCompact ? 11 : 15
-    for (const { car, pos } of resolvedCarsRef.current) {
+    let bestDist = Infinity
+    const hitRadius = isCompact ? 22 : 28
+    for (const { car, pos, hidden } of resolvedCarsRef.current) {
+      if (hidden) continue
       const dist = Math.hypot(pos.x - cx, pos.y - cy)
-      if (dist <= radius + 2) { found = car.driverCode; break }
+      if (dist < bestDist) {
+        bestDist = dist
+        if (dist <= hitRadius) found = car.driverCode
+      }
     }
     if (found !== hoveredDriverRef.current) setHoveredDriver(found)
 
@@ -413,8 +424,7 @@ export function TrackMap({ compact = false, mode = 'full' }: TrackMapProps) {
           }}
         >
           <div className="flex flex-col gap-1 text-[9px] sm:text-[10px]">
-            <LegendItem color="rgba(255,140,30,0.6)" borderColor="rgba(255,180,50,0.6)">DRS Zone</LegendItem>
-            <LegendItem color="rgba(255,180,50,0.4)" dashed borderColor="rgba(255,180,50,0.6)">Pit Lane</LegendItem>
+            <LegendItem color="rgba(0,210,80,0.6)" borderColor="rgba(0,230,100,0.6)">DRS Zone</LegendItem>
             <LegendItemDot color="rgba(150, 150, 150, 0.3)" borderColor="rgba(150, 150, 150, 0.5)">In Pit</LegendItemDot>
           </div>
         </div>
@@ -486,7 +496,7 @@ const HoverInfo: React.FC<{ car: { driverCode: string; driverNumber: number; tea
 
 const LegendItem: React.FC<{ color: string; borderColor?: string; dashed?: boolean; children: React.ReactNode }> = ({ color, borderColor, dashed, children }) => (
   <div className="flex items-center gap-2" style={{ color: '#6b6d72' }}>
-    <span className="h-2 w-5 rounded-sm" style={{ background: dashed ? color : `linear-gradient(90deg, ${color} 0%, ${color} 50%, ${color} 100%)`, border: borderColor ? `1px dashed ${borderColor}` : undefined, boxShadow: dashed ? undefined : '0 0 6px rgba(255,180,50,0.5)' }} />
+    <span className="h-2 w-5 rounded-sm" style={{ background: dashed ? color : `linear-gradient(90deg, ${color} 0%, ${color} 50%, ${color} 100%)`, border: borderColor ? `1px dashed ${borderColor}` : undefined, boxShadow: dashed ? undefined : `0 0 6px ${color}` }} />
     {children}
   </div>
 )

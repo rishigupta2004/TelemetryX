@@ -1,0 +1,16 @@
+{
+"type": "FeatureCollection",
+"_circuit": "portimao_v1",
+"_layer": "sectors",
+"_label": "Autodromo Internacional do Algarve",
+"_note": "S1=end of sector 1. S2=end of sector 2. T=speed trap. S3 ends at start\/finish — no point needed.",
+"name": "sectors",
+"features": [
+{ "type": "Feature", "id": "S1", "properties": { "sector": "S1", "ref": "see PDF", "circuit": "portimao_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "S2", "properties": { "sector": "S2", "ref": "see PDF", "circuit": "portimao_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "T", "properties": { "sector": "T", "ref": "see PDF", "circuit": "portimao_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "properties": { "id": null, "sector": "SPEED TRAP", "ref": null, "circuit": "PORTIMAO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -8.631887876914222, 37.235032834729374 ] } },
+{ "type": "Feature", "properties": { "id": "1", "sector": "SECTOR 1", "ref": null, "circuit": "PORTIMAO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -8.628876459134341, 37.231580350709002 ] } },
+{ "type": "Feature", "properties": { "id": "2", "sector": "SECTOR 2", "ref": null, "circuit": "PORTIMAO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -8.625074163957724, 37.22996817755412 ] } }
+]
+}

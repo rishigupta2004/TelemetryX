@@ -1,0 +1,16 @@
+{
+"type": "FeatureCollection",
+"_circuit": "spain_v2",
+"_layer": "sectors",
+"_label": "Barcelona 2023+ no chicane",
+"_note": "S1=end of sector 1. S2=end of sector 2. T=speed trap. S3 ends at start\/finish — no point needed.",
+"name": "sectors_v2",
+"features": [
+{ "type": "Feature", "id": "S1", "properties": { "sector": "S1", "ref": "50m before T4", "circuit": "spain_v2", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "S2", "properties": { "sector": "S2", "ref": "89m before T10", "circuit": "spain_v2", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "T", "properties": { "sector": "T", "ref": "220m before T1", "circuit": "spain_v2", "notes": "" }, "geometry": null },
+{ "type": "Feature", "properties": { "id": "2", "sector": "SECTOR 2", "ref": null, "circuit": "SPAIN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 2.261209796055518, 41.57244124963615 ] } },
+{ "type": "Feature", "properties": { "id": null, "sector": "SPEED TRAP", "ref": null, "circuit": "SPAIN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 2.257152397131375, 41.565162486436499 ] } },
+{ "type": "Feature", "properties": { "id": "1", "sector": "SECTOR 1", "ref": null, "circuit": "SPAIN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 2.253790719348403, 41.567916139020468 ] } }
+]
+}

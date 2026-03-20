@@ -121,13 +121,13 @@ const resolveStartFinishFallbackIndex = (
 ): number | null => {
   if (!points.length || !Array.isArray(startFinishPoints) || !startFinishPoints.length) return null
   const wantedFolder = detectCircuitFolder(trackName, raceName)
+  if (!wantedFolder) return null
   const candidates = (startFinishPoints as Array<{ lon: number; lat: number; circuitFolder?: string }>).filter((row) =>
-    wantedFolder ? String(row.circuitFolder || '').toLowerCase() === wantedFolder : true
+    String(row.circuitFolder || '').toLowerCase() === wantedFolder
   )
-  if (wantedFolder && candidates.length === 0) return null
+  if (candidates.length === 0) return null
   let best: { idx: number; d2: number } | null = null
-  const rows = candidates.length ? candidates : (startFinishPoints as Array<{ lon: number; lat: number }>)
-  for (const row of rows) {
+  for (const row of candidates) {
     if (!Number.isFinite(row.lon) || !Number.isFinite(row.lat)) continue
     const candidate = nearestPointIndex(points, row.lon, row.lat)
     if (!candidate) continue
@@ -155,7 +155,7 @@ const sanitizeOutlierPoints = (points: Point[]): Point[] => {
   const sorted = deltas.slice().sort((a, b) => a - b)
   const p50 = sorted[Math.floor(sorted.length * 0.5)] || 0
   const p90 = sorted[Math.floor(sorted.length * 0.9)] || p50
-  const maxAllowed = Math.max(p90 * 8, p50 * 20, 250)
+  const maxAllowed = Math.max(p90 * 20, p50 * 50, 600)
   const out: Point[] = [points[0]]
   for (let i = 1; i < points.length; i += 1) {
     const prev = out[out.length - 1]
@@ -163,7 +163,7 @@ const sanitizeOutlierPoints = (points: Point[]): Point[] => {
     const step = Math.hypot(candidate.x - prev.x, candidate.y - prev.y)
     if (step <= maxAllowed) out.push(candidate)
   }
-  return out.length >= Math.max(16, Math.floor(points.length * 0.7)) ? out : points
+  return out.length >= Math.max(16, Math.floor(points.length * 0.4)) ? out : points
 }
 
 const robustRawBounds = (points: Point[]): { minX: number; maxX: number; minY: number; maxY: number } => {
@@ -210,6 +210,19 @@ export const useTrackData = (
     const rawCenterline = asArray<number[]>(geo?.centerline)
     if (!rawCenterline.length) return null
 
+    // Helper to get raw origin
+    const getOrigin = (raw: number[][]): { x: number, y: number } | undefined => {
+      for (const item of raw as unknown[]) {
+        let x = 0, y = 0
+        if (Array.isArray(item)) { x = Number(item[0]); y = Number(item[1]) }
+        else if (item && typeof item === 'object') { x = Number((item as { x?: number }).x); y = Number((item as { y?: number }).y) }
+        else continue
+        if (Number.isFinite(x) && Number.isFinite(y)) return { x, y }
+      }
+      return undefined
+    }
+    const trackOrigin = getOrigin(rawCenterline)
+
     const parsedPoints = sanitizeOutlierPoints(parseCenterline(rawCenterline))
     const rawCount = parsedPoints.length
     const closed = isClosedLoop(parsedPoints)
@@ -227,25 +240,9 @@ export const useTrackData = (
       toIndex((geo as any)?.start_finish?.index, rawCount) ??
       toIndex((geo as any)?.startPositionIndex, rawCount)
 
-    let shouldUseFallback = fallbackStartLoopIndex != null && (explicitStartIndexRaw == null || explicitStartIndexRaw === 0)
-    if (
-      !shouldUseFallback &&
+    const shouldUseFallback =
       fallbackStartLoopIndex != null &&
-      explicitStartIndexRaw != null
-    ) {
-      const explicitLoopIdx = closed && explicitStartIndexRaw === rawCount - 1 ? 0 : explicitStartIndexRaw
-      const boundedExplicitLoop = Math.max(0, Math.min(explicitLoopIdx, loopCount - 1))
-      const fallbackPoint = loopPoints[fallbackStartLoopIndex]
-      const explicitPoint = loopPoints[boundedExplicitLoop]
-      // If backend index is materially far from canonical start/finish source,
-      // trust the source-derived fallback to avoid wrong map rotation.
-      if (fallbackPoint && explicitPoint) {
-        const startDeltaMeters = lonLatDistanceMeters(fallbackPoint, explicitPoint)
-        if (startDeltaMeters > 120) {
-          shouldUseFallback = true
-        }
-      }
-    }
+      (explicitStartIndexRaw == null || explicitStartIndexRaw === 0)
 
     const startIndexRaw = shouldUseFallback
       ? (closed ? Math.min(fallbackStartLoopIndex, Math.max(0, rawCount - 2)) : fallbackStartLoopIndex)
@@ -274,7 +271,7 @@ export const useTrackData = (
 
     const viewportWidth = Math.max(320, viewport.width)
     const viewportHeight = Math.max(220, viewport.height)
-    const viewportPadding = 28
+    const viewportPadding = 6
     const sourceWidth = Math.max(1e-9, rawBounds.maxX - rawBounds.minX)
     const sourceHeight = Math.max(1e-9, rawBounds.maxY - rawBounds.minY)
     const targetWidth = Math.max(1, viewportWidth - viewportPadding * 2)
@@ -304,7 +301,7 @@ export const useTrackData = (
       (geo as any)?.pit_lane?.centerline
     )
     const hasPitLaneData = rawPitLane.length >= 2
-    const rawPitLanePoints = parseCenterline(rawPitLane)
+    const rawPitLanePoints = parseCenterline(rawPitLane, trackOrigin)
     const pitLanePoints = rawPitLanePoints.map(toViewport)
     const pitLaneArcLengths = computeArcLengths(pitLanePoints)
     const pitLaneLookup =

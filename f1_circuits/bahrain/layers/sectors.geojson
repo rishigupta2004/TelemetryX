@@ -1,0 +1,16 @@
+{
+"type": "FeatureCollection",
+"_circuit": "bahrain_v1",
+"_layer": "sectors",
+"_label": "Bahrain International Circuit",
+"_note": "S1=end of sector 1. S2=end of sector 2. T=speed trap. S3 ends at start\/finish — no point needed.",
+"name": "sectors",
+"features": [
+{ "type": "Feature", "id": "S1", "properties": { "sector": "S1", "ref": "At T5", "circuit": "bahrain_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "S2", "properties": { "sector": "S2", "ref": "48m before T13", "circuit": "bahrain_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "T", "properties": { "sector": "T", "ref": "158m before T1", "circuit": "bahrain_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "properties": { "id": "", "sector": "SPEED TRAP", "ref": null, "circuit": "BAHRAIN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 50.510648401196974, 26.036033623649381 ] } },
+{ "type": "Feature", "properties": { "id": "1", "sector": "SECTOR 1", "ref": null, "circuit": "BAHRAIN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 50.516727371378309, 26.033939954008993 ] } },
+{ "type": "Feature", "properties": { "id": "2", "sector": "SECTOR 2", "ref": "", "circuit": "BAHRAIN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 50.516840118893263, 26.03029282732486 ] } }
+]
+}

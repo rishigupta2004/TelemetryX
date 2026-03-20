@@ -40,7 +40,9 @@ const TimingRowItem = memo(function TimingRowItem({ row, idx, selected, sessionB
   const tyreTextColor = tyreKey === 'HARD' ? '#000000' : '#ffffff'
   const bestIsSessionBest =
     row.bestLapTime != null && sessionBestLap != null && Math.abs(row.bestLapTime - sessionBestLap) < 1e-6
-  const baseBg = idx % 2 === 0 ? 'var(--bg-card)' : 'var(--bg-secondary)'
+  const baseBg = row.status === 'dnf'
+    ? 'rgba(255,0,0,0.04)'
+    : idx % 2 === 0 ? 'var(--bg-card)' : 'var(--bg-secondary)'
   const selectedBg = selected ? 'var(--bg-selected)' : baseBg
 
   return (
@@ -56,7 +58,9 @@ const TimingRowItem = memo(function TimingRowItem({ row, idx, selected, sessionB
       <td className="px-1">
         <div className="flex items-center gap-1.5">
           <span className="h-2 w-2 rounded-full" style={{ backgroundColor: row.teamColor }} />
-          <span className="truncate font-semibold tracking-[0.02em] text-fg-primary">{row.driverCode}</span>
+          <span className={`truncate font-semibold tracking-[0.02em] ${row.status === 'dnf' ? 'text-fg-muted opacity-50 line-through' : 'text-fg-primary'}`}>
+            {row.driverCode}
+          </span>
         </div>
       </td>
       <td className="px-1 text-right font-mono tabular-nums text-fg-primary">{row.gap}</td>

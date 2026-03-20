@@ -1,0 +1,234 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "paul_ricard_v1",
+  "_layer": "corners",
+  "_label": "Circuit Paul Ricard",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "",
+        "circuit": "paul_ricard_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "",
+        "circuit": "paul_ricard_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "",
+        "circuit": "paul_ricard_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "",
+        "circuit": "paul_ricard_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "",
+        "circuit": "paul_ricard_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "Beausset",
+        "circuit": "paul_ricard_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "",
+        "circuit": "paul_ricard_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "",
+        "circuit": "paul_ricard_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "",
+        "circuit": "paul_ricard_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "",
+        "circuit": "paul_ricard_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "corner_number": 11,
+        "name": "Signes",
+        "circuit": "paul_ricard_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "properties": {
+        "corner_number": 12,
+        "name": "",
+        "circuit": "paul_ricard_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "properties": {
+        "corner_number": 13,
+        "name": "",
+        "circuit": "paul_ricard_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "properties": {
+        "corner_number": 14,
+        "name": "Mistral Chicane",
+        "circuit": "paul_ricard_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 15,
+      "properties": {
+        "corner_number": 15,
+        "name": "",
+        "circuit": "paul_ricard_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "FRANCE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.786758828894422, 43.254606650169329 ] } },
+{ "type": "Feature", "properties": { "corner_number": 2, "name": null, "circuit": "FRANCE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.785723411623506, 43.254142497599609 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "FRANCE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.779742984282869, 43.256748892798811 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "FRANCE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.779564464063745, 43.257534381762952 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "FRANCE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.77815415433267, 43.257695049960162 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "FRANCE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.778636158924303, 43.258569799033872 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "FRANCE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.780706993466135, 43.257230897390443 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "FRANCE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.792525031972112, 43.253928273336662 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "FRANCE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.792703552191235, 43.254160349621522 ] } },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": "FRANCE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.803468321404383, 43.250625649282874 ] } },
+{ "type": "Feature", "properties": { "corner_number": 11, "name": null, "circuit": "FRANCE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.802075863695219, 43.247126652988051 ] } },
+{ "type": "Feature", "properties": { "corner_number": 12, "name": null, "circuit": "FRANCE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.802807796593625, 43.249929420428295 ] } },
+{ "type": "Feature", "properties": { "corner_number": 13, "name": null, "circuit": "FRANCE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.79957658062749, 43.249804456274909 ] } },
+{ "type": "Feature", "properties": { "corner_number": 14, "name": null, "circuit": "FRANCE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.796952333406375, 43.250714909392435 ] } },
+{ "type": "Feature", "properties": { "corner_number": 15, "name": null, "circuit": "FRANCE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.796291808595617, 43.249536675946217 ] } }
+]
+}

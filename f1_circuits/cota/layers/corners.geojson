@@ -1,0 +1,309 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "united_states_v1",
+  "_layer": "corners",
+  "_label": "Circuit of the Americas",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "T1",
+        "circuit": "united_states_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "",
+        "circuit": "united_states_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "",
+        "circuit": "united_states_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "",
+        "circuit": "united_states_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "",
+        "circuit": "united_states_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "",
+        "circuit": "united_states_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "",
+        "circuit": "united_states_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "",
+        "circuit": "united_states_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "Hairpin",
+        "circuit": "united_states_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "",
+        "circuit": "united_states_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "corner_number": 11,
+        "name": "",
+        "circuit": "united_states_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "properties": {
+        "corner_number": 12,
+        "name": "",
+        "circuit": "united_states_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "properties": {
+        "corner_number": 13,
+        "name": "",
+        "circuit": "united_states_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "properties": {
+        "corner_number": 14,
+        "name": "",
+        "circuit": "united_states_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 15,
+      "properties": {
+        "corner_number": 15,
+        "name": "",
+        "circuit": "united_states_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 16,
+      "properties": {
+        "corner_number": 16,
+        "name": "",
+        "circuit": "united_states_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 17,
+      "properties": {
+        "corner_number": 17,
+        "name": "",
+        "circuit": "united_states_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 18,
+      "properties": {
+        "corner_number": 18,
+        "name": "",
+        "circuit": "united_states_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 19,
+      "properties": {
+        "corner_number": 19,
+        "name": "",
+        "circuit": "united_states_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 20,
+      "properties": {
+        "corner_number": 20,
+        "name": "",
+        "circuit": "united_states_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "COTA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -97.6368423806815, 30.13007184596314 ] } },
+{ "type": "Feature", "properties": { "corner_number": 2, "name": null, "circuit": "COTA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -97.637258130299017, 30.132150594050763 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "COTA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -97.635123948929063, 30.133605717712097 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "COTA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -97.634694340990961, 30.13435406702364 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "COTA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -97.633821266794158, 30.134755958320582 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "COTA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -97.633585675344221, 30.135601315876215 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "COTA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -97.631160469242005, 30.135739899082058 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "COTA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -97.629885503748255, 30.136626831599443 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "COTA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -97.629067862833793, 30.136183365340749 ] } },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": "COTA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -97.626933681463839, 30.136585256637691 ] } },
+{ "type": "Feature", "properties": { "corner_number": 11, "name": null, "circuit": "COTA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -97.624466900399852, 30.139370779075104 ] } },
+{ "type": "Feature", "properties": { "corner_number": 12, "name": null, "circuit": "COTA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -97.636579072590393, 30.137319747628649 ] } },
+{ "type": "Feature", "properties": { "corner_number": 13, "name": null, "circuit": "COTA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -97.635428831981912, 30.135629032517382 ] } },
+{ "type": "Feature", "properties": { "corner_number": 14, "name": null, "circuit": "COTA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -97.636426631063969, 30.135615174196801 ] } },
+{ "type": "Feature", "properties": { "corner_number": 15, "name": null, "circuit": "COTA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -97.63775702984006, 30.136529823355353 ] } },
+{ "type": "Feature", "properties": { "corner_number": 16, "name": null, "circuit": "COTA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -97.63681466404033, 30.134852966564672 ] } },
+{ "type": "Feature", "properties": { "corner_number": 17, "name": null, "circuit": "COTA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -97.637119547093178, 30.133938317406116 ] } },
+{ "type": "Feature", "properties": { "corner_number": 18, "name": null, "circuit": "COTA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -97.637978762969396, 30.133716584276772 ] } },
+{ "type": "Feature", "properties": { "corner_number": 19, "name": null, "circuit": "COTA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -97.640611843880393, 30.135504307632125 ] } },
+{ "type": "Feature", "properties": { "corner_number": 20, "name": null, "circuit": "COTA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -97.643452799600141, 30.134478791908901 ] } }
+]
+}

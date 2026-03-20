@@ -1,0 +1,219 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "canada_v1",
+  "_layer": "corners",
+  "_label": "Circuit Gilles Villeneuve",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "",
+        "circuit": "canada_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "",
+        "circuit": "canada_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "",
+        "circuit": "canada_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "",
+        "circuit": "canada_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "",
+        "circuit": "canada_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "",
+        "circuit": "canada_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "",
+        "circuit": "canada_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "",
+        "circuit": "canada_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "",
+        "circuit": "canada_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "",
+        "circuit": "canada_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "corner_number": 11,
+        "name": "",
+        "circuit": "canada_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "properties": {
+        "corner_number": 12,
+        "name": "",
+        "circuit": "canada_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "properties": {
+        "corner_number": 13,
+        "name": "Senna S",
+        "circuit": "canada_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "properties": {
+        "corner_number": 14,
+        "name": "Pits Hairpin",
+        "circuit": "canada_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": "MONTREAL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -73.527524422090423, 45.514336916755319 ] } },
+{ "type": "Feature", "properties": { "corner_number": 11, "name": null, "circuit": "MONTREAL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -73.527004860085114, 45.513143848446809 ] } },
+{ "type": "Feature", "properties": { "corner_number": 12, "name": null, "circuit": "MONTREAL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -73.525176771547876, 45.509911018191488 ] } },
+{ "type": "Feature", "properties": { "corner_number": 12, "name": "CHAMPIONS WALL", "circuit": "MONTREAL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -73.523387169085112, 45.503984162723405 ] } },
+{ "type": "Feature", "properties": { "corner_number": 14, "name": "CHAMPIONS WALL", "circuit": "MONTREAL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -73.523810515904259, 45.503810975388298 ] } },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "MONTREAL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -73.522752148856384, 45.497826390808513 ] } },
+{ "type": "Feature", "properties": { "corner_number": 12, "name": null, "circuit": "MONTREAL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -73.521905455218089, 45.497345314877663 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "MONTREAL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -73.526081194297873, 45.498596112297875 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "MONTREAL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -73.525908006962766, 45.499115674303191 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "MONTREAL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -73.52794776890957, 45.500674360319152 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "MONTREAL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -73.528120956244678, 45.502694879228727 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "MONTREAL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -73.528967649882986, 45.502733365303193 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "MONTREAL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -73.529102351143621, 45.508737192920215 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "MONTREAL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -73.528448087877663, 45.508794922031917 ] } }
+]
+}

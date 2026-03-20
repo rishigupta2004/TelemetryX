@@ -1,0 +1,234 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "portimao_v1",
+  "_layer": "corners",
+  "_label": "Autodromo Internacional do Algarve",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "",
+        "circuit": "portimao_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "",
+        "circuit": "portimao_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "",
+        "circuit": "portimao_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "",
+        "circuit": "portimao_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "",
+        "circuit": "portimao_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "",
+        "circuit": "portimao_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "",
+        "circuit": "portimao_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "",
+        "circuit": "portimao_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "",
+        "circuit": "portimao_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "",
+        "circuit": "portimao_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "corner_number": 11,
+        "name": "",
+        "circuit": "portimao_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "properties": {
+        "corner_number": 12,
+        "name": "",
+        "circuit": "portimao_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "properties": {
+        "corner_number": 13,
+        "name": "",
+        "circuit": "portimao_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "properties": {
+        "corner_number": 14,
+        "name": "",
+        "circuit": "portimao_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 15,
+      "properties": {
+        "corner_number": 15,
+        "name": "",
+        "circuit": "portimao_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "PORTIMAO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -8.632048293670216, 37.235617507239361 ] } },
+{ "type": "Feature", "properties": { "corner_number": 2, "name": null, "circuit": "PORTIMAO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -8.630630785404257, 37.236454069494677 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "PORTIMAO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -8.628864709531916, 37.236047407287231 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "PORTIMAO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -8.630026601553192, 37.235234082872338 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "PORTIMAO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -8.62821405, 37.230307660702124 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "PORTIMAO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -8.627853863473405, 37.232375828499997 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "PORTIMAO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -8.628864709531916, 37.234211617893614 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "PORTIMAO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -8.627842244553191, 37.235175988271273 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "PORTIMAO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -8.62695920661702, 37.232166687936164 ] } },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": "PORTIMAO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -8.624774849617019, 37.230981558074461 ] } },
+{ "type": "Feature", "properties": { "corner_number": 11, "name": null, "circuit": "PORTIMAO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -8.624414663090423, 37.230214709340416 ] } },
+{ "type": "Feature", "properties": { "corner_number": 12, "name": null, "circuit": "PORTIMAO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -8.626587401170212, 37.229505955207443 ] } },
+{ "type": "Feature", "properties": { "corner_number": 13, "name": null, "circuit": "PORTIMAO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -8.626935968776595, 37.227646927973396 ] } },
+{ "type": "Feature", "properties": { "corner_number": 14, "name": null, "circuit": "PORTIMAO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -8.624821325297869, 37.228622917271267 ] } },
+{ "type": "Feature", "properties": { "corner_number": 15, "name": null, "circuit": "PORTIMAO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -8.627110252579786, 37.226031898063823 ] } }
+]
+}

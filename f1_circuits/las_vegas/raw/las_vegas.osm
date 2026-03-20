@@ -1,0 +1,2527 @@
+<?xml version="1.0" encoding="UTF-8"?><osm version="0.6" generator="Overpass API 0.7.62.10 2d4cfc48">
+<note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>
+<meta osm_base="2026-02-19T15:21:16Z"/>
+
+  <node id="137344634" lat="36.1171757" lon="-115.1639797">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="traffic_lights"/>
+    <tag k="traffic_signals:direction" v="forward"/>
+  </node>
+  <node id="137402120" lat="36.1255324" lon="-115.1691519"/>
+  <node id="137402122" lat="36.1253346" lon="-115.1679779"/>
+  <node id="137402123" lat="36.1252240" lon="-115.1676067"/>
+  <node id="137402126" lat="36.1251091" lon="-115.1674034"/>
+  <node id="137402135" lat="36.1244624" lon="-115.1667193"/>
+  <node id="137402137" lat="36.1234745" lon="-115.1662630"/>
+  <node id="137402141" lat="36.1231973" lon="-115.1660990"/>
+  <node id="137402143" lat="36.1230733" lon="-115.1659988">
+    <tag k="junction" v="yes"/>
+    <tag k="ref" v="10"/>
+  </node>
+  <node id="137402146" lat="36.1228819" lon="-115.1657711"/>
+  <node id="137402148" lat="36.1226808" lon="-115.1654862"/>
+  <node id="137402151" lat="36.1225776" lon="-115.1652328"/>
+  <node id="137402154" lat="36.1224945" lon="-115.1647887"/>
+  <node id="137476745" lat="36.1115256" lon="-115.1639338"/>
+  <node id="137743393" lat="36.1192075" lon="-115.1639952">
+    <tag k="junction" v="yes"/>
+    <tag k="ref" v="5"/>
+  </node>
+  <node id="247493048" lat="36.1110604" lon="-115.1731307"/>
+  <node id="252504202" lat="36.1222558" lon="-115.1715734">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="traffic_lights"/>
+    <tag k="traffic_signals:direction" v="forward"/>
+  </node>
+  <node id="259859639" lat="36.1091467" lon="-115.1731416">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="traffic_lights"/>
+    <tag k="traffic_signals:direction" v="forward"/>
+  </node>
+  <node id="1161959432" lat="36.1126502" lon="-115.1639408"/>
+  <node id="1307215317" lat="36.1112140" lon="-115.1731240"/>
+  <node id="1307215322" lat="36.1235930" lon="-115.1706376">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="traffic_lights"/>
+    <tag k="traffic_signals:direction" v="forward"/>
+  </node>
+  <node id="1307215323" lat="36.1098834" lon="-115.1731452"/>
+  <node id="1307215324" lat="36.1207385" lon="-115.1722903"/>
+  <node id="1307215327" lat="36.1251778" lon="-115.1696134"/>
+  <node id="1307215329" lat="36.1189207" lon="-115.1728294"/>
+  <node id="1307215330" lat="36.1181543" lon="-115.1729379"/>
+  <node id="1307215331" lat="36.1196140" lon="-115.1726712"/>
+  <node id="1307215334" lat="36.1214556" lon="-115.1720140"/>
+  <node id="1307215338" lat="36.1149118" lon="-115.1729720">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="traffic_lights"/>
+    <tag k="traffic_signals:direction" v="forward"/>
+  </node>
+  <node id="1307215339" lat="36.1242960" lon="-115.1701752"/>
+  <node id="1307215340" lat="36.1146045" lon="-115.1729710"/>
+  <node id="1307232382" lat="36.1115157" lon="-115.1731117"/>
+  <node id="1307232383" lat="36.1117604" lon="-115.1731008">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="traffic_lights"/>
+    <tag k="traffic_signals:direction" v="forward"/>
+  </node>
+  <node id="1490596685" lat="36.1254108" lon="-115.1694739"/>
+  <node id="1490596713" lat="36.1255587" lon="-115.1693784">
+    <tag k="junction" v="yes"/>
+    <tag k="ref" v="12"/>
+  </node>
+  <node id="1590310741" lat="36.1254094" lon="-115.1683482"/>
+  <node id="1598856720" lat="36.1201017" lon="-115.1725210">
+    <tag k="junction" v="yes"/>
+    <tag k="ref" v="13"/>
+  </node>
+  <node id="1675637835" lat="36.1233035" lon="-115.1708270"/>
+  <node id="1912068000" lat="36.1197458" lon="-115.1726338"/>
+  <node id="2278824741" lat="36.1140279" lon="-115.1730053"/>
+  <node id="2747919652" lat="36.1192046" lon="-115.1629772"/>
+  <node id="2777542741" lat="36.1141937" lon="-115.1639658"/>
+  <node id="2820167009" lat="36.1081206" lon="-115.1722746"/>
+  <node id="2820167011" lat="36.1094381" lon="-115.1731439"/>
+  <node id="2820167020" lat="36.1250904" lon="-115.1696691"/>
+  <node id="2820167021" lat="36.1254672" lon="-115.1687320"/>
+  <node id="2852160853" lat="36.1079522" lon="-115.1684604"/>
+  <node id="2852160855" lat="36.1079508" lon="-115.1686009"/>
+  <node id="2852160857" lat="36.1087541" lon="-115.1731770">
+    <tag k="junction" v="yes"/>
+    <tag k="ref" v="14"/>
+  </node>
+  <node id="2852160859" lat="36.1084918" lon="-115.1727950">
+    <tag k="junction" v="yes"/>
+    <tag k="ref" v="15"/>
+  </node>
+  <node id="2852160860" lat="36.1083292" lon="-115.1725615"/>
+  <node id="2852160861" lat="36.1081655" lon="-115.1723422"/>
+  <node id="2852160862" lat="36.1080432" lon="-115.1720948"/>
+  <node id="2852160863" lat="36.1079912" lon="-115.1719151"/>
+  <node id="2852160864" lat="36.1079580" lon="-115.1717842">
+    <tag k="junction" v="yes"/>
+    <tag k="ref" v="16"/>
+  </node>
+  <node id="2852160865" lat="36.1079335" lon="-115.1701591">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="traffic_lights"/>
+    <tag k="traffic_signals:direction" v="forward"/>
+  </node>
+  <node id="2852160866" lat="36.1079497" lon="-115.1687066"/>
+  <node id="2852160868" lat="36.1079540" lon="-115.1675992"/>
+  <node id="2852160870" lat="36.1079537" lon="-115.1657630"/>
+  <node id="3165620433" lat="36.1108004" lon="-115.1731358"/>
+  <node id="3196293414" lat="36.1180848" lon="-115.1639890"/>
+  <node id="3196293416" lat="36.1182312" lon="-115.1639880"/>
+  <node id="3524173094" lat="36.1162599" lon="-115.1639700"/>
+  <node id="3524177103" lat="36.1172027" lon="-115.1639800">
+    <tag k="button_operated" v="yes"/>
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="crossing:markings" v="zebra"/>
+    <tag k="crossing:signals" v="yes"/>
+    <tag k="highway" v="crossing"/>
+    <tag k="tactile_paving" v="yes"/>
+  </node>
+  <node id="3524185693" lat="36.1146818" lon="-115.1639713">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="crossing:island" v="no"/>
+    <tag k="crossing:markings" v="zebra"/>
+    <tag k="crossing:signals" v="yes"/>
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="3529524396" lat="36.1175110" lon="-115.1729810">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="traffic_lights"/>
+    <tag k="traffic_signals:direction" v="5"/>
+  </node>
+  <node id="3783743557" lat="36.1198499" lon="-115.1726010">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="crossing:island" v="yes"/>
+    <tag k="crossing:markings" v="zebra"/>
+    <tag k="crossing:signals" v="yes"/>
+    <tag k="highway" v="crossing"/>
+    <tag k="tactile_paving" v="yes"/>
+  </node>
+  <node id="3783743618" lat="36.1109576" lon="-115.1731340">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="crossing:markings" v="zebra"/>
+    <tag k="crossing:signals" v="yes"/>
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="3783743834" lat="36.1173636" lon="-115.1729889"/>
+  <node id="3783743845" lat="36.1169699" lon="-115.1729874"/>
+  <node id="3783744003" lat="36.1183621" lon="-115.1729085"/>
+  <node id="4210496188" lat="36.1192581" lon="-115.1727632"/>
+  <node id="4331663605" lat="36.1079520" lon="-115.1641079">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="crossing:markings" v="zebra"/>
+    <tag k="crossing:signals" v="yes"/>
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="4334050761" lat="36.1079514" lon="-115.1647319"/>
+  <node id="4380087444" lat="36.1080747" lon="-115.1721856"/>
+  <node id="4804173974" lat="36.1194996" lon="-115.1726996"/>
+  <node id="4804173975" lat="36.1180652" lon="-115.1729440"/>
+  <node id="4869411040" lat="36.1246163" lon="-115.1668161">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="traffic_lights"/>
+    <tag k="traffic_signals:direction" v="forward"/>
+  </node>
+  <node id="5255307360" lat="36.1222157" lon="-115.1715999">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="crossing:island" v="no"/>
+    <tag k="crossing:markings" v="zebra"/>
+    <tag k="crossing:signals" v="yes"/>
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="5450834124" lat="36.1223730" lon="-115.1714903"/>
+  <node id="5509252535" lat="36.1079503" lon="-115.1712724"/>
+  <node id="5509252567" lat="36.1079535" lon="-115.1678538"/>
+  <node id="5509253032" lat="36.1127628" lon="-115.1639470"/>
+  <node id="5509253038" lat="36.1135874" lon="-115.1639578"/>
+  <node id="5509253039" lat="36.1138594" lon="-115.1639614"/>
+  <node id="5509253044" lat="36.1136851" lon="-115.1639591"/>
+  <node id="5509253047" lat="36.1139494" lon="-115.1639626"/>
+  <node id="5513161675" lat="36.1117715" lon="-115.1639411"/>
+  <node id="5711218684" lat="36.1158950" lon="-115.1639649"/>
+  <node id="5711218691" lat="36.1155905" lon="-115.1639633"/>
+  <node id="5717469568" lat="36.1222552" lon="-115.1616209"/>
+  <node id="5717469569" lat="36.1222704" lon="-115.1621823"/>
+  <node id="5717469570" lat="36.1222920" lon="-115.1630379"/>
+  <node id="5717469571" lat="36.1222910" lon="-115.1636656"/>
+  <node id="5717469572" lat="36.1222899" lon="-115.1640396"/>
+  <node id="5717585565" lat="36.1143116" lon="-115.1639685">
+    <tag k="button_operated" v="yes"/>
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="tactile_paving" v="yes"/>
+    <tag k="traffic_signals" v="traffic_lights"/>
+    <tag k="traffic_signals:direction" v="forward"/>
+    <tag k="traffic_signals:sound" v="yes"/>
+    <tag k="traffic_signals:vibration" v="yes"/>
+  </node>
+  <node id="5717585567" lat="36.1111544" lon="-115.1639284">
+    <tag k="junction" v="yes"/>
+    <tag k="ref" v="4"/>
+  </node>
+  <node id="5717585571" lat="36.1079520" lon="-115.1641459">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="traffic_lights"/>
+    <tag k="traffic_signals:direction" v="forward"/>
+  </node>
+  <node id="6016349698" lat="36.1226804" lon="-115.1712722"/>
+  <node id="6091215746" lat="36.1172671" lon="-115.1729900">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="crossing:markings" v="zebra"/>
+    <tag k="crossing:signals" v="yes"/>
+    <tag k="highway" v="crossing"/>
+    <tag k="tactile_paving" v="no"/>
+  </node>
+  <node id="6091215751" lat="36.1174863" lon="-115.1729830">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="crossing:markings" v="zebra"/>
+    <tag k="crossing:signals" v="yes"/>
+    <tag k="highway" v="crossing"/>
+    <tag k="tactile_paving" v="yes"/>
+  </node>
+  <node id="6222356723" lat="36.1143382" lon="-115.1639691">
+    <tag k="button_operated" v="yes"/>
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="crossing:island" v="no"/>
+    <tag k="crossing:markings" v="zebra"/>
+    <tag k="crossing:signals" v="yes"/>
+    <tag k="highway" v="crossing"/>
+    <tag k="tactile_paving" v="yes"/>
+    <tag k="traffic_signals:sound" v="yes"/>
+    <tag k="traffic_signals:vibration" v="no"/>
+  </node>
+  <node id="6715647930" lat="36.1080239" lon="-115.1720233"/>
+  <node id="7059210713" lat="36.1103222" lon="-115.1731416"/>
+  <node id="7226402466" lat="36.1079473" lon="-115.1652369"/>
+  <node id="7359177854" lat="36.1133774" lon="-115.1639551"/>
+  <node id="7386205445" lat="36.1104429" lon="-115.1731398"/>
+  <node id="9034386146" lat="36.1249550" lon="-115.1671943"/>
+  <node id="9375435424" lat="36.1119352" lon="-115.1730951"/>
+  <node id="9497308570" lat="36.1168073" lon="-115.1639758"/>
+  <node id="9497407198" lat="36.1079448" lon="-115.1709059"/>
+  <node id="9514191337" lat="36.1153643" lon="-115.1639637"/>
+  <node id="9515536209" lat="36.1159426" lon="-115.1729795"/>
+  <node id="9515657013" lat="36.1157291" lon="-115.1639635"/>
+  <node id="9552067667" lat="36.1103620" lon="-115.1731403"/>
+  <node id="9577000545" lat="36.1222909" lon="-115.1636873"/>
+  <node id="9603432066" lat="36.1121837" lon="-115.1730844"/>
+  <node id="9781059410" lat="36.1079523" lon="-115.1662360"/>
+  <node id="9832606127" lat="36.1239130" lon="-115.1704270"/>
+  <node id="9832606128" lat="36.1226113" lon="-115.1713210"/>
+  <node id="9832606129" lat="36.1206341" lon="-115.1723277"/>
+  <node id="9835431642" lat="36.1231250" lon="-115.1709547"/>
+  <node id="9968242168" lat="36.1168687" lon="-115.1639758">
+    <tag k="maxspeed" v="35 mph"/>
+    <tag k="traffic_sign" v="maxspeed"/>
+    <tag k="traffic_sign:direction" v="forward"/>
+  </node>
+  <node id="10081276856" lat="36.1241561" lon="-115.1665776"/>
+  <node id="10081276857" lat="36.1241594" lon="-115.1665792"/>
+  <node id="10081276858" lat="36.1243390" lon="-115.1666627"/>
+  <node id="10242226579" lat="36.1130171" lon="-115.1730485"/>
+  <node id="10278507117" lat="36.1112997" lon="-115.1731204">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="traffic_lights"/>
+    <tag k="traffic_signals:direction" v="forward"/>
+  </node>
+  <node id="10278555026" lat="36.1125952" lon="-115.1730662"/>
+  <node id="10681393781" lat="36.1253047" lon="-115.1678766"/>
+  <node id="11052835397" lat="36.1222416" lon="-115.1607641"/>
+  <node id="11328804622" lat="36.1222864" lon="-115.1627863"/>
+  <node id="11348729066" lat="36.1090357" lon="-115.1731400"/>
+  <node id="11348753609" lat="36.1083062" lon="-115.1629815"/>
+  <node id="11348753610" lat="36.1085439" lon="-115.1626928"/>
+  <node id="11348753611" lat="36.1105837" lon="-115.1604566"/>
+  <node id="11348753612" lat="36.1107004" lon="-115.1603640">
+    <tag k="junction" v="yes"/>
+    <tag k="ref" v="1"/>
+  </node>
+  <node id="11348753613" lat="36.1108742" lon="-115.1603463"/>
+  <node id="11348753614" lat="36.1109842" lon="-115.1604157"/>
+  <node id="11348753615" lat="36.1110678" lon="-115.1605274">
+    <tag k="junction" v="yes"/>
+    <tag k="ref" v="2"/>
+  </node>
+  <node id="11348753616" lat="36.1111515" lon="-115.1607862"/>
+  <node id="11348753619" lat="36.1109028" lon="-115.1618403"/>
+  <node id="11348753620" lat="36.1105837" lon="-115.1622526"/>
+  <node id="11348753621" lat="36.1105089" lon="-115.1623878"/>
+  <node id="11348753622" lat="36.1104429" lon="-115.1629216">
+    <tag k="junction" v="yes"/>
+    <tag k="ref" v="3"/>
+  </node>
+  <node id="11348753623" lat="36.1105397" lon="-115.1632648"/>
+  <node id="11348753624" lat="36.1106145" lon="-115.1634310"/>
+  <node id="11348753625" lat="36.1107400" lon="-115.1636107"/>
+  <node id="11348753626" lat="36.1108918" lon="-115.1637578"/>
+  <node id="11348753629" lat="36.1087119" lon="-115.1627024"/>
+  <node id="11348753630" lat="36.1106321" lon="-115.1605846"/>
+  <node id="11348753631" lat="36.1107334" lon="-115.1605274"/>
+  <node id="11348753632" lat="36.1107994" lon="-115.1605247"/>
+  <node id="11348753633" lat="36.1108852" lon="-115.1605465"/>
+  <node id="11348753638" lat="36.1086429" lon="-115.1627718"/>
+  <node id="11348753639" lat="36.1086165" lon="-115.1628644"/>
+  <node id="11348753640" lat="36.1086055" lon="-115.1630061"/>
+  <node id="11348753641" lat="36.1085879" lon="-115.1630878"/>
+  <node id="11348753642" lat="36.1085439" lon="-115.1631586"/>
+  <node id="11348753643" lat="36.1083475" lon="-115.1633268"/>
+  <node id="11348753644" lat="36.1082835" lon="-115.1633988"/>
+  <node id="11348753645" lat="36.1082113" lon="-115.1635344"/>
+  <node id="11348753646" lat="36.1081275" lon="-115.1637191"/>
+  <node id="11358754437" lat="36.1080479" lon="-115.1636513"/>
+  <node id="11666697675" lat="36.1079327" lon="-115.1701034">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="crossing:markings" v="zebra"/>
+    <tag k="crossing:signals" v="yes"/>
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="12059212382" lat="36.1222356" lon="-115.1603925">
+    <tag k="junction" v="yes"/>
+    <tag k="ref" v="9"/>
+  </node>
+  <node id="12488446340" lat="36.1190399" lon="-115.1639955"/>
+  <node id="12488446343" lat="36.1221364" lon="-115.1603887">
+    <tag k="barrier" v="gate"/>
+  </node>
+  <node id="12626696512" lat="36.1191725" lon="-115.1611853">
+    <tag k="junction" v="yes"/>
+    <tag k="ref" v="6"/>
+  </node>
+  <node id="12638889506" lat="36.1193192" lon="-115.1609218">
+    <tag k="barrier" v="gate"/>
+  </node>
+  <node id="12638889507" lat="36.1196028" lon="-115.1605614"/>
+  <node id="12638889508" lat="36.1197837" lon="-115.1604001"/>
+  <node id="12638889509" lat="36.1201468" lon="-115.1601987"/>
+  <node id="12638889510" lat="36.1203662" lon="-115.1601417"/>
+  <node id="12638889511" lat="36.1206152" lon="-115.1601122"/>
+  <node id="12638889512" lat="36.1207857" lon="-115.1601159">
+    <tag k="junction" v="yes"/>
+    <tag k="ref" v="7"/>
+  </node>
+  <node id="12638889513" lat="36.1208848" lon="-115.1601224"/>
+  <node id="12638889514" lat="36.1209494" lon="-115.1601624"/>
+  <node id="12638889515" lat="36.1209770" lon="-115.1602662"/>
+  <node id="12638889516" lat="36.1209856" lon="-115.1604010"/>
+  <node id="12638889517" lat="36.1210136" lon="-115.1604701"/>
+  <node id="12638889518" lat="36.1210835" lon="-115.1605527"/>
+  <node id="12638889519" lat="36.1211970" lon="-115.1605933"/>
+  <node id="12638889520" lat="36.1213544" lon="-115.1606076"/>
+  <node id="12638889521" lat="36.1214874" lon="-115.1605870"/>
+  <node id="12638889522" lat="36.1217020" lon="-115.1604347"/>
+  <node id="12638889523" lat="36.1217986" lon="-115.1603919"/>
+  <node id="12638889524" lat="36.1208309" lon="-115.1602127"/>
+  <node id="12638889525" lat="36.1208473" lon="-115.1603983"/>
+  <node id="12638889526" lat="36.1208693" lon="-115.1605164"/>
+  <node id="12638889527" lat="36.1209215" lon="-115.1606157"/>
+  <node id="12638889528" lat="36.1210168" lon="-115.1606910">
+    <tag k="junction" v="yes"/>
+    <tag k="ref" v="8"/>
+  </node>
+  <node id="12638889529" lat="36.1211839" lon="-115.1607289"/>
+  <node id="12638889530" lat="36.1213038" lon="-115.1607192"/>
+  <node id="12680908708" lat="36.1191844" lon="-115.1619476"/>
+  <node id="12737783581" lat="36.1086137" lon="-115.1729726"/>
+  <node id="12781971625" lat="36.1255456" lon="-115.1692652"/>
+  <node id="12949325891" lat="36.1199921" lon="-115.1602819"/>
+  <node id="12949325892" lat="36.1199581" lon="-115.1603002"/>
+  <node id="13016208734" lat="36.1080898" lon="-115.1635088"/>
+  <node id="13016217985" lat="36.1086649" lon="-115.1625601">
+    <tag k="raceway" v="finish"/>
+  </node>
+  <node id="13016217986" lat="36.1092838" lon="-115.1618816">
+    <tag k="raceway" v="start"/>
+  </node>
+  <node id="13016217987" lat="36.1081544" lon="-115.1633356"/>
+  <node id="13016217988" lat="36.1082226" lon="-115.1631450"/>
+  <node id="13016217989" lat="36.1084118" lon="-115.1628372"/>
+  <node id="13016217990" lat="36.1111757" lon="-115.1609986"/>
+  <node id="13016217991" lat="36.1111669" lon="-115.1612056"/>
+  <node id="13016217992" lat="36.1111251" lon="-115.1613881"/>
+  <node id="13016217993" lat="36.1111163" lon="-115.1606445"/>
+  <node id="13016217994" lat="36.1109754" lon="-115.1606146"/>
+  <node id="13016217995" lat="36.1107950" lon="-115.1603395"/>
+  <node id="13016217996" lat="36.1104649" lon="-115.1625512"/>
+  <node id="13016217997" lat="36.1104407" lon="-115.1627527"/>
+  <node id="13016217998" lat="36.1104891" lon="-115.1631041"/>
+  <node id="13016217999" lat="36.1110480" lon="-115.1615733"/>
+  <node id="13060798867" lat="36.1147714" lon="-115.1729710"/>
+  <node id="13060955056" lat="36.1255088" lon="-115.1690052">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="traffic_lights"/>
+    <tag k="traffic_signals:direction" v="forward"/>
+  </node>
+  <node id="13154585534" lat="36.1201947" lon="-115.1724872">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="traffic_lights"/>
+    <tag k="traffic_signals:direction" v="forward"/>
+  </node>
+  <node id="13154585535" lat="36.1198760" lon="-115.1725947"/>
+  <node id="13154585537" lat="36.1221555" lon="-115.1716380"/>
+  <node id="13154585543" lat="36.1234100" lon="-115.1707580"/>
+  <node id="13179859940" lat="36.1222901" lon="-115.1639532">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="crossing:markings" v="zebra"/>
+    <tag k="crossing:signals" v="yes"/>
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="13179859946" lat="36.1224736" lon="-115.1642735">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="crossing:markings" v="zebra"/>
+    <tag k="crossing:signals" v="yes"/>
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="13179859976" lat="36.1221936" lon="-115.1603909">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="13179859985" lat="36.1192073" lon="-115.1639282">
+    <tag k="crossing" v="unmarked"/>
+    <tag k="crossing:markings" v="no"/>
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="13179906318" lat="36.1245943" lon="-115.1668003">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="crossing:markings" v="zebra"/>
+    <tag k="crossing:signals" v="yes"/>
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="13207647702" lat="36.1079538" lon="-115.1677215">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="crossing:markings" v="zebra"/>
+    <tag k="crossing:signals" v="yes"/>
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="13250780583" lat="36.1248066" lon="-115.1669930"/>
+  <node id="13250780586" lat="36.1247170" lon="-115.1668882">
+    <tag k="junction" v="yes"/>
+    <tag k="ref" v="11"/>
+  </node>
+  <node id="13341696769" lat="36.1079306" lon="-115.1699626"/>
+  <node id="13341696770" lat="36.1079321" lon="-115.1698576"/>
+  <node id="13341696773" lat="36.1079537" lon="-115.1677684">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="traffic_lights"/>
+    <tag k="traffic_signals:direction" v="forward"/>
+  </node>
+  <node id="13341696775" lat="36.1079521" lon="-115.1640271"/>
+  <node id="13341696778" lat="36.1079696" lon="-115.1639015">
+    <tag k="junction" v="yes"/>
+    <tag k="ref" v="17"/>
+  </node>
+  <node id="13341696779" lat="36.1080897" lon="-115.1637627"/>
+  <node id="13341696780" lat="36.1080475" lon="-115.1638115">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="crossing:markings" v="zebra"/>
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="13341696784" lat="36.1144213" lon="-115.1639683"/>
+  <node id="13341696785" lat="36.1145884" lon="-115.1639700"/>
+  <node id="13341696788" lat="36.1173030" lon="-115.1639816"/>
+  <node id="13341696794" lat="36.1224690" lon="-115.1641615"/>
+  <node id="13341705711" lat="36.1192393" lon="-115.1610652"/>
+  <way id="14323635">
+    <bounds minlat="36.1191725" minlon="-115.1639952" maxlat="36.1192075" maxlon="-115.1611853"/>
+    <nd ref="12626696512" lat="36.1191725" lon="-115.1611853"/>
+    <nd ref="12680908708" lat="36.1191844" lon="-115.1619476"/>
+    <nd ref="2747919652" lat="36.1192046" lon="-115.1629772"/>
+    <nd ref="13179859985" lat="36.1192073" lon="-115.1639282"/>
+    <nd ref="137743393" lat="36.1192075" lon="-115.1639952"/>
+    <tag k="access" v="yes"/>
+    <tag k="covered" v="no"/>
+    <tag k="highway" v="unclassified"/>
+    <tag k="lanes" v="2"/>
+    <tag k="name" v="Westchester Drive"/>
+    <tag k="oneway" v="no"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="tiger:cfcc" v="A41"/>
+    <tag k="tiger:county" v="Clark, NV"/>
+    <tag k="tiger:name_base" v="Westchester"/>
+    <tag k="tiger:name_type" v="Cir"/>
+    <tag k="tiger:reviewed" v="no"/>
+  </way>
+  <way id="281237566">
+    <bounds minlat="36.1079321" minlon="-115.1698576" maxlat="36.1079497" maxlon="-115.1687066"/>
+    <nd ref="13341696770" lat="36.1079321" lon="-115.1698576"/>
+    <nd ref="2852160866" lat="36.1079497" lon="-115.1687066"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="2"/>
+    <tag k="maxspeed" v="35 mph"/>
+    <tag k="name" v="East Harmon Avenue"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="421265955">
+    <bounds minlat="36.1146045" minlon="-115.1729710" maxlat="36.1147714" maxlon="-115.1729710"/>
+    <nd ref="13060798867" lat="36.1147714" lon="-115.1729710"/>
+    <nd ref="1307215340" lat="36.1146045" lon="-115.1729710"/>
+    <tag k="alt_name" v="Las Vegas Strip"/>
+    <tag k="bicycle" v="yes"/>
+    <tag k="foot" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lane_markings" v="no"/>
+    <tag k="loc_name" v="Las Vegas Boulevard South"/>
+    <tag k="maxspeed" v="30 mph"/>
+    <tag k="name" v="South Las Vegas Boulevard"/>
+    <tag k="old_ref" v="US 91;NV 6;NV 604"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk" v="no"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:old_ref" v="Nevada's State Maintained Highways (January 2003)"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="423686234">
+    <bounds minlat="36.1108004" minlon="-115.1731358" maxlat="36.1110604" maxlon="-115.1731307"/>
+    <nd ref="247493048" lat="36.1110604" lon="-115.1731307"/>
+    <nd ref="3783743618" lat="36.1109576" lon="-115.1731340"/>
+    <nd ref="3165620433" lat="36.1108004" lon="-115.1731358"/>
+    <tag k="alt_name" v="Las Vegas Strip"/>
+    <tag k="hgv" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="loc_name" v="Las Vegas Boulevard South"/>
+    <tag k="maxspeed" v="30 mph"/>
+    <tag k="name" v="South Las Vegas Boulevard"/>
+    <tag k="old_ref" v="US 91;NV 6;NV 604"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:old_ref" v="Nevada's State Maintained Highways (January 2003)"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="423686460">
+    <bounds minlat="36.1169699" minlon="-115.1729900" maxlat="36.1173636" maxlon="-115.1729874"/>
+    <nd ref="3783743834" lat="36.1173636" lon="-115.1729889"/>
+    <nd ref="6091215746" lat="36.1172671" lon="-115.1729900"/>
+    <nd ref="3783743845" lat="36.1169699" lon="-115.1729874"/>
+    <tag k="alt_name" v="Las Vegas Strip"/>
+    <tag k="hgv" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="loc_name" v="Las Vegas Boulevard South"/>
+    <tag k="maxspeed" v="30 mph"/>
+    <tag k="name" v="South Las Vegas Boulevard"/>
+    <tag k="old_ref" v="US 91;NV 6;NV 604"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="parking:both" v="no"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:old_ref" v="Nevada's State Maintained Highways (January 2003)"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="423689767">
+    <bounds minlat="36.1173636" minlon="-115.1729889" maxlat="36.1183621" maxlon="-115.1729085"/>
+    <nd ref="3783744003" lat="36.1183621" lon="-115.1729085"/>
+    <nd ref="1307215330" lat="36.1181543" lon="-115.1729379"/>
+    <nd ref="4804173975" lat="36.1180652" lon="-115.1729440"/>
+    <nd ref="3529524396" lat="36.1175110" lon="-115.1729810"/>
+    <nd ref="6091215751" lat="36.1174863" lon="-115.1729830"/>
+    <nd ref="3783743834" lat="36.1173636" lon="-115.1729889"/>
+    <tag k="alt_name" v="Las Vegas Strip"/>
+    <tag k="hgv" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="loc_name" v="Las Vegas Boulevard South"/>
+    <tag k="maxspeed" v="30 mph"/>
+    <tag k="name" v="South Las Vegas Boulevard"/>
+    <tag k="old_ref" v="US 91;NV 6;NV 604"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="parking:both" v="no"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:old_ref" v="Nevada's State Maintained Highways (January 2003)"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="435490976">
+    <bounds minlat="36.1079473" minlon="-115.1675992" maxlat="36.1079540" maxlon="-115.1652369"/>
+    <nd ref="2852160868" lat="36.1079540" lon="-115.1675992"/>
+    <nd ref="9781059410" lat="36.1079523" lon="-115.1662360"/>
+    <nd ref="2852160870" lat="36.1079537" lon="-115.1657630"/>
+    <nd ref="7226402466" lat="36.1079473" lon="-115.1652369"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="3"/>
+    <tag k="maxspeed" v="35 mph"/>
+    <tag k="name" v="East Harmon Avenue"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="435490978">
+    <bounds minlat="36.1079514" minlon="-115.1647319" maxlat="36.1079521" maxlon="-115.1640271"/>
+    <nd ref="4334050761" lat="36.1079514" lon="-115.1647319"/>
+    <nd ref="5717585571" lat="36.1079520" lon="-115.1641459"/>
+    <nd ref="4331663605" lat="36.1079520" lon="-115.1641079"/>
+    <nd ref="13341696775" lat="36.1079521" lon="-115.1640271"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="maxspeed" v="35 mph"/>
+    <tag k="name" v="East Harmon Avenue"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="placement" v="middle_of:4"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left|left|||right"/>
+  </way>
+  <way id="600023001">
+    <bounds minlat="36.1206341" minlon="-115.1723277" maxlat="36.1221555" maxlon="-115.1716380"/>
+    <nd ref="13154585537" lat="36.1221555" lon="-115.1716380"/>
+    <nd ref="1307215334" lat="36.1214556" lon="-115.1720140"/>
+    <nd ref="1307215324" lat="36.1207385" lon="-115.1722903"/>
+    <nd ref="9832606129" lat="36.1206341" lon="-115.1723277"/>
+    <tag k="alt_name" v="Las Vegas Strip"/>
+    <tag k="hgv" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="loc_name" v="Las Vegas Boulevard South"/>
+    <tag k="maxspeed" v="30 mph"/>
+    <tag k="name" v="South Las Vegas Boulevard"/>
+    <tag k="old_ref" v="US 91;NV 6;NV 604"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="postal_code" v="89123"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:old_ref" v="Nevada's State Maintained Highways (January 2003)"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="600519166">
+    <bounds minlat="36.1079535" minlon="-115.1678538" maxlat="36.1079540" maxlon="-115.1675992"/>
+    <nd ref="5509252567" lat="36.1079535" lon="-115.1678538"/>
+    <nd ref="13341696773" lat="36.1079537" lon="-115.1677684"/>
+    <nd ref="13207647702" lat="36.1079538" lon="-115.1677215"/>
+    <nd ref="2852160868" lat="36.1079540" lon="-115.1675992"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="maxspeed" v="35 mph"/>
+    <tag k="name" v="East Harmon Avenue"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="600520431">
+    <bounds minlat="36.1173030" minlon="-115.1639955" maxlat="36.1192075" maxlon="-115.1639816"/>
+    <nd ref="13341696788" lat="36.1173030" lon="-115.1639816"/>
+    <nd ref="3196293414" lat="36.1180848" lon="-115.1639890"/>
+    <nd ref="3196293416" lat="36.1182312" lon="-115.1639880"/>
+    <nd ref="12488446340" lat="36.1190399" lon="-115.1639955"/>
+    <nd ref="137743393" lat="36.1192075" lon="-115.1639952"/>
+    <tag k="flood_prone" v="yes"/>
+    <tag k="hgv" v="designated"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="2"/>
+    <tag k="maxspeed" v="35 mph"/>
+    <tag k="name" v="Koval Lane"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="source:hgv" v="https://library.municode.com/nv/clark_county/codes/code_of_ordinances?nodeId=TIT14TR_CH14.46COVERE_14.46.030TRRODE"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="tiger:cfcc" v="A41"/>
+    <tag k="tiger:county" v="Clark, NV"/>
+    <tag k="tiger:name_base" v="Koval"/>
+    <tag k="tiger:name_type" v="Ln"/>
+  </way>
+  <way id="601644233">
+    <bounds minlat="36.1250904" minlon="-115.1696691" maxlat="36.1254108" maxlon="-115.1694739"/>
+    <nd ref="1490596685" lat="36.1254108" lon="-115.1694739"/>
+    <nd ref="1307215327" lat="36.1251778" lon="-115.1696134"/>
+    <nd ref="2820167020" lat="36.1250904" lon="-115.1696691"/>
+    <tag k="alt_name" v="Las Vegas Strip"/>
+    <tag k="foot" v="no"/>
+    <tag k="hgv" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="3"/>
+    <tag k="lit" v="yes"/>
+    <tag k="loc_name" v="Las Vegas Boulevard South"/>
+    <tag k="maxspeed" v="30 mph"/>
+    <tag k="name" v="South Las Vegas Boulevard"/>
+    <tag k="old_ref" v="US 91;NV 6;NV 604"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="postal_code" v="89123"/>
+    <tag k="sidewalk:both" v="no"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:old_ref" v="Nevada's State Maintained Highways (January 2003)"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="601644239">
+    <bounds minlat="36.1224690" minlon="-115.1659988" maxlat="36.1230733" maxlon="-115.1641615"/>
+    <nd ref="13341696794" lat="36.1224690" lon="-115.1641615"/>
+    <nd ref="13179859946" lat="36.1224736" lon="-115.1642735"/>
+    <nd ref="137402154" lat="36.1224945" lon="-115.1647887"/>
+    <nd ref="137402151" lat="36.1225776" lon="-115.1652328"/>
+    <nd ref="137402148" lat="36.1226808" lon="-115.1654862"/>
+    <nd ref="137402146" lat="36.1228819" lon="-115.1657711"/>
+    <nd ref="137402143" lat="36.1230733" lon="-115.1659988"/>
+    <tag k="hgv" v="designated"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="3"/>
+    <tag k="maxspeed" v="35 mph"/>
+    <tag k="name" v="Sands Avenue"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="source:hgv" v="https://library.municode.com/nv/clark_county/codes/code_of_ordinances?nodeId=TIT14TR_CH14.46COVERE_14.46.030TRRODE"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="tiger:cfcc" v="A41"/>
+    <tag k="tiger:county" v="Clark, NV"/>
+    <tag k="tiger:name_base" v="Sands"/>
+    <tag k="tiger:name_type" v="Ave"/>
+  </way>
+  <way id="601645722">
+    <bounds minlat="36.1222899" minlon="-115.1640396" maxlat="36.1222909" maxlon="-115.1636873"/>
+    <nd ref="5717469572" lat="36.1222899" lon="-115.1640396"/>
+    <nd ref="13179859940" lat="36.1222901" lon="-115.1639532"/>
+    <nd ref="9577000545" lat="36.1222909" lon="-115.1636873"/>
+    <tag k="hgv" v="designated"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="3"/>
+    <tag k="maxheight" v="default"/>
+    <tag k="maxspeed" v="35 mph"/>
+    <tag k="name" v="Sands Avenue"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="good"/>
+    <tag k="source:hgv" v="https://library.municode.com/nv/clark_county/codes/code_of_ordinances?nodeId=TIT14TR_CH14.46COVERE_14.46.030TRRODE"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="601666019">
+    <bounds minlat="36.1079521" minlon="-115.1640271" maxlat="36.1079696" maxlon="-115.1639015"/>
+    <nd ref="13341696775" lat="36.1079521" lon="-115.1640271"/>
+    <nd ref="13341696778" lat="36.1079696" lon="-115.1639015"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="maxspeed" v="35 mph"/>
+    <tag k="name" v="East Harmon Avenue"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="placement" v="middle_of:4"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left|left|||right"/>
+  </way>
+  <way id="601666023">
+    <bounds minlat="36.1162599" minlon="-115.1639758" maxlat="36.1168073" maxlon="-115.1639700"/>
+    <nd ref="3524173094" lat="36.1162599" lon="-115.1639700"/>
+    <nd ref="9497308570" lat="36.1168073" lon="-115.1639758"/>
+    <tag k="hgv" v="designated"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="2"/>
+    <tag k="lit" v="no"/>
+    <tag k="maxspeed" v="35 mph"/>
+    <tag k="name" v="Koval Lane"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="shoulder" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="source:hgv" v="https://library.municode.com/nv/clark_county/codes/code_of_ordinances?nodeId=TIT14TR_CH14.46COVERE_14.46.030TRRODE"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="tiger:cfcc" v="A41"/>
+    <tag k="tiger:county" v="Clark, NV"/>
+    <tag k="tiger:name_base" v="Koval"/>
+    <tag k="tiger:name_type" v="Ln"/>
+  </way>
+  <way id="601671136">
+    <bounds minlat="36.1145884" minlon="-115.1639713" maxlat="36.1153643" maxlon="-115.1639637"/>
+    <nd ref="13341696785" lat="36.1145884" lon="-115.1639700"/>
+    <nd ref="3524185693" lat="36.1146818" lon="-115.1639713"/>
+    <nd ref="9514191337" lat="36.1153643" lon="-115.1639637"/>
+    <tag k="hgv" v="designated"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="2"/>
+    <tag k="name" v="Koval Lane"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="source:hgv" v="https://library.municode.com/nv/clark_county/codes/code_of_ordinances?nodeId=TIT14TR_CH14.46COVERE_14.46.030TRRODE"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="tiger:cfcc" v="A41"/>
+    <tag k="tiger:county" v="Clark, NV"/>
+    <tag k="tiger:name_base" v="Koval"/>
+    <tag k="tiger:name_type" v="Ln"/>
+  </way>
+  <way id="601671174">
+    <bounds minlat="36.1144213" minlon="-115.1639700" maxlat="36.1145884" maxlon="-115.1639683"/>
+    <nd ref="13341696784" lat="36.1144213" lon="-115.1639683"/>
+    <nd ref="13341696785" lat="36.1145884" lon="-115.1639700"/>
+    <tag k="hgv" v="designated"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lane_markings" v="no"/>
+    <tag k="name" v="Koval Lane"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="source:hgv" v="https://library.municode.com/nv/clark_county/codes/code_of_ordinances?nodeId=TIT14TR_CH14.46COVERE_14.46.030TRRODE"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="tiger:cfcc" v="A41"/>
+    <tag k="tiger:county" v="Clark, NV"/>
+    <tag k="tiger:name_base" v="Koval"/>
+    <tag k="tiger:name_type" v="Ln"/>
+  </way>
+  <way id="674621867">
+    <bounds minlat="36.1183621" minlon="-115.1729085" maxlat="36.1192581" maxlon="-115.1727632"/>
+    <nd ref="4210496188" lat="36.1192581" lon="-115.1727632"/>
+    <nd ref="1307215329" lat="36.1189207" lon="-115.1728294"/>
+    <nd ref="3783744003" lat="36.1183621" lon="-115.1729085"/>
+    <tag k="alt_name" v="Las Vegas Strip"/>
+    <tag k="hgv" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="loc_name" v="Las Vegas Boulevard South"/>
+    <tag k="maxspeed" v="30 mph"/>
+    <tag k="name" v="South Las Vegas Boulevard"/>
+    <tag k="old_ref" v="US 91;NV 6;NV 604"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="parking:both" v="no"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:old_ref" v="Nevada's State Maintained Highways (January 2003)"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="742140361">
+    <bounds minlat="36.1130171" minlon="-115.1730485" maxlat="36.1140279" maxlon="-115.1730053"/>
+    <nd ref="2278824741" lat="36.1140279" lon="-115.1730053"/>
+    <nd ref="10242226579" lat="36.1130171" lon="-115.1730485"/>
+    <tag k="alt_name" v="Las Vegas Strip"/>
+    <tag k="hgv" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lit" v="yes"/>
+    <tag k="loc_name" v="Las Vegas Boulevard South"/>
+    <tag k="maxspeed" v="30 mph"/>
+    <tag k="name" v="South Las Vegas Boulevard"/>
+    <tag k="old_ref" v="US 91;NV 6;NV 604"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:old_ref" v="Nevada's State Maintained Highways (January 2003)"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="847458816">
+    <bounds minlat="36.1157291" minlon="-115.1639649" maxlat="36.1158950" maxlon="-115.1639635"/>
+    <nd ref="9515657013" lat="36.1157291" lon="-115.1639635"/>
+    <nd ref="5711218684" lat="36.1158950" lon="-115.1639649"/>
+    <tag k="hgv" v="designated"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="3"/>
+    <tag k="name" v="Koval Lane"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="source:hgv" v="https://library.municode.com/nv/clark_county/codes/code_of_ordinances?nodeId=TIT14TR_CH14.46COVERE_14.46.030TRRODE"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="tiger:cfcc" v="A41"/>
+    <tag k="tiger:county" v="Clark, NV"/>
+    <tag k="tiger:name_base" v="Koval"/>
+    <tag k="tiger:name_type" v="Ln"/>
+    <tag k="turn:lanes" v="||right"/>
+  </way>
+  <way id="847458817">
+    <bounds minlat="36.1158950" minlon="-115.1639700" maxlat="36.1162599" maxlon="-115.1639649"/>
+    <nd ref="5711218684" lat="36.1158950" lon="-115.1639649"/>
+    <nd ref="3524173094" lat="36.1162599" lon="-115.1639700"/>
+    <tag k="hgv" v="designated"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="3"/>
+    <tag k="name" v="Koval Lane"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="source:hgv" v="https://library.municode.com/nv/clark_county/codes/code_of_ordinances?nodeId=TIT14TR_CH14.46COVERE_14.46.030TRRODE"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="tiger:cfcc" v="A41"/>
+    <tag k="tiger:county" v="Clark, NV"/>
+    <tag k="tiger:name_base" v="Koval"/>
+    <tag k="tiger:name_type" v="Ln"/>
+    <tag k="turn:lanes" v="none|none|right"/>
+  </way>
+  <way id="999044776">
+    <bounds minlat="36.1115256" minlon="-115.1639411" maxlat="36.1117715" maxlon="-115.1639338"/>
+    <nd ref="137476745" lat="36.1115256" lon="-115.1639338"/>
+    <nd ref="5513161675" lat="36.1117715" lon="-115.1639411"/>
+    <tag k="hgv" v="designated"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="2"/>
+    <tag k="name" v="Koval Lane"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="source:hgv" v="https://library.municode.com/nv/clark_county/codes/code_of_ordinances?nodeId=TIT14TR_CH14.46COVERE_14.46.030TRRODE"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="tiger:cfcc" v="A41"/>
+    <tag k="tiger:county" v="Clark, NV"/>
+    <tag k="tiger:name_base" v="Koval"/>
+    <tag k="tiger:name_type" v="Ln"/>
+  </way>
+  <way id="999044779">
+    <bounds minlat="36.1117715" minlon="-115.1639470" maxlat="36.1127628" maxlon="-115.1639408"/>
+    <nd ref="5513161675" lat="36.1117715" lon="-115.1639411"/>
+    <nd ref="1161959432" lat="36.1126502" lon="-115.1639408"/>
+    <nd ref="5509253032" lat="36.1127628" lon="-115.1639470"/>
+    <tag k="hgv" v="designated"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="2"/>
+    <tag k="name" v="Koval Lane"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="source:hgv" v="https://library.municode.com/nv/clark_county/codes/code_of_ordinances?nodeId=TIT14TR_CH14.46COVERE_14.46.030TRRODE"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="tiger:cfcc" v="A41"/>
+    <tag k="tiger:county" v="Clark, NV"/>
+    <tag k="tiger:name_base" v="Koval"/>
+    <tag k="tiger:name_type" v="Ln"/>
+  </way>
+  <way id="1009061533">
+    <bounds minlat="36.1254108" minlon="-115.1694739" maxlat="36.1255587" maxlon="-115.1693784"/>
+    <nd ref="1490596713" lat="36.1255587" lon="-115.1693784"/>
+    <nd ref="1490596685" lat="36.1254108" lon="-115.1694739"/>
+    <tag k="alt_name" v="Las Vegas Strip"/>
+    <tag k="foot" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="loc_name" v="Las Vegas Boulevard South"/>
+    <tag k="maxspeed" v="30 mph"/>
+    <tag k="name" v="South Las Vegas Boulevard"/>
+    <tag k="old_ref" v="US 91;NV 6;NV 604"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="postal_code" v="89123"/>
+    <tag k="sidewalk:both" v="no"/>
+    <tag k="smoothness" v="good"/>
+    <tag k="source:old_ref" v="Nevada's State Maintained Highways (January 2003)"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1009061534">
+    <bounds minlat="36.1255324" minlon="-115.1692652" maxlat="36.1255456" maxlon="-115.1691519"/>
+    <nd ref="137402120" lat="36.1255324" lon="-115.1691519"/>
+    <nd ref="12781971625" lat="36.1255456" lon="-115.1692652"/>
+    <tag k="foot" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="6"/>
+    <tag k="maxspeed" v="45 mph"/>
+    <tag k="name" v="Sands Avenue"/>
+    <tag k="old_name" v="D4–C Ranch Road"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:both" v="no"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="tiger:cfcc" v="A41"/>
+    <tag k="tiger:county" v="Clark, NV"/>
+    <tag k="tiger:name_base" v="Sands"/>
+    <tag k="tiger:name_direction_prefix" v="E"/>
+    <tag k="tiger:name_type" v="Ave"/>
+    <tag k="turn:lanes" v="left|left|||||"/>
+  </way>
+  <way id="1016480469">
+    <bounds minlat="36.1112140" minlon="-115.1731240" maxlat="36.1115157" maxlon="-115.1731117"/>
+    <nd ref="1307232382" lat="36.1115157" lon="-115.1731117"/>
+    <nd ref="10278507117" lat="36.1112997" lon="-115.1731204"/>
+    <nd ref="1307215317" lat="36.1112140" lon="-115.1731240"/>
+    <tag k="alt_name" v="Las Vegas Strip"/>
+    <tag k="bicycle" v="yes"/>
+    <tag k="foot" v="no"/>
+    <tag k="hgv" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="horse" v="permissive"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="loc_name" v="Las Vegas Boulevard South"/>
+    <tag k="maxspeed" v="30 mph"/>
+    <tag k="motor_vehicle" v="yes"/>
+    <tag k="name" v="South Las Vegas Boulevard"/>
+    <tag k="old_ref" v="US 91;NV 6;NV 604"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:old_ref" v="Nevada's State Maintained Highways (January 2003)"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="through|through|through|through"/>
+  </way>
+  <way id="1016480470">
+    <bounds minlat="36.1115157" minlon="-115.1731117" maxlat="36.1121837" maxlon="-115.1730844"/>
+    <nd ref="9603432066" lat="36.1121837" lon="-115.1730844"/>
+    <nd ref="9375435424" lat="36.1119352" lon="-115.1730951"/>
+    <nd ref="1307232383" lat="36.1117604" lon="-115.1731008"/>
+    <nd ref="1307232382" lat="36.1115157" lon="-115.1731117"/>
+    <tag k="alt_name" v="Las Vegas Strip"/>
+    <tag k="hgv" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="8"/>
+    <tag k="lit" v="yes"/>
+    <tag k="loc_name" v="Las Vegas Boulevard South"/>
+    <tag k="maxspeed" v="30 mph"/>
+    <tag k="name" v="South Las Vegas Boulevard"/>
+    <tag k="old_ref" v="US 91;NV 6;NV 604"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:old_ref" v="Nevada's State Maintained Highways (January 2003)"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left|left|left|none|none|none|none|right"/>
+  </way>
+  <way id="1016805774">
+    <bounds minlat="36.1127628" minlon="-115.1639691" maxlat="36.1144213" maxlon="-115.1639470"/>
+    <nd ref="5509253032" lat="36.1127628" lon="-115.1639470"/>
+    <nd ref="7359177854" lat="36.1133774" lon="-115.1639551"/>
+    <nd ref="5509253038" lat="36.1135874" lon="-115.1639578"/>
+    <nd ref="5509253044" lat="36.1136851" lon="-115.1639591"/>
+    <nd ref="5509253039" lat="36.1138594" lon="-115.1639614"/>
+    <nd ref="5509253047" lat="36.1139494" lon="-115.1639626"/>
+    <nd ref="2777542741" lat="36.1141937" lon="-115.1639658"/>
+    <nd ref="5717585565" lat="36.1143116" lon="-115.1639685"/>
+    <nd ref="6222356723" lat="36.1143382" lon="-115.1639691"/>
+    <nd ref="13341696784" lat="36.1144213" lon="-115.1639683"/>
+    <tag k="hgv" v="designated"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="2"/>
+    <tag k="name" v="Koval Lane"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="source:hgv" v="https://library.municode.com/nv/clark_county/codes/code_of_ordinances?nodeId=TIT14TR_CH14.46COVERE_14.46.030TRRODE"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="tiger:cfcc" v="A41"/>
+    <tag k="tiger:county" v="Clark, NV"/>
+    <tag k="tiger:name_base" v="Koval"/>
+    <tag k="tiger:name_type" v="Ln"/>
+  </way>
+  <way id="1030066598">
+    <bounds minlat="36.1087541" minlon="-115.1731770" maxlat="36.1090357" maxlon="-115.1731400"/>
+    <nd ref="11348729066" lat="36.1090357" lon="-115.1731400"/>
+    <nd ref="2852160857" lat="36.1087541" lon="-115.1731770"/>
+    <tag k="alt_name" v="Las Vegas Strip"/>
+    <tag k="bicycle" v="yes"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="6"/>
+    <tag k="loc_name" v="Las Vegas Boulevard South"/>
+    <tag k="maxspeed" v="30 mph"/>
+    <tag k="motor_vehicle" v="yes"/>
+    <tag k="name" v="South Las Vegas Boulevard"/>
+    <tag k="old_ref" v="US 91;NV 6;NV 604"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:both" v="no"/>
+    <tag k="source:old_ref" v="Nevada's State Maintained Highways (January 2003)"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left|left|none|none|none|none"/>
+  </way>
+  <way id="1030066599">
+    <bounds minlat="36.1086137" minlon="-115.1731770" maxlat="36.1087541" maxlon="-115.1729726"/>
+    <nd ref="2852160857" lat="36.1087541" lon="-115.1731770"/>
+    <nd ref="12737783581" lat="36.1086137" lon="-115.1729726"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="maxspeed" v="35 mph"/>
+    <tag k="name" v="West Harmon Avenue"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:both" v="no"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1030067968">
+    <bounds minlat="36.1110604" minlon="-115.1731307" maxlat="36.1112140" maxlon="-115.1731240"/>
+    <nd ref="1307215317" lat="36.1112140" lon="-115.1731240"/>
+    <nd ref="247493048" lat="36.1110604" lon="-115.1731307"/>
+    <tag k="alt_name" v="Las Vegas Strip"/>
+    <tag k="hgv" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="loc_name" v="Las Vegas Boulevard South"/>
+    <tag k="maxspeed" v="30 mph"/>
+    <tag k="name" v="South Las Vegas Boulevard"/>
+    <tag k="old_ref" v="US 91;NV 6;NV 604"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:old_ref" v="Nevada's State Maintained Highways (January 2003)"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1030280930">
+    <bounds minlat="36.1168073" minlon="-115.1639816" maxlat="36.1173030" maxlon="-115.1639758"/>
+    <nd ref="9497308570" lat="36.1168073" lon="-115.1639758"/>
+    <nd ref="9968242168" lat="36.1168687" lon="-115.1639758"/>
+    <nd ref="137344634" lat="36.1171757" lon="-115.1639797"/>
+    <nd ref="3524177103" lat="36.1172027" lon="-115.1639800"/>
+    <nd ref="13341696788" lat="36.1173030" lon="-115.1639816"/>
+    <tag k="flood_prone" v="yes"/>
+    <tag k="hgv" v="designated"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="3"/>
+    <tag k="maxspeed" v="35 mph"/>
+    <tag k="name" v="Koval Lane"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="source:hgv" v="https://library.municode.com/nv/clark_county/codes/code_of_ordinances?nodeId=TIT14TR_CH14.46COVERE_14.46.030TRRODE"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="tiger:cfcc" v="A41"/>
+    <tag k="tiger:county" v="Clark, NV"/>
+    <tag k="tiger:name_base" v="Koval"/>
+    <tag k="tiger:name_type" v="Ln"/>
+    <tag k="turn:lanes" v="left||"/>
+  </way>
+  <way id="1030290852">
+    <bounds minlat="36.1079580" minlon="-115.1727950" maxlat="36.1084918" maxlon="-115.1717842"/>
+    <nd ref="2852160859" lat="36.1084918" lon="-115.1727950"/>
+    <nd ref="2852160860" lat="36.1083292" lon="-115.1725615"/>
+    <nd ref="2852160861" lat="36.1081655" lon="-115.1723422"/>
+    <nd ref="2820167009" lat="36.1081206" lon="-115.1722746"/>
+    <nd ref="4380087444" lat="36.1080747" lon="-115.1721856"/>
+    <nd ref="2852160862" lat="36.1080432" lon="-115.1720948"/>
+    <nd ref="6715647930" lat="36.1080239" lon="-115.1720233"/>
+    <nd ref="2852160863" lat="36.1079912" lon="-115.1719151"/>
+    <nd ref="2852160864" lat="36.1079580" lon="-115.1717842"/>
+    <tag k="bicycle" v="yes"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="3"/>
+    <tag k="maxspeed" v="35 mph"/>
+    <tag k="motor_vehicle" v="yes"/>
+    <tag k="name" v="East Harmon Avenue"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1030290854">
+    <bounds minlat="36.1079306" minlon="-115.1709059" maxlat="36.1079448" maxlon="-115.1699626"/>
+    <nd ref="9497407198" lat="36.1079448" lon="-115.1709059"/>
+    <nd ref="2852160865" lat="36.1079335" lon="-115.1701591"/>
+    <nd ref="11666697675" lat="36.1079327" lon="-115.1701034"/>
+    <nd ref="13341696769" lat="36.1079306" lon="-115.1699626"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="maxspeed" v="35 mph"/>
+    <tag k="name" v="East Harmon Avenue"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="reverse;left|left|none|none|right"/>
+  </way>
+  <way id="1030290855">
+    <bounds minlat="36.1079306" minlon="-115.1699626" maxlat="36.1079321" maxlon="-115.1698576"/>
+    <nd ref="13341696769" lat="36.1079306" lon="-115.1699626"/>
+    <nd ref="13341696770" lat="36.1079321" lon="-115.1698576"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="maxspeed" v="35 mph"/>
+    <tag k="name" v="East Harmon Avenue"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1030290856">
+    <bounds minlat="36.1079497" minlon="-115.1687066" maxlat="36.1079535" maxlon="-115.1678538"/>
+    <nd ref="2852160866" lat="36.1079497" lon="-115.1687066"/>
+    <nd ref="2852160855" lat="36.1079508" lon="-115.1686009"/>
+    <nd ref="2852160853" lat="36.1079522" lon="-115.1684604"/>
+    <nd ref="5509252567" lat="36.1079535" lon="-115.1678538"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="maxspeed" v="35 mph"/>
+    <tag k="name" v="East Harmon Avenue"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left|left|none|none"/>
+  </way>
+  <way id="1032613489">
+    <bounds minlat="36.1153643" minlon="-115.1639637" maxlat="36.1155905" maxlon="-115.1639633"/>
+    <nd ref="9514191337" lat="36.1153643" lon="-115.1639637"/>
+    <nd ref="5711218691" lat="36.1155905" lon="-115.1639633"/>
+    <tag k="hgv" v="designated"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="3"/>
+    <tag k="name" v="Koval Lane"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="source:hgv" v="https://library.municode.com/nv/clark_county/codes/code_of_ordinances?nodeId=TIT14TR_CH14.46COVERE_14.46.030TRRODE"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="tiger:cfcc" v="A41"/>
+    <tag k="tiger:county" v="Clark, NV"/>
+    <tag k="tiger:name_base" v="Koval"/>
+    <tag k="tiger:name_type" v="Ln"/>
+    <tag k="turn:lanes" v="left|none|none"/>
+  </way>
+  <way id="1032776580">
+    <bounds minlat="36.1147714" minlon="-115.1729795" maxlat="36.1159426" maxlon="-115.1729710"/>
+    <nd ref="9515536209" lat="36.1159426" lon="-115.1729795"/>
+    <nd ref="1307215338" lat="36.1149118" lon="-115.1729720"/>
+    <nd ref="13060798867" lat="36.1147714" lon="-115.1729710"/>
+    <tag k="alt_name" v="Las Vegas Strip"/>
+    <tag k="foot" v="no"/>
+    <tag k="hgv" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="6"/>
+    <tag k="lit" v="yes"/>
+    <tag k="loc_name" v="Las Vegas Boulevard South"/>
+    <tag k="maxheight" v="default"/>
+    <tag k="maxspeed" v="30 mph"/>
+    <tag k="name" v="South Las Vegas Boulevard"/>
+    <tag k="old_ref" v="US 91;NV 6;NV 604"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:old_ref" v="Nevada's State Maintained Highways (January 2003)"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left|left|none|none|none|right"/>
+  </way>
+  <way id="1032789814">
+    <bounds minlat="36.1155905" minlon="-115.1639635" maxlat="36.1157291" maxlon="-115.1639633"/>
+    <nd ref="5711218691" lat="36.1155905" lon="-115.1639633"/>
+    <nd ref="9515657013" lat="36.1157291" lon="-115.1639635"/>
+    <tag k="hgv" v="designated"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="2"/>
+    <tag k="name" v="Koval Lane"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="source:hgv" v="https://library.municode.com/nv/clark_county/codes/code_of_ordinances?nodeId=TIT14TR_CH14.46COVERE_14.46.030TRRODE"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="tiger:cfcc" v="A41"/>
+    <tag k="tiger:county" v="Clark, NV"/>
+    <tag k="tiger:name_base" v="Koval"/>
+    <tag k="tiger:name_type" v="Ln"/>
+  </way>
+  <way id="1033820973">
+    <bounds minlat="36.1094381" minlon="-115.1731452" maxlat="36.1103620" maxlon="-115.1731403"/>
+    <nd ref="9552067667" lat="36.1103620" lon="-115.1731403"/>
+    <nd ref="7059210713" lat="36.1103222" lon="-115.1731416"/>
+    <nd ref="1307215323" lat="36.1098834" lon="-115.1731452"/>
+    <nd ref="2820167011" lat="36.1094381" lon="-115.1731439"/>
+    <tag k="alt_name" v="Las Vegas Strip"/>
+    <tag k="bicycle" v="yes"/>
+    <tag k="hgv" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="6"/>
+    <tag k="lit" v="yes"/>
+    <tag k="loc_name" v="Las Vegas Boulevard South"/>
+    <tag k="maxheight" v="default"/>
+    <tag k="maxspeed" v="30 mph"/>
+    <tag k="motor_vehicle" v="yes"/>
+    <tag k="name" v="South Las Vegas Boulevard"/>
+    <tag k="old_ref" v="US 91;NV 6;NV 604"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:old_ref" v="Nevada's State Maintained Highways (January 2003)"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left|left|none|none|none|none"/>
+  </way>
+  <way id="1036842429">
+    <bounds minlat="36.1103620" minlon="-115.1731403" maxlat="36.1108004" maxlon="-115.1731358"/>
+    <nd ref="3165620433" lat="36.1108004" lon="-115.1731358"/>
+    <nd ref="7386205445" lat="36.1104429" lon="-115.1731398"/>
+    <nd ref="9552067667" lat="36.1103620" lon="-115.1731403"/>
+    <tag k="alt_name" v="Las Vegas Strip"/>
+    <tag k="hgv" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lit" v="yes"/>
+    <tag k="loc_name" v="Las Vegas Boulevard South"/>
+    <tag k="maxspeed" v="30 mph"/>
+    <tag k="name" v="South Las Vegas Boulevard"/>
+    <tag k="old_ref" v="US 91;NV 6;NV 604"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:old_ref" v="Nevada's State Maintained Highways (January 2003)"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1043464439">
+    <bounds minlat="36.1140279" minlon="-115.1730053" maxlat="36.1146045" maxlon="-115.1729710"/>
+    <nd ref="1307215340" lat="36.1146045" lon="-115.1729710"/>
+    <nd ref="2278824741" lat="36.1140279" lon="-115.1730053"/>
+    <tag k="alt_name" v="Las Vegas Strip"/>
+    <tag k="foot" v="no"/>
+    <tag k="hgv" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="3"/>
+    <tag k="loc_name" v="Las Vegas Boulevard South"/>
+    <tag k="maxspeed" v="30 mph"/>
+    <tag k="name" v="South Las Vegas Boulevard"/>
+    <tag k="old_ref" v="US 91;NV 6;NV 604"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk" v="no"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:old_ref" v="Nevada's State Maintained Highways (January 2003)"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1043551491">
+    <bounds minlat="36.1196140" minlon="-115.1726712" maxlat="36.1201017" maxlon="-115.1725210"/>
+    <nd ref="1598856720" lat="36.1201017" lon="-115.1725210"/>
+    <nd ref="13154585535" lat="36.1198760" lon="-115.1725947"/>
+    <nd ref="3783743557" lat="36.1198499" lon="-115.1726010"/>
+    <nd ref="1912068000" lat="36.1197458" lon="-115.1726338"/>
+    <nd ref="1307215331" lat="36.1196140" lon="-115.1726712"/>
+    <tag k="alt_name" v="Las Vegas Strip"/>
+    <tag k="hgv" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="loc_name" v="Las Vegas Boulevard South"/>
+    <tag k="maxspeed" v="30 mph"/>
+    <tag k="name" v="South Las Vegas Boulevard"/>
+    <tag k="old_ref" v="US 91;NV 6;NV 604"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="postal_code" v="89123"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:old_ref" v="Nevada's State Maintained Highways (January 2003)"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1059801988">
+    <bounds minlat="36.1192581" minlon="-115.1727632" maxlat="36.1196140" maxlon="-115.1726712"/>
+    <nd ref="1307215331" lat="36.1196140" lon="-115.1726712"/>
+    <nd ref="4804173974" lat="36.1194996" lon="-115.1726996"/>
+    <nd ref="4210496188" lat="36.1192581" lon="-115.1727632"/>
+    <tag k="alt_name" v="Las Vegas Strip"/>
+    <tag k="hgv" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lit" v="yes"/>
+    <tag k="loc_name" v="Las Vegas Boulevard South"/>
+    <tag k="maxspeed" v="30 mph"/>
+    <tag k="name" v="South Las Vegas Boulevard"/>
+    <tag k="old_ref" v="US 91;NV 6;NV 604"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="parking:both" v="no"/>
+    <tag k="postal_code" v="89123"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:old_ref" v="Nevada's State Maintained Highways (January 2003)"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="reverse;left|none|none|none|none"/>
+  </way>
+  <way id="1071482657">
+    <bounds minlat="36.1239130" minlon="-115.1704270" maxlat="36.1250904" maxlon="-115.1696691"/>
+    <nd ref="2820167020" lat="36.1250904" lon="-115.1696691"/>
+    <nd ref="1307215339" lat="36.1242960" lon="-115.1701752"/>
+    <nd ref="9832606127" lat="36.1239130" lon="-115.1704270"/>
+    <tag k="alt_name" v="Las Vegas Strip"/>
+    <tag k="hgv" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="loc_name" v="Las Vegas Boulevard South"/>
+    <tag k="maxspeed" v="30 mph"/>
+    <tag k="name" v="South Las Vegas Boulevard"/>
+    <tag k="old_ref" v="US 91;NV 6;NV 604"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="postal_code" v="89123"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:old_ref" v="Nevada's State Maintained Highways (January 2003)"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1071482658">
+    <bounds minlat="36.1234100" minlon="-115.1707580" maxlat="36.1239130" maxlon="-115.1704270"/>
+    <nd ref="9832606127" lat="36.1239130" lon="-115.1704270"/>
+    <nd ref="1307215322" lat="36.1235930" lon="-115.1706376"/>
+    <nd ref="13154585543" lat="36.1234100" lon="-115.1707580"/>
+    <tag k="alt_name" v="Las Vegas Strip"/>
+    <tag k="hgv" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="7"/>
+    <tag k="lit" v="yes"/>
+    <tag k="loc_name" v="Las Vegas Boulevard South"/>
+    <tag k="maxspeed" v="30 mph"/>
+    <tag k="name" v="South Las Vegas Boulevard"/>
+    <tag k="old_ref" v="US 91;NV 6;NV 604"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="postal_code" v="89123"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:old_ref" v="Nevada's State Maintained Highways (January 2003)"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left|left|||||"/>
+  </way>
+  <way id="1071482659">
+    <bounds minlat="36.1233035" minlon="-115.1708270" maxlat="36.1234100" maxlon="-115.1707580"/>
+    <nd ref="13154585543" lat="36.1234100" lon="-115.1707580"/>
+    <nd ref="1675637835" lat="36.1233035" lon="-115.1708270"/>
+    <tag k="alt_name" v="Las Vegas Strip"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="6"/>
+    <tag k="lit" v="yes"/>
+    <tag k="loc_name" v="Las Vegas Boulevard South"/>
+    <tag k="maxspeed" v="30 mph"/>
+    <tag k="name" v="South Las Vegas Boulevard"/>
+    <tag k="old_ref" v="US 91;NV 6;NV 604"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="postal_code" v="89123"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:old_ref" v="Nevada's State Maintained Highways (January 2003)"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left|left||||"/>
+  </way>
+  <way id="1071482660">
+    <bounds minlat="36.1226113" minlon="-115.1713210" maxlat="36.1233035" maxlon="-115.1708270"/>
+    <nd ref="1675637835" lat="36.1233035" lon="-115.1708270"/>
+    <nd ref="9835431642" lat="36.1231250" lon="-115.1709547"/>
+    <nd ref="6016349698" lat="36.1226804" lon="-115.1712722"/>
+    <nd ref="9832606128" lat="36.1226113" lon="-115.1713210"/>
+    <tag k="alt_name" v="Las Vegas Strip"/>
+    <tag k="hgv" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="loc_name" v="Las Vegas Boulevard South"/>
+    <tag k="maxheight" v="default"/>
+    <tag k="maxspeed" v="30 mph"/>
+    <tag k="name" v="South Las Vegas Boulevard"/>
+    <tag k="old_ref" v="US 91;NV 6;NV 604"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="postal_code" v="89123"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:old_ref" v="Nevada's State Maintained Highways (January 2003)"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1071482661">
+    <bounds minlat="36.1223730" minlon="-115.1714903" maxlat="36.1226113" maxlon="-115.1713210"/>
+    <nd ref="9832606128" lat="36.1226113" lon="-115.1713210"/>
+    <nd ref="5450834124" lat="36.1223730" lon="-115.1714903"/>
+    <tag k="alt_name" v="Las Vegas Strip"/>
+    <tag k="hgv" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="7"/>
+    <tag k="lit" v="yes"/>
+    <tag k="loc_name" v="Las Vegas Boulevard South"/>
+    <tag k="maxspeed" v="30 mph"/>
+    <tag k="name" v="South Las Vegas Boulevard"/>
+    <tag k="old_ref" v="US 91;NV 6;NV 604"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="postal_code" v="89123"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:old_ref" v="Nevada's State Maintained Highways (January 2003)"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left|left|||||"/>
+  </way>
+  <way id="1071482662">
+    <bounds minlat="36.1221555" minlon="-115.1716380" maxlat="36.1223730" maxlon="-115.1714903"/>
+    <nd ref="5450834124" lat="36.1223730" lon="-115.1714903"/>
+    <nd ref="252504202" lat="36.1222558" lon="-115.1715734"/>
+    <nd ref="5255307360" lat="36.1222157" lon="-115.1715999"/>
+    <nd ref="13154585537" lat="36.1221555" lon="-115.1716380"/>
+    <tag k="alt_name" v="Las Vegas Strip"/>
+    <tag k="hgv" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="6"/>
+    <tag k="loc_name" v="Las Vegas Boulevard South"/>
+    <tag k="maxspeed" v="30 mph"/>
+    <tag k="name" v="South Las Vegas Boulevard"/>
+    <tag k="old_ref" v="US 91;NV 6;NV 604"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="postal_code" v="89123"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:old_ref" v="Nevada's State Maintained Highways (January 2003)"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left|left||||"/>
+  </way>
+  <way id="1071482663">
+    <bounds minlat="36.1201017" minlon="-115.1725210" maxlat="36.1206341" maxlon="-115.1723277"/>
+    <nd ref="9832606129" lat="36.1206341" lon="-115.1723277"/>
+    <nd ref="13154585534" lat="36.1201947" lon="-115.1724872"/>
+    <nd ref="1598856720" lat="36.1201017" lon="-115.1725210"/>
+    <tag k="alt_name" v="Las Vegas Strip"/>
+    <tag k="hgv" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lit" v="yes"/>
+    <tag k="loc_name" v="Las Vegas Boulevard South"/>
+    <tag k="maxspeed" v="30 mph"/>
+    <tag k="name" v="South Las Vegas Boulevard"/>
+    <tag k="old_ref" v="US 91;NV 6;NV 604"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="postal_code" v="89123"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:old_ref" v="Nevada's State Maintained Highways (January 2003)"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="reverse||||"/>
+  </way>
+  <way id="1101647962">
+    <bounds minlat="36.1248066" minlon="-115.1679779" maxlat="36.1253346" maxlon="-115.1669930"/>
+    <nd ref="13250780583" lat="36.1248066" lon="-115.1669930"/>
+    <nd ref="9034386146" lat="36.1249550" lon="-115.1671943"/>
+    <nd ref="137402126" lat="36.1251091" lon="-115.1674034"/>
+    <nd ref="137402123" lat="36.1252240" lon="-115.1676067"/>
+    <nd ref="10681393781" lat="36.1253047" lon="-115.1678766"/>
+    <nd ref="137402122" lat="36.1253346" lon="-115.1679779"/>
+    <tag k="hgv" v="designated"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="35 mph"/>
+    <tag k="name" v="Sands Avenue"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="sidewalk:right:surface" v="concrete"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:hgv" v="https://library.municode.com/nv/clark_county/codes/code_of_ordinances?nodeId=TIT14TR_CH14.46COVERE_14.46.030TRRODE"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1101647963">
+    <bounds minlat="36.1241594" minlon="-115.1666627" maxlat="36.1243390" maxlon="-115.1665792"/>
+    <nd ref="10081276857" lat="36.1241594" lon="-115.1665792"/>
+    <nd ref="10081276858" lat="36.1243390" lon="-115.1666627"/>
+    <tag k="hgv" v="designated"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="35 mph"/>
+    <tag k="name" v="Sands Avenue"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:hgv" v="https://library.municode.com/nv/clark_county/codes/code_of_ordinances?nodeId=TIT14TR_CH14.46COVERE_14.46.030TRRODE"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="tiger:cfcc" v="A41"/>
+    <tag k="tiger:county" v="Clark, NV"/>
+    <tag k="tiger:name_base" v="Sands"/>
+    <tag k="tiger:name_type" v="Ave"/>
+    <tag k="turn:lanes" v="left|none|none|none"/>
+  </way>
+  <way id="1101647964">
+    <bounds minlat="36.1243390" minlon="-115.1668882" maxlat="36.1247170" maxlon="-115.1666627"/>
+    <nd ref="10081276858" lat="36.1243390" lon="-115.1666627"/>
+    <nd ref="137402135" lat="36.1244624" lon="-115.1667193"/>
+    <nd ref="13179906318" lat="36.1245943" lon="-115.1668003"/>
+    <nd ref="4869411040" lat="36.1246163" lon="-115.1668161"/>
+    <nd ref="13250780586" lat="36.1247170" lon="-115.1668882"/>
+    <tag k="hgv" v="designated"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="6"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="35 mph"/>
+    <tag k="name" v="Sands Avenue"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:hgv" v="https://library.municode.com/nv/clark_county/codes/code_of_ordinances?nodeId=TIT14TR_CH14.46COVERE_14.46.030TRRODE"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="tiger:cfcc" v="A41"/>
+    <tag k="tiger:county" v="Clark, NV"/>
+    <tag k="tiger:name_base" v="Sands"/>
+    <tag k="tiger:name_type" v="Ave"/>
+    <tag k="turn:lanes" v="left|none|none|none|none|right"/>
+  </way>
+  <way id="1101647965">
+    <bounds minlat="36.1247170" minlon="-115.1669930" maxlat="36.1248066" maxlon="-115.1668882"/>
+    <nd ref="13250780586" lat="36.1247170" lon="-115.1668882"/>
+    <nd ref="13250780583" lat="36.1248066" lon="-115.1669930"/>
+    <tag k="hgv" v="designated"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="3"/>
+    <tag k="maxspeed" v="35 mph"/>
+    <tag k="name" v="Sands Avenue"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="source:hgv" v="https://library.municode.com/nv/clark_county/codes/code_of_ordinances?nodeId=TIT14TR_CH14.46COVERE_14.46.030TRRODE"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="tiger:cfcc" v="A41"/>
+    <tag k="tiger:county" v="Clark, NV"/>
+    <tag k="tiger:name_base" v="Sands"/>
+    <tag k="tiger:name_type" v="Ave"/>
+  </way>
+  <way id="1101647966">
+    <bounds minlat="36.1253346" minlon="-115.1687320" maxlat="36.1254672" maxlon="-115.1679779"/>
+    <nd ref="137402122" lat="36.1253346" lon="-115.1679779"/>
+    <nd ref="1590310741" lat="36.1254094" lon="-115.1683482"/>
+    <nd ref="2820167021" lat="36.1254672" lon="-115.1687320"/>
+    <tag k="hgv" v="designated"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="7"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxheight" v="default"/>
+    <tag k="maxspeed" v="35 mph"/>
+    <tag k="name" v="Sands Avenue"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:hgv" v="https://library.municode.com/nv/clark_county/codes/code_of_ordinances?nodeId=TIT14TR_CH14.46COVERE_14.46.030TRRODE"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left|left|none|none|none|none|right"/>
+  </way>
+  <way id="1101647967">
+    <bounds minlat="36.1254672" minlon="-115.1691519" maxlat="36.1255324" maxlon="-115.1687320"/>
+    <nd ref="2820167021" lat="36.1254672" lon="-115.1687320"/>
+    <nd ref="13060955056" lat="36.1255088" lon="-115.1690052"/>
+    <nd ref="137402120" lat="36.1255324" lon="-115.1691519"/>
+    <tag k="foot" v="no"/>
+    <tag k="hgv" v="designated"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="7"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="35 mph"/>
+    <tag k="name" v="Sands Avenue"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:hgv" v="https://library.municode.com/nv/clark_county/codes/code_of_ordinances?nodeId=TIT14TR_CH14.46COVERE_14.46.030TRRODE"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left|left|none|none|none|none|right"/>
+  </way>
+  <way id="1119837129">
+    <bounds minlat="36.1121837" minlon="-115.1730844" maxlat="36.1130171" maxlon="-115.1730485"/>
+    <nd ref="10242226579" lat="36.1130171" lon="-115.1730485"/>
+    <nd ref="10278555026" lat="36.1125952" lon="-115.1730662"/>
+    <nd ref="9603432066" lat="36.1121837" lon="-115.1730844"/>
+    <tag k="alt_name" v="Las Vegas Strip"/>
+    <tag k="hgv" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lit" v="yes"/>
+    <tag k="loc_name" v="Las Vegas Boulevard South"/>
+    <tag k="maxspeed" v="30 mph"/>
+    <tag k="name" v="South Las Vegas Boulevard"/>
+    <tag k="old_ref" v="US 91;NV 6;NV 604"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:old_ref" v="Nevada's State Maintained Highways (January 2003)"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="||||right"/>
+  </way>
+  <way id="1223479151">
+    <bounds minlat="36.1104407" minlon="-115.1629216" maxlat="36.1111757" maxlon="-115.1605274"/>
+    <nd ref="11348753615" lat="36.1110678" lon="-115.1605274"/>
+    <nd ref="13016217993" lat="36.1111163" lon="-115.1606445"/>
+    <nd ref="11348753616" lat="36.1111515" lon="-115.1607862"/>
+    <nd ref="13016217990" lat="36.1111757" lon="-115.1609986"/>
+    <nd ref="13016217991" lat="36.1111669" lon="-115.1612056"/>
+    <nd ref="13016217992" lat="36.1111251" lon="-115.1613881"/>
+    <nd ref="13016217999" lat="36.1110480" lon="-115.1615733"/>
+    <nd ref="11348753619" lat="36.1109028" lon="-115.1618403"/>
+    <nd ref="11348753620" lat="36.1105837" lon="-115.1622526"/>
+    <nd ref="11348753621" lat="36.1105089" lon="-115.1623878"/>
+    <nd ref="13016217996" lat="36.1104649" lon="-115.1625512"/>
+    <nd ref="13016217997" lat="36.1104407" lon="-115.1627527"/>
+    <nd ref="11348753622" lat="36.1104429" lon="-115.1629216"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="name" v="Las Vegas Strip Circuit"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1223479152">
+    <bounds minlat="36.1079696" minlon="-115.1639015" maxlat="36.1111515" maxlon="-115.1605247"/>
+    <nd ref="13341696778" lat="36.1079696" lon="-115.1639015"/>
+    <nd ref="13341696780" lat="36.1080475" lon="-115.1638115"/>
+    <nd ref="13341696779" lat="36.1080897" lon="-115.1637627"/>
+    <nd ref="11348753646" lat="36.1081275" lon="-115.1637191"/>
+    <nd ref="11348753645" lat="36.1082113" lon="-115.1635344"/>
+    <nd ref="11348753644" lat="36.1082835" lon="-115.1633988"/>
+    <nd ref="11348753643" lat="36.1083475" lon="-115.1633268"/>
+    <nd ref="11348753642" lat="36.1085439" lon="-115.1631586"/>
+    <nd ref="11348753641" lat="36.1085879" lon="-115.1630878"/>
+    <nd ref="11348753640" lat="36.1086055" lon="-115.1630061"/>
+    <nd ref="11348753639" lat="36.1086165" lon="-115.1628644"/>
+    <nd ref="11348753638" lat="36.1086429" lon="-115.1627718"/>
+    <nd ref="11348753629" lat="36.1087119" lon="-115.1627024"/>
+    <nd ref="11348753630" lat="36.1106321" lon="-115.1605846"/>
+    <nd ref="11348753631" lat="36.1107334" lon="-115.1605274"/>
+    <nd ref="11348753632" lat="36.1107994" lon="-115.1605247"/>
+    <nd ref="11348753633" lat="36.1108852" lon="-115.1605465"/>
+    <nd ref="13016217994" lat="36.1109754" lon="-115.1606146"/>
+    <nd ref="11348753616" lat="36.1111515" lon="-115.1607862"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="noname" v="yes"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="raceway" v="pitlane"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1224841829">
+    <bounds minlat="36.1111544" minlon="-115.1639338" maxlat="36.1115256" maxlon="-115.1639284"/>
+    <nd ref="5717585567" lat="36.1111544" lon="-115.1639284"/>
+    <nd ref="137476745" lat="36.1115256" lon="-115.1639338"/>
+    <tag k="hgv" v="designated"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="2"/>
+    <tag k="name" v="Koval Lane"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:both" v="no"/>
+    <tag k="source:hgv" v="https://library.municode.com/nv/clark_county/codes/code_of_ordinances?nodeId=TIT14TR_CH14.46COVERE_14.46.030TRRODE"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="tiger:cfcc" v="A41"/>
+    <tag k="tiger:county" v="Clark, NV"/>
+    <tag k="tiger:name_base" v="Koval"/>
+    <tag k="tiger:name_type" v="Ln"/>
+  </way>
+  <way id="1238536330">
+    <bounds minlat="36.1222356" minlon="-115.1636873" maxlat="36.1222920" maxlon="-115.1603925"/>
+    <nd ref="9577000545" lat="36.1222909" lon="-115.1636873"/>
+    <nd ref="5717469571" lat="36.1222910" lon="-115.1636656"/>
+    <nd ref="5717469570" lat="36.1222920" lon="-115.1630379"/>
+    <nd ref="11328804622" lat="36.1222864" lon="-115.1627863"/>
+    <nd ref="5717469569" lat="36.1222704" lon="-115.1621823"/>
+    <nd ref="5717469568" lat="36.1222552" lon="-115.1616209"/>
+    <nd ref="11052835397" lat="36.1222416" lon="-115.1607641"/>
+    <nd ref="12059212382" lat="36.1222356" lon="-115.1603925"/>
+    <tag k="hgv" v="designated"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="3"/>
+    <tag k="maxheight" v="default"/>
+    <tag k="maxspeed" v="35 mph"/>
+    <tag k="name" v="Sands Avenue"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="smoothness" v="good"/>
+    <tag k="source:hgv" v="https://library.municode.com/nv/clark_county/codes/code_of_ordinances?nodeId=TIT14TR_CH14.46COVERE_14.46.030TRRODE"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1362569857">
+    <bounds minlat="36.1159426" minlon="-115.1729874" maxlat="36.1169699" maxlon="-115.1729795"/>
+    <nd ref="3783743845" lat="36.1169699" lon="-115.1729874"/>
+    <nd ref="9515536209" lat="36.1159426" lon="-115.1729795"/>
+    <tag k="alt_name" v="Las Vegas Strip"/>
+    <tag k="hgv" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="loc_name" v="Las Vegas Boulevard South"/>
+    <tag k="maxspeed" v="30 mph"/>
+    <tag k="name" v="South Las Vegas Boulevard"/>
+    <tag k="old_ref" v="US 91;NV 6;NV 604"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="parking:both" v="no"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:old_ref" v="Nevada's State Maintained Highways (January 2003)"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1364789152">
+    <bounds minlat="36.1210168" minlon="-115.1607289" maxlat="36.1222356" maxlon="-115.1603887"/>
+    <nd ref="12638889528" lat="36.1210168" lon="-115.1606910"/>
+    <nd ref="12638889529" lat="36.1211839" lon="-115.1607289"/>
+    <nd ref="12638889530" lat="36.1213038" lon="-115.1607192"/>
+    <nd ref="12638889521" lat="36.1214874" lon="-115.1605870"/>
+    <nd ref="12638889522" lat="36.1217020" lon="-115.1604347"/>
+    <nd ref="12638889523" lat="36.1217986" lon="-115.1603919"/>
+    <nd ref="12488446343" lat="36.1221364" lon="-115.1603887"/>
+    <nd ref="13179859976" lat="36.1221936" lon="-115.1603909"/>
+    <nd ref="12059212382" lat="36.1222356" lon="-115.1603925"/>
+    <tag k="highway" v="service"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1364789153">
+    <bounds minlat="36.1207857" minlon="-115.1606076" maxlat="36.1214874" maxlon="-115.1601159"/>
+    <nd ref="12638889512" lat="36.1207857" lon="-115.1601159"/>
+    <nd ref="12638889513" lat="36.1208848" lon="-115.1601224"/>
+    <nd ref="12638889514" lat="36.1209494" lon="-115.1601624"/>
+    <nd ref="12638889515" lat="36.1209770" lon="-115.1602662"/>
+    <nd ref="12638889516" lat="36.1209856" lon="-115.1604010"/>
+    <nd ref="12638889517" lat="36.1210136" lon="-115.1604701"/>
+    <nd ref="12638889518" lat="36.1210835" lon="-115.1605527"/>
+    <nd ref="12638889519" lat="36.1211970" lon="-115.1605933"/>
+    <nd ref="12638889520" lat="36.1213544" lon="-115.1606076"/>
+    <nd ref="12638889521" lat="36.1214874" lon="-115.1605870"/>
+    <tag k="highway" v="service"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1381561592">
+    <bounds minlat="36.1084918" minlon="-115.1729726" maxlat="36.1086137" maxlon="-115.1727950"/>
+    <nd ref="12737783581" lat="36.1086137" lon="-115.1729726"/>
+    <nd ref="2852160859" lat="36.1084918" lon="-115.1727950"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="maxspeed" v="35 mph"/>
+    <tag k="name" v="East Harmon Avenue"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:both" v="no"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1417454723">
+    <bounds minlat="36.1255456" minlon="-115.1693784" maxlat="36.1255587" maxlon="-115.1692652"/>
+    <nd ref="12781971625" lat="36.1255456" lon="-115.1692652"/>
+    <nd ref="1490596713" lat="36.1255587" lon="-115.1693784"/>
+    <tag k="foot" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="6"/>
+    <tag k="maxspeed" v="45 mph"/>
+    <tag k="name" v="Spring Mountain Road"/>
+    <tag k="name:en" v="Spring Mountain Road"/>
+    <tag k="name:full" v="West Spring Mountain Road"/>
+    <tag k="name:prefix" v="West"/>
+    <tag k="name:zh-Hans" v="春山路"/>
+    <tag k="name:zh-Hant" v="春山路"/>
+    <tag k="old_name" v="D4–C Ranch Road"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:both" v="no"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="tiger:reviewed" v="yes"/>
+    <tag k="turn:lanes" v="left|left|||||"/>
+  </way>
+  <way id="1436762463">
+    <bounds minlat="36.1079473" minlon="-115.1652369" maxlat="36.1079514" maxlon="-115.1647319"/>
+    <nd ref="7226402466" lat="36.1079473" lon="-115.1652369"/>
+    <nd ref="4334050761" lat="36.1079514" lon="-115.1647319"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="3"/>
+    <tag k="maxspeed" v="35 mph"/>
+    <tag k="name" v="East Harmon Avenue"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1436769040">
+    <bounds minlat="36.1090357" minlon="-115.1731439" maxlat="36.1094381" maxlon="-115.1731400"/>
+    <nd ref="2820167011" lat="36.1094381" lon="-115.1731439"/>
+    <nd ref="259859639" lat="36.1091467" lon="-115.1731416"/>
+    <nd ref="11348729066" lat="36.1090357" lon="-115.1731400"/>
+    <tag k="alt_name" v="Las Vegas Strip"/>
+    <tag k="bicycle" v="yes"/>
+    <tag k="hgv" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="6"/>
+    <tag k="lit" v="yes"/>
+    <tag k="loc_name" v="Las Vegas Boulevard South"/>
+    <tag k="maxheight" v="default"/>
+    <tag k="maxspeed" v="30 mph"/>
+    <tag k="motor_vehicle" v="yes"/>
+    <tag k="name" v="South Las Vegas Boulevard"/>
+    <tag k="old_ref" v="US 91;NV 6;NV 604"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:both" v="no"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source:old_ref" v="Nevada's State Maintained Highways (January 2003)"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left|left|none|none|none|none"/>
+  </way>
+  <way id="1454797801">
+    <bounds minlat="36.1222899" minlon="-115.1641615" maxlat="36.1224690" maxlon="-115.1640396"/>
+    <nd ref="5717469572" lat="36.1222899" lon="-115.1640396"/>
+    <nd ref="13341696794" lat="36.1224690" lon="-115.1641615"/>
+    <tag k="fixme" v="How do racers get from the Sphere onto Sands Avenue westbound if it's blocked off by a physical barrier?"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="name" v="Las Vegas Strip Circuit"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="placement" v="transition"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1456078470">
+    <bounds minlat="36.1086649" minlon="-115.1625601" maxlat="36.1092838" maxlon="-115.1618816"/>
+    <nd ref="13016217985" lat="36.1086649" lon="-115.1625601"/>
+    <nd ref="13016217986" lat="36.1092838" lon="-115.1618816"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="name" v="Las Vegas Strip Circuit"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1456078471">
+    <bounds minlat="36.1079448" minlon="-115.1717842" maxlat="36.1079580" maxlon="-115.1709059"/>
+    <nd ref="2852160864" lat="36.1079580" lon="-115.1717842"/>
+    <nd ref="5509252535" lat="36.1079503" lon="-115.1712724"/>
+    <nd ref="9497407198" lat="36.1079448" lon="-115.1709059"/>
+    <tag k="bicycle" v="yes"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="3"/>
+    <tag k="maxspeed" v="35 mph"/>
+    <tag k="motor_vehicle" v="yes"/>
+    <tag k="name" v="East Harmon Avenue"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1456078472">
+    <bounds minlat="36.1230733" minlon="-115.1665792" maxlat="36.1241594" maxlon="-115.1659988"/>
+    <nd ref="137402143" lat="36.1230733" lon="-115.1659988"/>
+    <nd ref="137402141" lat="36.1231973" lon="-115.1660990"/>
+    <nd ref="137402137" lat="36.1234745" lon="-115.1662630"/>
+    <nd ref="10081276856" lat="36.1241561" lon="-115.1665776"/>
+    <nd ref="10081276857" lat="36.1241594" lon="-115.1665792"/>
+    <tag k="hgv" v="designated"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="3"/>
+    <tag k="maxspeed" v="35 mph"/>
+    <tag k="name" v="Sands Avenue"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="source:hgv" v="https://library.municode.com/nv/clark_county/codes/code_of_ordinances?nodeId=TIT14TR_CH14.46COVERE_14.46.030TRRODE"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="tiger:cfcc" v="A41"/>
+    <tag k="tiger:county" v="Clark, NV"/>
+    <tag k="tiger:name_base" v="Sands"/>
+    <tag k="tiger:name_type" v="Ave"/>
+  </way>
+  <way id="1456078473">
+    <bounds minlat="36.1207857" minlon="-115.1606910" maxlat="36.1210168" maxlon="-115.1601159"/>
+    <nd ref="12638889512" lat="36.1207857" lon="-115.1601159"/>
+    <nd ref="12638889524" lat="36.1208309" lon="-115.1602127"/>
+    <nd ref="12638889525" lat="36.1208473" lon="-115.1603983"/>
+    <nd ref="12638889526" lat="36.1208693" lon="-115.1605164"/>
+    <nd ref="12638889527" lat="36.1209215" lon="-115.1606157"/>
+    <nd ref="12638889528" lat="36.1210168" lon="-115.1606910"/>
+    <tag k="highway" v="service"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1456078474">
+    <bounds minlat="36.1191725" minlon="-115.1611853" maxlat="36.1207857" maxlon="-115.1601122"/>
+    <nd ref="12626696512" lat="36.1191725" lon="-115.1611853"/>
+    <nd ref="13341705711" lat="36.1192393" lon="-115.1610652"/>
+    <nd ref="12638889506" lat="36.1193192" lon="-115.1609218"/>
+    <nd ref="12638889507" lat="36.1196028" lon="-115.1605614"/>
+    <nd ref="12638889508" lat="36.1197837" lon="-115.1604001"/>
+    <nd ref="12949325892" lat="36.1199581" lon="-115.1603002"/>
+    <nd ref="12949325891" lat="36.1199921" lon="-115.1602819"/>
+    <nd ref="12638889509" lat="36.1201468" lon="-115.1601987"/>
+    <nd ref="12638889510" lat="36.1203662" lon="-115.1601417"/>
+    <nd ref="12638889511" lat="36.1206152" lon="-115.1601122"/>
+    <nd ref="12638889512" lat="36.1207857" lon="-115.1601159"/>
+    <tag k="highway" v="service"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1456078475">
+    <bounds minlat="36.1104429" minlon="-115.1639284" maxlat="36.1111544" maxlon="-115.1629216"/>
+    <nd ref="11348753622" lat="36.1104429" lon="-115.1629216"/>
+    <nd ref="13016217998" lat="36.1104891" lon="-115.1631041"/>
+    <nd ref="11348753623" lat="36.1105397" lon="-115.1632648"/>
+    <nd ref="11348753624" lat="36.1106145" lon="-115.1634310"/>
+    <nd ref="11348753625" lat="36.1107400" lon="-115.1636107"/>
+    <nd ref="11348753626" lat="36.1108918" lon="-115.1637578"/>
+    <nd ref="5717585567" lat="36.1111544" lon="-115.1639284"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="name" v="Las Vegas Strip Circuit"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1456078476">
+    <bounds minlat="36.1107004" minlon="-115.1605274" maxlat="36.1110678" maxlon="-115.1603395"/>
+    <nd ref="11348753612" lat="36.1107004" lon="-115.1603640"/>
+    <nd ref="13016217995" lat="36.1107950" lon="-115.1603395"/>
+    <nd ref="11348753613" lat="36.1108742" lon="-115.1603463"/>
+    <nd ref="11348753614" lat="36.1109842" lon="-115.1604157"/>
+    <nd ref="11348753615" lat="36.1110678" lon="-115.1605274"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="name" v="Las Vegas Strip Circuit"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1456078477">
+    <bounds minlat="36.1092838" minlon="-115.1618816" maxlat="36.1107004" maxlon="-115.1603640"/>
+    <nd ref="13016217986" lat="36.1092838" lon="-115.1618816"/>
+    <nd ref="11348753611" lat="36.1105837" lon="-115.1604566"/>
+    <nd ref="11348753612" lat="36.1107004" lon="-115.1603640"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="name" v="Las Vegas Strip Circuit"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1456078478">
+    <bounds minlat="36.1079696" minlon="-115.1639015" maxlat="36.1086649" maxlon="-115.1625601"/>
+    <nd ref="13341696778" lat="36.1079696" lon="-115.1639015"/>
+    <nd ref="11358754437" lat="36.1080479" lon="-115.1636513"/>
+    <nd ref="13016208734" lat="36.1080898" lon="-115.1635088"/>
+    <nd ref="13016217987" lat="36.1081544" lon="-115.1633356"/>
+    <nd ref="13016217988" lat="36.1082226" lon="-115.1631450"/>
+    <nd ref="11348753609" lat="36.1083062" lon="-115.1629815"/>
+    <nd ref="13016217989" lat="36.1084118" lon="-115.1628372"/>
+    <nd ref="11348753610" lat="36.1085439" lon="-115.1626928"/>
+    <nd ref="13016217985" lat="36.1086649" lon="-115.1625601"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="name" v="Las Vegas Strip Circuit"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <relation id="16696508">
+    <bounds minlat="36.1079306" minlon="-115.1731770" maxlat="36.1255587" maxlon="-115.1601122"/>
+    <member type="node" ref="13016217986" role="start" lat="36.1092838" lon="-115.1618816"/>
+    <member type="way" ref="1456078477" role="forward">
+      <nd lat="36.1092838" lon="-115.1618816"/>
+      <nd lat="36.1105837" lon="-115.1604566"/>
+      <nd lat="36.1107004" lon="-115.1603640"/>
+    </member>
+    <member type="node" ref="11348753612" role="" lat="36.1107004" lon="-115.1603640"/>
+    <member type="way" ref="1456078476" role="forward">
+      <nd lat="36.1107004" lon="-115.1603640"/>
+      <nd lat="36.1107950" lon="-115.1603395"/>
+      <nd lat="36.1108742" lon="-115.1603463"/>
+      <nd lat="36.1109842" lon="-115.1604157"/>
+      <nd lat="36.1110678" lon="-115.1605274"/>
+    </member>
+    <member type="node" ref="11348753615" role="" lat="36.1110678" lon="-115.1605274"/>
+    <member type="way" ref="1223479151" role="forward">
+      <nd lat="36.1110678" lon="-115.1605274"/>
+      <nd lat="36.1111163" lon="-115.1606445"/>
+      <nd lat="36.1111515" lon="-115.1607862"/>
+      <nd lat="36.1111757" lon="-115.1609986"/>
+      <nd lat="36.1111669" lon="-115.1612056"/>
+      <nd lat="36.1111251" lon="-115.1613881"/>
+      <nd lat="36.1110480" lon="-115.1615733"/>
+      <nd lat="36.1109028" lon="-115.1618403"/>
+      <nd lat="36.1105837" lon="-115.1622526"/>
+      <nd lat="36.1105089" lon="-115.1623878"/>
+      <nd lat="36.1104649" lon="-115.1625512"/>
+      <nd lat="36.1104407" lon="-115.1627527"/>
+      <nd lat="36.1104429" lon="-115.1629216"/>
+    </member>
+    <member type="node" ref="11348753622" role="" lat="36.1104429" lon="-115.1629216"/>
+    <member type="way" ref="1456078475" role="forward">
+      <nd lat="36.1104429" lon="-115.1629216"/>
+      <nd lat="36.1104891" lon="-115.1631041"/>
+      <nd lat="36.1105397" lon="-115.1632648"/>
+      <nd lat="36.1106145" lon="-115.1634310"/>
+      <nd lat="36.1107400" lon="-115.1636107"/>
+      <nd lat="36.1108918" lon="-115.1637578"/>
+      <nd lat="36.1111544" lon="-115.1639284"/>
+    </member>
+    <member type="node" ref="5717585567" role="" lat="36.1111544" lon="-115.1639284"/>
+    <member type="way" ref="1224841829" role="forward">
+      <nd lat="36.1111544" lon="-115.1639284"/>
+      <nd lat="36.1115256" lon="-115.1639338"/>
+    </member>
+    <member type="way" ref="999044776" role="forward">
+      <nd lat="36.1115256" lon="-115.1639338"/>
+      <nd lat="36.1117715" lon="-115.1639411"/>
+    </member>
+    <member type="way" ref="999044779" role="forward">
+      <nd lat="36.1117715" lon="-115.1639411"/>
+      <nd lat="36.1126502" lon="-115.1639408"/>
+      <nd lat="36.1127628" lon="-115.1639470"/>
+    </member>
+    <member type="way" ref="1016805774" role="forward">
+      <nd lat="36.1127628" lon="-115.1639470"/>
+      <nd lat="36.1133774" lon="-115.1639551"/>
+      <nd lat="36.1135874" lon="-115.1639578"/>
+      <nd lat="36.1136851" lon="-115.1639591"/>
+      <nd lat="36.1138594" lon="-115.1639614"/>
+      <nd lat="36.1139494" lon="-115.1639626"/>
+      <nd lat="36.1141937" lon="-115.1639658"/>
+      <nd lat="36.1143116" lon="-115.1639685"/>
+      <nd lat="36.1143382" lon="-115.1639691"/>
+      <nd lat="36.1144213" lon="-115.1639683"/>
+    </member>
+    <member type="way" ref="601671174" role="forward">
+      <nd lat="36.1144213" lon="-115.1639683"/>
+      <nd lat="36.1145884" lon="-115.1639700"/>
+    </member>
+    <member type="way" ref="601671136" role="forward">
+      <nd lat="36.1145884" lon="-115.1639700"/>
+      <nd lat="36.1146818" lon="-115.1639713"/>
+      <nd lat="36.1153643" lon="-115.1639637"/>
+    </member>
+    <member type="way" ref="1032613489" role="forward">
+      <nd lat="36.1153643" lon="-115.1639637"/>
+      <nd lat="36.1155905" lon="-115.1639633"/>
+    </member>
+    <member type="way" ref="1032789814" role="forward">
+      <nd lat="36.1155905" lon="-115.1639633"/>
+      <nd lat="36.1157291" lon="-115.1639635"/>
+    </member>
+    <member type="way" ref="847458816" role="forward">
+      <nd lat="36.1157291" lon="-115.1639635"/>
+      <nd lat="36.1158950" lon="-115.1639649"/>
+    </member>
+    <member type="way" ref="847458817" role="forward">
+      <nd lat="36.1158950" lon="-115.1639649"/>
+      <nd lat="36.1162599" lon="-115.1639700"/>
+    </member>
+    <member type="way" ref="601666023" role="forward">
+      <nd lat="36.1162599" lon="-115.1639700"/>
+      <nd lat="36.1168073" lon="-115.1639758"/>
+    </member>
+    <member type="way" ref="1030280930" role="forward">
+      <nd lat="36.1168073" lon="-115.1639758"/>
+      <nd lat="36.1168687" lon="-115.1639758"/>
+      <nd lat="36.1171757" lon="-115.1639797"/>
+      <nd lat="36.1172027" lon="-115.1639800"/>
+      <nd lat="36.1173030" lon="-115.1639816"/>
+    </member>
+    <member type="way" ref="600520431" role="forward">
+      <nd lat="36.1173030" lon="-115.1639816"/>
+      <nd lat="36.1180848" lon="-115.1639890"/>
+      <nd lat="36.1182312" lon="-115.1639880"/>
+      <nd lat="36.1190399" lon="-115.1639955"/>
+      <nd lat="36.1192075" lon="-115.1639952"/>
+    </member>
+    <member type="node" ref="137743393" role="" lat="36.1192075" lon="-115.1639952"/>
+    <member type="way" ref="14323635" role="backward">
+      <nd lat="36.1191725" lon="-115.1611853"/>
+      <nd lat="36.1191844" lon="-115.1619476"/>
+      <nd lat="36.1192046" lon="-115.1629772"/>
+      <nd lat="36.1192073" lon="-115.1639282"/>
+      <nd lat="36.1192075" lon="-115.1639952"/>
+    </member>
+    <member type="node" ref="12626696512" role="" lat="36.1191725" lon="-115.1611853"/>
+    <member type="way" ref="1456078474" role="forward">
+      <nd lat="36.1191725" lon="-115.1611853"/>
+      <nd lat="36.1192393" lon="-115.1610652"/>
+      <nd lat="36.1193192" lon="-115.1609218"/>
+      <nd lat="36.1196028" lon="-115.1605614"/>
+      <nd lat="36.1197837" lon="-115.1604001"/>
+      <nd lat="36.1199581" lon="-115.1603002"/>
+      <nd lat="36.1199921" lon="-115.1602819"/>
+      <nd lat="36.1201468" lon="-115.1601987"/>
+      <nd lat="36.1203662" lon="-115.1601417"/>
+      <nd lat="36.1206152" lon="-115.1601122"/>
+      <nd lat="36.1207857" lon="-115.1601159"/>
+    </member>
+    <member type="node" ref="12638889512" role="" lat="36.1207857" lon="-115.1601159"/>
+    <member type="way" ref="1456078473" role="forward">
+      <nd lat="36.1207857" lon="-115.1601159"/>
+      <nd lat="36.1208309" lon="-115.1602127"/>
+      <nd lat="36.1208473" lon="-115.1603983"/>
+      <nd lat="36.1208693" lon="-115.1605164"/>
+      <nd lat="36.1209215" lon="-115.1606157"/>
+      <nd lat="36.1210168" lon="-115.1606910"/>
+    </member>
+    <member type="node" ref="12638889528" role="" lat="36.1210168" lon="-115.1606910"/>
+    <member type="way" ref="1364789152" role="forward">
+      <nd lat="36.1210168" lon="-115.1606910"/>
+      <nd lat="36.1211839" lon="-115.1607289"/>
+      <nd lat="36.1213038" lon="-115.1607192"/>
+      <nd lat="36.1214874" lon="-115.1605870"/>
+      <nd lat="36.1217020" lon="-115.1604347"/>
+      <nd lat="36.1217986" lon="-115.1603919"/>
+      <nd lat="36.1221364" lon="-115.1603887"/>
+      <nd lat="36.1221936" lon="-115.1603909"/>
+      <nd lat="36.1222356" lon="-115.1603925"/>
+    </member>
+    <member type="node" ref="12059212382" role="" lat="36.1222356" lon="-115.1603925"/>
+    <member type="way" ref="1238536330" role="backward">
+      <nd lat="36.1222909" lon="-115.1636873"/>
+      <nd lat="36.1222910" lon="-115.1636656"/>
+      <nd lat="36.1222920" lon="-115.1630379"/>
+      <nd lat="36.1222864" lon="-115.1627863"/>
+      <nd lat="36.1222704" lon="-115.1621823"/>
+      <nd lat="36.1222552" lon="-115.1616209"/>
+      <nd lat="36.1222416" lon="-115.1607641"/>
+      <nd lat="36.1222356" lon="-115.1603925"/>
+    </member>
+    <member type="way" ref="601645722" role="backward">
+      <nd lat="36.1222899" lon="-115.1640396"/>
+      <nd lat="36.1222901" lon="-115.1639532"/>
+      <nd lat="36.1222909" lon="-115.1636873"/>
+    </member>
+    <member type="way" ref="1454797801" role="forward">
+      <nd lat="36.1222899" lon="-115.1640396"/>
+      <nd lat="36.1224690" lon="-115.1641615"/>
+    </member>
+    <member type="way" ref="601644239" role="forward">
+      <nd lat="36.1224690" lon="-115.1641615"/>
+      <nd lat="36.1224736" lon="-115.1642735"/>
+      <nd lat="36.1224945" lon="-115.1647887"/>
+      <nd lat="36.1225776" lon="-115.1652328"/>
+      <nd lat="36.1226808" lon="-115.1654862"/>
+      <nd lat="36.1228819" lon="-115.1657711"/>
+      <nd lat="36.1230733" lon="-115.1659988"/>
+    </member>
+    <member type="node" ref="137402143" role="" lat="36.1230733" lon="-115.1659988"/>
+    <member type="way" ref="1456078472" role="forward">
+      <nd lat="36.1230733" lon="-115.1659988"/>
+      <nd lat="36.1231973" lon="-115.1660990"/>
+      <nd lat="36.1234745" lon="-115.1662630"/>
+      <nd lat="36.1241561" lon="-115.1665776"/>
+      <nd lat="36.1241594" lon="-115.1665792"/>
+    </member>
+    <member type="way" ref="1101647963" role="forward">
+      <nd lat="36.1241594" lon="-115.1665792"/>
+      <nd lat="36.1243390" lon="-115.1666627"/>
+    </member>
+    <member type="way" ref="1101647964" role="forward">
+      <nd lat="36.1243390" lon="-115.1666627"/>
+      <nd lat="36.1244624" lon="-115.1667193"/>
+      <nd lat="36.1245943" lon="-115.1668003"/>
+      <nd lat="36.1246163" lon="-115.1668161"/>
+      <nd lat="36.1247170" lon="-115.1668882"/>
+    </member>
+    <member type="node" ref="13250780586" role="" lat="36.1247170" lon="-115.1668882"/>
+    <member type="way" ref="1101647965" role="forward">
+      <nd lat="36.1247170" lon="-115.1668882"/>
+      <nd lat="36.1248066" lon="-115.1669930"/>
+    </member>
+    <member type="way" ref="1101647962" role="forward">
+      <nd lat="36.1248066" lon="-115.1669930"/>
+      <nd lat="36.1249550" lon="-115.1671943"/>
+      <nd lat="36.1251091" lon="-115.1674034"/>
+      <nd lat="36.1252240" lon="-115.1676067"/>
+      <nd lat="36.1253047" lon="-115.1678766"/>
+      <nd lat="36.1253346" lon="-115.1679779"/>
+    </member>
+    <member type="way" ref="1101647966" role="forward">
+      <nd lat="36.1253346" lon="-115.1679779"/>
+      <nd lat="36.1254094" lon="-115.1683482"/>
+      <nd lat="36.1254672" lon="-115.1687320"/>
+    </member>
+    <member type="way" ref="1101647967" role="forward">
+      <nd lat="36.1254672" lon="-115.1687320"/>
+      <nd lat="36.1255088" lon="-115.1690052"/>
+      <nd lat="36.1255324" lon="-115.1691519"/>
+    </member>
+    <member type="way" ref="1009061534" role="forward">
+      <nd lat="36.1255324" lon="-115.1691519"/>
+      <nd lat="36.1255456" lon="-115.1692652"/>
+    </member>
+    <member type="way" ref="1417454723" role="forward">
+      <nd lat="36.1255456" lon="-115.1692652"/>
+      <nd lat="36.1255587" lon="-115.1693784"/>
+    </member>
+    <member type="node" ref="1490596713" role="" lat="36.1255587" lon="-115.1693784"/>
+    <member type="way" ref="1009061533" role="forward">
+      <nd lat="36.1255587" lon="-115.1693784"/>
+      <nd lat="36.1254108" lon="-115.1694739"/>
+    </member>
+    <member type="way" ref="601644233" role="forward">
+      <nd lat="36.1254108" lon="-115.1694739"/>
+      <nd lat="36.1251778" lon="-115.1696134"/>
+      <nd lat="36.1250904" lon="-115.1696691"/>
+    </member>
+    <member type="way" ref="1071482657" role="forward">
+      <nd lat="36.1250904" lon="-115.1696691"/>
+      <nd lat="36.1242960" lon="-115.1701752"/>
+      <nd lat="36.1239130" lon="-115.1704270"/>
+    </member>
+    <member type="way" ref="1071482658" role="forward">
+      <nd lat="36.1239130" lon="-115.1704270"/>
+      <nd lat="36.1235930" lon="-115.1706376"/>
+      <nd lat="36.1234100" lon="-115.1707580"/>
+    </member>
+    <member type="way" ref="1071482659" role="forward">
+      <nd lat="36.1234100" lon="-115.1707580"/>
+      <nd lat="36.1233035" lon="-115.1708270"/>
+    </member>
+    <member type="way" ref="1071482660" role="forward">
+      <nd lat="36.1233035" lon="-115.1708270"/>
+      <nd lat="36.1231250" lon="-115.1709547"/>
+      <nd lat="36.1226804" lon="-115.1712722"/>
+      <nd lat="36.1226113" lon="-115.1713210"/>
+    </member>
+    <member type="way" ref="1071482661" role="forward">
+      <nd lat="36.1226113" lon="-115.1713210"/>
+      <nd lat="36.1223730" lon="-115.1714903"/>
+    </member>
+    <member type="way" ref="1071482662" role="forward">
+      <nd lat="36.1223730" lon="-115.1714903"/>
+      <nd lat="36.1222558" lon="-115.1715734"/>
+      <nd lat="36.1222157" lon="-115.1715999"/>
+      <nd lat="36.1221555" lon="-115.1716380"/>
+    </member>
+    <member type="way" ref="600023001" role="forward">
+      <nd lat="36.1221555" lon="-115.1716380"/>
+      <nd lat="36.1214556" lon="-115.1720140"/>
+      <nd lat="36.1207385" lon="-115.1722903"/>
+      <nd lat="36.1206341" lon="-115.1723277"/>
+    </member>
+    <member type="way" ref="1071482663" role="forward">
+      <nd lat="36.1206341" lon="-115.1723277"/>
+      <nd lat="36.1201947" lon="-115.1724872"/>
+      <nd lat="36.1201017" lon="-115.1725210"/>
+    </member>
+    <member type="node" ref="1598856720" role="" lat="36.1201017" lon="-115.1725210"/>
+    <member type="way" ref="1043551491" role="forward">
+      <nd lat="36.1201017" lon="-115.1725210"/>
+      <nd lat="36.1198760" lon="-115.1725947"/>
+      <nd lat="36.1198499" lon="-115.1726010"/>
+      <nd lat="36.1197458" lon="-115.1726338"/>
+      <nd lat="36.1196140" lon="-115.1726712"/>
+    </member>
+    <member type="way" ref="1059801988" role="forward">
+      <nd lat="36.1196140" lon="-115.1726712"/>
+      <nd lat="36.1194996" lon="-115.1726996"/>
+      <nd lat="36.1192581" lon="-115.1727632"/>
+    </member>
+    <member type="way" ref="674621867" role="forward">
+      <nd lat="36.1192581" lon="-115.1727632"/>
+      <nd lat="36.1189207" lon="-115.1728294"/>
+      <nd lat="36.1183621" lon="-115.1729085"/>
+    </member>
+    <member type="way" ref="423689767" role="forward">
+      <nd lat="36.1183621" lon="-115.1729085"/>
+      <nd lat="36.1181543" lon="-115.1729379"/>
+      <nd lat="36.1180652" lon="-115.1729440"/>
+      <nd lat="36.1175110" lon="-115.1729810"/>
+      <nd lat="36.1174863" lon="-115.1729830"/>
+      <nd lat="36.1173636" lon="-115.1729889"/>
+    </member>
+    <member type="way" ref="423686460" role="forward">
+      <nd lat="36.1173636" lon="-115.1729889"/>
+      <nd lat="36.1172671" lon="-115.1729900"/>
+      <nd lat="36.1169699" lon="-115.1729874"/>
+    </member>
+    <member type="way" ref="1362569857" role="forward">
+      <nd lat="36.1169699" lon="-115.1729874"/>
+      <nd lat="36.1159426" lon="-115.1729795"/>
+    </member>
+    <member type="way" ref="1032776580" role="forward">
+      <nd lat="36.1159426" lon="-115.1729795"/>
+      <nd lat="36.1149118" lon="-115.1729720"/>
+      <nd lat="36.1147714" lon="-115.1729710"/>
+    </member>
+    <member type="way" ref="421265955" role="forward">
+      <nd lat="36.1147714" lon="-115.1729710"/>
+      <nd lat="36.1146045" lon="-115.1729710"/>
+    </member>
+    <member type="way" ref="1043464439" role="forward">
+      <nd lat="36.1146045" lon="-115.1729710"/>
+      <nd lat="36.1140279" lon="-115.1730053"/>
+    </member>
+    <member type="way" ref="742140361" role="forward">
+      <nd lat="36.1140279" lon="-115.1730053"/>
+      <nd lat="36.1130171" lon="-115.1730485"/>
+    </member>
+    <member type="way" ref="1119837129" role="forward">
+      <nd lat="36.1130171" lon="-115.1730485"/>
+      <nd lat="36.1125952" lon="-115.1730662"/>
+      <nd lat="36.1121837" lon="-115.1730844"/>
+    </member>
+    <member type="way" ref="1016480470" role="forward">
+      <nd lat="36.1121837" lon="-115.1730844"/>
+      <nd lat="36.1119352" lon="-115.1730951"/>
+      <nd lat="36.1117604" lon="-115.1731008"/>
+      <nd lat="36.1115157" lon="-115.1731117"/>
+    </member>
+    <member type="way" ref="1016480469" role="forward">
+      <nd lat="36.1115157" lon="-115.1731117"/>
+      <nd lat="36.1112997" lon="-115.1731204"/>
+      <nd lat="36.1112140" lon="-115.1731240"/>
+    </member>
+    <member type="way" ref="1030067968" role="forward">
+      <nd lat="36.1112140" lon="-115.1731240"/>
+      <nd lat="36.1110604" lon="-115.1731307"/>
+    </member>
+    <member type="way" ref="423686234" role="forward">
+      <nd lat="36.1110604" lon="-115.1731307"/>
+      <nd lat="36.1109576" lon="-115.1731340"/>
+      <nd lat="36.1108004" lon="-115.1731358"/>
+    </member>
+    <member type="way" ref="1036842429" role="forward">
+      <nd lat="36.1108004" lon="-115.1731358"/>
+      <nd lat="36.1104429" lon="-115.1731398"/>
+      <nd lat="36.1103620" lon="-115.1731403"/>
+    </member>
+    <member type="way" ref="1033820973" role="forward">
+      <nd lat="36.1103620" lon="-115.1731403"/>
+      <nd lat="36.1103222" lon="-115.1731416"/>
+      <nd lat="36.1098834" lon="-115.1731452"/>
+      <nd lat="36.1094381" lon="-115.1731439"/>
+    </member>
+    <member type="way" ref="1436769040" role="forward">
+      <nd lat="36.1094381" lon="-115.1731439"/>
+      <nd lat="36.1091467" lon="-115.1731416"/>
+      <nd lat="36.1090357" lon="-115.1731400"/>
+    </member>
+    <member type="way" ref="1030066598" role="forward">
+      <nd lat="36.1090357" lon="-115.1731400"/>
+      <nd lat="36.1087541" lon="-115.1731770"/>
+    </member>
+    <member type="node" ref="2852160857" role="" lat="36.1087541" lon="-115.1731770"/>
+    <member type="way" ref="1030066599" role="forward">
+      <nd lat="36.1087541" lon="-115.1731770"/>
+      <nd lat="36.1086137" lon="-115.1729726"/>
+    </member>
+    <member type="way" ref="1381561592" role="forward">
+      <nd lat="36.1086137" lon="-115.1729726"/>
+      <nd lat="36.1084918" lon="-115.1727950"/>
+    </member>
+    <member type="node" ref="2852160859" role="" lat="36.1084918" lon="-115.1727950"/>
+    <member type="way" ref="1030290852" role="forward">
+      <nd lat="36.1084918" lon="-115.1727950"/>
+      <nd lat="36.1083292" lon="-115.1725615"/>
+      <nd lat="36.1081655" lon="-115.1723422"/>
+      <nd lat="36.1081206" lon="-115.1722746"/>
+      <nd lat="36.1080747" lon="-115.1721856"/>
+      <nd lat="36.1080432" lon="-115.1720948"/>
+      <nd lat="36.1080239" lon="-115.1720233"/>
+      <nd lat="36.1079912" lon="-115.1719151"/>
+      <nd lat="36.1079580" lon="-115.1717842"/>
+    </member>
+    <member type="node" ref="2852160864" role="" lat="36.1079580" lon="-115.1717842"/>
+    <member type="way" ref="1456078471" role="forward">
+      <nd lat="36.1079580" lon="-115.1717842"/>
+      <nd lat="36.1079503" lon="-115.1712724"/>
+      <nd lat="36.1079448" lon="-115.1709059"/>
+    </member>
+    <member type="way" ref="1030290854" role="forward">
+      <nd lat="36.1079448" lon="-115.1709059"/>
+      <nd lat="36.1079335" lon="-115.1701591"/>
+      <nd lat="36.1079327" lon="-115.1701034"/>
+      <nd lat="36.1079306" lon="-115.1699626"/>
+    </member>
+    <member type="way" ref="1030290855" role="forward">
+      <nd lat="36.1079306" lon="-115.1699626"/>
+      <nd lat="36.1079321" lon="-115.1698576"/>
+    </member>
+    <member type="way" ref="281237566" role="forward">
+      <nd lat="36.1079321" lon="-115.1698576"/>
+      <nd lat="36.1079497" lon="-115.1687066"/>
+    </member>
+    <member type="way" ref="1030290856" role="forward">
+      <nd lat="36.1079497" lon="-115.1687066"/>
+      <nd lat="36.1079508" lon="-115.1686009"/>
+      <nd lat="36.1079522" lon="-115.1684604"/>
+      <nd lat="36.1079535" lon="-115.1678538"/>
+    </member>
+    <member type="way" ref="600519166" role="forward">
+      <nd lat="36.1079535" lon="-115.1678538"/>
+      <nd lat="36.1079537" lon="-115.1677684"/>
+      <nd lat="36.1079538" lon="-115.1677215"/>
+      <nd lat="36.1079540" lon="-115.1675992"/>
+    </member>
+    <member type="way" ref="435490976" role="forward">
+      <nd lat="36.1079540" lon="-115.1675992"/>
+      <nd lat="36.1079523" lon="-115.1662360"/>
+      <nd lat="36.1079537" lon="-115.1657630"/>
+      <nd lat="36.1079473" lon="-115.1652369"/>
+    </member>
+    <member type="way" ref="1436762463" role="forward">
+      <nd lat="36.1079473" lon="-115.1652369"/>
+      <nd lat="36.1079514" lon="-115.1647319"/>
+    </member>
+    <member type="way" ref="435490978" role="forward">
+      <nd lat="36.1079514" lon="-115.1647319"/>
+      <nd lat="36.1079520" lon="-115.1641459"/>
+      <nd lat="36.1079520" lon="-115.1641079"/>
+      <nd lat="36.1079521" lon="-115.1640271"/>
+    </member>
+    <member type="way" ref="601666019" role="forward">
+      <nd lat="36.1079521" lon="-115.1640271"/>
+      <nd lat="36.1079696" lon="-115.1639015"/>
+    </member>
+    <member type="node" ref="13341696778" role="" lat="36.1079696" lon="-115.1639015"/>
+    <member type="way" ref="1456078478" role="forward">
+      <nd lat="36.1079696" lon="-115.1639015"/>
+      <nd lat="36.1080479" lon="-115.1636513"/>
+      <nd lat="36.1080898" lon="-115.1635088"/>
+      <nd lat="36.1081544" lon="-115.1633356"/>
+      <nd lat="36.1082226" lon="-115.1631450"/>
+      <nd lat="36.1083062" lon="-115.1629815"/>
+      <nd lat="36.1084118" lon="-115.1628372"/>
+      <nd lat="36.1085439" lon="-115.1626928"/>
+      <nd lat="36.1086649" lon="-115.1625601"/>
+    </member>
+    <member type="node" ref="13016217985" role="end" lat="36.1086649" lon="-115.1625601"/>
+    <member type="way" ref="1456078470" role="forward">
+      <nd lat="36.1086649" lon="-115.1625601"/>
+      <nd lat="36.1092838" lon="-115.1618816"/>
+    </member>
+    <member type="way" ref="1364789153" role="pit_lane">
+      <nd lat="36.1207857" lon="-115.1601159"/>
+      <nd lat="36.1208848" lon="-115.1601224"/>
+      <nd lat="36.1209494" lon="-115.1601624"/>
+      <nd lat="36.1209770" lon="-115.1602662"/>
+      <nd lat="36.1209856" lon="-115.1604010"/>
+      <nd lat="36.1210136" lon="-115.1604701"/>
+      <nd lat="36.1210835" lon="-115.1605527"/>
+      <nd lat="36.1211970" lon="-115.1605933"/>
+      <nd lat="36.1213544" lon="-115.1606076"/>
+      <nd lat="36.1214874" lon="-115.1605870"/>
+    </member>
+    <member type="way" ref="1223479152" role="pit_lane">
+      <nd lat="36.1079696" lon="-115.1639015"/>
+      <nd lat="36.1080475" lon="-115.1638115"/>
+      <nd lat="36.1080897" lon="-115.1637627"/>
+      <nd lat="36.1081275" lon="-115.1637191"/>
+      <nd lat="36.1082113" lon="-115.1635344"/>
+      <nd lat="36.1082835" lon="-115.1633988"/>
+      <nd lat="36.1083475" lon="-115.1633268"/>
+      <nd lat="36.1085439" lon="-115.1631586"/>
+      <nd lat="36.1085879" lon="-115.1630878"/>
+      <nd lat="36.1086055" lon="-115.1630061"/>
+      <nd lat="36.1086165" lon="-115.1628644"/>
+      <nd lat="36.1086429" lon="-115.1627718"/>
+      <nd lat="36.1087119" lon="-115.1627024"/>
+      <nd lat="36.1106321" lon="-115.1605846"/>
+      <nd lat="36.1107334" lon="-115.1605274"/>
+      <nd lat="36.1107994" lon="-115.1605247"/>
+      <nd lat="36.1108852" lon="-115.1605465"/>
+      <nd lat="36.1109754" lon="-115.1606146"/>
+      <nd lat="36.1111515" lon="-115.1607862"/>
+    </member>
+    <tag k="fixme" v="How do racers get from the Sphere onto Sands Avenue westbound if it's blocked off by a physical barrier?"/>
+    <tag k="name" v="Las Vegas Strip Circuit"/>
+    <tag k="route" v="circuit"/>
+    <tag k="type" v="circuit"/>
+    <tag k="wikidata" v="Q113112116"/>
+    <tag k="wikipedia" v="en:Las Vegas Strip Circuit"/>
+  </relation>
+
+</osm>

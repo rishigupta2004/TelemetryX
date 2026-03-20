@@ -1,0 +1,16 @@
+{
+"type": "FeatureCollection",
+"_circuit": "sao_paulo_v1",
+"_layer": "sectors",
+"_label": "Autodromo Jose Carlos Pace — Interlagos",
+"_note": "S1=end of sector 1. S2=end of sector 2. T=speed trap. S3 ends at start\/finish — no point needed.",
+"name": "sectors",
+"features": [
+{ "type": "Feature", "id": "S1", "properties": { "sector": "S1", "ref": "168m before T4", "circuit": "sao_paulo_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "S2", "properties": { "sector": "S2", "ref": "85m before T12", "circuit": "sao_paulo_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "T", "properties": { "sector": "T", "ref": "90m before T1", "circuit": "sao_paulo_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "properties": { "id": null, "sector": "SPEED TRAP", "ref": null, "circuit": "SAO_PALO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -46.699348148101066, -23.705911582382978 ] } },
+{ "type": "Feature", "properties": { "id": "1", "sector": "SECTOR 1", "ref": null, "circuit": "SAO_PALO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -46.694462407287233, -23.701357259436168 ] } },
+{ "type": "Feature", "properties": { "id": "2", "sector": "SECTOR 2", "ref": null, "circuit": "SAO_PALO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -46.696472296287233, -23.698160680654254 ] } }
+]
+}

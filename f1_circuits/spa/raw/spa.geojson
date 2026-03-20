@@ -1,0 +1,4986 @@
+{
+  "type": "FeatureCollection",
+  "generator": "overpass-turbo",
+  "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
+  "timestamp": "2026-02-19T16:19:29Z",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/24449918",
+        "highway": "raceway",
+        "name": "Les Combes",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9774435,
+            50.4312599
+          ],
+          [
+            5.9773755,
+            50.4312041
+          ],
+          [
+            5.9772969,
+            50.4311555
+          ],
+          [
+            5.9772404,
+            50.4311331
+          ],
+          [
+            5.9771568,
+            50.4311042
+          ],
+          [
+            5.9770386,
+            50.4310638
+          ],
+          [
+            5.9769884,
+            50.431042
+          ],
+          [
+            5.9769435,
+            50.4310169
+          ],
+          [
+            5.97687,
+            50.4309741
+          ],
+          [
+            5.9767963,
+            50.4309104
+          ],
+          [
+            5.9767552,
+            50.4308615
+          ],
+          [
+            5.9767208,
+            50.4308077
+          ],
+          [
+            5.9766979,
+            50.4307612
+          ],
+          [
+            5.9766886,
+            50.4307137
+          ],
+          [
+            5.9766879,
+            50.4306713
+          ],
+          [
+            5.9766934,
+            50.4306294
+          ],
+          [
+            5.9767017,
+            50.430589
+          ],
+          [
+            5.9767298,
+            50.4304981
+          ]
+        ]
+      },
+      "id": "way/24449918"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126807099",
+        "highway": "raceway",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9638071,
+            50.445584
+          ],
+          [
+            5.9634405,
+            50.4459926
+          ]
+        ]
+      },
+      "id": "way/126807099"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126807100",
+        "highway": "raceway",
+        "name": "Courbe Paul Frère",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9601887,
+            50.4294294
+          ],
+          [
+            5.9600873,
+            50.4294765
+          ],
+          [
+            5.960009,
+            50.4295205
+          ],
+          [
+            5.9598734,
+            50.429617
+          ],
+          [
+            5.9597894,
+            50.4296938
+          ],
+          [
+            5.9597147,
+            50.4297801
+          ],
+          [
+            5.9596705,
+            50.4298418
+          ],
+          [
+            5.9596345,
+            50.4299049
+          ],
+          [
+            5.9596066,
+            50.4299704
+          ],
+          [
+            5.9595875,
+            50.4300358
+          ],
+          [
+            5.9595746,
+            50.4301627
+          ],
+          [
+            5.9595848,
+            50.4302759
+          ],
+          [
+            5.9596127,
+            50.4303807
+          ],
+          [
+            5.9596544,
+            50.4304757
+          ],
+          [
+            5.9599585,
+            50.4309855
+          ]
+        ]
+      },
+      "id": "way/126807100"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126807101",
+        "highway": "raceway",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.968839,
+            50.4334144
+          ],
+          [
+            5.9683801,
+            50.4326927
+          ],
+          [
+            5.9672975,
+            50.4309937
+          ]
+        ]
+      },
+      "id": "way/126807101"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126807103",
+        "highway": "raceway",
+        "name": "Double Gauche",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9728985,
+            50.4333661
+          ],
+          [
+            5.9728569,
+            50.4334898
+          ],
+          [
+            5.9728133,
+            50.433604
+          ],
+          [
+            5.9727498,
+            50.4336977
+          ],
+          [
+            5.9726708,
+            50.4337866
+          ],
+          [
+            5.9725625,
+            50.4338799
+          ],
+          [
+            5.9724398,
+            50.433959
+          ],
+          [
+            5.9723416,
+            50.4340111
+          ],
+          [
+            5.9722438,
+            50.4340598
+          ],
+          [
+            5.9720795,
+            50.4341182
+          ],
+          [
+            5.9719465,
+            50.4341538
+          ],
+          [
+            5.9718146,
+            50.4341748
+          ],
+          [
+            5.9717032,
+            50.4341859
+          ],
+          [
+            5.9709388,
+            50.4342245
+          ],
+          [
+            5.9708485,
+            50.4342291
+          ],
+          [
+            5.9707204,
+            50.4342299
+          ],
+          [
+            5.9706028,
+            50.4342268
+          ],
+          [
+            5.9704148,
+            50.4342109
+          ],
+          [
+            5.970226,
+            50.4341826
+          ],
+          [
+            5.9700842,
+            50.4341564
+          ],
+          [
+            5.9699544,
+            50.4341244
+          ],
+          [
+            5.9697899,
+            50.4340752
+          ],
+          [
+            5.9696432,
+            50.4340212
+          ],
+          [
+            5.969522,
+            50.433971
+          ],
+          [
+            5.9694187,
+            50.4339178
+          ],
+          [
+            5.9692913,
+            50.4338415
+          ],
+          [
+            5.9691753,
+            50.4337636
+          ],
+          [
+            5.9690395,
+            50.4336548
+          ],
+          [
+            5.9689443,
+            50.4335505
+          ],
+          [
+            5.968839,
+            50.4334144
+          ]
+        ]
+      },
+      "id": "way/126807103"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126807105",
+        "highway": "raceway",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9665475,
+            50.440291
+          ],
+          [
+            5.9664837,
+            50.4408137
+          ],
+          [
+            5.9664171,
+            50.4412905
+          ],
+          [
+            5.9664055,
+            50.4414022
+          ]
+        ]
+      },
+      "id": "way/126807105"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126807106",
+        "highway": "raceway",
+        "name": "Speaker's Corner",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9738128,
+            50.4290135
+          ],
+          [
+            5.9739518,
+            50.4290682
+          ],
+          [
+            5.9740781,
+            50.4291242
+          ],
+          [
+            5.9741507,
+            50.4291677
+          ],
+          [
+            5.9742173,
+            50.4292226
+          ],
+          [
+            5.9742679,
+            50.4292827
+          ],
+          [
+            5.9743024,
+            50.4293448
+          ],
+          [
+            5.9743227,
+            50.4294151
+          ],
+          [
+            5.9743278,
+            50.4294724
+          ],
+          [
+            5.9743245,
+            50.4295302
+          ],
+          [
+            5.9742976,
+            50.4295944
+          ],
+          [
+            5.9742266,
+            50.4297302
+          ],
+          [
+            5.9739924,
+            50.4301757
+          ],
+          [
+            5.9737488,
+            50.430664
+          ],
+          [
+            5.9736196,
+            50.4309288
+          ],
+          [
+            5.9735508,
+            50.4310868
+          ]
+        ]
+      },
+      "id": "way/126807106"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126807109",
+        "highway": "raceway",
+        "name": "Fagnes",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9672975,
+            50.4309937
+          ],
+          [
+            5.9672476,
+            50.4309078
+          ],
+          [
+            5.9672269,
+            50.4308768
+          ],
+          [
+            5.9671766,
+            50.4308007
+          ],
+          [
+            5.9671124,
+            50.4307264
+          ],
+          [
+            5.9670516,
+            50.4306666
+          ],
+          [
+            5.9669848,
+            50.4306136
+          ],
+          [
+            5.9668724,
+            50.4305447
+          ],
+          [
+            5.9667526,
+            50.4304882
+          ],
+          [
+            5.966637,
+            50.4304512
+          ],
+          [
+            5.9664837,
+            50.4304151
+          ],
+          [
+            5.96632,
+            50.4303954
+          ],
+          [
+            5.9662173,
+            50.4303892
+          ],
+          [
+            5.9661054,
+            50.4303936
+          ],
+          [
+            5.9659994,
+            50.4304041
+          ],
+          [
+            5.9658736,
+            50.4304232
+          ],
+          [
+            5.9657473,
+            50.4304533
+          ],
+          [
+            5.9656236,
+            50.4304943
+          ],
+          [
+            5.9654976,
+            50.4305486
+          ],
+          [
+            5.9653227,
+            50.430621
+          ],
+          [
+            5.9651456,
+            50.4306764
+          ],
+          [
+            5.96505,
+            50.4306956
+          ],
+          [
+            5.964933,
+            50.430709
+          ],
+          [
+            5.9647959,
+            50.4307154
+          ],
+          [
+            5.9646274,
+            50.4307086
+          ],
+          [
+            5.9644711,
+            50.4306852
+          ],
+          [
+            5.9643313,
+            50.4306515
+          ],
+          [
+            5.9642017,
+            50.4306065
+          ],
+          [
+            5.9640937,
+            50.4305491
+          ],
+          [
+            5.9639875,
+            50.4304882
+          ],
+          [
+            5.9638966,
+            50.430406
+          ]
+        ]
+      },
+      "id": "way/126807109"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126807110",
+        "highway": "raceway",
+        "old_ref": "N62",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9654089,
+            50.4456821
+          ],
+          [
+            5.9656928,
+            50.4455895
+          ],
+          [
+            5.9659945,
+            50.4454754
+          ],
+          [
+            5.96628,
+            50.4453582
+          ],
+          [
+            5.9666481,
+            50.4451858
+          ],
+          [
+            5.9668462,
+            50.4450844
+          ],
+          [
+            5.9670192,
+            50.444991
+          ],
+          [
+            5.9671848,
+            50.4449001
+          ],
+          [
+            5.9674285,
+            50.4447571
+          ],
+          [
+            5.9677408,
+            50.4445436
+          ],
+          [
+            5.968681,
+            50.4438467
+          ],
+          [
+            5.9698663,
+            50.4429533
+          ],
+          [
+            5.9700244,
+            50.4428321
+          ]
+        ]
+      },
+      "id": "way/126807110"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126807111",
+        "highway": "raceway",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9765858,
+            50.4292073
+          ],
+          [
+            5.9763615,
+            50.4291108
+          ],
+          [
+            5.9733886,
+            50.427794
+          ]
+        ]
+      },
+      "id": "way/126807111"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126807112",
+        "highway": "raceway",
+        "name": "Bruxelles",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9733886,
+            50.427794
+          ],
+          [
+            5.9732462,
+            50.4277332
+          ],
+          [
+            5.9731467,
+            50.4277022
+          ],
+          [
+            5.9730773,
+            50.4276877
+          ],
+          [
+            5.9729716,
+            50.4276769
+          ],
+          [
+            5.9728699,
+            50.4276763
+          ],
+          [
+            5.9727709,
+            50.4276836
+          ],
+          [
+            5.972667,
+            50.4277002
+          ],
+          [
+            5.9725526,
+            50.4277333
+          ],
+          [
+            5.9724656,
+            50.4277689
+          ],
+          [
+            5.97239,
+            50.4278144
+          ],
+          [
+            5.9723223,
+            50.4278721
+          ],
+          [
+            5.9722689,
+            50.4279314
+          ],
+          [
+            5.9722342,
+            50.4279905
+          ],
+          [
+            5.9722151,
+            50.4280492
+          ],
+          [
+            5.9722067,
+            50.4281113
+          ],
+          [
+            5.9722101,
+            50.4281753
+          ],
+          [
+            5.9722252,
+            50.4282351
+          ],
+          [
+            5.9722544,
+            50.4282944
+          ],
+          [
+            5.9722947,
+            50.4283455
+          ],
+          [
+            5.9723474,
+            50.4283949
+          ],
+          [
+            5.9724082,
+            50.4284397
+          ],
+          [
+            5.9724572,
+            50.4284683
+          ],
+          [
+            5.9725418,
+            50.4285085
+          ],
+          [
+            5.9726475,
+            50.428551
+          ]
+        ]
+      },
+      "id": "way/126807112"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126807113",
+        "highway": "raceway",
+        "oneway": "yes",
+        "sport": "motor",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9767298,
+            50.4304981
+          ],
+          [
+            5.9769802,
+            50.4298564
+          ]
+        ]
+      },
+      "id": "way/126807113"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126807114",
+        "highway": "raceway",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9604024,
+            50.4315072
+          ],
+          [
+            5.9605686,
+            50.4316696
+          ],
+          [
+            5.960771,
+            50.4318378
+          ],
+          [
+            5.9609869,
+            50.4319945
+          ],
+          [
+            5.9612958,
+            50.4322013
+          ],
+          [
+            5.9616197,
+            50.4324071
+          ],
+          [
+            5.9619574,
+            50.4326135
+          ],
+          [
+            5.9621037,
+            50.4327006
+          ],
+          [
+            5.962256,
+            50.4327858
+          ],
+          [
+            5.9624253,
+            50.432871
+          ],
+          [
+            5.9626036,
+            50.4329485
+          ],
+          [
+            5.9628261,
+            50.4330404
+          ],
+          [
+            5.9629709,
+            50.4330934
+          ],
+          [
+            5.9631006,
+            50.4331387
+          ],
+          [
+            5.9639606,
+            50.4334236
+          ]
+        ]
+      },
+      "id": "way/126807114"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126807116",
+        "highway": "raceway",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9638966,
+            50.430406
+          ],
+          [
+            5.9633252,
+            50.42984
+          ],
+          [
+            5.963069,
+            50.4295895
+          ],
+          [
+            5.9627877,
+            50.4293018
+          ],
+          [
+            5.9625386,
+            50.4290495
+          ]
+        ]
+      },
+      "id": "way/126807116"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126835637",
+        "highway": "raceway",
+        "name": "Raidillon",
+        "old_ref": "N62",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9710088,
+            50.4422939
+          ],
+          [
+            5.9710855,
+            50.4422622
+          ],
+          [
+            5.9711934,
+            50.4422161
+          ],
+          [
+            5.9712948,
+            50.4421672
+          ],
+          [
+            5.9713799,
+            50.4421221
+          ],
+          [
+            5.9714572,
+            50.4420725
+          ],
+          [
+            5.9715323,
+            50.4420102
+          ],
+          [
+            5.9715807,
+            50.441971
+          ],
+          [
+            5.9716406,
+            50.4419073
+          ],
+          [
+            5.9716944,
+            50.4418457
+          ],
+          [
+            5.9717503,
+            50.4417773
+          ],
+          [
+            5.9718094,
+            50.4416828
+          ],
+          [
+            5.9718777,
+            50.4415584
+          ],
+          [
+            5.9719222,
+            50.4414368
+          ],
+          [
+            5.9719466,
+            50.4413387
+          ],
+          [
+            5.9719666,
+            50.4412447
+          ],
+          [
+            5.9719918,
+            50.4411262
+          ],
+          [
+            5.9720149,
+            50.4410316
+          ],
+          [
+            5.97203,
+            50.4409743
+          ],
+          [
+            5.9720495,
+            50.4409212
+          ],
+          [
+            5.9720871,
+            50.4408559
+          ],
+          [
+            5.9721343,
+            50.4407871
+          ],
+          [
+            5.972175,
+            50.4407387
+          ],
+          [
+            5.9722157,
+            50.4406942
+          ],
+          [
+            5.972344,
+            50.4405599
+          ]
+        ]
+      },
+      "id": "way/126835637"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126835638",
+        "highway": "raceway",
+        "name": "Kemmel",
+        "old_ref": "N62",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.972344,
+            50.4405599
+          ],
+          [
+            5.9726866,
+            50.4402208
+          ],
+          [
+            5.9737199,
+            50.4391888
+          ],
+          [
+            5.9739495,
+            50.4389724
+          ],
+          [
+            5.9740561,
+            50.4388755
+          ],
+          [
+            5.9741444,
+            50.4387894
+          ],
+          [
+            5.9742253,
+            50.4387022
+          ],
+          [
+            5.974294,
+            50.4386243
+          ],
+          [
+            5.9743571,
+            50.4385464
+          ],
+          [
+            5.9744286,
+            50.4384541
+          ],
+          [
+            5.9744909,
+            50.4383618
+          ],
+          [
+            5.974596,
+            50.4381855
+          ],
+          [
+            5.9746894,
+            50.4379469
+          ],
+          [
+            5.9749742,
+            50.4373093
+          ],
+          [
+            5.9760006,
+            50.4350195
+          ],
+          [
+            5.9773058,
+            50.4320934
+          ],
+          [
+            5.9773933,
+            50.4319137
+          ],
+          [
+            5.9774656,
+            50.4317583
+          ]
+        ]
+      },
+      "id": "way/126835638"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126835639",
+        "highway": "raceway",
+        "name": "Eau Rouge",
+        "old_ref": "N62",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9700244,
+            50.4428321
+          ],
+          [
+            5.9702765,
+            50.4426433
+          ],
+          [
+            5.9703724,
+            50.4425754
+          ],
+          [
+            5.9704145,
+            50.4425456
+          ],
+          [
+            5.9704976,
+            50.4425021
+          ],
+          [
+            5.9706984,
+            50.4424132
+          ],
+          [
+            5.9708217,
+            50.4423659
+          ],
+          [
+            5.9710088,
+            50.4422939
+          ]
+        ]
+      },
+      "id": "way/126835639"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/175178443",
+        "highway": "raceway",
+        "name": "La Source",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9634405,
+            50.4459926
+          ],
+          [
+            5.9633414,
+            50.4461118
+          ],
+          [
+            5.9633389,
+            50.4461541
+          ],
+          [
+            5.9633595,
+            50.4461983
+          ],
+          [
+            5.9633828,
+            50.4462228
+          ],
+          [
+            5.9634198,
+            50.4462461
+          ],
+          [
+            5.9634768,
+            50.4462631
+          ],
+          [
+            5.963538,
+            50.4462608
+          ],
+          [
+            5.963645,
+            50.4462337
+          ],
+          [
+            5.9637612,
+            50.4462042
+          ]
+        ]
+      },
+      "id": "way/175178443"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/175178448",
+        "highway": "raceway",
+        "old_ref": "N62",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9637612,
+            50.4462042
+          ],
+          [
+            5.9643712,
+            50.4460298
+          ],
+          [
+            5.9649777,
+            50.4458402
+          ],
+          [
+            5.9654089,
+            50.4456821
+          ]
+        ]
+      },
+      "id": "way/175178448"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/175195997",
+        "highway": "raceway",
+        "name": "Malmedy",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9769802,
+            50.4298564
+          ],
+          [
+            5.9770211,
+            50.4297341
+          ],
+          [
+            5.9770362,
+            50.4296579
+          ],
+          [
+            5.9770251,
+            50.4295898
+          ],
+          [
+            5.9770084,
+            50.4295522
+          ],
+          [
+            5.9769902,
+            50.4295013
+          ],
+          [
+            5.9769673,
+            50.429468
+          ],
+          [
+            5.9769332,
+            50.429425
+          ],
+          [
+            5.9768964,
+            50.4293836
+          ],
+          [
+            5.9768533,
+            50.429351
+          ],
+          [
+            5.9768134,
+            50.4293193
+          ],
+          [
+            5.9767589,
+            50.4292892
+          ],
+          [
+            5.9765858,
+            50.4292073
+          ]
+        ]
+      },
+      "id": "way/175195997"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/175371353",
+        "highway": "raceway",
+        "name": "Campus",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9625386,
+            50.4290495
+          ],
+          [
+            5.9624697,
+            50.4289821
+          ],
+          [
+            5.9624199,
+            50.4289352
+          ],
+          [
+            5.962312,
+            50.4288694
+          ],
+          [
+            5.9622392,
+            50.4288367
+          ],
+          [
+            5.9621634,
+            50.4288078
+          ],
+          [
+            5.9620902,
+            50.4287898
+          ],
+          [
+            5.9620078,
+            50.4287736
+          ],
+          [
+            5.9618866,
+            50.4287636
+          ],
+          [
+            5.9617734,
+            50.4287671
+          ],
+          [
+            5.9616338,
+            50.4287828
+          ],
+          [
+            5.961504,
+            50.4288227
+          ],
+          [
+            5.9613935,
+            50.4288701
+          ]
+        ]
+      },
+      "id": "way/175371353"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/175371365",
+        "highway": "raceway",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9613935,
+            50.4288701
+          ],
+          [
+            5.9603397,
+            50.4293589
+          ],
+          [
+            5.9601887,
+            50.4294294
+          ]
+        ]
+      },
+      "id": "way/175371365"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/176133745",
+        "highway": "raceway",
+        "name": "Blanchimont",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9639606,
+            50.4334236
+          ],
+          [
+            5.9648218,
+            50.4337107
+          ],
+          [
+            5.9652835,
+            50.4338671
+          ],
+          [
+            5.9654947,
+            50.4339425
+          ],
+          [
+            5.9656921,
+            50.4340276
+          ],
+          [
+            5.9658609,
+            50.434102
+          ],
+          [
+            5.9660378,
+            50.4341971
+          ],
+          [
+            5.9662707,
+            50.4343381
+          ],
+          [
+            5.9665069,
+            50.4344986
+          ],
+          [
+            5.9666441,
+            50.4346131
+          ],
+          [
+            5.9667513,
+            50.4347143
+          ],
+          [
+            5.9668479,
+            50.4348085
+          ],
+          [
+            5.9669387,
+            50.4349105
+          ],
+          [
+            5.9671283,
+            50.4351527
+          ],
+          [
+            5.9676245,
+            50.4358594
+          ],
+          [
+            5.9678864,
+            50.4362397
+          ],
+          [
+            5.967944,
+            50.4363253
+          ],
+          [
+            5.9680037,
+            50.4364319
+          ],
+          [
+            5.9680418,
+            50.4365292
+          ],
+          [
+            5.9680633,
+            50.4366105
+          ],
+          [
+            5.9680748,
+            50.4367075
+          ],
+          [
+            5.9680763,
+            50.4367771
+          ],
+          [
+            5.9680712,
+            50.4368673
+          ],
+          [
+            5.9680482,
+            50.4369819
+          ],
+          [
+            5.9680001,
+            50.4371022
+          ],
+          [
+            5.9679165,
+            50.4372502
+          ]
+        ]
+      },
+      "id": "way/176133745"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/176133746",
+        "highway": "raceway",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9599585,
+            50.4309855
+          ],
+          [
+            5.9600727,
+            50.4311552
+          ],
+          [
+            5.9601664,
+            50.4312698
+          ],
+          [
+            5.9602931,
+            50.4314057
+          ],
+          [
+            5.9604024,
+            50.4315072
+          ]
+        ]
+      },
+      "id": "way/176133746"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/178964809",
+        "highway": "raceway",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9679165,
+            50.4372502
+          ],
+          [
+            5.9669111,
+            50.4389373
+          ],
+          [
+            5.9668017,
+            50.4391775
+          ],
+          [
+            5.9667211,
+            50.4393942
+          ],
+          [
+            5.9666814,
+            50.4395358
+          ],
+          [
+            5.9666477,
+            50.4396847
+          ],
+          [
+            5.9665897,
+            50.4399443
+          ],
+          [
+            5.9665475,
+            50.440291
+          ]
+        ]
+      },
+      "id": "way/178964809"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/323851541",
+        "highway": "raceway",
+        "name": "Pit Lane",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "pit_lane",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9667947,
+            50.4415508
+          ],
+          [
+            5.9669445,
+            50.4415094
+          ],
+          [
+            5.9670887,
+            50.4414966
+          ],
+          [
+            5.9672131,
+            50.4414864
+          ],
+          [
+            5.9672807,
+            50.4414876
+          ],
+          [
+            5.9673512,
+            50.4414946
+          ],
+          [
+            5.9674083,
+            50.4415068
+          ],
+          [
+            5.9674427,
+            50.4415166
+          ],
+          [
+            5.9674754,
+            50.4415315
+          ],
+          [
+            5.9675218,
+            50.4415604
+          ],
+          [
+            5.9675533,
+            50.4415888
+          ],
+          [
+            5.9675771,
+            50.4416197
+          ],
+          [
+            5.9675997,
+            50.4416646
+          ],
+          [
+            5.9676069,
+            50.4416994
+          ],
+          [
+            5.967603,
+            50.4417491
+          ],
+          [
+            5.9675929,
+            50.441788
+          ],
+          [
+            5.9675692,
+            50.4418285
+          ],
+          [
+            5.9674674,
+            50.4419707
+          ],
+          [
+            5.9673675,
+            50.4420963
+          ],
+          [
+            5.9671977,
+            50.4422878
+          ],
+          [
+            5.9669962,
+            50.4425116
+          ],
+          [
+            5.9669433,
+            50.4425718
+          ],
+          [
+            5.9668864,
+            50.4426189
+          ],
+          [
+            5.9666915,
+            50.4427568
+          ],
+          [
+            5.9664957,
+            50.4428924
+          ],
+          [
+            5.9664447,
+            50.4429281
+          ],
+          [
+            5.9663712,
+            50.4429756
+          ],
+          [
+            5.9662836,
+            50.4430705
+          ],
+          [
+            5.9662012,
+            50.4431675
+          ],
+          [
+            5.9656044,
+            50.4438288
+          ],
+          [
+            5.9641305,
+            50.4455165
+          ],
+          [
+            5.9640148,
+            50.4456521
+          ],
+          [
+            5.9639675,
+            50.4457184
+          ],
+          [
+            5.9639493,
+            50.4457683
+          ],
+          [
+            5.9639504,
+            50.4458086
+          ],
+          [
+            5.9639633,
+            50.4458455
+          ],
+          [
+            5.9639965,
+            50.4458824
+          ],
+          [
+            5.9640522,
+            50.4459201
+          ],
+          [
+            5.964119,
+            50.4459413
+          ],
+          [
+            5.9642169,
+            50.4459574
+          ],
+          [
+            5.9643216,
+            50.4459561
+          ],
+          [
+            5.9644452,
+            50.4459317
+          ],
+          [
+            5.9645688,
+            50.4459008
+          ],
+          [
+            5.9647482,
+            50.4458515
+          ],
+          [
+            5.9649357,
+            50.4457919
+          ],
+          [
+            5.9651291,
+            50.4457357
+          ],
+          [
+            5.9654089,
+            50.4456821
+          ]
+        ]
+      },
+      "id": "way/323851541"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/613486590",
+        "highway": "raceway",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9667947,
+            50.4415508
+          ],
+          [
+            5.9670465,
+            50.4415426
+          ],
+          [
+            5.9671068,
+            50.4415482
+          ],
+          [
+            5.9671709,
+            50.4415604
+          ],
+          [
+            5.9672139,
+            50.4415846
+          ],
+          [
+            5.9672516,
+            50.4416169
+          ],
+          [
+            5.9672704,
+            50.4416519
+          ],
+          [
+            5.9672755,
+            50.4416891
+          ],
+          [
+            5.9672719,
+            50.4417263
+          ],
+          [
+            5.9672547,
+            50.4417613
+          ],
+          [
+            5.9672225,
+            50.4417987
+          ],
+          [
+            5.9670718,
+            50.4419344
+          ],
+          [
+            5.9660281,
+            50.4430979
+          ],
+          [
+            5.9651626,
+            50.4440643
+          ],
+          [
+            5.9638071,
+            50.445584
+          ]
+        ]
+      },
+      "id": "way/613486590"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/637268672",
+        "highway": "raceway",
+        "name": "Chicane",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9664055,
+            50.4414022
+          ],
+          [
+            5.9664052,
+            50.4414383
+          ],
+          [
+            5.9664181,
+            50.4414694
+          ],
+          [
+            5.9664367,
+            50.4414959
+          ],
+          [
+            5.9664596,
+            50.441516
+          ],
+          [
+            5.9664907,
+            50.4415352
+          ],
+          [
+            5.9665367,
+            50.441552
+          ],
+          [
+            5.9666003,
+            50.4415609
+          ],
+          [
+            5.9666668,
+            50.44156
+          ],
+          [
+            5.9667128,
+            50.4415567
+          ],
+          [
+            5.9667947,
+            50.4415508
+          ]
+        ]
+      },
+      "id": "way/637268672"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1359025267",
+        "highway": "raceway",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9735508,
+            50.4310868
+          ],
+          [
+            5.9735048,
+            50.4312067
+          ],
+          [
+            5.9734189,
+            50.4315167
+          ],
+          [
+            5.9731121,
+            50.4325628
+          ],
+          [
+            5.9728985,
+            50.4333661
+          ]
+        ]
+      },
+      "id": "way/1359025267"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1359025268",
+        "highway": "raceway",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9726475,
+            50.428551
+          ],
+          [
+            5.972748,
+            50.4285892
+          ],
+          [
+            5.9733592,
+            50.4288359
+          ],
+          [
+            5.973732,
+            50.4289844
+          ],
+          [
+            5.9738128,
+            50.4290135
+          ]
+        ]
+      },
+      "id": "way/1359025268"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1430527230",
+        "highway": "raceway",
+        "name": "Les Combes",
+        "old_ref": "N62",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9774656,
+            50.4317583
+          ],
+          [
+            5.977526,
+            50.4316245
+          ],
+          [
+            5.9775434,
+            50.4315626
+          ],
+          [
+            5.977554,
+            50.4315167
+          ],
+          [
+            5.9775554,
+            50.4314687
+          ],
+          [
+            5.977549,
+            50.4314311
+          ],
+          [
+            5.9775263,
+            50.4313722
+          ],
+          [
+            5.9774924,
+            50.4313109
+          ],
+          [
+            5.9774435,
+            50.4312599
+          ]
+        ]
+      },
+      "id": "way/1430527230"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/175178448",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9637612,
+            50.4462042
+          ],
+          [
+            5.9643712,
+            50.4460298
+          ],
+          [
+            5.9649777,
+            50.4458402
+          ],
+          [
+            5.9654089,
+            50.4456821
+          ]
+        ]
+      },
+      "id": "way/175178448"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/175178443",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9634405,
+            50.4459926
+          ],
+          [
+            5.9633414,
+            50.4461118
+          ],
+          [
+            5.9633389,
+            50.4461541
+          ],
+          [
+            5.9633595,
+            50.4461983
+          ],
+          [
+            5.9633828,
+            50.4462228
+          ],
+          [
+            5.9634198,
+            50.4462461
+          ],
+          [
+            5.9634768,
+            50.4462631
+          ],
+          [
+            5.963538,
+            50.4462608
+          ],
+          [
+            5.963645,
+            50.4462337
+          ],
+          [
+            5.9637612,
+            50.4462042
+          ]
+        ]
+      },
+      "id": "way/175178443"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126807099",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9638071,
+            50.445584
+          ],
+          [
+            5.9634405,
+            50.4459926
+          ]
+        ]
+      },
+      "id": "way/126807099"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/637268672",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9664055,
+            50.4414022
+          ],
+          [
+            5.9664052,
+            50.4414383
+          ],
+          [
+            5.9664181,
+            50.4414694
+          ],
+          [
+            5.9664367,
+            50.4414959
+          ],
+          [
+            5.9664596,
+            50.441516
+          ],
+          [
+            5.9664907,
+            50.4415352
+          ],
+          [
+            5.9665367,
+            50.441552
+          ],
+          [
+            5.9666003,
+            50.4415609
+          ],
+          [
+            5.9666668,
+            50.44156
+          ],
+          [
+            5.9667128,
+            50.4415567
+          ],
+          [
+            5.9667947,
+            50.4415508
+          ]
+        ]
+      },
+      "id": "way/637268672"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/613486590",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9667947,
+            50.4415508
+          ],
+          [
+            5.9670465,
+            50.4415426
+          ],
+          [
+            5.9671068,
+            50.4415482
+          ],
+          [
+            5.9671709,
+            50.4415604
+          ],
+          [
+            5.9672139,
+            50.4415846
+          ],
+          [
+            5.9672516,
+            50.4416169
+          ],
+          [
+            5.9672704,
+            50.4416519
+          ],
+          [
+            5.9672755,
+            50.4416891
+          ],
+          [
+            5.9672719,
+            50.4417263
+          ],
+          [
+            5.9672547,
+            50.4417613
+          ],
+          [
+            5.9672225,
+            50.4417987
+          ],
+          [
+            5.9670718,
+            50.4419344
+          ],
+          [
+            5.9660281,
+            50.4430979
+          ],
+          [
+            5.9651626,
+            50.4440643
+          ],
+          [
+            5.9638071,
+            50.445584
+          ]
+        ]
+      },
+      "id": "way/613486590"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126807105",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9665475,
+            50.440291
+          ],
+          [
+            5.9664837,
+            50.4408137
+          ],
+          [
+            5.9664171,
+            50.4412905
+          ],
+          [
+            5.9664055,
+            50.4414022
+          ]
+        ]
+      },
+      "id": "way/126807105"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/176133745",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9639606,
+            50.4334236
+          ],
+          [
+            5.9648218,
+            50.4337107
+          ],
+          [
+            5.9652835,
+            50.4338671
+          ],
+          [
+            5.9654947,
+            50.4339425
+          ],
+          [
+            5.9656921,
+            50.4340276
+          ],
+          [
+            5.9658609,
+            50.434102
+          ],
+          [
+            5.9660378,
+            50.4341971
+          ],
+          [
+            5.9662707,
+            50.4343381
+          ],
+          [
+            5.9665069,
+            50.4344986
+          ],
+          [
+            5.9666441,
+            50.4346131
+          ],
+          [
+            5.9667513,
+            50.4347143
+          ],
+          [
+            5.9668479,
+            50.4348085
+          ],
+          [
+            5.9669387,
+            50.4349105
+          ],
+          [
+            5.9671283,
+            50.4351527
+          ],
+          [
+            5.9676245,
+            50.4358594
+          ],
+          [
+            5.9678864,
+            50.4362397
+          ],
+          [
+            5.967944,
+            50.4363253
+          ],
+          [
+            5.9680037,
+            50.4364319
+          ],
+          [
+            5.9680418,
+            50.4365292
+          ],
+          [
+            5.9680633,
+            50.4366105
+          ],
+          [
+            5.9680748,
+            50.4367075
+          ],
+          [
+            5.9680763,
+            50.4367771
+          ],
+          [
+            5.9680712,
+            50.4368673
+          ],
+          [
+            5.9680482,
+            50.4369819
+          ],
+          [
+            5.9680001,
+            50.4371022
+          ],
+          [
+            5.9679165,
+            50.4372502
+          ]
+        ]
+      },
+      "id": "way/176133745"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126807114",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9604024,
+            50.4315072
+          ],
+          [
+            5.9605686,
+            50.4316696
+          ],
+          [
+            5.960771,
+            50.4318378
+          ],
+          [
+            5.9609869,
+            50.4319945
+          ],
+          [
+            5.9612958,
+            50.4322013
+          ],
+          [
+            5.9616197,
+            50.4324071
+          ],
+          [
+            5.9619574,
+            50.4326135
+          ],
+          [
+            5.9621037,
+            50.4327006
+          ],
+          [
+            5.962256,
+            50.4327858
+          ],
+          [
+            5.9624253,
+            50.432871
+          ],
+          [
+            5.9626036,
+            50.4329485
+          ],
+          [
+            5.9628261,
+            50.4330404
+          ],
+          [
+            5.9629709,
+            50.4330934
+          ],
+          [
+            5.9631006,
+            50.4331387
+          ],
+          [
+            5.9639606,
+            50.4334236
+          ]
+        ]
+      },
+      "id": "way/126807114"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/176133746",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9599585,
+            50.4309855
+          ],
+          [
+            5.9600727,
+            50.4311552
+          ],
+          [
+            5.9601664,
+            50.4312698
+          ],
+          [
+            5.9602931,
+            50.4314057
+          ],
+          [
+            5.9604024,
+            50.4315072
+          ]
+        ]
+      },
+      "id": "way/176133746"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126807100",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9601887,
+            50.4294294
+          ],
+          [
+            5.9600873,
+            50.4294765
+          ],
+          [
+            5.960009,
+            50.4295205
+          ],
+          [
+            5.9598734,
+            50.429617
+          ],
+          [
+            5.9597894,
+            50.4296938
+          ],
+          [
+            5.9597147,
+            50.4297801
+          ],
+          [
+            5.9596705,
+            50.4298418
+          ],
+          [
+            5.9596345,
+            50.4299049
+          ],
+          [
+            5.9596066,
+            50.4299704
+          ],
+          [
+            5.9595875,
+            50.4300358
+          ],
+          [
+            5.9595746,
+            50.4301627
+          ],
+          [
+            5.9595848,
+            50.4302759
+          ],
+          [
+            5.9596127,
+            50.4303807
+          ],
+          [
+            5.9596544,
+            50.4304757
+          ],
+          [
+            5.9599585,
+            50.4309855
+          ]
+        ]
+      },
+      "id": "way/126807100"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/175371365",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9613935,
+            50.4288701
+          ],
+          [
+            5.9603397,
+            50.4293589
+          ],
+          [
+            5.9601887,
+            50.4294294
+          ]
+        ]
+      },
+      "id": "way/175371365"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/175371353",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9625386,
+            50.4290495
+          ],
+          [
+            5.9624697,
+            50.4289821
+          ],
+          [
+            5.9624199,
+            50.4289352
+          ],
+          [
+            5.962312,
+            50.4288694
+          ],
+          [
+            5.9622392,
+            50.4288367
+          ],
+          [
+            5.9621634,
+            50.4288078
+          ],
+          [
+            5.9620902,
+            50.4287898
+          ],
+          [
+            5.9620078,
+            50.4287736
+          ],
+          [
+            5.9618866,
+            50.4287636
+          ],
+          [
+            5.9617734,
+            50.4287671
+          ],
+          [
+            5.9616338,
+            50.4287828
+          ],
+          [
+            5.961504,
+            50.4288227
+          ],
+          [
+            5.9613935,
+            50.4288701
+          ]
+        ]
+      },
+      "id": "way/175371353"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126807116",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9638966,
+            50.430406
+          ],
+          [
+            5.9633252,
+            50.42984
+          ],
+          [
+            5.963069,
+            50.4295895
+          ],
+          [
+            5.9627877,
+            50.4293018
+          ],
+          [
+            5.9625386,
+            50.4290495
+          ]
+        ]
+      },
+      "id": "way/126807116"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126807109",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9672975,
+            50.4309937
+          ],
+          [
+            5.9672476,
+            50.4309078
+          ],
+          [
+            5.9672269,
+            50.4308768
+          ],
+          [
+            5.9671766,
+            50.4308007
+          ],
+          [
+            5.9671124,
+            50.4307264
+          ],
+          [
+            5.9670516,
+            50.4306666
+          ],
+          [
+            5.9669848,
+            50.4306136
+          ],
+          [
+            5.9668724,
+            50.4305447
+          ],
+          [
+            5.9667526,
+            50.4304882
+          ],
+          [
+            5.966637,
+            50.4304512
+          ],
+          [
+            5.9664837,
+            50.4304151
+          ],
+          [
+            5.96632,
+            50.4303954
+          ],
+          [
+            5.9662173,
+            50.4303892
+          ],
+          [
+            5.9661054,
+            50.4303936
+          ],
+          [
+            5.9659994,
+            50.4304041
+          ],
+          [
+            5.9658736,
+            50.4304232
+          ],
+          [
+            5.9657473,
+            50.4304533
+          ],
+          [
+            5.9656236,
+            50.4304943
+          ],
+          [
+            5.9654976,
+            50.4305486
+          ],
+          [
+            5.9653227,
+            50.430621
+          ],
+          [
+            5.9651456,
+            50.4306764
+          ],
+          [
+            5.96505,
+            50.4306956
+          ],
+          [
+            5.964933,
+            50.430709
+          ],
+          [
+            5.9647959,
+            50.4307154
+          ],
+          [
+            5.9646274,
+            50.4307086
+          ],
+          [
+            5.9644711,
+            50.4306852
+          ],
+          [
+            5.9643313,
+            50.4306515
+          ],
+          [
+            5.9642017,
+            50.4306065
+          ],
+          [
+            5.9640937,
+            50.4305491
+          ],
+          [
+            5.9639875,
+            50.4304882
+          ],
+          [
+            5.9638966,
+            50.430406
+          ]
+        ]
+      },
+      "id": "way/126807109"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126807101",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.968839,
+            50.4334144
+          ],
+          [
+            5.9683801,
+            50.4326927
+          ],
+          [
+            5.9672975,
+            50.4309937
+          ]
+        ]
+      },
+      "id": "way/126807101"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126807103",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9728985,
+            50.4333661
+          ],
+          [
+            5.9728569,
+            50.4334898
+          ],
+          [
+            5.9728133,
+            50.433604
+          ],
+          [
+            5.9727498,
+            50.4336977
+          ],
+          [
+            5.9726708,
+            50.4337866
+          ],
+          [
+            5.9725625,
+            50.4338799
+          ],
+          [
+            5.9724398,
+            50.433959
+          ],
+          [
+            5.9723416,
+            50.4340111
+          ],
+          [
+            5.9722438,
+            50.4340598
+          ],
+          [
+            5.9720795,
+            50.4341182
+          ],
+          [
+            5.9719465,
+            50.4341538
+          ],
+          [
+            5.9718146,
+            50.4341748
+          ],
+          [
+            5.9717032,
+            50.4341859
+          ],
+          [
+            5.9709388,
+            50.4342245
+          ],
+          [
+            5.9708485,
+            50.4342291
+          ],
+          [
+            5.9707204,
+            50.4342299
+          ],
+          [
+            5.9706028,
+            50.4342268
+          ],
+          [
+            5.9704148,
+            50.4342109
+          ],
+          [
+            5.970226,
+            50.4341826
+          ],
+          [
+            5.9700842,
+            50.4341564
+          ],
+          [
+            5.9699544,
+            50.4341244
+          ],
+          [
+            5.9697899,
+            50.4340752
+          ],
+          [
+            5.9696432,
+            50.4340212
+          ],
+          [
+            5.969522,
+            50.433971
+          ],
+          [
+            5.9694187,
+            50.4339178
+          ],
+          [
+            5.9692913,
+            50.4338415
+          ],
+          [
+            5.9691753,
+            50.4337636
+          ],
+          [
+            5.9690395,
+            50.4336548
+          ],
+          [
+            5.9689443,
+            50.4335505
+          ],
+          [
+            5.968839,
+            50.4334144
+          ]
+        ]
+      },
+      "id": "way/126807103"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1359025267",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9735508,
+            50.4310868
+          ],
+          [
+            5.9735048,
+            50.4312067
+          ],
+          [
+            5.9734189,
+            50.4315167
+          ],
+          [
+            5.9731121,
+            50.4325628
+          ],
+          [
+            5.9728985,
+            50.4333661
+          ]
+        ]
+      },
+      "id": "way/1359025267"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126807106",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9738128,
+            50.4290135
+          ],
+          [
+            5.9739518,
+            50.4290682
+          ],
+          [
+            5.9740781,
+            50.4291242
+          ],
+          [
+            5.9741507,
+            50.4291677
+          ],
+          [
+            5.9742173,
+            50.4292226
+          ],
+          [
+            5.9742679,
+            50.4292827
+          ],
+          [
+            5.9743024,
+            50.4293448
+          ],
+          [
+            5.9743227,
+            50.4294151
+          ],
+          [
+            5.9743278,
+            50.4294724
+          ],
+          [
+            5.9743245,
+            50.4295302
+          ],
+          [
+            5.9742976,
+            50.4295944
+          ],
+          [
+            5.9742266,
+            50.4297302
+          ],
+          [
+            5.9739924,
+            50.4301757
+          ],
+          [
+            5.9737488,
+            50.430664
+          ],
+          [
+            5.9736196,
+            50.4309288
+          ],
+          [
+            5.9735508,
+            50.4310868
+          ]
+        ]
+      },
+      "id": "way/126807106"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1359025268",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9726475,
+            50.428551
+          ],
+          [
+            5.972748,
+            50.4285892
+          ],
+          [
+            5.9733592,
+            50.4288359
+          ],
+          [
+            5.973732,
+            50.4289844
+          ],
+          [
+            5.9738128,
+            50.4290135
+          ]
+        ]
+      },
+      "id": "way/1359025268"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126807112",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9733886,
+            50.427794
+          ],
+          [
+            5.9732462,
+            50.4277332
+          ],
+          [
+            5.9731467,
+            50.4277022
+          ],
+          [
+            5.9730773,
+            50.4276877
+          ],
+          [
+            5.9729716,
+            50.4276769
+          ],
+          [
+            5.9728699,
+            50.4276763
+          ],
+          [
+            5.9727709,
+            50.4276836
+          ],
+          [
+            5.972667,
+            50.4277002
+          ],
+          [
+            5.9725526,
+            50.4277333
+          ],
+          [
+            5.9724656,
+            50.4277689
+          ],
+          [
+            5.97239,
+            50.4278144
+          ],
+          [
+            5.9723223,
+            50.4278721
+          ],
+          [
+            5.9722689,
+            50.4279314
+          ],
+          [
+            5.9722342,
+            50.4279905
+          ],
+          [
+            5.9722151,
+            50.4280492
+          ],
+          [
+            5.9722067,
+            50.4281113
+          ],
+          [
+            5.9722101,
+            50.4281753
+          ],
+          [
+            5.9722252,
+            50.4282351
+          ],
+          [
+            5.9722544,
+            50.4282944
+          ],
+          [
+            5.9722947,
+            50.4283455
+          ],
+          [
+            5.9723474,
+            50.4283949
+          ],
+          [
+            5.9724082,
+            50.4284397
+          ],
+          [
+            5.9724572,
+            50.4284683
+          ],
+          [
+            5.9725418,
+            50.4285085
+          ],
+          [
+            5.9726475,
+            50.428551
+          ]
+        ]
+      },
+      "id": "way/126807112"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126807111",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9765858,
+            50.4292073
+          ],
+          [
+            5.9763615,
+            50.4291108
+          ],
+          [
+            5.9733886,
+            50.427794
+          ]
+        ]
+      },
+      "id": "way/126807111"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/175195997",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9769802,
+            50.4298564
+          ],
+          [
+            5.9770211,
+            50.4297341
+          ],
+          [
+            5.9770362,
+            50.4296579
+          ],
+          [
+            5.9770251,
+            50.4295898
+          ],
+          [
+            5.9770084,
+            50.4295522
+          ],
+          [
+            5.9769902,
+            50.4295013
+          ],
+          [
+            5.9769673,
+            50.429468
+          ],
+          [
+            5.9769332,
+            50.429425
+          ],
+          [
+            5.9768964,
+            50.4293836
+          ],
+          [
+            5.9768533,
+            50.429351
+          ],
+          [
+            5.9768134,
+            50.4293193
+          ],
+          [
+            5.9767589,
+            50.4292892
+          ],
+          [
+            5.9765858,
+            50.4292073
+          ]
+        ]
+      },
+      "id": "way/175195997"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126807113",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9767298,
+            50.4304981
+          ],
+          [
+            5.9769802,
+            50.4298564
+          ]
+        ]
+      },
+      "id": "way/126807113"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/24449918",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9774435,
+            50.4312599
+          ],
+          [
+            5.9773755,
+            50.4312041
+          ],
+          [
+            5.9772969,
+            50.4311555
+          ],
+          [
+            5.9772404,
+            50.4311331
+          ],
+          [
+            5.9771568,
+            50.4311042
+          ],
+          [
+            5.9770386,
+            50.4310638
+          ],
+          [
+            5.9769884,
+            50.431042
+          ],
+          [
+            5.9769435,
+            50.4310169
+          ],
+          [
+            5.97687,
+            50.4309741
+          ],
+          [
+            5.9767963,
+            50.4309104
+          ],
+          [
+            5.9767552,
+            50.4308615
+          ],
+          [
+            5.9767208,
+            50.4308077
+          ],
+          [
+            5.9766979,
+            50.4307612
+          ],
+          [
+            5.9766886,
+            50.4307137
+          ],
+          [
+            5.9766879,
+            50.4306713
+          ],
+          [
+            5.9766934,
+            50.4306294
+          ],
+          [
+            5.9767017,
+            50.430589
+          ],
+          [
+            5.9767298,
+            50.4304981
+          ]
+        ]
+      },
+      "id": "way/24449918"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1430527230",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9774656,
+            50.4317583
+          ],
+          [
+            5.977526,
+            50.4316245
+          ],
+          [
+            5.9775434,
+            50.4315626
+          ],
+          [
+            5.977554,
+            50.4315167
+          ],
+          [
+            5.9775554,
+            50.4314687
+          ],
+          [
+            5.977549,
+            50.4314311
+          ],
+          [
+            5.9775263,
+            50.4313722
+          ],
+          [
+            5.9774924,
+            50.4313109
+          ],
+          [
+            5.9774435,
+            50.4312599
+          ]
+        ]
+      },
+      "id": "way/1430527230"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126835638",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.972344,
+            50.4405599
+          ],
+          [
+            5.9726866,
+            50.4402208
+          ],
+          [
+            5.9737199,
+            50.4391888
+          ],
+          [
+            5.9739495,
+            50.4389724
+          ],
+          [
+            5.9740561,
+            50.4388755
+          ],
+          [
+            5.9741444,
+            50.4387894
+          ],
+          [
+            5.9742253,
+            50.4387022
+          ],
+          [
+            5.974294,
+            50.4386243
+          ],
+          [
+            5.9743571,
+            50.4385464
+          ],
+          [
+            5.9744286,
+            50.4384541
+          ],
+          [
+            5.9744909,
+            50.4383618
+          ],
+          [
+            5.974596,
+            50.4381855
+          ],
+          [
+            5.9746894,
+            50.4379469
+          ],
+          [
+            5.9749742,
+            50.4373093
+          ],
+          [
+            5.9760006,
+            50.4350195
+          ],
+          [
+            5.9773058,
+            50.4320934
+          ],
+          [
+            5.9773933,
+            50.4319137
+          ],
+          [
+            5.9774656,
+            50.4317583
+          ]
+        ]
+      },
+      "id": "way/126835638"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126835637",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9710088,
+            50.4422939
+          ],
+          [
+            5.9710855,
+            50.4422622
+          ],
+          [
+            5.9711934,
+            50.4422161
+          ],
+          [
+            5.9712948,
+            50.4421672
+          ],
+          [
+            5.9713799,
+            50.4421221
+          ],
+          [
+            5.9714572,
+            50.4420725
+          ],
+          [
+            5.9715323,
+            50.4420102
+          ],
+          [
+            5.9715807,
+            50.441971
+          ],
+          [
+            5.9716406,
+            50.4419073
+          ],
+          [
+            5.9716944,
+            50.4418457
+          ],
+          [
+            5.9717503,
+            50.4417773
+          ],
+          [
+            5.9718094,
+            50.4416828
+          ],
+          [
+            5.9718777,
+            50.4415584
+          ],
+          [
+            5.9719222,
+            50.4414368
+          ],
+          [
+            5.9719466,
+            50.4413387
+          ],
+          [
+            5.9719666,
+            50.4412447
+          ],
+          [
+            5.9719918,
+            50.4411262
+          ],
+          [
+            5.9720149,
+            50.4410316
+          ],
+          [
+            5.97203,
+            50.4409743
+          ],
+          [
+            5.9720495,
+            50.4409212
+          ],
+          [
+            5.9720871,
+            50.4408559
+          ],
+          [
+            5.9721343,
+            50.4407871
+          ],
+          [
+            5.972175,
+            50.4407387
+          ],
+          [
+            5.9722157,
+            50.4406942
+          ],
+          [
+            5.972344,
+            50.4405599
+          ]
+        ]
+      },
+      "id": "way/126835637"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126835639",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9700244,
+            50.4428321
+          ],
+          [
+            5.9702765,
+            50.4426433
+          ],
+          [
+            5.9703724,
+            50.4425754
+          ],
+          [
+            5.9704145,
+            50.4425456
+          ],
+          [
+            5.9704976,
+            50.4425021
+          ],
+          [
+            5.9706984,
+            50.4424132
+          ],
+          [
+            5.9708217,
+            50.4423659
+          ],
+          [
+            5.9710088,
+            50.4422939
+          ]
+        ]
+      },
+      "id": "way/126835639"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/126807110",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9654089,
+            50.4456821
+          ],
+          [
+            5.9656928,
+            50.4455895
+          ],
+          [
+            5.9659945,
+            50.4454754
+          ],
+          [
+            5.96628,
+            50.4453582
+          ],
+          [
+            5.9666481,
+            50.4451858
+          ],
+          [
+            5.9668462,
+            50.4450844
+          ],
+          [
+            5.9670192,
+            50.444991
+          ],
+          [
+            5.9671848,
+            50.4449001
+          ],
+          [
+            5.9674285,
+            50.4447571
+          ],
+          [
+            5.9677408,
+            50.4445436
+          ],
+          [
+            5.968681,
+            50.4438467
+          ],
+          [
+            5.9698663,
+            50.4429533
+          ],
+          [
+            5.9700244,
+            50.4428321
+          ]
+        ]
+      },
+      "id": "way/126807110"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/323851541",
+        "@relations": [
+          {
+            "role": "pit_lane",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9667947,
+            50.4415508
+          ],
+          [
+            5.9669445,
+            50.4415094
+          ],
+          [
+            5.9670887,
+            50.4414966
+          ],
+          [
+            5.9672131,
+            50.4414864
+          ],
+          [
+            5.9672807,
+            50.4414876
+          ],
+          [
+            5.9673512,
+            50.4414946
+          ],
+          [
+            5.9674083,
+            50.4415068
+          ],
+          [
+            5.9674427,
+            50.4415166
+          ],
+          [
+            5.9674754,
+            50.4415315
+          ],
+          [
+            5.9675218,
+            50.4415604
+          ],
+          [
+            5.9675533,
+            50.4415888
+          ],
+          [
+            5.9675771,
+            50.4416197
+          ],
+          [
+            5.9675997,
+            50.4416646
+          ],
+          [
+            5.9676069,
+            50.4416994
+          ],
+          [
+            5.967603,
+            50.4417491
+          ],
+          [
+            5.9675929,
+            50.441788
+          ],
+          [
+            5.9675692,
+            50.4418285
+          ],
+          [
+            5.9674674,
+            50.4419707
+          ],
+          [
+            5.9673675,
+            50.4420963
+          ],
+          [
+            5.9671977,
+            50.4422878
+          ],
+          [
+            5.9669962,
+            50.4425116
+          ],
+          [
+            5.9669433,
+            50.4425718
+          ],
+          [
+            5.9668864,
+            50.4426189
+          ],
+          [
+            5.9666915,
+            50.4427568
+          ],
+          [
+            5.9664957,
+            50.4428924
+          ],
+          [
+            5.9664447,
+            50.4429281
+          ],
+          [
+            5.9663712,
+            50.4429756
+          ],
+          [
+            5.9662836,
+            50.4430705
+          ],
+          [
+            5.9662012,
+            50.4431675
+          ],
+          [
+            5.9656044,
+            50.4438288
+          ],
+          [
+            5.9641305,
+            50.4455165
+          ],
+          [
+            5.9640148,
+            50.4456521
+          ],
+          [
+            5.9639675,
+            50.4457184
+          ],
+          [
+            5.9639493,
+            50.4457683
+          ],
+          [
+            5.9639504,
+            50.4458086
+          ],
+          [
+            5.9639633,
+            50.4458455
+          ],
+          [
+            5.9639965,
+            50.4458824
+          ],
+          [
+            5.9640522,
+            50.4459201
+          ],
+          [
+            5.964119,
+            50.4459413
+          ],
+          [
+            5.9642169,
+            50.4459574
+          ],
+          [
+            5.9643216,
+            50.4459561
+          ],
+          [
+            5.9644452,
+            50.4459317
+          ],
+          [
+            5.9645688,
+            50.4459008
+          ],
+          [
+            5.9647482,
+            50.4458515
+          ],
+          [
+            5.9649357,
+            50.4457919
+          ],
+          [
+            5.9651291,
+            50.4457357
+          ],
+          [
+            5.9654089,
+            50.4456821
+          ]
+        ]
+      },
+      "id": "way/323851541"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/178964809",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            5.9679165,
+            50.4372502
+          ],
+          [
+            5.9669111,
+            50.4389373
+          ],
+          [
+            5.9668017,
+            50.4391775
+          ],
+          [
+            5.9667211,
+            50.4393942
+          ],
+          [
+            5.9666814,
+            50.4395358
+          ],
+          [
+            5.9666477,
+            50.4396847
+          ],
+          [
+            5.9665897,
+            50.4399443
+          ],
+          [
+            5.9665475,
+            50.440291
+          ]
+        ]
+      },
+      "id": "way/178964809"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/258602622",
+        "@relations": [
+          {
+            "role": "start",
+            "rel": "284560",
+            "reltags": {
+              "name": "Circuit de Spa Francorchamps",
+              "name:en": "Spa-Francorchamps Circuit",
+              "type": "circuit",
+              "wikidata": "Q172851",
+              "wikipedia": "en:Circuit de Spa-Francorchamps"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.9651626,
+          50.4440643
+        ]
+      },
+      "id": "node/258602622"
+    }
+  ]
+}

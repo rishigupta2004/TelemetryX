@@ -1,0 +1,234 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "mugello_v1",
+  "_layer": "corners",
+  "_label": "Mugello Circuit",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "San Donato",
+        "circuit": "mugello_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "Luco",
+        "circuit": "mugello_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "Poggio Secco",
+        "circuit": "mugello_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "",
+        "circuit": "mugello_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "",
+        "circuit": "mugello_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "",
+        "circuit": "mugello_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "",
+        "circuit": "mugello_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "",
+        "circuit": "mugello_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "Scarperia",
+        "circuit": "mugello_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "",
+        "circuit": "mugello_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "corner_number": 11,
+        "name": "",
+        "circuit": "mugello_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "properties": {
+        "corner_number": 12,
+        "name": "",
+        "circuit": "mugello_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "properties": {
+        "corner_number": 13,
+        "name": "",
+        "circuit": "mugello_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "properties": {
+        "corner_number": 14,
+        "name": "",
+        "circuit": "mugello_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 15,
+      "properties": {
+        "corner_number": 15,
+        "name": "Bucine",
+        "circuit": "mugello_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "TUSCAN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.375752821903447, 44.003257226934601 ] } },
+{ "type": "Feature", "properties": { "corner_number": 2, "name": null, "circuit": "TUSCAN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.376127718546428, 44.001354626471468 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "TUSCAN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.377243036059301, 44.000651695265873 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "TUSCAN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.374806207879915, 43.997408839304072 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "TUSCAN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.37520922177112, 43.996546577025214 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "TUSCAN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.372538083189868, 43.994128493677984 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "TUSCAN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.370541758565986, 43.993912928108266 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "TUSCAN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.368798489176116, 43.991644803418225 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "TUSCAN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.365855550528703, 43.99249769328101 ] } },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": "TUSCAN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.366577226566445, 43.995571845753467 ] } },
+{ "type": "Feature", "properties": { "corner_number": 11, "name": null, "circuit": "TUSCAN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.368179909715195, 43.995843645819626 ] } },
+{ "type": "Feature", "properties": { "corner_number": 12, "name": null, "circuit": "TUSCAN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.370438661989168, 43.999302067351131 ] } },
+{ "type": "Feature", "properties": { "corner_number": 13, "name": null, "circuit": "TUSCAN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.369866944608619, 43.997371349639771 ] } },
+{ "type": "Feature", "properties": { "corner_number": 14, "name": null, "circuit": "TUSCAN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.369810710112171, 43.996509087360913 ] } },
+{ "type": "Feature", "properties": { "corner_number": 15, "name": null, "circuit": "TUSCAN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.366764674887936, 43.992675769186413 ] } }
+]
+}

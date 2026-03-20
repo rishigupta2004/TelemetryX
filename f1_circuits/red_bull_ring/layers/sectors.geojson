@@ -1,0 +1,16 @@
+{
+"type": "FeatureCollection",
+"_circuit": "austria_v1",
+"_layer": "sectors",
+"_label": "Red Bull Ring",
+"_note": "S1=end of sector 1. S2=end of sector 2. T=speed trap. S3 ends at start\/finish — no point needed.",
+"name": "sectors",
+"features": [
+{ "type": "Feature", "id": "S1", "properties": { "sector": "S1", "ref": "160m before T1", "circuit": "austria_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "S2", "properties": { "sector": "S2", "ref": "170m before T4", "circuit": "austria_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "T", "properties": { "sector": "T", "ref": "60m before T7", "circuit": "austria_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "properties": { "id": null, "sector": "SPEED TRAP", "ref": null, "circuit": null, "notes": null }, "geometry": { "type": "Point", "coordinates": [ 14.754337112191235, 47.225930877091642 ] } },
+{ "type": "Feature", "properties": { "id": "1", "sector": "SECTOR 1", "ref": null, "circuit": "AUSTRIAN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 14.755076597768925, 47.225364708446222 ] } },
+{ "type": "Feature", "properties": { "id": "2", "sector": "SECTOR 2", "ref": null, "circuit": "AUSTRIAN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 14.759490402310757, 47.222672518764952 ] } }
+]
+}

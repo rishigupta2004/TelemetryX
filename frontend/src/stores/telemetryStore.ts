@@ -36,14 +36,6 @@ const cleanupWorker = () => {
   worker.terminate()
 }
 
-const initWorker = () => {
-  if (worker.onerror === null) {
-    worker.onerror = (e) => {
-      console.error('[telemetryStore] Worker error:', e)
-    }
-  }
-}
-
 const runWorker = (key: string, data: TelemetryResponse | null, t0: number, t1: number): Promise<TelemetryResponse> => {
   return new Promise((resolve, reject) => {
     const id = ++msgIdSeq
@@ -125,6 +117,14 @@ const normPayload = (p: unknown): { data: TelemetryResponse; reason: string | nu
   return { data, reason }
 }
 
+// FIX: helper to check if a TelemetryResponse has any actual rows
+const hasAnyRows = (tel: TelemetryResponse): boolean => {
+  for (const rows of Object.values(tel)) {
+    if (Array.isArray(rows) && rows.length > 0) return true
+  }
+  return false
+}
+
 const fetchChunked = async (year: number, race: string, session: string, start: number, end: number, signal?: AbortSignal): Promise<TelemetryResponse> => {
   const fetchKey = `${year}|${race}|${session}|${start}|${end}`
   const cached = rawTelemetryCache.get(fetchKey)
@@ -198,7 +198,45 @@ export const useTelemetryStore = create<TelemetryState>((set, get) => ({
     }
 
     try {
-      const data = await fetchChunked(year, race, session, fetchStart, fetchEnd, signal)
+      let data = await fetchChunked(year, race, session, fetchStart, fetchEnd, signal)
+      if (reqId !== latestTelemetryRequestId) return
+
+      // ─── EMPTY-WINDOW RECOVERY ─────────────────────────────────────────────────
+      // When the client first opens telemetry it requests t0=0,t1~=120s.
+      // FastF1 stores session_time_seconds as ABSOLUTE session time (e.g. race
+      // starts at t=300s after session open). The backend has shift logic but it
+      // only fires when race_time_offset>1000 which is wrong (lap 1 ends at ~90s
+      // so MIN(session_time_seconds WHERE lap=1) ≈ 90, not 1000).
+      //
+      // FIX: if the first fetch returns 0 rows for a new session, retry with a
+      // much wider window [0, 600] to guarantee we land somewhere in the data.
+      if (isSessionChange && !hasAnyRows(data)) {
+        const RECOVERY_END = Math.max(fetchEnd + 300, 600)
+        try {
+          const wider = await fetchChunked(year, race, session, 0, RECOVERY_END, signal)
+          if (reqId !== latestTelemetryRequestId) return
+          if (hasAnyRows(wider)) {
+            data = wider
+          }
+        } catch {
+          // Ignore recovery failure; will fall through with empty data
+        }
+      }
+
+      // Second recovery pass: try the full first hour of data
+      if (isSessionChange && !hasAnyRows(data)) {
+        try {
+          const fullRange = await fetchChunked(year, race, session, 0, 3600, signal)
+          if (reqId !== latestTelemetryRequestId) return
+          if (hasAnyRows(fullRange)) {
+            data = fullRange
+          }
+        } catch {
+          // Ignore
+        }
+      }
+      // ──────────────────────────────────────────────────────────────────────────
+
       if (reqId !== latestTelemetryRequestId) return
       const current = get()
       if (current.sessionKey !== sessionKey) return

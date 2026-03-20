@@ -1,0 +1,5136 @@
+{
+  "type": "FeatureCollection",
+  "generator": "overpass-turbo",
+  "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
+  "timestamp": "2026-02-19T15:31:29Z",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/15856988",
+        "cycleway:both": "lane",
+        "cycleway:both:lane": "exclusive",
+        "cycleway:both:width": "1.2",
+        "highway": "tertiary",
+        "lanes": "2",
+        "maxspeed": "50",
+        "name": "Lakeside Drive",
+        "surface": "paved",
+        "traffic_calming": "painted_island",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9689602,
+            -37.838502
+          ],
+          [
+            144.9691158,
+            -37.8385189
+          ],
+          [
+            144.9693069,
+            -37.8385284
+          ],
+          [
+            144.9694524,
+            -37.8385348
+          ],
+          [
+            144.9695583,
+            -37.8385417
+          ],
+          [
+            144.9696971,
+            -37.8385576
+          ],
+          [
+            144.96984,
+            -37.8385793
+          ],
+          [
+            144.9699694,
+            -37.8386089
+          ],
+          [
+            144.9700747,
+            -37.8386397
+          ],
+          [
+            144.9702215,
+            -37.8386857
+          ],
+          [
+            144.9703462,
+            -37.8387313
+          ],
+          [
+            144.9704435,
+            -37.8387758
+          ],
+          [
+            144.9706131,
+            -37.8388684
+          ],
+          [
+            144.9708029,
+            -37.8389886
+          ],
+          [
+            144.9709383,
+            -37.8390951
+          ],
+          [
+            144.9710825,
+            -37.8392328
+          ],
+          [
+            144.9711556,
+            -37.8393249
+          ],
+          [
+            144.9712434,
+            -37.8394292
+          ],
+          [
+            144.9713018,
+            -37.839524
+          ],
+          [
+            144.9713769,
+            -37.8396622
+          ],
+          [
+            144.9714211,
+            -37.8397565
+          ],
+          [
+            144.9714594,
+            -37.8398788
+          ],
+          [
+            144.9715372,
+            -37.8401995
+          ],
+          [
+            144.9717429,
+            -37.8410221
+          ],
+          [
+            144.9717678,
+            -37.8412392
+          ],
+          [
+            144.971773,
+            -37.8413887
+          ],
+          [
+            144.9717653,
+            -37.8414811
+          ],
+          [
+            144.9717607,
+            -37.8415544
+          ],
+          [
+            144.9717519,
+            -37.8416443
+          ],
+          [
+            144.9717326,
+            -37.8417462
+          ],
+          [
+            144.9717105,
+            -37.841826
+          ],
+          [
+            144.9716741,
+            -37.8419452
+          ],
+          [
+            144.9716318,
+            -37.8420564
+          ],
+          [
+            144.9715871,
+            -37.8421636
+          ],
+          [
+            144.9715266,
+            -37.8423052
+          ],
+          [
+            144.9714758,
+            -37.8424139
+          ],
+          [
+            144.9714357,
+            -37.8424935
+          ],
+          [
+            144.9713944,
+            -37.8425748
+          ],
+          [
+            144.9713542,
+            -37.8426533
+          ],
+          [
+            144.9713129,
+            -37.842739
+          ],
+          [
+            144.9712826,
+            -37.8427969
+          ],
+          [
+            144.971226,
+            -37.8429002
+          ],
+          [
+            144.9711535,
+            -37.8430401
+          ],
+          [
+            144.9710078,
+            -37.8433352
+          ],
+          [
+            144.970854,
+            -37.84365
+          ],
+          [
+            144.9707746,
+            -37.8438488
+          ],
+          [
+            144.9706708,
+            -37.8441607
+          ],
+          [
+            144.970644,
+            -37.844292
+          ],
+          [
+            144.9706299,
+            -37.8443794
+          ],
+          [
+            144.9706145,
+            -37.8445117
+          ],
+          [
+            144.9706051,
+            -37.8447098
+          ],
+          [
+            144.9706084,
+            -37.8448305
+          ],
+          [
+            144.9706272,
+            -37.8450767
+          ],
+          [
+            144.970642,
+            -37.8451758
+          ],
+          [
+            144.9706822,
+            -37.8453664
+          ],
+          [
+            144.970711,
+            -37.845482
+          ],
+          [
+            144.9707365,
+            -37.845563
+          ],
+          [
+            144.9707787,
+            -37.84568
+          ],
+          [
+            144.9708632,
+            -37.8458854
+          ],
+          [
+            144.970941,
+            -37.84604
+          ],
+          [
+            144.9710362,
+            -37.8462021
+          ],
+          [
+            144.9711562,
+            -37.8463741
+          ],
+          [
+            144.971295,
+            -37.8465531
+          ],
+          [
+            144.9714225,
+            -37.8466987
+          ],
+          [
+            144.9715727,
+            -37.8468618
+          ],
+          [
+            144.9717222,
+            -37.8469884
+          ],
+          [
+            144.9718871,
+            -37.8471197
+          ],
+          [
+            144.972205,
+            -37.8473436
+          ],
+          [
+            144.9725356,
+            -37.8475686
+          ],
+          [
+            144.9730204,
+            -37.8479043
+          ]
+        ]
+      },
+      "id": "way/15856988"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/28119448",
+        "access": "private",
+        "highway": "service",
+        "noname": "yes",
+        "source:name": "services.land.vic.gov.au",
+        "@relations": [
+          {
+            "role": "pit_lane",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9736519,
+            -37.8523986
+          ],
+          [
+            144.9733221,
+            -37.8526073
+          ],
+          [
+            144.9732023,
+            -37.8526878
+          ],
+          [
+            144.9731157,
+            -37.8527261
+          ],
+          [
+            144.9730182,
+            -37.8527484
+          ],
+          [
+            144.9729619,
+            -37.8527539
+          ],
+          [
+            144.9728991,
+            -37.852757
+          ],
+          [
+            144.9728427,
+            -37.8527587
+          ],
+          [
+            144.9727701,
+            -37.8527552
+          ],
+          [
+            144.9726957,
+            -37.8527436
+          ],
+          [
+            144.9726202,
+            -37.8527226
+          ],
+          [
+            144.9725327,
+            -37.8526941
+          ],
+          [
+            144.9724408,
+            -37.8526484
+          ],
+          [
+            144.968602,
+            -37.8495625
+          ],
+          [
+            144.9685294,
+            -37.8495104
+          ],
+          [
+            144.9682967,
+            -37.8493578
+          ],
+          [
+            144.9680531,
+            -37.8492015
+          ],
+          [
+            144.9676309,
+            -37.8489709
+          ]
+        ]
+      },
+      "id": "way/28119448"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/784071296",
+        "cycleway:both": "lane",
+        "cycleway:both:lane": "exclusive",
+        "cycleway:both:width": "1.2",
+        "highway": "tertiary",
+        "lanes": "2",
+        "maxspeed": "50",
+        "name": "Lakeside Drive",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9759047,
+            -37.8487781
+          ],
+          [
+            144.9762571,
+            -37.8490166
+          ],
+          [
+            144.9765115,
+            -37.8491793
+          ],
+          [
+            144.9766452,
+            -37.8492681
+          ],
+          [
+            144.9767963,
+            -37.8493688
+          ],
+          [
+            144.9768634,
+            -37.8494253
+          ]
+        ]
+      },
+      "id": "way/784071296"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/784076839",
+        "cycleway:both": "no",
+        "highway": "unclassified",
+        "lanes": "2",
+        "maxspeed": "40",
+        "name": "Aughtie Drive",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9660829,
+            -37.8474173
+          ],
+          [
+            144.9661225,
+            -37.8473491
+          ],
+          [
+            144.9661653,
+            -37.847275
+          ],
+          [
+            144.9661885,
+            -37.8472178
+          ],
+          [
+            144.9662187,
+            -37.8471317
+          ],
+          [
+            144.9662392,
+            -37.8470326
+          ],
+          [
+            144.9662493,
+            -37.8469099
+          ],
+          [
+            144.9662475,
+            -37.8468153
+          ],
+          [
+            144.9662348,
+            -37.8467073
+          ],
+          [
+            144.9662182,
+            -37.8466207
+          ],
+          [
+            144.9662084,
+            -37.8465731
+          ],
+          [
+            144.9661956,
+            -37.8465349
+          ],
+          [
+            144.9661699,
+            -37.8464806
+          ],
+          [
+            144.9661381,
+            -37.8464217
+          ],
+          [
+            144.9661007,
+            -37.8463599
+          ],
+          [
+            144.9660155,
+            -37.8462489
+          ],
+          [
+            144.9659537,
+            -37.8461872
+          ],
+          [
+            144.9658877,
+            -37.8461324
+          ],
+          [
+            144.9658102,
+            -37.8460675
+          ],
+          [
+            144.9657387,
+            -37.8460129
+          ],
+          [
+            144.9655504,
+            -37.8458711
+          ],
+          [
+            144.9650006,
+            -37.8454687
+          ],
+          [
+            144.9649509,
+            -37.84543
+          ],
+          [
+            144.9645955,
+            -37.8451404
+          ],
+          [
+            144.9641173,
+            -37.8447223
+          ],
+          [
+            144.9635636,
+            -37.8441805
+          ],
+          [
+            144.9634211,
+            -37.8440361
+          ],
+          [
+            144.9632444,
+            -37.8438424
+          ],
+          [
+            144.9630889,
+            -37.8436579
+          ],
+          [
+            144.9630152,
+            -37.8435626
+          ],
+          [
+            144.96285,
+            -37.8433489
+          ],
+          [
+            144.9623032,
+            -37.8425756
+          ],
+          [
+            144.962144,
+            -37.8423148
+          ],
+          [
+            144.962136,
+            -37.8422852
+          ],
+          [
+            144.9621333,
+            -37.8422555
+          ],
+          [
+            144.9621392,
+            -37.8422157
+          ],
+          [
+            144.9621521,
+            -37.8421835
+          ],
+          [
+            144.9621762,
+            -37.8421475
+          ],
+          [
+            144.9622111,
+            -37.8421178
+          ],
+          [
+            144.962254,
+            -37.8420988
+          ],
+          [
+            144.9623188,
+            -37.842082
+          ],
+          [
+            144.9624014,
+            -37.8420687
+          ]
+        ]
+      },
+      "id": "way/784076839"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/784076843",
+        "cycleway:both": "no",
+        "highway": "unclassified",
+        "lanes": "2",
+        "name": "Aughtie Drive",
+        "surface": "asphalt",
+        "traffic_calming": "painted_island",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9660459,
+            -37.8477021
+          ],
+          [
+            144.9660279,
+            -37.8476822
+          ],
+          [
+            144.9660132,
+            -37.8476638
+          ],
+          [
+            144.9660021,
+            -37.8476467
+          ],
+          [
+            144.9659929,
+            -37.8476259
+          ],
+          [
+            144.9659884,
+            -37.847612
+          ],
+          [
+            144.9659877,
+            -37.8475969
+          ],
+          [
+            144.9659902,
+            -37.8475832
+          ],
+          [
+            144.9659944,
+            -37.847568
+          ],
+          [
+            144.9660039,
+            -37.8475459
+          ],
+          [
+            144.9660183,
+            -37.847519
+          ],
+          [
+            144.9660432,
+            -37.8474788
+          ],
+          [
+            144.9660829,
+            -37.8474173
+          ]
+        ]
+      },
+      "id": "way/784076843"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/784076847",
+        "cycleway:both": "no",
+        "highway": "unclassified",
+        "name": "Aughtie Drive",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9739417,
+            -37.8521395
+          ],
+          [
+            144.9736519,
+            -37.8523986
+          ],
+          [
+            144.9734287,
+            -37.8525982
+          ],
+          [
+            144.9733395,
+            -37.8526803
+          ],
+          [
+            144.9732671,
+            -37.8527396
+          ],
+          [
+            144.9732192,
+            -37.8527753
+          ],
+          [
+            144.9731474,
+            -37.8528089
+          ],
+          [
+            144.9730744,
+            -37.8528346
+          ],
+          [
+            144.972984,
+            -37.8528622
+          ],
+          [
+            144.9728726,
+            -37.8528787
+          ],
+          [
+            144.9727719,
+            -37.8528805
+          ],
+          [
+            144.9726744,
+            -37.8528684
+          ],
+          [
+            144.9725677,
+            -37.8528431
+          ],
+          [
+            144.9724801,
+            -37.852812
+          ],
+          [
+            144.9724103,
+            -37.8527769
+          ],
+          [
+            144.9723306,
+            -37.8527285
+          ],
+          [
+            144.9722698,
+            -37.8526796
+          ],
+          [
+            144.9713459,
+            -37.8519381
+          ],
+          [
+            144.9689843,
+            -37.8500562
+          ],
+          [
+            144.9679562,
+            -37.84923
+          ],
+          [
+            144.9676309,
+            -37.8489709
+          ]
+        ]
+      },
+      "id": "way/784076847"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/784083210",
+        "cycleway:both": "no",
+        "highway": "unclassified",
+        "lanes": "2",
+        "name": "Albert Road Drive",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9636759,
+            -37.839914
+          ],
+          [
+            144.9637294,
+            -37.8398503
+          ],
+          [
+            144.9637575,
+            -37.8398199
+          ],
+          [
+            144.9637847,
+            -37.8397911
+          ],
+          [
+            144.9638166,
+            -37.8397614
+          ],
+          [
+            144.9638265,
+            -37.8397526
+          ],
+          [
+            144.9638622,
+            -37.839724
+          ],
+          [
+            144.9638898,
+            -37.8397024
+          ],
+          [
+            144.9639203,
+            -37.8396817
+          ],
+          [
+            144.9639696,
+            -37.8396524
+          ],
+          [
+            144.9641121,
+            -37.8395719
+          ],
+          [
+            144.9649228,
+            -37.8391078
+          ],
+          [
+            144.9651233,
+            -37.8389971
+          ],
+          [
+            144.9652259,
+            -37.8389479
+          ],
+          [
+            144.9653439,
+            -37.8388933
+          ],
+          [
+            144.9655315,
+            -37.8388235
+          ],
+          [
+            144.9657207,
+            -37.8387594
+          ],
+          [
+            144.9657694,
+            -37.8387462
+          ],
+          [
+            144.9658124,
+            -37.8387444
+          ],
+          [
+            144.9658611,
+            -37.8387436
+          ]
+        ]
+      },
+      "id": "way/784083210"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/784087846",
+        "disused:highway": "raceway",
+        "highway": "service",
+        "service": "parking_aisle",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9630962,
+            -37.8419617
+          ],
+          [
+            144.9633714,
+            -37.841923
+          ],
+          [
+            144.9634911,
+            -37.8418993
+          ],
+          [
+            144.9635653,
+            -37.8418787
+          ],
+          [
+            144.9636277,
+            -37.8418457
+          ],
+          [
+            144.9636783,
+            -37.841801
+          ]
+        ]
+      },
+      "id": "way/784087846"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/979723477",
+        "cycleway:both": "lane",
+        "cycleway:both:lane": "exclusive",
+        "cycleway:both:width": "1.2",
+        "highway": "tertiary",
+        "maxspeed": "50",
+        "name": "Lakeside Drive",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9769683,
+            -37.8495092
+          ],
+          [
+            144.9770415,
+            -37.8495751
+          ],
+          [
+            144.9771204,
+            -37.8496494
+          ],
+          [
+            144.9771303,
+            -37.8496586
+          ],
+          [
+            144.9771844,
+            -37.8497086
+          ],
+          [
+            144.9772333,
+            -37.8497519
+          ]
+        ]
+      },
+      "id": "way/979723477"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/979723478",
+        "cycleway:both": "lane",
+        "cycleway:both:lane": "exclusive",
+        "cycleway:both:width": "1.2",
+        "cycleway:right:traffic_mode:left": "motor_vehicle",
+        "highway": "tertiary",
+        "maxspeed": "50",
+        "name": "Lakeside Drive",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9775012,
+            -37.8501166
+          ],
+          [
+            144.9775884,
+            -37.8502678
+          ],
+          [
+            144.977647,
+            -37.8503878
+          ],
+          [
+            144.9777105,
+            -37.8505428
+          ],
+          [
+            144.9777723,
+            -37.8507001
+          ],
+          [
+            144.9778462,
+            -37.8509012
+          ],
+          [
+            144.9779626,
+            -37.8512126
+          ],
+          [
+            144.9781907,
+            -37.8518471
+          ]
+        ]
+      },
+      "id": "way/979723478"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/979723479",
+        "cycleway:left": "no",
+        "cycleway:right": "lane",
+        "cycleway:right:lane": "exclusive",
+        "highway": "tertiary",
+        "lanes": "1",
+        "maxspeed": "50",
+        "name": "Lakeside Drive",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9768634,
+            -37.8494253
+          ],
+          [
+            144.9769683,
+            -37.8495092
+          ]
+        ]
+      },
+      "id": "way/979723479"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/979723480",
+        "disused:highway": "raceway",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9751499,
+            -37.8482665
+          ],
+          [
+            144.974859,
+            -37.8480585
+          ],
+          [
+            144.9748397,
+            -37.8480477
+          ],
+          [
+            144.9748159,
+            -37.8480391
+          ],
+          [
+            144.9747921,
+            -37.8480332
+          ],
+          [
+            144.9747472,
+            -37.8480297
+          ],
+          [
+            144.9746991,
+            -37.8480298
+          ],
+          [
+            144.9746326,
+            -37.8480377
+          ],
+          [
+            144.9741322,
+            -37.848093
+          ],
+          [
+            144.9739301,
+            -37.8481171
+          ],
+          [
+            144.9735729,
+            -37.848152
+          ],
+          [
+            144.9735127,
+            -37.8481495
+          ],
+          [
+            144.9734546,
+            -37.8481441
+          ],
+          [
+            144.9733927,
+            -37.8481302
+          ],
+          [
+            144.9733468,
+            -37.8481163
+          ],
+          [
+            144.9733002,
+            -37.8480982
+          ],
+          [
+            144.9732543,
+            -37.8480734
+          ],
+          [
+            144.9732146,
+            -37.8480475
+          ],
+          [
+            144.9730204,
+            -37.8479043
+          ]
+        ]
+      },
+      "id": "way/979723480"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/987030966",
+        "cycleway:both": "no",
+        "highway": "unclassified",
+        "lanes": "3",
+        "lanes:forward": "2",
+        "maxspeed": "50",
+        "name": "Aughtie Drive",
+        "surface": "asphalt",
+        "turn:lanes:forward": "none|right",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9636942,
+            -37.8402557
+          ],
+          [
+            144.9636937,
+            -37.8402332
+          ],
+          [
+            144.9636923,
+            -37.8401939
+          ],
+          [
+            144.9636816,
+            -37.839979
+          ],
+          [
+            144.9636769,
+            -37.8399218
+          ],
+          [
+            144.9636759,
+            -37.839914
+          ]
+        ]
+      },
+      "id": "way/987030966"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/987030968",
+        "cycleway:both": "lane",
+        "cycleway:both:lane": "exclusive",
+        "cycleway:both:width": "1.3",
+        "highway": "tertiary",
+        "lanes": "2",
+        "maxspeed": "50",
+        "name": "Lakeside Drive",
+        "surface": "paved",
+        "traffic_calming": "painted_island",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9751499,
+            -37.8482665
+          ],
+          [
+            144.9753838,
+            -37.8484251
+          ],
+          [
+            144.9759047,
+            -37.8487781
+          ]
+        ]
+      },
+      "id": "way/987030968"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/987030969",
+        "cycleway:both": "no",
+        "highway": "unclassified",
+        "lanes": "2",
+        "maxspeed": "50",
+        "name": "Aughtie Drive",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9624014,
+            -37.8420687
+          ],
+          [
+            144.9625609,
+            -37.8420508
+          ],
+          [
+            144.962681,
+            -37.842032
+          ],
+          [
+            144.9627801,
+            -37.8420034
+          ]
+        ]
+      },
+      "id": "way/987030969"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/987030972",
+        "cycleway:left": "lane",
+        "cycleway:left:lane": "exclusive",
+        "cycleway:left:oneway": "yes",
+        "cycleway:left:traffic_mode:left": "motor_vehicle",
+        "cycleway:left:width": "1.2",
+        "cycleway:right": "no",
+        "highway": "tertiary",
+        "lit": "yes",
+        "maxspeed": "50",
+        "name": "Lakeside Drive",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9786557,
+            -37.8533681
+          ],
+          [
+            144.9786056,
+            -37.8531462
+          ],
+          [
+            144.9785564,
+            -37.8529031
+          ],
+          [
+            144.9785149,
+            -37.8527697
+          ],
+          [
+            144.978468,
+            -37.8526204
+          ]
+        ]
+      },
+      "id": "way/987030972"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/987030973",
+        "cycleway:both": "no",
+        "highway": "unclassified",
+        "name": "Aughtie Drive",
+        "traffic_calming": "painted_island",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9742877,
+            -37.8521588
+          ],
+          [
+            144.9742418,
+            -37.8521125
+          ],
+          [
+            144.9742035,
+            -37.8520839
+          ],
+          [
+            144.9741616,
+            -37.8520666
+          ],
+          [
+            144.9741066,
+            -37.8520606
+          ],
+          [
+            144.9740632,
+            -37.852064
+          ],
+          [
+            144.9740288,
+            -37.8520759
+          ],
+          [
+            144.973998,
+            -37.8520931
+          ],
+          [
+            144.9739417,
+            -37.8521395
+          ]
+        ]
+      },
+      "id": "way/987030973"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/987030974",
+        "cycleway:both": "no",
+        "highway": "unclassified",
+        "name": "Aughtie Drive",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9759175,
+            -37.8538943
+          ],
+          [
+            144.9758734,
+            -37.8538884
+          ],
+          [
+            144.9758212,
+            -37.8538793
+          ],
+          [
+            144.9757482,
+            -37.8538616
+          ],
+          [
+            144.9756855,
+            -37.8538427
+          ],
+          [
+            144.9756122,
+            -37.8538126
+          ],
+          [
+            144.9755532,
+            -37.8537836
+          ],
+          [
+            144.9754929,
+            -37.8537462
+          ],
+          [
+            144.975446,
+            -37.8537094
+          ],
+          [
+            144.975391,
+            -37.8536601
+          ],
+          [
+            144.9753339,
+            -37.8535979
+          ],
+          [
+            144.9746668,
+            -37.8526416
+          ],
+          [
+            144.9743662,
+            -37.8522554
+          ],
+          [
+            144.9742877,
+            -37.8521588
+          ]
+        ]
+      },
+      "id": "way/987030974"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/987030977",
+        "cycleway:both": "no",
+        "highway": "unclassified",
+        "lanes": "2",
+        "name": "Aughtie Drive",
+        "parking:lane:right": "diagonal",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9676309,
+            -37.8489709
+          ],
+          [
+            144.9672635,
+            -37.8486737
+          ],
+          [
+            144.9670125,
+            -37.8484708
+          ],
+          [
+            144.9666534,
+            -37.8482041
+          ],
+          [
+            144.9661594,
+            -37.8478089
+          ],
+          [
+            144.9661124,
+            -37.8477675
+          ],
+          [
+            144.9660708,
+            -37.8477274
+          ],
+          [
+            144.9660459,
+            -37.8477021
+          ]
+        ]
+      },
+      "id": "way/987030977"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/987030978",
+        "disused:highway": "raceway",
+        "oneway": "yes",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9636783,
+            -37.841801
+          ],
+          [
+            144.963709,
+            -37.8417534
+          ],
+          [
+            144.9637298,
+            -37.8417144
+          ],
+          [
+            144.9637499,
+            -37.841662
+          ],
+          [
+            144.963758,
+            -37.841617
+          ],
+          [
+            144.9637604,
+            -37.8415735
+          ],
+          [
+            144.9636942,
+            -37.8402557
+          ]
+        ]
+      },
+      "id": "way/987030978"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/987030982",
+        "cycleway:both": "no",
+        "highway": "service",
+        "lanes": "2",
+        "name": "Albert Road Drive",
+        "parking:lane:right": "perpendicular",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9658611,
+            -37.8387436
+          ],
+          [
+            144.9658906,
+            -37.8387232
+          ],
+          [
+            144.9659062,
+            -37.8387128
+          ],
+          [
+            144.9659204,
+            -37.8387037
+          ],
+          [
+            144.9659743,
+            -37.8386866
+          ],
+          [
+            144.9660099,
+            -37.8386728
+          ],
+          [
+            144.9665581,
+            -37.8384959
+          ],
+          [
+            144.9667039,
+            -37.8384491
+          ],
+          [
+            144.9668796,
+            -37.8383915
+          ],
+          [
+            144.9670475,
+            -37.8383327
+          ],
+          [
+            144.9672389,
+            -37.8382535
+          ],
+          [
+            144.9673807,
+            -37.8381915
+          ],
+          [
+            144.9675862,
+            -37.8380925
+          ]
+        ]
+      },
+      "id": "way/987030982"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/987030985",
+        "cycleway:both": "no",
+        "highway": "unclassified",
+        "name": "Ross Gregory Drive",
+        "source:name": "services.land.vic.gov.au",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9786557,
+            -37.8533681
+          ],
+          [
+            144.9776749,
+            -37.8535501
+          ],
+          [
+            144.9773215,
+            -37.8536137
+          ],
+          [
+            144.9770152,
+            -37.8536761
+          ],
+          [
+            144.9768607,
+            -37.8537084
+          ],
+          [
+            144.976725,
+            -37.853739
+          ],
+          [
+            144.9765678,
+            -37.8537787
+          ],
+          [
+            144.976451,
+            -37.8538081
+          ],
+          [
+            144.9763458,
+            -37.8538333
+          ],
+          [
+            144.9761531,
+            -37.8538791
+          ],
+          [
+            144.9760848,
+            -37.8538908
+          ],
+          [
+            144.976044,
+            -37.8538943
+          ],
+          [
+            144.9759951,
+            -37.8538958
+          ],
+          [
+            144.9759175,
+            -37.8538943
+          ]
+        ]
+      },
+      "id": "way/987030985"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1013633268",
+        "bicycle": "yes",
+        "foot": "yes",
+        "highway": "service",
+        "motor_vehicle": "no",
+        "name": "Albert Road Drive",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.967789,
+            -37.8379966
+          ],
+          [
+            144.9679594,
+            -37.8379181
+          ]
+        ]
+      },
+      "id": "way/1013633268"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1013633269",
+        "cycleway:left": "no",
+        "cycleway:right": "lane",
+        "cycleway:right:lane": "exclusive",
+        "highway": "tertiary",
+        "lanes": "5",
+        "lanes:backward": "3",
+        "maxspeed": "50",
+        "name": "Lakeside Drive",
+        "placement:forward": "right_of:2",
+        "surface": "paved",
+        "traffic_calming": "painted_island",
+        "turn:lanes:backward": "left|left|right",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9679594,
+            -37.8379181
+          ],
+          [
+            144.9680066,
+            -37.8379807
+          ],
+          [
+            144.9680712,
+            -37.8380529
+          ],
+          [
+            144.9681329,
+            -37.8381072
+          ],
+          [
+            144.9682011,
+            -37.8381656
+          ]
+        ]
+      },
+      "id": "way/1013633269"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021617874",
+        "cycleway:left": "no",
+        "cycleway:right": "lane",
+        "cycleway:right:lane": "exclusive",
+        "highway": "tertiary",
+        "lanes": "3",
+        "lanes:forward": "2",
+        "maxspeed": "50",
+        "name": "Lakeside Drive",
+        "placement:forward": "right_of:2",
+        "surface": "paved",
+        "traffic_calming": "painted_island",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.968397,
+            -37.8383082
+          ],
+          [
+            144.9684318,
+            -37.8383288
+          ],
+          [
+            144.9684707,
+            -37.8383484
+          ],
+          [
+            144.968519,
+            -37.8383712
+          ],
+          [
+            144.9685619,
+            -37.8383913
+          ],
+          [
+            144.9686035,
+            -37.8384088
+          ],
+          [
+            144.9686558,
+            -37.8384273
+          ],
+          [
+            144.9687228,
+            -37.838448
+          ],
+          [
+            144.9687711,
+            -37.8384612
+          ],
+          [
+            144.9688281,
+            -37.8384771
+          ],
+          [
+            144.9688992,
+            -37.8384919
+          ],
+          [
+            144.9689602,
+            -37.838502
+          ]
+        ]
+      },
+      "id": "way/1021617874"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021617920",
+        "cycleway:left": "no",
+        "cycleway:right": "lane",
+        "cycleway:right:lane": "exclusive",
+        "highway": "tertiary",
+        "lanes": "4",
+        "maxspeed": "50",
+        "name": "Lakeside Drive",
+        "surface": "paved",
+        "traffic_calming": "painted_island",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.968242,
+            -37.8381969
+          ],
+          [
+            144.9682762,
+            -37.838225
+          ],
+          [
+            144.9683218,
+            -37.83826
+          ],
+          [
+            144.9683674,
+            -37.8382891
+          ],
+          [
+            144.968397,
+            -37.8383082
+          ]
+        ]
+      },
+      "id": "way/1021617920"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1050342733",
+        "cycleway:left": "no",
+        "cycleway:right": "lane",
+        "cycleway:right:lane": "exclusive",
+        "highway": "tertiary",
+        "lanes": "5",
+        "lanes:backward": "3",
+        "maxspeed": "50",
+        "name": "Lakeside Drive",
+        "placement:forward": "right_of:2",
+        "surface": "paved",
+        "traffic_calming": "painted_island",
+        "turn:lanes:backward": "left|left|right",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9682011,
+            -37.8381656
+          ],
+          [
+            144.968242,
+            -37.8381969
+          ]
+        ]
+      },
+      "id": "way/1050342733"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1050371045",
+        "cycleway:both": "no",
+        "highway": "service",
+        "lanes": "2",
+        "name": "Albert Road Drive",
+        "parking:lane:right": "perpendicular",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9675862,
+            -37.8380925
+          ],
+          [
+            144.9677048,
+            -37.8380353
+          ],
+          [
+            144.967789,
+            -37.8379966
+          ]
+        ]
+      },
+      "id": "way/1050371045"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1070446542",
+        "disused:highway": "raceway",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9627801,
+            -37.8420034
+          ],
+          [
+            144.9629024,
+            -37.8419873
+          ],
+          [
+            144.9630962,
+            -37.8419617
+          ]
+        ]
+      },
+      "id": "way/1070446542"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1126808201",
+        "cycleway:both": "lane",
+        "cycleway:both:lane": "exclusive",
+        "cycleway:both:width": "1.2",
+        "cycleway:left:oneway": "yes",
+        "cycleway:right:oneway": "-1",
+        "cycleway:right:traffic_mode:left": "motor_vehicle",
+        "highway": "tertiary",
+        "lit": "yes",
+        "maxspeed": "50",
+        "name": "Lakeside Drive",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.978468,
+            -37.8526204
+          ],
+          [
+            144.9783553,
+            -37.8522752
+          ],
+          [
+            144.9782883,
+            -37.8520983
+          ],
+          [
+            144.9782373,
+            -37.8519617
+          ],
+          [
+            144.9781907,
+            -37.8518471
+          ]
+        ]
+      },
+      "id": "way/1126808201"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1253159342",
+        "cycleway:both": "lane",
+        "cycleway:both:lane": "exclusive",
+        "cycleway:both:width": "1.2",
+        "highway": "tertiary",
+        "maxspeed": "50",
+        "name": "Lakeside Drive",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9772333,
+            -37.8497519
+          ],
+          [
+            144.9773029,
+            -37.8498304
+          ],
+          [
+            144.9773723,
+            -37.8499171
+          ],
+          [
+            144.9774388,
+            -37.8500086
+          ],
+          [
+            144.9775012,
+            -37.8501166
+          ]
+        ]
+      },
+      "id": "way/1253159342"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/28119448",
+        "@relations": [
+          {
+            "role": "pit_lane",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9736519,
+            -37.8523986
+          ],
+          [
+            144.9733221,
+            -37.8526073
+          ],
+          [
+            144.9732023,
+            -37.8526878
+          ],
+          [
+            144.9731157,
+            -37.8527261
+          ],
+          [
+            144.9730182,
+            -37.8527484
+          ],
+          [
+            144.9729619,
+            -37.8527539
+          ],
+          [
+            144.9728991,
+            -37.852757
+          ],
+          [
+            144.9728427,
+            -37.8527587
+          ],
+          [
+            144.9727701,
+            -37.8527552
+          ],
+          [
+            144.9726957,
+            -37.8527436
+          ],
+          [
+            144.9726202,
+            -37.8527226
+          ],
+          [
+            144.9725327,
+            -37.8526941
+          ],
+          [
+            144.9724408,
+            -37.8526484
+          ],
+          [
+            144.968602,
+            -37.8495625
+          ],
+          [
+            144.9685294,
+            -37.8495104
+          ],
+          [
+            144.9682967,
+            -37.8493578
+          ],
+          [
+            144.9680531,
+            -37.8492015
+          ],
+          [
+            144.9676309,
+            -37.8489709
+          ]
+        ]
+      },
+      "id": "way/28119448"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/987030977",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9676309,
+            -37.8489709
+          ],
+          [
+            144.9672635,
+            -37.8486737
+          ],
+          [
+            144.9670125,
+            -37.8484708
+          ],
+          [
+            144.9666534,
+            -37.8482041
+          ],
+          [
+            144.9661594,
+            -37.8478089
+          ],
+          [
+            144.9661124,
+            -37.8477675
+          ],
+          [
+            144.9660708,
+            -37.8477274
+          ],
+          [
+            144.9660459,
+            -37.8477021
+          ]
+        ]
+      },
+      "id": "way/987030977"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/784076843",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9660459,
+            -37.8477021
+          ],
+          [
+            144.9660279,
+            -37.8476822
+          ],
+          [
+            144.9660132,
+            -37.8476638
+          ],
+          [
+            144.9660021,
+            -37.8476467
+          ],
+          [
+            144.9659929,
+            -37.8476259
+          ],
+          [
+            144.9659884,
+            -37.847612
+          ],
+          [
+            144.9659877,
+            -37.8475969
+          ],
+          [
+            144.9659902,
+            -37.8475832
+          ],
+          [
+            144.9659944,
+            -37.847568
+          ],
+          [
+            144.9660039,
+            -37.8475459
+          ],
+          [
+            144.9660183,
+            -37.847519
+          ],
+          [
+            144.9660432,
+            -37.8474788
+          ],
+          [
+            144.9660829,
+            -37.8474173
+          ]
+        ]
+      },
+      "id": "way/784076843"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/784076839",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9660829,
+            -37.8474173
+          ],
+          [
+            144.9661225,
+            -37.8473491
+          ],
+          [
+            144.9661653,
+            -37.847275
+          ],
+          [
+            144.9661885,
+            -37.8472178
+          ],
+          [
+            144.9662187,
+            -37.8471317
+          ],
+          [
+            144.9662392,
+            -37.8470326
+          ],
+          [
+            144.9662493,
+            -37.8469099
+          ],
+          [
+            144.9662475,
+            -37.8468153
+          ],
+          [
+            144.9662348,
+            -37.8467073
+          ],
+          [
+            144.9662182,
+            -37.8466207
+          ],
+          [
+            144.9662084,
+            -37.8465731
+          ],
+          [
+            144.9661956,
+            -37.8465349
+          ],
+          [
+            144.9661699,
+            -37.8464806
+          ],
+          [
+            144.9661381,
+            -37.8464217
+          ],
+          [
+            144.9661007,
+            -37.8463599
+          ],
+          [
+            144.9660155,
+            -37.8462489
+          ],
+          [
+            144.9659537,
+            -37.8461872
+          ],
+          [
+            144.9658877,
+            -37.8461324
+          ],
+          [
+            144.9658102,
+            -37.8460675
+          ],
+          [
+            144.9657387,
+            -37.8460129
+          ],
+          [
+            144.9655504,
+            -37.8458711
+          ],
+          [
+            144.9650006,
+            -37.8454687
+          ],
+          [
+            144.9649509,
+            -37.84543
+          ],
+          [
+            144.9645955,
+            -37.8451404
+          ],
+          [
+            144.9641173,
+            -37.8447223
+          ],
+          [
+            144.9635636,
+            -37.8441805
+          ],
+          [
+            144.9634211,
+            -37.8440361
+          ],
+          [
+            144.9632444,
+            -37.8438424
+          ],
+          [
+            144.9630889,
+            -37.8436579
+          ],
+          [
+            144.9630152,
+            -37.8435626
+          ],
+          [
+            144.96285,
+            -37.8433489
+          ],
+          [
+            144.9623032,
+            -37.8425756
+          ],
+          [
+            144.962144,
+            -37.8423148
+          ],
+          [
+            144.962136,
+            -37.8422852
+          ],
+          [
+            144.9621333,
+            -37.8422555
+          ],
+          [
+            144.9621392,
+            -37.8422157
+          ],
+          [
+            144.9621521,
+            -37.8421835
+          ],
+          [
+            144.9621762,
+            -37.8421475
+          ],
+          [
+            144.9622111,
+            -37.8421178
+          ],
+          [
+            144.962254,
+            -37.8420988
+          ],
+          [
+            144.9623188,
+            -37.842082
+          ],
+          [
+            144.9624014,
+            -37.8420687
+          ]
+        ]
+      },
+      "id": "way/784076839"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/987030969",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9624014,
+            -37.8420687
+          ],
+          [
+            144.9625609,
+            -37.8420508
+          ],
+          [
+            144.962681,
+            -37.842032
+          ],
+          [
+            144.9627801,
+            -37.8420034
+          ]
+        ]
+      },
+      "id": "way/987030969"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1070446542",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9627801,
+            -37.8420034
+          ],
+          [
+            144.9629024,
+            -37.8419873
+          ],
+          [
+            144.9630962,
+            -37.8419617
+          ]
+        ]
+      },
+      "id": "way/1070446542"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/784087846",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9630962,
+            -37.8419617
+          ],
+          [
+            144.9633714,
+            -37.841923
+          ],
+          [
+            144.9634911,
+            -37.8418993
+          ],
+          [
+            144.9635653,
+            -37.8418787
+          ],
+          [
+            144.9636277,
+            -37.8418457
+          ],
+          [
+            144.9636783,
+            -37.841801
+          ]
+        ]
+      },
+      "id": "way/784087846"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/987030978",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9636783,
+            -37.841801
+          ],
+          [
+            144.963709,
+            -37.8417534
+          ],
+          [
+            144.9637298,
+            -37.8417144
+          ],
+          [
+            144.9637499,
+            -37.841662
+          ],
+          [
+            144.963758,
+            -37.841617
+          ],
+          [
+            144.9637604,
+            -37.8415735
+          ],
+          [
+            144.9636942,
+            -37.8402557
+          ]
+        ]
+      },
+      "id": "way/987030978"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/987030966",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9636942,
+            -37.8402557
+          ],
+          [
+            144.9636937,
+            -37.8402332
+          ],
+          [
+            144.9636923,
+            -37.8401939
+          ],
+          [
+            144.9636816,
+            -37.839979
+          ],
+          [
+            144.9636769,
+            -37.8399218
+          ],
+          [
+            144.9636759,
+            -37.839914
+          ]
+        ]
+      },
+      "id": "way/987030966"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/784083210",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9636759,
+            -37.839914
+          ],
+          [
+            144.9637294,
+            -37.8398503
+          ],
+          [
+            144.9637575,
+            -37.8398199
+          ],
+          [
+            144.9637847,
+            -37.8397911
+          ],
+          [
+            144.9638166,
+            -37.8397614
+          ],
+          [
+            144.9638265,
+            -37.8397526
+          ],
+          [
+            144.9638622,
+            -37.839724
+          ],
+          [
+            144.9638898,
+            -37.8397024
+          ],
+          [
+            144.9639203,
+            -37.8396817
+          ],
+          [
+            144.9639696,
+            -37.8396524
+          ],
+          [
+            144.9641121,
+            -37.8395719
+          ],
+          [
+            144.9649228,
+            -37.8391078
+          ],
+          [
+            144.9651233,
+            -37.8389971
+          ],
+          [
+            144.9652259,
+            -37.8389479
+          ],
+          [
+            144.9653439,
+            -37.8388933
+          ],
+          [
+            144.9655315,
+            -37.8388235
+          ],
+          [
+            144.9657207,
+            -37.8387594
+          ],
+          [
+            144.9657694,
+            -37.8387462
+          ],
+          [
+            144.9658124,
+            -37.8387444
+          ],
+          [
+            144.9658611,
+            -37.8387436
+          ]
+        ]
+      },
+      "id": "way/784083210"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/987030982",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9658611,
+            -37.8387436
+          ],
+          [
+            144.9658906,
+            -37.8387232
+          ],
+          [
+            144.9659062,
+            -37.8387128
+          ],
+          [
+            144.9659204,
+            -37.8387037
+          ],
+          [
+            144.9659743,
+            -37.8386866
+          ],
+          [
+            144.9660099,
+            -37.8386728
+          ],
+          [
+            144.9665581,
+            -37.8384959
+          ],
+          [
+            144.9667039,
+            -37.8384491
+          ],
+          [
+            144.9668796,
+            -37.8383915
+          ],
+          [
+            144.9670475,
+            -37.8383327
+          ],
+          [
+            144.9672389,
+            -37.8382535
+          ],
+          [
+            144.9673807,
+            -37.8381915
+          ],
+          [
+            144.9675862,
+            -37.8380925
+          ]
+        ]
+      },
+      "id": "way/987030982"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1050371045",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9675862,
+            -37.8380925
+          ],
+          [
+            144.9677048,
+            -37.8380353
+          ],
+          [
+            144.967789,
+            -37.8379966
+          ]
+        ]
+      },
+      "id": "way/1050371045"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1013633268",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.967789,
+            -37.8379966
+          ],
+          [
+            144.9679594,
+            -37.8379181
+          ]
+        ]
+      },
+      "id": "way/1013633268"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1013633269",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9679594,
+            -37.8379181
+          ],
+          [
+            144.9680066,
+            -37.8379807
+          ],
+          [
+            144.9680712,
+            -37.8380529
+          ],
+          [
+            144.9681329,
+            -37.8381072
+          ],
+          [
+            144.9682011,
+            -37.8381656
+          ]
+        ]
+      },
+      "id": "way/1013633269"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1050342733",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9682011,
+            -37.8381656
+          ],
+          [
+            144.968242,
+            -37.8381969
+          ]
+        ]
+      },
+      "id": "way/1050342733"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021617920",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.968242,
+            -37.8381969
+          ],
+          [
+            144.9682762,
+            -37.838225
+          ],
+          [
+            144.9683218,
+            -37.83826
+          ],
+          [
+            144.9683674,
+            -37.8382891
+          ],
+          [
+            144.968397,
+            -37.8383082
+          ]
+        ]
+      },
+      "id": "way/1021617920"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1021617874",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.968397,
+            -37.8383082
+          ],
+          [
+            144.9684318,
+            -37.8383288
+          ],
+          [
+            144.9684707,
+            -37.8383484
+          ],
+          [
+            144.968519,
+            -37.8383712
+          ],
+          [
+            144.9685619,
+            -37.8383913
+          ],
+          [
+            144.9686035,
+            -37.8384088
+          ],
+          [
+            144.9686558,
+            -37.8384273
+          ],
+          [
+            144.9687228,
+            -37.838448
+          ],
+          [
+            144.9687711,
+            -37.8384612
+          ],
+          [
+            144.9688281,
+            -37.8384771
+          ],
+          [
+            144.9688992,
+            -37.8384919
+          ],
+          [
+            144.9689602,
+            -37.838502
+          ]
+        ]
+      },
+      "id": "way/1021617874"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/15856988",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9689602,
+            -37.838502
+          ],
+          [
+            144.9691158,
+            -37.8385189
+          ],
+          [
+            144.9693069,
+            -37.8385284
+          ],
+          [
+            144.9694524,
+            -37.8385348
+          ],
+          [
+            144.9695583,
+            -37.8385417
+          ],
+          [
+            144.9696971,
+            -37.8385576
+          ],
+          [
+            144.96984,
+            -37.8385793
+          ],
+          [
+            144.9699694,
+            -37.8386089
+          ],
+          [
+            144.9700747,
+            -37.8386397
+          ],
+          [
+            144.9702215,
+            -37.8386857
+          ],
+          [
+            144.9703462,
+            -37.8387313
+          ],
+          [
+            144.9704435,
+            -37.8387758
+          ],
+          [
+            144.9706131,
+            -37.8388684
+          ],
+          [
+            144.9708029,
+            -37.8389886
+          ],
+          [
+            144.9709383,
+            -37.8390951
+          ],
+          [
+            144.9710825,
+            -37.8392328
+          ],
+          [
+            144.9711556,
+            -37.8393249
+          ],
+          [
+            144.9712434,
+            -37.8394292
+          ],
+          [
+            144.9713018,
+            -37.839524
+          ],
+          [
+            144.9713769,
+            -37.8396622
+          ],
+          [
+            144.9714211,
+            -37.8397565
+          ],
+          [
+            144.9714594,
+            -37.8398788
+          ],
+          [
+            144.9715372,
+            -37.8401995
+          ],
+          [
+            144.9717429,
+            -37.8410221
+          ],
+          [
+            144.9717678,
+            -37.8412392
+          ],
+          [
+            144.971773,
+            -37.8413887
+          ],
+          [
+            144.9717653,
+            -37.8414811
+          ],
+          [
+            144.9717607,
+            -37.8415544
+          ],
+          [
+            144.9717519,
+            -37.8416443
+          ],
+          [
+            144.9717326,
+            -37.8417462
+          ],
+          [
+            144.9717105,
+            -37.841826
+          ],
+          [
+            144.9716741,
+            -37.8419452
+          ],
+          [
+            144.9716318,
+            -37.8420564
+          ],
+          [
+            144.9715871,
+            -37.8421636
+          ],
+          [
+            144.9715266,
+            -37.8423052
+          ],
+          [
+            144.9714758,
+            -37.8424139
+          ],
+          [
+            144.9714357,
+            -37.8424935
+          ],
+          [
+            144.9713944,
+            -37.8425748
+          ],
+          [
+            144.9713542,
+            -37.8426533
+          ],
+          [
+            144.9713129,
+            -37.842739
+          ],
+          [
+            144.9712826,
+            -37.8427969
+          ],
+          [
+            144.971226,
+            -37.8429002
+          ],
+          [
+            144.9711535,
+            -37.8430401
+          ],
+          [
+            144.9710078,
+            -37.8433352
+          ],
+          [
+            144.970854,
+            -37.84365
+          ],
+          [
+            144.9707746,
+            -37.8438488
+          ],
+          [
+            144.9706708,
+            -37.8441607
+          ],
+          [
+            144.970644,
+            -37.844292
+          ],
+          [
+            144.9706299,
+            -37.8443794
+          ],
+          [
+            144.9706145,
+            -37.8445117
+          ],
+          [
+            144.9706051,
+            -37.8447098
+          ],
+          [
+            144.9706084,
+            -37.8448305
+          ],
+          [
+            144.9706272,
+            -37.8450767
+          ],
+          [
+            144.970642,
+            -37.8451758
+          ],
+          [
+            144.9706822,
+            -37.8453664
+          ],
+          [
+            144.970711,
+            -37.845482
+          ],
+          [
+            144.9707365,
+            -37.845563
+          ],
+          [
+            144.9707787,
+            -37.84568
+          ],
+          [
+            144.9708632,
+            -37.8458854
+          ],
+          [
+            144.970941,
+            -37.84604
+          ],
+          [
+            144.9710362,
+            -37.8462021
+          ],
+          [
+            144.9711562,
+            -37.8463741
+          ],
+          [
+            144.971295,
+            -37.8465531
+          ],
+          [
+            144.9714225,
+            -37.8466987
+          ],
+          [
+            144.9715727,
+            -37.8468618
+          ],
+          [
+            144.9717222,
+            -37.8469884
+          ],
+          [
+            144.9718871,
+            -37.8471197
+          ],
+          [
+            144.972205,
+            -37.8473436
+          ],
+          [
+            144.9725356,
+            -37.8475686
+          ],
+          [
+            144.9730204,
+            -37.8479043
+          ]
+        ]
+      },
+      "id": "way/15856988"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/979723480",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9751499,
+            -37.8482665
+          ],
+          [
+            144.974859,
+            -37.8480585
+          ],
+          [
+            144.9748397,
+            -37.8480477
+          ],
+          [
+            144.9748159,
+            -37.8480391
+          ],
+          [
+            144.9747921,
+            -37.8480332
+          ],
+          [
+            144.9747472,
+            -37.8480297
+          ],
+          [
+            144.9746991,
+            -37.8480298
+          ],
+          [
+            144.9746326,
+            -37.8480377
+          ],
+          [
+            144.9741322,
+            -37.848093
+          ],
+          [
+            144.9739301,
+            -37.8481171
+          ],
+          [
+            144.9735729,
+            -37.848152
+          ],
+          [
+            144.9735127,
+            -37.8481495
+          ],
+          [
+            144.9734546,
+            -37.8481441
+          ],
+          [
+            144.9733927,
+            -37.8481302
+          ],
+          [
+            144.9733468,
+            -37.8481163
+          ],
+          [
+            144.9733002,
+            -37.8480982
+          ],
+          [
+            144.9732543,
+            -37.8480734
+          ],
+          [
+            144.9732146,
+            -37.8480475
+          ],
+          [
+            144.9730204,
+            -37.8479043
+          ]
+        ]
+      },
+      "id": "way/979723480"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/987030968",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9751499,
+            -37.8482665
+          ],
+          [
+            144.9753838,
+            -37.8484251
+          ],
+          [
+            144.9759047,
+            -37.8487781
+          ]
+        ]
+      },
+      "id": "way/987030968"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/784071296",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9759047,
+            -37.8487781
+          ],
+          [
+            144.9762571,
+            -37.8490166
+          ],
+          [
+            144.9765115,
+            -37.8491793
+          ],
+          [
+            144.9766452,
+            -37.8492681
+          ],
+          [
+            144.9767963,
+            -37.8493688
+          ],
+          [
+            144.9768634,
+            -37.8494253
+          ]
+        ]
+      },
+      "id": "way/784071296"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/979723479",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9768634,
+            -37.8494253
+          ],
+          [
+            144.9769683,
+            -37.8495092
+          ]
+        ]
+      },
+      "id": "way/979723479"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/979723477",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9769683,
+            -37.8495092
+          ],
+          [
+            144.9770415,
+            -37.8495751
+          ],
+          [
+            144.9771204,
+            -37.8496494
+          ],
+          [
+            144.9771303,
+            -37.8496586
+          ],
+          [
+            144.9771844,
+            -37.8497086
+          ],
+          [
+            144.9772333,
+            -37.8497519
+          ]
+        ]
+      },
+      "id": "way/979723477"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1253159342",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9772333,
+            -37.8497519
+          ],
+          [
+            144.9773029,
+            -37.8498304
+          ],
+          [
+            144.9773723,
+            -37.8499171
+          ],
+          [
+            144.9774388,
+            -37.8500086
+          ],
+          [
+            144.9775012,
+            -37.8501166
+          ]
+        ]
+      },
+      "id": "way/1253159342"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/979723478",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9775012,
+            -37.8501166
+          ],
+          [
+            144.9775884,
+            -37.8502678
+          ],
+          [
+            144.977647,
+            -37.8503878
+          ],
+          [
+            144.9777105,
+            -37.8505428
+          ],
+          [
+            144.9777723,
+            -37.8507001
+          ],
+          [
+            144.9778462,
+            -37.8509012
+          ],
+          [
+            144.9779626,
+            -37.8512126
+          ],
+          [
+            144.9781907,
+            -37.8518471
+          ]
+        ]
+      },
+      "id": "way/979723478"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1126808201",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.978468,
+            -37.8526204
+          ],
+          [
+            144.9783553,
+            -37.8522752
+          ],
+          [
+            144.9782883,
+            -37.8520983
+          ],
+          [
+            144.9782373,
+            -37.8519617
+          ],
+          [
+            144.9781907,
+            -37.8518471
+          ]
+        ]
+      },
+      "id": "way/1126808201"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/987030972",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9786557,
+            -37.8533681
+          ],
+          [
+            144.9786056,
+            -37.8531462
+          ],
+          [
+            144.9785564,
+            -37.8529031
+          ],
+          [
+            144.9785149,
+            -37.8527697
+          ],
+          [
+            144.978468,
+            -37.8526204
+          ]
+        ]
+      },
+      "id": "way/987030972"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/987030985",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9786557,
+            -37.8533681
+          ],
+          [
+            144.9776749,
+            -37.8535501
+          ],
+          [
+            144.9773215,
+            -37.8536137
+          ],
+          [
+            144.9770152,
+            -37.8536761
+          ],
+          [
+            144.9768607,
+            -37.8537084
+          ],
+          [
+            144.976725,
+            -37.853739
+          ],
+          [
+            144.9765678,
+            -37.8537787
+          ],
+          [
+            144.976451,
+            -37.8538081
+          ],
+          [
+            144.9763458,
+            -37.8538333
+          ],
+          [
+            144.9761531,
+            -37.8538791
+          ],
+          [
+            144.9760848,
+            -37.8538908
+          ],
+          [
+            144.976044,
+            -37.8538943
+          ],
+          [
+            144.9759951,
+            -37.8538958
+          ],
+          [
+            144.9759175,
+            -37.8538943
+          ]
+        ]
+      },
+      "id": "way/987030985"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/987030974",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9759175,
+            -37.8538943
+          ],
+          [
+            144.9758734,
+            -37.8538884
+          ],
+          [
+            144.9758212,
+            -37.8538793
+          ],
+          [
+            144.9757482,
+            -37.8538616
+          ],
+          [
+            144.9756855,
+            -37.8538427
+          ],
+          [
+            144.9756122,
+            -37.8538126
+          ],
+          [
+            144.9755532,
+            -37.8537836
+          ],
+          [
+            144.9754929,
+            -37.8537462
+          ],
+          [
+            144.975446,
+            -37.8537094
+          ],
+          [
+            144.975391,
+            -37.8536601
+          ],
+          [
+            144.9753339,
+            -37.8535979
+          ],
+          [
+            144.9746668,
+            -37.8526416
+          ],
+          [
+            144.9743662,
+            -37.8522554
+          ],
+          [
+            144.9742877,
+            -37.8521588
+          ]
+        ]
+      },
+      "id": "way/987030974"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/987030973",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9742877,
+            -37.8521588
+          ],
+          [
+            144.9742418,
+            -37.8521125
+          ],
+          [
+            144.9742035,
+            -37.8520839
+          ],
+          [
+            144.9741616,
+            -37.8520666
+          ],
+          [
+            144.9741066,
+            -37.8520606
+          ],
+          [
+            144.9740632,
+            -37.852064
+          ],
+          [
+            144.9740288,
+            -37.8520759
+          ],
+          [
+            144.973998,
+            -37.8520931
+          ],
+          [
+            144.9739417,
+            -37.8521395
+          ]
+        ]
+      },
+      "id": "way/987030973"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/784076847",
+        "@relations": [
+          {
+            "role": "forward",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            144.9739417,
+            -37.8521395
+          ],
+          [
+            144.9736519,
+            -37.8523986
+          ],
+          [
+            144.9734287,
+            -37.8525982
+          ],
+          [
+            144.9733395,
+            -37.8526803
+          ],
+          [
+            144.9732671,
+            -37.8527396
+          ],
+          [
+            144.9732192,
+            -37.8527753
+          ],
+          [
+            144.9731474,
+            -37.8528089
+          ],
+          [
+            144.9730744,
+            -37.8528346
+          ],
+          [
+            144.972984,
+            -37.8528622
+          ],
+          [
+            144.9728726,
+            -37.8528787
+          ],
+          [
+            144.9727719,
+            -37.8528805
+          ],
+          [
+            144.9726744,
+            -37.8528684
+          ],
+          [
+            144.9725677,
+            -37.8528431
+          ],
+          [
+            144.9724801,
+            -37.852812
+          ],
+          [
+            144.9724103,
+            -37.8527769
+          ],
+          [
+            144.9723306,
+            -37.8527285
+          ],
+          [
+            144.9722698,
+            -37.8526796
+          ],
+          [
+            144.9713459,
+            -37.8519381
+          ],
+          [
+            144.9689843,
+            -37.8500562
+          ],
+          [
+            144.9679562,
+            -37.84923
+          ],
+          [
+            144.9676309,
+            -37.8489709
+          ]
+        ]
+      },
+      "id": "way/784076847"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/308865601",
+        "barrier": "gate",
+        "vehicle": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.9730182,
+          -37.8527484
+        ]
+      },
+      "id": "node/308865601"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/308865610",
+        "barrier": "gate",
+        "vehicle": "private"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.9682967,
+          -37.8493578
+        ]
+      },
+      "id": "node/308865610"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/7324020541",
+        "crossing": "traffic_signals",
+        "highway": "crossing"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.9771204,
+          -37.8496494
+        ]
+      },
+      "id": "node/7324020541"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/7324143969",
+        "barrier": "gate",
+        "vehicle": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.967789,
+          -37.8379966
+        ]
+      },
+      "id": "node/7324143969"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/7324280650",
+        "crossing": "zebra",
+        "crossing:island": "no",
+        "highway": "crossing",
+        "tactile_paving": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.9623032,
+          -37.8425756
+        ]
+      },
+      "id": "node/7324280650"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/8017899862",
+        "crossing": "unmarked",
+        "crossing:island": "no",
+        "crossing:markings": "no",
+        "highway": "crossing",
+        "tactile_paving": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.9660099,
+          -37.8386728
+        ]
+      },
+      "id": "node/8017899862"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/8017899864",
+        "crossing": "unmarked",
+        "crossing:markings": "no",
+        "highway": "crossing",
+        "tactile_paving": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.9677048,
+          -37.8380353
+        ]
+      },
+      "id": "node/8017899864"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/8586260428",
+        "crossing": "unmarked",
+        "crossing:markings": "no",
+        "highway": "crossing"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.9770152,
+          -37.8536761
+        ]
+      },
+      "id": "node/8586260428"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9063324197",
+        "highway": "traffic_signals",
+        "traffic_signals": "traffic_lights",
+        "traffic_signals:direction": "forward"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.9767963,
+          -37.8493688
+        ]
+      },
+      "id": "node/9063324197"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9063324198",
+        "highway": "traffic_signals",
+        "traffic_signals:direction": "backward"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.9771303,
+          -37.8496586
+        ]
+      },
+      "id": "node/9063324198"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9123374386",
+        "raceway": "start-finish",
+        "@relations": [
+          {
+            "role": "start",
+            "rel": "280443",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Albert Park Circuit",
+              "name:en": "Albert Park Circuit",
+              "name:fr": "Circuit de l'Albert Park",
+              "oneway": "yes",
+              "sport": "motor",
+              "start_date": "1953",
+              "type": "circuit",
+              "wikidata": "Q171288",
+              "wikipedia": "en:Albert Park Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.9689843,
+          -37.8500562
+        ]
+      },
+      "id": "node/9123374386"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9649446757",
+        "access": "no",
+        "barrier": "bollard"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          144.9629024,
+          -37.8419873
+        ]
+      },
+      "id": "node/9649446757"
+    }
+  ]
+}

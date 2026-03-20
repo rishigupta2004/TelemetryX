@@ -1,0 +1,5506 @@
+{
+  "type": "FeatureCollection",
+  "generator": "overpass-turbo",
+  "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
+  "timestamp": "2026-02-19T14:55:45Z",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/25402777",
+        "highway": "secondary",
+        "lanes": "5",
+        "lanes:backward": "3",
+        "lanes:forward": "2",
+        "lit": "yes",
+        "name": "Puşkin küçəsi",
+        "name:az": "Puşkin küçəsi",
+        "name:az-cyr": "Пушкин күчәси",
+        "name:en": "Pushkin Street",
+        "name:ru": "улица Пушкина",
+        "oneway": "no",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8540339,
+            40.3753742
+          ],
+          [
+            49.8540464,
+            40.3753526
+          ],
+          [
+            49.8541224,
+            40.375224
+          ],
+          [
+            49.8546391,
+            40.3744093
+          ]
+        ]
+      },
+      "id": "way/25402777"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/25406140",
+        "cycleway:right": "lane",
+        "highway": "service",
+        "lit": "yes",
+        "maxspeed": "60",
+        "name": "İstiqlaliyyət küçəsi",
+        "name:az": "İstiqlaliyyət küçəsi",
+        "name:en": "Istiglaliyyat Street",
+        "name:ru": "улица Истиглалиййят",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8347612,
+            40.369172
+          ],
+          [
+            49.8348349,
+            40.369191
+          ],
+          [
+            49.8348707,
+            40.3692007
+          ],
+          [
+            49.8357734,
+            40.3694258
+          ]
+        ]
+      },
+      "id": "way/25406140"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/131835265",
+        "highway": "trunk",
+        "int_ref": "E 60",
+        "lanes": "4",
+        "maxspeed": "60",
+        "name": "Neftçilər prospekti",
+        "name:az": "Neftçilər prospekti",
+        "name:az-cyr": "Нефтчиләр проспекти",
+        "name:en": "Neftchilar Avenue",
+        "name:ru": "проспект Нефтяников",
+        "oneway": "yes",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8413111,
+            40.3686959
+          ],
+          [
+            49.8415609,
+            40.3688299
+          ],
+          [
+            49.8417306,
+            40.3689114
+          ],
+          [
+            49.8418955,
+            40.3689768
+          ],
+          [
+            49.8429139,
+            40.36933
+          ],
+          [
+            49.8453609,
+            40.3701255
+          ],
+          [
+            49.8455768,
+            40.3701955
+          ],
+          [
+            49.8456502,
+            40.370218
+          ]
+        ]
+      },
+      "id": "way/131835265"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/165695131",
+        "cycleway:both": "shoulder",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "60",
+        "name": "Xaqani küçəsi",
+        "name:az": "Xaqani küçəsi",
+        "name:en": "Khagani Street",
+        "name:ru": "улица Хагани",
+        "oneway": "yes",
+        "surface": "asphalt",
+        "wikidata": "Q368862",
+        "wikipedia": "en:Khaqani",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.849819,
+            40.3750372
+          ],
+          [
+            49.8501887,
+            40.3751491
+          ],
+          [
+            49.851492,
+            40.3755552
+          ],
+          [
+            49.8515529,
+            40.3755748
+          ],
+          [
+            49.8515706,
+            40.3755792
+          ],
+          [
+            49.8516237,
+            40.375597
+          ],
+          [
+            49.851801,
+            40.3756525
+          ],
+          [
+            49.8528955,
+            40.3759653
+          ],
+          [
+            49.8534834,
+            40.3761382
+          ]
+        ]
+      },
+      "id": "way/165695131"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/167173308",
+        "highway": "primary",
+        "int_ref": "AH8",
+        "lit": "yes",
+        "name": "Niyazi küçəsi",
+        "name:en": "Niyazi Street",
+        "name:ru": "улица Ниязи",
+        "oneway": "no",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8311157,
+            40.3639098
+          ],
+          [
+            49.8311531,
+            40.363895
+          ]
+        ]
+      },
+      "id": "way/167173308"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/167173315",
+        "highway": "trunk",
+        "int_name": "Neftchilar Prospect",
+        "int_ref": "E 60",
+        "lanes": "3",
+        "maxspeed": "60",
+        "name": "Neftçilər prospekti",
+        "name:az": "Neftçilər prospekti",
+        "name:az-cyr": "Нефтчиләр проспекти",
+        "name:en": "Neftchilar Avenue",
+        "name:ru": "проспект Нефтяников",
+        "oneway": "yes",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8417595,
+            40.3690778
+          ],
+          [
+            49.8411486,
+            40.3687248
+          ]
+        ]
+      },
+      "id": "way/167173315"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/177431273",
+        "cycleway:left": "lane",
+        "cycleway:left:oneway": "no",
+        "highway": "primary",
+        "lanes": "3",
+        "lit": "yes",
+        "name": "Bülbül prospekti",
+        "name:az": "Bülbül prospekti",
+        "name:en": "Bulbul Avenue",
+        "name:ru": "проспект Бюльбюля",
+        "oneway": "yes",
+        "oneway:bicycle": "no",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8445259,
+            40.3722258
+          ],
+          [
+            49.8445837,
+            40.3721233
+          ],
+          [
+            49.8450789,
+            40.3712449
+          ],
+          [
+            49.8451477,
+            40.3711229
+          ]
+        ]
+      },
+      "id": "way/177431273"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179238852",
+        "highway": "trunk",
+        "int_ref": "E 60",
+        "lanes": "4",
+        "lit": "yes",
+        "maxspeed": "60",
+        "name": "Neftçilər prospekti",
+        "name:az": "Neftçilər prospekti",
+        "name:az-cyr": "Нефтчиләр проспекти",
+        "name:en": "Neftchilar Avenue",
+        "name:ru": "проспект Нефтяников",
+        "oneway": "yes",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8486029,
+            40.3711852
+          ],
+          [
+            49.8486724,
+            40.3712074
+          ],
+          [
+            49.8487342,
+            40.3712272
+          ],
+          [
+            49.850091,
+            40.371668
+          ],
+          [
+            49.8505044,
+            40.3717988
+          ],
+          [
+            49.8505682,
+            40.3718192
+          ],
+          [
+            49.8506578,
+            40.3718508
+          ],
+          [
+            49.851408,
+            40.3720939
+          ]
+        ]
+      },
+      "id": "way/179238852"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/182645384",
+        "cycleway:left": "lane",
+        "cycleway:left:oneway": "no",
+        "foot": "no",
+        "highway": "primary",
+        "lanes": "3",
+        "name": "Bülbül prospekti",
+        "name:az": "Bülbül prospekti",
+        "name:en": "Bulbul Avenue",
+        "name:ru": "проспект Бюльбюля",
+        "oneway": "yes",
+        "oneway:bicycle": "no",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8444737,
+            40.3723258
+          ],
+          [
+            49.844491,
+            40.3722949
+          ],
+          [
+            49.8445259,
+            40.3722258
+          ]
+        ]
+      },
+      "id": "way/182645384"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/202546449",
+        "cycleway:right": "lane",
+        "highway": "service",
+        "lit": "yes",
+        "maxspeed": "60",
+        "name": "İstiqlaliyyət küçəsi",
+        "name:az": "İstiqlaliyyət küçəsi",
+        "name:en": "Istiglaliyyat Street",
+        "name:ru": "улица Истиглалиййят",
+        "oneway": "yes",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8358859,
+            40.3693974
+          ],
+          [
+            49.8360709,
+            40.3689282
+          ],
+          [
+            49.8360994,
+            40.3688977
+          ],
+          [
+            49.8361342,
+            40.3688782
+          ],
+          [
+            49.8361929,
+            40.3688656
+          ]
+        ]
+      },
+      "id": "way/202546449"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/249018354",
+        "highway": "trunk",
+        "lanes": "3",
+        "lit": "yes",
+        "maxspeed": "60",
+        "name": "Neftçilər prospekti",
+        "name:az": "Neftçilər prospekti",
+        "name:az-cyr": "Нефтчиләр проспекти",
+        "name:en": "Neftchilar Avenue",
+        "name:ru": "проспект Нефтяников",
+        "oneway": "yes",
+        "parking:both": "no",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8354168,
+            40.363315
+          ],
+          [
+            49.8359273,
+            40.3640753
+          ],
+          [
+            49.8359702,
+            40.3641212
+          ],
+          [
+            49.8360228,
+            40.3641702
+          ],
+          [
+            49.8379302,
+            40.3655061
+          ],
+          [
+            49.8380408,
+            40.365599
+          ],
+          [
+            49.8380801,
+            40.3656539
+          ],
+          [
+            49.838115,
+            40.3657356
+          ],
+          [
+            49.8383428,
+            40.3667173
+          ],
+          [
+            49.8383683,
+            40.3667997
+          ],
+          [
+            49.8383955,
+            40.3668776
+          ],
+          [
+            49.8384132,
+            40.3669193
+          ],
+          [
+            49.8384265,
+            40.3669478
+          ],
+          [
+            49.838465,
+            40.3669986
+          ],
+          [
+            49.8385285,
+            40.3670517
+          ],
+          [
+            49.8386012,
+            40.3670979
+          ],
+          [
+            49.8390734,
+            40.3673716
+          ],
+          [
+            49.839361,
+            40.3675418
+          ],
+          [
+            49.8413111,
+            40.3686959
+          ]
+        ]
+      },
+      "id": "way/249018354"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/278666424",
+        "cycleway:both": "shoulder",
+        "highway": "secondary",
+        "lit": "yes",
+        "maxspeed": "50",
+        "name": "Puşkin küçəsi",
+        "name:az": "Puşkin küçəsi",
+        "name:az-cyr": "Пушкин күчәси",
+        "name:en": "Pushkin Street",
+        "name:ru": "улица Пушкина",
+        "oneway": "no",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8536173,
+            40.3761036
+          ],
+          [
+            49.8538434,
+            40.3756973
+          ],
+          [
+            49.8539269,
+            40.3755461
+          ],
+          [
+            49.8539725,
+            40.3754718
+          ],
+          [
+            49.8540339,
+            40.3753742
+          ]
+        ]
+      },
+      "id": "way/278666424"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/290633714",
+        "highway": "trunk",
+        "int_ref": "E 60",
+        "lanes": "4",
+        "maxspeed": "60",
+        "name": "Zərifə Əliyeva küçəsi",
+        "name:az": "Zərifə Əliyeva küçəsi",
+        "name:en": "Zarifa Aliyeva Street",
+        "name:ru": "улица Зарифы Алиевой",
+        "oneway": "yes",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8421253,
+            40.3699691
+          ],
+          [
+            49.8419955,
+            40.3698938
+          ],
+          [
+            49.8419016,
+            40.369832
+          ],
+          [
+            49.8418345,
+            40.3697865
+          ],
+          [
+            49.8417805,
+            40.3697456
+          ],
+          [
+            49.8417434,
+            40.3697134
+          ],
+          [
+            49.841723,
+            40.3696813
+          ],
+          [
+            49.8417121,
+            40.3696427
+          ],
+          [
+            49.8417091,
+            40.3696134
+          ],
+          [
+            49.8417158,
+            40.3695704
+          ],
+          [
+            49.8417261,
+            40.3695421
+          ],
+          [
+            49.8418425,
+            40.369249
+          ],
+          [
+            49.841846,
+            40.3692132
+          ],
+          [
+            49.8418349,
+            40.3691692
+          ],
+          [
+            49.8418184,
+            40.3691346
+          ],
+          [
+            49.8417939,
+            40.3691043
+          ],
+          [
+            49.8417595,
+            40.3690778
+          ]
+        ]
+      },
+      "id": "way/290633714"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/323377758",
+        "highway": "trunk",
+        "int_ref": "E 60",
+        "lanes": "4",
+        "maxspeed": "60",
+        "name": "Neftçilər prospekti",
+        "name:az": "Neftçilər prospekti",
+        "name:az-cyr": "Нефтчиләр проспекти",
+        "name:en": "Neftchilar Avenue",
+        "name:ru": "проспект Нефтяников",
+        "oneway": "yes",
+        "surface": "asphalt",
+        "turn:lanes": "left|left;through|through|through",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8456502,
+            40.370218
+          ],
+          [
+            49.8475002,
+            40.3708293
+          ],
+          [
+            49.8486029,
+            40.3711852
+          ]
+        ]
+      },
+      "id": "way/323377758"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/414510525",
+        "cycleway:both": "shoulder",
+        "cycleway:left:oneway": "-1",
+        "highway": "trunk",
+        "int_ref": "E 60",
+        "lanes": "3",
+        "maxspeed": "60",
+        "name": "Zərifə Əliyeva küçəsi",
+        "name:az": "Zərifə Əliyeva küçəsi",
+        "name:en": "Zarifa Aliyeva Street",
+        "name:ru": "улица Зарифы Алиевой",
+        "oneway": "yes",
+        "oneway:bicycle": "no",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8451477,
+            40.3711229
+          ],
+          [
+            49.8445875,
+            40.3709294
+          ],
+          [
+            49.8444834,
+            40.3708947
+          ],
+          [
+            49.8440058,
+            40.3707378
+          ],
+          [
+            49.8438871,
+            40.3706977
+          ],
+          [
+            49.843349,
+            40.370525
+          ]
+        ]
+      },
+      "id": "way/414510525"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/476752809",
+        "cycleway:right": "track",
+        "highway": "primary",
+        "int_ref": "AH8",
+        "lanes": "4",
+        "lit": "yes",
+        "maxspeed": "60",
+        "name": "İstiqlaliyyət küçəsi",
+        "name:az": "İstiqlaliyyət küçəsi",
+        "name:en": "Istiglaliyyat Street",
+        "name:ru": "улица Истиглалиййят",
+        "oneway": "yes",
+        "oneway:bicycle": "no",
+        "parking:both": "no",
+        "sidewalk:both": "separate",
+        "surface": "asphalt",
+        "wikidata": "Q4472311",
+        "wikipedia": "en:Istiglaliyyat Street",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8313437,
+            40.367165
+          ],
+          [
+            49.8314116,
+            40.3673438
+          ],
+          [
+            49.8315478,
+            40.3676905
+          ],
+          [
+            49.8315717,
+            40.3677415
+          ],
+          [
+            49.8316014,
+            40.3677881
+          ],
+          [
+            49.8316408,
+            40.3678426
+          ],
+          [
+            49.8316892,
+            40.3678889
+          ],
+          [
+            49.8317105,
+            40.3679101
+          ],
+          [
+            49.8317555,
+            40.3679468
+          ],
+          [
+            49.8318279,
+            40.3679949
+          ],
+          [
+            49.8319016,
+            40.3680368
+          ],
+          [
+            49.8323905,
+            40.3682624
+          ],
+          [
+            49.8330439,
+            40.3685626
+          ],
+          [
+            49.8332933,
+            40.3686536
+          ],
+          [
+            49.8339413,
+            40.3688909
+          ],
+          [
+            49.8346129,
+            40.3691276
+          ],
+          [
+            49.8347612,
+            40.369172
+          ]
+        ]
+      },
+      "id": "way/476752809"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/476752810",
+        "highway": "primary",
+        "int_ref": "AH8",
+        "lit": "yes",
+        "name": "İstiqlaliyyət küçəsi",
+        "name:az": "İstiqlaliyyət küçəsi",
+        "name:en": "Istiglaliyyat Street",
+        "name:ru": "улица Истиглалиййят",
+        "oneway": "no",
+        "parking:both": "no",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8309367,
+            40.3661235
+          ],
+          [
+            49.830924,
+            40.3660381
+          ],
+          [
+            49.830922,
+            40.3659582
+          ],
+          [
+            49.8309253,
+            40.3658756
+          ],
+          [
+            49.8309343,
+            40.3657592
+          ],
+          [
+            49.8309703,
+            40.3652591
+          ],
+          [
+            49.8310425,
+            40.3644489
+          ],
+          [
+            49.8310762,
+            40.3639914
+          ]
+        ]
+      },
+      "id": "way/476752810"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/500527621",
+        "highway": "primary",
+        "int_ref": "AH8",
+        "lanes": "2",
+        "lit": "yes",
+        "name": "Niyazi küçəsi",
+        "name:en": "Niyazi Street",
+        "name:ru": "улица Ниязи",
+        "oneway": "no",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8319415,
+            40.3635853
+          ],
+          [
+            49.8331686,
+            40.3631032
+          ]
+        ]
+      },
+      "id": "way/500527621"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/639403533",
+        "cycleway:right": "lane",
+        "highway": "service",
+        "maxspeed": "60",
+        "name": "İstiqlaliyyət küçəsi",
+        "name:az": "İstiqlaliyyət küçəsi",
+        "name:en": "Istiglaliyyat Street",
+        "name:ru": "улица Истиглалиййят",
+        "oneway": "yes",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8361929,
+            40.3688656
+          ],
+          [
+            49.8363257,
+            40.368873
+          ]
+        ]
+      },
+      "id": "way/639403533"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/766787796",
+        "highway": "trunk",
+        "int_ref": "E 60",
+        "lanes": "4",
+        "lit": "yes",
+        "maxspeed": "60",
+        "name": "Neftçilər prospekti",
+        "name:az": "Neftçilər prospekti",
+        "name:az-cyr": "Нефтчиләр проспекти",
+        "name:en": "Neftchilar Avenue",
+        "name:ru": "проспект Нефтяников",
+        "oneway": "yes",
+        "sidewalk:left": "yes",
+        "sidewalk:right": "separate",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.851408,
+            40.3720939
+          ],
+          [
+            49.8551386,
+            40.3733112
+          ]
+        ]
+      },
+      "id": "way/766787796"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/822375070",
+        "highway": "raceway",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8331686,
+            40.3631032
+          ],
+          [
+            49.8344798,
+            40.3626424
+          ],
+          [
+            49.8345651,
+            40.3626149
+          ],
+          [
+            49.8346359,
+            40.3626022
+          ],
+          [
+            49.8347273,
+            40.3626016
+          ],
+          [
+            49.8348009,
+            40.3626064
+          ],
+          [
+            49.8348588,
+            40.36262
+          ],
+          [
+            49.8349332,
+            40.3626456
+          ],
+          [
+            49.8349526,
+            40.3626523
+          ],
+          [
+            49.8350438,
+            40.3627061
+          ],
+          [
+            49.8351317,
+            40.3627909
+          ],
+          [
+            49.8352054,
+            40.3629264
+          ],
+          [
+            49.8354168,
+            40.363315
+          ]
+        ]
+      },
+      "id": "way/822375070"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/926192527",
+        "cycleway:right": "track",
+        "highway": "primary",
+        "int_ref": "AH8",
+        "lanes": "3",
+        "lit": "yes",
+        "maxspeed": "60",
+        "name": "İstiqlaliyyət küçəsi",
+        "name:az": "İstiqlaliyyət küçəsi",
+        "name:en": "Istiglaliyyat Street",
+        "name:ru": "улица Истиглалиййят",
+        "oneway": "yes",
+        "oneway:bicycle": "no",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8309367,
+            40.3661235
+          ],
+          [
+            49.8309535,
+            40.3661771
+          ],
+          [
+            49.8309723,
+            40.3662292
+          ],
+          [
+            49.8309939,
+            40.3662844
+          ],
+          [
+            49.8311006,
+            40.3665488
+          ]
+        ]
+      },
+      "id": "way/926192527"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1050381554",
+        "highway": "primary",
+        "int_ref": "AH8",
+        "lit": "yes",
+        "name": "İstiqlaliyyət küçəsi",
+        "oneway": "no",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8310762,
+            40.3639914
+          ],
+          [
+            49.8310775,
+            40.3639648
+          ],
+          [
+            49.8310819,
+            40.3639462
+          ],
+          [
+            49.8310876,
+            40.3639347
+          ],
+          [
+            49.8310943,
+            40.3639265
+          ],
+          [
+            49.831103,
+            40.3639188
+          ],
+          [
+            49.8311157,
+            40.3639098
+          ]
+        ]
+      },
+      "id": "way/1050381554"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1050381555",
+        "highway": "primary",
+        "int_ref": "AH8",
+        "lit": "yes",
+        "name": "Niyazi küçəsi",
+        "name:en": "Niyazi Street",
+        "name:ru": "улица Ниязи",
+        "oneway": "no",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8311531,
+            40.363895
+          ],
+          [
+            49.8319415,
+            40.3635853
+          ]
+        ]
+      },
+      "id": "way/1050381555"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1069034735",
+        "access": "no",
+        "addr:street": "Əziz Əliyev küç.",
+        "bicycle": "no",
+        "cycleway:right": "lane",
+        "foot": "yes",
+        "highway": "pedestrian",
+        "horse": "permissive",
+        "lit": "yes",
+        "maxspeed": "60",
+        "motor_vehicle": "no",
+        "name": "Əziz Əliyev küçəsi",
+        "name:az": "Əziz Əliyev küçəsi",
+        "name:en": "Aziz Aliyev Street",
+        "oneway": "no",
+        "surface": "asphalt",
+        "wikidata": "Q4062274",
+        "wikipedia": "en:Aziz Aliyev",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.836343,
+            40.3688442
+          ],
+          [
+            49.8363814,
+            40.3688444
+          ],
+          [
+            49.8364187,
+            40.3688468
+          ],
+          [
+            49.8365553,
+            40.3688526
+          ],
+          [
+            49.8366896,
+            40.3688523
+          ],
+          [
+            49.8367283,
+            40.3688455
+          ],
+          [
+            49.8367744,
+            40.3688328
+          ],
+          [
+            49.8368501,
+            40.3688056
+          ],
+          [
+            49.8370603,
+            40.3687266
+          ],
+          [
+            49.8370883,
+            40.3687218
+          ],
+          [
+            49.8371176,
+            40.3687237
+          ],
+          [
+            49.8371798,
+            40.3687345
+          ],
+          [
+            49.8372188,
+            40.3687449
+          ],
+          [
+            49.8372584,
+            40.3687515
+          ],
+          [
+            49.8372983,
+            40.3687477
+          ],
+          [
+            49.837335,
+            40.3687328
+          ],
+          [
+            49.8373731,
+            40.3686922
+          ],
+          [
+            49.8380909,
+            40.3671006
+          ]
+        ]
+      },
+      "id": "way/1069034735"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1167453170",
+        "highway": "trunk",
+        "int_name": "Neftchilar Prospect",
+        "int_ref": "E 60",
+        "lanes": "3",
+        "lit": "yes",
+        "maxspeed": "60",
+        "name": "Neftçilər prospekti",
+        "name:az": "Neftçilər prospekti",
+        "name:az-cyr": "Нефтчиләр проспекти",
+        "name:en": "Neftchilar Avenue",
+        "name:ru": "проспект Нефтяников",
+        "oneway": "yes",
+        "parking:both": "no",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8411486,
+            40.3687248
+          ],
+          [
+            49.8402124,
+            40.3681684
+          ],
+          [
+            49.8389888,
+            40.3674542
+          ],
+          [
+            49.8388073,
+            40.3673493
+          ],
+          [
+            49.8385545,
+            40.3672033
+          ],
+          [
+            49.8384878,
+            40.3671631
+          ],
+          [
+            49.8384263,
+            40.3671154
+          ]
+        ]
+      },
+      "id": "way/1167453170"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1168829202",
+        "cycleway:right": "lane",
+        "highway": "secondary",
+        "lit": "yes",
+        "name": "Puşkin küçəsi",
+        "name:az": "Puşkin küçəsi",
+        "name:az-cyr": "Пушкин күчәси",
+        "name:en": "Pushkin Street",
+        "name:ru": "улица Пушкина",
+        "oneway": "yes",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8546391,
+            40.3744093
+          ],
+          [
+            49.8546521,
+            40.3743876
+          ],
+          [
+            49.8547871,
+            40.3741607
+          ]
+        ]
+      },
+      "id": "way/1168829202"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1168829203",
+        "highway": "raceway",
+        "sport": "motor",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8551386,
+            40.3733112
+          ],
+          [
+            49.8551658,
+            40.3733437
+          ],
+          [
+            49.8551752,
+            40.3733815
+          ],
+          [
+            49.8551711,
+            40.3734326
+          ],
+          [
+            49.8551524,
+            40.3734867
+          ],
+          [
+            49.8551282,
+            40.3735399
+          ],
+          [
+            49.8550024,
+            40.3737941
+          ]
+        ]
+      },
+      "id": "way/1168829203"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1279858618",
+        "cycleway:right": "track",
+        "highway": "primary",
+        "int_ref": "AH8",
+        "lanes": "3",
+        "lit": "yes",
+        "maxspeed": "60",
+        "name": "İstiqlaliyyət küçəsi",
+        "name:az": "İstiqlaliyyət küçəsi",
+        "name:en": "Istiglaliyyat Street",
+        "name:ru": "улица Истиглалиййят",
+        "oneway": "yes",
+        "oneway:bicycle": "no",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8311006,
+            40.3665488
+          ],
+          [
+            49.8313437,
+            40.367165
+          ]
+        ]
+      },
+      "id": "way/1279858618"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1329392226",
+        "cycleway:both": "shoulder",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "60",
+        "name": "Xaqani küçəsi",
+        "name:az": "Xaqani küçəsi",
+        "name:en": "Khagani Street",
+        "name:ru": "улица Хагани",
+        "oneway": "yes",
+        "surface": "asphalt",
+        "wikidata": "Q368862",
+        "wikipedia": "en:Khaqani",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8442609,
+            40.3731112
+          ],
+          [
+            49.8467214,
+            40.3739722
+          ],
+          [
+            49.8467878,
+            40.3739938
+          ]
+        ]
+      },
+      "id": "way/1329392226"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1329392228",
+        "highway": "secondary",
+        "lit": "yes",
+        "name": "Puşkin küçəsi",
+        "name:az": "Puşkin küçəsi",
+        "name:az-cyr": "Пушкин күчәси",
+        "name:en": "Pushkin Street",
+        "name:ru": "улица Пушкина",
+        "oneway": "yes",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8547871,
+            40.3741607
+          ],
+          [
+            49.8549323,
+            40.3738985
+          ],
+          [
+            49.8550024,
+            40.3737941
+          ]
+        ]
+      },
+      "id": "way/1329392228"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1413579322",
+        "cycleway:right": "lane",
+        "highway": "service",
+        "name": "İstiqlaliyyət küçəsi",
+        "name:az": "İstiqlaliyyət küçəsi",
+        "name:en": "Istiglaliyyat Street",
+        "name:ru": "улица Истиглалиййят",
+        "oneway": "yes",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8357734,
+            40.3694258
+          ],
+          [
+            49.8358456,
+            40.3694115
+          ],
+          [
+            49.8358859,
+            40.3693974
+          ]
+        ]
+      },
+      "id": "way/1413579322"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1413965638",
+        "highway": "trunk",
+        "int_name": "Neftchilar Prospect",
+        "int_ref": "E 60",
+        "lanes": "3",
+        "lit": "yes",
+        "maxspeed": "60",
+        "name": "Neftçilər prospekti",
+        "name:az": "Neftçilər prospekti",
+        "name:az-cyr": "Нефтчиләр проспекти",
+        "name:en": "Neftchilar Avenue",
+        "name:ru": "проспект Нефтяников",
+        "oneway": "yes",
+        "parking:both": "no",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8384263,
+            40.3671154
+          ],
+          [
+            49.8383772,
+            40.367075
+          ],
+          [
+            49.8383183,
+            40.367015
+          ]
+        ]
+      },
+      "id": "way/1413965638"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1415063177",
+        "cycleway:both": "shoulder",
+        "foot": "no",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "60",
+        "name": "Xaqani küçəsi",
+        "name:az": "Xaqani küçəsi",
+        "name:en": "Khagani Street",
+        "name:ru": "улица Хагани",
+        "oneway": "yes",
+        "surface": "asphalt",
+        "wikidata": "Q368862",
+        "wikipedia": "en:Khaqani",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8496235,
+            40.3749734
+          ],
+          [
+            49.8497366,
+            40.3750116
+          ],
+          [
+            49.849819,
+            40.3750372
+          ]
+        ]
+      },
+      "id": "way/1415063177"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1415063178",
+        "cycleway:both": "shoulder",
+        "foot": "no",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "60",
+        "name": "Xaqani küçəsi",
+        "name:az": "Xaqani küçəsi",
+        "name:en": "Khagani Street",
+        "name:ru": "улица Хагани",
+        "oneway": "yes",
+        "surface": "asphalt",
+        "wikidata": "Q368862",
+        "wikipedia": "en:Khaqani",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8468677,
+            40.3740198
+          ],
+          [
+            49.8470069,
+            40.3740687
+          ]
+        ]
+      },
+      "id": "way/1415063178"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1415063201",
+        "cycleway:both": "shoulder",
+        "foot": "no",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "60",
+        "name": "Xaqani küçəsi",
+        "name:az": "Xaqani küçəsi",
+        "name:en": "Khagani Street",
+        "name:ru": "улица Хагани",
+        "oneway": "yes",
+        "surface": "asphalt",
+        "wikidata": "Q368862",
+        "wikipedia": "en:Khaqani",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8534834,
+            40.3761382
+          ],
+          [
+            49.8535825,
+            40.3761661
+          ]
+        ]
+      },
+      "id": "way/1415063201"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1415063202",
+        "cycleway:both": "shoulder",
+        "foot": "no",
+        "highway": "secondary",
+        "lit": "yes",
+        "maxspeed": "50",
+        "name": "Puşkin küçəsi",
+        "name:az": "Puşkin küçəsi",
+        "name:az-cyr": "Пушкин күчәси",
+        "name:en": "Pushkin Street",
+        "name:ru": "улица Пушкина",
+        "oneway": "no",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8535825,
+            40.3761661
+          ],
+          [
+            49.8536173,
+            40.3761036
+          ]
+        ]
+      },
+      "id": "way/1415063202"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1415075088",
+        "cycleway:both": "shoulder",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "60",
+        "name": "Xaqani küçəsi",
+        "name:az": "Xaqani küçəsi",
+        "name:en": "Khagani Street",
+        "name:ru": "улица Хагани",
+        "oneway": "yes",
+        "surface": "asphalt",
+        "wikidata": "Q368862",
+        "wikipedia": "en:Khaqani",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8470069,
+            40.3740687
+          ],
+          [
+            49.8496235,
+            40.3749734
+          ]
+        ]
+      },
+      "id": "way/1415075088"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1415075090",
+        "cycleway:both": "shoulder",
+        "foot": "no",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "60",
+        "name": "Xaqani küçəsi",
+        "name:az": "Xaqani küçəsi",
+        "name:en": "Khagani Street",
+        "name:ru": "улица Хагани",
+        "oneway": "yes",
+        "surface": "asphalt",
+        "wikidata": "Q368862",
+        "wikipedia": "en:Khaqani",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8467878,
+            40.3739938
+          ],
+          [
+            49.8468677,
+            40.3740198
+          ]
+        ]
+      },
+      "id": "way/1415075090"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1415085013",
+        "cycleway:both": "shoulder",
+        "cycleway:left:oneway": "-1",
+        "foot": "no",
+        "highway": "trunk",
+        "int_ref": "E 60",
+        "lanes": "3",
+        "maxspeed": "60",
+        "name": "Zərifə Əliyeva küçəsi",
+        "name:az": "Zərifə Əliyeva küçəsi",
+        "name:en": "Zarifa Aliyeva Street",
+        "name:ru": "улица Зарифы Алиевой",
+        "oneway": "yes",
+        "oneway:bicycle": "no",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.843349,
+            40.370525
+          ],
+          [
+            49.843251,
+            40.3704894
+          ]
+        ]
+      },
+      "id": "way/1415085013"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1415085014",
+        "cycleway:both": "shoulder",
+        "cycleway:left:oneway": "-1",
+        "highway": "trunk",
+        "int_ref": "E 60",
+        "lanes": "3",
+        "maxspeed": "60",
+        "name": "Zərifə Əliyeva küçəsi",
+        "name:az": "Zərifə Əliyeva küçəsi",
+        "name:en": "Zarifa Aliyeva Street",
+        "name:ru": "улица Зарифы Алиевой",
+        "oneway": "yes",
+        "oneway:bicycle": "no",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.843251,
+            40.3704894
+          ],
+          [
+            49.8422111,
+            40.370009
+          ],
+          [
+            49.8421253,
+            40.3699691
+          ]
+        ]
+      },
+      "id": "way/1415085014"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1415085016",
+        "cycleway:left": "lane",
+        "cycleway:left:oneway": "no",
+        "highway": "primary",
+        "lanes": "3",
+        "name": "Bülbül prospekti",
+        "name:az": "Bülbül prospekti",
+        "name:en": "Bulbul Avenue",
+        "name:ru": "проспект Бюльбюля",
+        "oneway": "yes",
+        "oneway:bicycle": "no",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.844143,
+            40.3729955
+          ],
+          [
+            49.8444737,
+            40.3723258
+          ]
+        ]
+      },
+      "id": "way/1415085016"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1415085017",
+        "cycleway:left": "lane",
+        "cycleway:left:oneway": "no",
+        "foot": "no",
+        "highway": "primary",
+        "lanes": "3",
+        "name": "Bülbül prospekti",
+        "name:az": "Bülbül prospekti",
+        "name:en": "Bulbul Avenue",
+        "name:ru": "проспект Бюльбюля",
+        "oneway": "yes",
+        "oneway:bicycle": "no",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8441084,
+            40.3730594
+          ],
+          [
+            49.844143,
+            40.3729955
+          ]
+        ]
+      },
+      "id": "way/1415085017"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1415085020",
+        "cycleway:both": "shoulder",
+        "foot": "no",
+        "highway": "residential",
+        "lanes": "2",
+        "maxspeed": "60",
+        "name": "Xaqani küçəsi",
+        "name:az": "Xaqani küçəsi",
+        "name:en": "Khagani Street",
+        "name:ru": "улица Хагани",
+        "oneway": "yes",
+        "surface": "asphalt",
+        "wikidata": "Q368862",
+        "wikipedia": "en:Khaqani",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8441084,
+            40.3730594
+          ],
+          [
+            49.8442261,
+            40.3730994
+          ],
+          [
+            49.8442609,
+            40.3731112
+          ]
+        ]
+      },
+      "id": "way/1415085020"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1464153930",
+        "highway": "trunk",
+        "int_name": "Neftchilar Prospect",
+        "int_ref": "E 60",
+        "lanes": "3",
+        "lit": "yes",
+        "maxspeed": "60",
+        "name": "Neftçilər prospekti",
+        "name:az": "Neftçilər prospekti",
+        "name:az-cyr": "Нефтчиләр проспекти",
+        "name:en": "Neftchilar Avenue",
+        "name:ru": "проспект Нефтяников",
+        "oneway": "yes",
+        "parking:both": "no",
+        "sidewalk": "both",
+        "sidewalk:both:surface": "paving_stones",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8383183,
+            40.367015
+          ],
+          [
+            49.8382934,
+            40.36698
+          ]
+        ]
+      },
+      "id": "way/1464153930"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1464153931",
+        "crossing": "traffic_signals",
+        "crossing:markings": "yes",
+        "footway": "crossing",
+        "highway": "footway",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8380909,
+            40.3671006
+          ],
+          [
+            49.8381179,
+            40.3670679
+          ],
+          [
+            49.8381475,
+            40.367032
+          ],
+          [
+            49.8381989,
+            40.3670137
+          ],
+          [
+            49.8382536,
+            40.3669942
+          ],
+          [
+            49.838274,
+            40.3669869
+          ],
+          [
+            49.8382934,
+            40.36698
+          ]
+        ]
+      },
+      "id": "way/1464153931"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1069034735",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.836343,
+            40.3688442
+          ],
+          [
+            49.8363814,
+            40.3688444
+          ],
+          [
+            49.8364187,
+            40.3688468
+          ],
+          [
+            49.8365553,
+            40.3688526
+          ],
+          [
+            49.8366896,
+            40.3688523
+          ],
+          [
+            49.8367283,
+            40.3688455
+          ],
+          [
+            49.8367744,
+            40.3688328
+          ],
+          [
+            49.8368501,
+            40.3688056
+          ],
+          [
+            49.8370603,
+            40.3687266
+          ],
+          [
+            49.8370883,
+            40.3687218
+          ],
+          [
+            49.8371176,
+            40.3687237
+          ],
+          [
+            49.8371798,
+            40.3687345
+          ],
+          [
+            49.8372188,
+            40.3687449
+          ],
+          [
+            49.8372584,
+            40.3687515
+          ],
+          [
+            49.8372983,
+            40.3687477
+          ],
+          [
+            49.837335,
+            40.3687328
+          ],
+          [
+            49.8373731,
+            40.3686922
+          ],
+          [
+            49.8380909,
+            40.3671006
+          ]
+        ]
+      },
+      "id": "way/1069034735"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1464153931",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8380909,
+            40.3671006
+          ],
+          [
+            49.8381179,
+            40.3670679
+          ],
+          [
+            49.8381475,
+            40.367032
+          ],
+          [
+            49.8381989,
+            40.3670137
+          ],
+          [
+            49.8382536,
+            40.3669942
+          ],
+          [
+            49.838274,
+            40.3669869
+          ],
+          [
+            49.8382934,
+            40.36698
+          ]
+        ]
+      },
+      "id": "way/1464153931"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1464153930",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8383183,
+            40.367015
+          ],
+          [
+            49.8382934,
+            40.36698
+          ]
+        ]
+      },
+      "id": "way/1464153930"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1413965638",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8384263,
+            40.3671154
+          ],
+          [
+            49.8383772,
+            40.367075
+          ],
+          [
+            49.8383183,
+            40.367015
+          ]
+        ]
+      },
+      "id": "way/1413965638"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1167453170",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8411486,
+            40.3687248
+          ],
+          [
+            49.8402124,
+            40.3681684
+          ],
+          [
+            49.8389888,
+            40.3674542
+          ],
+          [
+            49.8388073,
+            40.3673493
+          ],
+          [
+            49.8385545,
+            40.3672033
+          ],
+          [
+            49.8384878,
+            40.3671631
+          ],
+          [
+            49.8384263,
+            40.3671154
+          ]
+        ]
+      },
+      "id": "way/1167453170"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/167173315",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8417595,
+            40.3690778
+          ],
+          [
+            49.8411486,
+            40.3687248
+          ]
+        ]
+      },
+      "id": "way/167173315"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/290633714",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8421253,
+            40.3699691
+          ],
+          [
+            49.8419955,
+            40.3698938
+          ],
+          [
+            49.8419016,
+            40.369832
+          ],
+          [
+            49.8418345,
+            40.3697865
+          ],
+          [
+            49.8417805,
+            40.3697456
+          ],
+          [
+            49.8417434,
+            40.3697134
+          ],
+          [
+            49.841723,
+            40.3696813
+          ],
+          [
+            49.8417121,
+            40.3696427
+          ],
+          [
+            49.8417091,
+            40.3696134
+          ],
+          [
+            49.8417158,
+            40.3695704
+          ],
+          [
+            49.8417261,
+            40.3695421
+          ],
+          [
+            49.8418425,
+            40.369249
+          ],
+          [
+            49.841846,
+            40.3692132
+          ],
+          [
+            49.8418349,
+            40.3691692
+          ],
+          [
+            49.8418184,
+            40.3691346
+          ],
+          [
+            49.8417939,
+            40.3691043
+          ],
+          [
+            49.8417595,
+            40.3690778
+          ]
+        ]
+      },
+      "id": "way/290633714"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1415085014",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.843251,
+            40.3704894
+          ],
+          [
+            49.8422111,
+            40.370009
+          ],
+          [
+            49.8421253,
+            40.3699691
+          ]
+        ]
+      },
+      "id": "way/1415085014"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1415085013",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.843349,
+            40.370525
+          ],
+          [
+            49.843251,
+            40.3704894
+          ]
+        ]
+      },
+      "id": "way/1415085013"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/414510525",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8451477,
+            40.3711229
+          ],
+          [
+            49.8445875,
+            40.3709294
+          ],
+          [
+            49.8444834,
+            40.3708947
+          ],
+          [
+            49.8440058,
+            40.3707378
+          ],
+          [
+            49.8438871,
+            40.3706977
+          ],
+          [
+            49.843349,
+            40.370525
+          ]
+        ]
+      },
+      "id": "way/414510525"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/177431273",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8445259,
+            40.3722258
+          ],
+          [
+            49.8445837,
+            40.3721233
+          ],
+          [
+            49.8450789,
+            40.3712449
+          ],
+          [
+            49.8451477,
+            40.3711229
+          ]
+        ]
+      },
+      "id": "way/177431273"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/182645384",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8444737,
+            40.3723258
+          ],
+          [
+            49.844491,
+            40.3722949
+          ],
+          [
+            49.8445259,
+            40.3722258
+          ]
+        ]
+      },
+      "id": "way/182645384"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1415085016",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.844143,
+            40.3729955
+          ],
+          [
+            49.8444737,
+            40.3723258
+          ]
+        ]
+      },
+      "id": "way/1415085016"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1415085017",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8441084,
+            40.3730594
+          ],
+          [
+            49.844143,
+            40.3729955
+          ]
+        ]
+      },
+      "id": "way/1415085017"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1415085020",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8441084,
+            40.3730594
+          ],
+          [
+            49.8442261,
+            40.3730994
+          ],
+          [
+            49.8442609,
+            40.3731112
+          ]
+        ]
+      },
+      "id": "way/1415085020"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1329392226",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8442609,
+            40.3731112
+          ],
+          [
+            49.8467214,
+            40.3739722
+          ],
+          [
+            49.8467878,
+            40.3739938
+          ]
+        ]
+      },
+      "id": "way/1329392226"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1415075090",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8467878,
+            40.3739938
+          ],
+          [
+            49.8468677,
+            40.3740198
+          ]
+        ]
+      },
+      "id": "way/1415075090"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1415063178",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8468677,
+            40.3740198
+          ],
+          [
+            49.8470069,
+            40.3740687
+          ]
+        ]
+      },
+      "id": "way/1415063178"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1415075088",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8470069,
+            40.3740687
+          ],
+          [
+            49.8496235,
+            40.3749734
+          ]
+        ]
+      },
+      "id": "way/1415075088"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1415063177",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8496235,
+            40.3749734
+          ],
+          [
+            49.8497366,
+            40.3750116
+          ],
+          [
+            49.849819,
+            40.3750372
+          ]
+        ]
+      },
+      "id": "way/1415063177"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/165695131",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.849819,
+            40.3750372
+          ],
+          [
+            49.8501887,
+            40.3751491
+          ],
+          [
+            49.851492,
+            40.3755552
+          ],
+          [
+            49.8515529,
+            40.3755748
+          ],
+          [
+            49.8515706,
+            40.3755792
+          ],
+          [
+            49.8516237,
+            40.375597
+          ],
+          [
+            49.851801,
+            40.3756525
+          ],
+          [
+            49.8528955,
+            40.3759653
+          ],
+          [
+            49.8534834,
+            40.3761382
+          ]
+        ]
+      },
+      "id": "way/165695131"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1415063201",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8534834,
+            40.3761382
+          ],
+          [
+            49.8535825,
+            40.3761661
+          ]
+        ]
+      },
+      "id": "way/1415063201"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1415063202",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8535825,
+            40.3761661
+          ],
+          [
+            49.8536173,
+            40.3761036
+          ]
+        ]
+      },
+      "id": "way/1415063202"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/278666424",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8536173,
+            40.3761036
+          ],
+          [
+            49.8538434,
+            40.3756973
+          ],
+          [
+            49.8539269,
+            40.3755461
+          ],
+          [
+            49.8539725,
+            40.3754718
+          ],
+          [
+            49.8540339,
+            40.3753742
+          ]
+        ]
+      },
+      "id": "way/278666424"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/25402777",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8540339,
+            40.3753742
+          ],
+          [
+            49.8540464,
+            40.3753526
+          ],
+          [
+            49.8541224,
+            40.375224
+          ],
+          [
+            49.8546391,
+            40.3744093
+          ]
+        ]
+      },
+      "id": "way/25402777"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1168829202",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8546391,
+            40.3744093
+          ],
+          [
+            49.8546521,
+            40.3743876
+          ],
+          [
+            49.8547871,
+            40.3741607
+          ]
+        ]
+      },
+      "id": "way/1168829202"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1329392228",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8547871,
+            40.3741607
+          ],
+          [
+            49.8549323,
+            40.3738985
+          ],
+          [
+            49.8550024,
+            40.3737941
+          ]
+        ]
+      },
+      "id": "way/1329392228"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1168829203",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8551386,
+            40.3733112
+          ],
+          [
+            49.8551658,
+            40.3733437
+          ],
+          [
+            49.8551752,
+            40.3733815
+          ],
+          [
+            49.8551711,
+            40.3734326
+          ],
+          [
+            49.8551524,
+            40.3734867
+          ],
+          [
+            49.8551282,
+            40.3735399
+          ],
+          [
+            49.8550024,
+            40.3737941
+          ]
+        ]
+      },
+      "id": "way/1168829203"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/766787796",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.851408,
+            40.3720939
+          ],
+          [
+            49.8551386,
+            40.3733112
+          ]
+        ]
+      },
+      "id": "way/766787796"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179238852",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8486029,
+            40.3711852
+          ],
+          [
+            49.8486724,
+            40.3712074
+          ],
+          [
+            49.8487342,
+            40.3712272
+          ],
+          [
+            49.850091,
+            40.371668
+          ],
+          [
+            49.8505044,
+            40.3717988
+          ],
+          [
+            49.8505682,
+            40.3718192
+          ],
+          [
+            49.8506578,
+            40.3718508
+          ],
+          [
+            49.851408,
+            40.3720939
+          ]
+        ]
+      },
+      "id": "way/179238852"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/323377758",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8456502,
+            40.370218
+          ],
+          [
+            49.8475002,
+            40.3708293
+          ],
+          [
+            49.8486029,
+            40.3711852
+          ]
+        ]
+      },
+      "id": "way/323377758"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/131835265",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8413111,
+            40.3686959
+          ],
+          [
+            49.8415609,
+            40.3688299
+          ],
+          [
+            49.8417306,
+            40.3689114
+          ],
+          [
+            49.8418955,
+            40.3689768
+          ],
+          [
+            49.8429139,
+            40.36933
+          ],
+          [
+            49.8453609,
+            40.3701255
+          ],
+          [
+            49.8455768,
+            40.3701955
+          ],
+          [
+            49.8456502,
+            40.370218
+          ]
+        ]
+      },
+      "id": "way/131835265"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/249018354",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8354168,
+            40.363315
+          ],
+          [
+            49.8359273,
+            40.3640753
+          ],
+          [
+            49.8359702,
+            40.3641212
+          ],
+          [
+            49.8360228,
+            40.3641702
+          ],
+          [
+            49.8379302,
+            40.3655061
+          ],
+          [
+            49.8380408,
+            40.365599
+          ],
+          [
+            49.8380801,
+            40.3656539
+          ],
+          [
+            49.838115,
+            40.3657356
+          ],
+          [
+            49.8383428,
+            40.3667173
+          ],
+          [
+            49.8383683,
+            40.3667997
+          ],
+          [
+            49.8383955,
+            40.3668776
+          ],
+          [
+            49.8384132,
+            40.3669193
+          ],
+          [
+            49.8384265,
+            40.3669478
+          ],
+          [
+            49.838465,
+            40.3669986
+          ],
+          [
+            49.8385285,
+            40.3670517
+          ],
+          [
+            49.8386012,
+            40.3670979
+          ],
+          [
+            49.8390734,
+            40.3673716
+          ],
+          [
+            49.839361,
+            40.3675418
+          ],
+          [
+            49.8413111,
+            40.3686959
+          ]
+        ]
+      },
+      "id": "way/249018354"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/822375070",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8331686,
+            40.3631032
+          ],
+          [
+            49.8344798,
+            40.3626424
+          ],
+          [
+            49.8345651,
+            40.3626149
+          ],
+          [
+            49.8346359,
+            40.3626022
+          ],
+          [
+            49.8347273,
+            40.3626016
+          ],
+          [
+            49.8348009,
+            40.3626064
+          ],
+          [
+            49.8348588,
+            40.36262
+          ],
+          [
+            49.8349332,
+            40.3626456
+          ],
+          [
+            49.8349526,
+            40.3626523
+          ],
+          [
+            49.8350438,
+            40.3627061
+          ],
+          [
+            49.8351317,
+            40.3627909
+          ],
+          [
+            49.8352054,
+            40.3629264
+          ],
+          [
+            49.8354168,
+            40.363315
+          ]
+        ]
+      },
+      "id": "way/822375070"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/500527621",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8319415,
+            40.3635853
+          ],
+          [
+            49.8331686,
+            40.3631032
+          ]
+        ]
+      },
+      "id": "way/500527621"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1050381555",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8311531,
+            40.363895
+          ],
+          [
+            49.8319415,
+            40.3635853
+          ]
+        ]
+      },
+      "id": "way/1050381555"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/167173308",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8311157,
+            40.3639098
+          ],
+          [
+            49.8311531,
+            40.363895
+          ]
+        ]
+      },
+      "id": "way/167173308"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1050381554",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8310762,
+            40.3639914
+          ],
+          [
+            49.8310775,
+            40.3639648
+          ],
+          [
+            49.8310819,
+            40.3639462
+          ],
+          [
+            49.8310876,
+            40.3639347
+          ],
+          [
+            49.8310943,
+            40.3639265
+          ],
+          [
+            49.831103,
+            40.3639188
+          ],
+          [
+            49.8311157,
+            40.3639098
+          ]
+        ]
+      },
+      "id": "way/1050381554"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/476752810",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8309367,
+            40.3661235
+          ],
+          [
+            49.830924,
+            40.3660381
+          ],
+          [
+            49.830922,
+            40.3659582
+          ],
+          [
+            49.8309253,
+            40.3658756
+          ],
+          [
+            49.8309343,
+            40.3657592
+          ],
+          [
+            49.8309703,
+            40.3652591
+          ],
+          [
+            49.8310425,
+            40.3644489
+          ],
+          [
+            49.8310762,
+            40.3639914
+          ]
+        ]
+      },
+      "id": "way/476752810"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/926192527",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8309367,
+            40.3661235
+          ],
+          [
+            49.8309535,
+            40.3661771
+          ],
+          [
+            49.8309723,
+            40.3662292
+          ],
+          [
+            49.8309939,
+            40.3662844
+          ],
+          [
+            49.8311006,
+            40.3665488
+          ]
+        ]
+      },
+      "id": "way/926192527"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1279858618",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8311006,
+            40.3665488
+          ],
+          [
+            49.8313437,
+            40.367165
+          ]
+        ]
+      },
+      "id": "way/1279858618"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/476752809",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8313437,
+            40.367165
+          ],
+          [
+            49.8314116,
+            40.3673438
+          ],
+          [
+            49.8315478,
+            40.3676905
+          ],
+          [
+            49.8315717,
+            40.3677415
+          ],
+          [
+            49.8316014,
+            40.3677881
+          ],
+          [
+            49.8316408,
+            40.3678426
+          ],
+          [
+            49.8316892,
+            40.3678889
+          ],
+          [
+            49.8317105,
+            40.3679101
+          ],
+          [
+            49.8317555,
+            40.3679468
+          ],
+          [
+            49.8318279,
+            40.3679949
+          ],
+          [
+            49.8319016,
+            40.3680368
+          ],
+          [
+            49.8323905,
+            40.3682624
+          ],
+          [
+            49.8330439,
+            40.3685626
+          ],
+          [
+            49.8332933,
+            40.3686536
+          ],
+          [
+            49.8339413,
+            40.3688909
+          ],
+          [
+            49.8346129,
+            40.3691276
+          ],
+          [
+            49.8347612,
+            40.369172
+          ]
+        ]
+      },
+      "id": "way/476752809"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/25406140",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8347612,
+            40.369172
+          ],
+          [
+            49.8348349,
+            40.369191
+          ],
+          [
+            49.8348707,
+            40.3692007
+          ],
+          [
+            49.8357734,
+            40.3694258
+          ]
+        ]
+      },
+      "id": "way/25406140"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1413579322",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8357734,
+            40.3694258
+          ],
+          [
+            49.8358456,
+            40.3694115
+          ],
+          [
+            49.8358859,
+            40.3693974
+          ]
+        ]
+      },
+      "id": "way/1413579322"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/202546449",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8358859,
+            40.3693974
+          ],
+          [
+            49.8360709,
+            40.3689282
+          ],
+          [
+            49.8360994,
+            40.3688977
+          ],
+          [
+            49.8361342,
+            40.3688782
+          ],
+          [
+            49.8361929,
+            40.3688656
+          ]
+        ]
+      },
+      "id": "way/202546449"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/639403533",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "11266687",
+            "reltags": {
+              "highway": "raceway",
+              "name": "Baku City Circuit",
+              "sport": "motor",
+              "surface": "asphalt",
+              "type": "circuit",
+              "wikidata": "Q17004958",
+              "wikipedia": "en:Baku City Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            49.8361929,
+            40.3688656
+          ],
+          [
+            49.8363257,
+            40.368873
+          ]
+        ]
+      },
+      "id": "way/639403533"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/276371995",
+        "highway": "traffic_signals"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8445259,
+          40.3722258
+        ]
+      },
+      "id": "node/276371995"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/276846861",
+        "highway": "traffic_signals",
+        "traffic_signals": "signal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8535825,
+          40.3761661
+        ]
+      },
+      "id": "node/276846861"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/2290884744",
+        "crossing": "traffic_signals",
+        "crossing:markings": "yes",
+        "highway": "crossing"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8382934,
+          40.36698
+        ]
+      },
+      "id": "node/2290884744"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/3077754616",
+        "enforcement": "maxspeed",
+        "highway": "speed_camera",
+        "maxspeed": "60"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8390734,
+          40.3673716
+        ]
+      },
+      "id": "node/3077754616"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/3077754617",
+        "enforcement": "maxspeed",
+        "highway": "speed_camera",
+        "maxspeed": "60"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8389888,
+          40.3674542
+        ]
+      },
+      "id": "node/3077754617"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/3528416858",
+        "bench": "yes",
+        "bin": "yes",
+        "bus": "yes",
+        "highway": "bus_stop",
+        "lit": "no",
+        "name": "Kukla teatrı",
+        "name:en": "Puppet Theatre",
+        "name:ru": "Кукольный театр",
+        "public_transport": "platform",
+        "shelter": "yes"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.839361,
+          40.3675418
+        ]
+      },
+      "id": "node/3528416858"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/4445139960",
+        "highway": "traffic_signals",
+        "traffic_signals": "signal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8539269,
+          40.3755461
+        ]
+      },
+      "id": "node/4445139960"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/4462419092",
+        "crossing": "traffic_signals",
+        "crossing:island": "no",
+        "highway": "crossing"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8539725,
+          40.3754718
+        ]
+      },
+      "id": "node/4462419092"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/4462419096",
+        "crossing": "traffic_signals",
+        "crossing:island": "no",
+        "highway": "crossing"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8541224,
+          40.375224
+        ]
+      },
+      "id": "node/4462419096"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/4475530713",
+        "button_operated": "no",
+        "crossing": "traffic_signals",
+        "highway": "crossing",
+        "traffic_signals:sound": "no",
+        "traffic_signals:vibration": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8442609,
+          40.3731112
+        ]
+      },
+      "id": "node/4475530713"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/4475530714",
+        "button_operated": "no",
+        "crossing": "traffic_signals",
+        "highway": "crossing",
+        "traffic_signals:sound": "no",
+        "traffic_signals:vibration": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.844143,
+          40.3729955
+        ]
+      },
+      "id": "node/4475530714"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/4475530719",
+        "highway": "traffic_signals",
+        "traffic_signals": "signal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8450789,
+          40.3712449
+        ]
+      },
+      "id": "node/4475530719"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/4475530721",
+        "highway": "traffic_signals",
+        "traffic_signals": "signal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8453609,
+          40.3701255
+        ]
+      },
+      "id": "node/4475530721"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/4489370565",
+        "highway": "traffic_signals",
+        "traffic_signals": "signal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8467214,
+          40.3739722
+        ]
+      },
+      "id": "node/4489370565"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/4489370567",
+        "crossing": "traffic_signals",
+        "highway": "crossing"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8467878,
+          40.3739938
+        ]
+      },
+      "id": "node/4489370567"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/5079651134",
+        "crossing": "traffic_signals",
+        "highway": "crossing"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8444737,
+          40.3723258
+        ]
+      },
+      "id": "node/5079651134"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/5910313116",
+        "crossing": "traffic_signals",
+        "highway": "crossing"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8534834,
+          40.3761382
+        ]
+      },
+      "id": "node/5910313116"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/6225812433",
+        "crossing": "traffic_signals",
+        "highway": "crossing"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8496235,
+          40.3749734
+        ]
+      },
+      "id": "node/6225812433"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/6225812434",
+        "crossing": "traffic_signals",
+        "highway": "crossing"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.849819,
+          40.3750372
+        ]
+      },
+      "id": "node/6225812434"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/7190127942",
+        "button_operated": "no",
+        "crossing": "traffic_signals",
+        "highway": "crossing",
+        "traffic_signals:sound": "no",
+        "traffic_signals:vibration": "yes"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.843349,
+          40.370525
+        ]
+      },
+      "id": "node/7190127942"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9630529549",
+        "button_operated": "no",
+        "crossing": "traffic_signals",
+        "highway": "crossing",
+        "traffic_signals:sound": "no",
+        "traffic_signals:vibration": "no"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8346129,
+          40.3691276
+        ]
+      },
+      "id": "node/9630529549"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/11729823831",
+        "crossing:markings": "yes",
+        "crossing:signals": "no",
+        "highway": "crossing",
+        "kerb": "lowered"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8515706,
+          40.3755792
+        ]
+      },
+      "id": "node/11729823831"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/12215592953",
+        "crossing:signals": "yes",
+        "highway": "crossing",
+        "kerb": "raised"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8348707,
+          40.3692007
+        ]
+      },
+      "id": "node/12215592953"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/12223155259",
+        "crossing": "traffic_signals",
+        "highway": "crossing"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8536173,
+          40.3761036
+        ]
+      },
+      "id": "node/12223155259"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/12224096820",
+        "crossing": "traffic_signals",
+        "highway": "crossing"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8470069,
+          40.3740687
+        ]
+      },
+      "id": "node/12224096820"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/12348830215",
+        "crossing": "uncontrolled",
+        "highway": "crossing"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.844491,
+          40.3722949
+        ]
+      },
+      "id": "node/12348830215"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/12367590228",
+        "crossing": "uncontrolled",
+        "highway": "crossing"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8515529,
+          40.3755748
+        ]
+      },
+      "id": "node/12367590228"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/12498057092",
+        "crossing": "traffic_signals",
+        "crossing:markings": "yes",
+        "highway": "crossing"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8384265,
+          40.3669478
+        ]
+      },
+      "id": "node/12498057092"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/12498057096",
+        "crossing": "traffic_signals",
+        "highway": "crossing"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8384132,
+          40.3669193
+        ]
+      },
+      "id": "node/12498057096"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/12695993101",
+        "bench": "yes",
+        "bin": "yes",
+        "bus": "yes",
+        "highway": "bus_stop",
+        "lit": "yes",
+        "name": "Kukla teatrı",
+        "name:en": "Puppet Theatre",
+        "name:ru": "Кукольный театр",
+        "public_transport": "platform",
+        "shelter": "yes"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8388073,
+          40.3673493
+        ]
+      },
+      "id": "node/12695993101"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/13001072175",
+        "highway": "traffic_signals",
+        "traffic_signals": "signal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8455768,
+          40.3701955
+        ]
+      },
+      "id": "node/13001072175"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/13003842717",
+        "highway": "crossing"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8317105,
+          40.3679101
+        ]
+      },
+      "id": "node/13003842717"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/13267034118",
+        "highway": "traffic_signals",
+        "traffic_signals": "signal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8442261,
+          40.3730994
+        ]
+      },
+      "id": "node/13267034118"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/13267034136",
+        "crossing": "traffic_signals",
+        "highway": "crossing"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8348349,
+          40.369191
+        ]
+      },
+      "id": "node/13267034136"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+"type": "FeatureCollection",
+"_circuit": "japan_v1",
+"_layer": "drs",
+"_label": "Suzuka",
+"_note": "3 features per zone: detection_point (Point), activation_point (Point), zone_line (LineString).",
+"name": "drs",
+"features": [
+{ "type": "Feature", "id": "z1_detection", "properties": { "zone": 1, "feature_type": "detection_point", "ref": "back straight between T10-T11", "circuit": "japan_v1", "notes": "Place at DRS detection sensor — style RED" }, "geometry": null },
+{ "type": "Feature", "id": "z1_activation", "properties": { "zone": 1, "feature_type": "activation_point", "ref": "main straight after T18 chicane", "circuit": "japan_v1", "notes": "Place where DRS wing opens — style GREEN" }, "geometry": null },
+{ "type": "Feature", "id": "z1_zone_line", "properties": { "zone": 1, "feature_type": "zone_line", "ref": "Zone 1: activation point → braking point", "circuit": "japan_v1", "notes": "Draw line from activation to end of DRS zone — style GREEN line" }, "geometry": { "type": "LineString", "coordinates": [ ] } },
+{ "type": "Feature", "properties": { "id": "1", "zone": null, "feature_type": null, "ref": null, "circuit": "SUZUKA", "notes": null }, "geometry": { "type": "LineString", "coordinates": [ [ 136.538317782019618, 34.845336578334894 ], [ 136.543195017741056, 34.840403023494261 ] ] } }
+]
+}

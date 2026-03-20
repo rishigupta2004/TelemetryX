@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useRef } from 'react'
 import { Pause, Play, SkipBack, SkipForward } from 'lucide-react'
+import { useTimingData } from '../hooks/useTimingData'
 import { useSessionTime } from '../lib/timeUtils'
 import { getRaceControlState } from '../lib/raceControlState'
 import { usePlaybackStore } from '../stores/playbackStore'
@@ -18,6 +19,8 @@ export function PlaybackBar() {
   const setSpeed = usePlaybackStore((s) => s.setSpeed)
   const loadingState = useSessionStore((s) => s.loadingState)
   const sessionData = useSessionStore((s) => s.sessionData)
+  const sessionMeta = useSessionStore((s) => s.sessionMeta)
+  const timing = useTimingData()
   const scrubberRef = useRef<HTMLDivElement>(null)
 
   const formatTime = (seconds: number) => {
@@ -29,6 +32,14 @@ export function PlaybackBar() {
   }
 
   const currentLap = useMemo(() => {
+    const leaderRow = timing.rows[0]
+    const totalFromMeta = sessionMeta?.totalLaps ?? 0
+    const totalFromRows = timing.rows.reduce((max, row) => Math.max(max, row.currentLap || 0, row.lapsCompleted || 0), 0)
+    if (leaderRow) {
+      const leaderLap = Math.max(1, leaderRow.currentLap || leaderRow.lapsCompleted + 1 || 1)
+      return { current: leaderLap, total: totalFromMeta || totalFromRows || 0 }
+    }
+
     if (!sessionData?.laps || duration === 0) {
       return { current: 0, total: 0 }
     }
@@ -53,8 +64,8 @@ export function PlaybackBar() {
 
     if (currentLapNum === 0) currentLapNum = 1
 
-    return { current: currentLapNum, total: totalLaps }
-  }, [sessionData?.laps, sessionTime, duration])
+    return { current: currentLapNum, total: totalFromMeta || totalLaps }
+  }, [timing.rows, sessionMeta?.totalLaps, sessionData?.laps, sessionTime, duration])
 
   const handleScrub = useCallback(
     (clientX: number) => {

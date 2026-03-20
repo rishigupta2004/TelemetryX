@@ -1,0 +1,294 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "miami_v1",
+  "_layer": "corners",
+  "_label": "Miami International Autodrome",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "",
+        "circuit": "miami_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "",
+        "circuit": "miami_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "",
+        "circuit": "miami_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "",
+        "circuit": "miami_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "",
+        "circuit": "miami_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "",
+        "circuit": "miami_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "",
+        "circuit": "miami_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "",
+        "circuit": "miami_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "",
+        "circuit": "miami_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "",
+        "circuit": "miami_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "corner_number": 11,
+        "name": "",
+        "circuit": "miami_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "properties": {
+        "corner_number": 12,
+        "name": "",
+        "circuit": "miami_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "properties": {
+        "corner_number": 13,
+        "name": "",
+        "circuit": "miami_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "properties": {
+        "corner_number": 14,
+        "name": "",
+        "circuit": "miami_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 15,
+      "properties": {
+        "corner_number": 15,
+        "name": "",
+        "circuit": "miami_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 16,
+      "properties": {
+        "corner_number": 16,
+        "name": "",
+        "circuit": "miami_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 17,
+      "properties": {
+        "corner_number": 17,
+        "name": "",
+        "circuit": "miami_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 18,
+      "properties": {
+        "corner_number": 18,
+        "name": "",
+        "circuit": "miami_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 19,
+      "properties": {
+        "corner_number": 19,
+        "name": "",
+        "circuit": "miami_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "MIAMI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -80.235296499482075, 25.957810673784852 ] } },
+{ "type": "Feature", "properties": { "corner_number": 2, "name": null, "circuit": "MIAMI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -80.235934804940243, 25.957193296374495 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "MIAMI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -80.235945268964144, 25.956418958605571 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "MIAMI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -80.241009856533864, 25.957224688446207 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "MIAMI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -80.242192291235057, 25.956785199442223 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "MIAMI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -80.243406118007968, 25.957392112828678 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "MIAMI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -80.244787369163348, 25.956523598844615 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "MIAMI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -80.244253703944224, 25.956073645816726 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "MIAMI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -80.239387932828691, 25.955927149482065 ] } },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": null, "notes": null }, "geometry": { "type": "Point", "coordinates": [ -80.236458006135464, 25.95522605988047 ] } },
+{ "type": "Feature", "properties": { "corner_number": 11, "name": null, "circuit": "MIAMI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -80.230619080796814, 25.957329328685251 ] } },
+{ "type": "Feature", "properties": { "corner_number": 12, "name": null, "circuit": "MIAMI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -80.23124692223108, 25.95813505852589 ] } },
+{ "type": "Feature", "properties": { "corner_number": 13, "name": null, "circuit": "MIAMI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -80.230221447888454, 25.95846990729083 ] } },
+{ "type": "Feature", "properties": { "corner_number": 14, "name": null, "circuit": "MIAMI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -80.229740102788838, 25.959108212748998 ] } },
+{ "type": "Feature", "properties": { "corner_number": 15, "name": null, "circuit": "MIAMI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -80.229980775338646, 25.959244245059754 ] } },
+{ "type": "Feature", "properties": { "corner_number": 16, "name": null, "circuit": "MIAMI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -80.229834279003981, 25.96009183099601 ] } },
+{ "type": "Feature", "properties": { "corner_number": 17, "name": null, "circuit": "MIAMI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -80.242977093027889, 25.960541784023899 ] } },
+{ "type": "Feature", "properties": { "corner_number": 18, "name": null, "circuit": "MIAMI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -80.242003938804785, 25.959725590159355 ] } },
+{ "type": "Feature", "properties": { "corner_number": 19, "name": null, "circuit": "MIAMI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -80.239869277928292, 25.960217399282861 ] } }
+]
+}

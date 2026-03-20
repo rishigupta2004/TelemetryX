@@ -1,0 +1,294 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "emilia_romagna_v1",
+  "_layer": "corners",
+  "_label": "Imola",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "",
+        "circuit": "emilia_romagna_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "Tamburello",
+        "circuit": "emilia_romagna_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "",
+        "circuit": "emilia_romagna_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "",
+        "circuit": "emilia_romagna_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "",
+        "circuit": "emilia_romagna_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "",
+        "circuit": "emilia_romagna_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "Acque Minerali",
+        "circuit": "emilia_romagna_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "",
+        "circuit": "emilia_romagna_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "",
+        "circuit": "emilia_romagna_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "",
+        "circuit": "emilia_romagna_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "corner_number": 11,
+        "name": "",
+        "circuit": "emilia_romagna_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "properties": {
+        "corner_number": 12,
+        "name": "",
+        "circuit": "emilia_romagna_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "properties": {
+        "corner_number": 13,
+        "name": "",
+        "circuit": "emilia_romagna_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "properties": {
+        "corner_number": 14,
+        "name": "Variante Alta",
+        "circuit": "emilia_romagna_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 15,
+      "properties": {
+        "corner_number": 15,
+        "name": "",
+        "circuit": "emilia_romagna_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 16,
+      "properties": {
+        "corner_number": 16,
+        "name": "",
+        "circuit": "emilia_romagna_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 17,
+      "properties": {
+        "corner_number": 17,
+        "name": "Rivazza",
+        "circuit": "emilia_romagna_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 18,
+      "properties": {
+        "corner_number": 18,
+        "name": "",
+        "circuit": "emilia_romagna_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 19,
+      "properties": {
+        "corner_number": 19,
+        "name": "",
+        "circuit": "emilia_romagna_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "IMOLA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.716018378877308, 44.344206182284552 ] } },
+{ "type": "Feature", "properties": { "corner_number": 2, "name": null, "circuit": "IMOLA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.708120555011481, 44.344038143478897 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "IMOLA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.707903093027692, 44.343543911697559 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "IMOLA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.70636108986991, 44.34290141038182 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "IMOLA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.704354508837667, 44.339323172284914 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "IMOLA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.704591740092711, 44.338562055341647 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "IMOLA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.702100811914754, 44.336753167021932 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "IMOLA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.707132091448802, 44.336852013378206 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "IMOLA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.709563711812999, 44.336624666758787 ] } },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": "IMOLA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.710542290740053, 44.338008515746537 ] } },
+{ "type": "Feature", "properties": { "corner_number": 11, "name": null, "circuit": "IMOLA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.710038174323087, 44.34003486605004 ] } },
+{ "type": "Feature", "properties": { "corner_number": 12, "name": null, "circuit": "IMOLA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.710809175901977, 44.340894829349573 ] } },
+{ "type": "Feature", "properties": { "corner_number": 13, "name": null, "circuit": "IMOLA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.711560408209616, 44.340736675179549 ] } },
+{ "type": "Feature", "properties": { "corner_number": 14, "name": null, "circuit": "IMOLA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.717115573431887, 44.340716905908288 ] } },
+{ "type": "Feature", "properties": { "corner_number": 15, "name": null, "circuit": "IMOLA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.717352804686929, 44.340479674653245 ] } },
+{ "type": "Feature", "properties": { "corner_number": 16, "name": null, "circuit": "IMOLA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.722828892824184, 44.343089218458715 ] } },
+{ "type": "Feature", "properties": { "corner_number": 17, "name": null, "circuit": "IMOLA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.72517155146774, 44.344018374207636 ] } },
+{ "type": "Feature", "properties": { "corner_number": 18, "name": null, "circuit": "IMOLA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.724469742338236, 44.345056260948454 ] } },
+{ "type": "Feature", "properties": { "corner_number": 19, "name": null, "circuit": "IMOLA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.720377503188734, 44.344048028114514 ] } }
+]
+}

@@ -1,0 +1,14 @@
+{
+"type": "FeatureCollection",
+"_circuit": "bahrain_v1",
+"_layer": "pit",
+"_label": "Bahrain International Circuit",
+"_note": "pit_entry and pit_exit are Points at where cars enter\/leave pit lane. pit_lane is a LineString along pit road centreline.",
+"name": "pit",
+"features": [
+{ "type": "Feature", "id": "pit_entry", "properties": { "type": "pit_entry", "circuit": "bahrain_v1", "notes": "Point where cars leave main track into pit lane" }, "geometry": null },
+{ "type": "Feature", "id": "pit_exit", "properties": { "type": "pit_exit", "circuit": "bahrain_v1", "notes": "Point where cars rejoin main track from pit lane" }, "geometry": null },
+{ "type": "Feature", "id": "pit_lane", "properties": { "type": "pit_lane", "circuit": "bahrain_v1", "notes": "LineString — trace full pit lane centreline" }, "geometry": { "type": "LineString", "coordinates": [ ] } },
+{ "type": "Feature", "properties": { "id": "1", "type": "PIT LANE", "circuit": "BAHRAIN", "notes": null }, "geometry": { "type": "LineString", "coordinates": [ [ 50.510312791493206, 26.028477061125798 ], [ 50.51045946322516, 26.029233663668123 ], [ 50.51052465066158, 26.030209917803326 ], [ 50.510709348398095, 26.034168545057792 ], [ 50.51067132239352, 26.035120352897028 ], [ 50.510649593248054, 26.035535241076463 ] ] } }
+]
+}

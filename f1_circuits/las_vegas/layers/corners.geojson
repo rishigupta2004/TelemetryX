@@ -1,0 +1,264 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "las_vegas_v1",
+  "_layer": "corners",
+  "_label": "Las Vegas Strip Circuit",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "",
+        "circuit": "las_vegas_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "",
+        "circuit": "las_vegas_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "",
+        "circuit": "las_vegas_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "",
+        "circuit": "las_vegas_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "",
+        "circuit": "las_vegas_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "",
+        "circuit": "las_vegas_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "",
+        "circuit": "las_vegas_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "",
+        "circuit": "las_vegas_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "",
+        "circuit": "las_vegas_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "",
+        "circuit": "las_vegas_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "corner_number": 11,
+        "name": "",
+        "circuit": "las_vegas_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "properties": {
+        "corner_number": 12,
+        "name": "",
+        "circuit": "las_vegas_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "properties": {
+        "corner_number": 13,
+        "name": "",
+        "circuit": "las_vegas_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "properties": {
+        "corner_number": 14,
+        "name": "",
+        "circuit": "las_vegas_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 15,
+      "properties": {
+        "corner_number": 15,
+        "name": "",
+        "circuit": "las_vegas_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 16,
+      "properties": {
+        "corner_number": 16,
+        "name": "",
+        "circuit": "las_vegas_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 17,
+      "properties": {
+        "corner_number": 17,
+        "name": "",
+        "circuit": "las_vegas_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "LAS VEGAS", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -115.160325277647416, 36.110793056623677 ] } },
+{ "type": "Feature", "properties": { "corner_number": 2, "name": null, "circuit": "LAS VEGAS", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -115.161256921205819, 36.111149856284342 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "LAS VEGAS", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -115.162921986288907, 36.11043625696302 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "LAS VEGAS", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -115.163923007559106, 36.111159767386027 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "LAS VEGAS", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -115.163982474169231, 36.119207581954335 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "LAS VEGAS", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -115.161147899087297, 36.119187759750965 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "LAS VEGAS", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -115.160097322308673, 36.120783447122264 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "LAS VEGAS", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -115.160682077308095, 36.121001491359337 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "LAS VEGAS", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -115.160394655359227, 36.122240379069972 ] } },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": "LAS VEGAS", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -115.165607894845579, 36.12272602305255 ] } },
+{ "type": "Feature", "properties": { "corner_number": 11, "name": null, "circuit": "LAS VEGAS", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -115.167263048826982, 36.124975843135068 ] } },
+{ "type": "Feature", "properties": { "corner_number": 12, "name": null, "circuit": "LAS VEGAS", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -115.1693840245876, 36.125550687032799 ] } },
+{ "type": "Feature", "properties": { "corner_number": 13, "name": null, "circuit": "LAS VEGAS", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -115.172922287889193, 36.118345316107728 ] } },
+{ "type": "Feature", "properties": { "corner_number": 14, "name": null, "circuit": "LAS VEGAS", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -115.173189887634692, 36.108751369676561 ] } },
+{ "type": "Feature", "properties": { "corner_number": 16, "name": null, "circuit": "LAS VEGAS", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -115.171841977805514, 36.10795848154175 ] } },
+{ "type": "Feature", "properties": { "corner_number": 15, "name": null, "circuit": "LAS VEGAS", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -115.172506021618418, 36.108394570015896 ] } },
+{ "type": "Feature", "properties": { "corner_number": 17, "name": null, "circuit": "LAS VEGAS", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -115.163853629847324, 36.10795848154175 ] } }
+]
+}

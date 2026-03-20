@@ -1,0 +1,16 @@
+{
+"type": "FeatureCollection",
+"_circuit": "hungary_v1",
+"_layer": "sectors",
+"_label": "Hungaroring",
+"_note": "S1=end of sector 1. S2=end of sector 2. T=speed trap. S3 ends at start\/finish — no point needed.",
+"name": "sectors",
+"features": [
+{ "type": "Feature", "id": "S1", "properties": { "sector": "S1", "ref": "85m before T4", "circuit": "hungary_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "S2", "properties": { "sector": "S2", "ref": "100m after T11", "circuit": "hungary_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "T", "properties": { "sector": "T", "ref": "310m before T1", "circuit": "hungary_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "properties": { "id": null, "sector": "SPEED TRAP", "ref": null, "circuit": "HUNGAROING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 19.243282004595745, 47.581600489680845 ] } },
+{ "type": "Feature", "properties": { "id": "1", "sector": "SECTOR 1", "ref": null, "circuit": "HUNGAROING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 19.24996831925532, 47.585702076531909 ] } },
+{ "type": "Feature", "properties": { "id": "2", "sector": "SECTOR 2", "ref": null, "circuit": "HUNGAROING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 19.255841597468088, 47.580678239382969 ] } }
+]
+}

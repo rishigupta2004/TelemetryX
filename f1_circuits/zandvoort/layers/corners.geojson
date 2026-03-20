@@ -1,0 +1,219 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "dutch_v1",
+  "_layer": "corners",
+  "_label": "Circuit Zandvoort",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "Tarzanbocht",
+        "circuit": "dutch_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "",
+        "circuit": "dutch_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "Gerlachbocht",
+        "circuit": "dutch_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "",
+        "circuit": "dutch_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "",
+        "circuit": "dutch_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "",
+        "circuit": "dutch_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "",
+        "circuit": "dutch_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "",
+        "circuit": "dutch_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "",
+        "circuit": "dutch_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "Hugenholtz",
+        "circuit": "dutch_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "corner_number": 11,
+        "name": "",
+        "circuit": "dutch_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "properties": {
+        "corner_number": 12,
+        "name": "",
+        "circuit": "dutch_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "properties": {
+        "corner_number": 13,
+        "name": "",
+        "circuit": "dutch_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "properties": {
+        "corner_number": 14,
+        "name": "Arie Luyendyk",
+        "circuit": "dutch_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "ZANDVOORT", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 4.543362009302788, 52.391829782529875 ] } },
+{ "type": "Feature", "properties": { "corner_number": 2, "name": null, "circuit": "ZANDVOORT", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 4.542832388326692, 52.389171684800793 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "ZANDVOORT", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 4.541263511095617, 52.388382249760951 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "ZANDVOORT", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 4.543821680338645, 52.388472185398406 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "ZANDVOORT", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 4.546809542071713, 52.388272328426289 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "ZANDVOORT", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 4.549087911553785, 52.388901877888443 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "ZANDVOORT", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 4.553005108207171, 52.38821237133466 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "ZANDVOORT", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 4.551126452669322, 52.385784109123506 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "ZANDVOORT", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 4.548228526573705, 52.386543565617529 ] } },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": "ZANDVOORT", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 4.551146438366533, 52.387622793266928 ] } },
+{ "type": "Feature", "properties": { "corner_number": 11, "name": null, "circuit": "ZANDVOORT", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 4.543232102270916, 52.387083179442229 ] } },
+{ "type": "Feature", "properties": { "corner_number": 12, "name": null, "circuit": "ZANDVOORT", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 4.542212831713146, 52.387412943446215 ] } },
+{ "type": "Feature", "properties": { "corner_number": 13, "name": null, "circuit": "ZANDVOORT", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 4.542462652928286, 52.384654917231074 ] } },
+{ "type": "Feature", "properties": { "corner_number": 14, "name": null, "circuit": "ZANDVOORT", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 4.538695349003984, 52.385474330816727 ] } }
+]
+}

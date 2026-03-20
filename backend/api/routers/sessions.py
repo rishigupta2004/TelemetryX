@@ -242,11 +242,15 @@ def _session_telemetry_bounds(silver_path: str) -> Optional[Tuple[float, float]]
     try:
         row = conn.execute(
             """
-            SELECT
-                MIN(CAST(session_time_seconds AS DOUBLE)),
-                MAX(CAST(session_time_seconds AS DOUBLE))
+            SELECT MIN(
+                CAST(session_time_seconds AS DOUBLE) -
+                CAST(lap_time_seconds AS DOUBLE)
+            )
             FROM read_parquet(?)
             WHERE session_time_seconds IS NOT NULL
+              AND lap_time_seconds IS NOT NULL
+              AND CAST(lap_time_seconds AS DOUBLE) > 40
+              AND CAST(lap_number AS INTEGER) = 1
             """,
             [telemetry_file],
         ).fetchone()
@@ -1042,17 +1046,26 @@ def load_telemetry(
             if os.path.exists(laps_file):
                 offset_row = conn.execute(
                     """
-                    SELECT MIN(CAST(session_time_seconds AS DOUBLE))
+                    SELECT MIN(
+                        CAST(session_time_seconds AS DOUBLE) - CAST(lap_time_seconds AS DOUBLE)
+                    )
                     FROM read_parquet(?)
                     WHERE session_time_seconds IS NOT NULL
+                      AND lap_time_seconds IS NOT NULL
+                      AND lap_time_seconds > 0
                       AND CAST(lap_number AS INTEGER) = 1
                     """,
                     [laps_file],
                 ).fetchone()
                 if offset_row and offset_row[0] is not None:
-                    race_time_offset = float(offset_row[0])
+                    race_time_offset = max(0.0, float(offset_row[0]))
+            # FIX: old threshold was >1000 which never fired because
+            # MIN(session_time_seconds WHERE lap=1) ≈ 90s (lap end time),
+            # not 1000s. New: shift if offset > 30s AND client window
+            # starts before the data begins.
             should_shift_to_race_time = (
-                race_time_offset > 1000.0 and float(t1_bound) <= 2000.0
+                race_time_offset > 30.0
+                and float(t1_bound) < race_time_offset + 60.0
             )
         except Exception:
             race_time_offset = 0.0

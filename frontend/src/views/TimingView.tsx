@@ -4,9 +4,12 @@ import { TrackMap } from '../components/TrackMap'
 import { WeatherPanel } from '../components/WeatherPanel'
 import TimingTower from '../components/TimingTower'
 import { useTimingData } from '../hooks/useTimingData'
+import { useSessionStore } from '../stores/sessionStore'
 
 export const TimingView = React.memo(function TimingView() {
   const timing = useTimingData()
+  const sessionData = useSessionStore((s) => s.sessionData)
+  const weather = sessionData?.weather?.at(-1)
 
   return (
     <div className="h-full w-full p-2">
@@ -16,9 +19,17 @@ export const TimingView = React.memo(function TimingView() {
           Timing + Track
         </div>
       </div>
-      <div className="grid h-[calc(100%-1.5rem)] min-h-0 grid-cols-[minmax(340px,36%)_minmax(0,1fr)] gap-2.5">
-        <div className="h-full min-h-0 min-w-0">
-          <TimingTower rows={timing.rows} status={timing.status} error={timing.error} />
+      <div className="grid h-[calc(100%-1.5rem)] min-h-0 grid-cols-[minmax(560px,43%)_minmax(0,1fr)] gap-2.5">
+        <div className="flex h-full min-h-0 min-w-0 flex-col overflow-hidden">
+          <div className="min-h-0 flex-1">
+            <TimingTower rows={timing.rows} status={timing.status} error={timing.error} />
+          </div>
+          <div className="flex gap-2 border-t border-border px-2 py-1 text-[10px] text-text-muted">
+            <span>AIR {typeof weather?.airTemp === 'number' ? weather.airTemp.toFixed(1) : '—'}°C</span>
+            <span>TRK {typeof weather?.trackTemp === 'number' ? weather.trackTemp.toFixed(1) : '—'}°C</span>
+            <span>HUM {typeof weather?.humidity === 'number' ? weather.humidity : '—'}%</span>
+            <span>WND {typeof weather?.windSpeed === 'number' ? weather.windSpeed.toFixed(1) : '—'}</span>
+          </div>
         </div>
 
         <div className="flex min-w-0 flex-1 min-h-0 flex-col">

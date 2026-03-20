@@ -113,7 +113,7 @@ const buildIndex = (drivers: Driver[], allLaps: LapRow[]) => {
       if (isValidLap(lap)) validCnt++
       if (i > 0) {
         if ((lap as any).isPitOutLap) { pitCnt++; lastPitLap = lap.lapNumber ?? 0 }
-        else { const pc = normCompound(laps[i - 1]. tyreCompound), cc = normCompound(lap. tyreCompound); if (pc !== '—' && cc !== '—' && pc !== cc) { pitCnt++; lastPitLap = lap.lapNumber ?? 0 } }
+        else { const pc = normCompound(laps[i - 1].tyreCompound), cc = normCompound(lap.tyreCompound); if (pc !== '—' && cc !== '—' && pc !== cc) { pitCnt++; lastPitLap = lap.lapNumber ?? 0 } }
       }
       if ((lap.lapTime ?? 0) > 0 && isValidLap(lap)) bestLap = bestLap == null ? lap.lapTime as number : Math.min(bestLap, lap.lapTime as number)
       elapsed += lapDur(lap)
@@ -286,31 +286,39 @@ export const useTimingData = (): UseTimingDataResult => {
         rows[i].position = i + 1
       }
 
-      // During bootstrap (`/viz` latest-only laps), gap math is unreliable.
-      const isBootstrapTiming =
-        index.driverBundles.length > 0 &&
-        index.driverBundles.every((bundle) => bundle.laps.length <= 1) &&
-        roundedSessionTime < Math.max(0, (index.allLapsByEnd[0]?.lapStartSeconds ?? 0) - 1)
+      // ─── GAP / INTERVAL COMPUTATION ───────────────────────────────────────────
+      // FIX: "Bootstrap" means the leader has not yet completed any laps.
+      // Old code used a session-time heuristic that almost never fired.
+      // New: simply check leader.lapsCompleted.
+      const leader = rows[0]
+      const canComputeGaps = leader != null && leader.lapsCompleted > 0
 
-      for (let i = 0; i < rows.length; i++) {
+      for (let i = 0; i < rows.length; i += 1) {
         const row = rows[i]
         const ahead = rows[i - 1]
-        const leader = rows[0]
-        if (!leader) continue
+
         if (i === 0) {
           rows[i].gap = 'LEADER'
           rows[i].interval = '—'
           continue
         }
-        if (isBootstrapTiming) {
+
+        if (!canComputeGaps) {
+          // Not enough data yet — show dashes rather than fabricated numbers
           rows[i].gap = '—'
           rows[i].interval = '—'
           continue
         }
+
         if (row.status !== 'racing' || leader.status !== 'racing') continue
 
+        // FIX: original code used Math.max(0, lapsCompleted - 1) which when
+        // lapsCompleted=0 gives index 0, reading the FIRST lap's elapsed time
+        // instead of zero → all gaps wrong from lap 0.
+        // Now we return null explicitly for lapsCompleted=0.
         const raceTimeFor = (candidate: TimingRow): number | null => {
-          const cum = index.elapsedByDriverNumber.get(candidate.driverNumber)?.[Math.max(0, candidate.lapsCompleted - 1)] ?? 0
+          if (candidate.lapsCompleted <= 0) return null
+          const cum = index.elapsedByDriverNumber.get(candidate.driverNumber)?.[candidate.lapsCompleted - 1] ?? 0
           const inLap = candidate.lapProgress * Math.max(1, candidate.lapTimeRef)
           const total = cum + inLap
           return Number.isFinite(total) ? total : null
@@ -333,9 +341,9 @@ export const useTimingData = (): UseTimingDataResult => {
           }
         }
       }
+      // ──────────────────────────────────────────────────────────────────────────
 
       // Replay fallback: use the most recently completed lap's sector durations
-      // when live/in-lap sector streaming has not populated S1/S2/S3 yet.
       for (const row of rows) {
         const driverLaps = index.lapsByDriverNumber.get(row.driverNumber) ?? []
         if (!driverLaps.length) continue

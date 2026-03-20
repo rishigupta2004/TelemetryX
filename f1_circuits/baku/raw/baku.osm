@@ -1,0 +1,1573 @@
+<?xml version="1.0" encoding="UTF-8"?><osm version="0.6" generator="Overpass API 0.7.62.10 2d4cfc48">
+<note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>
+<meta osm_base="2026-02-19T14:55:45Z"/>
+
+  <node id="276370536" lat="40.3672033" lon="49.8385545"/>
+  <node id="276370538" lat="40.3693300" lon="49.8429139"/>
+  <node id="276370540" lat="40.3711852" lon="49.8486029"/>
+  <node id="276371182" lat="40.3704894" lon="49.8432510"/>
+  <node id="276371597" lat="40.3753742" lon="49.8540339"/>
+  <node id="276371601" lat="40.3711229" lon="49.8451477"/>
+  <node id="276371827" lat="40.3702180" lon="49.8456502"/>
+  <node id="276371995" lat="40.3722258" lon="49.8445259">
+    <tag k="highway" v="traffic_signals"/>
+  </node>
+  <node id="276371996" lat="40.3730594" lon="49.8441084"/>
+  <node id="276374004" lat="40.3750116" lon="49.8497366"/>
+  <node id="276842653" lat="40.3744093" lon="49.8546391"/>
+  <node id="276846861" lat="40.3761661" lon="49.8535825">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="276846862" lat="40.3755970" lon="49.8516237"/>
+  <node id="276846863" lat="40.3740198" lon="49.8468677"/>
+  <node id="276847442" lat="40.3755552" lon="49.8514920"/>
+  <node id="276847443" lat="40.3756525" lon="49.8518010"/>
+  <node id="276848321" lat="40.3708293" lon="49.8475002"/>
+  <node id="276876530" lat="40.3681684" lon="49.8402124"/>
+  <node id="276876589" lat="40.3688523" lon="49.8366896"/>
+  <node id="276876590" lat="40.3687266" lon="49.8370603"/>
+  <node id="276880945" lat="40.3678889" lon="49.8316892"/>
+  <node id="276881215" lat="40.3665488" lon="49.8311006"/>
+  <node id="276881459" lat="40.3688909" lon="49.8339413"/>
+  <node id="276887830" lat="40.3671650" lon="49.8313437"/>
+  <node id="277334987" lat="40.3676905" lon="49.8315478"/>
+  <node id="277336019" lat="40.3682624" lon="49.8323905"/>
+  <node id="277336118" lat="40.3685626" lon="49.8330439"/>
+  <node id="1416166971" lat="40.3695421" lon="49.8417261"/>
+  <node id="1416166973" lat="40.3692490" lon="49.8418425"/>
+  <node id="1416166974" lat="40.3696427" lon="49.8417121"/>
+  <node id="1416166976" lat="40.3691043" lon="49.8417939"/>
+  <node id="1466042013" lat="40.3687345" lon="49.8371798"/>
+  <node id="1466042015" lat="40.3688468" lon="49.8364187"/>
+  <node id="1467420792" lat="40.3652591" lon="49.8309703"/>
+  <node id="1770473714" lat="40.3687515" lon="49.8372584"/>
+  <node id="1770473722" lat="40.3687237" lon="49.8371176"/>
+  <node id="1770473731" lat="40.3688056" lon="49.8368501"/>
+  <node id="1770473732" lat="40.3688328" lon="49.8367744"/>
+  <node id="1797880831" lat="40.3687248" lon="49.8411486"/>
+  <node id="2101927480" lat="40.3751491" lon="49.8501887"/>
+  <node id="2125106195" lat="40.3688656" lon="49.8361929"/>
+  <node id="2290884744" lat="40.3669800" lon="49.8382934">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="crossing:markings" v="yes"/>
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="2290884749" lat="40.3671154" lon="49.8384263"/>
+  <node id="2290884750" lat="40.3690778" lon="49.8417595"/>
+  <node id="2290884754" lat="40.3691692" lon="49.8418349"/>
+  <node id="2290884755" lat="40.3691346" lon="49.8418184"/>
+  <node id="2290884756" lat="40.3692132" lon="49.8418460"/>
+  <node id="2290884761" lat="40.3699691" lon="49.8421253"/>
+  <node id="2557102477" lat="40.3716680" lon="49.8500910"/>
+  <node id="2557155069" lat="40.3633150" lon="49.8354168"/>
+  <node id="2558476048" lat="40.3712272" lon="49.8487342"/>
+  <node id="2844641823" lat="40.3738985" lon="49.8549323"/>
+  <node id="2941447471" lat="40.3686959" lon="49.8413111"/>
+  <node id="2941447472" lat="40.3697134" lon="49.8417434"/>
+  <node id="2941447474" lat="40.3689768" lon="49.8418955"/>
+  <node id="2941447475" lat="40.3688299" lon="49.8415609"/>
+  <node id="2941455965" lat="40.3641212" lon="49.8359702"/>
+  <node id="2941455970" lat="40.3667173" lon="49.8383428"/>
+  <node id="2941455972" lat="40.3670979" lon="49.8386012"/>
+  <node id="2941455976" lat="40.3670517" lon="49.8385285"/>
+  <node id="2941457639" lat="40.3670750" lon="49.8383772"/>
+  <node id="2941464307" lat="40.3696813" lon="49.8417230"/>
+  <node id="2945156941" lat="40.3641702" lon="49.8360228"/>
+  <node id="2945156942" lat="40.3655061" lon="49.8379302"/>
+  <node id="3031367458" lat="40.3640753" lon="49.8359273"/>
+  <node id="3077754616" lat="40.3673716" lon="49.8390734">
+    <tag k="enforcement" v="maxspeed"/>
+    <tag k="highway" v="speed_camera"/>
+    <tag k="maxspeed" v="60"/>
+  </node>
+  <node id="3077754617" lat="40.3674542" lon="49.8389888">
+    <tag k="enforcement" v="maxspeed"/>
+    <tag k="highway" v="speed_camera"/>
+    <tag k="maxspeed" v="60"/>
+  </node>
+  <node id="3383981132" lat="40.3741607" lon="49.8547871"/>
+  <node id="3454030819" lat="40.3639098" lon="49.8311157"/>
+  <node id="3454030834" lat="40.3657592" lon="49.8309343"/>
+  <node id="3454030841" lat="40.3694258" lon="49.8357734"/>
+  <node id="3454030843" lat="40.3693974" lon="49.8358859"/>
+  <node id="3454030846" lat="40.3655990" lon="49.8380408"/>
+  <node id="3463121869" lat="40.3691720" lon="49.8347612"/>
+  <node id="3463121877" lat="40.3688730" lon="49.8363257"/>
+  <node id="3528416858" lat="40.3675418" lon="49.8393610">
+    <tag k="bench" v="yes"/>
+    <tag k="bin" v="yes"/>
+    <tag k="bus" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="lit" v="no"/>
+    <tag k="name" v="Kukla teatrı"/>
+    <tag k="name:en" v="Puppet Theatre"/>
+    <tag k="name:ru" v="Кукольный театр"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="3594182942" lat="40.3697456" lon="49.8417805"/>
+  <node id="3648243699" lat="40.3712074" lon="49.8486724"/>
+  <node id="3648244741" lat="40.3718508" lon="49.8506578"/>
+  <node id="3765773689" lat="40.3677881" lon="49.8316014"/>
+  <node id="3889262340" lat="40.3759653" lon="49.8528955"/>
+  <node id="4445139960" lat="40.3755461" lon="49.8539269">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="4462419092" lat="40.3754718" lon="49.8539725">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="crossing:island" v="no"/>
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="4462419096" lat="40.3752240" lon="49.8541224">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="crossing:island" v="no"/>
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="4475530713" lat="40.3731112" lon="49.8442609">
+    <tag k="button_operated" v="no"/>
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="crossing"/>
+    <tag k="traffic_signals:sound" v="no"/>
+    <tag k="traffic_signals:vibration" v="no"/>
+  </node>
+  <node id="4475530714" lat="40.3729955" lon="49.8441430">
+    <tag k="button_operated" v="no"/>
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="crossing"/>
+    <tag k="traffic_signals:sound" v="no"/>
+    <tag k="traffic_signals:vibration" v="no"/>
+  </node>
+  <node id="4475530719" lat="40.3712449" lon="49.8450789">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="4475530721" lat="40.3701255" lon="49.8453609">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="4489370565" lat="40.3739722" lon="49.8467214">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="4489370567" lat="40.3739938" lon="49.8467878">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="4489396194" lat="40.3718192" lon="49.8505682"/>
+  <node id="4702367245" lat="40.3659582" lon="49.8309220"/>
+  <node id="4702367250" lat="40.3635853" lon="49.8319415"/>
+  <node id="4702367253" lat="40.3631032" lon="49.8331686"/>
+  <node id="4702367255" lat="40.3661235" lon="49.8309367"/>
+  <node id="5079651134" lat="40.3723258" lon="49.8444737">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="5280753618" lat="40.3700090" lon="49.8422111"/>
+  <node id="5607438769" lat="40.3720939" lon="49.8514080"/>
+  <node id="5910313116" lat="40.3761382" lon="49.8534834">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="6225812433" lat="40.3749734" lon="49.8496235">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="6225812434" lat="40.3750372" lon="49.8498190">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="7065820506" lat="40.3689282" lon="49.8360709"/>
+  <node id="7190127942" lat="40.3705250" lon="49.8433490">
+    <tag k="button_operated" v="no"/>
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="crossing"/>
+    <tag k="traffic_signals:sound" v="no"/>
+    <tag k="traffic_signals:vibration" v="yes"/>
+  </node>
+  <node id="7384081390" lat="40.3756973" lon="49.8538434"/>
+  <node id="7567583178" lat="40.3656539" lon="49.8380801"/>
+  <node id="7567583179" lat="40.3657356" lon="49.8381150"/>
+  <node id="7567593314" lat="40.3688526" lon="49.8365553"/>
+  <node id="7678658470" lat="40.3626424" lon="49.8344798"/>
+  <node id="7678658471" lat="40.3626022" lon="49.8346359"/>
+  <node id="7678658472" lat="40.3626064" lon="49.8348009"/>
+  <node id="7678658473" lat="40.3627061" lon="49.8350438"/>
+  <node id="7678658474" lat="40.3627909" lon="49.8351317"/>
+  <node id="7678658479" lat="40.3626523" lon="49.8349526"/>
+  <node id="9630529519" lat="40.3662844" lon="49.8309939"/>
+  <node id="9630529549" lat="40.3691276" lon="49.8346129">
+    <tag k="button_operated" v="no"/>
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="crossing"/>
+    <tag k="traffic_signals:sound" v="no"/>
+    <tag k="traffic_signals:vibration" v="no"/>
+  </node>
+  <node id="9652645369" lat="40.3639347" lon="49.8310876"/>
+  <node id="9652645370" lat="40.3639188" lon="49.8311030"/>
+  <node id="9652645373" lat="40.3639265" lon="49.8310943"/>
+  <node id="9652645374" lat="40.3644489" lon="49.8310425"/>
+  <node id="9652645376" lat="40.3639462" lon="49.8310819"/>
+  <node id="9652645377" lat="40.3639648" lon="49.8310775"/>
+  <node id="9652645397" lat="40.3639914" lon="49.8310762"/>
+  <node id="9652645413" lat="40.3626200" lon="49.8348588"/>
+  <node id="9652645414" lat="40.3626016" lon="49.8347273"/>
+  <node id="9652645415" lat="40.3626149" lon="49.8345651"/>
+  <node id="9652651820" lat="40.3638950" lon="49.8311531"/>
+  <node id="9652651824" lat="40.3661771" lon="49.8309535"/>
+  <node id="9652651825" lat="40.3660381" lon="49.8309240"/>
+  <node id="9652651826" lat="40.3662292" lon="49.8309723"/>
+  <node id="9811381248" lat="40.3737941" lon="49.8550024"/>
+  <node id="9812789080" lat="40.3709294" lon="49.8445875"/>
+  <node id="9812789082" lat="40.3707378" lon="49.8440058"/>
+  <node id="9812789084" lat="40.3708947" lon="49.8444834"/>
+  <node id="9812799749" lat="40.3689114" lon="49.8417306"/>
+  <node id="9812799762" lat="40.3695704" lon="49.8417158"/>
+  <node id="9812799763" lat="40.3696134" lon="49.8417091"/>
+  <node id="9812858715" lat="40.3671631" lon="49.8384878"/>
+  <node id="9812867722" lat="40.3670150" lon="49.8383183"/>
+  <node id="9812867727" lat="40.3669986" lon="49.8384650"/>
+  <node id="9812867729" lat="40.3671006" lon="49.8380909"/>
+  <node id="9813017960" lat="40.3629264" lon="49.8352054"/>
+  <node id="9813148803" lat="40.3697865" lon="49.8418345"/>
+  <node id="9813148804" lat="40.3698320" lon="49.8419016"/>
+  <node id="9813148805" lat="40.3698938" lon="49.8419955"/>
+  <node id="9823327612" lat="40.3686536" lon="49.8332933"/>
+  <node id="9823340878" lat="40.3687328" lon="49.8373350"/>
+  <node id="9823340879" lat="40.3686922" lon="49.8373731"/>
+  <node id="9823360097" lat="40.3658756" lon="49.8309253"/>
+  <node id="9823360108" lat="40.3680368" lon="49.8319016"/>
+  <node id="9823360111" lat="40.3679949" lon="49.8318279"/>
+  <node id="9823360112" lat="40.3679468" lon="49.8317555"/>
+  <node id="9823360115" lat="40.3678426" lon="49.8316408"/>
+  <node id="9823366017" lat="40.3677415" lon="49.8315717"/>
+  <node id="9823366030" lat="40.3688455" lon="49.8367283"/>
+  <node id="9823366032" lat="40.3687477" lon="49.8372983"/>
+  <node id="9823366033" lat="40.3687218" lon="49.8370883"/>
+  <node id="9823366034" lat="40.3687449" lon="49.8372188"/>
+  <node id="10259212076" lat="40.3721233" lon="49.8445837"/>
+  <node id="10593475597" lat="40.3673438" lon="49.8314116"/>
+  <node id="10869386370" lat="40.3735399" lon="49.8551282"/>
+  <node id="10869386371" lat="40.3734867" lon="49.8551524"/>
+  <node id="10869386372" lat="40.3734326" lon="49.8551711"/>
+  <node id="10869386373" lat="40.3733815" lon="49.8551752"/>
+  <node id="10869386374" lat="40.3733437" lon="49.8551658"/>
+  <node id="10869386375" lat="40.3733112" lon="49.8551386"/>
+  <node id="11309681420" lat="40.3706977" lon="49.8438871"/>
+  <node id="11729823831" lat="40.3755792" lon="49.8515706">
+    <tag k="crossing:markings" v="yes"/>
+    <tag k="crossing:signals" v="no"/>
+    <tag k="highway" v="crossing"/>
+    <tag k="kerb" v="lowered"/>
+  </node>
+  <node id="12215592953" lat="40.3692007" lon="49.8348707">
+    <tag k="crossing:signals" v="yes"/>
+    <tag k="highway" v="crossing"/>
+    <tag k="kerb" v="raised"/>
+  </node>
+  <node id="12216054794" lat="40.3753526" lon="49.8540464"/>
+  <node id="12216060845" lat="40.3743876" lon="49.8546521"/>
+  <node id="12223155259" lat="40.3761036" lon="49.8536173">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="12224096820" lat="40.3740687" lon="49.8470069">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="12348830215" lat="40.3722949" lon="49.8444910">
+    <tag k="crossing" v="uncontrolled"/>
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="12367590228" lat="40.3755748" lon="49.8515529">
+    <tag k="crossing" v="uncontrolled"/>
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="12498057092" lat="40.3669478" lon="49.8384265">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="crossing:markings" v="yes"/>
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="12498057096" lat="40.3669193" lon="49.8384132">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="12695993101" lat="40.3673493" lon="49.8388073">
+    <tag k="bench" v="yes"/>
+    <tag k="bin" v="yes"/>
+    <tag k="bus" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="lit" v="yes"/>
+    <tag k="name" v="Kukla teatrı"/>
+    <tag k="name:en" v="Puppet Theatre"/>
+    <tag k="name:ru" v="Кукольный театр"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="12988634893" lat="40.3717988" lon="49.8505044"/>
+  <node id="12990498600" lat="40.3694115" lon="49.8358456"/>
+  <node id="12990514004" lat="40.3688977" lon="49.8360994"/>
+  <node id="12990514015" lat="40.3688444" lon="49.8363814"/>
+  <node id="12990514017" lat="40.3688782" lon="49.8361342"/>
+  <node id="12990591268" lat="40.3668776" lon="49.8383955"/>
+  <node id="12990591269" lat="40.3667997" lon="49.8383683"/>
+  <node id="13001072175" lat="40.3701955" lon="49.8455768">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13003842717" lat="40.3679101" lon="49.8317105">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="13015056843" lat="40.3626456" lon="49.8349332"/>
+  <node id="13018099526" lat="40.3688442" lon="49.8363430"/>
+  <node id="13267034118" lat="40.3730994" lon="49.8442261">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="13267034136" lat="40.3691910" lon="49.8348349">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="13281495656" lat="40.3670320" lon="49.8381475"/>
+  <node id="13281509735" lat="40.3670679" lon="49.8381179"/>
+  <node id="13430602736" lat="40.3670137" lon="49.8381989"/>
+  <node id="13430602737" lat="40.3669869" lon="49.8382740"/>
+  <node id="13430602738" lat="40.3669942" lon="49.8382536"/>
+  <way id="25402777">
+    <bounds minlat="40.3744093" minlon="49.8540339" maxlat="40.3753742" maxlon="49.8546391"/>
+    <nd ref="276371597" lat="40.3753742" lon="49.8540339"/>
+    <nd ref="12216054794" lat="40.3753526" lon="49.8540464"/>
+    <nd ref="4462419096" lat="40.3752240" lon="49.8541224"/>
+    <nd ref="276842653" lat="40.3744093" lon="49.8546391"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lanes:backward" v="3"/>
+    <tag k="lanes:forward" v="2"/>
+    <tag k="lit" v="yes"/>
+    <tag k="name" v="Puşkin küçəsi"/>
+    <tag k="name:az" v="Puşkin küçəsi"/>
+    <tag k="name:az-cyr" v="Пушкин күчәси"/>
+    <tag k="name:en" v="Pushkin Street"/>
+    <tag k="name:ru" v="улица Пушкина"/>
+    <tag k="oneway" v="no"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="25406140">
+    <bounds minlat="40.3691720" minlon="49.8347612" maxlat="40.3694258" maxlon="49.8357734"/>
+    <nd ref="3463121869" lat="40.3691720" lon="49.8347612"/>
+    <nd ref="13267034136" lat="40.3691910" lon="49.8348349"/>
+    <nd ref="12215592953" lat="40.3692007" lon="49.8348707"/>
+    <nd ref="3454030841" lat="40.3694258" lon="49.8357734"/>
+    <tag k="cycleway:right" v="lane"/>
+    <tag k="highway" v="service"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="İstiqlaliyyət küçəsi"/>
+    <tag k="name:az" v="İstiqlaliyyət küçəsi"/>
+    <tag k="name:en" v="Istiglaliyyat Street"/>
+    <tag k="name:ru" v="улица Истиглалиййят"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="131835265">
+    <bounds minlat="40.3686959" minlon="49.8413111" maxlat="40.3702180" maxlon="49.8456502"/>
+    <nd ref="2941447471" lat="40.3686959" lon="49.8413111"/>
+    <nd ref="2941447475" lat="40.3688299" lon="49.8415609"/>
+    <nd ref="9812799749" lat="40.3689114" lon="49.8417306"/>
+    <nd ref="2941447474" lat="40.3689768" lon="49.8418955"/>
+    <nd ref="276370538" lat="40.3693300" lon="49.8429139"/>
+    <nd ref="4475530721" lat="40.3701255" lon="49.8453609"/>
+    <nd ref="13001072175" lat="40.3701955" lon="49.8455768"/>
+    <nd ref="276371827" lat="40.3702180" lon="49.8456502"/>
+    <tag k="highway" v="trunk"/>
+    <tag k="int_ref" v="E 60"/>
+    <tag k="lanes" v="4"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="Neftçilər prospekti"/>
+    <tag k="name:az" v="Neftçilər prospekti"/>
+    <tag k="name:az-cyr" v="Нефтчиләр проспекти"/>
+    <tag k="name:en" v="Neftchilar Avenue"/>
+    <tag k="name:ru" v="проспект Нефтяников"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="165695131">
+    <bounds minlat="40.3750372" minlon="49.8498190" maxlat="40.3761382" maxlon="49.8534834"/>
+    <nd ref="6225812434" lat="40.3750372" lon="49.8498190"/>
+    <nd ref="2101927480" lat="40.3751491" lon="49.8501887"/>
+    <nd ref="276847442" lat="40.3755552" lon="49.8514920"/>
+    <nd ref="12367590228" lat="40.3755748" lon="49.8515529"/>
+    <nd ref="11729823831" lat="40.3755792" lon="49.8515706"/>
+    <nd ref="276846862" lat="40.3755970" lon="49.8516237"/>
+    <nd ref="276847443" lat="40.3756525" lon="49.8518010"/>
+    <nd ref="3889262340" lat="40.3759653" lon="49.8528955"/>
+    <nd ref="5910313116" lat="40.3761382" lon="49.8534834"/>
+    <tag k="cycleway:both" v="shoulder"/>
+    <tag k="highway" v="residential"/>
+    <tag k="lanes" v="2"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="Xaqani küçəsi"/>
+    <tag k="name:az" v="Xaqani küçəsi"/>
+    <tag k="name:en" v="Khagani Street"/>
+    <tag k="name:ru" v="улица Хагани"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="wikidata" v="Q368862"/>
+    <tag k="wikipedia" v="en:Khaqani"/>
+  </way>
+  <way id="167173308">
+    <bounds minlat="40.3638950" minlon="49.8311157" maxlat="40.3639098" maxlon="49.8311531"/>
+    <nd ref="3454030819" lat="40.3639098" lon="49.8311157"/>
+    <nd ref="9652651820" lat="40.3638950" lon="49.8311531"/>
+    <tag k="highway" v="primary"/>
+    <tag k="int_ref" v="AH8"/>
+    <tag k="lit" v="yes"/>
+    <tag k="name" v="Niyazi küçəsi"/>
+    <tag k="name:en" v="Niyazi Street"/>
+    <tag k="name:ru" v="улица Ниязи"/>
+    <tag k="oneway" v="no"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="167173315">
+    <bounds minlat="40.3687248" minlon="49.8411486" maxlat="40.3690778" maxlon="49.8417595"/>
+    <nd ref="2290884750" lat="40.3690778" lon="49.8417595"/>
+    <nd ref="1797880831" lat="40.3687248" lon="49.8411486"/>
+    <tag k="highway" v="trunk"/>
+    <tag k="int_name" v="Neftchilar Prospect"/>
+    <tag k="int_ref" v="E 60"/>
+    <tag k="lanes" v="3"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="Neftçilər prospekti"/>
+    <tag k="name:az" v="Neftçilər prospekti"/>
+    <tag k="name:az-cyr" v="Нефтчиләр проспекти"/>
+    <tag k="name:en" v="Neftchilar Avenue"/>
+    <tag k="name:ru" v="проспект Нефтяников"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="177431273">
+    <bounds minlat="40.3711229" minlon="49.8445259" maxlat="40.3722258" maxlon="49.8451477"/>
+    <nd ref="276371995" lat="40.3722258" lon="49.8445259"/>
+    <nd ref="10259212076" lat="40.3721233" lon="49.8445837"/>
+    <nd ref="4475530719" lat="40.3712449" lon="49.8450789"/>
+    <nd ref="276371601" lat="40.3711229" lon="49.8451477"/>
+    <tag k="cycleway:left" v="lane"/>
+    <tag k="cycleway:left:oneway" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="3"/>
+    <tag k="lit" v="yes"/>
+    <tag k="name" v="Bülbül prospekti"/>
+    <tag k="name:az" v="Bülbül prospekti"/>
+    <tag k="name:en" v="Bulbul Avenue"/>
+    <tag k="name:ru" v="проспект Бюльбюля"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="oneway:bicycle" v="no"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="179238852">
+    <bounds minlat="40.3711852" minlon="49.8486029" maxlat="40.3720939" maxlon="49.8514080"/>
+    <nd ref="276370540" lat="40.3711852" lon="49.8486029"/>
+    <nd ref="3648243699" lat="40.3712074" lon="49.8486724"/>
+    <nd ref="2558476048" lat="40.3712272" lon="49.8487342"/>
+    <nd ref="2557102477" lat="40.3716680" lon="49.8500910"/>
+    <nd ref="12988634893" lat="40.3717988" lon="49.8505044"/>
+    <nd ref="4489396194" lat="40.3718192" lon="49.8505682"/>
+    <nd ref="3648244741" lat="40.3718508" lon="49.8506578"/>
+    <nd ref="5607438769" lat="40.3720939" lon="49.8514080"/>
+    <tag k="highway" v="trunk"/>
+    <tag k="int_ref" v="E 60"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="Neftçilər prospekti"/>
+    <tag k="name:az" v="Neftçilər prospekti"/>
+    <tag k="name:az-cyr" v="Нефтчиләр проспекти"/>
+    <tag k="name:en" v="Neftchilar Avenue"/>
+    <tag k="name:ru" v="проспект Нефтяников"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="182645384">
+    <bounds minlat="40.3722258" minlon="49.8444737" maxlat="40.3723258" maxlon="49.8445259"/>
+    <nd ref="5079651134" lat="40.3723258" lon="49.8444737"/>
+    <nd ref="12348830215" lat="40.3722949" lon="49.8444910"/>
+    <nd ref="276371995" lat="40.3722258" lon="49.8445259"/>
+    <tag k="cycleway:left" v="lane"/>
+    <tag k="cycleway:left:oneway" v="no"/>
+    <tag k="foot" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="3"/>
+    <tag k="name" v="Bülbül prospekti"/>
+    <tag k="name:az" v="Bülbül prospekti"/>
+    <tag k="name:en" v="Bulbul Avenue"/>
+    <tag k="name:ru" v="проспект Бюльбюля"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="oneway:bicycle" v="no"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="202546449">
+    <bounds minlat="40.3688656" minlon="49.8358859" maxlat="40.3693974" maxlon="49.8361929"/>
+    <nd ref="3454030843" lat="40.3693974" lon="49.8358859"/>
+    <nd ref="7065820506" lat="40.3689282" lon="49.8360709"/>
+    <nd ref="12990514004" lat="40.3688977" lon="49.8360994"/>
+    <nd ref="12990514017" lat="40.3688782" lon="49.8361342"/>
+    <nd ref="2125106195" lat="40.3688656" lon="49.8361929"/>
+    <tag k="cycleway:right" v="lane"/>
+    <tag k="highway" v="service"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="İstiqlaliyyət küçəsi"/>
+    <tag k="name:az" v="İstiqlaliyyət küçəsi"/>
+    <tag k="name:en" v="Istiglaliyyat Street"/>
+    <tag k="name:ru" v="улица Истиглалиййят"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="249018354">
+    <bounds minlat="40.3633150" minlon="49.8354168" maxlat="40.3686959" maxlon="49.8413111"/>
+    <nd ref="2557155069" lat="40.3633150" lon="49.8354168"/>
+    <nd ref="3031367458" lat="40.3640753" lon="49.8359273"/>
+    <nd ref="2941455965" lat="40.3641212" lon="49.8359702"/>
+    <nd ref="2945156941" lat="40.3641702" lon="49.8360228"/>
+    <nd ref="2945156942" lat="40.3655061" lon="49.8379302"/>
+    <nd ref="3454030846" lat="40.3655990" lon="49.8380408"/>
+    <nd ref="7567583178" lat="40.3656539" lon="49.8380801"/>
+    <nd ref="7567583179" lat="40.3657356" lon="49.8381150"/>
+    <nd ref="2941455970" lat="40.3667173" lon="49.8383428"/>
+    <nd ref="12990591269" lat="40.3667997" lon="49.8383683"/>
+    <nd ref="12990591268" lat="40.3668776" lon="49.8383955"/>
+    <nd ref="12498057096" lat="40.3669193" lon="49.8384132"/>
+    <nd ref="12498057092" lat="40.3669478" lon="49.8384265"/>
+    <nd ref="9812867727" lat="40.3669986" lon="49.8384650"/>
+    <nd ref="2941455976" lat="40.3670517" lon="49.8385285"/>
+    <nd ref="2941455972" lat="40.3670979" lon="49.8386012"/>
+    <nd ref="3077754616" lat="40.3673716" lon="49.8390734"/>
+    <nd ref="3528416858" lat="40.3675418" lon="49.8393610"/>
+    <nd ref="2941447471" lat="40.3686959" lon="49.8413111"/>
+    <tag k="highway" v="trunk"/>
+    <tag k="lanes" v="3"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="Neftçilər prospekti"/>
+    <tag k="name:az" v="Neftçilər prospekti"/>
+    <tag k="name:az-cyr" v="Нефтчиләр проспекти"/>
+    <tag k="name:en" v="Neftchilar Avenue"/>
+    <tag k="name:ru" v="проспект Нефтяников"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="parking:both" v="no"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="278666424">
+    <bounds minlat="40.3753742" minlon="49.8536173" maxlat="40.3761036" maxlon="49.8540339"/>
+    <nd ref="12223155259" lat="40.3761036" lon="49.8536173"/>
+    <nd ref="7384081390" lat="40.3756973" lon="49.8538434"/>
+    <nd ref="4445139960" lat="40.3755461" lon="49.8539269"/>
+    <nd ref="4462419092" lat="40.3754718" lon="49.8539725"/>
+    <nd ref="276371597" lat="40.3753742" lon="49.8540339"/>
+    <tag k="cycleway:both" v="shoulder"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Puşkin küçəsi"/>
+    <tag k="name:az" v="Puşkin küçəsi"/>
+    <tag k="name:az-cyr" v="Пушкин күчәси"/>
+    <tag k="name:en" v="Pushkin Street"/>
+    <tag k="name:ru" v="улица Пушкина"/>
+    <tag k="oneway" v="no"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="290633714">
+    <bounds minlat="40.3690778" minlon="49.8417091" maxlat="40.3699691" maxlon="49.8421253"/>
+    <nd ref="2290884761" lat="40.3699691" lon="49.8421253"/>
+    <nd ref="9813148805" lat="40.3698938" lon="49.8419955"/>
+    <nd ref="9813148804" lat="40.3698320" lon="49.8419016"/>
+    <nd ref="9813148803" lat="40.3697865" lon="49.8418345"/>
+    <nd ref="3594182942" lat="40.3697456" lon="49.8417805"/>
+    <nd ref="2941447472" lat="40.3697134" lon="49.8417434"/>
+    <nd ref="2941464307" lat="40.3696813" lon="49.8417230"/>
+    <nd ref="1416166974" lat="40.3696427" lon="49.8417121"/>
+    <nd ref="9812799763" lat="40.3696134" lon="49.8417091"/>
+    <nd ref="9812799762" lat="40.3695704" lon="49.8417158"/>
+    <nd ref="1416166971" lat="40.3695421" lon="49.8417261"/>
+    <nd ref="1416166973" lat="40.3692490" lon="49.8418425"/>
+    <nd ref="2290884756" lat="40.3692132" lon="49.8418460"/>
+    <nd ref="2290884754" lat="40.3691692" lon="49.8418349"/>
+    <nd ref="2290884755" lat="40.3691346" lon="49.8418184"/>
+    <nd ref="1416166976" lat="40.3691043" lon="49.8417939"/>
+    <nd ref="2290884750" lat="40.3690778" lon="49.8417595"/>
+    <tag k="highway" v="trunk"/>
+    <tag k="int_ref" v="E 60"/>
+    <tag k="lanes" v="4"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="Zərifə Əliyeva küçəsi"/>
+    <tag k="name:az" v="Zərifə Əliyeva küçəsi"/>
+    <tag k="name:en" v="Zarifa Aliyeva Street"/>
+    <tag k="name:ru" v="улица Зарифы Алиевой"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="323377758">
+    <bounds minlat="40.3702180" minlon="49.8456502" maxlat="40.3711852" maxlon="49.8486029"/>
+    <nd ref="276371827" lat="40.3702180" lon="49.8456502"/>
+    <nd ref="276848321" lat="40.3708293" lon="49.8475002"/>
+    <nd ref="276370540" lat="40.3711852" lon="49.8486029"/>
+    <tag k="highway" v="trunk"/>
+    <tag k="int_ref" v="E 60"/>
+    <tag k="lanes" v="4"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="Neftçilər prospekti"/>
+    <tag k="name:az" v="Neftçilər prospekti"/>
+    <tag k="name:az-cyr" v="Нефтчиләр проспекти"/>
+    <tag k="name:en" v="Neftchilar Avenue"/>
+    <tag k="name:ru" v="проспект Нефтяников"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left|left;through|through|through"/>
+  </way>
+  <way id="414510525">
+    <bounds minlat="40.3705250" minlon="49.8433490" maxlat="40.3711229" maxlon="49.8451477"/>
+    <nd ref="276371601" lat="40.3711229" lon="49.8451477"/>
+    <nd ref="9812789080" lat="40.3709294" lon="49.8445875"/>
+    <nd ref="9812789084" lat="40.3708947" lon="49.8444834"/>
+    <nd ref="9812789082" lat="40.3707378" lon="49.8440058"/>
+    <nd ref="11309681420" lat="40.3706977" lon="49.8438871"/>
+    <nd ref="7190127942" lat="40.3705250" lon="49.8433490"/>
+    <tag k="cycleway:both" v="shoulder"/>
+    <tag k="cycleway:left:oneway" v="-1"/>
+    <tag k="highway" v="trunk"/>
+    <tag k="int_ref" v="E 60"/>
+    <tag k="lanes" v="3"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="Zərifə Əliyeva küçəsi"/>
+    <tag k="name:az" v="Zərifə Əliyeva küçəsi"/>
+    <tag k="name:en" v="Zarifa Aliyeva Street"/>
+    <tag k="name:ru" v="улица Зарифы Алиевой"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="oneway:bicycle" v="no"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="476752809">
+    <bounds minlat="40.3671650" minlon="49.8313437" maxlat="40.3691720" maxlon="49.8347612"/>
+    <nd ref="276887830" lat="40.3671650" lon="49.8313437"/>
+    <nd ref="10593475597" lat="40.3673438" lon="49.8314116"/>
+    <nd ref="277334987" lat="40.3676905" lon="49.8315478"/>
+    <nd ref="9823366017" lat="40.3677415" lon="49.8315717"/>
+    <nd ref="3765773689" lat="40.3677881" lon="49.8316014"/>
+    <nd ref="9823360115" lat="40.3678426" lon="49.8316408"/>
+    <nd ref="276880945" lat="40.3678889" lon="49.8316892"/>
+    <nd ref="13003842717" lat="40.3679101" lon="49.8317105"/>
+    <nd ref="9823360112" lat="40.3679468" lon="49.8317555"/>
+    <nd ref="9823360111" lat="40.3679949" lon="49.8318279"/>
+    <nd ref="9823360108" lat="40.3680368" lon="49.8319016"/>
+    <nd ref="277336019" lat="40.3682624" lon="49.8323905"/>
+    <nd ref="277336118" lat="40.3685626" lon="49.8330439"/>
+    <nd ref="9823327612" lat="40.3686536" lon="49.8332933"/>
+    <nd ref="276881459" lat="40.3688909" lon="49.8339413"/>
+    <nd ref="9630529549" lat="40.3691276" lon="49.8346129"/>
+    <nd ref="3463121869" lat="40.3691720" lon="49.8347612"/>
+    <tag k="cycleway:right" v="track"/>
+    <tag k="highway" v="primary"/>
+    <tag k="int_ref" v="AH8"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="İstiqlaliyyət küçəsi"/>
+    <tag k="name:az" v="İstiqlaliyyət küçəsi"/>
+    <tag k="name:en" v="Istiglaliyyat Street"/>
+    <tag k="name:ru" v="улица Истиглалиййят"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="oneway:bicycle" v="no"/>
+    <tag k="parking:both" v="no"/>
+    <tag k="sidewalk:both" v="separate"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="wikidata" v="Q4472311"/>
+    <tag k="wikipedia" v="en:Istiglaliyyat Street"/>
+  </way>
+  <way id="476752810">
+    <bounds minlat="40.3639914" minlon="49.8309220" maxlat="40.3661235" maxlon="49.8310762"/>
+    <nd ref="4702367255" lat="40.3661235" lon="49.8309367"/>
+    <nd ref="9652651825" lat="40.3660381" lon="49.8309240"/>
+    <nd ref="4702367245" lat="40.3659582" lon="49.8309220"/>
+    <nd ref="9823360097" lat="40.3658756" lon="49.8309253"/>
+    <nd ref="3454030834" lat="40.3657592" lon="49.8309343"/>
+    <nd ref="1467420792" lat="40.3652591" lon="49.8309703"/>
+    <nd ref="9652645374" lat="40.3644489" lon="49.8310425"/>
+    <nd ref="9652645397" lat="40.3639914" lon="49.8310762"/>
+    <tag k="highway" v="primary"/>
+    <tag k="int_ref" v="AH8"/>
+    <tag k="lit" v="yes"/>
+    <tag k="name" v="İstiqlaliyyət küçəsi"/>
+    <tag k="name:az" v="İstiqlaliyyət küçəsi"/>
+    <tag k="name:en" v="Istiglaliyyat Street"/>
+    <tag k="name:ru" v="улица Истиглалиййят"/>
+    <tag k="oneway" v="no"/>
+    <tag k="parking:both" v="no"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="500527621">
+    <bounds minlat="40.3631032" minlon="49.8319415" maxlat="40.3635853" maxlon="49.8331686"/>
+    <nd ref="4702367250" lat="40.3635853" lon="49.8319415"/>
+    <nd ref="4702367253" lat="40.3631032" lon="49.8331686"/>
+    <tag k="highway" v="primary"/>
+    <tag k="int_ref" v="AH8"/>
+    <tag k="lanes" v="2"/>
+    <tag k="lit" v="yes"/>
+    <tag k="name" v="Niyazi küçəsi"/>
+    <tag k="name:en" v="Niyazi Street"/>
+    <tag k="name:ru" v="улица Ниязи"/>
+    <tag k="oneway" v="no"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="639403533">
+    <bounds minlat="40.3688656" minlon="49.8361929" maxlat="40.3688730" maxlon="49.8363257"/>
+    <nd ref="2125106195" lat="40.3688656" lon="49.8361929"/>
+    <nd ref="3463121877" lat="40.3688730" lon="49.8363257"/>
+    <tag k="cycleway:right" v="lane"/>
+    <tag k="highway" v="service"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="İstiqlaliyyət küçəsi"/>
+    <tag k="name:az" v="İstiqlaliyyət küçəsi"/>
+    <tag k="name:en" v="Istiglaliyyat Street"/>
+    <tag k="name:ru" v="улица Истиглалиййят"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="766787796">
+    <bounds minlat="40.3720939" minlon="49.8514080" maxlat="40.3733112" maxlon="49.8551386"/>
+    <nd ref="5607438769" lat="40.3720939" lon="49.8514080"/>
+    <nd ref="10869386375" lat="40.3733112" lon="49.8551386"/>
+    <tag k="highway" v="trunk"/>
+    <tag k="int_ref" v="E 60"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="Neftçilər prospekti"/>
+    <tag k="name:az" v="Neftçilər prospekti"/>
+    <tag k="name:az-cyr" v="Нефтчиләр проспекти"/>
+    <tag k="name:en" v="Neftchilar Avenue"/>
+    <tag k="name:ru" v="проспект Нефтяников"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="yes"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="822375070">
+    <bounds minlat="40.3626016" minlon="49.8331686" maxlat="40.3633150" maxlon="49.8354168"/>
+    <nd ref="4702367253" lat="40.3631032" lon="49.8331686"/>
+    <nd ref="7678658470" lat="40.3626424" lon="49.8344798"/>
+    <nd ref="9652645415" lat="40.3626149" lon="49.8345651"/>
+    <nd ref="7678658471" lat="40.3626022" lon="49.8346359"/>
+    <nd ref="9652645414" lat="40.3626016" lon="49.8347273"/>
+    <nd ref="7678658472" lat="40.3626064" lon="49.8348009"/>
+    <nd ref="9652645413" lat="40.3626200" lon="49.8348588"/>
+    <nd ref="13015056843" lat="40.3626456" lon="49.8349332"/>
+    <nd ref="7678658479" lat="40.3626523" lon="49.8349526"/>
+    <nd ref="7678658473" lat="40.3627061" lon="49.8350438"/>
+    <nd ref="7678658474" lat="40.3627909" lon="49.8351317"/>
+    <nd ref="9813017960" lat="40.3629264" lon="49.8352054"/>
+    <nd ref="2557155069" lat="40.3633150" lon="49.8354168"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="926192527">
+    <bounds minlat="40.3661235" minlon="49.8309367" maxlat="40.3665488" maxlon="49.8311006"/>
+    <nd ref="4702367255" lat="40.3661235" lon="49.8309367"/>
+    <nd ref="9652651824" lat="40.3661771" lon="49.8309535"/>
+    <nd ref="9652651826" lat="40.3662292" lon="49.8309723"/>
+    <nd ref="9630529519" lat="40.3662844" lon="49.8309939"/>
+    <nd ref="276881215" lat="40.3665488" lon="49.8311006"/>
+    <tag k="cycleway:right" v="track"/>
+    <tag k="highway" v="primary"/>
+    <tag k="int_ref" v="AH8"/>
+    <tag k="lanes" v="3"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="İstiqlaliyyət küçəsi"/>
+    <tag k="name:az" v="İstiqlaliyyət küçəsi"/>
+    <tag k="name:en" v="Istiglaliyyat Street"/>
+    <tag k="name:ru" v="улица Истиглалиййят"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="oneway:bicycle" v="no"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1050381554">
+    <bounds minlat="40.3639098" minlon="49.8310762" maxlat="40.3639914" maxlon="49.8311157"/>
+    <nd ref="9652645397" lat="40.3639914" lon="49.8310762"/>
+    <nd ref="9652645377" lat="40.3639648" lon="49.8310775"/>
+    <nd ref="9652645376" lat="40.3639462" lon="49.8310819"/>
+    <nd ref="9652645369" lat="40.3639347" lon="49.8310876"/>
+    <nd ref="9652645373" lat="40.3639265" lon="49.8310943"/>
+    <nd ref="9652645370" lat="40.3639188" lon="49.8311030"/>
+    <nd ref="3454030819" lat="40.3639098" lon="49.8311157"/>
+    <tag k="highway" v="primary"/>
+    <tag k="int_ref" v="AH8"/>
+    <tag k="lit" v="yes"/>
+    <tag k="name" v="İstiqlaliyyət küçəsi"/>
+    <tag k="oneway" v="no"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1050381555">
+    <bounds minlat="40.3635853" minlon="49.8311531" maxlat="40.3638950" maxlon="49.8319415"/>
+    <nd ref="9652651820" lat="40.3638950" lon="49.8311531"/>
+    <nd ref="4702367250" lat="40.3635853" lon="49.8319415"/>
+    <tag k="highway" v="primary"/>
+    <tag k="int_ref" v="AH8"/>
+    <tag k="lit" v="yes"/>
+    <tag k="name" v="Niyazi küçəsi"/>
+    <tag k="name:en" v="Niyazi Street"/>
+    <tag k="name:ru" v="улица Ниязи"/>
+    <tag k="oneway" v="no"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1069034735">
+    <bounds minlat="40.3671006" minlon="49.8363430" maxlat="40.3688526" maxlon="49.8380909"/>
+    <nd ref="13018099526" lat="40.3688442" lon="49.8363430"/>
+    <nd ref="12990514015" lat="40.3688444" lon="49.8363814"/>
+    <nd ref="1466042015" lat="40.3688468" lon="49.8364187"/>
+    <nd ref="7567593314" lat="40.3688526" lon="49.8365553"/>
+    <nd ref="276876589" lat="40.3688523" lon="49.8366896"/>
+    <nd ref="9823366030" lat="40.3688455" lon="49.8367283"/>
+    <nd ref="1770473732" lat="40.3688328" lon="49.8367744"/>
+    <nd ref="1770473731" lat="40.3688056" lon="49.8368501"/>
+    <nd ref="276876590" lat="40.3687266" lon="49.8370603"/>
+    <nd ref="9823366033" lat="40.3687218" lon="49.8370883"/>
+    <nd ref="1770473722" lat="40.3687237" lon="49.8371176"/>
+    <nd ref="1466042013" lat="40.3687345" lon="49.8371798"/>
+    <nd ref="9823366034" lat="40.3687449" lon="49.8372188"/>
+    <nd ref="1770473714" lat="40.3687515" lon="49.8372584"/>
+    <nd ref="9823366032" lat="40.3687477" lon="49.8372983"/>
+    <nd ref="9823340878" lat="40.3687328" lon="49.8373350"/>
+    <nd ref="9823340879" lat="40.3686922" lon="49.8373731"/>
+    <nd ref="9812867729" lat="40.3671006" lon="49.8380909"/>
+    <tag k="access" v="no"/>
+    <tag k="addr:street" v="Əziz Əliyev küç."/>
+    <tag k="bicycle" v="no"/>
+    <tag k="cycleway:right" v="lane"/>
+    <tag k="foot" v="yes"/>
+    <tag k="highway" v="pedestrian"/>
+    <tag k="horse" v="permissive"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="motor_vehicle" v="no"/>
+    <tag k="name" v="Əziz Əliyev küçəsi"/>
+    <tag k="name:az" v="Əziz Əliyev küçəsi"/>
+    <tag k="name:en" v="Aziz Aliyev Street"/>
+    <tag k="oneway" v="no"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="wikidata" v="Q4062274"/>
+    <tag k="wikipedia" v="en:Aziz Aliyev"/>
+  </way>
+  <way id="1167453170">
+    <bounds minlat="40.3671154" minlon="49.8384263" maxlat="40.3687248" maxlon="49.8411486"/>
+    <nd ref="1797880831" lat="40.3687248" lon="49.8411486"/>
+    <nd ref="276876530" lat="40.3681684" lon="49.8402124"/>
+    <nd ref="3077754617" lat="40.3674542" lon="49.8389888"/>
+    <nd ref="12695993101" lat="40.3673493" lon="49.8388073"/>
+    <nd ref="276370536" lat="40.3672033" lon="49.8385545"/>
+    <nd ref="9812858715" lat="40.3671631" lon="49.8384878"/>
+    <nd ref="2290884749" lat="40.3671154" lon="49.8384263"/>
+    <tag k="highway" v="trunk"/>
+    <tag k="int_name" v="Neftchilar Prospect"/>
+    <tag k="int_ref" v="E 60"/>
+    <tag k="lanes" v="3"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="Neftçilər prospekti"/>
+    <tag k="name:az" v="Neftçilər prospekti"/>
+    <tag k="name:az-cyr" v="Нефтчиләр проспекти"/>
+    <tag k="name:en" v="Neftchilar Avenue"/>
+    <tag k="name:ru" v="проспект Нефтяников"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="parking:both" v="no"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1168829202">
+    <bounds minlat="40.3741607" minlon="49.8546391" maxlat="40.3744093" maxlon="49.8547871"/>
+    <nd ref="276842653" lat="40.3744093" lon="49.8546391"/>
+    <nd ref="12216060845" lat="40.3743876" lon="49.8546521"/>
+    <nd ref="3383981132" lat="40.3741607" lon="49.8547871"/>
+    <tag k="cycleway:right" v="lane"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lit" v="yes"/>
+    <tag k="name" v="Puşkin küçəsi"/>
+    <tag k="name:az" v="Puşkin küçəsi"/>
+    <tag k="name:az-cyr" v="Пушкин күчәси"/>
+    <tag k="name:en" v="Pushkin Street"/>
+    <tag k="name:ru" v="улица Пушкина"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1168829203">
+    <bounds minlat="40.3733112" minlon="49.8550024" maxlat="40.3737941" maxlon="49.8551752"/>
+    <nd ref="10869386375" lat="40.3733112" lon="49.8551386"/>
+    <nd ref="10869386374" lat="40.3733437" lon="49.8551658"/>
+    <nd ref="10869386373" lat="40.3733815" lon="49.8551752"/>
+    <nd ref="10869386372" lat="40.3734326" lon="49.8551711"/>
+    <nd ref="10869386371" lat="40.3734867" lon="49.8551524"/>
+    <nd ref="10869386370" lat="40.3735399" lon="49.8551282"/>
+    <nd ref="9811381248" lat="40.3737941" lon="49.8550024"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="sport" v="motor"/>
+  </way>
+  <way id="1279858618">
+    <bounds minlat="40.3665488" minlon="49.8311006" maxlat="40.3671650" maxlon="49.8313437"/>
+    <nd ref="276881215" lat="40.3665488" lon="49.8311006"/>
+    <nd ref="276887830" lat="40.3671650" lon="49.8313437"/>
+    <tag k="cycleway:right" v="track"/>
+    <tag k="highway" v="primary"/>
+    <tag k="int_ref" v="AH8"/>
+    <tag k="lanes" v="3"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="İstiqlaliyyət küçəsi"/>
+    <tag k="name:az" v="İstiqlaliyyət küçəsi"/>
+    <tag k="name:en" v="Istiglaliyyat Street"/>
+    <tag k="name:ru" v="улица Истиглалиййят"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="oneway:bicycle" v="no"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1329392226">
+    <bounds minlat="40.3731112" minlon="49.8442609" maxlat="40.3739938" maxlon="49.8467878"/>
+    <nd ref="4475530713" lat="40.3731112" lon="49.8442609"/>
+    <nd ref="4489370565" lat="40.3739722" lon="49.8467214"/>
+    <nd ref="4489370567" lat="40.3739938" lon="49.8467878"/>
+    <tag k="cycleway:both" v="shoulder"/>
+    <tag k="highway" v="residential"/>
+    <tag k="lanes" v="2"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="Xaqani küçəsi"/>
+    <tag k="name:az" v="Xaqani küçəsi"/>
+    <tag k="name:en" v="Khagani Street"/>
+    <tag k="name:ru" v="улица Хагани"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="wikidata" v="Q368862"/>
+    <tag k="wikipedia" v="en:Khaqani"/>
+  </way>
+  <way id="1329392228">
+    <bounds minlat="40.3737941" minlon="49.8547871" maxlat="40.3741607" maxlon="49.8550024"/>
+    <nd ref="3383981132" lat="40.3741607" lon="49.8547871"/>
+    <nd ref="2844641823" lat="40.3738985" lon="49.8549323"/>
+    <nd ref="9811381248" lat="40.3737941" lon="49.8550024"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lit" v="yes"/>
+    <tag k="name" v="Puşkin küçəsi"/>
+    <tag k="name:az" v="Puşkin küçəsi"/>
+    <tag k="name:az-cyr" v="Пушкин күчәси"/>
+    <tag k="name:en" v="Pushkin Street"/>
+    <tag k="name:ru" v="улица Пушкина"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1413579322">
+    <bounds minlat="40.3693974" minlon="49.8357734" maxlat="40.3694258" maxlon="49.8358859"/>
+    <nd ref="3454030841" lat="40.3694258" lon="49.8357734"/>
+    <nd ref="12990498600" lat="40.3694115" lon="49.8358456"/>
+    <nd ref="3454030843" lat="40.3693974" lon="49.8358859"/>
+    <tag k="cycleway:right" v="lane"/>
+    <tag k="highway" v="service"/>
+    <tag k="name" v="İstiqlaliyyət küçəsi"/>
+    <tag k="name:az" v="İstiqlaliyyət küçəsi"/>
+    <tag k="name:en" v="Istiglaliyyat Street"/>
+    <tag k="name:ru" v="улица Истиглалиййят"/>
+    <tag k="oneway" v="yes"/>
+  </way>
+  <way id="1413965638">
+    <bounds minlat="40.3670150" minlon="49.8383183" maxlat="40.3671154" maxlon="49.8384263"/>
+    <nd ref="2290884749" lat="40.3671154" lon="49.8384263"/>
+    <nd ref="2941457639" lat="40.3670750" lon="49.8383772"/>
+    <nd ref="9812867722" lat="40.3670150" lon="49.8383183"/>
+    <tag k="highway" v="trunk"/>
+    <tag k="int_name" v="Neftchilar Prospect"/>
+    <tag k="int_ref" v="E 60"/>
+    <tag k="lanes" v="3"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="Neftçilər prospekti"/>
+    <tag k="name:az" v="Neftçilər prospekti"/>
+    <tag k="name:az-cyr" v="Нефтчиләр проспекти"/>
+    <tag k="name:en" v="Neftchilar Avenue"/>
+    <tag k="name:ru" v="проспект Нефтяников"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="parking:both" v="no"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1415063177">
+    <bounds minlat="40.3749734" minlon="49.8496235" maxlat="40.3750372" maxlon="49.8498190"/>
+    <nd ref="6225812433" lat="40.3749734" lon="49.8496235"/>
+    <nd ref="276374004" lat="40.3750116" lon="49.8497366"/>
+    <nd ref="6225812434" lat="40.3750372" lon="49.8498190"/>
+    <tag k="cycleway:both" v="shoulder"/>
+    <tag k="foot" v="no"/>
+    <tag k="highway" v="residential"/>
+    <tag k="lanes" v="2"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="Xaqani küçəsi"/>
+    <tag k="name:az" v="Xaqani küçəsi"/>
+    <tag k="name:en" v="Khagani Street"/>
+    <tag k="name:ru" v="улица Хагани"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="wikidata" v="Q368862"/>
+    <tag k="wikipedia" v="en:Khaqani"/>
+  </way>
+  <way id="1415063178">
+    <bounds minlat="40.3740198" minlon="49.8468677" maxlat="40.3740687" maxlon="49.8470069"/>
+    <nd ref="276846863" lat="40.3740198" lon="49.8468677"/>
+    <nd ref="12224096820" lat="40.3740687" lon="49.8470069"/>
+    <tag k="cycleway:both" v="shoulder"/>
+    <tag k="foot" v="no"/>
+    <tag k="highway" v="residential"/>
+    <tag k="lanes" v="2"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="Xaqani küçəsi"/>
+    <tag k="name:az" v="Xaqani küçəsi"/>
+    <tag k="name:en" v="Khagani Street"/>
+    <tag k="name:ru" v="улица Хагани"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="wikidata" v="Q368862"/>
+    <tag k="wikipedia" v="en:Khaqani"/>
+  </way>
+  <way id="1415063201">
+    <bounds minlat="40.3761382" minlon="49.8534834" maxlat="40.3761661" maxlon="49.8535825"/>
+    <nd ref="5910313116" lat="40.3761382" lon="49.8534834"/>
+    <nd ref="276846861" lat="40.3761661" lon="49.8535825"/>
+    <tag k="cycleway:both" v="shoulder"/>
+    <tag k="foot" v="no"/>
+    <tag k="highway" v="residential"/>
+    <tag k="lanes" v="2"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="Xaqani küçəsi"/>
+    <tag k="name:az" v="Xaqani küçəsi"/>
+    <tag k="name:en" v="Khagani Street"/>
+    <tag k="name:ru" v="улица Хагани"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="wikidata" v="Q368862"/>
+    <tag k="wikipedia" v="en:Khaqani"/>
+  </way>
+  <way id="1415063202">
+    <bounds minlat="40.3761036" minlon="49.8535825" maxlat="40.3761661" maxlon="49.8536173"/>
+    <nd ref="276846861" lat="40.3761661" lon="49.8535825"/>
+    <nd ref="12223155259" lat="40.3761036" lon="49.8536173"/>
+    <tag k="cycleway:both" v="shoulder"/>
+    <tag k="foot" v="no"/>
+    <tag k="highway" v="secondary"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Puşkin küçəsi"/>
+    <tag k="name:az" v="Puşkin küçəsi"/>
+    <tag k="name:az-cyr" v="Пушкин күчәси"/>
+    <tag k="name:en" v="Pushkin Street"/>
+    <tag k="name:ru" v="улица Пушкина"/>
+    <tag k="oneway" v="no"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1415075088">
+    <bounds minlat="40.3740687" minlon="49.8470069" maxlat="40.3749734" maxlon="49.8496235"/>
+    <nd ref="12224096820" lat="40.3740687" lon="49.8470069"/>
+    <nd ref="6225812433" lat="40.3749734" lon="49.8496235"/>
+    <tag k="cycleway:both" v="shoulder"/>
+    <tag k="highway" v="residential"/>
+    <tag k="lanes" v="2"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="Xaqani küçəsi"/>
+    <tag k="name:az" v="Xaqani küçəsi"/>
+    <tag k="name:en" v="Khagani Street"/>
+    <tag k="name:ru" v="улица Хагани"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="wikidata" v="Q368862"/>
+    <tag k="wikipedia" v="en:Khaqani"/>
+  </way>
+  <way id="1415075090">
+    <bounds minlat="40.3739938" minlon="49.8467878" maxlat="40.3740198" maxlon="49.8468677"/>
+    <nd ref="4489370567" lat="40.3739938" lon="49.8467878"/>
+    <nd ref="276846863" lat="40.3740198" lon="49.8468677"/>
+    <tag k="cycleway:both" v="shoulder"/>
+    <tag k="foot" v="no"/>
+    <tag k="highway" v="residential"/>
+    <tag k="lanes" v="2"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="Xaqani küçəsi"/>
+    <tag k="name:az" v="Xaqani küçəsi"/>
+    <tag k="name:en" v="Khagani Street"/>
+    <tag k="name:ru" v="улица Хагани"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="wikidata" v="Q368862"/>
+    <tag k="wikipedia" v="en:Khaqani"/>
+  </way>
+  <way id="1415085013">
+    <bounds minlat="40.3704894" minlon="49.8432510" maxlat="40.3705250" maxlon="49.8433490"/>
+    <nd ref="7190127942" lat="40.3705250" lon="49.8433490"/>
+    <nd ref="276371182" lat="40.3704894" lon="49.8432510"/>
+    <tag k="cycleway:both" v="shoulder"/>
+    <tag k="cycleway:left:oneway" v="-1"/>
+    <tag k="foot" v="no"/>
+    <tag k="highway" v="trunk"/>
+    <tag k="int_ref" v="E 60"/>
+    <tag k="lanes" v="3"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="Zərifə Əliyeva küçəsi"/>
+    <tag k="name:az" v="Zərifə Əliyeva küçəsi"/>
+    <tag k="name:en" v="Zarifa Aliyeva Street"/>
+    <tag k="name:ru" v="улица Зарифы Алиевой"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="oneway:bicycle" v="no"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1415085014">
+    <bounds minlat="40.3699691" minlon="49.8421253" maxlat="40.3704894" maxlon="49.8432510"/>
+    <nd ref="276371182" lat="40.3704894" lon="49.8432510"/>
+    <nd ref="5280753618" lat="40.3700090" lon="49.8422111"/>
+    <nd ref="2290884761" lat="40.3699691" lon="49.8421253"/>
+    <tag k="cycleway:both" v="shoulder"/>
+    <tag k="cycleway:left:oneway" v="-1"/>
+    <tag k="highway" v="trunk"/>
+    <tag k="int_ref" v="E 60"/>
+    <tag k="lanes" v="3"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="Zərifə Əliyeva küçəsi"/>
+    <tag k="name:az" v="Zərifə Əliyeva küçəsi"/>
+    <tag k="name:en" v="Zarifa Aliyeva Street"/>
+    <tag k="name:ru" v="улица Зарифы Алиевой"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="oneway:bicycle" v="no"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1415085016">
+    <bounds minlat="40.3723258" minlon="49.8441430" maxlat="40.3729955" maxlon="49.8444737"/>
+    <nd ref="4475530714" lat="40.3729955" lon="49.8441430"/>
+    <nd ref="5079651134" lat="40.3723258" lon="49.8444737"/>
+    <tag k="cycleway:left" v="lane"/>
+    <tag k="cycleway:left:oneway" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="3"/>
+    <tag k="name" v="Bülbül prospekti"/>
+    <tag k="name:az" v="Bülbül prospekti"/>
+    <tag k="name:en" v="Bulbul Avenue"/>
+    <tag k="name:ru" v="проспект Бюльбюля"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="oneway:bicycle" v="no"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1415085017">
+    <bounds minlat="40.3729955" minlon="49.8441084" maxlat="40.3730594" maxlon="49.8441430"/>
+    <nd ref="276371996" lat="40.3730594" lon="49.8441084"/>
+    <nd ref="4475530714" lat="40.3729955" lon="49.8441430"/>
+    <tag k="cycleway:left" v="lane"/>
+    <tag k="cycleway:left:oneway" v="no"/>
+    <tag k="foot" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="3"/>
+    <tag k="name" v="Bülbül prospekti"/>
+    <tag k="name:az" v="Bülbül prospekti"/>
+    <tag k="name:en" v="Bulbul Avenue"/>
+    <tag k="name:ru" v="проспект Бюльбюля"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="oneway:bicycle" v="no"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1415085020">
+    <bounds minlat="40.3730594" minlon="49.8441084" maxlat="40.3731112" maxlon="49.8442609"/>
+    <nd ref="276371996" lat="40.3730594" lon="49.8441084"/>
+    <nd ref="13267034118" lat="40.3730994" lon="49.8442261"/>
+    <nd ref="4475530713" lat="40.3731112" lon="49.8442609"/>
+    <tag k="cycleway:both" v="shoulder"/>
+    <tag k="foot" v="no"/>
+    <tag k="highway" v="residential"/>
+    <tag k="lanes" v="2"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="Xaqani küçəsi"/>
+    <tag k="name:az" v="Xaqani küçəsi"/>
+    <tag k="name:en" v="Khagani Street"/>
+    <tag k="name:ru" v="улица Хагани"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="wikidata" v="Q368862"/>
+    <tag k="wikipedia" v="en:Khaqani"/>
+  </way>
+  <way id="1464153930">
+    <bounds minlat="40.3669800" minlon="49.8382934" maxlat="40.3670150" maxlon="49.8383183"/>
+    <nd ref="9812867722" lat="40.3670150" lon="49.8383183"/>
+    <nd ref="2290884744" lat="40.3669800" lon="49.8382934"/>
+    <tag k="highway" v="trunk"/>
+    <tag k="int_name" v="Neftchilar Prospect"/>
+    <tag k="int_ref" v="E 60"/>
+    <tag k="lanes" v="3"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="Neftçilər prospekti"/>
+    <tag k="name:az" v="Neftçilər prospekti"/>
+    <tag k="name:az-cyr" v="Нефтчиләр проспекти"/>
+    <tag k="name:en" v="Neftchilar Avenue"/>
+    <tag k="name:ru" v="проспект Нефтяников"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="parking:both" v="no"/>
+    <tag k="sidewalk" v="both"/>
+    <tag k="sidewalk:both:surface" v="paving_stones"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1464153931">
+    <bounds minlat="40.3669800" minlon="49.8380909" maxlat="40.3671006" maxlon="49.8382934"/>
+    <nd ref="9812867729" lat="40.3671006" lon="49.8380909"/>
+    <nd ref="13281509735" lat="40.3670679" lon="49.8381179"/>
+    <nd ref="13281495656" lat="40.3670320" lon="49.8381475"/>
+    <nd ref="13430602736" lat="40.3670137" lon="49.8381989"/>
+    <nd ref="13430602738" lat="40.3669942" lon="49.8382536"/>
+    <nd ref="13430602737" lat="40.3669869" lon="49.8382740"/>
+    <nd ref="2290884744" lat="40.3669800" lon="49.8382934"/>
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="crossing:markings" v="yes"/>
+    <tag k="footway" v="crossing"/>
+    <tag k="highway" v="footway"/>
+  </way>
+  <relation id="11266687">
+    <bounds minlat="40.3626016" minlon="49.8309220" maxlat="40.3761661" maxlon="49.8551752"/>
+    <member type="way" ref="1069034735" role="">
+      <nd lat="40.3688442" lon="49.8363430"/>
+      <nd lat="40.3688444" lon="49.8363814"/>
+      <nd lat="40.3688468" lon="49.8364187"/>
+      <nd lat="40.3688526" lon="49.8365553"/>
+      <nd lat="40.3688523" lon="49.8366896"/>
+      <nd lat="40.3688455" lon="49.8367283"/>
+      <nd lat="40.3688328" lon="49.8367744"/>
+      <nd lat="40.3688056" lon="49.8368501"/>
+      <nd lat="40.3687266" lon="49.8370603"/>
+      <nd lat="40.3687218" lon="49.8370883"/>
+      <nd lat="40.3687237" lon="49.8371176"/>
+      <nd lat="40.3687345" lon="49.8371798"/>
+      <nd lat="40.3687449" lon="49.8372188"/>
+      <nd lat="40.3687515" lon="49.8372584"/>
+      <nd lat="40.3687477" lon="49.8372983"/>
+      <nd lat="40.3687328" lon="49.8373350"/>
+      <nd lat="40.3686922" lon="49.8373731"/>
+      <nd lat="40.3671006" lon="49.8380909"/>
+    </member>
+    <member type="way" ref="1464153931" role="">
+      <nd lat="40.3671006" lon="49.8380909"/>
+      <nd lat="40.3670679" lon="49.8381179"/>
+      <nd lat="40.3670320" lon="49.8381475"/>
+      <nd lat="40.3670137" lon="49.8381989"/>
+      <nd lat="40.3669942" lon="49.8382536"/>
+      <nd lat="40.3669869" lon="49.8382740"/>
+      <nd lat="40.3669800" lon="49.8382934"/>
+    </member>
+    <member type="way" ref="1464153930" role="">
+      <nd lat="40.3670150" lon="49.8383183"/>
+      <nd lat="40.3669800" lon="49.8382934"/>
+    </member>
+    <member type="way" ref="1413965638" role="">
+      <nd lat="40.3671154" lon="49.8384263"/>
+      <nd lat="40.3670750" lon="49.8383772"/>
+      <nd lat="40.3670150" lon="49.8383183"/>
+    </member>
+    <member type="way" ref="1167453170" role="">
+      <nd lat="40.3687248" lon="49.8411486"/>
+      <nd lat="40.3681684" lon="49.8402124"/>
+      <nd lat="40.3674542" lon="49.8389888"/>
+      <nd lat="40.3673493" lon="49.8388073"/>
+      <nd lat="40.3672033" lon="49.8385545"/>
+      <nd lat="40.3671631" lon="49.8384878"/>
+      <nd lat="40.3671154" lon="49.8384263"/>
+    </member>
+    <member type="way" ref="167173315" role="">
+      <nd lat="40.3690778" lon="49.8417595"/>
+      <nd lat="40.3687248" lon="49.8411486"/>
+    </member>
+    <member type="way" ref="290633714" role="">
+      <nd lat="40.3699691" lon="49.8421253"/>
+      <nd lat="40.3698938" lon="49.8419955"/>
+      <nd lat="40.3698320" lon="49.8419016"/>
+      <nd lat="40.3697865" lon="49.8418345"/>
+      <nd lat="40.3697456" lon="49.8417805"/>
+      <nd lat="40.3697134" lon="49.8417434"/>
+      <nd lat="40.3696813" lon="49.8417230"/>
+      <nd lat="40.3696427" lon="49.8417121"/>
+      <nd lat="40.3696134" lon="49.8417091"/>
+      <nd lat="40.3695704" lon="49.8417158"/>
+      <nd lat="40.3695421" lon="49.8417261"/>
+      <nd lat="40.3692490" lon="49.8418425"/>
+      <nd lat="40.3692132" lon="49.8418460"/>
+      <nd lat="40.3691692" lon="49.8418349"/>
+      <nd lat="40.3691346" lon="49.8418184"/>
+      <nd lat="40.3691043" lon="49.8417939"/>
+      <nd lat="40.3690778" lon="49.8417595"/>
+    </member>
+    <member type="way" ref="1415085014" role="">
+      <nd lat="40.3704894" lon="49.8432510"/>
+      <nd lat="40.3700090" lon="49.8422111"/>
+      <nd lat="40.3699691" lon="49.8421253"/>
+    </member>
+    <member type="way" ref="1415085013" role="">
+      <nd lat="40.3705250" lon="49.8433490"/>
+      <nd lat="40.3704894" lon="49.8432510"/>
+    </member>
+    <member type="way" ref="414510525" role="">
+      <nd lat="40.3711229" lon="49.8451477"/>
+      <nd lat="40.3709294" lon="49.8445875"/>
+      <nd lat="40.3708947" lon="49.8444834"/>
+      <nd lat="40.3707378" lon="49.8440058"/>
+      <nd lat="40.3706977" lon="49.8438871"/>
+      <nd lat="40.3705250" lon="49.8433490"/>
+    </member>
+    <member type="way" ref="177431273" role="">
+      <nd lat="40.3722258" lon="49.8445259"/>
+      <nd lat="40.3721233" lon="49.8445837"/>
+      <nd lat="40.3712449" lon="49.8450789"/>
+      <nd lat="40.3711229" lon="49.8451477"/>
+    </member>
+    <member type="way" ref="182645384" role="">
+      <nd lat="40.3723258" lon="49.8444737"/>
+      <nd lat="40.3722949" lon="49.8444910"/>
+      <nd lat="40.3722258" lon="49.8445259"/>
+    </member>
+    <member type="way" ref="1415085016" role="">
+      <nd lat="40.3729955" lon="49.8441430"/>
+      <nd lat="40.3723258" lon="49.8444737"/>
+    </member>
+    <member type="way" ref="1415085017" role="">
+      <nd lat="40.3730594" lon="49.8441084"/>
+      <nd lat="40.3729955" lon="49.8441430"/>
+    </member>
+    <member type="way" ref="1415085020" role="">
+      <nd lat="40.3730594" lon="49.8441084"/>
+      <nd lat="40.3730994" lon="49.8442261"/>
+      <nd lat="40.3731112" lon="49.8442609"/>
+    </member>
+    <member type="way" ref="1329392226" role="">
+      <nd lat="40.3731112" lon="49.8442609"/>
+      <nd lat="40.3739722" lon="49.8467214"/>
+      <nd lat="40.3739938" lon="49.8467878"/>
+    </member>
+    <member type="way" ref="1415075090" role="">
+      <nd lat="40.3739938" lon="49.8467878"/>
+      <nd lat="40.3740198" lon="49.8468677"/>
+    </member>
+    <member type="way" ref="1415063178" role="">
+      <nd lat="40.3740198" lon="49.8468677"/>
+      <nd lat="40.3740687" lon="49.8470069"/>
+    </member>
+    <member type="way" ref="1415075088" role="">
+      <nd lat="40.3740687" lon="49.8470069"/>
+      <nd lat="40.3749734" lon="49.8496235"/>
+    </member>
+    <member type="way" ref="1415063177" role="">
+      <nd lat="40.3749734" lon="49.8496235"/>
+      <nd lat="40.3750116" lon="49.8497366"/>
+      <nd lat="40.3750372" lon="49.8498190"/>
+    </member>
+    <member type="way" ref="165695131" role="">
+      <nd lat="40.3750372" lon="49.8498190"/>
+      <nd lat="40.3751491" lon="49.8501887"/>
+      <nd lat="40.3755552" lon="49.8514920"/>
+      <nd lat="40.3755748" lon="49.8515529"/>
+      <nd lat="40.3755792" lon="49.8515706"/>
+      <nd lat="40.3755970" lon="49.8516237"/>
+      <nd lat="40.3756525" lon="49.8518010"/>
+      <nd lat="40.3759653" lon="49.8528955"/>
+      <nd lat="40.3761382" lon="49.8534834"/>
+    </member>
+    <member type="way" ref="1415063201" role="">
+      <nd lat="40.3761382" lon="49.8534834"/>
+      <nd lat="40.3761661" lon="49.8535825"/>
+    </member>
+    <member type="way" ref="1415063202" role="">
+      <nd lat="40.3761661" lon="49.8535825"/>
+      <nd lat="40.3761036" lon="49.8536173"/>
+    </member>
+    <member type="way" ref="278666424" role="">
+      <nd lat="40.3761036" lon="49.8536173"/>
+      <nd lat="40.3756973" lon="49.8538434"/>
+      <nd lat="40.3755461" lon="49.8539269"/>
+      <nd lat="40.3754718" lon="49.8539725"/>
+      <nd lat="40.3753742" lon="49.8540339"/>
+    </member>
+    <member type="way" ref="25402777" role="">
+      <nd lat="40.3753742" lon="49.8540339"/>
+      <nd lat="40.3753526" lon="49.8540464"/>
+      <nd lat="40.3752240" lon="49.8541224"/>
+      <nd lat="40.3744093" lon="49.8546391"/>
+    </member>
+    <member type="way" ref="1168829202" role="">
+      <nd lat="40.3744093" lon="49.8546391"/>
+      <nd lat="40.3743876" lon="49.8546521"/>
+      <nd lat="40.3741607" lon="49.8547871"/>
+    </member>
+    <member type="way" ref="1329392228" role="">
+      <nd lat="40.3741607" lon="49.8547871"/>
+      <nd lat="40.3738985" lon="49.8549323"/>
+      <nd lat="40.3737941" lon="49.8550024"/>
+    </member>
+    <member type="way" ref="1168829203" role="">
+      <nd lat="40.3733112" lon="49.8551386"/>
+      <nd lat="40.3733437" lon="49.8551658"/>
+      <nd lat="40.3733815" lon="49.8551752"/>
+      <nd lat="40.3734326" lon="49.8551711"/>
+      <nd lat="40.3734867" lon="49.8551524"/>
+      <nd lat="40.3735399" lon="49.8551282"/>
+      <nd lat="40.3737941" lon="49.8550024"/>
+    </member>
+    <member type="way" ref="766787796" role="">
+      <nd lat="40.3720939" lon="49.8514080"/>
+      <nd lat="40.3733112" lon="49.8551386"/>
+    </member>
+    <member type="way" ref="179238852" role="">
+      <nd lat="40.3711852" lon="49.8486029"/>
+      <nd lat="40.3712074" lon="49.8486724"/>
+      <nd lat="40.3712272" lon="49.8487342"/>
+      <nd lat="40.3716680" lon="49.8500910"/>
+      <nd lat="40.3717988" lon="49.8505044"/>
+      <nd lat="40.3718192" lon="49.8505682"/>
+      <nd lat="40.3718508" lon="49.8506578"/>
+      <nd lat="40.3720939" lon="49.8514080"/>
+    </member>
+    <member type="way" ref="323377758" role="">
+      <nd lat="40.3702180" lon="49.8456502"/>
+      <nd lat="40.3708293" lon="49.8475002"/>
+      <nd lat="40.3711852" lon="49.8486029"/>
+    </member>
+    <member type="way" ref="131835265" role="">
+      <nd lat="40.3686959" lon="49.8413111"/>
+      <nd lat="40.3688299" lon="49.8415609"/>
+      <nd lat="40.3689114" lon="49.8417306"/>
+      <nd lat="40.3689768" lon="49.8418955"/>
+      <nd lat="40.3693300" lon="49.8429139"/>
+      <nd lat="40.3701255" lon="49.8453609"/>
+      <nd lat="40.3701955" lon="49.8455768"/>
+      <nd lat="40.3702180" lon="49.8456502"/>
+    </member>
+    <member type="way" ref="249018354" role="">
+      <nd lat="40.3633150" lon="49.8354168"/>
+      <nd lat="40.3640753" lon="49.8359273"/>
+      <nd lat="40.3641212" lon="49.8359702"/>
+      <nd lat="40.3641702" lon="49.8360228"/>
+      <nd lat="40.3655061" lon="49.8379302"/>
+      <nd lat="40.3655990" lon="49.8380408"/>
+      <nd lat="40.3656539" lon="49.8380801"/>
+      <nd lat="40.3657356" lon="49.8381150"/>
+      <nd lat="40.3667173" lon="49.8383428"/>
+      <nd lat="40.3667997" lon="49.8383683"/>
+      <nd lat="40.3668776" lon="49.8383955"/>
+      <nd lat="40.3669193" lon="49.8384132"/>
+      <nd lat="40.3669478" lon="49.8384265"/>
+      <nd lat="40.3669986" lon="49.8384650"/>
+      <nd lat="40.3670517" lon="49.8385285"/>
+      <nd lat="40.3670979" lon="49.8386012"/>
+      <nd lat="40.3673716" lon="49.8390734"/>
+      <nd lat="40.3675418" lon="49.8393610"/>
+      <nd lat="40.3686959" lon="49.8413111"/>
+    </member>
+    <member type="way" ref="822375070" role="">
+      <nd lat="40.3631032" lon="49.8331686"/>
+      <nd lat="40.3626424" lon="49.8344798"/>
+      <nd lat="40.3626149" lon="49.8345651"/>
+      <nd lat="40.3626022" lon="49.8346359"/>
+      <nd lat="40.3626016" lon="49.8347273"/>
+      <nd lat="40.3626064" lon="49.8348009"/>
+      <nd lat="40.3626200" lon="49.8348588"/>
+      <nd lat="40.3626456" lon="49.8349332"/>
+      <nd lat="40.3626523" lon="49.8349526"/>
+      <nd lat="40.3627061" lon="49.8350438"/>
+      <nd lat="40.3627909" lon="49.8351317"/>
+      <nd lat="40.3629264" lon="49.8352054"/>
+      <nd lat="40.3633150" lon="49.8354168"/>
+    </member>
+    <member type="way" ref="500527621" role="">
+      <nd lat="40.3635853" lon="49.8319415"/>
+      <nd lat="40.3631032" lon="49.8331686"/>
+    </member>
+    <member type="way" ref="1050381555" role="">
+      <nd lat="40.3638950" lon="49.8311531"/>
+      <nd lat="40.3635853" lon="49.8319415"/>
+    </member>
+    <member type="way" ref="167173308" role="">
+      <nd lat="40.3639098" lon="49.8311157"/>
+      <nd lat="40.3638950" lon="49.8311531"/>
+    </member>
+    <member type="way" ref="1050381554" role="">
+      <nd lat="40.3639914" lon="49.8310762"/>
+      <nd lat="40.3639648" lon="49.8310775"/>
+      <nd lat="40.3639462" lon="49.8310819"/>
+      <nd lat="40.3639347" lon="49.8310876"/>
+      <nd lat="40.3639265" lon="49.8310943"/>
+      <nd lat="40.3639188" lon="49.8311030"/>
+      <nd lat="40.3639098" lon="49.8311157"/>
+    </member>
+    <member type="way" ref="476752810" role="">
+      <nd lat="40.3661235" lon="49.8309367"/>
+      <nd lat="40.3660381" lon="49.8309240"/>
+      <nd lat="40.3659582" lon="49.8309220"/>
+      <nd lat="40.3658756" lon="49.8309253"/>
+      <nd lat="40.3657592" lon="49.8309343"/>
+      <nd lat="40.3652591" lon="49.8309703"/>
+      <nd lat="40.3644489" lon="49.8310425"/>
+      <nd lat="40.3639914" lon="49.8310762"/>
+    </member>
+    <member type="way" ref="926192527" role="">
+      <nd lat="40.3661235" lon="49.8309367"/>
+      <nd lat="40.3661771" lon="49.8309535"/>
+      <nd lat="40.3662292" lon="49.8309723"/>
+      <nd lat="40.3662844" lon="49.8309939"/>
+      <nd lat="40.3665488" lon="49.8311006"/>
+    </member>
+    <member type="way" ref="1279858618" role="">
+      <nd lat="40.3665488" lon="49.8311006"/>
+      <nd lat="40.3671650" lon="49.8313437"/>
+    </member>
+    <member type="way" ref="476752809" role="">
+      <nd lat="40.3671650" lon="49.8313437"/>
+      <nd lat="40.3673438" lon="49.8314116"/>
+      <nd lat="40.3676905" lon="49.8315478"/>
+      <nd lat="40.3677415" lon="49.8315717"/>
+      <nd lat="40.3677881" lon="49.8316014"/>
+      <nd lat="40.3678426" lon="49.8316408"/>
+      <nd lat="40.3678889" lon="49.8316892"/>
+      <nd lat="40.3679101" lon="49.8317105"/>
+      <nd lat="40.3679468" lon="49.8317555"/>
+      <nd lat="40.3679949" lon="49.8318279"/>
+      <nd lat="40.3680368" lon="49.8319016"/>
+      <nd lat="40.3682624" lon="49.8323905"/>
+      <nd lat="40.3685626" lon="49.8330439"/>
+      <nd lat="40.3686536" lon="49.8332933"/>
+      <nd lat="40.3688909" lon="49.8339413"/>
+      <nd lat="40.3691276" lon="49.8346129"/>
+      <nd lat="40.3691720" lon="49.8347612"/>
+    </member>
+    <member type="way" ref="25406140" role="">
+      <nd lat="40.3691720" lon="49.8347612"/>
+      <nd lat="40.3691910" lon="49.8348349"/>
+      <nd lat="40.3692007" lon="49.8348707"/>
+      <nd lat="40.3694258" lon="49.8357734"/>
+    </member>
+    <member type="way" ref="1413579322" role="">
+      <nd lat="40.3694258" lon="49.8357734"/>
+      <nd lat="40.3694115" lon="49.8358456"/>
+      <nd lat="40.3693974" lon="49.8358859"/>
+    </member>
+    <member type="way" ref="202546449" role="">
+      <nd lat="40.3693974" lon="49.8358859"/>
+      <nd lat="40.3689282" lon="49.8360709"/>
+      <nd lat="40.3688977" lon="49.8360994"/>
+      <nd lat="40.3688782" lon="49.8361342"/>
+      <nd lat="40.3688656" lon="49.8361929"/>
+    </member>
+    <member type="way" ref="639403533" role="">
+      <nd lat="40.3688656" lon="49.8361929"/>
+      <nd lat="40.3688730" lon="49.8363257"/>
+    </member>
+    <tag k="highway" v="raceway"/>
+    <tag k="name" v="Baku City Circuit"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="type" v="circuit"/>
+    <tag k="wikidata" v="Q17004958"/>
+    <tag k="wikipedia" v="en:Baku City Circuit"/>
+  </relation>
+
+</osm>

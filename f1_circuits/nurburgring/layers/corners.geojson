@@ -1,0 +1,234 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "nurburgring_v1",
+  "_layer": "corners",
+  "_label": "Nurburgring GP Circuit",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "",
+        "circuit": "nurburgring_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "",
+        "circuit": "nurburgring_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "",
+        "circuit": "nurburgring_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "",
+        "circuit": "nurburgring_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "",
+        "circuit": "nurburgring_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "",
+        "circuit": "nurburgring_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "",
+        "circuit": "nurburgring_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "",
+        "circuit": "nurburgring_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "",
+        "circuit": "nurburgring_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "",
+        "circuit": "nurburgring_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "corner_number": 11,
+        "name": "",
+        "circuit": "nurburgring_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "properties": {
+        "corner_number": 12,
+        "name": "",
+        "circuit": "nurburgring_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "properties": {
+        "corner_number": 13,
+        "name": "",
+        "circuit": "nurburgring_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "properties": {
+        "corner_number": 14,
+        "name": "",
+        "circuit": "nurburgring_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 15,
+      "properties": {
+        "corner_number": 15,
+        "name": "",
+        "circuit": "nurburgring_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "NURBURGING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 6.941047114180495, 50.331804725970549 ] } },
+{ "type": "Feature", "properties": { "corner_number": 2, "name": null, "circuit": "NURBURGING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 6.941594756217193, 50.333298295161548 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "NURBURGING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 6.938624213048437, 50.33298298611011 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "NURBURGING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 6.939885449254166, 50.332651081845448 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "NURBURGING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 6.938707189114603, 50.328452492897426 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "NURBURGING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 6.94046628171733, 50.3275397561696 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "NURBURGING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 6.934243076754853, 50.324121142243534 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "NURBURGING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 6.937329786416242, 50.326693400294694 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "NURBURGING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 6.937080858217743, 50.327689113088688 ] } },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": "NURBURGING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 6.938723784327837, 50.331522607345576 ] } },
+{ "type": "Feature", "properties": { "corner_number": 11, "name": null, "circuit": "NURBURGING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 6.936367264048712, 50.332568105779274 ] } },
+{ "type": "Feature", "properties": { "corner_number": 12, "name": null, "circuit": "NURBURGING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 6.939819068401232, 50.335538648948038 ] } },
+{ "type": "Feature", "properties": { "corner_number": 13, "name": null, "circuit": "NURBURGING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 6.946457153694542, 50.336799885153766 ] } },
+{ "type": "Feature", "properties": { "corner_number": 14, "name": null, "circuit": "NURBURGING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 6.946772462745974, 50.337231360697835 ] } },
+{ "type": "Feature", "properties": { "corner_number": 15, "name": null, "circuit": "NURBURGING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 6.94994214847353, 50.337463693683098 ] } }
+]
+}

@@ -1,0 +1,4117 @@
+{
+  "type": "FeatureCollection",
+  "generator": "overpass-turbo",
+  "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
+  "timestamp": "2026-02-19T15:49:58Z",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/19842206",
+        "access": "no",
+        "highway": "raceway",
+        "importance": "international",
+        "lanes": "1",
+        "lit": "no",
+        "name": "Rettifilo di partenza",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2807694,
+            45.616193
+          ],
+          [
+            9.2811729,
+            45.6189632
+          ],
+          [
+            9.2812785,
+            45.6195721
+          ],
+          [
+            9.2814088,
+            45.6206107
+          ],
+          [
+            9.2814693,
+            45.6210889
+          ],
+          [
+            9.2814831,
+            45.6211988
+          ],
+          [
+            9.2818939,
+            45.6244492
+          ]
+        ]
+      },
+      "id": "way/19842206"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/38168747",
+        "highway": "raceway",
+        "name": "Pit Lane",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "pit_lane",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2807176,
+            45.6139645
+          ],
+          [
+            9.2807806,
+            45.6143784
+          ],
+          [
+            9.2807878,
+            45.6144353
+          ],
+          [
+            9.280794,
+            45.6145061
+          ],
+          [
+            9.2808031,
+            45.6146404
+          ],
+          [
+            9.2808057,
+            45.6146707
+          ],
+          [
+            9.2808098,
+            45.6147039
+          ],
+          [
+            9.2808137,
+            45.6147384
+          ],
+          [
+            9.2808189,
+            45.6147757
+          ],
+          [
+            9.2808635,
+            45.6150604
+          ],
+          [
+            9.2809221,
+            45.6153955
+          ],
+          [
+            9.2809782,
+            45.6160014
+          ],
+          [
+            9.2809959,
+            45.6161212
+          ],
+          [
+            9.2813286,
+            45.6184074
+          ],
+          [
+            9.2813702,
+            45.6186927
+          ],
+          [
+            9.2814306,
+            45.6191387
+          ],
+          [
+            9.2814355,
+            45.6192836
+          ],
+          [
+            9.2814345,
+            45.6192983
+          ],
+          [
+            9.281418,
+            45.6195366
+          ],
+          [
+            9.2814231,
+            45.6202502
+          ],
+          [
+            9.2814088,
+            45.6206107
+          ]
+        ]
+      },
+      "id": "way/38168747"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968220",
+        "access": "no",
+        "highway": "raceway",
+        "importance": "international",
+        "name": "Curva Biassono",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2822082,
+            45.6273764
+          ],
+          [
+            9.2822228,
+            45.6274663
+          ],
+          [
+            9.2822884,
+            45.6277162
+          ],
+          [
+            9.2823414,
+            45.6278535
+          ],
+          [
+            9.2824275,
+            45.6280305
+          ],
+          [
+            9.2825703,
+            45.6282622
+          ],
+          [
+            9.2827297,
+            45.6284718
+          ],
+          [
+            9.282913,
+            45.6286635
+          ],
+          [
+            9.2830708,
+            45.6288006
+          ],
+          [
+            9.283235,
+            45.6289288
+          ],
+          [
+            9.2834071,
+            45.6290458
+          ],
+          [
+            9.2835825,
+            45.6291517
+          ],
+          [
+            9.2837929,
+            45.6292643
+          ],
+          [
+            9.2839877,
+            45.6293589
+          ],
+          [
+            9.2841817,
+            45.6294438
+          ],
+          [
+            9.2844657,
+            45.629551
+          ],
+          [
+            9.2848557,
+            45.6296739
+          ],
+          [
+            9.2851848,
+            45.6297512
+          ],
+          [
+            9.2854824,
+            45.6298095
+          ],
+          [
+            9.2857484,
+            45.6298536
+          ],
+          [
+            9.2860752,
+            45.6298946
+          ],
+          [
+            9.2865519,
+            45.6299347
+          ]
+        ]
+      },
+      "id": "way/179968220"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968226",
+        "access": "no",
+        "highway": "raceway",
+        "importance": "international",
+        "name": "Curva Vialone",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2860336,
+            45.6228017
+          ],
+          [
+            9.2860101,
+            45.6227867
+          ],
+          [
+            9.2859698,
+            45.6227584
+          ],
+          [
+            9.2859403,
+            45.6227348
+          ],
+          [
+            9.2859149,
+            45.6227122
+          ],
+          [
+            9.2858989,
+            45.6226938
+          ],
+          [
+            9.2858869,
+            45.6226763
+          ],
+          [
+            9.285875,
+            45.6226525
+          ],
+          [
+            9.2858678,
+            45.6226164
+          ],
+          [
+            9.2858646,
+            45.6225764
+          ],
+          [
+            9.2858674,
+            45.6225369
+          ],
+          [
+            9.2858742,
+            45.6224935
+          ]
+        ]
+      },
+      "id": "way/179968226"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968228",
+        "access": "no",
+        "highway": "raceway",
+        "importance": "international",
+        "name": "Curva del Serraglio",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2928085,
+            45.6268389
+          ],
+          [
+            9.2926812,
+            45.6267832
+          ],
+          [
+            9.2924828,
+            45.6266921
+          ],
+          [
+            9.2923997,
+            45.6266526
+          ],
+          [
+            9.2923206,
+            45.626614
+          ],
+          [
+            9.2922114,
+            45.6265584
+          ],
+          [
+            9.2921062,
+            45.6265036
+          ],
+          [
+            9.2919931,
+            45.626442
+          ],
+          [
+            9.2919078,
+            45.6263942
+          ],
+          [
+            9.2918437,
+            45.6263574
+          ],
+          [
+            9.2917835,
+            45.6263216
+          ],
+          [
+            9.2914155,
+            45.6260946
+          ]
+        ]
+      },
+      "id": "way/179968228"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968229",
+        "access": "no",
+        "highway": "raceway",
+        "importance": "international",
+        "name": "Lesmo 1",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2953451,
+            45.6313282
+          ],
+          [
+            9.2954105,
+            45.6313405
+          ],
+          [
+            9.2954746,
+            45.6313509
+          ],
+          [
+            9.295546,
+            45.6313584
+          ],
+          [
+            9.2956,
+            45.6313611
+          ],
+          [
+            9.2956574,
+            45.6313621
+          ],
+          [
+            9.2956987,
+            45.6313603
+          ],
+          [
+            9.2957393,
+            45.6313576
+          ],
+          [
+            9.2957773,
+            45.631354
+          ],
+          [
+            9.2958187,
+            45.631349
+          ],
+          [
+            9.2958573,
+            45.631343
+          ],
+          [
+            9.2958897,
+            45.6313363
+          ],
+          [
+            9.2959307,
+            45.6313269
+          ],
+          [
+            9.2959735,
+            45.6313159
+          ],
+          [
+            9.2960016,
+            45.6313079
+          ],
+          [
+            9.2960631,
+            45.6312875
+          ],
+          [
+            9.2961261,
+            45.6312634
+          ],
+          [
+            9.2961718,
+            45.6312429
+          ],
+          [
+            9.2962081,
+            45.6312248
+          ],
+          [
+            9.2962484,
+            45.6312008
+          ],
+          [
+            9.296288,
+            45.6311755
+          ],
+          [
+            9.2963347,
+            45.6311412
+          ],
+          [
+            9.2963759,
+            45.6311078
+          ],
+          [
+            9.2964073,
+            45.6310774
+          ],
+          [
+            9.2964334,
+            45.6310487
+          ],
+          [
+            9.2964598,
+            45.6310175
+          ],
+          [
+            9.2964834,
+            45.6309871
+          ],
+          [
+            9.2964962,
+            45.6309676
+          ],
+          [
+            9.2965124,
+            45.6309404
+          ],
+          [
+            9.296526,
+            45.630916
+          ],
+          [
+            9.2965404,
+            45.6308827
+          ],
+          [
+            9.2965522,
+            45.6308523
+          ],
+          [
+            9.2965676,
+            45.6307979
+          ],
+          [
+            9.2965789,
+            45.6307373
+          ],
+          [
+            9.2965875,
+            45.6306805
+          ]
+        ]
+      },
+      "id": "way/179968229"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968230",
+        "access": "no",
+        "highway": "raceway",
+        "importance": "international",
+        "name": "Lesmo 2",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2968526,
+            45.6286688
+          ],
+          [
+            9.296855,
+            45.6286185
+          ],
+          [
+            9.2968553,
+            45.6285872
+          ],
+          [
+            9.2968496,
+            45.6285509
+          ],
+          [
+            9.2968398,
+            45.6285193
+          ],
+          [
+            9.2968266,
+            45.6284888
+          ],
+          [
+            9.2968106,
+            45.6284602
+          ],
+          [
+            9.2967989,
+            45.6284456
+          ],
+          [
+            9.2967862,
+            45.6284308
+          ],
+          [
+            9.2967737,
+            45.6284186
+          ],
+          [
+            9.2967473,
+            45.6283964
+          ],
+          [
+            9.2967177,
+            45.6283781
+          ],
+          [
+            9.2966854,
+            45.6283598
+          ],
+          [
+            9.296667,
+            45.6283501
+          ],
+          [
+            9.296646,
+            45.6283404
+          ],
+          [
+            9.2966018,
+            45.6283215
+          ]
+        ]
+      },
+      "id": "way/179968230"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968234",
+        "access": "no",
+        "highway": "raceway",
+        "importance": "international",
+        "name": "Curva Alboreto",
+        "old_name": "Curva Parabolica",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "wikidata": "Q122205345",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2836943,
+            45.6125332
+          ],
+          [
+            9.2836829,
+            45.6124607
+          ],
+          [
+            9.2836748,
+            45.6124199
+          ],
+          [
+            9.2836621,
+            45.6123799
+          ],
+          [
+            9.2836493,
+            45.6123493
+          ],
+          [
+            9.2836301,
+            45.612314
+          ],
+          [
+            9.2836121,
+            45.6122853
+          ],
+          [
+            9.2835861,
+            45.6122518
+          ],
+          [
+            9.2835547,
+            45.6122145
+          ],
+          [
+            9.2835135,
+            45.6121723
+          ],
+          [
+            9.2834735,
+            45.6121356
+          ],
+          [
+            9.283437,
+            45.6121034
+          ],
+          [
+            9.2833888,
+            45.6120669
+          ],
+          [
+            9.2833477,
+            45.612042
+          ],
+          [
+            9.2832924,
+            45.6120117
+          ],
+          [
+            9.2832435,
+            45.6119878
+          ],
+          [
+            9.2831973,
+            45.6119685
+          ],
+          [
+            9.2831588,
+            45.6119535
+          ],
+          [
+            9.2831229,
+            45.6119404
+          ],
+          [
+            9.2830829,
+            45.611927
+          ],
+          [
+            9.2830457,
+            45.6119156
+          ],
+          [
+            9.2829644,
+            45.6118954
+          ],
+          [
+            9.2828799,
+            45.6118781
+          ],
+          [
+            9.2828343,
+            45.6118718
+          ],
+          [
+            9.282792,
+            45.6118662
+          ],
+          [
+            9.2827312,
+            45.6118614
+          ],
+          [
+            9.2826842,
+            45.6118581
+          ],
+          [
+            9.2826487,
+            45.611858
+          ],
+          [
+            9.2826161,
+            45.6118587
+          ],
+          [
+            9.2825723,
+            45.6118609
+          ],
+          [
+            9.2825318,
+            45.6118641
+          ],
+          [
+            9.2824941,
+            45.6118672
+          ],
+          [
+            9.2824575,
+            45.6118723
+          ],
+          [
+            9.2824236,
+            45.6118775
+          ],
+          [
+            9.2823557,
+            45.6118905
+          ],
+          [
+            9.282308,
+            45.6119002
+          ],
+          [
+            9.2822575,
+            45.6119119
+          ],
+          [
+            9.2821633,
+            45.6119351
+          ],
+          [
+            9.2820753,
+            45.6119603
+          ],
+          [
+            9.2820164,
+            45.6119786
+          ],
+          [
+            9.2819549,
+            45.6120018
+          ],
+          [
+            9.2818946,
+            45.6120258
+          ],
+          [
+            9.2818422,
+            45.6120483
+          ],
+          [
+            9.2817937,
+            45.6120708
+          ],
+          [
+            9.2817351,
+            45.6121
+          ],
+          [
+            9.2816981,
+            45.6121195
+          ],
+          [
+            9.2816492,
+            45.6121473
+          ],
+          [
+            9.2816043,
+            45.6121743
+          ],
+          [
+            9.2815401,
+            45.612215
+          ],
+          [
+            9.2814742,
+            45.6122623
+          ],
+          [
+            9.2814137,
+            45.6123077
+          ],
+          [
+            9.2813463,
+            45.612364
+          ],
+          [
+            9.2812843,
+            45.6124212
+          ],
+          [
+            9.2812113,
+            45.6124973
+          ],
+          [
+            9.2811845,
+            45.6125263
+          ],
+          [
+            9.281143,
+            45.612573
+          ],
+          [
+            9.2811166,
+            45.6126045
+          ],
+          [
+            9.2810875,
+            45.6126407
+          ],
+          [
+            9.2810626,
+            45.612676
+          ],
+          [
+            9.281035,
+            45.6127161
+          ],
+          [
+            9.2810083,
+            45.6127568
+          ],
+          [
+            9.2809772,
+            45.6128112
+          ],
+          [
+            9.2809512,
+            45.6128565
+          ],
+          [
+            9.2809291,
+            45.6128999
+          ],
+          [
+            9.2809071,
+            45.6129452
+          ],
+          [
+            9.280885,
+            45.6129933
+          ],
+          [
+            9.2808663,
+            45.6130393
+          ],
+          [
+            9.2808476,
+            45.6130881
+          ],
+          [
+            9.2808101,
+            45.6131896
+          ],
+          [
+            9.2807914,
+            45.6132572
+          ],
+          [
+            9.2807753,
+            45.6133239
+          ],
+          [
+            9.2807585,
+            45.6134067
+          ],
+          [
+            9.2807416,
+            45.6135051
+          ],
+          [
+            9.2807256,
+            45.6136345
+          ],
+          [
+            9.280716,
+            45.6137995
+          ],
+          [
+            9.2807176,
+            45.6139645
+          ],
+          [
+            9.280693,
+            45.6148387
+          ],
+          [
+            9.2806903,
+            45.6152515
+          ],
+          [
+            9.2807029,
+            45.6156372
+          ],
+          [
+            9.2807327,
+            45.6159111
+          ],
+          [
+            9.2807694,
+            45.616193
+          ]
+        ]
+      },
+      "id": "way/179968234"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968239",
+        "access": "no",
+        "highway": "raceway",
+        "importance": "international",
+        "name": "Variante Ascari",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "wikidata": "Q122205456",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2859173,
+            45.6222108
+          ],
+          [
+            9.2859194,
+            45.6221562
+          ],
+          [
+            9.2859183,
+            45.6220664
+          ],
+          [
+            9.2859094,
+            45.6220052
+          ],
+          [
+            9.2858952,
+            45.6219441
+          ],
+          [
+            9.2858801,
+            45.6218978
+          ],
+          [
+            9.2858636,
+            45.6218543
+          ],
+          [
+            9.2858339,
+            45.6217941
+          ],
+          [
+            9.2858041,
+            45.6217414
+          ],
+          [
+            9.28576,
+            45.6216813
+          ],
+          [
+            9.2857172,
+            45.6216259
+          ],
+          [
+            9.2856764,
+            45.6215829
+          ],
+          [
+            9.2856343,
+            45.6215446
+          ],
+          [
+            9.2855901,
+            45.6215076
+          ],
+          [
+            9.2855646,
+            45.6214886
+          ],
+          [
+            9.2855364,
+            45.6214687
+          ],
+          [
+            9.2855004,
+            45.6214444
+          ],
+          [
+            9.2854618,
+            45.6214192
+          ],
+          [
+            9.2853818,
+            45.6213724
+          ],
+          [
+            9.2853126,
+            45.6213354
+          ],
+          [
+            9.2852473,
+            45.6213032
+          ],
+          [
+            9.285199,
+            45.6212775
+          ],
+          [
+            9.2851637,
+            45.6212565
+          ],
+          [
+            9.2851339,
+            45.6212364
+          ],
+          [
+            9.2851085,
+            45.6212143
+          ],
+          [
+            9.2850844,
+            45.6211913
+          ],
+          [
+            9.2850605,
+            45.6211587
+          ],
+          [
+            9.2850448,
+            45.6211355
+          ],
+          [
+            9.2850286,
+            45.6211029
+          ],
+          [
+            9.2850178,
+            45.6210685
+          ],
+          [
+            9.2849918,
+            45.6209513
+          ]
+        ]
+      },
+      "id": "way/179968239"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968242",
+        "access": "no",
+        "highway": "raceway",
+        "importance": "international",
+        "name": "Variante del Rettifilo",
+        "note": "Used only for cars races.",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2818939,
+            45.6244492
+          ],
+          [
+            9.281898,
+            45.6244736
+          ],
+          [
+            9.2819022,
+            45.6244924
+          ],
+          [
+            9.2819139,
+            45.6245138
+          ],
+          [
+            9.2819322,
+            45.6245326
+          ],
+          [
+            9.2819584,
+            45.6245453
+          ],
+          [
+            9.2819947,
+            45.6245576
+          ],
+          [
+            9.2820328,
+            45.6245615
+          ],
+          [
+            9.282077,
+            45.6245615
+          ],
+          [
+            9.2822336,
+            45.6245489
+          ],
+          [
+            9.2822742,
+            45.6245472
+          ],
+          [
+            9.2823228,
+            45.6245498
+          ],
+          [
+            9.2823659,
+            45.6245609
+          ],
+          [
+            9.2823877,
+            45.6245701
+          ],
+          [
+            9.2824103,
+            45.624584
+          ],
+          [
+            9.2824276,
+            45.6245967
+          ],
+          [
+            9.2824435,
+            45.6246131
+          ],
+          [
+            9.2824626,
+            45.6246448
+          ],
+          [
+            9.2824666,
+            45.6246649
+          ],
+          [
+            9.2824693,
+            45.6246869
+          ],
+          [
+            9.2824669,
+            45.6247091
+          ],
+          [
+            9.282465,
+            45.6247212
+          ],
+          [
+            9.2824337,
+            45.6248045
+          ]
+        ]
+      },
+      "id": "way/179968242"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968245",
+        "access": "no",
+        "highway": "raceway",
+        "importance": "international",
+        "name": "Variante della Roggia",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2912597,
+            45.6301582
+          ],
+          [
+            9.2912965,
+            45.6301613
+          ],
+          [
+            9.2913293,
+            45.6301653
+          ],
+          [
+            9.2913588,
+            45.6301711
+          ],
+          [
+            9.2913855,
+            45.6301774
+          ],
+          [
+            9.2914016,
+            45.6301838
+          ],
+          [
+            9.2914194,
+            45.6301947
+          ],
+          [
+            9.2914339,
+            45.6302055
+          ],
+          [
+            9.2914458,
+            45.6302172
+          ],
+          [
+            9.2914579,
+            45.6302319
+          ],
+          [
+            9.29147,
+            45.6302486
+          ],
+          [
+            9.2914793,
+            45.6302659
+          ],
+          [
+            9.2914886,
+            45.630285
+          ],
+          [
+            9.2915531,
+            45.6304407
+          ],
+          [
+            9.2915638,
+            45.6304626
+          ],
+          [
+            9.2915771,
+            45.6304845
+          ],
+          [
+            9.2915883,
+            45.6305013
+          ],
+          [
+            9.2916021,
+            45.6305168
+          ],
+          [
+            9.2916174,
+            45.6305308
+          ],
+          [
+            9.2916378,
+            45.6305438
+          ],
+          [
+            9.2916554,
+            45.6305527
+          ],
+          [
+            9.2916782,
+            45.6305597
+          ],
+          [
+            9.2917079,
+            45.6305663
+          ],
+          [
+            9.2917382,
+            45.6305707
+          ],
+          [
+            9.2918022,
+            45.630579
+          ]
+        ]
+      },
+      "id": "way/179968245"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968249",
+        "access": "no",
+        "highway": "raceway",
+        "importance": "international",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2858742,
+            45.6224935
+          ],
+          [
+            9.2859128,
+            45.6222547
+          ],
+          [
+            9.2859173,
+            45.6222108
+          ]
+        ]
+      },
+      "id": "way/179968249"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968251",
+        "access": "no",
+        "highway": "raceway",
+        "importance": "international",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2965875,
+            45.6306805
+          ],
+          [
+            9.2967285,
+            45.6296103
+          ],
+          [
+            9.2968526,
+            45.6286688
+          ]
+        ]
+      },
+      "id": "way/179968251"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968252",
+        "access": "no",
+        "highway": "raceway",
+        "importance": "international",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2966018,
+            45.6283215
+          ],
+          [
+            9.2965539,
+            45.6283016
+          ],
+          [
+            9.2929304,
+            45.6268889
+          ],
+          [
+            9.2928085,
+            45.6268389
+          ]
+        ]
+      },
+      "id": "way/179968252"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968254",
+        "access": "no",
+        "highway": "raceway",
+        "importance": "international",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2891166,
+            45.624688
+          ],
+          [
+            9.2860336,
+            45.6228017
+          ]
+        ]
+      },
+      "id": "way/179968254"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968257",
+        "access": "no",
+        "highway": "raceway",
+        "importance": "international",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2849918,
+            45.6209513
+          ],
+          [
+            9.2846818,
+            45.6191886
+          ],
+          [
+            9.284201,
+            45.6159649
+          ],
+          [
+            9.2836943,
+            45.6125332
+          ]
+        ]
+      },
+      "id": "way/179968257"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968262",
+        "access": "no",
+        "highway": "raceway",
+        "importance": "international",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2865519,
+            45.6299347
+          ],
+          [
+            9.2885865,
+            45.6300489
+          ],
+          [
+            9.2896282,
+            45.6301022
+          ],
+          [
+            9.2900952,
+            45.6301181
+          ],
+          [
+            9.2906556,
+            45.6301371
+          ],
+          [
+            9.291219,
+            45.6301563
+          ],
+          [
+            9.2912597,
+            45.6301582
+          ]
+        ]
+      },
+      "id": "way/179968262"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968263",
+        "access": "no",
+        "highway": "raceway",
+        "importance": "international",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2918022,
+            45.630579
+          ],
+          [
+            9.2919598,
+            45.6305981
+          ],
+          [
+            9.2920582,
+            45.6306105
+          ],
+          [
+            9.2921538,
+            45.6306229
+          ],
+          [
+            9.292225,
+            45.6306331
+          ],
+          [
+            9.2922935,
+            45.6306434
+          ],
+          [
+            9.2923973,
+            45.63066
+          ],
+          [
+            9.2924845,
+            45.6306745
+          ],
+          [
+            9.2925717,
+            45.6306908
+          ],
+          [
+            9.2926459,
+            45.6307068
+          ],
+          [
+            9.2940914,
+            45.6310426
+          ],
+          [
+            9.2953451,
+            45.6313282
+          ]
+        ]
+      },
+      "id": "way/179968263"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968264",
+        "access": "no",
+        "highway": "raceway",
+        "importance": "international",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2824337,
+            45.6248045
+          ],
+          [
+            9.2824108,
+            45.6248654
+          ],
+          [
+            9.2821906,
+            45.6254508
+          ],
+          [
+            9.2821342,
+            45.6256399
+          ],
+          [
+            9.2821004,
+            45.625796
+          ],
+          [
+            9.2820801,
+            45.6259694
+          ],
+          [
+            9.2820745,
+            45.6261909
+          ],
+          [
+            9.2822082,
+            45.6273764
+          ]
+        ]
+      },
+      "id": "way/179968264"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1443867792",
+        "access": "no",
+        "highway": "raceway",
+        "importance": "international",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2914155,
+            45.6260946
+          ],
+          [
+            9.2893552,
+            45.624834
+          ]
+        ]
+      },
+      "id": "way/1443867792"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1443867793",
+        "access": "no",
+        "covered": "yes",
+        "highway": "raceway",
+        "importance": "international",
+        "oneway": "yes",
+        "sport": "motor",
+        "surface": "asphalt",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2893552,
+            45.624834
+          ],
+          [
+            9.2891166,
+            45.624688
+          ]
+        ]
+      },
+      "id": "way/1443867793"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968257",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2849918,
+            45.6209513
+          ],
+          [
+            9.2846818,
+            45.6191886
+          ],
+          [
+            9.284201,
+            45.6159649
+          ],
+          [
+            9.2836943,
+            45.6125332
+          ]
+        ]
+      },
+      "id": "way/179968257"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968239",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2859173,
+            45.6222108
+          ],
+          [
+            9.2859194,
+            45.6221562
+          ],
+          [
+            9.2859183,
+            45.6220664
+          ],
+          [
+            9.2859094,
+            45.6220052
+          ],
+          [
+            9.2858952,
+            45.6219441
+          ],
+          [
+            9.2858801,
+            45.6218978
+          ],
+          [
+            9.2858636,
+            45.6218543
+          ],
+          [
+            9.2858339,
+            45.6217941
+          ],
+          [
+            9.2858041,
+            45.6217414
+          ],
+          [
+            9.28576,
+            45.6216813
+          ],
+          [
+            9.2857172,
+            45.6216259
+          ],
+          [
+            9.2856764,
+            45.6215829
+          ],
+          [
+            9.2856343,
+            45.6215446
+          ],
+          [
+            9.2855901,
+            45.6215076
+          ],
+          [
+            9.2855646,
+            45.6214886
+          ],
+          [
+            9.2855364,
+            45.6214687
+          ],
+          [
+            9.2855004,
+            45.6214444
+          ],
+          [
+            9.2854618,
+            45.6214192
+          ],
+          [
+            9.2853818,
+            45.6213724
+          ],
+          [
+            9.2853126,
+            45.6213354
+          ],
+          [
+            9.2852473,
+            45.6213032
+          ],
+          [
+            9.285199,
+            45.6212775
+          ],
+          [
+            9.2851637,
+            45.6212565
+          ],
+          [
+            9.2851339,
+            45.6212364
+          ],
+          [
+            9.2851085,
+            45.6212143
+          ],
+          [
+            9.2850844,
+            45.6211913
+          ],
+          [
+            9.2850605,
+            45.6211587
+          ],
+          [
+            9.2850448,
+            45.6211355
+          ],
+          [
+            9.2850286,
+            45.6211029
+          ],
+          [
+            9.2850178,
+            45.6210685
+          ],
+          [
+            9.2849918,
+            45.6209513
+          ]
+        ]
+      },
+      "id": "way/179968239"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968249",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2858742,
+            45.6224935
+          ],
+          [
+            9.2859128,
+            45.6222547
+          ],
+          [
+            9.2859173,
+            45.6222108
+          ]
+        ]
+      },
+      "id": "way/179968249"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968226",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2860336,
+            45.6228017
+          ],
+          [
+            9.2860101,
+            45.6227867
+          ],
+          [
+            9.2859698,
+            45.6227584
+          ],
+          [
+            9.2859403,
+            45.6227348
+          ],
+          [
+            9.2859149,
+            45.6227122
+          ],
+          [
+            9.2858989,
+            45.6226938
+          ],
+          [
+            9.2858869,
+            45.6226763
+          ],
+          [
+            9.285875,
+            45.6226525
+          ],
+          [
+            9.2858678,
+            45.6226164
+          ],
+          [
+            9.2858646,
+            45.6225764
+          ],
+          [
+            9.2858674,
+            45.6225369
+          ],
+          [
+            9.2858742,
+            45.6224935
+          ]
+        ]
+      },
+      "id": "way/179968226"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968254",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2891166,
+            45.624688
+          ],
+          [
+            9.2860336,
+            45.6228017
+          ]
+        ]
+      },
+      "id": "way/179968254"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1443867793",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2893552,
+            45.624834
+          ],
+          [
+            9.2891166,
+            45.624688
+          ]
+        ]
+      },
+      "id": "way/1443867793"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1443867792",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2914155,
+            45.6260946
+          ],
+          [
+            9.2893552,
+            45.624834
+          ]
+        ]
+      },
+      "id": "way/1443867792"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968228",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2928085,
+            45.6268389
+          ],
+          [
+            9.2926812,
+            45.6267832
+          ],
+          [
+            9.2924828,
+            45.6266921
+          ],
+          [
+            9.2923997,
+            45.6266526
+          ],
+          [
+            9.2923206,
+            45.626614
+          ],
+          [
+            9.2922114,
+            45.6265584
+          ],
+          [
+            9.2921062,
+            45.6265036
+          ],
+          [
+            9.2919931,
+            45.626442
+          ],
+          [
+            9.2919078,
+            45.6263942
+          ],
+          [
+            9.2918437,
+            45.6263574
+          ],
+          [
+            9.2917835,
+            45.6263216
+          ],
+          [
+            9.2914155,
+            45.6260946
+          ]
+        ]
+      },
+      "id": "way/179968228"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968252",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2966018,
+            45.6283215
+          ],
+          [
+            9.2965539,
+            45.6283016
+          ],
+          [
+            9.2929304,
+            45.6268889
+          ],
+          [
+            9.2928085,
+            45.6268389
+          ]
+        ]
+      },
+      "id": "way/179968252"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968230",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2968526,
+            45.6286688
+          ],
+          [
+            9.296855,
+            45.6286185
+          ],
+          [
+            9.2968553,
+            45.6285872
+          ],
+          [
+            9.2968496,
+            45.6285509
+          ],
+          [
+            9.2968398,
+            45.6285193
+          ],
+          [
+            9.2968266,
+            45.6284888
+          ],
+          [
+            9.2968106,
+            45.6284602
+          ],
+          [
+            9.2967989,
+            45.6284456
+          ],
+          [
+            9.2967862,
+            45.6284308
+          ],
+          [
+            9.2967737,
+            45.6284186
+          ],
+          [
+            9.2967473,
+            45.6283964
+          ],
+          [
+            9.2967177,
+            45.6283781
+          ],
+          [
+            9.2966854,
+            45.6283598
+          ],
+          [
+            9.296667,
+            45.6283501
+          ],
+          [
+            9.296646,
+            45.6283404
+          ],
+          [
+            9.2966018,
+            45.6283215
+          ]
+        ]
+      },
+      "id": "way/179968230"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968251",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2965875,
+            45.6306805
+          ],
+          [
+            9.2967285,
+            45.6296103
+          ],
+          [
+            9.2968526,
+            45.6286688
+          ]
+        ]
+      },
+      "id": "way/179968251"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968229",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2953451,
+            45.6313282
+          ],
+          [
+            9.2954105,
+            45.6313405
+          ],
+          [
+            9.2954746,
+            45.6313509
+          ],
+          [
+            9.295546,
+            45.6313584
+          ],
+          [
+            9.2956,
+            45.6313611
+          ],
+          [
+            9.2956574,
+            45.6313621
+          ],
+          [
+            9.2956987,
+            45.6313603
+          ],
+          [
+            9.2957393,
+            45.6313576
+          ],
+          [
+            9.2957773,
+            45.631354
+          ],
+          [
+            9.2958187,
+            45.631349
+          ],
+          [
+            9.2958573,
+            45.631343
+          ],
+          [
+            9.2958897,
+            45.6313363
+          ],
+          [
+            9.2959307,
+            45.6313269
+          ],
+          [
+            9.2959735,
+            45.6313159
+          ],
+          [
+            9.2960016,
+            45.6313079
+          ],
+          [
+            9.2960631,
+            45.6312875
+          ],
+          [
+            9.2961261,
+            45.6312634
+          ],
+          [
+            9.2961718,
+            45.6312429
+          ],
+          [
+            9.2962081,
+            45.6312248
+          ],
+          [
+            9.2962484,
+            45.6312008
+          ],
+          [
+            9.296288,
+            45.6311755
+          ],
+          [
+            9.2963347,
+            45.6311412
+          ],
+          [
+            9.2963759,
+            45.6311078
+          ],
+          [
+            9.2964073,
+            45.6310774
+          ],
+          [
+            9.2964334,
+            45.6310487
+          ],
+          [
+            9.2964598,
+            45.6310175
+          ],
+          [
+            9.2964834,
+            45.6309871
+          ],
+          [
+            9.2964962,
+            45.6309676
+          ],
+          [
+            9.2965124,
+            45.6309404
+          ],
+          [
+            9.296526,
+            45.630916
+          ],
+          [
+            9.2965404,
+            45.6308827
+          ],
+          [
+            9.2965522,
+            45.6308523
+          ],
+          [
+            9.2965676,
+            45.6307979
+          ],
+          [
+            9.2965789,
+            45.6307373
+          ],
+          [
+            9.2965875,
+            45.6306805
+          ]
+        ]
+      },
+      "id": "way/179968229"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968263",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2918022,
+            45.630579
+          ],
+          [
+            9.2919598,
+            45.6305981
+          ],
+          [
+            9.2920582,
+            45.6306105
+          ],
+          [
+            9.2921538,
+            45.6306229
+          ],
+          [
+            9.292225,
+            45.6306331
+          ],
+          [
+            9.2922935,
+            45.6306434
+          ],
+          [
+            9.2923973,
+            45.63066
+          ],
+          [
+            9.2924845,
+            45.6306745
+          ],
+          [
+            9.2925717,
+            45.6306908
+          ],
+          [
+            9.2926459,
+            45.6307068
+          ],
+          [
+            9.2940914,
+            45.6310426
+          ],
+          [
+            9.2953451,
+            45.6313282
+          ]
+        ]
+      },
+      "id": "way/179968263"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968245",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2912597,
+            45.6301582
+          ],
+          [
+            9.2912965,
+            45.6301613
+          ],
+          [
+            9.2913293,
+            45.6301653
+          ],
+          [
+            9.2913588,
+            45.6301711
+          ],
+          [
+            9.2913855,
+            45.6301774
+          ],
+          [
+            9.2914016,
+            45.6301838
+          ],
+          [
+            9.2914194,
+            45.6301947
+          ],
+          [
+            9.2914339,
+            45.6302055
+          ],
+          [
+            9.2914458,
+            45.6302172
+          ],
+          [
+            9.2914579,
+            45.6302319
+          ],
+          [
+            9.29147,
+            45.6302486
+          ],
+          [
+            9.2914793,
+            45.6302659
+          ],
+          [
+            9.2914886,
+            45.630285
+          ],
+          [
+            9.2915531,
+            45.6304407
+          ],
+          [
+            9.2915638,
+            45.6304626
+          ],
+          [
+            9.2915771,
+            45.6304845
+          ],
+          [
+            9.2915883,
+            45.6305013
+          ],
+          [
+            9.2916021,
+            45.6305168
+          ],
+          [
+            9.2916174,
+            45.6305308
+          ],
+          [
+            9.2916378,
+            45.6305438
+          ],
+          [
+            9.2916554,
+            45.6305527
+          ],
+          [
+            9.2916782,
+            45.6305597
+          ],
+          [
+            9.2917079,
+            45.6305663
+          ],
+          [
+            9.2917382,
+            45.6305707
+          ],
+          [
+            9.2918022,
+            45.630579
+          ]
+        ]
+      },
+      "id": "way/179968245"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968262",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2865519,
+            45.6299347
+          ],
+          [
+            9.2885865,
+            45.6300489
+          ],
+          [
+            9.2896282,
+            45.6301022
+          ],
+          [
+            9.2900952,
+            45.6301181
+          ],
+          [
+            9.2906556,
+            45.6301371
+          ],
+          [
+            9.291219,
+            45.6301563
+          ],
+          [
+            9.2912597,
+            45.6301582
+          ]
+        ]
+      },
+      "id": "way/179968262"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968220",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2822082,
+            45.6273764
+          ],
+          [
+            9.2822228,
+            45.6274663
+          ],
+          [
+            9.2822884,
+            45.6277162
+          ],
+          [
+            9.2823414,
+            45.6278535
+          ],
+          [
+            9.2824275,
+            45.6280305
+          ],
+          [
+            9.2825703,
+            45.6282622
+          ],
+          [
+            9.2827297,
+            45.6284718
+          ],
+          [
+            9.282913,
+            45.6286635
+          ],
+          [
+            9.2830708,
+            45.6288006
+          ],
+          [
+            9.283235,
+            45.6289288
+          ],
+          [
+            9.2834071,
+            45.6290458
+          ],
+          [
+            9.2835825,
+            45.6291517
+          ],
+          [
+            9.2837929,
+            45.6292643
+          ],
+          [
+            9.2839877,
+            45.6293589
+          ],
+          [
+            9.2841817,
+            45.6294438
+          ],
+          [
+            9.2844657,
+            45.629551
+          ],
+          [
+            9.2848557,
+            45.6296739
+          ],
+          [
+            9.2851848,
+            45.6297512
+          ],
+          [
+            9.2854824,
+            45.6298095
+          ],
+          [
+            9.2857484,
+            45.6298536
+          ],
+          [
+            9.2860752,
+            45.6298946
+          ],
+          [
+            9.2865519,
+            45.6299347
+          ]
+        ]
+      },
+      "id": "way/179968220"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968264",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2824337,
+            45.6248045
+          ],
+          [
+            9.2824108,
+            45.6248654
+          ],
+          [
+            9.2821906,
+            45.6254508
+          ],
+          [
+            9.2821342,
+            45.6256399
+          ],
+          [
+            9.2821004,
+            45.625796
+          ],
+          [
+            9.2820801,
+            45.6259694
+          ],
+          [
+            9.2820745,
+            45.6261909
+          ],
+          [
+            9.2822082,
+            45.6273764
+          ]
+        ]
+      },
+      "id": "way/179968264"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968242",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2818939,
+            45.6244492
+          ],
+          [
+            9.281898,
+            45.6244736
+          ],
+          [
+            9.2819022,
+            45.6244924
+          ],
+          [
+            9.2819139,
+            45.6245138
+          ],
+          [
+            9.2819322,
+            45.6245326
+          ],
+          [
+            9.2819584,
+            45.6245453
+          ],
+          [
+            9.2819947,
+            45.6245576
+          ],
+          [
+            9.2820328,
+            45.6245615
+          ],
+          [
+            9.282077,
+            45.6245615
+          ],
+          [
+            9.2822336,
+            45.6245489
+          ],
+          [
+            9.2822742,
+            45.6245472
+          ],
+          [
+            9.2823228,
+            45.6245498
+          ],
+          [
+            9.2823659,
+            45.6245609
+          ],
+          [
+            9.2823877,
+            45.6245701
+          ],
+          [
+            9.2824103,
+            45.624584
+          ],
+          [
+            9.2824276,
+            45.6245967
+          ],
+          [
+            9.2824435,
+            45.6246131
+          ],
+          [
+            9.2824626,
+            45.6246448
+          ],
+          [
+            9.2824666,
+            45.6246649
+          ],
+          [
+            9.2824693,
+            45.6246869
+          ],
+          [
+            9.2824669,
+            45.6247091
+          ],
+          [
+            9.282465,
+            45.6247212
+          ],
+          [
+            9.2824337,
+            45.6248045
+          ]
+        ]
+      },
+      "id": "way/179968242"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/19842206",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2807694,
+            45.616193
+          ],
+          [
+            9.2811729,
+            45.6189632
+          ],
+          [
+            9.2812785,
+            45.6195721
+          ],
+          [
+            9.2814088,
+            45.6206107
+          ],
+          [
+            9.2814693,
+            45.6210889
+          ],
+          [
+            9.2814831,
+            45.6211988
+          ],
+          [
+            9.2818939,
+            45.6244492
+          ]
+        ]
+      },
+      "id": "way/19842206"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/179968234",
+        "@relations": [
+          {
+            "role": "",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2836943,
+            45.6125332
+          ],
+          [
+            9.2836829,
+            45.6124607
+          ],
+          [
+            9.2836748,
+            45.6124199
+          ],
+          [
+            9.2836621,
+            45.6123799
+          ],
+          [
+            9.2836493,
+            45.6123493
+          ],
+          [
+            9.2836301,
+            45.612314
+          ],
+          [
+            9.2836121,
+            45.6122853
+          ],
+          [
+            9.2835861,
+            45.6122518
+          ],
+          [
+            9.2835547,
+            45.6122145
+          ],
+          [
+            9.2835135,
+            45.6121723
+          ],
+          [
+            9.2834735,
+            45.6121356
+          ],
+          [
+            9.283437,
+            45.6121034
+          ],
+          [
+            9.2833888,
+            45.6120669
+          ],
+          [
+            9.2833477,
+            45.612042
+          ],
+          [
+            9.2832924,
+            45.6120117
+          ],
+          [
+            9.2832435,
+            45.6119878
+          ],
+          [
+            9.2831973,
+            45.6119685
+          ],
+          [
+            9.2831588,
+            45.6119535
+          ],
+          [
+            9.2831229,
+            45.6119404
+          ],
+          [
+            9.2830829,
+            45.611927
+          ],
+          [
+            9.2830457,
+            45.6119156
+          ],
+          [
+            9.2829644,
+            45.6118954
+          ],
+          [
+            9.2828799,
+            45.6118781
+          ],
+          [
+            9.2828343,
+            45.6118718
+          ],
+          [
+            9.282792,
+            45.6118662
+          ],
+          [
+            9.2827312,
+            45.6118614
+          ],
+          [
+            9.2826842,
+            45.6118581
+          ],
+          [
+            9.2826487,
+            45.611858
+          ],
+          [
+            9.2826161,
+            45.6118587
+          ],
+          [
+            9.2825723,
+            45.6118609
+          ],
+          [
+            9.2825318,
+            45.6118641
+          ],
+          [
+            9.2824941,
+            45.6118672
+          ],
+          [
+            9.2824575,
+            45.6118723
+          ],
+          [
+            9.2824236,
+            45.6118775
+          ],
+          [
+            9.2823557,
+            45.6118905
+          ],
+          [
+            9.282308,
+            45.6119002
+          ],
+          [
+            9.2822575,
+            45.6119119
+          ],
+          [
+            9.2821633,
+            45.6119351
+          ],
+          [
+            9.2820753,
+            45.6119603
+          ],
+          [
+            9.2820164,
+            45.6119786
+          ],
+          [
+            9.2819549,
+            45.6120018
+          ],
+          [
+            9.2818946,
+            45.6120258
+          ],
+          [
+            9.2818422,
+            45.6120483
+          ],
+          [
+            9.2817937,
+            45.6120708
+          ],
+          [
+            9.2817351,
+            45.6121
+          ],
+          [
+            9.2816981,
+            45.6121195
+          ],
+          [
+            9.2816492,
+            45.6121473
+          ],
+          [
+            9.2816043,
+            45.6121743
+          ],
+          [
+            9.2815401,
+            45.612215
+          ],
+          [
+            9.2814742,
+            45.6122623
+          ],
+          [
+            9.2814137,
+            45.6123077
+          ],
+          [
+            9.2813463,
+            45.612364
+          ],
+          [
+            9.2812843,
+            45.6124212
+          ],
+          [
+            9.2812113,
+            45.6124973
+          ],
+          [
+            9.2811845,
+            45.6125263
+          ],
+          [
+            9.281143,
+            45.612573
+          ],
+          [
+            9.2811166,
+            45.6126045
+          ],
+          [
+            9.2810875,
+            45.6126407
+          ],
+          [
+            9.2810626,
+            45.612676
+          ],
+          [
+            9.281035,
+            45.6127161
+          ],
+          [
+            9.2810083,
+            45.6127568
+          ],
+          [
+            9.2809772,
+            45.6128112
+          ],
+          [
+            9.2809512,
+            45.6128565
+          ],
+          [
+            9.2809291,
+            45.6128999
+          ],
+          [
+            9.2809071,
+            45.6129452
+          ],
+          [
+            9.280885,
+            45.6129933
+          ],
+          [
+            9.2808663,
+            45.6130393
+          ],
+          [
+            9.2808476,
+            45.6130881
+          ],
+          [
+            9.2808101,
+            45.6131896
+          ],
+          [
+            9.2807914,
+            45.6132572
+          ],
+          [
+            9.2807753,
+            45.6133239
+          ],
+          [
+            9.2807585,
+            45.6134067
+          ],
+          [
+            9.2807416,
+            45.6135051
+          ],
+          [
+            9.2807256,
+            45.6136345
+          ],
+          [
+            9.280716,
+            45.6137995
+          ],
+          [
+            9.2807176,
+            45.6139645
+          ],
+          [
+            9.280693,
+            45.6148387
+          ],
+          [
+            9.2806903,
+            45.6152515
+          ],
+          [
+            9.2807029,
+            45.6156372
+          ],
+          [
+            9.2807327,
+            45.6159111
+          ],
+          [
+            9.2807694,
+            45.616193
+          ]
+        ]
+      },
+      "id": "way/179968234"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/38168747",
+        "@relations": [
+          {
+            "role": "pit_lane",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            9.2807176,
+            45.6139645
+          ],
+          [
+            9.2807806,
+            45.6143784
+          ],
+          [
+            9.2807878,
+            45.6144353
+          ],
+          [
+            9.280794,
+            45.6145061
+          ],
+          [
+            9.2808031,
+            45.6146404
+          ],
+          [
+            9.2808057,
+            45.6146707
+          ],
+          [
+            9.2808098,
+            45.6147039
+          ],
+          [
+            9.2808137,
+            45.6147384
+          ],
+          [
+            9.2808189,
+            45.6147757
+          ],
+          [
+            9.2808635,
+            45.6150604
+          ],
+          [
+            9.2809221,
+            45.6153955
+          ],
+          [
+            9.2809782,
+            45.6160014
+          ],
+          [
+            9.2809959,
+            45.6161212
+          ],
+          [
+            9.2813286,
+            45.6184074
+          ],
+          [
+            9.2813702,
+            45.6186927
+          ],
+          [
+            9.2814306,
+            45.6191387
+          ],
+          [
+            9.2814355,
+            45.6192836
+          ],
+          [
+            9.2814345,
+            45.6192983
+          ],
+          [
+            9.281418,
+            45.6195366
+          ],
+          [
+            9.2814231,
+            45.6202502
+          ],
+          [
+            9.2814088,
+            45.6206107
+          ]
+        ]
+      },
+      "id": "way/38168747"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/1828499259",
+        "highway": "traffic_signals",
+        "traffic_signals": "signal",
+        "traffic_signals:direction": "forward",
+        "@relations": [
+          {
+            "role": "start",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          },
+          {
+            "role": "finish",
+            "rel": "284565",
+            "reltags": {
+              "access": "no",
+              "highway": "raceway",
+              "importance": "international",
+              "name": "Autodromo Nazionale di Monza",
+              "name:en": "Monza Circuit",
+              "name:it": "Autodromo Nazionale di Monza",
+              "name:ru": "Монца",
+              "type": "circuit",
+              "wikidata": "Q171417",
+              "wikipedia": "it:Autodromo Nazionale di Monza"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.2811729,
+          45.6189632
+        ]
+      },
+      "id": "node/1828499259"
+    }
+  ]
+}

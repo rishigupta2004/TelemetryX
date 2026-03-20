@@ -1,0 +1,16 @@
+{
+"type": "FeatureCollection",
+"_circuit": "mexico_v1",
+"_layer": "sectors",
+"_label": "Autodromo Hermanos Rodriguez",
+"_note": "S1=end of sector 1. S2=end of sector 2. T=speed trap. S3 ends at start\/finish — no point needed.",
+"name": "sectors",
+"features": [
+{ "type": "Feature", "id": "S1", "properties": { "sector": "S1", "ref": "136m before T4", "circuit": "mexico_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "S2", "properties": { "sector": "S2", "ref": "242m before T12", "circuit": "mexico_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "T", "properties": { "sector": "T", "ref": "234m before T1", "circuit": "mexico_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "properties": { "id": "2", "sector": "SECTOR 2", "ref": null, "circuit": "MEXICO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -99.092703786372624, 19.403429419845843 ] } },
+{ "type": "Feature", "properties": { "id": null, "sector": "SPEED TRAP", "ref": null, "circuit": "MEXICO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -99.084209400005818, 19.404954053296294 ] } },
+{ "type": "Feature", "properties": { "id": "1", "sector": "SECTOR 1", "ref": null, "circuit": "MEXICO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -99.085812219787073, 19.398760578949954 ] } }
+]
+}

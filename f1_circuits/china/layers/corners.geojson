@@ -1,0 +1,249 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "china_v1",
+  "_layer": "corners",
+  "_label": "Shanghai International Circuit",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "",
+        "circuit": "china_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "",
+        "circuit": "china_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "",
+        "circuit": "china_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "",
+        "circuit": "china_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "",
+        "circuit": "china_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "",
+        "circuit": "china_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "",
+        "circuit": "china_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "",
+        "circuit": "china_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "",
+        "circuit": "china_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "",
+        "circuit": "china_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "corner_number": 11,
+        "name": "",
+        "circuit": "china_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "properties": {
+        "corner_number": 12,
+        "name": "",
+        "circuit": "china_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "properties": {
+        "corner_number": 13,
+        "name": "",
+        "circuit": "china_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "properties": {
+        "corner_number": 14,
+        "name": "",
+        "circuit": "china_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 15,
+      "properties": {
+        "corner_number": 15,
+        "name": "",
+        "circuit": "china_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 16,
+      "properties": {
+        "corner_number": 16,
+        "name": "",
+        "circuit": "china_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "CHINA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 121.217056306936158, 31.336625387361703 ] } },
+{ "type": "Feature", "properties": { "corner_number": 2, "name": null, "circuit": "CHINA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 121.217099577659567, 31.337955962106385 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "CHINA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 121.217326748957433, 31.33710136531915 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "CHINA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 121.217856815319138, 31.337934326744683 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "CHINA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 121.215790638276587, 31.339978868425536 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "CHINA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 121.215000947574467, 31.342185675319151 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "CHINA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 121.218365246319138, 31.339524525829791 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "CHINA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 121.220442241042548, 31.341212084042557 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "CHINA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 121.221913445638293, 31.340065409872341 ] } },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": "CHINA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 121.222703136340414, 31.340779376808513 ] } },
+{ "type": "Feature", "properties": { "corner_number": 11, "name": null, "circuit": "CHINA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 121.220074439893608, 31.344446570617023 ] } },
+{ "type": "Feature", "properties": { "corner_number": 12, "name": null, "circuit": "CHINA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 121.219501102808508, 31.344067951787238 ] } },
+{ "type": "Feature", "properties": { "corner_number": 13, "name": null, "circuit": "CHINA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 121.218927765723393, 31.345149719872342 ] } },
+{ "type": "Feature", "properties": { "corner_number": 14, "name": null, "circuit": "CHINA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 121.227884805468079, 31.335868149702129 ] } },
+{ "type": "Feature", "properties": { "corner_number": 15, "name": null, "circuit": "CHINA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 121.227051844042549, 31.336138591723405 ] } },
+{ "type": "Feature", "properties": { "corner_number": 16, "name": null, "circuit": "CHINA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 121.225256109021274, 31.338237221808512 ] } }
+]
+}

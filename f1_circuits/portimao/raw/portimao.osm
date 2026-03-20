@@ -1,0 +1,1106 @@
+<?xml version="1.0" encoding="UTF-8"?><osm version="0.6" generator="Overpass API 0.7.62.10 2d4cfc48">
+<note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>
+<meta osm_base="2026-02-19T16:05:15Z"/>
+
+  <node id="449345126" lat="37.2364723" lon="-8.6303738"/>
+  <node id="449345127" lat="37.2359505" lon="-8.6288926"/>
+  <node id="449345128" lat="37.2351875" lon="-8.6300588"/>
+  <node id="449345129" lat="37.2304062" lon="-8.6284515"/>
+  <node id="449345130" lat="37.2303042" lon="-8.6281607"/>
+  <node id="449345131" lat="37.2304908" lon="-8.6280305"/>
+  <node id="449345132" lat="37.2325374" lon="-8.6279120"/>
+  <node id="449345133" lat="37.2340150" lon="-8.6288429"/>
+  <node id="449345134" lat="37.2344279" lon="-8.6287974"/>
+  <node id="449345135" lat="37.2351079" lon="-8.6280855"/>
+  <node id="449345136" lat="37.2319268" lon="-8.6267835"/>
+  <node id="449345137" lat="37.2304458" lon="-8.6243944"/>
+  <node id="449345138" lat="37.2300852" lon="-8.6246023"/>
+  <node id="449345139" lat="37.2296991" lon="-8.6262121"/>
+  <node id="449345140" lat="37.2293570" lon="-8.6267456"/>
+  <node id="449345141" lat="37.2275928" lon="-8.6267406"/>
+  <node id="449345142" lat="37.2286374" lon="-8.6255402"/>
+  <node id="449345143" lat="37.2287594" lon="-8.6250422"/>
+  <node id="449345144" lat="37.2277148" lon="-8.6247424"/>
+  <node id="449345145" lat="37.2262308" lon="-8.6264736"/>
+  <node id="449345146" lat="37.2260876" lon="-8.6274561"/>
+  <node id="449345147" lat="37.2269164" lon="-8.6289264"/>
+  <node id="469234186" lat="37.2351818" lon="-8.6278611"/>
+  <node id="469811413" lat="37.2328481" lon="-8.6280789"/>
+  <node id="469811423" lat="37.2331031" lon="-8.6271796"/>
+  <node id="469811427" lat="37.2312114" lon="-8.6279407"/>
+  <node id="469811433" lat="37.2311501" lon="-8.6287110"/>
+  <node id="469811434" lat="37.2288077" lon="-8.6269527"/>
+  <node id="469811438" lat="37.2282547" lon="-8.6259292"/>
+  <node id="469811439" lat="37.2264852" lon="-8.6260330"/>
+  <node id="469811440" lat="37.2264399" lon="-8.6284776"/>
+  <node id="469811441" lat="37.2354775" lon="-8.6320377"/>
+  <node id="469811442" lat="37.2363508" lon="-8.6308770"/>
+  <node id="469811443" lat="37.2364719" lon="-8.6306030"/>
+  <node id="469811444" lat="37.2362164" lon="-8.6290606"/>
+  <node id="469811445" lat="37.2361501" lon="-8.6289127"/>
+  <node id="469811446" lat="37.2358315" lon="-8.6290559"/>
+  <node id="469811447" lat="37.2355453" lon="-8.6296692"/>
+  <node id="469811448" lat="37.2349367" lon="-8.6300742"/>
+  <node id="469811449" lat="37.2302907" lon="-8.6282933"/>
+  <node id="469811450" lat="37.2303679" lon="-8.6280734"/>
+  <node id="469811451" lat="37.2342564" lon="-8.6288704"/>
+  <node id="469811452" lat="37.2317188" lon="-8.6264661"/>
+  <node id="469811453" lat="37.2302404" lon="-8.6243947"/>
+  <node id="469811454" lat="37.2295655" lon="-8.6265008"/>
+  <node id="469811455" lat="37.2276428" lon="-8.6269760"/>
+  <node id="469811456" lat="37.2276792" lon="-8.6265292"/>
+  <node id="469811457" lat="37.2287365" lon="-8.6253799"/>
+  <node id="469811459" lat="37.2286128" lon="-8.6247807"/>
+  <node id="469811464" lat="37.2262237" lon="-8.6280585"/>
+  <node id="1699902583" lat="37.2351249" lon="-8.6276403"/>
+  <node id="1699902597" lat="37.2280052" lon="-8.6245818"/>
+  <node id="1699902756" lat="37.2279531" lon="-8.6271088"/>
+  <node id="1699902759" lat="37.2278071" lon="-8.6271091"/>
+  <node id="1699902760" lat="37.2311256" lon="-8.6250096"/>
+  <node id="1699902827" lat="37.2260917" lon="-8.6270526"/>
+  <node id="1699902940" lat="37.2308606" lon="-8.6246175"/>
+  <node id="1699903034" lat="37.2291951" lon="-8.6268476"/>
+  <node id="1699903153" lat="37.2320216" lon="-8.6278334"/>
+  <node id="1699903180" lat="37.2349663" lon="-8.6275157"/>
+  <node id="1699903269" lat="37.2322399" lon="-8.6270072"/>
+  <node id="1699903423" lat="37.2357596" lon="-8.6318715"/>
+  <node id="1699903648" lat="37.2356556" lon="-8.6320243"/>
+  <node id="1699903724" lat="37.2283094" lon="-8.6245878"/>
+  <node id="1700481867" lat="37.2348608" lon="-8.6318173"/>
+  <node id="1700482273" lat="37.2266879" lon="-8.6257953"/>
+  <node id="1700482286" lat="37.2266379" lon="-8.6287121"/>
+  <node id="1700482807" lat="37.2269084" lon="-8.6255649"/>
+  <node id="1700482826" lat="37.2272127" lon="-8.6290539"/>
+  <node id="1872423143" lat="37.2320025" lon="-8.6268597"/>
+  <node id="1872423148" lat="37.2351724" lon="-8.6279496"/>
+  <node id="1872423151" lat="37.2275911" lon="-8.6268238"/>
+  <node id="1872423154" lat="37.2276077" lon="-8.6266684"/>
+  <node id="1872423168" lat="37.2326157" lon="-8.6279488"/>
+  <node id="1872423169" lat="37.2358900" lon="-8.6289554"/>
+  <node id="1872423170" lat="37.2296616" lon="-8.6263179"/>
+  <node id="1872423171" lat="37.2301172" lon="-8.6245300"/>
+  <node id="1872423172" lat="37.2352557" lon="-8.6300235"/>
+  <node id="1872423175" lat="37.2281561" lon="-8.6245645"/>
+  <node id="1872423177" lat="37.2261320" lon="-8.6277579"/>
+  <node id="1872423181" lat="37.2350211" lon="-8.6275384"/>
+  <node id="1872423185" lat="37.2278820" lon="-8.6271155"/>
+  <node id="1872423188" lat="37.2355449" lon="-8.6320519"/>
+  <node id="1872423190" lat="37.2357177" lon="-8.6319473"/>
+  <node id="1872423194" lat="37.2286825" lon="-8.6248686"/>
+  <node id="1872423197" lat="37.2341745" lon="-8.6288778"/>
+  <node id="1872423199" lat="37.2263277" lon="-8.6262728"/>
+  <node id="1872423201" lat="37.2351590" lon="-8.6277099"/>
+  <node id="1872423212" lat="37.2287739" lon="-8.6251337"/>
+  <node id="1872423213" lat="37.2302888" lon="-8.6282271"/>
+  <node id="1872423214" lat="37.2260828" lon="-8.6272601"/>
+  <node id="1872423215" lat="37.2303770" lon="-8.6243762"/>
+  <node id="1872423218" lat="37.2276914" lon="-8.6270408"/>
+  <node id="1872423223" lat="37.2296168" lon="-8.6264112"/>
+  <node id="1872423229" lat="37.2351481" lon="-8.6280221"/>
+  <node id="1872423232" lat="37.2295031" lon="-8.6265910"/>
+  <node id="1872423234" lat="37.2278341" lon="-8.6246540"/>
+  <node id="1872423236" lat="37.2350279" lon="-8.6300864"/>
+  <node id="1872423240" lat="37.2276437" lon="-8.6265822"/>
+  <node id="1872423243" lat="37.2361820" lon="-8.6289621"/>
+  <node id="1872423245" lat="37.2364317" lon="-8.6307197"/>
+  <node id="1872423250" lat="37.2321744" lon="-8.6278302"/>
+  <node id="1872423251" lat="37.2307479" lon="-8.6245304"/>
+  <node id="1872423259" lat="37.2318571" lon="-8.6267004"/>
+  <node id="1872423261" lat="37.2343474" lon="-8.6288445"/>
+  <node id="1872423265" lat="37.2323591" lon="-8.6270462"/>
+  <node id="1872423268" lat="37.2303290" lon="-8.6281127"/>
+  <node id="1872423270" lat="37.2350804" lon="-8.6275847"/>
+  <node id="1872423272" lat="37.2344877" lon="-8.6287522"/>
+  <node id="1872423277" lat="37.2303133" lon="-8.6283609"/>
+  <node id="1872423279" lat="37.2309459" lon="-8.6247047"/>
+  <node id="1872423281" lat="37.2287738" lon="-8.6252234"/>
+  <node id="1872423283" lat="37.2340939" lon="-8.6288686"/>
+  <node id="1872423285" lat="37.2364845" lon="-8.6305046"/>
+  <node id="1872423290" lat="37.2353972" lon="-8.6299080"/>
+  <node id="1872423291" lat="37.2276396" lon="-8.6248080"/>
+  <node id="1872423292" lat="37.2261271" lon="-8.6268284"/>
+  <node id="1872423294" lat="37.2262808" lon="-8.6282095"/>
+  <node id="1872423296" lat="37.2292882" lon="-8.6267962"/>
+  <node id="1872423298" lat="37.2265251" lon="-8.6285908"/>
+  <node id="1872423300" lat="37.2321538" lon="-8.6269671"/>
+  <node id="1872423307" lat="37.2279079" lon="-8.6246106"/>
+  <node id="1872423309" lat="37.2290824" lon="-8.6268932"/>
+  <node id="1872423311" lat="37.2308011" lon="-8.6245669"/>
+  <node id="1872423314" lat="37.2284015" lon="-8.6246231"/>
+  <node id="1872423316" lat="37.2267961" lon="-8.6288496"/>
+  <node id="1872423318" lat="37.2323091" lon="-8.6278441"/>
+  <node id="1872423320" lat="37.2351025" lon="-8.6300827"/>
+  <node id="1872423323" lat="37.2351789" lon="-8.6277858"/>
+  <node id="1872423328" lat="37.2261774" lon="-8.6266311"/>
+  <node id="1872423330" lat="37.2302988" lon="-8.6243778"/>
+  <node id="1872423331" lat="37.2320857" lon="-8.6269245"/>
+  <node id="1872423333" lat="37.2317903" lon="-8.6266002"/>
+  <node id="1872423335" lat="37.2324248" lon="-8.6278716"/>
+  <node id="1872423337" lat="37.2301561" lon="-8.6244702"/>
+  <node id="1872423339" lat="37.2360356" lon="-8.6288579"/>
+  <node id="1872423343" lat="37.2294358" lon="-8.6266729"/>
+  <node id="1872423345" lat="37.2304107" lon="-8.6280487"/>
+  <node id="1872423347" lat="37.2277443" lon="-8.6270842"/>
+  <node id="1872423349" lat="37.2287294" lon="-8.6249561"/>
+  <node id="1872423353" lat="37.2310600" lon="-8.6248761"/>
+  <node id="1872423357" lat="37.2286946" lon="-8.6254613"/>
+  <node id="1872423359" lat="37.2284881" lon="-8.6246700"/>
+  <node id="1872423360" lat="37.2303512" lon="-8.6284120"/>
+  <node id="1872423362" lat="37.2353257" lon="-8.6299763"/>
+  <node id="5006070798" lat="37.2298018" lon="-8.6299791">
+    <tag k="raceway" v="finish"/>
+  </node>
+  <node id="5006082193" lat="37.2354713" lon="-8.6298090"/>
+  <node id="5006082194" lat="37.2359848" lon="-8.6288696"/>
+  <node id="5006082195" lat="37.2360954" lon="-8.6288723"/>
+  <node id="5006082198" lat="37.2321164" lon="-8.6308098">
+    <tag k="raceway" v="start"/>
+  </node>
+  <node id="5006082199" lat="37.2356005" lon="-8.6320507"/>
+  <node id="5006084805" lat="37.2339028" lon="-8.6287796"/>
+  <node id="5006084808" lat="37.2348659" lon="-8.6300571"/>
+  <node id="5006090670" lat="37.2364552" lon="-8.6306640"/>
+  <node id="5006090671" lat="37.2270619" lon="-8.6289943"/>
+  <node id="5006090672" lat="37.2267133" lon="-8.6287831"/>
+  <node id="5006090674" lat="37.2263523" lon="-8.6283499"/>
+  <node id="5006090675" lat="37.2261719" lon="-8.6279127"/>
+  <node id="5006090676" lat="37.2261051" lon="-8.6276143"/>
+  <node id="5006090679" lat="37.2280806" lon="-8.6245673"/>
+  <node id="5006090680" lat="37.2282392" lon="-8.6245734"/>
+  <node id="5006090681" lat="37.2285510" lon="-8.6247236"/>
+  <node id="5006090682" lat="37.2287619" lon="-8.6253029"/>
+  <node id="5006090683" lat="37.2276081" lon="-8.6269035"/>
+  <node id="5006090685" lat="37.2289493" lon="-8.6269270"/>
+  <node id="5006090686" lat="37.2301922" lon="-8.6244231"/>
+  <node id="5006090687" lat="37.2306930" lon="-8.6244962"/>
+  <node id="5006090688" lat="37.2310086" lon="-8.6247899"/>
+  <node id="5006090689" lat="37.2316736" lon="-8.6263676"/>
+  <node id="5006093050" lat="37.2273736" lon="-8.6291114"/>
+  <node id="5006094949" lat="37.2323902" lon="-8.6309103">
+    <tag k="highway" v="traffic_signals"/>
+  </node>
+  <way id="157736307">
+    <bounds minlat="37.2357596" minlon="-8.6318715" maxlat="37.2363508" maxlon="-8.6308770"/>
+    <nd ref="1699903423" lat="37.2357596" lon="-8.6318715"/>
+    <nd ref="469811442" lat="37.2363508" lon="-8.6308770"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="363133187">
+    <bounds minlat="37.2302888" minlon="-8.6284515" maxlat="37.2304908" maxlon="-8.6280305"/>
+    <nd ref="449345129" lat="37.2304062" lon="-8.6284515"/>
+    <nd ref="1872423360" lat="37.2303512" lon="-8.6284120"/>
+    <nd ref="1872423277" lat="37.2303133" lon="-8.6283609"/>
+    <nd ref="469811449" lat="37.2302907" lon="-8.6282933"/>
+    <nd ref="1872423213" lat="37.2302888" lon="-8.6282271"/>
+    <nd ref="449345130" lat="37.2303042" lon="-8.6281607"/>
+    <nd ref="1872423268" lat="37.2303290" lon="-8.6281127"/>
+    <nd ref="469811450" lat="37.2303679" lon="-8.6280734"/>
+    <nd ref="1872423345" lat="37.2304107" lon="-8.6280487"/>
+    <nd ref="449345131" lat="37.2304908" lon="-8.6280305"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="name" v="Curva da Torre Vip"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="ref" v="6"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="363133190">
+    <bounds minlat="37.2339028" minlon="-8.6288778" maxlat="37.2344877" maxlon="-8.6287522"/>
+    <nd ref="5006084805" lat="37.2339028" lon="-8.6287796"/>
+    <nd ref="449345133" lat="37.2340150" lon="-8.6288429"/>
+    <nd ref="1872423283" lat="37.2340939" lon="-8.6288686"/>
+    <nd ref="1872423197" lat="37.2341745" lon="-8.6288778"/>
+    <nd ref="469811451" lat="37.2342564" lon="-8.6288704"/>
+    <nd ref="1872423261" lat="37.2343474" lon="-8.6288445"/>
+    <nd ref="449345134" lat="37.2344279" lon="-8.6287974"/>
+    <nd ref="1872423272" lat="37.2344877" lon="-8.6287522"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="ref" v="8"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="363133193">
+    <bounds minlat="37.2300852" minlon="-8.6250096" maxlat="37.2311256" maxlon="-8.6243762"/>
+    <nd ref="1699902760" lat="37.2311256" lon="-8.6250096"/>
+    <nd ref="1872423353" lat="37.2310600" lon="-8.6248761"/>
+    <nd ref="5006090688" lat="37.2310086" lon="-8.6247899"/>
+    <nd ref="1872423279" lat="37.2309459" lon="-8.6247047"/>
+    <nd ref="1699902940" lat="37.2308606" lon="-8.6246175"/>
+    <nd ref="1872423311" lat="37.2308011" lon="-8.6245669"/>
+    <nd ref="1872423251" lat="37.2307479" lon="-8.6245304"/>
+    <nd ref="5006090687" lat="37.2306930" lon="-8.6244962"/>
+    <nd ref="449345137" lat="37.2304458" lon="-8.6243944"/>
+    <nd ref="1872423215" lat="37.2303770" lon="-8.6243762"/>
+    <nd ref="1872423330" lat="37.2302988" lon="-8.6243778"/>
+    <nd ref="469811453" lat="37.2302404" lon="-8.6243947"/>
+    <nd ref="5006090686" lat="37.2301922" lon="-8.6244231"/>
+    <nd ref="1872423337" lat="37.2301561" lon="-8.6244702"/>
+    <nd ref="1872423171" lat="37.2301172" lon="-8.6245300"/>
+    <nd ref="449345138" lat="37.2300852" lon="-8.6246023"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="name" v="Curva Portimão"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="ref" v="11"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="363133194">
+    <bounds minlat="37.2320216" minlon="-8.6280789" maxlat="37.2328481" maxlon="-8.6278302"/>
+    <nd ref="1699903153" lat="37.2320216" lon="-8.6278334"/>
+    <nd ref="1872423250" lat="37.2321744" lon="-8.6278302"/>
+    <nd ref="1872423318" lat="37.2323091" lon="-8.6278441"/>
+    <nd ref="1872423335" lat="37.2324248" lon="-8.6278716"/>
+    <nd ref="449345132" lat="37.2325374" lon="-8.6279120"/>
+    <nd ref="1872423168" lat="37.2326157" lon="-8.6279488"/>
+    <nd ref="469811413" lat="37.2328481" lon="-8.6280789"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="ref" v="7"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="363133195">
+    <bounds minlat="37.2260828" minlon="-8.6284776" maxlat="37.2264852" maxlon="-8.6260330"/>
+    <nd ref="469811439" lat="37.2264852" lon="-8.6260330"/>
+    <nd ref="1872423199" lat="37.2263277" lon="-8.6262728"/>
+    <nd ref="449345145" lat="37.2262308" lon="-8.6264736"/>
+    <nd ref="1872423328" lat="37.2261774" lon="-8.6266311"/>
+    <nd ref="1872423292" lat="37.2261271" lon="-8.6268284"/>
+    <nd ref="1699902827" lat="37.2260917" lon="-8.6270526"/>
+    <nd ref="1872423214" lat="37.2260828" lon="-8.6272601"/>
+    <nd ref="449345146" lat="37.2260876" lon="-8.6274561"/>
+    <nd ref="5006090676" lat="37.2261051" lon="-8.6276143"/>
+    <nd ref="1872423177" lat="37.2261320" lon="-8.6277579"/>
+    <nd ref="5006090675" lat="37.2261719" lon="-8.6279127"/>
+    <nd ref="469811464" lat="37.2262237" lon="-8.6280585"/>
+    <nd ref="1872423294" lat="37.2262808" lon="-8.6282095"/>
+    <nd ref="5006090674" lat="37.2263523" lon="-8.6283499"/>
+    <nd ref="469811440" lat="37.2264399" lon="-8.6284776"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="name" v="Curva Galp"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="ref" v="15"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="363133196">
+    <bounds minlat="37.2276396" minlon="-8.6255402" maxlat="37.2287739" maxlon="-8.6245645"/>
+    <nd ref="449345142" lat="37.2286374" lon="-8.6255402"/>
+    <nd ref="1872423357" lat="37.2286946" lon="-8.6254613"/>
+    <nd ref="469811457" lat="37.2287365" lon="-8.6253799"/>
+    <nd ref="5006090682" lat="37.2287619" lon="-8.6253029"/>
+    <nd ref="1872423281" lat="37.2287738" lon="-8.6252234"/>
+    <nd ref="1872423212" lat="37.2287739" lon="-8.6251337"/>
+    <nd ref="449345143" lat="37.2287594" lon="-8.6250422"/>
+    <nd ref="1872423349" lat="37.2287294" lon="-8.6249561"/>
+    <nd ref="1872423194" lat="37.2286825" lon="-8.6248686"/>
+    <nd ref="469811459" lat="37.2286128" lon="-8.6247807"/>
+    <nd ref="5006090681" lat="37.2285510" lon="-8.6247236"/>
+    <nd ref="1872423359" lat="37.2284881" lon="-8.6246700"/>
+    <nd ref="1872423314" lat="37.2284015" lon="-8.6246231"/>
+    <nd ref="1699903724" lat="37.2283094" lon="-8.6245878"/>
+    <nd ref="5006090680" lat="37.2282392" lon="-8.6245734"/>
+    <nd ref="1872423175" lat="37.2281561" lon="-8.6245645"/>
+    <nd ref="5006090679" lat="37.2280806" lon="-8.6245673"/>
+    <nd ref="1699902597" lat="37.2280052" lon="-8.6245818"/>
+    <nd ref="1872423307" lat="37.2279079" lon="-8.6246106"/>
+    <nd ref="1872423234" lat="37.2278341" lon="-8.6246540"/>
+    <nd ref="449345144" lat="37.2277148" lon="-8.6247424"/>
+    <nd ref="1872423291" lat="37.2276396" lon="-8.6248080"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="name" v="Curva Sagres"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="ref" v="14"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="363133197">
+    <bounds minlat="37.2275911" minlon="-8.6271155" maxlat="37.2279531" maxlon="-8.6265292"/>
+    <nd ref="1699902756" lat="37.2279531" lon="-8.6271088"/>
+    <nd ref="1872423185" lat="37.2278820" lon="-8.6271155"/>
+    <nd ref="1699902759" lat="37.2278071" lon="-8.6271091"/>
+    <nd ref="1872423347" lat="37.2277443" lon="-8.6270842"/>
+    <nd ref="1872423218" lat="37.2276914" lon="-8.6270408"/>
+    <nd ref="469811455" lat="37.2276428" lon="-8.6269760"/>
+    <nd ref="5006090683" lat="37.2276081" lon="-8.6269035"/>
+    <nd ref="1872423151" lat="37.2275911" lon="-8.6268238"/>
+    <nd ref="449345141" lat="37.2275928" lon="-8.6267406"/>
+    <nd ref="1872423154" lat="37.2276077" lon="-8.6266684"/>
+    <nd ref="1872423240" lat="37.2276437" lon="-8.6265822"/>
+    <nd ref="469811456" lat="37.2276792" lon="-8.6265292"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="ref" v="13"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="363133198">
+    <bounds minlat="37.2264852" minlon="-8.6260330" maxlat="37.2269084" maxlon="-8.6255649"/>
+    <nd ref="1700482807" lat="37.2269084" lon="-8.6255649"/>
+    <nd ref="1700482273" lat="37.2266879" lon="-8.6257953"/>
+    <nd ref="469811439" lat="37.2264852" lon="-8.6260330"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="363133199">
+    <bounds minlat="37.2264399" minlon="-8.6318173" maxlat="37.2348608" maxlon="-8.6284776"/>
+    <nd ref="469811440" lat="37.2264399" lon="-8.6284776"/>
+    <nd ref="1872423298" lat="37.2265251" lon="-8.6285908"/>
+    <nd ref="1700482286" lat="37.2266379" lon="-8.6287121"/>
+    <nd ref="5006090672" lat="37.2267133" lon="-8.6287831"/>
+    <nd ref="1872423316" lat="37.2267961" lon="-8.6288496"/>
+    <nd ref="449345147" lat="37.2269164" lon="-8.6289264"/>
+    <nd ref="5006090671" lat="37.2270619" lon="-8.6289943"/>
+    <nd ref="1700482826" lat="37.2272127" lon="-8.6290539"/>
+    <nd ref="5006093050" lat="37.2273736" lon="-8.6291114"/>
+    <nd ref="5006070798" lat="37.2298018" lon="-8.6299791"/>
+    <nd ref="5006082198" lat="37.2321164" lon="-8.6308098"/>
+    <nd ref="5006094949" lat="37.2323902" lon="-8.6309103"/>
+    <nd ref="1700481867" lat="37.2348608" lon="-8.6318173"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="name" v="Autódromo Internacional do Algarve"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="18"/>
+  </way>
+  <way id="363133200">
+    <bounds minlat="37.2354775" minlon="-8.6320519" maxlat="37.2357596" maxlon="-8.6318715"/>
+    <nd ref="469811441" lat="37.2354775" lon="-8.6320377"/>
+    <nd ref="1872423188" lat="37.2355449" lon="-8.6320519"/>
+    <nd ref="5006082199" lat="37.2356005" lon="-8.6320507"/>
+    <nd ref="1699903648" lat="37.2356556" lon="-8.6320243"/>
+    <nd ref="1872423190" lat="37.2357177" lon="-8.6319473"/>
+    <nd ref="1699903423" lat="37.2357596" lon="-8.6318715"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="ref" v="1"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="363133201">
+    <bounds minlat="37.2348659" minlon="-8.6300864" maxlat="37.2354713" maxlon="-8.6298090"/>
+    <nd ref="5006082193" lat="37.2354713" lon="-8.6298090"/>
+    <nd ref="1872423290" lat="37.2353972" lon="-8.6299080"/>
+    <nd ref="1872423362" lat="37.2353257" lon="-8.6299763"/>
+    <nd ref="1872423172" lat="37.2352557" lon="-8.6300235"/>
+    <nd ref="449345128" lat="37.2351875" lon="-8.6300588"/>
+    <nd ref="1872423320" lat="37.2351025" lon="-8.6300827"/>
+    <nd ref="1872423236" lat="37.2350279" lon="-8.6300864"/>
+    <nd ref="469811448" lat="37.2349367" lon="-8.6300742"/>
+    <nd ref="5006084808" lat="37.2348659" lon="-8.6300571"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="ref" v="5"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="511858148">
+    <bounds minlat="37.2348608" minlon="-8.6320377" maxlat="37.2354775" maxlon="-8.6318173"/>
+    <nd ref="1700481867" lat="37.2348608" lon="-8.6318173"/>
+    <nd ref="469811441" lat="37.2354775" lon="-8.6320377"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="511858149">
+    <bounds minlat="37.2362164" minlon="-8.6303738" maxlat="37.2364723" maxlon="-8.6290606"/>
+    <nd ref="449345126" lat="37.2364723" lon="-8.6303738"/>
+    <nd ref="469811444" lat="37.2362164" lon="-8.6290606"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="511858150">
+    <bounds minlat="37.2358315" minlon="-8.6290606" maxlat="37.2362164" maxlon="-8.6288579"/>
+    <nd ref="469811444" lat="37.2362164" lon="-8.6290606"/>
+    <nd ref="1872423243" lat="37.2361820" lon="-8.6289621"/>
+    <nd ref="469811445" lat="37.2361501" lon="-8.6289127"/>
+    <nd ref="5006082195" lat="37.2360954" lon="-8.6288723"/>
+    <nd ref="1872423339" lat="37.2360356" lon="-8.6288579"/>
+    <nd ref="5006082194" lat="37.2359848" lon="-8.6288696"/>
+    <nd ref="449345127" lat="37.2359505" lon="-8.6288926"/>
+    <nd ref="1872423169" lat="37.2358900" lon="-8.6289554"/>
+    <nd ref="469811446" lat="37.2358315" lon="-8.6290559"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="name" v="Curva Lagos"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="ref" v="4"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="511858151">
+    <bounds minlat="37.2363508" minlon="-8.6308770" maxlat="37.2364845" maxlon="-8.6303738"/>
+    <nd ref="469811442" lat="37.2363508" lon="-8.6308770"/>
+    <nd ref="1872423245" lat="37.2364317" lon="-8.6307197"/>
+    <nd ref="5006090670" lat="37.2364552" lon="-8.6306640"/>
+    <nd ref="469811443" lat="37.2364719" lon="-8.6306030"/>
+    <nd ref="1872423285" lat="37.2364845" lon="-8.6305046"/>
+    <nd ref="449345126" lat="37.2364723" lon="-8.6303738"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="ref" v="3"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="511858533">
+    <bounds minlat="37.2344877" minlon="-8.6287522" maxlat="37.2351079" maxlon="-8.6280855"/>
+    <nd ref="1872423272" lat="37.2344877" lon="-8.6287522"/>
+    <nd ref="449345135" lat="37.2351079" lon="-8.6280855"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="511858536">
+    <bounds minlat="37.2328481" minlon="-8.6287796" maxlat="37.2339028" maxlon="-8.6280789"/>
+    <nd ref="469811413" lat="37.2328481" lon="-8.6280789"/>
+    <nd ref="5006084805" lat="37.2339028" lon="-8.6287796"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="511858539">
+    <bounds minlat="37.2331031" minlon="-8.6275157" maxlat="37.2349663" maxlon="-8.6271796"/>
+    <nd ref="1699903180" lat="37.2349663" lon="-8.6275157"/>
+    <nd ref="469811423" lat="37.2331031" lon="-8.6271796"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="511858543">
+    <bounds minlat="37.2349663" minlon="-8.6280855" maxlat="37.2351818" maxlon="-8.6275157"/>
+    <nd ref="449345135" lat="37.2351079" lon="-8.6280855"/>
+    <nd ref="1872423229" lat="37.2351481" lon="-8.6280221"/>
+    <nd ref="1872423148" lat="37.2351724" lon="-8.6279496"/>
+    <nd ref="469234186" lat="37.2351818" lon="-8.6278611"/>
+    <nd ref="1872423323" lat="37.2351789" lon="-8.6277858"/>
+    <nd ref="1872423201" lat="37.2351590" lon="-8.6277099"/>
+    <nd ref="1699902583" lat="37.2351249" lon="-8.6276403"/>
+    <nd ref="1872423270" lat="37.2350804" lon="-8.6275847"/>
+    <nd ref="1872423181" lat="37.2350211" lon="-8.6275384"/>
+    <nd ref="1699903180" lat="37.2349663" lon="-8.6275157"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="name" v="Curva Samsung"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="ref" v="9"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="511858546">
+    <bounds minlat="37.2304908" minlon="-8.6280305" maxlat="37.2312114" maxlon="-8.6279407"/>
+    <nd ref="449345131" lat="37.2304908" lon="-8.6280305"/>
+    <nd ref="469811427" lat="37.2312114" lon="-8.6279407"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="511858547">
+    <bounds minlat="37.2304062" minlon="-8.6287110" maxlat="37.2311501" maxlon="-8.6284515"/>
+    <nd ref="469811433" lat="37.2311501" lon="-8.6287110"/>
+    <nd ref="449345129" lat="37.2304062" lon="-8.6284515"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="511858548">
+    <bounds minlat="37.2311501" minlon="-8.6300571" maxlat="37.2348659" maxlon="-8.6287110"/>
+    <nd ref="5006084808" lat="37.2348659" lon="-8.6300571"/>
+    <nd ref="469811433" lat="37.2311501" lon="-8.6287110"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="511858549">
+    <bounds minlat="37.2354713" minlon="-8.6298090" maxlat="37.2358315" maxlon="-8.6290559"/>
+    <nd ref="469811446" lat="37.2358315" lon="-8.6290559"/>
+    <nd ref="469811447" lat="37.2355453" lon="-8.6296692"/>
+    <nd ref="5006082193" lat="37.2354713" lon="-8.6298090"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="511859282">
+    <bounds minlat="37.2282547" minlon="-8.6259292" maxlat="37.2286374" maxlon="-8.6255402"/>
+    <nd ref="469811438" lat="37.2282547" lon="-8.6259292"/>
+    <nd ref="449345142" lat="37.2286374" lon="-8.6255402"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="511859283">
+    <bounds minlat="37.2269084" minlon="-8.6255649" maxlat="37.2276396" maxlon="-8.6248080"/>
+    <nd ref="1872423291" lat="37.2276396" lon="-8.6248080"/>
+    <nd ref="1700482807" lat="37.2269084" lon="-8.6255649"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="511859284">
+    <bounds minlat="37.2312114" minlon="-8.6279407" maxlat="37.2320216" maxlon="-8.6278334"/>
+    <nd ref="469811427" lat="37.2312114" lon="-8.6279407"/>
+    <nd ref="1699903153" lat="37.2320216" lon="-8.6278334"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="511859285">
+    <bounds minlat="37.2276792" minlon="-8.6265292" maxlat="37.2282547" maxlon="-8.6259292"/>
+    <nd ref="469811456" lat="37.2276792" lon="-8.6265292"/>
+    <nd ref="469811438" lat="37.2282547" lon="-8.6259292"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="511859286">
+    <bounds minlat="37.2279531" minlon="-8.6271088" maxlat="37.2288077" maxlon="-8.6269527"/>
+    <nd ref="469811434" lat="37.2288077" lon="-8.6269527"/>
+    <nd ref="1699902756" lat="37.2279531" lon="-8.6271088"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="511859287">
+    <bounds minlat="37.2296991" minlon="-8.6262121" maxlat="37.2300852" maxlon="-8.6246023"/>
+    <nd ref="449345138" lat="37.2300852" lon="-8.6246023"/>
+    <nd ref="449345139" lat="37.2296991" lon="-8.6262121"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="511859288">
+    <bounds minlat="37.2288077" minlon="-8.6269527" maxlat="37.2296991" maxlon="-8.6262121"/>
+    <nd ref="449345139" lat="37.2296991" lon="-8.6262121"/>
+    <nd ref="1872423170" lat="37.2296616" lon="-8.6263179"/>
+    <nd ref="1872423223" lat="37.2296168" lon="-8.6264112"/>
+    <nd ref="469811454" lat="37.2295655" lon="-8.6265008"/>
+    <nd ref="1872423232" lat="37.2295031" lon="-8.6265910"/>
+    <nd ref="1872423343" lat="37.2294358" lon="-8.6266729"/>
+    <nd ref="449345140" lat="37.2293570" lon="-8.6267456"/>
+    <nd ref="1872423296" lat="37.2292882" lon="-8.6267962"/>
+    <nd ref="1699903034" lat="37.2291951" lon="-8.6268476"/>
+    <nd ref="1872423309" lat="37.2290824" lon="-8.6268932"/>
+    <nd ref="5006090685" lat="37.2289493" lon="-8.6269270"/>
+    <nd ref="469811434" lat="37.2288077" lon="-8.6269527"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="ref" v="12"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="511859289">
+    <bounds minlat="37.2311256" minlon="-8.6263676" maxlat="37.2316736" maxlon="-8.6250096"/>
+    <nd ref="5006090689" lat="37.2316736" lon="-8.6263676"/>
+    <nd ref="1699902760" lat="37.2311256" lon="-8.6250096"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="511859290">
+    <bounds minlat="37.2316736" minlon="-8.6270462" maxlat="37.2323591" maxlon="-8.6263676"/>
+    <nd ref="1872423265" lat="37.2323591" lon="-8.6270462"/>
+    <nd ref="1699903269" lat="37.2322399" lon="-8.6270072"/>
+    <nd ref="1872423300" lat="37.2321538" lon="-8.6269671"/>
+    <nd ref="1872423331" lat="37.2320857" lon="-8.6269245"/>
+    <nd ref="1872423143" lat="37.2320025" lon="-8.6268597"/>
+    <nd ref="449345136" lat="37.2319268" lon="-8.6267835"/>
+    <nd ref="1872423259" lat="37.2318571" lon="-8.6267004"/>
+    <nd ref="1872423333" lat="37.2317903" lon="-8.6266002"/>
+    <nd ref="469811452" lat="37.2317188" lon="-8.6264661"/>
+    <nd ref="5006090689" lat="37.2316736" lon="-8.6263676"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="name" v="Curva Craig Jones"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="ref" v="10"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <way id="511859291">
+    <bounds minlat="37.2323591" minlon="-8.6271796" maxlat="37.2331031" maxlon="-8.6270462"/>
+    <nd ref="469811423" lat="37.2331031" lon="-8.6271796"/>
+    <nd ref="1872423265" lat="37.2323591" lon="-8.6270462"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="lanes" v="1"/>
+    <tag k="maxspeed" v="none"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="https://commons.wikimedia.org/wiki/File:Aut%C3%B3dromo_de_Algarve.svg"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="width" v="14"/>
+  </way>
+  <relation id="7509968">
+    <bounds minlat="37.2260828" minlon="-8.6320519" maxlat="37.2364845" maxlon="-8.6243762"/>
+    <member type="node" ref="5006070798" role="stop" lat="37.2298018" lon="-8.6299791"/>
+    <member type="node" ref="5006082198" role="inner" lat="37.2321164" lon="-8.6308098"/>
+    <member type="way" ref="363133199" role="outer">
+      <nd lat="37.2264399" lon="-8.6284776"/>
+      <nd lat="37.2265251" lon="-8.6285908"/>
+      <nd lat="37.2266379" lon="-8.6287121"/>
+      <nd lat="37.2267133" lon="-8.6287831"/>
+      <nd lat="37.2267961" lon="-8.6288496"/>
+      <nd lat="37.2269164" lon="-8.6289264"/>
+      <nd lat="37.2270619" lon="-8.6289943"/>
+      <nd lat="37.2272127" lon="-8.6290539"/>
+      <nd lat="37.2273736" lon="-8.6291114"/>
+      <nd lat="37.2298018" lon="-8.6299791"/>
+      <nd lat="37.2321164" lon="-8.6308098"/>
+      <nd lat="37.2323902" lon="-8.6309103"/>
+      <nd lat="37.2348608" lon="-8.6318173"/>
+    </member>
+    <member type="way" ref="511858148" role="outer">
+      <nd lat="37.2348608" lon="-8.6318173"/>
+      <nd lat="37.2354775" lon="-8.6320377"/>
+    </member>
+    <member type="way" ref="363133200" role="outer">
+      <nd lat="37.2354775" lon="-8.6320377"/>
+      <nd lat="37.2355449" lon="-8.6320519"/>
+      <nd lat="37.2356005" lon="-8.6320507"/>
+      <nd lat="37.2356556" lon="-8.6320243"/>
+      <nd lat="37.2357177" lon="-8.6319473"/>
+      <nd lat="37.2357596" lon="-8.6318715"/>
+    </member>
+    <member type="way" ref="157736307" role="outer">
+      <nd lat="37.2357596" lon="-8.6318715"/>
+      <nd lat="37.2363508" lon="-8.6308770"/>
+    </member>
+    <member type="way" ref="511858151" role="outer">
+      <nd lat="37.2363508" lon="-8.6308770"/>
+      <nd lat="37.2364317" lon="-8.6307197"/>
+      <nd lat="37.2364552" lon="-8.6306640"/>
+      <nd lat="37.2364719" lon="-8.6306030"/>
+      <nd lat="37.2364845" lon="-8.6305046"/>
+      <nd lat="37.2364723" lon="-8.6303738"/>
+    </member>
+    <member type="way" ref="511858149" role="outer">
+      <nd lat="37.2364723" lon="-8.6303738"/>
+      <nd lat="37.2362164" lon="-8.6290606"/>
+    </member>
+    <member type="way" ref="511858150" role="outer">
+      <nd lat="37.2362164" lon="-8.6290606"/>
+      <nd lat="37.2361820" lon="-8.6289621"/>
+      <nd lat="37.2361501" lon="-8.6289127"/>
+      <nd lat="37.2360954" lon="-8.6288723"/>
+      <nd lat="37.2360356" lon="-8.6288579"/>
+      <nd lat="37.2359848" lon="-8.6288696"/>
+      <nd lat="37.2359505" lon="-8.6288926"/>
+      <nd lat="37.2358900" lon="-8.6289554"/>
+      <nd lat="37.2358315" lon="-8.6290559"/>
+    </member>
+    <member type="way" ref="511858549" role="outer">
+      <nd lat="37.2358315" lon="-8.6290559"/>
+      <nd lat="37.2355453" lon="-8.6296692"/>
+      <nd lat="37.2354713" lon="-8.6298090"/>
+    </member>
+    <member type="way" ref="363133201" role="outer">
+      <nd lat="37.2354713" lon="-8.6298090"/>
+      <nd lat="37.2353972" lon="-8.6299080"/>
+      <nd lat="37.2353257" lon="-8.6299763"/>
+      <nd lat="37.2352557" lon="-8.6300235"/>
+      <nd lat="37.2351875" lon="-8.6300588"/>
+      <nd lat="37.2351025" lon="-8.6300827"/>
+      <nd lat="37.2350279" lon="-8.6300864"/>
+      <nd lat="37.2349367" lon="-8.6300742"/>
+      <nd lat="37.2348659" lon="-8.6300571"/>
+    </member>
+    <member type="way" ref="511858548" role="outer">
+      <nd lat="37.2348659" lon="-8.6300571"/>
+      <nd lat="37.2311501" lon="-8.6287110"/>
+    </member>
+    <member type="way" ref="511858547" role="outer">
+      <nd lat="37.2311501" lon="-8.6287110"/>
+      <nd lat="37.2304062" lon="-8.6284515"/>
+    </member>
+    <member type="way" ref="363133187" role="outer">
+      <nd lat="37.2304062" lon="-8.6284515"/>
+      <nd lat="37.2303512" lon="-8.6284120"/>
+      <nd lat="37.2303133" lon="-8.6283609"/>
+      <nd lat="37.2302907" lon="-8.6282933"/>
+      <nd lat="37.2302888" lon="-8.6282271"/>
+      <nd lat="37.2303042" lon="-8.6281607"/>
+      <nd lat="37.2303290" lon="-8.6281127"/>
+      <nd lat="37.2303679" lon="-8.6280734"/>
+      <nd lat="37.2304107" lon="-8.6280487"/>
+      <nd lat="37.2304908" lon="-8.6280305"/>
+    </member>
+    <member type="way" ref="511858546" role="outer">
+      <nd lat="37.2304908" lon="-8.6280305"/>
+      <nd lat="37.2312114" lon="-8.6279407"/>
+    </member>
+    <member type="way" ref="511859284" role="outer">
+      <nd lat="37.2312114" lon="-8.6279407"/>
+      <nd lat="37.2320216" lon="-8.6278334"/>
+    </member>
+    <member type="way" ref="363133194" role="outer">
+      <nd lat="37.2320216" lon="-8.6278334"/>
+      <nd lat="37.2321744" lon="-8.6278302"/>
+      <nd lat="37.2323091" lon="-8.6278441"/>
+      <nd lat="37.2324248" lon="-8.6278716"/>
+      <nd lat="37.2325374" lon="-8.6279120"/>
+      <nd lat="37.2326157" lon="-8.6279488"/>
+      <nd lat="37.2328481" lon="-8.6280789"/>
+    </member>
+    <member type="way" ref="511858536" role="outer">
+      <nd lat="37.2328481" lon="-8.6280789"/>
+      <nd lat="37.2339028" lon="-8.6287796"/>
+    </member>
+    <member type="way" ref="363133190" role="outer">
+      <nd lat="37.2339028" lon="-8.6287796"/>
+      <nd lat="37.2340150" lon="-8.6288429"/>
+      <nd lat="37.2340939" lon="-8.6288686"/>
+      <nd lat="37.2341745" lon="-8.6288778"/>
+      <nd lat="37.2342564" lon="-8.6288704"/>
+      <nd lat="37.2343474" lon="-8.6288445"/>
+      <nd lat="37.2344279" lon="-8.6287974"/>
+      <nd lat="37.2344877" lon="-8.6287522"/>
+    </member>
+    <member type="way" ref="511858533" role="outer">
+      <nd lat="37.2344877" lon="-8.6287522"/>
+      <nd lat="37.2351079" lon="-8.6280855"/>
+    </member>
+    <member type="way" ref="511858543" role="outer">
+      <nd lat="37.2351079" lon="-8.6280855"/>
+      <nd lat="37.2351481" lon="-8.6280221"/>
+      <nd lat="37.2351724" lon="-8.6279496"/>
+      <nd lat="37.2351818" lon="-8.6278611"/>
+      <nd lat="37.2351789" lon="-8.6277858"/>
+      <nd lat="37.2351590" lon="-8.6277099"/>
+      <nd lat="37.2351249" lon="-8.6276403"/>
+      <nd lat="37.2350804" lon="-8.6275847"/>
+      <nd lat="37.2350211" lon="-8.6275384"/>
+      <nd lat="37.2349663" lon="-8.6275157"/>
+    </member>
+    <member type="way" ref="511858539" role="outer">
+      <nd lat="37.2349663" lon="-8.6275157"/>
+      <nd lat="37.2331031" lon="-8.6271796"/>
+    </member>
+    <member type="way" ref="511859291" role="outer">
+      <nd lat="37.2331031" lon="-8.6271796"/>
+      <nd lat="37.2323591" lon="-8.6270462"/>
+    </member>
+    <member type="way" ref="511859290" role="outer">
+      <nd lat="37.2323591" lon="-8.6270462"/>
+      <nd lat="37.2322399" lon="-8.6270072"/>
+      <nd lat="37.2321538" lon="-8.6269671"/>
+      <nd lat="37.2320857" lon="-8.6269245"/>
+      <nd lat="37.2320025" lon="-8.6268597"/>
+      <nd lat="37.2319268" lon="-8.6267835"/>
+      <nd lat="37.2318571" lon="-8.6267004"/>
+      <nd lat="37.2317903" lon="-8.6266002"/>
+      <nd lat="37.2317188" lon="-8.6264661"/>
+      <nd lat="37.2316736" lon="-8.6263676"/>
+    </member>
+    <member type="way" ref="511859289" role="outer">
+      <nd lat="37.2316736" lon="-8.6263676"/>
+      <nd lat="37.2311256" lon="-8.6250096"/>
+    </member>
+    <member type="way" ref="363133193" role="outer">
+      <nd lat="37.2311256" lon="-8.6250096"/>
+      <nd lat="37.2310600" lon="-8.6248761"/>
+      <nd lat="37.2310086" lon="-8.6247899"/>
+      <nd lat="37.2309459" lon="-8.6247047"/>
+      <nd lat="37.2308606" lon="-8.6246175"/>
+      <nd lat="37.2308011" lon="-8.6245669"/>
+      <nd lat="37.2307479" lon="-8.6245304"/>
+      <nd lat="37.2306930" lon="-8.6244962"/>
+      <nd lat="37.2304458" lon="-8.6243944"/>
+      <nd lat="37.2303770" lon="-8.6243762"/>
+      <nd lat="37.2302988" lon="-8.6243778"/>
+      <nd lat="37.2302404" lon="-8.6243947"/>
+      <nd lat="37.2301922" lon="-8.6244231"/>
+      <nd lat="37.2301561" lon="-8.6244702"/>
+      <nd lat="37.2301172" lon="-8.6245300"/>
+      <nd lat="37.2300852" lon="-8.6246023"/>
+    </member>
+    <member type="way" ref="511859287" role="outer">
+      <nd lat="37.2300852" lon="-8.6246023"/>
+      <nd lat="37.2296991" lon="-8.6262121"/>
+    </member>
+    <member type="way" ref="511859288" role="outer">
+      <nd lat="37.2296991" lon="-8.6262121"/>
+      <nd lat="37.2296616" lon="-8.6263179"/>
+      <nd lat="37.2296168" lon="-8.6264112"/>
+      <nd lat="37.2295655" lon="-8.6265008"/>
+      <nd lat="37.2295031" lon="-8.6265910"/>
+      <nd lat="37.2294358" lon="-8.6266729"/>
+      <nd lat="37.2293570" lon="-8.6267456"/>
+      <nd lat="37.2292882" lon="-8.6267962"/>
+      <nd lat="37.2291951" lon="-8.6268476"/>
+      <nd lat="37.2290824" lon="-8.6268932"/>
+      <nd lat="37.2289493" lon="-8.6269270"/>
+      <nd lat="37.2288077" lon="-8.6269527"/>
+    </member>
+    <member type="way" ref="511859286" role="outer">
+      <nd lat="37.2288077" lon="-8.6269527"/>
+      <nd lat="37.2279531" lon="-8.6271088"/>
+    </member>
+    <member type="way" ref="363133197" role="outer">
+      <nd lat="37.2279531" lon="-8.6271088"/>
+      <nd lat="37.2278820" lon="-8.6271155"/>
+      <nd lat="37.2278071" lon="-8.6271091"/>
+      <nd lat="37.2277443" lon="-8.6270842"/>
+      <nd lat="37.2276914" lon="-8.6270408"/>
+      <nd lat="37.2276428" lon="-8.6269760"/>
+      <nd lat="37.2276081" lon="-8.6269035"/>
+      <nd lat="37.2275911" lon="-8.6268238"/>
+      <nd lat="37.2275928" lon="-8.6267406"/>
+      <nd lat="37.2276077" lon="-8.6266684"/>
+      <nd lat="37.2276437" lon="-8.6265822"/>
+      <nd lat="37.2276792" lon="-8.6265292"/>
+    </member>
+    <member type="way" ref="511859285" role="outer">
+      <nd lat="37.2276792" lon="-8.6265292"/>
+      <nd lat="37.2282547" lon="-8.6259292"/>
+    </member>
+    <member type="way" ref="511859282" role="outer">
+      <nd lat="37.2282547" lon="-8.6259292"/>
+      <nd lat="37.2286374" lon="-8.6255402"/>
+    </member>
+    <member type="way" ref="363133196" role="outer">
+      <nd lat="37.2286374" lon="-8.6255402"/>
+      <nd lat="37.2286946" lon="-8.6254613"/>
+      <nd lat="37.2287365" lon="-8.6253799"/>
+      <nd lat="37.2287619" lon="-8.6253029"/>
+      <nd lat="37.2287738" lon="-8.6252234"/>
+      <nd lat="37.2287739" lon="-8.6251337"/>
+      <nd lat="37.2287594" lon="-8.6250422"/>
+      <nd lat="37.2287294" lon="-8.6249561"/>
+      <nd lat="37.2286825" lon="-8.6248686"/>
+      <nd lat="37.2286128" lon="-8.6247807"/>
+      <nd lat="37.2285510" lon="-8.6247236"/>
+      <nd lat="37.2284881" lon="-8.6246700"/>
+      <nd lat="37.2284015" lon="-8.6246231"/>
+      <nd lat="37.2283094" lon="-8.6245878"/>
+      <nd lat="37.2282392" lon="-8.6245734"/>
+      <nd lat="37.2281561" lon="-8.6245645"/>
+      <nd lat="37.2280806" lon="-8.6245673"/>
+      <nd lat="37.2280052" lon="-8.6245818"/>
+      <nd lat="37.2279079" lon="-8.6246106"/>
+      <nd lat="37.2278341" lon="-8.6246540"/>
+      <nd lat="37.2277148" lon="-8.6247424"/>
+      <nd lat="37.2276396" lon="-8.6248080"/>
+    </member>
+    <member type="way" ref="511859283" role="outer">
+      <nd lat="37.2276396" lon="-8.6248080"/>
+      <nd lat="37.2269084" lon="-8.6255649"/>
+    </member>
+    <member type="way" ref="363133198" role="outer">
+      <nd lat="37.2269084" lon="-8.6255649"/>
+      <nd lat="37.2266879" lon="-8.6257953"/>
+      <nd lat="37.2264852" lon="-8.6260330"/>
+    </member>
+    <member type="way" ref="363133195" role="outer">
+      <nd lat="37.2264852" lon="-8.6260330"/>
+      <nd lat="37.2263277" lon="-8.6262728"/>
+      <nd lat="37.2262308" lon="-8.6264736"/>
+      <nd lat="37.2261774" lon="-8.6266311"/>
+      <nd lat="37.2261271" lon="-8.6268284"/>
+      <nd lat="37.2260917" lon="-8.6270526"/>
+      <nd lat="37.2260828" lon="-8.6272601"/>
+      <nd lat="37.2260876" lon="-8.6274561"/>
+      <nd lat="37.2261051" lon="-8.6276143"/>
+      <nd lat="37.2261320" lon="-8.6277579"/>
+      <nd lat="37.2261719" lon="-8.6279127"/>
+      <nd lat="37.2262237" lon="-8.6280585"/>
+      <nd lat="37.2262808" lon="-8.6282095"/>
+      <nd lat="37.2263523" lon="-8.6283499"/>
+      <nd lat="37.2264399" lon="-8.6284776"/>
+    </member>
+    <tag k="area" v="no"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="name" v="Algarve International Circuit"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="route" v="tracks"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="type" v="route"/>
+    <tag k="wikidata" v="Q789427"/>
+    <tag k="wikipedia" v="en:Algarve International Circuit"/>
+  </relation>
+
+</osm>

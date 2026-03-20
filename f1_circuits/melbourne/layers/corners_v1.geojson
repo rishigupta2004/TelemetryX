@@ -1,0 +1,249 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "australia_v1",
+  "_layer": "corners",
+  "_label": "Albert Park pre-2022",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "",
+        "circuit": "australia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "",
+        "circuit": "australia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "",
+        "circuit": "australia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "",
+        "circuit": "australia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "",
+        "circuit": "australia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "",
+        "circuit": "australia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "",
+        "circuit": "australia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "",
+        "circuit": "australia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "",
+        "circuit": "australia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "",
+        "circuit": "australia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "corner_number": 11,
+        "name": "",
+        "circuit": "australia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "properties": {
+        "corner_number": 12,
+        "name": "",
+        "circuit": "australia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "properties": {
+        "corner_number": 13,
+        "name": "",
+        "circuit": "australia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "properties": {
+        "corner_number": 14,
+        "name": "",
+        "circuit": "australia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 15,
+      "properties": {
+        "corner_number": 15,
+        "name": "",
+        "circuit": "australia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 16,
+      "properties": {
+        "corner_number": 16,
+        "name": "",
+        "circuit": "australia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "MELBOURNE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 144.965987178813805, -37.847613677005327 ] } },
+{ "type": "Feature", "properties": { "corner_number": 2, "name": null, "circuit": "MELBOURNE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 144.966218806244655, -37.846544627324477 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "MELBOURNE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 144.962156417457436, -37.842161523632981 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "MELBOURNE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 144.963688721999972, -37.841840808728726 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "MELBOURNE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 144.963724356989331, -37.839898701808515 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "MELBOURNE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 144.967893650744656, -37.837956594888304 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "MELBOURNE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 144.968766707984031, -37.838491119728729 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "MELBOURNE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 144.970673179914883, -37.838900922106383 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "MELBOURNE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 144.971973857026569, -37.842214976117027 ] } },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": "MELBOURNE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 144.971100799787223, -37.842624778494688 ] } },
+{ "type": "Feature", "properties": { "corner_number": 11, "name": null, "circuit": "MELBOURNE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 144.973506161569134, -37.848148201845753 ] } },
+{ "type": "Feature", "properties": { "corner_number": 12, "name": null, "circuit": "MELBOURNE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 144.974789021186155, -37.848023479382981 ] } },
+{ "type": "Feature", "properties": { "corner_number": 13, "name": null, "circuit": "MELBOURNE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 144.978619782542552, -37.853154917851072 ] } },
+{ "type": "Feature", "properties": { "corner_number": 14, "name": null, "circuit": "MELBOURNE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 144.975751165898913, -37.853903252627667 ] } },
+{ "type": "Feature", "properties": { "corner_number": 15, "name": null, "circuit": "MELBOURNE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 144.974129773882964, -37.852085868170221 ] } },
+{ "type": "Feature", "properties": { "corner_number": 16, "name": null, "circuit": "MELBOURNE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 144.972757826792531, -37.852852020441496 ] } }
+]
+}

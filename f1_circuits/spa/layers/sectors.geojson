@@ -1,0 +1,16 @@
+{
+"type": "FeatureCollection",
+"_circuit": "belgium_v1",
+"_layer": "sectors",
+"_label": "Spa-Francorchamps",
+"_note": "S1=end of sector 1. S2=end of sector 2. T=speed trap. S3 ends at start\/finish — no point needed.",
+"name": "sectors",
+"features": [
+{ "type": "Feature", "id": "S1", "properties": { "sector": "S1", "ref": "see PDF", "circuit": "belgium_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "S2", "properties": { "sector": "S2", "ref": "see PDF", "circuit": "belgium_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "T", "properties": { "sector": "T", "ref": "see PDF", "circuit": "belgium_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "properties": { "id": null, "sector": "SPEED TRAP", "ref": null, "circuit": null, "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.9771188826383, 50.432547425723413 ] } },
+{ "type": "Feature", "properties": { "id": "1", "sector": "SECTOR 1", "ref": null, "circuit": "SPA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.976745169319152, 50.433191043106397 ] } },
+{ "type": "Feature", "properties": { "id": "2", "sector": "SECTOR 2", "ref": null, "circuit": "SPA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.961298352127656, 50.428893339936181 ] } }
+]
+}

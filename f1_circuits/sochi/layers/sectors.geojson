@@ -1,0 +1,16 @@
+{
+"type": "FeatureCollection",
+"_circuit": "russia_v1",
+"_layer": "sectors",
+"_label": "Sochi Autodrom",
+"_note": "S1=end of sector 1. S2=end of sector 2. T=speed trap. S3 ends at start\/finish — no point needed.",
+"name": "sectors",
+"features": [
+{ "type": "Feature", "id": "S1", "properties": { "sector": "S1", "ref": "see PDF", "circuit": "russia_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "S2", "properties": { "sector": "S2", "ref": "see PDF", "circuit": "russia_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "T", "properties": { "sector": "T", "ref": "see PDF", "circuit": "russia_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "properties": { "id": null, "sector": "SPEED TRAP", "ref": null, "circuit": "SOCHI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.958600153831085, 43.406154513518906 ] } },
+{ "type": "Feature", "properties": { "id": "1", "sector": "SECTOR 1", "ref": null, "circuit": "SOCHI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.949653252923333, 43.402484546884409 ] } },
+{ "type": "Feature", "properties": { "id": "2", "sector": "SECTOR 2", "ref": null, "circuit": "SOCHI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.961987815339846, 43.408478101861455 ] } }
+]
+}

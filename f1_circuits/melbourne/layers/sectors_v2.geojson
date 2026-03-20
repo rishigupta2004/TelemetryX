@@ -1,0 +1,16 @@
+{
+"type": "FeatureCollection",
+"_circuit": "australia_v2",
+"_layer": "sectors",
+"_label": "Albert Park 2022+",
+"_note": "S1=end of sector 1. S2=end of sector 2. T=speed trap. S3 ends at start\/finish — no point needed.",
+"name": "sectors_v2",
+"features": [
+{ "type": "Feature", "id": "S1", "properties": { "sector": "S1", "ref": "120m before T6", "circuit": "australia_v2", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "S2", "properties": { "sector": "S2", "ref": "140m before T9", "circuit": "australia_v2", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "T", "properties": { "sector": "T", "ref": "120m before T1", "circuit": "australia_v2", "notes": "" }, "geometry": null },
+{ "type": "Feature", "properties": { "id": "1", "sector": "SECTOR 1", "ref": null, "circuit": "MELBOURNE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 144.966743482396993, -37.83849726010213 ] } },
+{ "type": "Feature", "properties": { "id": "NULLspeed trap", "sector": null, "ref": null, "circuit": "MELBOURNE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 144.966647080229109, -37.848221828790095 ] } },
+{ "type": "Feature", "properties": { "id": "2", "sector": "SECTOR 2", "ref": null, "circuit": "MELBOURNE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 144.972166104341994, -37.847306008194948 ] } }
+]
+}

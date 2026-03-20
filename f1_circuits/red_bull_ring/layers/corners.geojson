@@ -1,0 +1,159 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "austria_v1",
+  "_layer": "corners",
+  "_label": "Red Bull Ring",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "",
+        "circuit": "austria_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "",
+        "circuit": "austria_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "",
+        "circuit": "austria_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "",
+        "circuit": "austria_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "",
+        "circuit": "austria_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "",
+        "circuit": "austria_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "",
+        "circuit": "austria_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "",
+        "circuit": "austria_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "",
+        "circuit": "austria_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "",
+        "circuit": "austria_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "AUSTRIAN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 14.76092315561753, 47.219240843505986 ] } },
+{ "type": "Feature", "properties": { "corner_number": 2, "name": null, "circuit": "AUSTRIAN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 14.756393806454183, 47.224405688087657 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "AUSTRIAN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 14.754048250637451, 47.22617352079682 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "AUSTRIAN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 14.764609029043823, 47.225561134302794 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "AUSTRIAN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 14.762690988326693, 47.224336361314748 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "AUSTRIAN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 14.758704698884461, 47.224151489920324 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "AUSTRIAN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 14.760229887888446, 47.222071686733074 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "AUSTRIAN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 14.761847512589641, 47.222637855378494 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "AUSTRIAN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 14.76963522007968, 47.22312314278885 ] } },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": "AUSTRIAN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 14.770617349362547, 47.221332201155384 ] } }
+]
+}

@@ -1,0 +1,18 @@
+{
+"type": "FeatureCollection",
+"_circuit": "spain_v1",
+"_layer": "drs",
+"_label": "Barcelona pre-2023 with chicane",
+"_note": "3 features per zone: detection_point (Point), activation_point (Point), zone_line (LineString).",
+"name": "drs_v1",
+"features": [
+{ "type": "Feature", "id": "z1_detection", "properties": { "zone": 1, "feature_type": "detection_point", "ref": "see PDF", "circuit": "spain_v1", "notes": "Place at DRS detection sensor — style RED" }, "geometry": null },
+{ "type": "Feature", "id": "z1_activation", "properties": { "zone": 1, "feature_type": "activation_point", "ref": "see PDF", "circuit": "spain_v1", "notes": "Place where DRS wing opens — style GREEN" }, "geometry": null },
+{ "type": "Feature", "id": "z1_zone_line", "properties": { "zone": 1, "feature_type": "zone_line", "ref": "Zone 1: activation point → braking point", "circuit": "spain_v1", "notes": "Draw line from activation to end of DRS zone — style GREEN line" }, "geometry": { "type": "LineString", "coordinates": [ ] } },
+{ "type": "Feature", "id": "z2_detection", "properties": { "zone": 2, "feature_type": "detection_point", "ref": "see PDF", "circuit": "spain_v1", "notes": "Place at DRS detection sensor — style RED" }, "geometry": null },
+{ "type": "Feature", "id": "z2_activation", "properties": { "zone": 2, "feature_type": "activation_point", "ref": "see PDF", "circuit": "spain_v1", "notes": "Place where DRS wing opens — style GREEN" }, "geometry": null },
+{ "type": "Feature", "id": "z2_zone_line", "properties": { "zone": 2, "feature_type": "zone_line", "ref": "Zone 2: activation point → braking point", "circuit": "spain_v1", "notes": "Draw line from activation to end of DRS zone — style GREEN line" }, "geometry": { "type": "LineString", "coordinates": [ ] } },
+{ "type": "Feature", "properties": { "id": "1", "zone": null, "feature_type": null, "ref": null, "circuit": null, "notes": null }, "geometry": { "type": "LineString", "coordinates": [ [ 2.25698285164319, 41.570851029884899 ], [ 2.261847053235246, 41.572704337462639 ] ] } },
+{ "type": "Feature", "properties": { "id": "2", "zone": null, "feature_type": null, "ref": null, "circuit": null, "notes": null }, "geometry": { "type": "LineString", "coordinates": [ [ 2.262823401391344, 41.571891688398587 ], [ 2.257152397131375, 41.565174179228784 ] ] } }
+]
+}

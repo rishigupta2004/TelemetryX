@@ -1,0 +1,16 @@
+{
+"type": "FeatureCollection",
+"_circuit": "singapore_v1",
+"_layer": "drs",
+"_label": "Marina Bay pre-2023",
+"_note": "3 features per zone: detection_point (Point), activation_point (Point), zone_line (LineString).",
+"name": "drs_v1",
+"features": [
+{ "type": "Feature", "id": "z1_detection", "properties": { "zone": 1, "feature_type": "detection_point", "ref": "see PDF", "circuit": "singapore_v1", "notes": "Place at DRS detection sensor — style RED" }, "geometry": null },
+{ "type": "Feature", "id": "z1_activation", "properties": { "zone": 1, "feature_type": "activation_point", "ref": "see PDF", "circuit": "singapore_v1", "notes": "Place where DRS wing opens — style GREEN" }, "geometry": null },
+{ "type": "Feature", "id": "z1_zone_line", "properties": { "zone": 1, "feature_type": "zone_line", "ref": "Zone 1: activation point → braking point", "circuit": "singapore_v1", "notes": "Draw line from activation to end of DRS zone — style GREEN line" }, "geometry": { "type": "LineString", "coordinates": [ ] } },
+{ "type": "Feature", "properties": { "id": "1", "zone": null, "feature_type": null, "ref": null, "circuit": "SINGAPORE", "notes": null }, "geometry": { "type": "LineString", "coordinates": [ [ 103.862298878638285, 1.291263462638298 ], [ 103.861689267404245, 1.291349189218086 ], [ 103.859117470010631, 1.291453966148936 ], [ 103.858765038515955, 1.291501592026596 ], [ 103.85602178796276, 1.293054195638298 ] ] } },
+{ "type": "Feature", "properties": { "id": "2", "zone": null, "feature_type": null, "ref": null, "circuit": null, "notes": null }, "geometry": { "type": "LineString", "coordinates": [ [ 103.853792896888294, 1.286700903558511 ], [ 103.853811995619665, 1.286931900227156 ], [ 103.853835017983982, 1.287162538890884 ], [ 103.853861957329158, 1.287392752909019 ], [ 103.853892805871368, 1.287622475763583 ], [ 103.853927554697222, 1.287851641078512 ], [ 103.853966193766411, 1.288080182638841 ], [ 103.85400871191456, 1.288308034409829 ], [ 103.854055096856513, 1.288535130556044 ], [ 103.854105335189786, 1.288761405460384 ], [ 103.854159412398545, 1.288986793743038 ], [ 103.854217312857742, 1.289211230280372 ], [ 103.85427901983762, 1.289434650223751 ], [ 103.854344515508572, 1.289656989018274 ], [ 103.854413780946331, 1.289878182421428 ], [ 103.854486796137323, 1.290098166521648 ], [ 103.854563539984568, 1.290316877756783 ], [ 103.854643990313718, 1.290534252932467 ], [ 103.854728123879482, 1.290750229240373 ], [ 103.854815916372331, 1.29096474427636 ], [ 103.85490734242552, 1.291177736058511 ] ] } },
+{ "type": "Feature", "properties": { "id": "3", "zone": null, "feature_type": null, "ref": null, "circuit": null, "notes": null }, "geometry": { "type": "LineString", "coordinates": [ [ 103.864461093484039, 1.289548931042553 ], [ 103.863803856372328, 1.294092439771277 ] ] } }
+]
+}

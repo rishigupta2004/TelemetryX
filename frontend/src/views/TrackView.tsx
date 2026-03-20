@@ -4,29 +4,25 @@ import { ViewErrorBoundary } from '../components/ViewErrorBoundary'
 import { WeatherPanel } from '../components/WeatherPanel'
 import { RaceControlFeed } from '../components/RaceControlFeed'
 import { useTimingData } from '../hooks/useTimingData'
-import { useSessionTimeAt } from '../lib/timeUtils'
 import { useSessionStore } from '../stores/sessionStore'
 
 export const TrackView = React.memo(function TrackView() {
   const timing = useTimingData()
-  const sessionTime = useSessionTimeAt(4)
   const laps = useSessionStore((s) => s.laps)
   const sessionMeta = useSessionStore((s) => s.sessionMeta)
 
   const currentLap = useMemo(() => {
+    const leaderRow = timing.rows[0]
+    if (leaderRow) {
+      return Math.max(1, leaderRow.currentLap || leaderRow.lapsCompleted + 1 || 1)
+    }
     if (!laps.length) return null
     let best = 0
     for (const lap of laps) {
-      if (lap.lapEndSeconds <= sessionTime && lap.lapNumber > best) best = lap.lapNumber
+      if (lap.lapNumber > best) best = lap.lapNumber
     }
-    if (best > 0) return best
-    for (const lap of laps) {
-      if (lap.lapStartSeconds <= sessionTime && sessionTime <= lap.lapEndSeconds) {
-        return lap.lapNumber
-      }
-    }
-    return null
-  }, [laps, sessionTime])
+    return best > 0 ? best : null
+  }, [timing.rows, laps])
 
   const topRows = useMemo(() => timing.rows.slice(0, 10), [timing.rows])
 

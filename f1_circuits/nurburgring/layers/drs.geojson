@@ -1,0 +1,18 @@
+{
+"type": "FeatureCollection",
+"_circuit": "nurburgring_v1",
+"_layer": "drs",
+"_label": "Nurburgring GP Circuit",
+"_note": "3 features per zone: detection_point (Point), activation_point (Point), zone_line (LineString).",
+"name": "drs",
+"features": [
+{ "type": "Feature", "id": "z1_detection", "properties": { "zone": 1, "feature_type": "detection_point", "ref": "85m after T11", "circuit": "nurburgring_v1", "notes": "Place at DRS detection sensor — style RED" }, "geometry": null },
+{ "type": "Feature", "id": "z1_activation", "properties": { "zone": 1, "feature_type": "activation_point", "ref": "55m after T11", "circuit": "nurburgring_v1", "notes": "Place where DRS wing opens — style GREEN" }, "geometry": null },
+{ "type": "Feature", "id": "z1_zone_line", "properties": { "zone": 1, "feature_type": "zone_line", "ref": "Zone 1: activation point → braking point", "circuit": "nurburgring_v1", "notes": "Draw line from activation to end of DRS zone — style GREEN line" }, "geometry": { "type": "LineString", "coordinates": [ ] } },
+{ "type": "Feature", "id": "z2_detection", "properties": { "zone": 2, "feature_type": "detection_point", "ref": "115m before T15", "circuit": "nurburgring_v1", "notes": "Place at DRS detection sensor — style RED" }, "geometry": null },
+{ "type": "Feature", "id": "z2_activation", "properties": { "zone": 2, "feature_type": "activation_point", "ref": "73m after T15", "circuit": "nurburgring_v1", "notes": "Place where DRS wing opens — style GREEN" }, "geometry": null },
+{ "type": "Feature", "id": "z2_zone_line", "properties": { "zone": 2, "feature_type": "zone_line", "ref": "Zone 2: activation point → braking point", "circuit": "nurburgring_v1", "notes": "Draw line from activation to end of DRS zone — style GREEN line" }, "geometry": { "type": "LineString", "coordinates": [ ] } },
+{ "type": "Feature", "properties": { "id": "2", "zone": null, "feature_type": null, "ref": null, "circuit": "NURBURGING", "notes": null }, "geometry": { "type": "LineString", "coordinates": [ [ 6.949411101650065, 50.336700313874367 ], [ 6.943088325408187, 50.332551510566049 ], [ 6.941362423231927, 50.331754940330853 ] ] } },
+{ "type": "Feature", "properties": { "id": "1", "zone": null, "feature_type": null, "ref": null, "circuit": "NURBURGING", "notes": null }, "geometry": { "type": "LineString", "coordinates": [ [ 6.93723021513684, 50.333530628146811 ], [ 6.939636521055665, 50.335405887242175 ], [ 6.939723701916312, 50.335445002757481 ], [ 6.939811532081809, 50.33548263768845 ], [ 6.939899986409679, 50.335518781261619 ], [ 6.939989039578769, 50.335553423130442 ], [ 6.9400786660965, 50.335586553378249 ], [ 6.940168840306166, 50.335618162521101 ], [ 6.940259536394277, 50.335648241510476 ], [ 6.940350728397947, 50.335676781735899 ], [ 6.940442390212331, 50.335703775027369 ], [ 6.940534495598092, 50.335729213657721 ], [ 6.940627018188917, 50.335753090344831 ], [ 6.940719931499063, 50.335775398253702 ], [ 6.940813208930938, 50.335796130998418 ], [ 6.940906823782715, 50.335815282643971 ], [ 6.941000749255977, 50.335832847707955 ], [ 6.941094958463388, 50.335848821162166 ], [ 6.94118942443639, 50.335863198433998 ], [ 6.941284120132921, 50.335875975407781 ], [ 6.94137901844516, 50.33588714842594 ], [ 6.946258011135742, 50.336716909087599 ] ] } }
+]
+}

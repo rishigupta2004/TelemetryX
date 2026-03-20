@@ -1,0 +1,233 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "sao_paulo_v1",
+  "_layer": "corners",
+  "_label": "Autodromo Jose Carlos Pace \u2014 Interlagos",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "Senna S",
+        "circuit": "sao_paulo_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "",
+        "circuit": "sao_paulo_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "",
+        "circuit": "sao_paulo_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "Curva do Lago",
+        "circuit": "sao_paulo_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "",
+        "circuit": "sao_paulo_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "",
+        "circuit": "sao_paulo_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "",
+        "circuit": "sao_paulo_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "",
+        "circuit": "sao_paulo_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "",
+        "circuit": "sao_paulo_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "",
+        "circuit": "sao_paulo_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "corner_number": 11,
+        "name": "Jun\u00e7\u00e3o",
+        "circuit": "sao_paulo_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "properties": {
+        "corner_number": 12,
+        "name": "",
+        "circuit": "sao_paulo_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "properties": {
+        "corner_number": 13,
+        "name": "",
+        "circuit": "sao_paulo_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "properties": {
+        "corner_number": 14,
+        "name": "",
+        "circuit": "sao_paulo_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 15,
+      "properties": {
+        "corner_number": 15,
+        "name": "",
+        "circuit": "sao_paulo_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "SAO_PALO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -46.698963275739366, -23.706435436430851 ] } },
+{ "type": "Feature", "properties": { "corner_number": 2, "name": null, "circuit": "SAO_PALO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -46.69818284011702, -23.70601849137234 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "SAO_PALO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -46.696760950558513, -23.706307145643617 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "SAO_PALO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -46.694130989420216, -23.699668097404256 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "SAO_PALO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -46.695969824037235, -23.69951842481915 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "SAO_PALO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -46.698428730792557, -23.702319440340425 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "SAO_PALO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -46.699722329563834, -23.702084240563831 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "SAO_PALO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -46.699861311250004, -23.700566132914894 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "SAO_PALO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -46.698663930569154, -23.700640969207445 ] } },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": "SAO_PALO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -46.699519202484048, -23.69851348031915 ] } },
+{ "type": "Feature", "properties": { "corner_number": 11, "name": null, "circuit": "SAO_PALO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -46.697787276856381, -23.699400824930851 ] } },
+{ "type": "Feature", "properties": { "corner_number": 12, "name": null, "circuit": "SAO_PALO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -46.696162260218088, -23.697476463122339 ] } },
+{ "type": "Feature", "properties": { "corner_number": 13, "name": null, "circuit": "SAO_PALO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -46.697316877303194, -23.696984681771276 ] } },
+{ "type": "Feature", "properties": { "corner_number": 14, "name": null, "circuit": "SAO_PALO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -46.699743711361705, -23.697968244473405 ] } }
+]
+}

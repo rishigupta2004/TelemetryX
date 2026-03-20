@@ -1,0 +1,18 @@
+{
+"type": "FeatureCollection",
+"_circuit": "bahrain_sakhir_v1",
+"_layer": "drs",
+"_label": "Bahrain Outer — Sakhir 2020",
+"_note": "3 features per zone: detection_point (Point), activation_point (Point), zone_line (LineString).",
+"name": "drs",
+"features": [
+{ "type": "Feature", "id": "z1_detection", "properties": { "zone": 1, "feature_type": "detection_point", "ref": "50m before T1", "circuit": "bahrain_sakhir_v1", "notes": "Place at DRS detection sensor — style RED" }, "geometry": null },
+{ "type": "Feature", "id": "z1_activation", "properties": { "zone": 1, "feature_type": "activation_point", "ref": "23m after T3", "circuit": "bahrain_sakhir_v1", "notes": "Place where DRS wing opens — style GREEN" }, "geometry": null },
+{ "type": "Feature", "id": "z1_zone_line", "properties": { "zone": 1, "feature_type": "zone_line", "ref": "Zone 1: activation point → braking point", "circuit": "bahrain_sakhir_v1", "notes": "Draw line from activation to end of DRS zone — style GREEN line" }, "geometry": { "type": "LineString", "coordinates": [ ] } },
+{ "type": "Feature", "id": "z2_detection", "properties": { "zone": 2, "feature_type": "detection_point", "ref": "110m before T10", "circuit": "bahrain_sakhir_v1", "notes": "Place at DRS detection sensor — style RED" }, "geometry": null },
+{ "type": "Feature", "id": "z2_activation", "properties": { "zone": 2, "feature_type": "activation_point", "ref": "170m after T11", "circuit": "bahrain_sakhir_v1", "notes": "Place where DRS wing opens — style GREEN" }, "geometry": null },
+{ "type": "Feature", "id": "z2_zone_line", "properties": { "zone": 2, "feature_type": "zone_line", "ref": "Zone 2: activation point → braking point", "circuit": "bahrain_sakhir_v1", "notes": "Draw line from activation to end of DRS zone — style GREEN line" }, "geometry": { "type": "LineString", "coordinates": [ ] } },
+{ "type": "Feature", "properties": { "id": "2", "zone": null, "feature_type": null, "ref": null, "circuit": "SAKHIR", "notes": null }, "geometry": { "type": "LineString", "coordinates": [ [ 50.510312021670217, 26.028479225872339 ], [ 50.51063907812766, 26.036316467648934 ] ] } },
+{ "type": "Feature", "properties": { "id": "1", "zone": null, "feature_type": null, "ref": null, "circuit": "SAKHIR", "notes": null }, "geometry": { "type": "LineString", "coordinates": [ [ 50.513146510968085, 26.03649816568085 ], [ 50.518112923840427, 26.035686581138297 ] ] } }
+]
+}

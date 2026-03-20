@@ -1,0 +1,16 @@
+{
+"type": "FeatureCollection",
+"_circuit": "azerbaijan_v1",
+"_layer": "sectors",
+"_label": "Baku City Circuit",
+"_note": "S1=end of sector 1. S2=end of sector 2. T=speed trap. S3 ends at start\/finish — no point needed.",
+"name": "sectors",
+"features": [
+{ "type": "Feature", "id": "S1", "properties": { "sector": "S1", "ref": "46m before T5", "circuit": "azerbaijan_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "S2", "properties": { "sector": "S2", "ref": "56m before T16", "circuit": "azerbaijan_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "T", "properties": { "sector": "T", "ref": "210m after T20", "circuit": "azerbaijan_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "properties": { "id": null, "sector": "SPEED TRAP", "ref": null, "circuit": "BAKU", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 49.853415931296752, 40.372723049291473 ] } },
+{ "type": "Feature", "properties": { "id": "1", "sector": "SECTOR 1", "ref": null, "circuit": "BAKU", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 49.842641229540718, 40.370215327778233 ] } },
+{ "type": "Feature", "properties": { "id": "2", "sector": "SECTOR 2", "ref": null, "circuit": "BAKU", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 49.83435299742068, 40.362670911361285 ] } }
+]
+}

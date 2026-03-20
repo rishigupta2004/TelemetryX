@@ -1,0 +1,309 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "azerbaijan_v1",
+  "_layer": "corners",
+  "_label": "Baku City Circuit",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "",
+        "circuit": "azerbaijan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "",
+        "circuit": "azerbaijan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "",
+        "circuit": "azerbaijan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "",
+        "circuit": "azerbaijan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "",
+        "circuit": "azerbaijan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "",
+        "circuit": "azerbaijan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "",
+        "circuit": "azerbaijan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "T8 castle section",
+        "circuit": "azerbaijan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "",
+        "circuit": "azerbaijan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "",
+        "circuit": "azerbaijan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "corner_number": 11,
+        "name": "",
+        "circuit": "azerbaijan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "properties": {
+        "corner_number": 12,
+        "name": "",
+        "circuit": "azerbaijan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "properties": {
+        "corner_number": 13,
+        "name": "",
+        "circuit": "azerbaijan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "properties": {
+        "corner_number": 14,
+        "name": "",
+        "circuit": "azerbaijan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 15,
+      "properties": {
+        "corner_number": 15,
+        "name": "",
+        "circuit": "azerbaijan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 16,
+      "properties": {
+        "corner_number": 16,
+        "name": "",
+        "circuit": "azerbaijan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 17,
+      "properties": {
+        "corner_number": 17,
+        "name": "",
+        "circuit": "azerbaijan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 18,
+      "properties": {
+        "corner_number": 18,
+        "name": "",
+        "circuit": "azerbaijan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 19,
+      "properties": {
+        "corner_number": 19,
+        "name": "",
+        "circuit": "azerbaijan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 20,
+      "properties": {
+        "corner_number": 20,
+        "name": "",
+        "circuit": "azerbaijan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "BAKU", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 49.855181302703535, 40.373343196191996 ] } },
+{ "type": "Feature", "properties": { "corner_number": 2, "name": null, "circuit": "BAKU", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 49.853581282762512, 40.376155602376976 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "BAKU", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 49.84412137104939, 40.37306278032603 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "BAKU", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 49.845135816682095, 40.371124611840777 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "BAKU", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 49.841713093612391, 40.369656552307269 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "BAKU", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 49.841869796596299, 40.369186443355524 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "BAKU", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 49.838224390338937, 40.366976106529798 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "BAKU", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 49.837267677384517, 40.368749324505671 ] } },
+{ "type": "Feature", "properties": { "corner_number": 12, "name": null, "circuit": "BAKU", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 49.835799617851002, 40.369400879017732 ] } },
+{ "type": "Feature", "properties": { "corner_number": 11, "name": null, "circuit": "BAKU", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 49.836129518869768, 40.368873037387708 ] } },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": "BAKU", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 49.836822311009179, 40.368823552234893 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "BAKU", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 49.837061489247787, 40.368708086878321 ] } },
+{ "type": "Feature", "properties": { "corner_number": 13, "name": null, "circuit": "BAKU", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 49.831684102641887, 40.367891581856881 ] } },
+{ "type": "Feature", "properties": { "corner_number": 14, "name": null, "circuit": "BAKU", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 49.83093357782419, 40.366110116355543 ] } },
+{ "type": "Feature", "properties": { "corner_number": 15, "name": null, "circuit": "BAKU", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 49.831090280808105, 40.363908027055274 ] } },
+{ "type": "Feature", "properties": { "corner_number": 16, "name": null, "circuit": "BAKU", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 49.83482640984564, 40.362596670505681 ] } },
+{ "type": "Feature", "properties": { "corner_number": 17, "name": null, "circuit": "BAKU", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 49.835972815885853, 40.364122462717475 ] } },
+{ "type": "Feature", "properties": { "corner_number": 18, "name": null, "circuit": "BAKU", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 49.838067687355021, 40.365607017301926 ] } },
+{ "type": "Feature", "properties": { "corner_number": 19, "name": null, "circuit": "BAKU", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 49.838438826001131, 40.366967859004326 ] } },
+{ "type": "Feature", "properties": { "corner_number": 20, "name": null, "circuit": "BAKU", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 49.84183680649442, 40.36894726511693 ] } }
+]
+}

@@ -1,0 +1,219 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "turkey_v1",
+  "_layer": "corners",
+  "_label": "Istanbul Park",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "",
+        "circuit": "turkey_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "",
+        "circuit": "turkey_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "",
+        "circuit": "turkey_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "",
+        "circuit": "turkey_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "",
+        "circuit": "turkey_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "",
+        "circuit": "turkey_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "",
+        "circuit": "turkey_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "T8 quad-apex",
+        "circuit": "turkey_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "",
+        "circuit": "turkey_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "",
+        "circuit": "turkey_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "corner_number": 11,
+        "name": "",
+        "circuit": "turkey_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "properties": {
+        "corner_number": 12,
+        "name": "",
+        "circuit": "turkey_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "properties": {
+        "corner_number": 13,
+        "name": "",
+        "circuit": "turkey_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "properties": {
+        "corner_number": 14,
+        "name": "",
+        "circuit": "turkey_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "ISTANBUL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 29.409114115295505, 40.952772841290454 ] } },
+{ "type": "Feature", "properties": { "corner_number": 2, "name": null, "circuit": "ISTANBUL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 29.410325835674769, 40.955235369803155 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "ISTANBUL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 29.414755781147349, 40.955873803121257 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "ISTANBUL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 29.414886073661247, 40.957202786763034 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "ISTANBUL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 29.416723198107231, 40.95734610852832 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "ISTANBUL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 29.41656684709055, 40.958219068371449 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "ISTANBUL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 29.411563614556815, 40.960407982604956 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "ISTANBUL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 29.417452836185067, 40.961671819989782 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "ISTANBUL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 29.409283495563574, 40.961424264213377 ] } },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": "ISTANBUL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 29.409687402356663, 40.960720684638318 ] } },
+{ "type": "Feature", "properties": { "corner_number": 11, "name": null, "circuit": "ISTANBUL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 29.407733014648173, 40.956277709914346 ] } },
+{ "type": "Feature", "properties": { "corner_number": 12, "name": null, "circuit": "ISTANBUL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 29.399928493065598, 40.952772841290454 ] } },
+{ "type": "Feature", "properties": { "corner_number": 13, "name": null, "circuit": "ISTANBUL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 29.400983862428184, 40.952447110005707 ] } },
+{ "type": "Feature", "properties": { "corner_number": 14, "name": null, "circuit": "ISTANBUL", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 29.400866599165674, 40.95146991615146 ] } }
+]
+}

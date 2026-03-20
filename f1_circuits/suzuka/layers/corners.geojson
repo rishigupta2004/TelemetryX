@@ -1,0 +1,279 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "japan_v1",
+  "_layer": "corners",
+  "_label": "Suzuka",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "",
+        "circuit": "japan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "",
+        "circuit": "japan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "S Curves",
+        "circuit": "japan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "",
+        "circuit": "japan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "",
+        "circuit": "japan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "",
+        "circuit": "japan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "",
+        "circuit": "japan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "",
+        "circuit": "japan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "",
+        "circuit": "japan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "",
+        "circuit": "japan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "corner_number": 11,
+        "name": "Dunlop",
+        "circuit": "japan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "properties": {
+        "corner_number": 12,
+        "name": "",
+        "circuit": "japan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "properties": {
+        "corner_number": 13,
+        "name": "Hairpin",
+        "circuit": "japan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "properties": {
+        "corner_number": 14,
+        "name": "",
+        "circuit": "japan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 15,
+      "properties": {
+        "corner_number": 15,
+        "name": "130R",
+        "circuit": "japan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 16,
+      "properties": {
+        "corner_number": 16,
+        "name": "",
+        "circuit": "japan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 17,
+      "properties": {
+        "corner_number": 17,
+        "name": "Chicane",
+        "circuit": "japan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 18,
+      "properties": {
+        "corner_number": 18,
+        "name": "Spoon",
+        "circuit": "japan_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "SUZUKA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 136.543383883864607, 34.840085830358554 ] } },
+{ "type": "Feature", "properties": { "corner_number": 2, "name": null, "circuit": "SUZUKA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 136.542529594661431, 34.838931790557758 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "SUZUKA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 136.540821016255052, 34.840625381434258 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "SUZUKA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 136.539681963984123, 34.840835206852582 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "SUZUKA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 136.538887624900468, 34.842169097011947 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "SUZUKA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 136.537194034023969, 34.842618722908362 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "SUZUKA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 136.537358896852652, 34.844222388605573 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "SUZUKA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 136.53257787482076, 34.843248199163341 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "SUZUKA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 136.530854308884528, 34.84318824904382 ] } },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": null, "notes": null }, "geometry": { "type": "Point", "coordinates": [ 136.530149894980127, 34.846005904661354 ] } },
+{ "type": "Feature", "properties": { "corner_number": 11, "name": null, "circuit": "SUZUKA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 136.530509595697254, 34.847174931992036 ] } },
+{ "type": "Feature", "properties": { "corner_number": 12, "name": null, "circuit": "SUZUKA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 136.528875954940276, 34.84561622888446 ] } },
+{ "type": "Feature", "properties": { "corner_number": 13, "name": null, "circuit": "SUZUKA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 136.523660294541884, 34.848209071553789 ] } },
+{ "type": "Feature", "properties": { "corner_number": 14, "name": null, "circuit": "SUZUKA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 136.521936728605624, 34.847894333426296 ] } },
+{ "type": "Feature", "properties": { "corner_number": 15, "name": "130 R", "circuit": "SUZUKA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 136.531004184183331, 34.843847700358566 ] } },
+{ "type": "Feature", "properties": { "corner_number": 16, "name": null, "circuit": "SUZUKA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 136.534870966892498, 34.845930967011959 ] } },
+{ "type": "Feature", "properties": { "corner_number": 17, "name": null, "circuit": "SUZUKA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 136.535425505498068, 34.845631216414347 ] } },
+{ "type": "Feature", "properties": { "corner_number": 18, "name": null, "circuit": "SUZUKA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 136.536489620119596, 34.846065854780882 ] } }
+]
+}

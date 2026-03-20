@@ -1,0 +1,264 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "mexico_v1",
+  "_layer": "corners",
+  "_label": "Autodromo Hermanos Rodriguez",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "Peraltada",
+        "circuit": "mexico_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "",
+        "circuit": "mexico_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "",
+        "circuit": "mexico_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "",
+        "circuit": "mexico_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "",
+        "circuit": "mexico_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "Foro Sol",
+        "circuit": "mexico_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "",
+        "circuit": "mexico_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "",
+        "circuit": "mexico_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "",
+        "circuit": "mexico_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "",
+        "circuit": "mexico_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "corner_number": 11,
+        "name": "",
+        "circuit": "mexico_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "properties": {
+        "corner_number": 12,
+        "name": "",
+        "circuit": "mexico_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "properties": {
+        "corner_number": 13,
+        "name": "",
+        "circuit": "mexico_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "properties": {
+        "corner_number": 14,
+        "name": "",
+        "circuit": "mexico_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 15,
+      "properties": {
+        "corner_number": 15,
+        "name": "",
+        "circuit": "mexico_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 16,
+      "properties": {
+        "corner_number": 16,
+        "name": "",
+        "circuit": "mexico_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 17,
+      "properties": {
+        "corner_number": 17,
+        "name": "",
+        "circuit": "mexico_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "MEXICO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -99.083451531574454, 19.404756572840423 ] } },
+{ "type": "Feature", "properties": { "corner_number": 2, "name": null, "circuit": "MEXICO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -99.083483316079779, 19.403993744712764 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "MEXICO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -99.08307011751063, 19.403718279 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "MEXICO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -99.086163809361693, 19.398177180239358 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "MEXICO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -99.085655257276585, 19.397774576505316 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "MEXICO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -99.086577007930842, 19.397022343212761 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "MEXICO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -99.08652403375531, 19.400041871218082 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "MEXICO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -99.08721269803722, 19.40051863879787 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "MEXICO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -99.087721250122328, 19.401292061760635 ] } },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": "MEXICO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -99.089501182420207, 19.401684070659574 ] } },
+{ "type": "Feature", "properties": { "corner_number": 11, "name": null, "circuit": "MEXICO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -99.089808432638293, 19.402436303952125 ] } },
+{ "type": "Feature", "properties": { "corner_number": 12, "name": null, "circuit": "MEXICO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -99.094989307005307, 19.403781848010638 ] } },
+{ "type": "Feature", "properties": { "corner_number": 13, "name": null, "circuit": "MEXICO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -99.095243583047861, 19.40532869393617 ] } },
+{ "type": "Feature", "properties": { "corner_number": 14, "name": null, "circuit": "MEXICO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -99.095730945462762, 19.405053228223405 ] } },
+{ "type": "Feature", "properties": { "corner_number": 15, "name": null, "circuit": "MEXICO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -99.096197118207442, 19.405190961079786 ] } },
+{ "type": "Feature", "properties": { "corner_number": 16, "name": null, "circuit": "MEXICO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -99.096811618643613, 19.405296909430849 ] } },
+{ "type": "Feature", "properties": { "corner_number": 17, "name": null, "circuit": "MEXICO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -99.096101764691483, 19.406366987776597 ] } }
+]
+}

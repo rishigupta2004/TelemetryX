@@ -1,0 +1,3232 @@
+{
+  "type": "FeatureCollection",
+  "generator": "overpass-turbo",
+  "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
+  "timestamp": "2026-02-19T19:04:53Z",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/383365018",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8616157,
+            1.2913406
+          ],
+          [
+            103.8620486,
+            1.2913099
+          ]
+        ]
+      },
+      "id": "way/383365018"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/174262763",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8620486,
+            1.2913099
+          ],
+          [
+            103.862347,
+            1.2912552
+          ]
+        ]
+      },
+      "id": "way/174262763"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/672222982",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.862347,
+            1.2912552
+          ],
+          [
+            103.862531,
+            1.2913032
+          ]
+        ]
+      },
+      "id": "way/672222982"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/654223306",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.862531,
+            1.2913032
+          ],
+          [
+            103.8626721,
+            1.2913649
+          ],
+          [
+            103.862765,
+            1.2914334
+          ],
+          [
+            103.8628065,
+            1.2914723
+          ],
+          [
+            103.8628486,
+            1.2915327
+          ]
+        ]
+      },
+      "id": "way/654223306"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/21805129",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8628486,
+            1.2915327
+          ],
+          [
+            103.8628898,
+            1.2916159
+          ],
+          [
+            103.8629054,
+            1.2916981
+          ],
+          [
+            103.8629088,
+            1.2918067
+          ],
+          [
+            103.8628904,
+            1.292052
+          ],
+          [
+            103.8628207,
+            1.2924838
+          ],
+          [
+            103.8627941,
+            1.292604
+          ],
+          [
+            103.8627184,
+            1.2928397
+          ],
+          [
+            103.8625264,
+            1.2933616
+          ]
+        ]
+      },
+      "id": "way/21805129"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/686335800",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8625264,
+            1.2933616
+          ],
+          [
+            103.8624291,
+            1.2935764
+          ],
+          [
+            103.8623795,
+            1.2937185
+          ]
+        ]
+      },
+      "id": "way/686335800"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/686323968",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8623795,
+            1.2937185
+          ],
+          [
+            103.8623658,
+            1.2937976
+          ]
+        ]
+      },
+      "id": "way/686323968"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/686335799",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8623658,
+            1.2937976
+          ],
+          [
+            103.862354,
+            1.293866
+          ],
+          [
+            103.862346,
+            1.2940148
+          ],
+          [
+            103.8623708,
+            1.2943413
+          ]
+        ]
+      },
+      "id": "way/686335799"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/686323967",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8623708,
+            1.2943413
+          ],
+          [
+            103.8623818,
+            1.2944856
+          ],
+          [
+            103.8623862,
+            1.2945431
+          ]
+        ]
+      },
+      "id": "way/686323967"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/572140291",
+        "@relations": [
+          {
+            "role": "pitlane",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8625486,
+            1.2947844
+          ],
+          [
+            103.8624761,
+            1.2947048
+          ],
+          [
+            103.8624309,
+            1.2946376
+          ],
+          [
+            103.8623862,
+            1.2945431
+          ]
+        ]
+      },
+      "id": "way/572140291"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/465064165",
+        "@relations": [
+          {
+            "role": "pitlane",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8631437,
+            1.2944915
+          ],
+          [
+            103.8630729,
+            1.2945423
+          ],
+          [
+            103.8630206,
+            1.294593
+          ],
+          [
+            103.8629382,
+            1.2947144
+          ],
+          [
+            103.8628791,
+            1.294785
+          ],
+          [
+            103.8628109,
+            1.2948213
+          ],
+          [
+            103.8627335,
+            1.2948393
+          ],
+          [
+            103.8626515,
+            1.2948413
+          ],
+          [
+            103.8626109,
+            1.2948294
+          ],
+          [
+            103.8625486,
+            1.2947844
+          ]
+        ]
+      },
+      "id": "way/465064165"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/303311925",
+        "@relations": [
+          {
+            "role": "",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8599012,
+            1.2893511
+          ],
+          [
+            103.8599152,
+            1.289439
+          ],
+          [
+            103.8599238,
+            1.2894876
+          ],
+          [
+            103.8599477,
+            1.2895371
+          ],
+          [
+            103.8600016,
+            1.2895747
+          ],
+          [
+            103.8603219,
+            1.2895984
+          ]
+        ]
+      },
+      "id": "way/303311925"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/297234502",
+        "@relations": [
+          {
+            "role": "",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8598053,
+            1.2888386
+          ],
+          [
+            103.8599012,
+            1.2893511
+          ]
+        ]
+      },
+      "id": "way/297234502"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/100484287",
+        "@relations": [
+          {
+            "role": "pitlane",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8628407,
+            1.2887014
+          ],
+          [
+            103.8632536,
+            1.2887279
+          ],
+          [
+            103.8638126,
+            1.2887572
+          ],
+          [
+            103.8638848,
+            1.2887674
+          ],
+          [
+            103.8639411,
+            1.2887904
+          ],
+          [
+            103.8639727,
+            1.2888105
+          ],
+          [
+            103.8640004,
+            1.2888378
+          ],
+          [
+            103.8640617,
+            1.2889283
+          ],
+          [
+            103.8643361,
+            1.2893477
+          ],
+          [
+            103.8643641,
+            1.2894189
+          ],
+          [
+            103.864381,
+            1.2895198
+          ],
+          [
+            103.8643762,
+            1.2896475
+          ],
+          [
+            103.8639366,
+            1.2925836
+          ],
+          [
+            103.8639114,
+            1.2927527
+          ],
+          [
+            103.863905,
+            1.2928552
+          ],
+          [
+            103.8639016,
+            1.2929638
+          ],
+          [
+            103.8639285,
+            1.2936526
+          ],
+          [
+            103.8639266,
+            1.2937142
+          ],
+          [
+            103.863917,
+            1.2937973
+          ],
+          [
+            103.8638632,
+            1.2940083
+          ],
+          [
+            103.8638425,
+            1.294069
+          ],
+          [
+            103.8638137,
+            1.2941394
+          ],
+          [
+            103.8637712,
+            1.2941844
+          ],
+          [
+            103.8637052,
+            1.2942283
+          ],
+          [
+            103.8635941,
+            1.2942744
+          ],
+          [
+            103.863457,
+            1.2943066
+          ],
+          [
+            103.8633693,
+            1.2943388
+          ],
+          [
+            103.863276,
+            1.2943863
+          ],
+          [
+            103.8631437,
+            1.2944915
+          ]
+        ]
+      },
+      "id": "way/100484287"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/686335807",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8628407,
+            1.2887014
+          ],
+          [
+            103.8635476,
+            1.2886748
+          ],
+          [
+            103.8638731,
+            1.2886587
+          ],
+          [
+            103.8639349,
+            1.2886633
+          ],
+          [
+            103.8639966,
+            1.2886823
+          ],
+          [
+            103.8640432,
+            1.2887103
+          ],
+          [
+            103.8640787,
+            1.2887606
+          ],
+          [
+            103.8644684,
+            1.2893684
+          ],
+          [
+            103.8644928,
+            1.289426
+          ],
+          [
+            103.8645045,
+            1.2895026
+          ],
+          [
+            103.8644918,
+            1.2896455
+          ],
+          [
+            103.8642117,
+            1.2916929
+          ],
+          [
+            103.8640608,
+            1.2926489
+          ],
+          [
+            103.8640375,
+            1.2928871
+          ],
+          [
+            103.8640305,
+            1.2931935
+          ],
+          [
+            103.864041,
+            1.2937056
+          ],
+          [
+            103.8640224,
+            1.293853
+          ],
+          [
+            103.8639949,
+            1.2939935
+          ],
+          [
+            103.8639217,
+            1.2942405
+          ],
+          [
+            103.8638941,
+            1.2943034
+          ],
+          [
+            103.8638678,
+            1.294336
+          ],
+          [
+            103.8638198,
+            1.2943562
+          ],
+          [
+            103.8637208,
+            1.2943578
+          ],
+          [
+            103.8636225,
+            1.2943588
+          ],
+          [
+            103.8635511,
+            1.2943667
+          ],
+          [
+            103.8634178,
+            1.2943961
+          ],
+          [
+            103.8632984,
+            1.2944297
+          ],
+          [
+            103.8631437,
+            1.2944915
+          ]
+        ]
+      },
+      "id": "way/686335807"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/686335806",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8619413,
+            1.2887895
+          ],
+          [
+            103.8627747,
+            1.2887046
+          ],
+          [
+            103.8628407,
+            1.2887014
+          ]
+        ]
+      },
+      "id": "way/686335806"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/303311924",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8611454,
+            1.2895943
+          ],
+          [
+            103.8612069,
+            1.2894944
+          ],
+          [
+            103.8612622,
+            1.2894373
+          ],
+          [
+            103.861277,
+            1.2893749
+          ],
+          [
+            103.861277,
+            1.2892211
+          ],
+          [
+            103.8612786,
+            1.2891389
+          ],
+          [
+            103.8612981,
+            1.28906
+          ],
+          [
+            103.8613328,
+            1.2889754
+          ],
+          [
+            103.8613893,
+            1.2889054
+          ],
+          [
+            103.8614754,
+            1.2888544
+          ],
+          [
+            103.861576,
+            1.2888304
+          ],
+          [
+            103.8618303,
+            1.2888019
+          ],
+          [
+            103.8619413,
+            1.2887895
+          ]
+        ]
+      },
+      "id": "way/303311924"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/479284866",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8611454,
+            1.2895943
+          ],
+          [
+            103.8609437,
+            1.2895936
+          ]
+        ]
+      },
+      "id": "way/479284866"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/152783801",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8609437,
+            1.2895936
+          ],
+          [
+            103.8608279,
+            1.2896005
+          ]
+        ]
+      },
+      "id": "way/152783801"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/173791995",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8608279,
+            1.2896005
+          ],
+          [
+            103.8608264,
+            1.2896006
+          ],
+          [
+            103.8606115,
+            1.2896043
+          ]
+        ]
+      },
+      "id": "way/173791995"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/581942152",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8606115,
+            1.2896043
+          ],
+          [
+            103.8603219,
+            1.2895984
+          ]
+        ]
+      },
+      "id": "way/581942152"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/176298699",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8608123,
+            1.2913614
+          ],
+          [
+            103.860918,
+            1.2913563
+          ]
+        ]
+      },
+      "id": "way/176298699"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/479540202",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.860347,
+            1.2913809
+          ],
+          [
+            103.8607768,
+            1.2913557
+          ],
+          [
+            103.8608123,
+            1.2913614
+          ]
+        ]
+      },
+      "id": "way/479540202"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/383365019",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8612464,
+            1.2913449
+          ],
+          [
+            103.8615148,
+            1.2913404
+          ]
+        ]
+      },
+      "id": "way/383365019"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/584419619",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.860918,
+            1.2913563
+          ],
+          [
+            103.8610636,
+            1.2913483
+          ],
+          [
+            103.8612464,
+            1.2913449
+          ]
+        ]
+      },
+      "id": "way/584419619"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/479745479",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.859378,
+            1.2914224
+          ],
+          [
+            103.8597005,
+            1.2914086
+          ]
+        ]
+      },
+      "id": "way/479745479"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/479745478",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8592097,
+            1.291438
+          ],
+          [
+            103.859378,
+            1.2914224
+          ]
+        ]
+      },
+      "id": "way/479745478"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/649944021",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8590495,
+            1.2914634
+          ],
+          [
+            103.8592097,
+            1.291438
+          ]
+        ]
+      },
+      "id": "way/649944021"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/479540200",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8585785,
+            1.2915926
+          ],
+          [
+            103.858703,
+            1.2915475
+          ],
+          [
+            103.8587725,
+            1.2915233
+          ],
+          [
+            103.8588089,
+            1.2915103
+          ],
+          [
+            103.8590495,
+            1.2914634
+          ]
+        ]
+      },
+      "id": "way/479540200"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/633311062",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8569869,
+            1.289794
+          ],
+          [
+            103.8568781,
+            1.2898254
+          ],
+          [
+            103.8567861,
+            1.2898549
+          ],
+          [
+            103.8567376,
+            1.2898782
+          ],
+          [
+            103.8566645,
+            1.2899135
+          ],
+          [
+            103.8565763,
+            1.2899715
+          ],
+          [
+            103.8565472,
+            1.2899906
+          ],
+          [
+            103.8564514,
+            1.2900794
+          ],
+          [
+            103.8563522,
+            1.2901714
+          ],
+          [
+            103.8562853,
+            1.2902236
+          ]
+        ]
+      },
+      "id": "way/633311062"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/545362402",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8578896,
+            1.291982
+          ],
+          [
+            103.8582436,
+            1.2917797
+          ]
+        ]
+      },
+      "id": "way/545362402"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/635375722",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.857176,
+            1.2923891
+          ],
+          [
+            103.8572319,
+            1.2923557
+          ]
+        ]
+      },
+      "id": "way/635375722"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/75067163",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8572319,
+            1.2923557
+          ],
+          [
+            103.8576541,
+            1.2921217
+          ],
+          [
+            103.8577245,
+            1.2920828
+          ]
+        ]
+      },
+      "id": "way/75067163"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/173791997",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8577245,
+            1.2920828
+          ],
+          [
+            103.8578775,
+            1.2919894
+          ]
+        ]
+      },
+      "id": "way/173791997"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/723073393",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8578775,
+            1.2919894
+          ],
+          [
+            103.8578896,
+            1.291982
+          ]
+        ]
+      },
+      "id": "way/723073393"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/21998987",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8549222,
+            1.2910827
+          ],
+          [
+            103.8548828,
+            1.2909735
+          ],
+          [
+            103.8547704,
+            1.2906604
+          ],
+          [
+            103.8546677,
+            1.2903412
+          ],
+          [
+            103.8546242,
+            1.2901772
+          ],
+          [
+            103.8546059,
+            1.2901081
+          ],
+          [
+            103.8545929,
+            1.2900434
+          ],
+          [
+            103.8545847,
+            1.2900031
+          ],
+          [
+            103.8545152,
+            1.289661
+          ],
+          [
+            103.8545091,
+            1.2896309
+          ]
+        ]
+      },
+      "id": "way/21998987"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/635390734",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8545091,
+            1.2896309
+          ],
+          [
+            103.8544491,
+            1.2893353
+          ],
+          [
+            103.8544324,
+            1.2892532
+          ]
+        ]
+      },
+      "id": "way/635390734"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/35037536",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8544324,
+            1.2892532
+          ],
+          [
+            103.8541799,
+            1.2879421
+          ],
+          [
+            103.8539338,
+            1.2866643
+          ]
+        ]
+      },
+      "id": "way/35037536"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/35037537",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8539338,
+            1.2866643
+          ],
+          [
+            103.8539121,
+            1.2865277
+          ],
+          [
+            103.8538963,
+            1.2864287
+          ]
+        ]
+      },
+      "id": "way/35037537"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/173779732",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8538963,
+            1.2864287
+          ],
+          [
+            103.8538728,
+            1.286314
+          ]
+        ]
+      },
+      "id": "way/173779732"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/22002574",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8538728,
+            1.286314
+          ],
+          [
+            103.8537113,
+            1.2863939
+          ]
+        ]
+      },
+      "id": "way/22002574"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/635373148",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8582587,
+            1.2917686
+          ],
+          [
+            103.8583109,
+            1.2917335
+          ],
+          [
+            103.8585785,
+            1.2915926
+          ]
+        ]
+      },
+      "id": "way/635373148"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/545362403",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8582436,
+            1.2917797
+          ],
+          [
+            103.8582587,
+            1.2917686
+          ]
+        ]
+      },
+      "id": "way/545362403"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/156457347",
+        "@relations": [
+          {
+            "role": "",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8546524,
+            1.2916561
+          ],
+          [
+            103.854467,
+            1.2918487
+          ]
+        ]
+      },
+      "id": "way/156457347"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/650084964",
+        "@relations": [
+          {
+            "role": "",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.854467,
+            1.2918487
+          ],
+          [
+            103.8543182,
+            1.2920088
+          ]
+        ]
+      },
+      "id": "way/650084964"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/634770511",
+        "@relations": [
+          {
+            "role": "",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8543182,
+            1.2920088
+          ],
+          [
+            103.854231,
+            1.2921016
+          ],
+          [
+            103.8539248,
+            1.2924047
+          ]
+        ]
+      },
+      "id": "way/634770511"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/479565615",
+        "@relations": [
+          {
+            "role": "",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8539248,
+            1.2924047
+          ],
+          [
+            103.8536185,
+            1.2926038
+          ]
+        ]
+      },
+      "id": "way/479565615"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/303311926",
+        "@relations": [
+          {
+            "role": "",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8575587,
+            1.2897433
+          ],
+          [
+            103.8576702,
+            1.2897137
+          ],
+          [
+            103.8577109,
+            1.2897026
+          ],
+          [
+            103.8577283,
+            1.2896926
+          ],
+          [
+            103.8577514,
+            1.2896508
+          ],
+          [
+            103.8577441,
+            1.2894104
+          ],
+          [
+            103.8577472,
+            1.2891773
+          ],
+          [
+            103.8577645,
+            1.2890986
+          ],
+          [
+            103.8578072,
+            1.2890236
+          ],
+          [
+            103.857889,
+            1.2889406
+          ],
+          [
+            103.8579781,
+            1.2888867
+          ],
+          [
+            103.8580664,
+            1.288861
+          ],
+          [
+            103.8596951,
+            1.2887587
+          ],
+          [
+            103.8597484,
+            1.2887679
+          ],
+          [
+            103.8597848,
+            1.2887939
+          ],
+          [
+            103.8598053,
+            1.2888386
+          ]
+        ]
+      },
+      "id": "way/303311926"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/303314681",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8575587,
+            1.2897433
+          ],
+          [
+            103.8574821,
+            1.2897436
+          ],
+          [
+            103.857456,
+            1.2897446
+          ],
+          [
+            103.8573304,
+            1.2897515
+          ],
+          [
+            103.8573057,
+            1.2897529
+          ],
+          [
+            103.8572552,
+            1.2897557
+          ],
+          [
+            103.8571045,
+            1.2897751
+          ],
+          [
+            103.8569869,
+            1.289794
+          ]
+        ]
+      },
+      "id": "way/303314681"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/633871920",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8600077,
+            1.2913955
+          ],
+          [
+            103.860347,
+            1.2913809
+          ]
+        ]
+      },
+      "id": "way/633871920"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/633871919",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8597005,
+            1.2914086
+          ],
+          [
+            103.8600077,
+            1.2913955
+          ]
+        ]
+      },
+      "id": "way/633871919"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/649336906",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8570723,
+            1.2924516
+          ],
+          [
+            103.857176,
+            1.2923891
+          ]
+        ]
+      },
+      "id": "way/649336906"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/21701074",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8559769,
+            1.2930831
+          ],
+          [
+            103.8562154,
+            1.2929484
+          ],
+          [
+            103.856514,
+            1.2927809
+          ],
+          [
+            103.8568682,
+            1.2925727
+          ],
+          [
+            103.8569856,
+            1.2925027
+          ],
+          [
+            103.8570723,
+            1.2924516
+          ]
+        ]
+      },
+      "id": "way/21701074"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/51511352",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8558226,
+            1.293172
+          ],
+          [
+            103.8559769,
+            1.2930831
+          ]
+        ]
+      },
+      "id": "way/51511352"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/459186771",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8552936,
+            1.2922894
+          ],
+          [
+            103.8556295,
+            1.2928507
+          ],
+          [
+            103.8558226,
+            1.293172
+          ]
+        ]
+      },
+      "id": "way/459186771"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/16688065",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8548655,
+            1.2914505
+          ],
+          [
+            103.8549246,
+            1.2915866
+          ],
+          [
+            103.8552936,
+            1.2922894
+          ]
+        ]
+      },
+      "id": "way/16688065"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/51511339",
+        "@relations": [
+          {
+            "role": "",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8548655,
+            1.2914505
+          ],
+          [
+            103.8546524,
+            1.2916561
+          ]
+        ]
+      },
+      "id": "way/51511339"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/581766308",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8550077,
+            1.291324
+          ],
+          [
+            103.8549222,
+            1.2910827
+          ]
+        ]
+      },
+      "id": "way/581766308"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/479605911",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.855215,
+            1.2911447
+          ],
+          [
+            103.855059,
+            1.2912783
+          ],
+          [
+            103.8550077,
+            1.291324
+          ]
+        ]
+      },
+      "id": "way/479605911"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/479565613",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8557792,
+            1.2906442
+          ],
+          [
+            103.8552331,
+            1.2911273
+          ],
+          [
+            103.855215,
+            1.2911447
+          ]
+        ]
+      },
+      "id": "way/479565613"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/479565612",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8561732,
+            1.2903202
+          ],
+          [
+            103.8559901,
+            1.2904669
+          ],
+          [
+            103.8557792,
+            1.2906442
+          ]
+        ]
+      },
+      "id": "way/479565612"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/634832601",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8562853,
+            1.2902236
+          ],
+          [
+            103.8561732,
+            1.2903202
+          ]
+        ]
+      },
+      "id": "way/634832601"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/173779754",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.853252,
+            1.2923897
+          ],
+          [
+            103.8533954,
+            1.2925175
+          ],
+          [
+            103.853499,
+            1.2925629
+          ],
+          [
+            103.8536185,
+            1.2926038
+          ]
+        ]
+      },
+      "id": "way/173779754"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/647084783",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8530651,
+            1.2920661
+          ],
+          [
+            103.853252,
+            1.2923897
+          ]
+        ]
+      },
+      "id": "way/647084783"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/649520780",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8526354,
+            1.2912821
+          ],
+          [
+            103.8530651,
+            1.2920661
+          ]
+        ]
+      },
+      "id": "way/649520780"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/480250096",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8525268,
+            1.2910839
+          ],
+          [
+            103.8526354,
+            1.2912821
+          ]
+        ]
+      },
+      "id": "way/480250096"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/155907160",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8524294,
+            1.2909086
+          ],
+          [
+            103.8525268,
+            1.2910839
+          ]
+        ]
+      },
+      "id": "way/155907160"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/21584500",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8515966,
+            1.2894423
+          ],
+          [
+            103.8523289,
+            1.2907304
+          ],
+          [
+            103.8524014,
+            1.2908589
+          ],
+          [
+            103.8524116,
+            1.2908769
+          ],
+          [
+            103.8524294,
+            1.2909086
+          ]
+        ]
+      },
+      "id": "way/21584500"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/475217889",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8516497,
+            1.2889302
+          ],
+          [
+            103.8515972,
+            1.2890226
+          ],
+          [
+            103.8515715,
+            1.289087
+          ],
+          [
+            103.8515587,
+            1.2891764
+          ],
+          [
+            103.8515617,
+            1.2892272
+          ],
+          [
+            103.8515671,
+            1.2892805
+          ],
+          [
+            103.8515763,
+            1.2893267
+          ],
+          [
+            103.8515814,
+            1.289366
+          ],
+          [
+            103.8515966,
+            1.2894423
+          ]
+        ]
+      },
+      "id": "way/475217889"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/448084962",
+        "@relations": [
+          {
+            "role": "",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8516497,
+            1.2889302
+          ],
+          [
+            103.8518672,
+            1.2887628
+          ]
+        ]
+      },
+      "id": "way/448084962"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/684544691",
+        "@relations": [
+          {
+            "role": "",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8518672,
+            1.2887628
+          ],
+          [
+            103.8519372,
+            1.2887089
+          ]
+        ]
+      },
+      "id": "way/684544691"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/633604555",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8523523,
+            1.2882637
+          ],
+          [
+            103.8523538,
+            1.2883751
+          ]
+        ]
+      },
+      "id": "way/633604555"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/480733941",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8523538,
+            1.2883751
+          ],
+          [
+            103.8523418,
+            1.2884014
+          ]
+        ]
+      },
+      "id": "way/480733941"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/23132147",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8523418,
+            1.2884014
+          ],
+          [
+            103.8522876,
+            1.288464
+          ],
+          [
+            103.8522399,
+            1.2885016
+          ],
+          [
+            103.8520299,
+            1.2886465
+          ],
+          [
+            103.8519961,
+            1.2886699
+          ]
+        ]
+      },
+      "id": "way/23132147"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/655019701",
+        "@relations": [
+          {
+            "role": "",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8519372,
+            1.2887089
+          ],
+          [
+            103.8519961,
+            1.2886699
+          ]
+        ]
+      },
+      "id": "way/655019701"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/297234496",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8537113,
+            1.2863939
+          ],
+          [
+            103.8536294,
+            1.2864949
+          ],
+          [
+            103.8534839,
+            1.2866878
+          ],
+          [
+            103.8533852,
+            1.2868379
+          ],
+          [
+            103.8533037,
+            1.2869534
+          ],
+          [
+            103.8532395,
+            1.2871317
+          ]
+        ]
+      },
+      "id": "way/297234496"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/29377119",
+        "@relations": [
+          {
+            "role": "",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8527898,
+            1.2875108
+          ],
+          [
+            103.8532395,
+            1.2871317
+          ]
+        ]
+      },
+      "id": "way/29377119"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/480247943",
+        "@relations": [
+          {
+            "role": "",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8525899,
+            1.2876815
+          ],
+          [
+            103.8526038,
+            1.2876704
+          ],
+          [
+            103.8527898,
+            1.2875108
+          ]
+        ]
+      },
+      "id": "way/480247943"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/480247942",
+        "@relations": [
+          {
+            "role": "backward",
+            "rel": 421263,
+            "reltags": {
+              "name": "Marina Bay Street Circuit",
+              "type": "circuit",
+              "wikidata": "Q171390",
+              "wikipedia": "en:Marina Bay Street Circuit"
+            }
+          }
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            103.8525899,
+            1.2876815
+          ],
+          [
+            103.8524929,
+            1.2877475
+          ],
+          [
+            103.8524451,
+            1.2878174
+          ],
+          [
+            103.8524097,
+            1.2879023
+          ],
+          [
+            103.8523772,
+            1.2880957
+          ],
+          [
+            103.8523523,
+            1.2882637
+          ]
+        ]
+      },
+      "id": "way/480247942"
+    }
+  ]
+}

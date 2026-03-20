@@ -1,0 +1,18 @@
+{
+"type": "FeatureCollection",
+"_circuit": "italy_v1",
+"_layer": "drs",
+"_label": "Monza",
+"_note": "3 features per zone: detection_point (Point), activation_point (Point), zone_line (LineString).",
+"name": "drs",
+"features": [
+{ "type": "Feature", "id": "z1_detection", "properties": { "zone": 1, "feature_type": "detection_point", "ref": "12m after finish line", "circuit": "italy_v1", "notes": "Place at DRS detection sensor — style RED" }, "geometry": null },
+{ "type": "Feature", "id": "z1_activation", "properties": { "zone": 1, "feature_type": "activation_point", "ref": "170m after T7", "circuit": "italy_v1", "notes": "Place where DRS wing opens — style GREEN" }, "geometry": null },
+{ "type": "Feature", "id": "z1_zone_line", "properties": { "zone": 1, "feature_type": "zone_line", "ref": "Zone 1: activation point → braking point", "circuit": "italy_v1", "notes": "Draw line from activation to end of DRS zone — style GREEN line" }, "geometry": { "type": "LineString", "coordinates": [ ] } },
+{ "type": "Feature", "id": "z2_detection", "properties": { "zone": 2, "feature_type": "detection_point", "ref": "233m before T4", "circuit": "italy_v1", "notes": "Place at DRS detection sensor — style RED" }, "geometry": null },
+{ "type": "Feature", "id": "z2_activation", "properties": { "zone": 2, "feature_type": "activation_point", "ref": "20m after T11", "circuit": "italy_v1", "notes": "Place where DRS wing opens — style GREEN" }, "geometry": null },
+{ "type": "Feature", "id": "z2_zone_line", "properties": { "zone": 2, "feature_type": "zone_line", "ref": "Zone 2: activation point → braking point", "circuit": "italy_v1", "notes": "Draw line from activation to end of DRS zone — style GREEN line" }, "geometry": { "type": "LineString", "coordinates": [ ] } },
+{ "type": "Feature", "properties": { "id": "1", "zone": null, "feature_type": null, "ref": null, "circuit": "MONZA", "notes": null }, "geometry": { "type": "LineString", "coordinates": [ [ 9.294916578660024, 45.627630204022516 ], [ 9.294488085486492, 45.627465705070328 ], [ 9.294063727513267, 45.627296044209089 ], [ 9.293643631855517, 45.62712127221355 ], [ 9.293227924351648, 45.626941441388595 ], [ 9.29281672952561, 45.626756605553609 ], [ 9.292410170549594, 45.626566820026369 ], [ 9.29200836920713, 45.626372141606616 ], [ 9.291611445856621, 45.626172628559026 ], [ 9.291219519395275, 45.625968340595833 ], [ 9.290832707223499, 45.625759338859055 ], [ 9.290451125209733, 45.625545685902161 ], [ 9.290074887655734, 45.625327445671473 ], [ 9.289704107262349, 45.625104683487031 ], [ 9.289338895095739, 45.624877466023065 ], [ 9.288979360554121, 45.624645861288172 ], [ 9.288625611335005, 45.624409938604927 ], [ 9.28625839167147, 45.62286777416768 ] ] } },
+{ "type": "Feature", "properties": { "id": "2", "zone": null, "feature_type": null, "ref": null, "circuit": "MONZA", "notes": null }, "geometry": { "type": "LineString", "coordinates": [ [ 9.280734039439315, 45.613545683555422 ], [ 9.280709872596667, 45.613724092539584 ], [ 9.280690047858842, 45.613902762695972 ], [ 9.280674570962695, 45.614081642319043 ], [ 9.280663446386896, 45.614260679643181 ], [ 9.280656677350663, 45.614439822857598 ], [ 9.280654265812805, 45.614619020121353 ], [ 9.280656212471166, 45.61479821957839 ], [ 9.28066251676243, 45.614977369372497 ], [ 9.280673176862269, 45.615156417662313 ], [ 9.280688189685881, 45.615335312636383 ], [ 9.280707550888884, 45.615514002528087 ], [ 9.280731254868563, 45.615692435630656 ], [ 9.280759294765504, 45.615870560312118 ], [ 9.280791662465568, 45.616048325030242 ], [ 9.28188126150742, 45.624456821942999 ] ] } }
+]
+}

@@ -1,0 +1,16 @@
+{
+"type": "FeatureCollection",
+"_circuit": "united_states_v1",
+"_layer": "sectors",
+"_label": "Circuit of the Americas",
+"_note": "S1=end of sector 1. S2=end of sector 2. T=speed trap. S3 ends at start\/finish — no point needed.",
+"name": "sectors",
+"features": [
+{ "type": "Feature", "id": "S1", "properties": { "sector": "S1", "ref": "65m after T18", "circuit": "united_states_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "S2", "properties": { "sector": "S2", "ref": "65m before T13", "circuit": "united_states_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "T", "properties": { "sector": "T", "ref": "55m before T7", "circuit": "united_states_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "properties": { "id": null, "sector": "SPEED TRAP", "ref": null, "circuit": "COTA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -97.635818386540706, 30.137457175383524 ] } },
+{ "type": "Feature", "properties": { "id": "1", "sector": "SECTOR 1", "ref": null, "circuit": "COTA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -97.631914167254649, 30.135993093151257 ] } },
+{ "type": "Feature", "properties": { "id": "2", "sector": "SECTOR 2", "ref": null, "circuit": "COTA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -97.63583274028808, 30.136366290583009 ] } }
+]
+}

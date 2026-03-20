@@ -1,0 +1,174 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "italy_v1",
+  "_layer": "corners",
+  "_label": "Monza",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "Prima Variante",
+        "circuit": "italy_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "",
+        "circuit": "italy_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "",
+        "circuit": "italy_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "Curva Grande",
+        "circuit": "italy_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "",
+        "circuit": "italy_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "",
+        "circuit": "italy_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "Lesmo 1",
+        "circuit": "italy_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "Lesmo 2",
+        "circuit": "italy_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "",
+        "circuit": "italy_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "Ascari",
+        "circuit": "italy_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "corner_number": 11,
+        "name": "Parabolica",
+        "circuit": "italy_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "MONZA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 9.281913084343882, 45.62450065283894 ] } },
+{ "type": "Feature", "properties": { "corner_number": 2, "name": null, "circuit": "MONZA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 9.282496782343109, 45.624636723914747 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "MONZA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 9.283177763342209, 45.628922793742383 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "MONZA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 9.291381962998029, 45.630192677422066 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "MONZA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 9.291608956664396, 45.630555496046142 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "MONZA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 9.295467848992626, 45.631394505118898 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "MONZA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 9.296732527990953, 45.628378549072316 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "MONZA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 9.285869259671983, 45.622663660989716 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "MONZA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 9.285869259671983, 45.621733802664146 ] } },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": "MONZA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 9.28505856800639, 45.621166808311415 ] } },
+{ "type": "Feature", "properties": { "corner_number": 11, "name": null, "circuit": "MONZA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 9.282821059009347, 45.611889966445148 ] } }
+]
+}

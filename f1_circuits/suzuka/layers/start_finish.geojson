@@ -1,0 +1,10 @@
+{
+"type": "FeatureCollection",
+"_layer": "start_finish",
+"_note": "Single Point. Place exactly on the painted start\/finish line on the track centreline in QGIS. Not the pit exit, not the grid boxes — the actual line on the tarmac.",
+"name": "start_finish",
+"features": [
+{ "type": "Feature", "id": "start_finish_line", "properties": { "type": "start_finish_line", "circuit_folder": "suzuka", "notes": "Place on painted start/finish line, centreline" }, "geometry": null },
+{ "type": "Feature", "properties": { "id": null, "type": "START/FINSIH PT", "circuit_folder": null, "notes": null }, "geometry": { "type": "Point", "coordinates": [ 136.538861599620759, 34.844685556977083 ] } }
+]
+}

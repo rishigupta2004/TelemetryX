@@ -1,0 +1,294 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "singapore_v2",
+  "_layer": "corners",
+  "_label": "Marina Bay 2023+",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "",
+        "circuit": "singapore_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "",
+        "circuit": "singapore_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "",
+        "circuit": "singapore_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "",
+        "circuit": "singapore_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "",
+        "circuit": "singapore_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "",
+        "circuit": "singapore_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "",
+        "circuit": "singapore_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "",
+        "circuit": "singapore_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "",
+        "circuit": "singapore_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "",
+        "circuit": "singapore_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "corner_number": 11,
+        "name": "",
+        "circuit": "singapore_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "properties": {
+        "corner_number": 12,
+        "name": "",
+        "circuit": "singapore_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "properties": {
+        "corner_number": 13,
+        "name": "",
+        "circuit": "singapore_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "properties": {
+        "corner_number": 14,
+        "name": "",
+        "circuit": "singapore_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 15,
+      "properties": {
+        "corner_number": 15,
+        "name": "",
+        "circuit": "singapore_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 16,
+      "properties": {
+        "corner_number": 16,
+        "name": "",
+        "circuit": "singapore_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 17,
+      "properties": {
+        "corner_number": 17,
+        "name": "",
+        "circuit": "singapore_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 18,
+      "properties": {
+        "corner_number": 18,
+        "name": "",
+        "circuit": "singapore_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 19,
+      "properties": {
+        "corner_number": 19,
+        "name": "",
+        "circuit": "singapore_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "SINGAPORE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 103.863746705319144, 1.294273418106383 ] } },
+{ "type": "Feature", "properties": { "corner_number": 2, "name": null, "circuit": "SINGAPORE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 103.863194245138288, 1.294387720212766 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "SINGAPORE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 103.86267988565956, 1.294825878287234 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "SINGAPORE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 103.862356029691483, 1.293749533452128 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "SINGAPORE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 103.862784662590414, 1.291377764744681 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "SINGAPORE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 103.85879361404254, 1.291501592026596 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "SINGAPORE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 103.855850334803179, 1.293149447393617 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "SINGAPORE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 103.854869241723392, 1.291453966148936 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "SINGAPORE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 103.853545242324458, 1.292558886510638 ] } },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": "SINGAPORE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 103.851535430287228, 1.289120298143617 ] } },
+{ "type": "Feature", "properties": { "corner_number": 11, "name": null, "circuit": "SINGAPORE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 103.852392696085104, 1.288367809276596 ] } },
+{ "type": "Feature", "properties": { "corner_number": 12, "name": null, "circuit": "SINGAPORE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 103.852506998191487, 1.287710572164894 ] } },
+{ "type": "Feature", "properties": { "corner_number": 13, "name": null, "circuit": "SINGAPORE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 103.853745271010638, 1.286538975574469 ] } },
+{ "type": "Feature", "properties": { "corner_number": 14, "name": null, "circuit": "SINGAPORE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 103.854983543829775, 1.291292038164894 ] } },
+{ "type": "Feature", "properties": { "corner_number": 15, "name": null, "circuit": "SINGAPORE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 103.856669499898928, 1.289872787010639 ] } },
+{ "type": "Feature", "properties": { "corner_number": 16, "name": null, "circuit": "SINGAPORE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 103.86117490792553, 1.28952988069149 ] } },
+{ "type": "Feature", "properties": { "corner_number": 17, "name": null, "circuit": "SINGAPORE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 103.861403512138295, 1.288920269457447 ] } },
+{ "type": "Feature", "properties": { "corner_number": 18, "name": null, "circuit": "SINGAPORE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 103.863965784356381, 1.288663089718086 ] } },
+{ "type": "Feature", "properties": { "corner_number": 19, "name": null, "circuit": "SINGAPORE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 103.864432517957439, 1.289444154111702 ] } }
+]
+}

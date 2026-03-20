@@ -1,0 +1,14 @@
+{
+"type": "FeatureCollection",
+"_circuit": "bahrain_sakhir_v1",
+"_layer": "pit",
+"_label": "Bahrain Outer — Sakhir 2020",
+"_note": "pit_entry and pit_exit are Points at where cars enter\/leave pit lane. pit_lane is a LineString along pit road centreline.",
+"name": "pit",
+"features": [
+{ "type": "Feature", "id": "pit_entry", "properties": { "type": "pit_entry", "circuit": "bahrain_sakhir_v1", "notes": "Point where cars leave main track into pit lane" }, "geometry": null },
+{ "type": "Feature", "id": "pit_exit", "properties": { "type": "pit_exit", "circuit": "bahrain_sakhir_v1", "notes": "Point where cars rejoin main track from pit lane" }, "geometry": null },
+{ "type": "Feature", "id": "pit_lane", "properties": { "type": "pit_lane", "circuit": "bahrain_sakhir_v1", "notes": "LineString — trace full pit lane centreline" }, "geometry": { "type": "LineString", "coordinates": [ ] } },
+{ "type": "Feature", "properties": { "id": null, "type": "PIT LANE", "circuit": "SAKHIR", "notes": null }, "geometry": { "type": "LineString", "coordinates": [ [ 50.510336248074474, 26.028430773063828 ], [ 50.510530059308515, 26.029629980074468 ], [ 50.510723870542556, 26.034620619351063 ], [ 50.510651191329792, 26.036219562031913 ] ] } }
+]
+}

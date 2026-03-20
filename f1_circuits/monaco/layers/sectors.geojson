@@ -1,0 +1,16 @@
+{
+"type": "FeatureCollection",
+"_circuit": "monaco_v1",
+"_layer": "sectors",
+"_label": "Circuit de Monaco",
+"_note": "S1=end of sector 1. S2=end of sector 2. T=speed trap. S3 ends at start\/finish — no point needed.",
+"name": "sectors",
+"features": [
+{ "type": "Feature", "id": "S1", "properties": { "sector": "S1", "ref": "60m before T5", "circuit": "monaco_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "S2", "properties": { "sector": "S2", "ref": "67m before T13", "circuit": "monaco_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "T", "properties": { "sector": "T", "ref": "188m before T10", "circuit": "monaco_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "properties": { "id": "2", "sector": "SECTOR 2", "ref": null, "circuit": "MONACO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 7.421760838612111, 43.735869061066538 ] } },
+{ "type": "Feature", "properties": { "id": null, "sector": "SPEED TRAP", "ref": null, "circuit": "MONACO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 7.425821926457083, 43.737267743889284 ] } },
+{ "type": "Feature", "properties": { "id": "1", "sector": "SECTOR 1", "ref": null, "circuit": "MONACO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 7.428562036080581, 43.740940308727929 ] } }
+]
+}

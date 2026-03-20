@@ -1,0 +1,16 @@
+{
+"type": "FeatureCollection",
+"_circuit": "jeddah_v1",
+"_layer": "sectors",
+"_label": "Jeddah Corniche Circuit",
+"_note": "S1=end of sector 1. S2=end of sector 2. T=speed trap. S3 ends at start\/finish — no point needed.",
+"name": "sectors",
+"features": [
+{ "type": "Feature", "id": "S1", "properties": { "sector": "S1", "ref": "265m before T13", "circuit": "jeddah_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "S2", "properties": { "sector": "S2", "ref": "120m before T22", "circuit": "jeddah_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "T", "properties": { "sector": "T", "ref": "200m before T27", "circuit": "jeddah_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "properties": { "id": null, "sector": "SPEED TRAP", "ref": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.105374294749502, 21.625778926677548 ] } },
+{ "type": "Feature", "properties": { "id": "2", "sector": "SECTOR 2", "ref": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.102849799898166, 21.635718464983427 ] } },
+{ "type": "Feature", "properties": { "id": "1", "sector": "SECTOR 1", "ref": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.103113868397259, 21.64728466524371 ] } }
+]
+}

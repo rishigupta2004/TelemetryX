@@ -1,0 +1,18 @@
+{
+"type": "FeatureCollection",
+"_circuit": "las_vegas_v1",
+"_layer": "drs",
+"_label": "Las Vegas Strip Circuit",
+"_note": "3 features per zone: detection_point (Point), activation_point (Point), zone_line (LineString).",
+"name": "drs",
+"features": [
+{ "type": "Feature", "id": "z1_detection", "properties": { "zone": 1, "feature_type": "detection_point", "ref": "10m after T2", "circuit": "las_vegas_v1", "notes": "Place at DRS detection sensor — style RED" }, "geometry": null },
+{ "type": "Feature", "id": "z1_activation", "properties": { "zone": 1, "feature_type": "activation_point", "ref": "20m after T4", "circuit": "las_vegas_v1", "notes": "Place where DRS wing opens — style GREEN" }, "geometry": null },
+{ "type": "Feature", "id": "z1_zone_line", "properties": { "zone": 1, "feature_type": "zone_line", "ref": "Zone 1: activation point → braking point", "circuit": "las_vegas_v1", "notes": "Draw line from activation to end of DRS zone — style GREEN line" }, "geometry": { "type": "LineString", "coordinates": [ ] } },
+{ "type": "Feature", "id": "z2_detection", "properties": { "zone": 2, "feature_type": "detection_point", "ref": "140m before T14", "circuit": "las_vegas_v1", "notes": "Place at DRS detection sensor — style RED" }, "geometry": null },
+{ "type": "Feature", "id": "z2_activation", "properties": { "zone": 2, "feature_type": "activation_point", "ref": "710m after T12", "circuit": "las_vegas_v1", "notes": "Place where DRS wing opens — style GREEN" }, "geometry": null },
+{ "type": "Feature", "id": "z2_zone_line", "properties": { "zone": 2, "feature_type": "zone_line", "ref": "Zone 2: activation point → braking point", "circuit": "las_vegas_v1", "notes": "Draw line from activation to end of DRS zone — style GREEN line" }, "geometry": { "type": "LineString", "coordinates": [ ] } },
+{ "type": "Feature", "properties": { "id": "1", "zone": null, "feature_type": null, "ref": null, "circuit": "LAS VEGAS", "notes": null }, "geometry": { "type": "LineString", "coordinates": [ [ -115.163922520127883, 36.111367738044351 ], [ -115.163981011875535, 36.11902040836187 ] ] } },
+{ "type": "Feature", "properties": { "id": "2", "zone": null, "feature_type": null, "ref": null, "circuit": "LAS VEGAS", "notes": null }, "geometry": { "type": "LineString", "coordinates": [ [ -115.172998489638204, 36.117392388052281 ], [ -115.173144719007325, 36.109047565387577 ] ] } }
+]
+}

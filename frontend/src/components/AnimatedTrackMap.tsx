@@ -57,7 +57,7 @@ const SECTOR_COLORS = [
 
 const DRS_COLOR = 'rgba(255, 180, 50, 0.5)'
 const DRS_GLOW = 'rgba(255, 180, 50, 0.8)'
-const PIT_LANE_COLOR = 'rgba(180, 180, 180, 0.4)'
+const PIT_LANE_COLOR = 'rgba(180, 180, 180, 0.2)'
 const TRACK_BORDER_COLOR = 'rgba(255, 255, 255, 0.2)'
 const TRACK_CENTER_COLOR = 'rgba(255, 255, 255, 0.08)'
 
@@ -529,7 +529,7 @@ export function AnimatedTrackMap({
                 <path
                   d={pitLanePathString}
                   fill="none"
-                  stroke="rgba(255, 255, 255, 0.15)"
+                  stroke="rgba(255, 255, 255, 0.08)"
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"

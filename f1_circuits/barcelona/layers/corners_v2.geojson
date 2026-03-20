@@ -1,0 +1,219 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "spain_v2",
+  "_layer": "corners",
+  "_label": "Barcelona 2023+ no chicane",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "T1",
+        "circuit": "spain_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "",
+        "circuit": "spain_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "Repsol",
+        "circuit": "spain_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "",
+        "circuit": "spain_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "",
+        "circuit": "spain_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "",
+        "circuit": "spain_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "",
+        "circuit": "spain_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "",
+        "circuit": "spain_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "La Caixa",
+        "circuit": "spain_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "Campsa",
+        "circuit": "spain_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "corner_number": 11,
+        "name": "",
+        "circuit": "spain_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "properties": {
+        "corner_number": 12,
+        "name": "",
+        "circuit": "spain_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "properties": {
+        "corner_number": 13,
+        "name": "",
+        "circuit": "spain_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "properties": {
+        "corner_number": 14,
+        "name": "",
+        "circuit": "spain_v2",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "SPAIN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 2.256667146251398, 41.564659696368096 ] } },
+{ "type": "Feature", "properties": { "corner_number": 2, "name": null, "circuit": "SPAIN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 2.255468635041817, 41.564899398610009 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "SPAIN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 2.252481126612081, 41.564589539614353 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "SPAIN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 2.255018462538706, 41.568307847562131 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "SPAIN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 2.25403042159032, 41.565472345432148 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "SPAIN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 2.256292976898163, 41.565922517935256 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "SPAIN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 2.257795500707247, 41.567454273725062 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "SPAIN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 2.257029622812345, 41.568021374151058 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "SPAIN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 2.255983117902515, 41.570090998386128 ] } },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": "SPAIN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 2.261999059534998, 41.572903114931549 ] } },
+{ "type": "Feature", "properties": { "corner_number": 11, "name": null, "circuit": "SPAIN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 2.260590078064222, 41.573283130680927 ] } },
+{ "type": "Feature", "properties": { "corner_number": 12, "name": null, "circuit": "SPAIN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 2.258947240747674, 41.57317789555033 ] } },
+{ "type": "Feature", "properties": { "corner_number": 13, "name": null, "circuit": "SPAIN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 2.260800548325417, 41.574715497736285 ] } },
+{ "type": "Feature", "properties": { "corner_number": 14, "name": null, "circuit": "SPAIN", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 2.263682821624556, 41.573253898700209 ] } }
+]
+}

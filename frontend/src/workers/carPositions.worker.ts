@@ -45,7 +45,7 @@ type PositionLite = {
   y: number
 }
 
-type PitWindow = { start: number; end: number }
+type PitWindow = { start: number; end: number; exitProgress: number }
 
 type DriverIndex = {
   driver: DriverLite
@@ -200,8 +200,8 @@ function buildPitWindows(laps: LapLite[]): PitWindow[] {
     const start = pitIn
     const end = Math.max(start + 1, pitOut)
     const prev = out[out.length - 1]
-    if (prev && start <= prev.end) prev.end = Math.max(prev.end, end)
-    else out.push({ start, end })
+    if (prev && start <= prev.end) { prev.end = Math.max(prev.end, end) } 
+    else out.push({ start, end, exitProgress: -1 })
   }
 
   return out
@@ -465,6 +465,34 @@ function computePositions(sessionTime: number): CarPosition[] {
       if (activeWindow) {
         isInPit = true
         pitProgress = pitProgressWithStop(activeWindow, sessionTime)
+      } else {
+        // Car just left pit — check if it left within last 12 seconds
+        // Find the most recently ended pit window
+        let lastEndedWindow: PitWindow | null = null
+        for (let pw = 0; pw < pitWindows.length; pw++) {
+          if (pitWindows[pw].end < sessionTime && 
+              sessionTime - pitWindows[pw].end < 12.0) {
+            lastEndedWindow = pitWindows[pw]
+          }
+        }
+        if (lastEndedWindow) {
+          // Smoothly blend: car exits pit at progress 1.0 of pit lane
+          // and we use the lap number after the pit to compute correct progress
+          isInPit = false
+          pitProgress = null
+          // Keep car near pit exit — don't let timing jump snap it to S/F
+          // by clamping progress to not go below pit exit fraction
+          const reentryFraction = 0.02 // pit exits are usually ~2% into the lap
+          if (progress < reentryFraction) {
+            // Override: hold car at pit exit point until timing catches up
+            const holdProgress = reentryFraction + 
+              (sessionTime - lastEndedWindow.end) * 0.0005
+            // Replace the smoothedUnwrapped we computed earlier
+            filteredUnwrappedProgress.set(driver.driverNumber, 
+              Math.max((lapNumber - 1) + reentryFraction, 
+                       filteredUnwrappedProgress.get(driver.driverNumber) ?? 0))
+          }
+        }
       }
     } else {
       pitHint.delete(driver.driverNumber)

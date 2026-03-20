@@ -13,14 +13,15 @@ const isLonLat = (pts: Point[]): boolean => {
   return chk > 0 && val / chk >= 0.8
 }
 
-const projectToMeters = (pts: Point[]): Point[] => {
+const projectToMeters = (pts: Point[], refLonLat?: { x: number, y: number }): Point[] => {
   if (!pts.length) return []
-  const lon0 = pts[0].x, lat0 = pts[0].y
+  const lon0 = refLonLat ? refLonLat.x : pts[0].x
+  const lat0 = refLonLat ? refLonLat.y : pts[0].y
   const cos = Math.cos((lat0 * Math.PI) / 180)
   return pts.map(p => ({ x: (p.x - lon0) * 111_320 * cos, y: (p.y - lat0) * 111_320 }))
 }
 
-export const parseCenterline = (raw: number[][]): Point[] => {
+export const parseCenterline = (raw: number[][], refLonLat?: { x: number, y: number }): Point[] => {
   const out: Point[] = []
   for (const item of raw as unknown[]) {
     let x = 0, y = 0
@@ -30,7 +31,7 @@ export const parseCenterline = (raw: number[][]): Point[] => {
     if (!Number.isFinite(x) || !Number.isFinite(y)) continue
     out.push({ x, y })
   }
-  return isLonLat(out) ? projectToMeters(out).map(p => ({ x: -p.y, y: -p.x })) : out
+  return isLonLat(out) ? projectToMeters(out, refLonLat).map(p => ({ x: p.x, y: -p.y })) : out
 }
 
 export const getBounds = (pts: Point[], pad = 60) => {

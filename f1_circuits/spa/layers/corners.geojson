@@ -1,0 +1,294 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "belgium_v1",
+  "_layer": "corners",
+  "_label": "Spa-Francorchamps",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "",
+        "circuit": "belgium_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "",
+        "circuit": "belgium_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "Raidillon",
+        "circuit": "belgium_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "",
+        "circuit": "belgium_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "",
+        "circuit": "belgium_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "",
+        "circuit": "belgium_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "",
+        "circuit": "belgium_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "Pouhon",
+        "circuit": "belgium_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "",
+        "circuit": "belgium_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "",
+        "circuit": "belgium_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "corner_number": 11,
+        "name": "",
+        "circuit": "belgium_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "properties": {
+        "corner_number": 12,
+        "name": "",
+        "circuit": "belgium_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "properties": {
+        "corner_number": 13,
+        "name": "",
+        "circuit": "belgium_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "properties": {
+        "corner_number": 14,
+        "name": "",
+        "circuit": "belgium_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 15,
+      "properties": {
+        "corner_number": 15,
+        "name": "",
+        "circuit": "belgium_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 16,
+      "properties": {
+        "corner_number": 16,
+        "name": "",
+        "circuit": "belgium_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 17,
+      "properties": {
+        "corner_number": 17,
+        "name": "Bus Stop",
+        "circuit": "belgium_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 18,
+      "properties": {
+        "corner_number": 18,
+        "name": "",
+        "circuit": "belgium_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 19,
+      "properties": {
+        "corner_number": 19,
+        "name": "",
+        "circuit": "belgium_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "SPA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.963312251680849, 50.446187961872354 ] } },
+{ "type": "Feature", "properties": { "corner_number": 2, "name": null, "circuit": "SPA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.970412804744681, 50.442575399787252 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "SPA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.971471659148937, 50.442097877212781 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "SPA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.972052990978725, 50.440914451702142 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "SPA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.977575643361705, 50.431405523914904 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "SPA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.976765931170215, 50.43088647763831 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "SPA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.977015073382981, 50.429536957319158 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "SPA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.972239847638298, 50.428062865893629 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "SPA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.974295270893618, 50.429370862510652 ] } },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": "SPA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.972675846510639, 50.433793136787244 ] } },
+{ "type": "Feature", "properties": { "corner_number": 11, "name": null, "circuit": "SPA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.969353950340425, 50.433855422340436 ] } },
+{ "type": "Feature", "properties": { "corner_number": 12, "name": null, "circuit": "SPA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.966779480808509, 50.430492002468092 ] } },
+{ "type": "Feature", "properties": { "corner_number": 13, "name": null, "circuit": "SPA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.964557962744679, 50.430699620978736 ] } },
+{ "type": "Feature", "properties": { "corner_number": 14, "name": null, "circuit": "SPA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.962170349872338, 50.428831054382989 ] } },
+{ "type": "Feature", "properties": { "corner_number": 15, "name": null, "circuit": "SPA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.959678927744677, 50.429848385085116 ] } },
+{ "type": "Feature", "properties": { "corner_number": 16, "name": null, "circuit": "SPA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.9658659593617, 50.434146088255332 ] } },
+{ "type": "Feature", "properties": { "corner_number": 17, "name": null, "circuit": "SPA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.968045953723403, 50.436741319638308 ] } },
+{ "type": "Feature", "properties": { "corner_number": 18, "name": null, "circuit": "SPA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.966447291191488, 50.441537307234057 ] } },
+{ "type": "Feature", "properties": { "corner_number": 19, "name": null, "circuit": "SPA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 5.967693002255318, 50.441578830936187 ] } }
+]
+}

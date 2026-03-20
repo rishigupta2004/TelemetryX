@@ -1,0 +1,16 @@
+{
+"type": "FeatureCollection",
+"_circuit": "abu_dhabi_v2",
+"_layer": "sectors",
+"_label": "Yas Marina 2021+",
+"_note": "S1=end of sector 1. S2=end of sector 2. T=speed trap. S3 ends at start\/finish — no point needed.",
+"name": "sectors_v2",
+"features": [
+{ "type": "Feature", "id": "S1", "properties": { "sector": "S1", "ref": "205m before T5", "circuit": "abu_dhabi_v2", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "S2", "properties": { "sector": "S2", "ref": "100m before T9", "circuit": "abu_dhabi_v2", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "T", "properties": { "sector": "T", "ref": "150m before T6", "circuit": "abu_dhabi_v2", "notes": "" }, "geometry": null },
+{ "type": "Feature", "properties": { "id": "1", "sector": "Sector 1", "ref": null, "circuit": "Yas_Marina", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 54.60598801029186, 24.476681823103497 ] } },
+{ "type": "Feature", "properties": { "id": null, "sector": "SPEED TRAP", "ref": null, "circuit": "Yas_Marina", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 54.601873237366242, 24.469402841883799 ] } },
+{ "type": "Feature", "properties": { "id": null, "sector": "Sector 2", "ref": null, "circuit": "Yas_Marina", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 54.60788913955497, 24.463491111161535 ] } }
+]
+}

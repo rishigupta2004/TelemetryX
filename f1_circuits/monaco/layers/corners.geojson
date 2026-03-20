@@ -1,0 +1,294 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "monaco_v1",
+  "_layer": "corners",
+  "_label": "Circuit de Monaco",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "Sainte Devote",
+        "circuit": "monaco_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "",
+        "circuit": "monaco_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "",
+        "circuit": "monaco_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "",
+        "circuit": "monaco_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "Casino",
+        "circuit": "monaco_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "",
+        "circuit": "monaco_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "",
+        "circuit": "monaco_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "Fairmont Hairpin",
+        "circuit": "monaco_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "",
+        "circuit": "monaco_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "Portier",
+        "circuit": "monaco_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "corner_number": 11,
+        "name": "",
+        "circuit": "monaco_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "properties": {
+        "corner_number": 12,
+        "name": "",
+        "circuit": "monaco_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "properties": {
+        "corner_number": 13,
+        "name": "",
+        "circuit": "monaco_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "properties": {
+        "corner_number": 14,
+        "name": "Nouvelle Chicane",
+        "circuit": "monaco_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 15,
+      "properties": {
+        "corner_number": 15,
+        "name": "",
+        "circuit": "monaco_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 16,
+      "properties": {
+        "corner_number": 16,
+        "name": "",
+        "circuit": "monaco_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 17,
+      "properties": {
+        "corner_number": 17,
+        "name": "Tabac",
+        "circuit": "monaco_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 18,
+      "properties": {
+        "corner_number": 18,
+        "name": "",
+        "circuit": "monaco_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 19,
+      "properties": {
+        "corner_number": 19,
+        "name": "La Rascasse",
+        "circuit": "monaco_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "MONACO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 7.42148487489362, 43.73695194625531 ] } },
+{ "type": "Feature", "properties": { "corner_number": 2, "name": null, "circuit": "MONACO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 7.425815124489362, 43.737733932638285 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "MONACO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 7.42786783874468, 43.738447495212753 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "MONACO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 7.427183600659574, 43.739444527851049 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "MONACO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 7.428776897914892, 43.741116023744667 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "MONACO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 7.429744606063828, 43.740275388382969 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "MONACO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 7.42931451355319, 43.740813004021263 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "MONACO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 7.430311546191487, 43.741086699255305 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "MONACO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 7.429050593148935, 43.738310647595732 ] } },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": "MONACO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 7.425453455787235, 43.737049694553178 ] } },
+{ "type": "Feature", "properties": { "corner_number": 11, "name": null, "circuit": "MONACO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 7.424994038787235, 43.737098568702116 ] } },
+{ "type": "Feature", "properties": { "corner_number": 12, "name": null, "circuit": "MONACO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 7.422217987127662, 43.736766224489351 ] } },
+{ "type": "Feature", "properties": { "corner_number": 13, "name": null, "circuit": "MONACO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 7.421895417744683, 43.735368423829776 ] } },
+{ "type": "Feature", "properties": { "corner_number": 14, "name": null, "circuit": "MONACO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 7.422178887808514, 43.735212026553185 ] } },
+{ "type": "Feature", "properties": { "corner_number": 15, "name": null, "circuit": "MONACO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 7.422452583042555, 43.734039046978715 ] } },
+{ "type": "Feature", "properties": { "corner_number": 16, "name": null, "circuit": "MONACO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 7.422208212297875, 43.733911974191479 ] } },
+{ "type": "Feature", "properties": { "corner_number": 17, "name": null, "circuit": "MONACO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 7.4226480796383, 43.73309088848935 ] } },
+{ "type": "Feature", "properties": { "corner_number": 18, "name": null, "circuit": "MONACO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 7.423469165340427, 43.732631471489356 ] } },
+{ "type": "Feature", "properties": { "corner_number": 19, "name": null, "circuit": "MONACO", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 7.422413483723407, 43.73242620006382 ] } }
+]
+}

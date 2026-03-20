@@ -1,0 +1,414 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "jeddah_v1",
+  "_layer": "corners",
+  "_label": "Jeddah Corniche Circuit",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "",
+        "circuit": "jeddah_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "",
+        "circuit": "jeddah_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "",
+        "circuit": "jeddah_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "",
+        "circuit": "jeddah_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "",
+        "circuit": "jeddah_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "",
+        "circuit": "jeddah_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "",
+        "circuit": "jeddah_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "",
+        "circuit": "jeddah_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "",
+        "circuit": "jeddah_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "",
+        "circuit": "jeddah_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "corner_number": 11,
+        "name": "",
+        "circuit": "jeddah_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "properties": {
+        "corner_number": 12,
+        "name": "",
+        "circuit": "jeddah_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "properties": {
+        "corner_number": 13,
+        "name": "",
+        "circuit": "jeddah_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "properties": {
+        "corner_number": 14,
+        "name": "",
+        "circuit": "jeddah_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 15,
+      "properties": {
+        "corner_number": 15,
+        "name": "",
+        "circuit": "jeddah_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 16,
+      "properties": {
+        "corner_number": 16,
+        "name": "",
+        "circuit": "jeddah_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 17,
+      "properties": {
+        "corner_number": 17,
+        "name": "",
+        "circuit": "jeddah_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 18,
+      "properties": {
+        "corner_number": 18,
+        "name": "",
+        "circuit": "jeddah_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 19,
+      "properties": {
+        "corner_number": 19,
+        "name": "",
+        "circuit": "jeddah_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 20,
+      "properties": {
+        "corner_number": 20,
+        "name": "",
+        "circuit": "jeddah_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 21,
+      "properties": {
+        "corner_number": 21,
+        "name": "",
+        "circuit": "jeddah_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 22,
+      "properties": {
+        "corner_number": 22,
+        "name": "",
+        "circuit": "jeddah_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 23,
+      "properties": {
+        "corner_number": 23,
+        "name": "",
+        "circuit": "jeddah_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 24,
+      "properties": {
+        "corner_number": 24,
+        "name": "",
+        "circuit": "jeddah_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 25,
+      "properties": {
+        "corner_number": 25,
+        "name": "",
+        "circuit": "jeddah_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 26,
+      "properties": {
+        "corner_number": 26,
+        "name": "",
+        "circuit": "jeddah_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 27,
+      "properties": {
+        "corner_number": 27,
+        "name": "",
+        "circuit": "jeddah_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.10363295068035, 21.634809763888811 ] } },
+{ "type": "Feature", "properties": { "corner_number": 2, "name": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.103101458041998, 21.634801191426899 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.103255762356355, 21.635684155003524 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.102895718956177, 21.638778813752662 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.102029900303378, 21.639550335324468 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.102441378475007, 21.640810487225089 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.102184204617735, 21.641770602958893 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.101712719212742, 21.642139218820979 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.101781298908016, 21.643536530112137 ] } },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.10256139294173, 21.643990870593314 ] } },
+{ "type": "Feature", "properties": { "corner_number": 11, "name": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.102818566799002, 21.644950986327117 ] } },
+{ "type": "Feature", "properties": { "corner_number": 12, "name": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.103032878346724, 21.645431044194019 ] } },
+{ "type": "Feature", "properties": { "corner_number": 13, "name": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.102355653855916, 21.65008589101059 ] } },
+{ "type": "Feature", "properties": { "corner_number": 14, "name": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.102535675555998, 21.647685601676081 ] } },
+{ "type": "Feature", "properties": { "corner_number": 15, "name": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.10203847276528, 21.645679645589379 ] } },
+{ "type": "Feature", "properties": { "corner_number": 16, "name": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.101824161217557, 21.644702384931758 ] } },
+{ "type": "Feature", "properties": { "corner_number": 17, "name": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.101138364264834, 21.644385203841132 ] } },
+{ "type": "Feature", "properties": { "corner_number": 18, "name": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.101198371498192, 21.642053494201893 ] } },
+{ "type": "Feature", "properties": { "corner_number": 19, "name": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.101652711979369, 21.640819059687001 ] } },
+{ "type": "Feature", "properties": { "corner_number": 20, "name": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.101755581522276, 21.639164574538565 ] } },
+{ "type": "Feature", "properties": { "corner_number": 21, "name": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.102518530632167, 21.637741545861676 ] } },
+{ "type": "Feature", "properties": { "corner_number": 22, "name": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.102655690022715, 21.634792618964994 ] } },
+{ "type": "Feature", "properties": { "corner_number": 23, "name": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.103041450808618, 21.634424003102907 ] } },
+{ "type": "Feature", "properties": { "corner_number": 24, "name": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.103538653599344, 21.632983829502194 ] } },
+{ "type": "Feature", "properties": { "corner_number": 25, "name": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.102501385708358, 21.630583540167681 ] } },
+{ "type": "Feature", "properties": { "corner_number": 27, "name": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.106384710953122, 21.625414345636571 ] } },
+{ "type": "Feature", "properties": { "corner_number": 26, "name": null, "circuit": "JEDDAH", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.104224450552067, 21.626631635227646 ] } }
+]
+}

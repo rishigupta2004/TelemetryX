@@ -1,0 +1,19 @@
+{
+"type": "FeatureCollection",
+"_circuit": "australia_v1",
+"_layer": "sectors",
+"_label": "Albert Park pre-2022",
+"_note": "S1=end of sector 1. S2=end of sector 2. T=speed trap. S3 ends at start\/finish — no point needed.",
+"name": "sectors_v1",
+"features": [
+{ "type": "Feature", "id": "S1", "properties": { "sector": "S1", "ref": "147m before T6", "circuit": "australia_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "S2", "properties": { "sector": "S2", "ref": "143m before T11", "circuit": "australia_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "T", "properties": { "sector": "T", "ref": "123m before T1", "circuit": "australia_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "properties": { "id": null, "sector": "SPEED TRAP", "ref": null, "circuit": "MELBOURNE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 144.966486068664864, -37.848005661888301 ] } },
+{ "type": "Feature", "properties": { "id": "1", "sector": "SECTOR 1", "ref": null, "circuit": "MELBOURNE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 144.966717696095714, -37.838491119728729 ] } },
+{ "type": "Feature", "properties": { "id": "2", "sector": "SECTOR 2", "ref": null, "circuit": "MELBOURNE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 144.972152031973394, -37.847292962101072 ] } },
+{ "type": "Feature", "properties": { "id": null, "sector": "SPEED TRAP", "ref": null, "circuit": "MELBOURNE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 144.966432616180839, -37.848023479382988 ] } },
+{ "type": "Feature", "properties": { "id": "1", "sector": "SECTOR 1", "ref": null, "circuit": "MELBOURNE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 144.966699878601048, -37.838491119728729 ] } },
+{ "type": "Feature", "properties": { "id": "2", "sector": "SECTOR 2", "ref": null, "circuit": "MELBOURNE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 144.97216984946806, -37.847275144606392 ] } }
+]
+}

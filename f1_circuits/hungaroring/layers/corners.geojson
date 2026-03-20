@@ -1,0 +1,219 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "hungary_v1",
+  "_layer": "corners",
+  "_label": "Hungaroring",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "",
+        "circuit": "hungary_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "",
+        "circuit": "hungary_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "",
+        "circuit": "hungary_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "",
+        "circuit": "hungary_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "",
+        "circuit": "hungary_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "",
+        "circuit": "hungary_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "",
+        "circuit": "hungary_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "",
+        "circuit": "hungary_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "",
+        "circuit": "hungary_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "",
+        "circuit": "hungary_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "corner_number": 11,
+        "name": "",
+        "circuit": "hungary_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "properties": {
+        "corner_number": 12,
+        "name": "",
+        "circuit": "hungary_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "properties": {
+        "corner_number": 13,
+        "name": "",
+        "circuit": "hungary_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "properties": {
+        "corner_number": 14,
+        "name": "",
+        "circuit": "hungary_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "HUNGAROING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 19.242286945063832, 47.582328582021269 ] } },
+{ "type": "Feature", "properties": { "corner_number": 2, "name": null, "circuit": "HUNGAROING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 19.248245167382979, 47.58093307170212 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "HUNGAROING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 19.247638423765959, 47.582413526127652 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "HUNGAROING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 19.250611467489364, 47.586260280659566 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "HUNGAROING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 19.250320230553193, 47.588311074085098 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "HUNGAROING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 19.253572376340426, 47.586745675553189 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "HUNGAROING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 19.253293274276597, 47.586527247851059 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "HUNGAROING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 19.253924287638299, 47.585022523680848 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "HUNGAROING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 19.25559890002128, 47.584682747255314 ] } },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": "HUNGAROING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 19.255513955914896, 47.582850381531912 ] } },
+{ "type": "Feature", "properties": { "corner_number": 11, "name": null, "circuit": "HUNGAROING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 19.256581824680854, 47.581467006085099 ] } },
+{ "type": "Feature", "properties": { "corner_number": 12, "name": null, "circuit": "HUNGAROING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 19.252989902468087, 47.578651715702122 ] } },
+{ "type": "Feature", "properties": { "corner_number": 13, "name": null, "circuit": "HUNGAROING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 19.25022315157447, 47.579634640361697 ] } },
+{ "type": "Feature", "properties": { "corner_number": 14, "name": null, "circuit": "HUNGAROING", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 19.251873494212767, 47.577741600276589 ] } }
+]
+}

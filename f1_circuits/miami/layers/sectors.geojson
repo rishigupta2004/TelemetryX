@@ -1,0 +1,16 @@
+{
+"type": "FeatureCollection",
+"_circuit": "miami_v1",
+"_layer": "sectors",
+"_label": "Miami International Autodrome",
+"_note": "S1=end of sector 1. S2=end of sector 2. T=speed trap. S3 ends at start\/finish — no point needed.",
+"name": "sectors",
+"features": [
+{ "type": "Feature", "id": "S1", "properties": { "sector": "S1", "ref": "110m after T8", "circuit": "miami_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "S2", "properties": { "sector": "S2", "ref": "70m after T16", "circuit": "miami_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "T", "properties": { "sector": "T", "ref": "150m before T17", "circuit": "miami_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "properties": { "id": "speed trap", "sector": null, "ref": null, "circuit": "MIAMI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -80.242244611354579, 25.960573176095611 ] } },
+{ "type": "Feature", "properties": { "id": "1", "sector": "SECTOR 1", "ref": null, "circuit": "MIAMI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -80.242966629003988, 25.956021325697204 ] } },
+{ "type": "Feature", "properties": { "id": "2", "sector": "SECTOR 2", "ref": null, "circuit": "MIAMI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ -80.230462120438247, 25.960133687091627 ] } }
+]
+}

@@ -51,7 +51,7 @@ function extractApexRows(rows: TelemetryRow[], maxCorners: number): Array<{ labe
   let lastAccepted = -9999
   for (let i = 3; i < rows.length - 3; i += 1) {
     const s = Number(rows[i].speed || 0)
-    if (!Number.isFinite(s) || s <= 0 || s >= 280) continue
+    if (!Number.isFinite(s) || s < 20 || s > 400) continue
     const prev = Number(rows[i - 1].speed || 0)
     const next = Number(rows[i + 1].speed || 0)
     if (!(s <= prev && s <= next)) continue
@@ -98,6 +98,16 @@ export const AnalyticsView = React.memo(function AnalyticsView() {
 
   const laps = lapsStore.length ? lapsStore : sessionData?.laps ?? []
   const drivers = sessionData?.drivers ?? []
+  const validLaps = useMemo(
+    () =>
+      (laps ?? []).filter(
+        (l) =>
+          l.lapTime != null &&
+          Number.isFinite(Number(l.lapTime)) &&
+          Number(l.lapTime) > 40
+      ),
+    [laps]
+  )
 
   const telemetryByCode = useMemo(() => {
     const map = new Map<string, TelemetryRow[]>()
@@ -234,11 +244,11 @@ export const AnalyticsView = React.memo(function AnalyticsView() {
 
   const selectedCode = primaryDriver || orderedCodes[0] || null
 
-  const analyticsFetchWindow = useMemo(() => {
-    if (!selectedCode) return []
+  const analyticsFetchWindow = useMemo<{ t0: number; t1: number } | null>(() => {
+    if (!selectedCode) return null
     const rows = (lapsByCode.get(selectedCode) ?? []).filter(validLap)
     const bestLap = rows.sort((a, b) => getLapTimeSeconds(a) - getLapTimeSeconds(b))[0]
-    if (!bestLap) return []
+    if (!bestLap) return null
     const t0 = Math.max(0, Math.floor(bestLap.lapStartSeconds - 20))
     const t1 = Math.ceil(bestLap.lapEndSeconds + 20)
     return { t0, t1 }
@@ -333,25 +343,25 @@ export const AnalyticsView = React.memo(function AnalyticsView() {
       .slice(0, 20)
   }, [orderedCodes, telemetryByCode])
 
-  const compareDelta = useMemo(() => {
-    if (!selectedCode || !compareDriver) return []
+  const compareDelta = useMemo<number | null>(() => {
+    if (!selectedCode || !compareDriver) return null
     const a = (lapsByCode.get(selectedCode) ?? []).filter(validLap)
     const b = (lapsByCode.get(compareDriver) ?? []).filter(validLap)
     const byLapB = new Map(b.map((lap) => [lap.lapNumber, lap]))
     const deltas = a
       .map((lap) => {
         const other = byLapB.get(lap.lapNumber)
-        if (!other) return []
+        if (!other) return Number.NaN
         return getLapTimeSeconds(lap) - getLapTimeSeconds(other)
       })
-      .filter((v): v is number => v != null)
-    if (!deltas.length) return []
+      .filter((v): v is number => Number.isFinite(v))
+    if (!deltas.length) return null
     const avg = deltas.reduce((x, y) => x + y, 0) / deltas.length
-    return avg
+    return Number.isFinite(avg) ? avg : null
   }, [selectedCode, compareDriver, lapsByCode])
 
   useEffect(() => {
-    if (!selectedYear || !selectedRace || !selectedSession || !selectedCode) return
+    if (!selectedYear || !selectedRace || !selectedSession || !selectedCode || !analyticsFetchWindow) return
     if (!analyticsFetchWindow) return
     const existingRows = telemetryByCode.get(selectedCode)
     if (existingRows && existingRows.length > 32) return
@@ -424,10 +434,20 @@ export const AnalyticsView = React.memo(function AnalyticsView() {
         </div>
       )
     }
-    if (!laps.length) {
+    if (!laps.length || !drivers.length) {
       return (
-        <div className="flex items-center justify-center h-64 text-gray-400">
-          Loading lap data…
+        <div className="flex items-center justify-center h-64 text-gray-400 font-mono text-xs uppercase tracking-widest bg-bg-secondary/30 rounded border border-white/5">
+          <div className="flex flex-col items-center gap-3">
+            <span className="h-2 w-2 rounded-full bg-accent animate-pulse" />
+            Initializing data stream...
+          </div>
+        </div>
+      )
+    }
+    if (!validLaps.length) {
+      return (
+        <div className="flex h-full items-center justify-center text-text-muted">
+          No lap data available for analytics
         </div>
       )
     }
@@ -566,7 +586,7 @@ export const AnalyticsView = React.memo(function AnalyticsView() {
                         style={{ width: `${Math.max(8, Math.min(100, (row.speed / 330) * 100))}%` }}
                       />
                     </div>
-                    <div className="text-right font-mono text-fg-secondary">{row.speed.toFixed(1)} km/h</div>
+                    <div className="text-right font-mono text-fg-secondary">{Number(row.speed).toFixed(0)} km/h</div>
                   </div>
                 ))}
               </div>
@@ -641,9 +661,9 @@ export const AnalyticsView = React.memo(function AnalyticsView() {
           <span className="rounded-md border border-border bg-bg-inset px-2 py-0.5 font-mono">
             Driver {selectedCode || '-'} {compareDriver ? `| ${compareDriver}` : ''}
           </span>
-          {compareDelta != null && (
+          {typeof compareDelta === 'number' && Number.isFinite(compareDelta) && (
             <span className="rounded-md border border-border bg-bg-inset px-2 py-0.5 font-mono">
-              Avg Δ {compareDelta >= 0 ? '+' : ''}{compareDelta.toFixed(3)}s
+              Avg Δ {compareDelta >= 0 ? '+' : ''}{(typeof compareDelta === 'number' && Number.isFinite(compareDelta) ? compareDelta.toFixed(3) : '—')}s
             </span>
           )}
           {cursorText && (
@@ -655,8 +675,8 @@ export const AnalyticsView = React.memo(function AnalyticsView() {
       </div>
 
       <div className="bg-bg-surface rounded-md border border-border flex-1 overflow-hidden">
-        <div ref={panelRef} className="h-full w-full p-2.5">
-          <ViewErrorBoundary viewName="Analytics Panel">
+        <div ref={panelRef} className="h-full w-full min-h-[400px] p-2.5">
+          <ViewErrorBoundary viewName="AnalyticsView">
             {renderPanel()}
           </ViewErrorBoundary>
         </div>

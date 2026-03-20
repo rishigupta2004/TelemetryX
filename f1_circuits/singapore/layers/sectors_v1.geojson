@@ -1,0 +1,16 @@
+{
+"type": "FeatureCollection",
+"_circuit": "singapore_v1",
+"_layer": "sectors",
+"_label": "Marina Bay pre-2023",
+"_note": "S1=end of sector 1. S2=end of sector 2. T=speed trap. S3 ends at start\/finish — no point needed.",
+"name": "sectors_v1",
+"features": [
+{ "type": "Feature", "id": "S1", "properties": { "sector": "S1", "ref": "see PDF", "circuit": "singapore_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "S2", "properties": { "sector": "S2", "ref": "see PDF", "circuit": "singapore_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "T", "properties": { "sector": "T", "ref": "see PDF", "circuit": "singapore_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "properties": { "id": null, "sector": "SPEED TRAP", "ref": null, "circuit": "SINGAPORE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 103.863899108127654, 1.293425677484043 ] } },
+{ "type": "Feature", "properties": { "id": "1", "sector": "SECTOR 1", "ref": null, "circuit": "SINGAPORE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 103.856802852356381, 1.292596987212766 ] } },
+{ "type": "Feature", "properties": { "id": "2", "sector": "SECTOR 2", "ref": null, "circuit": "SINGAPORE", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 103.854621587159571, 1.290225218505319 ] } }
+]
+}

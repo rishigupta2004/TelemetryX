@@ -143,15 +143,11 @@ export const drawTrack = (
   grad.addColorStop(1, '#2a2a32')
   drawPath(ctx, points, grad, 18)
   drawPath(ctx, points, 'rgba(60, 60, 70, 0.6)', 12)
-  drawPath(ctx, points, 'rgba(255, 255, 255, 0.08)', 1, [16, 20])
-
-  drawCurbs(ctx, points, true, 4)
-  drawCurbs(ctx, points, false, 4)
 
   if (hasPitLane && pitLanePoints && pitLanePoints.length > 0) {
-    drawPath(ctx, pitLanePoints, 'rgba(45, 45, 50, 0.5)', 14)
+    drawPath(ctx, pitLanePoints, 'rgba(45, 45, 50, 0.2)', 14)
     drawPath(ctx, pitLanePoints, '#2a2a30', 10)
-    drawPath(ctx, pitLanePoints, 'rgba(255, 180, 50, 0.15)', 1.5, [8, 10])
+    drawPath(ctx, pitLanePoints, 'rgba(255, 180, 50, 0.08)', 1.5, [8, 10])
   }
 }
 
@@ -162,21 +158,12 @@ export const drawDRSZones = (
 ) => {
   drsPolylines.forEach(drs => {
     if (!drs.segment || drs.segment.length < 2) return
-    
-    const drsGradient = ctx.createLinearGradient(
-      drs.segment[0]?.x || 0, drs.segment[0]?.y || 0,
-      drs.segment[drs.segment.length - 1]?.x || 0, drs.segment[drs.segment.length - 1]?.y || 0
-    )
-    drsGradient.addColorStop(0, 'rgba(255, 140, 30, 0.3)')
-    drsGradient.addColorStop(0.5, 'rgba(255, 180, 60, 0.5)')
-    drsGradient.addColorStop(1, 'rgba(255, 140, 30, 0.3)')
-    drawPath(ctx, drs.segment, drsGradient, 16)
-    
-    drawPath(ctx, drs.segment, 'rgba(255, 200, 80, 0.78)', 5)
-    drawPath(ctx, drs.segment, 'rgba(255, 255, 255, 0.3)', 1.2, [10, 12])
+
+    drawPath(ctx, drs.segment, 'rgba(0, 210, 80, 0.22)', 16)
+    drawPath(ctx, drs.segment, 'rgba(0, 230, 100, 0.92)', 4)
 
     if (drs.midPoint) {
-      drawLabelPill(ctx, drs.midPoint.x, drs.midPoint.y - 24, `DRS ${drs.zone.zoneNumber}`, 'rgba(255,200,80,0.95)', 'rgba(40,25,5,0.92)', 10)
+      drawLabelPill(ctx, drs.midPoint.x, drs.midPoint.y - 24, `DRS ${drs.zone.zoneNumber}`, 'rgba(0,220,90,0.95)', 'rgba(5,30,15,0.92)', 10)
     }
   })
 }

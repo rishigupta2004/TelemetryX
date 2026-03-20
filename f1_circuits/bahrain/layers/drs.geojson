@@ -1,0 +1,22 @@
+{
+"type": "FeatureCollection",
+"_circuit": "bahrain_v1",
+"_layer": "drs",
+"_label": "Bahrain International Circuit",
+"_note": "3 features per zone: detection_point (Point), activation_point (Point), zone_line (LineString).",
+"name": "drs",
+"features": [
+{ "type": "Feature", "id": "z1_detection", "properties": { "zone": 1, "feature_type": "detection_point", "ref": "50m before T1", "circuit": "bahrain_v1", "notes": "Place at DRS detection sensor — style RED" }, "geometry": null },
+{ "type": "Feature", "id": "z1_activation", "properties": { "zone": 1, "feature_type": "activation_point", "ref": "23m after T3", "circuit": "bahrain_v1", "notes": "Place where DRS wing opens — style GREEN" }, "geometry": null },
+{ "type": "Feature", "id": "z1_zone_line", "properties": { "zone": 1, "feature_type": "zone_line", "ref": "Zone 1: activation point → braking point", "circuit": "bahrain_v1", "notes": "Draw line from activation to end of DRS zone — style GREEN line" }, "geometry": { "type": "LineString", "coordinates": [ ] } },
+{ "type": "Feature", "id": "z2_detection", "properties": { "zone": 2, "feature_type": "detection_point", "ref": "10m before T9", "circuit": "bahrain_v1", "notes": "Place at DRS detection sensor — style RED" }, "geometry": null },
+{ "type": "Feature", "id": "z2_activation", "properties": { "zone": 2, "feature_type": "activation_point", "ref": "50m after T10", "circuit": "bahrain_v1", "notes": "Place where DRS wing opens — style GREEN" }, "geometry": null },
+{ "type": "Feature", "id": "z2_zone_line", "properties": { "zone": 2, "feature_type": "zone_line", "ref": "Zone 2: activation point → braking point", "circuit": "bahrain_v1", "notes": "Draw line from activation to end of DRS zone — style GREEN line" }, "geometry": { "type": "LineString", "coordinates": [ ] } },
+{ "type": "Feature", "id": "z3_detection", "properties": { "zone": 3, "feature_type": "detection_point", "ref": "110m before T14", "circuit": "bahrain_v1", "notes": "Place at DRS detection sensor — style RED" }, "geometry": null },
+{ "type": "Feature", "id": "z3_activation", "properties": { "zone": 3, "feature_type": "activation_point", "ref": "170m after T15", "circuit": "bahrain_v1", "notes": "Place where DRS wing opens — style GREEN" }, "geometry": null },
+{ "type": "Feature", "id": "z3_zone_line", "properties": { "zone": 3, "feature_type": "zone_line", "ref": "Zone 3: activation point → braking point", "circuit": "bahrain_v1", "notes": "Draw line from activation to end of DRS zone — style GREEN line" }, "geometry": { "type": "LineString", "coordinates": [ ] } },
+{ "type": "Feature", "properties": { "id": "1", "zone": null, "feature_type": null, "ref": null, "circuit": null, "notes": null }, "geometry": { "type": "LineString", "coordinates": [ [ 50.513136464583766, 26.036528812740233 ], [ 50.518045919783795, 26.035697948772231 ] ] } },
+{ "type": "Feature", "properties": { "id": "2", "zone": null, "feature_type": null, "ref": null, "circuit": null, "notes": null }, "geometry": { "type": "LineString", "coordinates": [ [ 50.512619359637036, 26.0347249558539 ], [ 50.512589521362393, 26.03453850612733 ], [ 50.51256295656718, 26.03435165678448 ], [ 50.51253967184784, 26.034164454221095 ], [ 50.512519672986322, 26.033976944920827 ], [ 50.512502964948638, 26.033789175443722 ], [ 50.512489551883661, 26.033601192414661 ], [ 50.512479437122046, 26.033413042511764 ], [ 50.512315180256607, 26.029198421620929 ], [ 50.512315180256607, 26.029198421620929 ] ] } },
+{ "type": "Feature", "properties": { "id": "3", "zone": null, "feature_type": null, "ref": null, "circuit": null, "notes": null }, "geometry": { "type": "LineString", "coordinates": [ [ 50.510360458478047, 26.029248280295821 ], [ 50.510665513937219, 26.036302465652248 ] ] } }
+]
+}

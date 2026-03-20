@@ -1,0 +1,279 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "russia_v1",
+  "_layer": "corners",
+  "_label": "Sochi Autodrom",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "",
+        "circuit": "russia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "",
+        "circuit": "russia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "",
+        "circuit": "russia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "",
+        "circuit": "russia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "",
+        "circuit": "russia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "",
+        "circuit": "russia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "",
+        "circuit": "russia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "",
+        "circuit": "russia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "",
+        "circuit": "russia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "",
+        "circuit": "russia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "corner_number": 11,
+        "name": "",
+        "circuit": "russia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "properties": {
+        "corner_number": 12,
+        "name": "",
+        "circuit": "russia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "properties": {
+        "corner_number": 13,
+        "name": "",
+        "circuit": "russia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "properties": {
+        "corner_number": 14,
+        "name": "",
+        "circuit": "russia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 15,
+      "properties": {
+        "corner_number": 15,
+        "name": "",
+        "circuit": "russia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 16,
+      "properties": {
+        "corner_number": 16,
+        "name": "",
+        "circuit": "russia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 17,
+      "properties": {
+        "corner_number": 17,
+        "name": "",
+        "circuit": "russia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 18,
+      "properties": {
+        "corner_number": 18,
+        "name": "",
+        "circuit": "russia_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "SOCHI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.96637440267812, 43.407804912715477 ] } },
+{ "type": "Feature", "properties": { "corner_number": 2, "name": null, "circuit": "SOCHI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.957753238453897, 43.406045934624395 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "SOCHI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.953496945789041, 43.407500891810848 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "SOCHI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.953323219557824, 43.404243524975499 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "SOCHI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.948719474430533, 43.402223957537586 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "SOCHI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.947351380359684, 43.404373819648917 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "SOCHI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.947742264379926, 43.405785345277565 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "SOCHI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.951455662572222, 43.406263092413418 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "SOCHI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.951781399255758, 43.407196870906212 ] } },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": "SOCHI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.950695610310646, 43.409433596133155 ] } },
+{ "type": "Feature", "properties": { "corner_number": 11, "name": null, "circuit": "SOCHI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.956276565488537, 43.409867911711203 ] } },
+{ "type": "Feature", "properties": { "corner_number": 12, "name": null, "circuit": "SOCHI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.960511142374493, 43.408673543871572 ] } },
+{ "type": "Feature", "properties": { "corner_number": 13, "name": null, "circuit": "SOCHI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.963898803883254, 43.408782122766084 ] } },
+{ "type": "Feature", "properties": { "corner_number": 14, "name": null, "circuit": "SOCHI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.964354835240201, 43.407935207388896 ] } },
+{ "type": "Feature", "properties": { "corner_number": 15, "name": null, "circuit": "SOCHI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.966743570919455, 43.409303301459737 ] } },
+{ "type": "Feature", "properties": { "corner_number": 16, "name": null, "circuit": "SOCHI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.965983518657872, 43.409889627490102 ] } },
+{ "type": "Feature", "properties": { "corner_number": 17, "name": null, "circuit": "SOCHI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.968372254337133, 43.412669247189598 ] } },
+{ "type": "Feature", "properties": { "corner_number": 18, "name": null, "circuit": "SOCHI", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 39.970218095543828, 43.412126352717038 ] } }
+]
+}

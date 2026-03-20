@@ -1,0 +1,16 @@
+{
+"type": "FeatureCollection",
+"_circuit": "emilia_romagna_v1",
+"_layer": "sectors",
+"_label": "Imola",
+"_note": "S1=end of sector 1. S2=end of sector 2. T=speed trap. S3 ends at start\/finish — no point needed.",
+"name": "sectors",
+"features": [
+{ "type": "Feature", "id": "S1", "properties": { "sector": "S1", "ref": "115m before T7", "circuit": "emilia_romagna_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "S2", "properties": { "sector": "S2", "ref": "190m before T14", "circuit": "emilia_romagna_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "T", "properties": { "sector": "T", "ref": "120m before T17", "circuit": "emilia_romagna_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "properties": { "id": "1", "sector": "SECTOR 1", "ref": null, "circuit": null, "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.703652887523276, 44.337936036136263 ] } },
+{ "type": "Feature", "properties": { "id": "2", "sector": "SECTOR 2", "ref": null, "circuit": "IMOLA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.715003998861816, 44.340756188021629 ] } },
+{ "type": "Feature", "properties": { "id": "3", "sector": "SPEED TRAP", "ref": null, "circuit": "IMOLA", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 11.709416572938963, 44.34435188167545 ] } }
+]
+}

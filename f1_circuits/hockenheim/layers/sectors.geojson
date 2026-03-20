@@ -1,0 +1,16 @@
+{
+"type": "FeatureCollection",
+"_circuit": "hockenheim_v1",
+"_layer": "sectors",
+"_label": "Hockenheimring",
+"_note": "S1=end of sector 1. S2=end of sector 2. T=speed trap. S3 ends at start\/finish — no point needed.",
+"name": "sectors",
+"features": [
+{ "type": "Feature", "id": "S1", "properties": { "sector": "S1", "ref": "35m after T4", "circuit": "hockenheim_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "S2", "properties": { "sector": "S2", "ref": "185m before T12", "circuit": "hockenheim_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "id": "T", "properties": { "sector": "T", "ref": "260m before T6", "circuit": "hockenheim_v1", "notes": "" }, "geometry": null },
+{ "type": "Feature", "properties": { "id": "", "sector": "SECTOR 1", "ref": null, "circuit": "HOCKENHWIM", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 8.570121764810191, 49.332523004597178 ] } },
+{ "type": "Feature", "properties": { "id": null, "sector": "SPEED TRAP", "ref": null, "circuit": "HOCKENHWIM", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 8.582360888876478, 49.332140893817432 ] } },
+{ "type": "Feature", "properties": { "id": null, "sector": "SECTOR 2", "ref": null, "circuit": "HOCKENHWIM", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 8.57424392958559, 49.328018729042029 ] } }
+]
+}

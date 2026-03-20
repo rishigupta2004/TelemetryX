@@ -1,0 +1,2651 @@
+<?xml version="1.0" encoding="UTF-8"?><osm version="0.6" generator="Overpass API 0.7.62.10 2d4cfc48">
+<note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>
+<meta osm_base="2026-02-19T16:15:20Z"/>
+
+  <node id="172510077" lat="1.2931720" lon="103.8558226">
+    <tag k="highway" v="traffic_signals"/>
+  </node>
+  <node id="232279092" lat="1.2909086" lon="103.8524294">
+    <tag k="highway" v="traffic_signals"/>
+  </node>
+  <node id="232353185" lat="1.2922316" lon="103.8540982"/>
+  <node id="232353226" lat="1.2926038" lon="103.8536185">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+  </node>
+  <node id="232353353" lat="1.2918487" lon="103.8544670"/>
+  <node id="232353925" lat="1.2893739" lon="103.8515745"/>
+  <node id="232376467" lat="1.2923897" lon="103.8532520"/>
+  <node id="233497179" lat="1.2930831" lon="103.8559769">
+    <tag k="highway" v="traffic_signals"/>
+  </node>
+  <node id="233879421" lat="1.2913240" lon="103.8550077">
+    <tag k="highway" v="traffic_signals"/>
+  </node>
+  <node id="233879440" lat="1.2906494" lon="103.8557948"/>
+  <node id="233879466" lat="1.2901714" lon="103.8563522">
+    <tag k="highway" v="traffic_signals"/>
+  </node>
+  <node id="233879502" lat="1.2898549" lon="103.8567861"/>
+  <node id="233879574" lat="1.2896858" lon="103.8586061">
+    <tag k="highway" v="traffic_signals"/>
+  </node>
+  <node id="233879603" lat="1.2895592" lon="103.8609857">
+    <tag k="highway" v="traffic_signals"/>
+  </node>
+  <node id="233879753" lat="1.2914505" lon="103.8548655">
+    <tag k="highway" v="traffic_signals"/>
+  </node>
+  <node id="233879798" lat="1.2925727" lon="103.8568682"/>
+  <node id="233879856" lat="1.2915475" lon="103.8587030"/>
+  <node id="233879872" lat="1.2913301" lon="103.8608319">
+    <tag k="highway" v="traffic_signals"/>
+  </node>
+  <node id="233879899" lat="1.2913321" lon="103.8609332">
+    <tag k="highway" v="traffic_signals"/>
+  </node>
+  <node id="233880373" lat="1.2923557" lon="103.8572319"/>
+  <node id="235070001" lat="1.2947844" lon="103.8625486"/>
+  <node id="235070344" lat="1.2913032" lon="103.8625310"/>
+  <node id="235070526" lat="1.2920520" lon="103.8628904"/>
+  <node id="235070560" lat="1.2924838" lon="103.8628207"/>
+  <node id="235070587" lat="1.2935764" lon="103.8624291"/>
+  <node id="235070624" lat="1.2940148" lon="103.8623460"/>
+  <node id="237012287" lat="1.2866054" lon="103.8537625"/>
+  <node id="237054799" lat="1.2871039" lon="103.8532676"/>
+  <node id="410939418" lat="1.2892613" lon="103.8542660"/>
+  <node id="462263951" lat="1.2915327" lon="103.8628486"/>
+  <node id="479983003" lat="1.2895650" lon="103.8608765">
+    <tag k="highway" v="traffic_signals"/>
+  </node>
+  <node id="595497945" lat="1.2920774" lon="103.8577256"/>
+  <node id="634071195" lat="1.2895529" lon="103.8611045">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1161612960" lat="1.2894651" lon="103.8643271"/>
+  <node id="1161612993" lat="1.2945431" lon="103.8623862"/>
+  <node id="1161612996" lat="1.2941208" lon="103.8637308"/>
+  <node id="1161613002" lat="1.2942320" lon="103.8636063"/>
+  <node id="1161613033" lat="1.2887453" lon="103.8638073"/>
+  <node id="1161613070" lat="1.2942570" lon="103.8635345"/>
+  <node id="1161613118" lat="1.2892835" lon="103.8642651"/>
+  <node id="1161613127" lat="1.2887014" lon="103.8628407"/>
+  <node id="1161613131" lat="1.2942787" lon="103.8634356"/>
+  <node id="1161613167" lat="1.2896515" lon="103.8643313"/>
+  <node id="1161613173" lat="1.2942990" lon="103.8633351"/>
+  <node id="1161613185" lat="1.2893596" lon="103.8643031"/>
+  <node id="1161613227" lat="1.2887279" lon="103.8632536"/>
+  <node id="1161613230" lat="1.2887864" lon="103.8639319"/>
+  <node id="1188509769" lat="1.2925756" lon="103.8534982">
+    <tag k="button_operated" v="no"/>
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="crossing"/>
+    <tag k="tactile_paving" v="no"/>
+    <tag k="traffic_signals:sound" v="no"/>
+  </node>
+  <node id="1188527792" lat="1.2918067" lon="103.8629088"/>
+  <node id="1398079475" lat="1.2916630" lon="103.8546550"/>
+  <node id="1446076194" lat="1.2889170" lon="103.8640347"/>
+  <node id="1446076209" lat="1.2895766" lon="103.8643387"/>
+  <node id="1446076213" lat="1.2897557" lon="103.8572552"/>
+  <node id="1446076214" lat="1.2897940" lon="103.8569869"/>
+  <node id="1446076215" lat="1.2937185" lon="103.8623795"/>
+  <node id="1446076217" lat="1.2938660" lon="103.8623540"/>
+  <node id="1446076218" lat="1.2941967" lon="103.8636644"/>
+  <node id="1446076223" lat="1.2946271" lon="103.8629806"/>
+  <node id="1683099954" lat="1.2925175" lon="103.8533954"/>
+  <node id="1720073355" lat="1.2916120" lon="103.8585312"/>
+  <node id="1720073397" lat="1.2923891" lon="103.8571760"/>
+  <node id="1720073406" lat="1.2914743" lon="103.8590169"/>
+  <node id="1720073678" lat="1.2899906" lon="103.8565472"/>
+  <node id="1743939385" lat="1.2903222" lon="103.8561749"/>
+  <node id="1764796980" lat="1.2902257" lon="103.8562871">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="crossing"/>
+    <tag k="tactile_paving" v="yes"/>
+    <tag k="traffic_signals:sound" v="yes"/>
+  </node>
+  <node id="1764796983" lat="1.2898254" lon="103.8568781"/>
+  <node id="1764796984" lat="1.2899135" lon="103.8566645"/>
+  <node id="1780184887" lat="1.2896780" lon="103.8587507">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1780184888" lat="1.2897309" lon="103.8577561"/>
+  <node id="1818161326" lat="1.2897468" lon="103.8574561"/>
+  <node id="1818164136" lat="1.2922894" lon="103.8552936"/>
+  <node id="1832823579" lat="1.2896305" lon="103.8596687"/>
+  <node id="1832823581" lat="1.2896398" lon="103.8595101"/>
+  <node id="1832823583" lat="1.2896553" lon="103.8591787"/>
+  <node id="1832823584" lat="1.2896723" lon="103.8588597"/>
+  <node id="1832823586" lat="1.2897137" lon="103.8580786"/>
+  <node id="1832823589" lat="1.2897535" lon="103.8573305"/>
+  <node id="1832823650" lat="1.2904014" lon="103.8546839"/>
+  <node id="1832823668" lat="1.2914033" lon="103.8600553"/>
+  <node id="1832823669" lat="1.2915233" lon="103.8587725"/>
+  <node id="1832823705" lat="1.2917790" lon="103.8582423"/>
+  <node id="2466494264" lat="1.2899715" lon="103.8565763"/>
+  <node id="2466494275" lat="1.2897454" lon="103.8574822"/>
+  <node id="2466494277" lat="1.2911304" lon="103.8552358"/>
+  <node id="2466494309" lat="1.2912783" lon="103.8550590"/>
+  <node id="2466494354" lat="1.2909735" lon="103.8548828"/>
+  <node id="2466494363" lat="1.2897405" lon="103.8575749"/>
+  <node id="2466494365" lat="1.2904752" lon="103.8559972"/>
+  <node id="2466494373" lat="1.2915866" lon="103.8549246"/>
+  <node id="2466494375" lat="1.2898782" lon="103.8567376"/>
+  <node id="2466494397" lat="1.2900794" lon="103.8564514"/>
+  <node id="2511487801" lat="1.2865708" lon="103.8536500">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="crossing"/>
+    <tag k="tactile_paving" v="no"/>
+  </node>
+  <node id="3010901881" lat="1.2867007" lon="103.8537803"/>
+  <node id="3010901912" lat="1.2889492" lon="103.8516398">
+    <tag k="traffic_calming" v="island"/>
+  </node>
+  <node id="3010901923" lat="1.2897751" lon="103.8571045"/>
+  <node id="3059486888" lat="1.2927809" lon="103.8565140"/>
+  <node id="3059486893" lat="1.2925027" lon="103.8569856"/>
+  <node id="3071267371" lat="1.2928507" lon="103.8556295"/>
+  <node id="3071267396" lat="1.2924047" lon="103.8539248"/>
+  <node id="3076643588" lat="1.2887895" lon="103.8619413"/>
+  <node id="3076643589" lat="1.2886770" lon="103.8639715"/>
+  <node id="3076643594" lat="1.2886587" lon="103.8638731"/>
+  <node id="3076643603" lat="1.2893749" lon="103.8612770"/>
+  <node id="3076643605" lat="1.2892211" lon="103.8612770"/>
+  <node id="3076643606" lat="1.2896534" lon="103.8644482"/>
+  <node id="3076643611" lat="1.2894944" lon="103.8612069">
+    <tag k="barrier" v="yes"/>
+  </node>
+  <node id="3076643614" lat="1.2947850" lon="103.8628791"/>
+  <node id="3076643616" lat="1.2888304" lon="103.8615760"/>
+  <node id="3076643619" lat="1.2893103" lon="103.8643984"/>
+  <node id="3076643620" lat="1.2912552" lon="103.8623470"/>
+  <node id="3076643621" lat="1.2948294" lon="103.8626109"/>
+  <node id="3076643622" lat="1.2890600" lon="103.8612981"/>
+  <node id="3076643623" lat="1.2943212" lon="103.8637918"/>
+  <node id="3076643626" lat="1.2886748" lon="103.8635476"/>
+  <node id="3076643627" lat="1.2943517" lon="103.8635351"/>
+  <node id="3076643628" lat="1.2948393" lon="103.8627335"/>
+  <node id="3076643629" lat="1.2943578" lon="103.8637208"/>
+  <node id="3076643632" lat="1.2887646" lon="103.8640496"/>
+  <node id="3076644036" lat="1.2889054" lon="103.8613893"/>
+  <node id="3076644037" lat="1.2895026" lon="103.8644596"/>
+  <node id="3736885019" lat="1.2913099" lon="103.8620486"/>
+  <node id="3736885022" lat="1.2913406" lon="103.8616157"/>
+  <node id="4281759834" lat="1.2916929" lon="103.8642117">
+    <tag k="race course" v="start_end"/>
+  </node>
+  <node id="4281759839" lat="1.2914445" lon="103.8593764"/>
+  <node id="4451336935" lat="1.2883511" lon="103.8523788"/>
+  <node id="4451336947" lat="1.2883390" lon="103.8524101"/>
+  <node id="4451336954" lat="1.2884014" lon="103.8523418"/>
+  <node id="4513378919" lat="1.2920088" lon="103.8543182"/>
+  <node id="4600842968" lat="1.2914334" lon="103.8627650"/>
+  <node id="4600854642" lat="1.2913836" lon="103.8603800"/>
+  <node id="4689967578" lat="1.2907304" lon="103.8523289">
+    <tag k="button_operated" v="yes"/>
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="crossing"/>
+    <tag k="kerb" v="lowered"/>
+    <tag k="tactile_paving" v="yes"/>
+    <tag k="traffic_signals:sound" v="yes"/>
+  </node>
+  <node id="4726227141" lat="1.2913424" lon="103.8612076"/>
+  <node id="4726775783" lat="1.2911468" lon="103.8552168"/>
+  <node id="4726775785" lat="1.2910827" lon="103.8549222"/>
+  <node id="4727947772" lat="1.2914593" lon="103.8591706"/>
+  <node id="4732505517" lat="1.2883751" lon="103.8523538"/>
+  <node id="4732525705" lat="1.2910839" lon="103.8525268"/>
+  <node id="5133993153" lat="1.2880957" lon="103.8523772"/>
+  <node id="5136090633" lat="1.2913404" lon="103.8615148">
+    <tag k="bus" v="yes"/>
+    <tag k="public_transport" v="stop_position"/>
+  </node>
+  <node id="5136107116" lat="1.2866461" lon="103.8537699">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="crossing"/>
+    <tag k="tactile_paving" v="yes"/>
+  </node>
+  <node id="5157731601" lat="1.2887046" lon="103.8627747"/>
+  <node id="5165925965" lat="1.2895801" lon="103.8605926"/>
+  <node id="5233693837" lat="1.2884640" lon="103.8522876"/>
+  <node id="5233693838" lat="1.2885016" lon="103.8522399"/>
+  <node id="5270623340" lat="1.2897548" lon="103.8573058"/>
+  <node id="5270928837" lat="1.2908769" lon="103.8524116"/>
+  <node id="5270981855" lat="1.2917694" lon="103.8582593"/>
+  <node id="5270981856" lat="1.2919820" lon="103.8578896"/>
+  <node id="5411304500" lat="1.2940727" lon="103.8638557"/>
+  <node id="5411304501" lat="1.2941585" lon="103.8638501"/>
+  <node id="5411304502" lat="1.2945220" lon="103.8630464"/>
+  <node id="5411304505" lat="1.2944147" lon="103.8631271"/>
+  <node id="5411304506" lat="1.2943611" lon="103.8634118"/>
+  <node id="5411304507" lat="1.2943588" lon="103.8636225"/>
+  <node id="5411304508" lat="1.2944007" lon="103.8632824"/>
+  <node id="5411304510" lat="1.2947144" lon="103.8629382"/>
+  <node id="5411304511" lat="1.2948213" lon="103.8628109"/>
+  <node id="5411304513" lat="1.2893969" lon="103.8644413"/>
+  <node id="5411304514" lat="1.2887063" lon="103.8640023"/>
+  <node id="5411304515" lat="1.2886633" lon="103.8639349"/>
+  <node id="5411304516" lat="1.2887568" lon="103.8638756"/>
+  <node id="5411304517" lat="1.2888263" lon="103.8639740"/>
+  <node id="5411304721" lat="1.2894373" lon="103.8612622"/>
+  <node id="5411304722" lat="1.2889754" lon="103.8613328"/>
+  <node id="5864342563" lat="1.2895672" lon="103.8608347">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="crossing"/>
+    <tag k="tactile_paving" v="yes"/>
+  </node>
+  <node id="5864342578" lat="1.2913364" lon="103.8607530">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="crossing"/>
+    <tag k="tactile_paving" v="yes"/>
+  </node>
+  <node id="5864342580" lat="1.2913371" lon="103.8610007">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="crossing"/>
+    <tag k="tactile_paving" v="yes"/>
+  </node>
+  <node id="5864347585" lat="1.2914253" lon="103.8597007"/>
+  <node id="5864381389" lat="1.2948413" lon="103.8626515"/>
+  <node id="5978628576" lat="1.2897023" lon="103.8582930"/>
+  <node id="6046754591" lat="1.2944856" lon="103.8623818"/>
+  <node id="6077839914" lat="1.2919144" lon="103.8529922"/>
+  <node id="6094193512" lat="1.2924516" lon="103.8570723"/>
+  <node id="6095372887" lat="1.2912821" lon="103.8526354"/>
+  <node id="6340950159" lat="1.2942661" lon="103.8638328"/>
+  <node id="6340950160" lat="1.2944754" lon="103.8630531"/>
+  <node id="6340950161" lat="1.2943371" lon="103.8632484"/>
+  <node id="6340950163" lat="1.2940416" lon="103.8637574"/>
+  <node id="6340950165" lat="1.2932544" lon="103.8638606"/>
+  <node id="6340950167" lat="1.2945495" lon="103.8630271"/>
+  <node id="6340950168" lat="1.2947048" lon="103.8624761"/>
+  <node id="6340950169" lat="1.2946376" lon="103.8624309"/>
+  <node id="6340950170" lat="1.2926040" lon="103.8627941"/>
+  <node id="6340950171" lat="1.2928397" lon="103.8627184"/>
+  <node id="6340950173" lat="1.2914723" lon="103.8628065"/>
+  <node id="6340950174" lat="1.2916159" lon="103.8628898"/>
+  <node id="6340950175" lat="1.2916981" lon="103.8629054"/>
+  <node id="6340950179" lat="1.2896130" lon="103.8599725"/>
+  <node id="6340950180" lat="1.2891389" lon="103.8612786"/>
+  <node id="6340950181" lat="1.2888544" lon="103.8614754"/>
+  <node id="6355011388" lat="1.2929484" lon="103.8562154"/>
+  <node id="6374444454" lat="1.2888019" lon="103.8618303"/>
+  <node id="6413721257" lat="1.2887807" lon="103.8518670"/>
+  <node id="6413721265" lat="1.2886636" lon="103.8520374"/>
+  <node id="6432919892" lat="1.2943413" lon="103.8623708"/>
+  <node id="6433028833" lat="1.2937976" lon="103.8623658"/>
+  <node id="6433028834" lat="1.2933616" lon="103.8625264"/>
+  <node id="6665734167" lat="1.2913649" lon="103.8626721"/>
+  <node id="6743567258" lat="1.2915103" lon="103.8588089"/>
+  <node id="6769049627" lat="1.2917362" lon="103.8583143"/>
+  <node id="6782303341" lat="1.2919894" lon="103.8578775"/>
+  <node id="6782303342" lat="1.2921020" lon="103.8576827"/>
+  <node id="6856578455" lat="1.2890920" lon="103.8514513"/>
+  <node id="6988663055" lat="1.2877239" lon="103.8525432"/>
+  <node id="6997023277" lat="1.2896701" lon="103.8517392"/>
+  <node id="6997023278" lat="1.2895140" lon="103.8516524"/>
+  <node id="7023019223" lat="1.2914491" lon="103.8592734"/>
+  <node id="7138225045" lat="1.2909459" lon="103.8554503"/>
+  <node id="7759646003" lat="1.2924992" lon="103.8554120"/>
+  <node id="7863541446" lat="1.2919464" lon="103.8628983"/>
+  <node id="7863612116" lat="1.2895948" lon="103.8603161"/>
+  <node id="7867763422" lat="1.2924912" lon="103.8537917">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="7891770123" lat="1.2921701" lon="103.8531320"/>
+  <node id="8169664152" lat="1.2915357" lon="103.8549025"/>
+  <node id="8169664154" lat="1.2918822" lon="103.8550798"/>
+  <node id="9370421301" lat="1.2886362" lon="103.8520792"/>
+  <node id="9370421302" lat="1.2891874" lon="103.8514743"/>
+  <node id="9370421303" lat="1.2891414" lon="103.8514573"/>
+  <node id="9370421304" lat="1.2876704" lon="103.8526038"/>
+  <node id="9370421307" lat="1.2874994" lon="103.8527757"/>
+  <node id="9370421308" lat="1.2876606" lon="103.8526136"/>
+  <node id="9370423135" lat="1.2920809" lon="103.8530832"/>
+  <node id="9383172239" lat="1.2878349" lon="103.8524516"/>
+  <node id="9383172240" lat="1.2882495" lon="103.8523827"/>
+  <node id="9569954749" lat="1.2868763" lon="103.8534399"/>
+  <node id="9569954750" lat="1.2867720" lon="103.8535107"/>
+  <node id="9569954751" lat="1.2866113" lon="103.8536251">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="traffic_signals" v="signal"/>
+    <tag k="traffic_signals:direction" v="forward"/>
+  </node>
+  <node id="9569954753" lat="1.2865738" lon="103.8536782"/>
+  <node id="9569954754" lat="1.2865829" lon="103.8537184"/>
+  <node id="9814205647" lat="1.2929856" lon="103.8638851"/>
+  <node id="9814205648" lat="1.2931305" lon="103.8638658"/>
+  <node id="9814205649" lat="1.2934466" lon="103.8638425"/>
+  <node id="9946316970" lat="1.2914304" lon="103.8596063"/>
+  <node id="9946316973" lat="1.2914117" lon="103.8599232"/>
+  <node id="10046842560" lat="1.2882719" lon="103.8523895"/>
+  <node id="12071463879" lat="1.2915628" lon="103.8547543"/>
+  <node id="12169568595" lat="1.2918776" lon="103.8580705"/>
+  <node id="12169571327" lat="1.2918934" lon="103.8580435"/>
+  <node id="12522242614" lat="1.2922407" lon="103.8540891"/>
+  <node id="12522242619" lat="1.2923967" lon="103.8539328"/>
+  <node id="12762090856" lat="1.2870678" lon="103.8533008"/>
+  <node id="12762090857" lat="1.2870013" lon="103.8533443"/>
+  <node id="12762090858" lat="1.2869481" lon="103.8533754"/>
+  <node id="12878473076" lat="1.2906554" lon="103.8547722"/>
+  <node id="12878473097" lat="1.2904397" lon="103.8560384"/>
+  <node id="12878476505" lat="1.2905895" lon="103.8558644"/>
+  <node id="13003578482" lat="1.2914054" lon="103.8600220"/>
+  <way id="16688065">
+    <bounds minlat="1.2914505" minlon="103.8548655" maxlat="1.2922894" maxlon="103.8552936"/>
+    <nd ref="233879753" lat="1.2914505" lon="103.8548655"/>
+    <nd ref="8169664152" lat="1.2915357" lon="103.8549025"/>
+    <nd ref="2466494373" lat="1.2915866" lon="103.8549246"/>
+    <nd ref="8169664154" lat="1.2918822" lon="103.8550798"/>
+    <nd ref="1818164136" lat="1.2922894" lon="103.8552936"/>
+    <tag k="highway" v="trunk"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="70"/>
+    <tag k="name" v="Nicoll Highway"/>
+    <tag k="name:ms" v="Lebuhraya Nicoll"/>
+    <tag k="name:ta" v="நிகோல் நெடுஞ்சாலை"/>
+    <tag k="name:zh" v="尼诰大道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="21584500">
+    <bounds minlat="1.2896701" minlon="103.8517392" maxlat="1.2909086" maxlon="103.8524294"/>
+    <nd ref="6997023277" lat="1.2896701" lon="103.8517392"/>
+    <nd ref="4689967578" lat="1.2907304" lon="103.8523289"/>
+    <nd ref="5270928837" lat="1.2908769" lon="103.8524116"/>
+    <nd ref="232279092" lat="1.2909086" lon="103.8524294"/>
+    <tag k="highway" v="tertiary"/>
+    <tag k="lanes" v="2"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Saint Andrew's Road"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="yes"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="through|through"/>
+  </way>
+  <way id="21701074">
+    <bounds minlat="1.2925027" minlon="103.8565140" maxlat="1.2927809" maxlon="103.8569856"/>
+    <nd ref="3059486888" lat="1.2927809" lon="103.8565140"/>
+    <nd ref="233879798" lat="1.2925727" lon="103.8568682"/>
+    <nd ref="3059486893" lat="1.2925027" lon="103.8569856"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="6"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Boulevard"/>
+    <tag k="name:zh" v="莱佛士林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:both" v="separate"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="21805129">
+    <bounds minlat="1.2915327" minlon="103.8625264" maxlat="1.2933616" maxlon="103.8629088"/>
+    <nd ref="462263951" lat="1.2915327" lon="103.8628486"/>
+    <nd ref="6340950174" lat="1.2916159" lon="103.8628898"/>
+    <nd ref="6340950175" lat="1.2916981" lon="103.8629054"/>
+    <nd ref="1188527792" lat="1.2918067" lon="103.8629088"/>
+    <nd ref="7863541446" lat="1.2919464" lon="103.8628983"/>
+    <nd ref="235070526" lat="1.2920520" lon="103.8628904"/>
+    <nd ref="235070560" lat="1.2924838" lon="103.8628207"/>
+    <nd ref="6340950170" lat="1.2926040" lon="103.8627941"/>
+    <nd ref="6340950171" lat="1.2928397" lon="103.8627184"/>
+    <nd ref="6433028834" lat="1.2933616" lon="103.8625264"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="2"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="Republic Boulevard"/>
+    <tag k="name:zh" v="共和国林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk" v="left"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="29377119">
+    <bounds minlat="1.2871039" minlon="103.8527757" maxlat="1.2874994" maxlon="103.8532676"/>
+    <nd ref="9370421307" lat="1.2874994" lon="103.8527757"/>
+    <nd ref="237054799" lat="1.2871039" lon="103.8532676"/>
+    <tag k="bridge" v="yes"/>
+    <tag k="bridge:name" v="Anderson Bridge"/>
+    <tag k="highway" v="footway"/>
+    <tag k="image" v="https://images.mapillary.com/4kwZ6YR3RVToi_vUG8YcJg/thumb-2048.jpg"/>
+    <tag k="lanes" v="2"/>
+    <tag k="lanes:backward" v="1"/>
+    <tag k="lanes:forward" v="1"/>
+    <tag k="layer" v="1"/>
+    <tag k="lit" v="yes"/>
+    <tag k="mapillary" v="1215895535872042"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Fullerton Road"/>
+    <tag k="name:zh" v="浮尔顿路"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes:backward" v="through"/>
+    <tag k="turn:lanes:forward" v="through"/>
+  </way>
+  <way id="35037538">
+    <bounds minlat="1.2867007" minlon="103.8537803" maxlat="1.2892613" maxlon="103.8542660"/>
+    <nd ref="3010901881" lat="1.2867007" lon="103.8537803"/>
+    <nd ref="410939418" lat="1.2892613" lon="103.8542660"/>
+    <tag k="bridge" v="yes"/>
+    <tag k="bridge:name" v="Esplanade Bridge"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="highway" v="trunk"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="layer" v="1"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="70"/>
+    <tag k="name" v="Esplanade Drive"/>
+    <tag k="name:zh" v="海滨公园通道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="separate"/>
+    <tag k="sidewalk:right" v="no"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="start_date" v="1997"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="51511339">
+    <bounds minlat="1.2914505" minlon="103.8547543" maxlat="1.2915628" maxlon="103.8548655"/>
+    <nd ref="233879753" lat="1.2914505" lon="103.8548655"/>
+    <nd ref="12071463879" lat="1.2915628" lon="103.8547543"/>
+    <tag k="foot" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Stamford Road"/>
+    <tag k="name:zh" v="史丹福路"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="GPS &amp; Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="51511352">
+    <bounds minlat="1.2930831" minlon="103.8558226" maxlat="1.2931720" maxlon="103.8559769"/>
+    <nd ref="172510077" lat="1.2931720" lon="103.8558226"/>
+    <nd ref="233497179" lat="1.2930831" lon="103.8559769"/>
+    <tag k="foot" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Bras Basah Road"/>
+    <tag k="name:zh" v="勿拉士巴沙路"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="GPS &amp; Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="75067163">
+    <bounds minlat="1.2920774" minlon="103.8572319" maxlat="1.2923557" maxlon="103.8577256"/>
+    <nd ref="233880373" lat="1.2923557" lon="103.8572319"/>
+    <nd ref="6782303342" lat="1.2921020" lon="103.8576827"/>
+    <nd ref="595497945" lat="1.2920774" lon="103.8577256"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Boulevard"/>
+    <tag k="name:zh" v="莱佛士林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:both" v="separate"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="100484287">
+    <bounds minlat="1.2887014" minlon="103.8628407" maxlat="1.2945220" maxlon="103.8643387"/>
+    <nd ref="1161613127" lat="1.2887014" lon="103.8628407"/>
+    <nd ref="1161613227" lat="1.2887279" lon="103.8632536"/>
+    <nd ref="1161613033" lat="1.2887453" lon="103.8638073"/>
+    <nd ref="5411304516" lat="1.2887568" lon="103.8638756"/>
+    <nd ref="1161613230" lat="1.2887864" lon="103.8639319"/>
+    <nd ref="5411304517" lat="1.2888263" lon="103.8639740"/>
+    <nd ref="1446076194" lat="1.2889170" lon="103.8640347"/>
+    <nd ref="1161613118" lat="1.2892835" lon="103.8642651"/>
+    <nd ref="1161613185" lat="1.2893596" lon="103.8643031"/>
+    <nd ref="1161612960" lat="1.2894651" lon="103.8643271"/>
+    <nd ref="1446076209" lat="1.2895766" lon="103.8643387"/>
+    <nd ref="1161613167" lat="1.2896515" lon="103.8643313"/>
+    <nd ref="9814205647" lat="1.2929856" lon="103.8638851"/>
+    <nd ref="9814205648" lat="1.2931305" lon="103.8638658"/>
+    <nd ref="6340950165" lat="1.2932544" lon="103.8638606"/>
+    <nd ref="9814205649" lat="1.2934466" lon="103.8638425"/>
+    <nd ref="6340950163" lat="1.2940416" lon="103.8637574"/>
+    <nd ref="1161612996" lat="1.2941208" lon="103.8637308"/>
+    <nd ref="1446076218" lat="1.2941967" lon="103.8636644"/>
+    <nd ref="1161613002" lat="1.2942320" lon="103.8636063"/>
+    <nd ref="1161613070" lat="1.2942570" lon="103.8635345"/>
+    <nd ref="1161613131" lat="1.2942787" lon="103.8634356"/>
+    <nd ref="1161613173" lat="1.2942990" lon="103.8633351"/>
+    <nd ref="6340950161" lat="1.2943371" lon="103.8632484"/>
+    <nd ref="5411304505" lat="1.2944147" lon="103.8631271"/>
+    <nd ref="6340950160" lat="1.2944754" lon="103.8630531"/>
+    <nd ref="5411304502" lat="1.2945220" lon="103.8630464"/>
+    <tag k="access" v="private"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="name" v="Pit Lane"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="raceway" v="pitlane"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="152783801">
+    <bounds minlat="1.2895592" minlon="103.8608765" maxlat="1.2895650" maxlon="103.8609857"/>
+    <nd ref="233879603" lat="1.2895592" lon="103.8609857"/>
+    <nd ref="479983003" lat="1.2895650" lon="103.8608765"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="3"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Avenue"/>
+    <tag k="name:zh" v="莱佛士大道"/>
+    <tag k="note" v="Part of it estimated ???"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="raceway" v="sometimes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="through|through|through;right"/>
+  </way>
+  <way id="155907160">
+    <bounds minlat="1.2909086" minlon="103.8524294" maxlat="1.2910839" maxlon="103.8525268"/>
+    <nd ref="232279092" lat="1.2909086" lon="103.8524294"/>
+    <nd ref="4732525705" lat="1.2910839" lon="103.8525268"/>
+    <tag k="highway" v="tertiary"/>
+    <tag k="lanes" v="2"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Saint Andrew's Road"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="yes"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="through|through"/>
+  </way>
+  <way id="156457347">
+    <bounds minlat="1.2916630" minlon="103.8544670" maxlat="1.2918487" maxlon="103.8546550"/>
+    <nd ref="1398079475" lat="1.2916630" lon="103.8546550"/>
+    <nd ref="232353353" lat="1.2918487" lon="103.8544670"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Stamford Road"/>
+    <tag k="name:zh" v="史丹福路"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="GPS &amp; Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="173779754">
+    <bounds minlat="1.2923897" minlon="103.8532520" maxlat="1.2926038" maxlon="103.8536185"/>
+    <nd ref="232376467" lat="1.2923897" lon="103.8532520"/>
+    <nd ref="1683099954" lat="1.2925175" lon="103.8533954"/>
+    <nd ref="1188509769" lat="1.2925756" lon="103.8534982"/>
+    <nd ref="232353226" lat="1.2926038" lon="103.8536185"/>
+    <tag k="highway" v="tertiary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Saint Andrew's Road"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="no"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="through|through|through|through"/>
+  </way>
+  <way id="173791995">
+    <bounds minlat="1.2895650" minlon="103.8605926" maxlat="1.2895801" maxlon="103.8608765"/>
+    <nd ref="479983003" lat="1.2895650" lon="103.8608765"/>
+    <nd ref="5864342563" lat="1.2895672" lon="103.8608347"/>
+    <nd ref="5165925965" lat="1.2895801" lon="103.8605926"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Avenue"/>
+    <tag k="name:zh" v="莱佛士大道"/>
+    <tag k="note" v="Part of it estimated ???"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="raceway" v="sometimes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="173791997">
+    <bounds minlat="1.2919894" minlon="103.8577256" maxlat="1.2920774" maxlon="103.8578775"/>
+    <nd ref="595497945" lat="1.2920774" lon="103.8577256"/>
+    <nd ref="6782303341" lat="1.2919894" lon="103.8578775"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Boulevard"/>
+    <tag k="name:zh" v="莱佛士林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="174262763">
+    <bounds minlat="1.2912552" minlon="103.8620486" maxlat="1.2913099" maxlon="103.8623470"/>
+    <nd ref="3736885019" lat="1.2913099" lon="103.8620486"/>
+    <nd ref="3076643620" lat="1.2912552" lon="103.8623470"/>
+    <tag k="foot" v="yes"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Boulevard"/>
+    <tag k="name:zh" v="莱佛士林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left|left|right|right"/>
+  </way>
+  <way id="176298699">
+    <bounds minlat="1.2913301" minlon="103.8608319" maxlat="1.2913321" maxlon="103.8609332"/>
+    <nd ref="233879872" lat="1.2913301" lon="103.8608319"/>
+    <nd ref="233879899" lat="1.2913321" lon="103.8609332"/>
+    <tag k="foot" v="yes"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Boulevard"/>
+    <tag k="name:zh" v="莱佛士林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="180551367">
+    <bounds minlat="1.2896130" minlon="103.8596687" maxlat="1.2896305" maxlon="103.8599725"/>
+    <nd ref="6340950179" lat="1.2896130" lon="103.8599725"/>
+    <nd ref="1832823579" lat="1.2896305" lon="103.8596687"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Avenue"/>
+    <tag k="name:zh" v="莱佛士大道"/>
+    <tag k="note" v="Part of it estimated ???"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk" v="left"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="303311924">
+    <bounds minlat="1.2887895" minlon="103.8611045" maxlat="1.2895529" maxlon="103.8619413"/>
+    <nd ref="634071195" lat="1.2895529" lon="103.8611045"/>
+    <nd ref="3076643611" lat="1.2894944" lon="103.8612069"/>
+    <nd ref="5411304721" lat="1.2894373" lon="103.8612622"/>
+    <nd ref="3076643603" lat="1.2893749" lon="103.8612770"/>
+    <nd ref="3076643605" lat="1.2892211" lon="103.8612770"/>
+    <nd ref="6340950180" lat="1.2891389" lon="103.8612786"/>
+    <nd ref="3076643622" lat="1.2890600" lon="103.8612981"/>
+    <nd ref="5411304722" lat="1.2889754" lon="103.8613328"/>
+    <nd ref="3076644036" lat="1.2889054" lon="103.8613893"/>
+    <nd ref="6340950181" lat="1.2888544" lon="103.8614754"/>
+    <nd ref="3076643616" lat="1.2888304" lon="103.8615760"/>
+    <nd ref="6374444454" lat="1.2888019" lon="103.8618303"/>
+    <nd ref="3076643588" lat="1.2887895" lon="103.8619413"/>
+    <tag k="access" v="private"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="name" v="Marina Bay Street Circuit"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="303314681">
+    <bounds minlat="1.2897405" minlon="103.8573058" maxlat="1.2897548" maxlon="103.8575749"/>
+    <nd ref="2466494363" lat="1.2897405" lon="103.8575749"/>
+    <nd ref="2466494275" lat="1.2897454" lon="103.8574822"/>
+    <nd ref="1818161326" lat="1.2897468" lon="103.8574561"/>
+    <nd ref="1832823589" lat="1.2897535" lon="103.8573305"/>
+    <nd ref="5270623340" lat="1.2897548" lon="103.8573058"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Avenue"/>
+    <tag k="name:zh" v="莱佛士大道"/>
+    <tag k="note" v="Part of it estimated ???"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="raceway" v="sometimes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="none|through|through|through;right"/>
+  </way>
+  <way id="383365018">
+    <bounds minlat="1.2913099" minlon="103.8616157" maxlat="1.2913406" maxlon="103.8620486"/>
+    <nd ref="3736885022" lat="1.2913406" lon="103.8616157"/>
+    <nd ref="3736885019" lat="1.2913099" lon="103.8620486"/>
+    <tag k="foot" v="yes"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="3"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Boulevard"/>
+    <tag k="name:zh" v="莱佛士林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="383365019">
+    <bounds minlat="1.2913404" minlon="103.8612076" maxlat="1.2913424" maxlon="103.8615148"/>
+    <nd ref="4726227141" lat="1.2913424" lon="103.8612076"/>
+    <nd ref="5136090633" lat="1.2913404" lon="103.8615148"/>
+    <tag k="foot" v="yes"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="3"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Boulevard"/>
+    <tag k="name:zh" v="莱佛士林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="448084962">
+    <bounds minlat="1.2887807" minlon="103.8516398" maxlat="1.2889492" maxlon="103.8518670"/>
+    <nd ref="3010901912" lat="1.2889492" lon="103.8516398"/>
+    <nd ref="6413721257" lat="1.2887807" lon="103.8518670"/>
+    <tag k="highway" v="residential"/>
+    <tag k="lanes" v="2"/>
+    <tag k="lanes:backward" v="1"/>
+    <tag k="lanes:forward" v="1"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Connaught Drive"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes:backward" v="through"/>
+    <tag k="turn:lanes:forward" v="through"/>
+  </way>
+  <way id="459186771">
+    <bounds minlat="1.2924992" minlon="103.8554120" maxlat="1.2931720" maxlon="103.8558226"/>
+    <nd ref="7759646003" lat="1.2924992" lon="103.8554120"/>
+    <nd ref="3071267371" lat="1.2928507" lon="103.8556295"/>
+    <nd ref="172510077" lat="1.2931720" lon="103.8558226"/>
+    <tag k="highway" v="trunk"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="70"/>
+    <tag k="name" v="Nicoll Highway"/>
+    <tag k="name:ms" v="Lebuhraya Nicoll"/>
+    <tag k="name:ta" v="நிகோல் நெடுஞ்சாலை"/>
+    <tag k="name:zh" v="尼诰大道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="through|through|through;right|right|right"/>
+  </way>
+  <way id="465064165">
+    <bounds minlat="1.2945220" minlon="103.8623862" maxlat="1.2948413" maxlon="103.8630464"/>
+    <nd ref="5411304502" lat="1.2945220" lon="103.8630464"/>
+    <nd ref="6340950167" lat="1.2945495" lon="103.8630271"/>
+    <nd ref="1446076223" lat="1.2946271" lon="103.8629806"/>
+    <nd ref="5411304510" lat="1.2947144" lon="103.8629382"/>
+    <nd ref="3076643614" lat="1.2947850" lon="103.8628791"/>
+    <nd ref="5411304511" lat="1.2948213" lon="103.8628109"/>
+    <nd ref="3076643628" lat="1.2948393" lon="103.8627335"/>
+    <nd ref="5864381389" lat="1.2948413" lon="103.8626515"/>
+    <nd ref="3076643621" lat="1.2948294" lon="103.8626109"/>
+    <nd ref="235070001" lat="1.2947844" lon="103.8625486"/>
+    <nd ref="6340950168" lat="1.2947048" lon="103.8624761"/>
+    <nd ref="6340950169" lat="1.2946376" lon="103.8624309"/>
+    <nd ref="1161612993" lat="1.2945431" lon="103.8623862"/>
+    <tag k="access" v="private"/>
+    <tag k="foot" v="no"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="name" v="Marina Bay Street Circuit"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="475215022">
+    <bounds minlat="1.2877239" minlon="103.8523772" maxlat="1.2883390" maxlon="103.8525432"/>
+    <nd ref="6988663055" lat="1.2877239" lon="103.8525432"/>
+    <nd ref="9383172239" lat="1.2878349" lon="103.8524516"/>
+    <nd ref="5133993153" lat="1.2880957" lon="103.8523772"/>
+    <nd ref="9383172240" lat="1.2882495" lon="103.8523827"/>
+    <nd ref="10046842560" lat="1.2882719" lon="103.8523895"/>
+    <nd ref="4451336947" lat="1.2883390" lon="103.8524101"/>
+    <tag k="foot" v="yes"/>
+    <tag k="highway" v="footway"/>
+    <tag k="lit" v="yes"/>
+    <tag k="motor_vehicle" v="yes"/>
+    <tag k="name" v="Fullerton Road"/>
+    <tag k="name:zh" v="浮尔顿路"/>
+    <tag k="surface" v="cobblestone:flattened"/>
+  </way>
+  <way id="475217889">
+    <bounds minlat="1.2890920" minlon="103.8514513" maxlat="1.2893739" maxlon="103.8515745"/>
+    <nd ref="6856578455" lat="1.2890920" lon="103.8514513"/>
+    <nd ref="9370421303" lat="1.2891414" lon="103.8514573"/>
+    <nd ref="9370421302" lat="1.2891874" lon="103.8514743"/>
+    <nd ref="232353925" lat="1.2893739" lon="103.8515745"/>
+    <tag k="highway" v="residential"/>
+    <tag k="lanes" v="2"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Connaught Drive"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk" v="right"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="through|through"/>
+  </way>
+  <way id="479284866">
+    <bounds minlat="1.2895529" minlon="103.8609857" maxlat="1.2895592" maxlon="103.8611045"/>
+    <nd ref="634071195" lat="1.2895529" lon="103.8611045"/>
+    <nd ref="233879603" lat="1.2895592" lon="103.8609857"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Avenue"/>
+    <tag k="name:zh" v="莱佛士大道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left;through|through|through;right|right"/>
+  </way>
+  <way id="479540200">
+    <bounds minlat="1.2914743" minlon="103.8585312" maxlat="1.2916120" maxlon="103.8590169"/>
+    <nd ref="1720073355" lat="1.2916120" lon="103.8585312"/>
+    <nd ref="233879856" lat="1.2915475" lon="103.8587030"/>
+    <nd ref="1832823669" lat="1.2915233" lon="103.8587725"/>
+    <nd ref="6743567258" lat="1.2915103" lon="103.8588089"/>
+    <nd ref="1720073406" lat="1.2914743" lon="103.8590169"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Boulevard"/>
+    <tag k="name:zh" v="莱佛士林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="479540202">
+    <bounds minlat="1.2913301" minlon="103.8603800" maxlat="1.2913836" maxlon="103.8608319"/>
+    <nd ref="4600854642" lat="1.2913836" lon="103.8603800"/>
+    <nd ref="5864342578" lat="1.2913364" lon="103.8607530"/>
+    <nd ref="233879872" lat="1.2913301" lon="103.8608319"/>
+    <tag k="foot" v="yes"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Boulevard"/>
+    <tag k="name:zh" v="莱佛士林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="through|through|through|through;right|right"/>
+  </way>
+  <way id="479565608">
+    <bounds minlat="1.2896723" minlon="103.8586061" maxlat="1.2896858" maxlon="103.8588597"/>
+    <nd ref="1832823584" lat="1.2896723" lon="103.8588597"/>
+    <nd ref="1780184887" lat="1.2896780" lon="103.8587507"/>
+    <nd ref="233879574" lat="1.2896858" lon="103.8586061"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Avenue"/>
+    <tag k="name:zh" v="莱佛士大道"/>
+    <tag k="note" v="Part of it estimated ???"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk" v="both"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="none|through|through|through"/>
+  </way>
+  <way id="479565612">
+    <bounds minlat="1.2903222" minlon="103.8557948" maxlat="1.2906494" maxlon="103.8561749"/>
+    <nd ref="1743939385" lat="1.2903222" lon="103.8561749"/>
+    <nd ref="12878473097" lat="1.2904397" lon="103.8560384"/>
+    <nd ref="2466494365" lat="1.2904752" lon="103.8559972"/>
+    <nd ref="12878476505" lat="1.2905895" lon="103.8558644"/>
+    <nd ref="233879440" lat="1.2906494" lon="103.8557948"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Avenue"/>
+    <tag k="name:zh" v="莱佛士大道"/>
+    <tag k="note" v="Part of it estimated ???"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="raceway" v="sometimes"/>
+    <tag k="sidewalk" v="separate"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left;through|through|through|through|right"/>
+  </way>
+  <way id="479565613">
+    <bounds minlat="1.2909459" minlon="103.8552168" maxlat="1.2911468" maxlon="103.8554503"/>
+    <nd ref="7138225045" lat="1.2909459" lon="103.8554503"/>
+    <nd ref="2466494277" lat="1.2911304" lon="103.8552358"/>
+    <nd ref="4726775783" lat="1.2911468" lon="103.8552168"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="6"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Avenue"/>
+    <tag k="name:zh" v="莱佛士大道"/>
+    <tag k="note" v="Part of it estimated ???"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="raceway" v="sometimes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left|left;through|through|through|through;right|right"/>
+  </way>
+  <way id="479565615">
+    <bounds minlat="1.2924047" minlon="103.8536185" maxlat="1.2926038" maxlon="103.8539248"/>
+    <nd ref="3071267396" lat="1.2924047" lon="103.8539248"/>
+    <nd ref="7867763422" lat="1.2924912" lon="103.8537917"/>
+    <nd ref="232353226" lat="1.2926038" lon="103.8536185"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Stamford Road"/>
+    <tag k="name:zh" v="史丹福路"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="GPS &amp; Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="through|through|through|through"/>
+  </way>
+  <way id="479605911">
+    <bounds minlat="1.2911468" minlon="103.8550077" maxlat="1.2913240" maxlon="103.8552168"/>
+    <nd ref="4726775783" lat="1.2911468" lon="103.8552168"/>
+    <nd ref="2466494309" lat="1.2912783" lon="103.8550590"/>
+    <nd ref="233879421" lat="1.2913240" lon="103.8550077"/>
+    <tag k="foot" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Avenue"/>
+    <tag k="name:zh" v="莱佛士大道"/>
+    <tag k="note" v="Part of it estimated ???"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="raceway" v="sometimes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left;through|through|through|through;right|right"/>
+  </way>
+  <way id="479745478">
+    <bounds minlat="1.2914445" minlon="103.8591706" maxlat="1.2914593" maxlon="103.8593764"/>
+    <nd ref="4727947772" lat="1.2914593" lon="103.8591706"/>
+    <nd ref="7023019223" lat="1.2914491" lon="103.8592734"/>
+    <nd ref="4281759839" lat="1.2914445" lon="103.8593764"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxheight" v="4.5"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Boulevard"/>
+    <tag k="name:zh" v="莱佛士林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="tunnel" v="building_passage"/>
+  </way>
+  <way id="479745479">
+    <bounds minlat="1.2914253" minlon="103.8593764" maxlat="1.2914445" maxlon="103.8597007"/>
+    <nd ref="4281759839" lat="1.2914445" lon="103.8593764"/>
+    <nd ref="9946316970" lat="1.2914304" lon="103.8596063"/>
+    <nd ref="5864347585" lat="1.2914253" lon="103.8597007"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="foot" v="yes"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Boulevard"/>
+    <tag k="name:zh" v="莱佛士林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="480247943">
+    <bounds minlat="1.2874994" minlon="103.8525432" maxlat="1.2877239" maxlon="103.8527757"/>
+    <nd ref="6988663055" lat="1.2877239" lon="103.8525432"/>
+    <nd ref="9370421304" lat="1.2876704" lon="103.8526038"/>
+    <nd ref="9370421308" lat="1.2876606" lon="103.8526136"/>
+    <nd ref="9370421307" lat="1.2874994" lon="103.8527757"/>
+    <tag k="highway" v="footway"/>
+    <tag k="lanes" v="2"/>
+    <tag k="lanes:backward" v="1"/>
+    <tag k="lanes:forward" v="1"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Fullerton Road"/>
+    <tag k="name:zh" v="浮尔顿路"/>
+    <tag k="sidewalk" v="right"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes:backward" v="through"/>
+    <tag k="turn:lanes:forward" v="through"/>
+  </way>
+  <way id="480250096">
+    <bounds minlat="1.2910839" minlon="103.8525268" maxlat="1.2912821" maxlon="103.8526354"/>
+    <nd ref="4732525705" lat="1.2910839" lon="103.8525268"/>
+    <nd ref="6095372887" lat="1.2912821" lon="103.8526354"/>
+    <tag k="highway" v="tertiary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Saint Andrew's Road"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk" v="left"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="through|through|through|through"/>
+  </way>
+  <way id="528537303">
+    <bounds minlat="1.2913404" minlon="103.8615148" maxlat="1.2913406" maxlon="103.8616157"/>
+    <nd ref="5136090633" lat="1.2913404" lon="103.8615148"/>
+    <nd ref="3736885022" lat="1.2913406" lon="103.8616157"/>
+    <tag k="foot" v="yes"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="3"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Boulevard"/>
+    <tag k="name:zh" v="莱佛士林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="528539591">
+    <bounds minlat="1.2866054" minlon="103.8537625" maxlat="1.2867007" maxlon="103.8537803"/>
+    <nd ref="237012287" lat="1.2866054" lon="103.8537625"/>
+    <nd ref="5136107116" lat="1.2866461" lon="103.8537699"/>
+    <nd ref="3010901881" lat="1.2867007" lon="103.8537803"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="highway" v="trunk"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="70"/>
+    <tag k="name" v="Esplanade Drive"/>
+    <tag k="name:zh" v="海滨公园通道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="separate"/>
+    <tag k="sidewalk:right" v="no"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="545362402">
+    <bounds minlat="1.2917790" minlon="103.8578896" maxlat="1.2919820" maxlon="103.8582423"/>
+    <nd ref="5270981856" lat="1.2919820" lon="103.8578896"/>
+    <nd ref="12169571327" lat="1.2918934" lon="103.8580435"/>
+    <nd ref="12169568595" lat="1.2918776" lon="103.8580705"/>
+    <nd ref="1832823705" lat="1.2917790" lon="103.8582423"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxheight" v="4.5"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Boulevard"/>
+    <tag k="name:zh" v="莱佛士林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="tunnel" v="building_passage"/>
+  </way>
+  <way id="545362403">
+    <bounds minlat="1.2917694" minlon="103.8582423" maxlat="1.2917790" maxlon="103.8582593"/>
+    <nd ref="1832823705" lat="1.2917790" lon="103.8582423"/>
+    <nd ref="5270981855" lat="1.2917694" lon="103.8582593"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Boulevard"/>
+    <tag k="name:zh" v="莱佛士林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="tunnel" v="building_passage"/>
+    <tag k="turn:lanes" v="left;through|through|through|through|through"/>
+  </way>
+  <way id="581766308">
+    <bounds minlat="1.2910827" minlon="103.8549222" maxlat="1.2913240" maxlon="103.8550077"/>
+    <nd ref="233879421" lat="1.2913240" lon="103.8550077"/>
+    <nd ref="4726775785" lat="1.2910827" lon="103.8549222"/>
+    <tag k="highway" v="trunk"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="70"/>
+    <tag k="name" v="Esplanade Drive"/>
+    <tag k="name:zh" v="海滨公园通道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="581942152">
+    <bounds minlat="1.2895801" minlon="103.8599725" maxlat="1.2896130" maxlon="103.8605926"/>
+    <nd ref="5165925965" lat="1.2895801" lon="103.8605926"/>
+    <nd ref="7863612116" lat="1.2895948" lon="103.8603161"/>
+    <nd ref="6340950179" lat="1.2896130" lon="103.8599725"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Avenue"/>
+    <tag k="name:zh" v="莱佛士大道"/>
+    <tag k="note" v="Part of it estimated ???"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="raceway" v="sometimes"/>
+    <tag k="sidewalk" v="left"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="584419619">
+    <bounds minlat="1.2913321" minlon="103.8609332" maxlat="1.2913424" maxlon="103.8612076"/>
+    <nd ref="233879899" lat="1.2913321" lon="103.8609332"/>
+    <nd ref="5864342580" lat="1.2913371" lon="103.8610007"/>
+    <nd ref="4726227141" lat="1.2913424" lon="103.8612076"/>
+    <tag k="foot" v="yes"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="3"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Boulevard"/>
+    <tag k="name:zh" v="莱佛士林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="633311062">
+    <bounds minlat="1.2897940" minlon="103.8562871" maxlat="1.2902257" maxlon="103.8569869"/>
+    <nd ref="1446076214" lat="1.2897940" lon="103.8569869"/>
+    <nd ref="1764796983" lat="1.2898254" lon="103.8568781"/>
+    <nd ref="233879502" lat="1.2898549" lon="103.8567861"/>
+    <nd ref="2466494375" lat="1.2898782" lon="103.8567376"/>
+    <nd ref="1764796984" lat="1.2899135" lon="103.8566645"/>
+    <nd ref="2466494264" lat="1.2899715" lon="103.8565763"/>
+    <nd ref="1720073678" lat="1.2899906" lon="103.8565472"/>
+    <nd ref="2466494397" lat="1.2900794" lon="103.8564514"/>
+    <nd ref="233879466" lat="1.2901714" lon="103.8563522"/>
+    <nd ref="1764796980" lat="1.2902257" lon="103.8562871"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Avenue"/>
+    <tag k="name:zh" v="莱佛士大道"/>
+    <tag k="note" v="Part of it estimated ???"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="raceway" v="sometimes"/>
+    <tag k="sidewalk" v="separate"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="none|through|through|through"/>
+  </way>
+  <way id="633340452">
+    <bounds minlat="1.2896858" minlon="103.8582930" maxlat="1.2897023" maxlon="103.8586061"/>
+    <nd ref="233879574" lat="1.2896858" lon="103.8586061"/>
+    <nd ref="5978628576" lat="1.2897023" lon="103.8582930"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Avenue"/>
+    <tag k="name:zh" v="莱佛士大道"/>
+    <tag k="note" v="Part of it estimated ???"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk" v="both"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="none|through|through|through"/>
+  </way>
+  <way id="633340456">
+    <bounds minlat="1.2896398" minlon="103.8591787" maxlat="1.2896553" maxlon="103.8595101"/>
+    <nd ref="1832823581" lat="1.2896398" lon="103.8595101"/>
+    <nd ref="1832823583" lat="1.2896553" lon="103.8591787"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Avenue"/>
+    <tag k="name:zh" v="莱佛士大道"/>
+    <tag k="note" v="Part of it estimated ???"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk" v="left"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="none|through|through|through"/>
+  </way>
+  <way id="633343709">
+    <bounds minlat="1.2897023" minlon="103.8580786" maxlat="1.2897137" maxlon="103.8582930"/>
+    <nd ref="5978628576" lat="1.2897023" lon="103.8582930"/>
+    <nd ref="1832823586" lat="1.2897137" lon="103.8580786"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Avenue"/>
+    <tag k="name:zh" v="莱佛士大道"/>
+    <tag k="note" v="Part of it estimated ???"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk" v="right"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="none|through|through|through"/>
+  </way>
+  <way id="633871919">
+    <bounds minlat="1.2914117" minlon="103.8597007" maxlat="1.2914253" maxlon="103.8599232"/>
+    <nd ref="5864347585" lat="1.2914253" lon="103.8597007"/>
+    <nd ref="9946316973" lat="1.2914117" lon="103.8599232"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="foot" v="yes"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Boulevard"/>
+    <tag k="name:zh" v="莱佛士林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left;through|none|none|none|none"/>
+  </way>
+  <way id="633871920">
+    <bounds minlat="1.2913836" minlon="103.8600553" maxlat="1.2914033" maxlon="103.8603800"/>
+    <nd ref="1832823668" lat="1.2914033" lon="103.8600553"/>
+    <nd ref="4600854642" lat="1.2913836" lon="103.8603800"/>
+    <tag k="foot" v="yes"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="6"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Boulevard"/>
+    <tag k="name:zh" v="莱佛士林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left|through|through|through|through;right|right"/>
+  </way>
+  <way id="634770511">
+    <bounds minlat="1.2920088" minlon="103.8540982" maxlat="1.2922316" maxlon="103.8543182"/>
+    <nd ref="4513378919" lat="1.2920088" lon="103.8543182"/>
+    <nd ref="232353185" lat="1.2922316" lon="103.8540982"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Stamford Road"/>
+    <tag k="name:zh" v="史丹福路"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:both" v="separate"/>
+    <tag k="source" v="GPS &amp; Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="through|through|through|through"/>
+  </way>
+  <way id="634832601">
+    <bounds minlat="1.2902257" minlon="103.8561749" maxlat="1.2903222" maxlon="103.8562871"/>
+    <nd ref="1764796980" lat="1.2902257" lon="103.8562871"/>
+    <nd ref="1743939385" lat="1.2903222" lon="103.8561749"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Avenue"/>
+    <tag k="name:zh" v="莱佛士大道"/>
+    <tag k="note" v="Part of it estimated ???"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="raceway" v="sometimes"/>
+    <tag k="sidewalk" v="separate"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="none|through|through|through"/>
+  </way>
+  <way id="635373148">
+    <bounds minlat="1.2916120" minlon="103.8582593" maxlat="1.2917694" maxlon="103.8585312"/>
+    <nd ref="5270981855" lat="1.2917694" lon="103.8582593"/>
+    <nd ref="6769049627" lat="1.2917362" lon="103.8583143"/>
+    <nd ref="1720073355" lat="1.2916120" lon="103.8585312"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Boulevard"/>
+    <tag k="name:zh" v="莱佛士林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="635375722">
+    <bounds minlat="1.2923557" minlon="103.8571760" maxlat="1.2923891" maxlon="103.8572319"/>
+    <nd ref="1720073397" lat="1.2923891" lon="103.8571760"/>
+    <nd ref="233880373" lat="1.2923557" lon="103.8572319"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="6"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Boulevard"/>
+    <tag k="name:zh" v="莱佛士林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:both" v="separate"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left|left;through|through|through|through|through"/>
+  </way>
+  <way id="635394837">
+    <bounds minlat="1.2896305" minlon="103.8595101" maxlat="1.2896398" maxlon="103.8596687"/>
+    <nd ref="1832823579" lat="1.2896305" lon="103.8596687"/>
+    <nd ref="1832823581" lat="1.2896398" lon="103.8595101"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Avenue"/>
+    <tag k="name:zh" v="莱佛士大道"/>
+    <tag k="note" v="Part of it estimated ???"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk" v="left"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="647084783">
+    <bounds minlat="1.2919144" minlon="103.8529922" maxlat="1.2921701" maxlon="103.8531320"/>
+    <nd ref="6077839914" lat="1.2919144" lon="103.8529922"/>
+    <nd ref="9370423135" lat="1.2920809" lon="103.8530832"/>
+    <nd ref="7891770123" lat="1.2921701" lon="103.8531320"/>
+    <tag k="highway" v="tertiary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Saint Andrew's Road"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk" v="left"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left|through|through|through"/>
+  </way>
+  <way id="649336906">
+    <bounds minlat="1.2923891" minlon="103.8570723" maxlat="1.2924516" maxlon="103.8571760"/>
+    <nd ref="6094193512" lat="1.2924516" lon="103.8570723"/>
+    <nd ref="1720073397" lat="1.2923891" lon="103.8571760"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="6"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Boulevard"/>
+    <tag k="name:zh" v="莱佛士林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:both" v="separate"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left|left;through|through|through|through|through"/>
+  </way>
+  <way id="649520780">
+    <bounds minlat="1.2912821" minlon="103.8526354" maxlat="1.2919144" maxlon="103.8529922"/>
+    <nd ref="6095372887" lat="1.2912821" lon="103.8526354"/>
+    <nd ref="6077839914" lat="1.2919144" lon="103.8529922"/>
+    <tag k="highway" v="tertiary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Saint Andrew's Road"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk" v="left"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="649944021">
+    <bounds minlat="1.2914593" minlon="103.8590169" maxlat="1.2914743" maxlon="103.8591706"/>
+    <nd ref="1720073406" lat="1.2914743" lon="103.8590169"/>
+    <nd ref="4727947772" lat="1.2914593" lon="103.8591706"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Boulevard"/>
+    <tag k="name:zh" v="莱佛士林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="none|through|through|through|through"/>
+  </way>
+  <way id="650084964">
+    <bounds minlat="1.2918487" minlon="103.8543182" maxlat="1.2920088" maxlon="103.8544670"/>
+    <nd ref="232353353" lat="1.2918487" lon="103.8544670"/>
+    <nd ref="4513378919" lat="1.2920088" lon="103.8543182"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Stamford Road"/>
+    <tag k="name:zh" v="史丹福路"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="GPS &amp; Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="654223306">
+    <bounds minlat="1.2913032" minlon="103.8625310" maxlat="1.2915327" maxlon="103.8628486"/>
+    <nd ref="235070344" lat="1.2913032" lon="103.8625310"/>
+    <nd ref="6665734167" lat="1.2913649" lon="103.8626721"/>
+    <nd ref="4600842968" lat="1.2914334" lon="103.8627650"/>
+    <nd ref="6340950173" lat="1.2914723" lon="103.8628065"/>
+    <nd ref="462263951" lat="1.2915327" lon="103.8628486"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="2"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="Republic Boulevard"/>
+    <tag k="name:zh" v="共和国林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk" v="left"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="672222982">
+    <bounds minlat="1.2912552" minlon="103.8623470" maxlat="1.2913032" maxlon="103.8625310"/>
+    <nd ref="3076643620" lat="1.2912552" lon="103.8623470"/>
+    <nd ref="235070344" lat="1.2913032" lon="103.8625310"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="2"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="Republic Boulevard"/>
+    <tag k="name:zh" v="共和国林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left|left"/>
+  </way>
+  <way id="684544691">
+    <bounds minlat="1.2886636" minlon="103.8518670" maxlat="1.2887807" maxlon="103.8520374"/>
+    <nd ref="6413721257" lat="1.2887807" lon="103.8518670"/>
+    <nd ref="6413721265" lat="1.2886636" lon="103.8520374"/>
+    <tag k="highway" v="residential"/>
+    <tag k="lanes" v="2"/>
+    <tag k="lanes:backward" v="1"/>
+    <tag k="lanes:forward" v="1"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Connaught Drive"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes:backward" v="through;right"/>
+    <tag k="turn:lanes:forward" v="through"/>
+  </way>
+  <way id="686323967">
+    <bounds minlat="1.2943413" minlon="103.8623708" maxlat="1.2945431" maxlon="103.8623862"/>
+    <nd ref="6432919892" lat="1.2943413" lon="103.8623708"/>
+    <nd ref="6046754591" lat="1.2944856" lon="103.8623818"/>
+    <nd ref="1161612993" lat="1.2945431" lon="103.8623862"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="2"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="Republic Boulevard"/>
+    <tag k="name:zh" v="共和国林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="686323968">
+    <bounds minlat="1.2937185" minlon="103.8623658" maxlat="1.2937976" maxlon="103.8623795"/>
+    <nd ref="1446076215" lat="1.2937185" lon="103.8623795"/>
+    <nd ref="6433028833" lat="1.2937976" lon="103.8623658"/>
+    <tag k="highway" v="primary"/>
+    <tag k="image" v="https://images.mapillary.com/AYKz9KrqqwYJuXU8KLXNuA/thumb-2048.jpg"/>
+    <tag k="lanes" v="2"/>
+    <tag k="lit" v="yes"/>
+    <tag k="mapillary" v="1146291622500301"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="Republic Boulevard"/>
+    <tag k="name:zh" v="共和国林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="686335799">
+    <bounds minlat="1.2937976" minlon="103.8623460" maxlat="1.2943413" maxlon="103.8623708"/>
+    <nd ref="6433028833" lat="1.2937976" lon="103.8623658"/>
+    <nd ref="1446076217" lat="1.2938660" lon="103.8623540"/>
+    <nd ref="235070624" lat="1.2940148" lon="103.8623460"/>
+    <nd ref="6432919892" lat="1.2943413" lon="103.8623708"/>
+    <tag k="highway" v="primary"/>
+    <tag k="image" v="https://images.mapillary.com/AYKz9KrqqwYJuXU8KLXNuA/thumb-2048.jpg"/>
+    <tag k="lanes" v="2"/>
+    <tag k="lit" v="yes"/>
+    <tag k="mapillary" v="1146291622500301"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="Republic Boulevard"/>
+    <tag k="name:zh" v="共和国林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="686335800">
+    <bounds minlat="1.2933616" minlon="103.8623795" maxlat="1.2937185" maxlon="103.8625264"/>
+    <nd ref="6433028834" lat="1.2933616" lon="103.8625264"/>
+    <nd ref="235070587" lat="1.2935764" lon="103.8624291"/>
+    <nd ref="1446076215" lat="1.2937185" lon="103.8623795"/>
+    <tag k="highway" v="primary"/>
+    <tag k="image" v="https://images.mapillary.com/o72ouKUNKmshV92TGsV5zw/thumb-2048.jpg"/>
+    <tag k="lanes" v="2"/>
+    <tag k="lit" v="yes"/>
+    <tag k="mapillary" v="212247987118309"/>
+    <tag k="maxspeed" v="60"/>
+    <tag k="name" v="Republic Boulevard"/>
+    <tag k="name:zh" v="共和国林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="686335806">
+    <bounds minlat="1.2887014" minlon="103.8619413" maxlat="1.2887895" maxlon="103.8628407"/>
+    <nd ref="3076643588" lat="1.2887895" lon="103.8619413"/>
+    <nd ref="5157731601" lat="1.2887046" lon="103.8627747"/>
+    <nd ref="1161613127" lat="1.2887014" lon="103.8628407"/>
+    <tag k="access" v="private"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="image" v="https://images.mapillary.com/8ANa6_FW5wLK1ixdGUS1MQ/thumb-2048.jpg"/>
+    <tag k="mapillary" v="212396450442941"/>
+    <tag k="name" v="Marina Bay Street Circuit"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="686335807">
+    <bounds minlat="1.2886587" minlon="103.8628407" maxlat="1.2945220" maxlon="103.8644596"/>
+    <nd ref="1161613127" lat="1.2887014" lon="103.8628407"/>
+    <nd ref="3076643626" lat="1.2886748" lon="103.8635476"/>
+    <nd ref="3076643594" lat="1.2886587" lon="103.8638731"/>
+    <nd ref="5411304515" lat="1.2886633" lon="103.8639349"/>
+    <nd ref="3076643589" lat="1.2886770" lon="103.8639715"/>
+    <nd ref="5411304514" lat="1.2887063" lon="103.8640023"/>
+    <nd ref="3076643632" lat="1.2887646" lon="103.8640496"/>
+    <nd ref="3076643619" lat="1.2893103" lon="103.8643984"/>
+    <nd ref="5411304513" lat="1.2893969" lon="103.8644413"/>
+    <nd ref="3076644037" lat="1.2895026" lon="103.8644596"/>
+    <nd ref="3076643606" lat="1.2896534" lon="103.8644482"/>
+    <nd ref="4281759834" lat="1.2916929" lon="103.8642117"/>
+    <nd ref="5411304500" lat="1.2940727" lon="103.8638557"/>
+    <nd ref="5411304501" lat="1.2941585" lon="103.8638501"/>
+    <nd ref="6340950159" lat="1.2942661" lon="103.8638328"/>
+    <nd ref="3076643623" lat="1.2943212" lon="103.8637918"/>
+    <nd ref="3076643629" lat="1.2943578" lon="103.8637208"/>
+    <nd ref="5411304507" lat="1.2943588" lon="103.8636225"/>
+    <nd ref="3076643627" lat="1.2943517" lon="103.8635351"/>
+    <nd ref="5411304506" lat="1.2943611" lon="103.8634118"/>
+    <nd ref="5411304508" lat="1.2944007" lon="103.8632824"/>
+    <nd ref="5411304502" lat="1.2945220" lon="103.8630464"/>
+    <tag k="access" v="private"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="name" v="Marina Bay Street Circuit"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="723073393">
+    <bounds minlat="1.2919820" minlon="103.8578775" maxlat="1.2919894" maxlon="103.8578896"/>
+    <nd ref="6782303341" lat="1.2919894" lon="103.8578775"/>
+    <nd ref="5270981856" lat="1.2919820" lon="103.8578896"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Boulevard"/>
+    <tag k="name:zh" v="莱佛士林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="through|through|through|through|through"/>
+  </way>
+  <way id="747875236">
+    <bounds minlat="1.2895140" minlon="103.8516524" maxlat="1.2896701" maxlon="103.8517392"/>
+    <nd ref="6997023278" lat="1.2895140" lon="103.8516524"/>
+    <nd ref="6997023277" lat="1.2896701" lon="103.8517392"/>
+    <tag k="highway" v="tertiary"/>
+    <tag k="lanes" v="2"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Saint Andrew's Road"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="yes"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="through|through"/>
+  </way>
+  <way id="747875237">
+    <bounds minlat="1.2893739" minlon="103.8515745" maxlat="1.2895140" maxlon="103.8516524"/>
+    <nd ref="232353925" lat="1.2893739" lon="103.8515745"/>
+    <nd ref="6997023278" lat="1.2895140" lon="103.8516524"/>
+    <tag k="highway" v="tertiary"/>
+    <tag k="lanes" v="2"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Saint Andrew's Road"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:left" v="yes"/>
+    <tag k="sidewalk:right" v="separate"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="750071183">
+    <bounds minlat="1.2922316" minlon="103.8539328" maxlat="1.2923967" maxlon="103.8540982"/>
+    <nd ref="232353185" lat="1.2922316" lon="103.8540982"/>
+    <nd ref="12522242614" lat="1.2922407" lon="103.8540891"/>
+    <nd ref="12522242619" lat="1.2923967" lon="103.8539328"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Stamford Road"/>
+    <tag k="name:zh" v="史丹福路"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:both" v="separate"/>
+    <tag k="source" v="GPS &amp; Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="through|through|through|through|right"/>
+  </way>
+  <way id="750071184">
+    <bounds minlat="1.2904014" minlon="103.8546839" maxlat="1.2910827" maxlon="103.8549222"/>
+    <nd ref="4726775785" lat="1.2910827" lon="103.8549222"/>
+    <nd ref="2466494354" lat="1.2909735" lon="103.8548828"/>
+    <nd ref="12878473076" lat="1.2906554" lon="103.8547722"/>
+    <nd ref="1832823650" lat="1.2904014" lon="103.8546839"/>
+    <tag k="highway" v="trunk"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="70"/>
+    <tag k="name" v="Esplanade Drive"/>
+    <tag k="name:zh" v="海滨公园通道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="759511978">
+    <bounds minlat="1.2889492" minlon="103.8514513" maxlat="1.2890920" maxlon="103.8516398"/>
+    <nd ref="3010901912" lat="1.2889492" lon="103.8516398"/>
+    <nd ref="6856578455" lat="1.2890920" lon="103.8514513"/>
+    <tag k="highway" v="residential"/>
+    <tag k="lanes" v="1"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Connaught Drive"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="through"/>
+  </way>
+  <way id="763525862">
+    <bounds minlat="1.2924516" minlon="103.8569856" maxlat="1.2925027" maxlon="103.8570723"/>
+    <nd ref="3059486893" lat="1.2925027" lon="103.8569856"/>
+    <nd ref="6094193512" lat="1.2924516" lon="103.8570723"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="6"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Boulevard"/>
+    <tag k="name:zh" v="莱佛士林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:both" v="separate"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left|left;through|through|through|through|through"/>
+  </way>
+  <way id="763525863">
+    <bounds minlat="1.2927809" minlon="103.8562154" maxlat="1.2929484" maxlon="103.8565140"/>
+    <nd ref="6355011388" lat="1.2929484" lon="103.8562154"/>
+    <nd ref="3059486888" lat="1.2927809" lon="103.8565140"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="6"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Boulevard"/>
+    <tag k="name:zh" v="莱佛士林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left;through|through|none|none|none|none"/>
+  </way>
+  <way id="763525864">
+    <bounds minlat="1.2929484" minlon="103.8559769" maxlat="1.2930831" maxlon="103.8562154"/>
+    <nd ref="233497179" lat="1.2930831" lon="103.8559769"/>
+    <nd ref="6355011388" lat="1.2929484" lon="103.8562154"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Boulevard"/>
+    <tag k="name:zh" v="莱佛士林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="763531722">
+    <bounds minlat="1.2897137" minlon="103.8577561" maxlat="1.2897309" maxlon="103.8580786"/>
+    <nd ref="1832823586" lat="1.2897137" lon="103.8580786"/>
+    <nd ref="1780184888" lat="1.2897309" lon="103.8577561"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Avenue"/>
+    <tag k="name:zh" v="莱佛士大道"/>
+    <tag k="note" v="Part of it estimated ???"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="none|through|through|through;right"/>
+  </way>
+  <way id="764062389">
+    <bounds minlat="1.2897548" minlon="103.8569869" maxlat="1.2897940" maxlon="103.8573058"/>
+    <nd ref="5270623340" lat="1.2897548" lon="103.8573058"/>
+    <nd ref="1446076213" lat="1.2897557" lon="103.8572552"/>
+    <nd ref="3010901923" lat="1.2897751" lon="103.8571045"/>
+    <nd ref="1446076214" lat="1.2897940" lon="103.8569869"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Avenue"/>
+    <tag k="name:zh" v="莱佛士大道"/>
+    <tag k="note" v="Part of it estimated ???"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="raceway" v="sometimes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="none|through|through|through"/>
+  </way>
+  <way id="764062390">
+    <bounds minlat="1.2906494" minlon="103.8554503" maxlat="1.2909459" maxlon="103.8557948"/>
+    <nd ref="233879440" lat="1.2906494" lon="103.8557948"/>
+    <nd ref="7138225045" lat="1.2909459" lon="103.8554503"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Avenue"/>
+    <tag k="name:zh" v="莱佛士大道"/>
+    <tag k="note" v="Part of it estimated ???"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="raceway" v="sometimes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left;through|through|through|through;right"/>
+  </way>
+  <way id="767388313">
+    <bounds minlat="1.2892613" minlon="103.8542660" maxlat="1.2904014" maxlon="103.8546839"/>
+    <nd ref="410939418" lat="1.2892613" lon="103.8542660"/>
+    <nd ref="1832823650" lat="1.2904014" lon="103.8546839"/>
+    <tag k="highway" v="raceway"/>
+    <tag k="name" v="Marina Bay Street Circuit"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sport" v="motor"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="767388315">
+    <bounds minlat="1.2897309" minlon="103.8575749" maxlat="1.2897405" maxlon="103.8577561"/>
+    <nd ref="1780184888" lat="1.2897309" lon="103.8577561"/>
+    <nd ref="2466494363" lat="1.2897405" lon="103.8575749"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Avenue"/>
+    <tag k="name:zh" v="莱佛士大道"/>
+    <tag k="note" v="Part of it estimated ???"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="none|through|through|through;right"/>
+  </way>
+  <way id="831044956">
+    <bounds minlat="1.2922894" minlon="103.8552936" maxlat="1.2924992" maxlon="103.8554120"/>
+    <nd ref="1818164136" lat="1.2922894" lon="103.8552936"/>
+    <nd ref="7759646003" lat="1.2924992" lon="103.8554120"/>
+    <tag k="highway" v="trunk"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="70"/>
+    <tag k="name" v="Nicoll Highway"/>
+    <tag k="name:ms" v="Lebuhraya Nicoll"/>
+    <tag k="name:ta" v="நிகோல் நெடுஞ்சாலை"/>
+    <tag k="name:zh" v="尼诰大道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="through|through|through;right|right"/>
+  </way>
+  <way id="842953325">
+    <bounds minlat="1.2896553" minlon="103.8588597" maxlat="1.2896723" maxlon="103.8591787"/>
+    <nd ref="1832823583" lat="1.2896553" lon="103.8591787"/>
+    <nd ref="1832823584" lat="1.2896723" lon="103.8588597"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Avenue"/>
+    <tag k="name:zh" v="莱佛士大道"/>
+    <tag k="note" v="Part of it estimated ???"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk" v="both"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="none|through|through|through"/>
+  </way>
+  <way id="845894319">
+    <bounds minlat="1.2921701" minlon="103.8531320" maxlat="1.2923897" maxlon="103.8532520"/>
+    <nd ref="7891770123" lat="1.2921701" lon="103.8531320"/>
+    <nd ref="232376467" lat="1.2923897" lon="103.8532520"/>
+    <tag k="highway" v="tertiary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Saint Andrew's Road"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk" v="left"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left|slight_left;slight_right|through|through"/>
+  </way>
+  <way id="1015882722">
+    <bounds minlat="1.2884014" minlon="103.8520792" maxlat="1.2886362" maxlon="103.8523418"/>
+    <nd ref="4451336954" lat="1.2884014" lon="103.8523418"/>
+    <nd ref="5233693837" lat="1.2884640" lon="103.8522876"/>
+    <nd ref="5233693838" lat="1.2885016" lon="103.8522399"/>
+    <nd ref="9370421301" lat="1.2886362" lon="103.8520792"/>
+    <tag k="highway" v="residential"/>
+    <tag k="lanes" v="1"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Connaught Drive"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="through"/>
+  </way>
+  <way id="1015882723">
+    <bounds minlat="1.2886362" minlon="103.8520374" maxlat="1.2886636" maxlon="103.8520792"/>
+    <nd ref="6413721265" lat="1.2886636" lon="103.8520374"/>
+    <nd ref="9370421301" lat="1.2886362" lon="103.8520792"/>
+    <tag k="highway" v="residential"/>
+    <tag k="lanes" v="1"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Connaught Drive"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="through"/>
+  </way>
+  <way id="1121759129">
+    <bounds minlat="1.2868763" minlon="103.8532676" maxlat="1.2871039" maxlon="103.8534399"/>
+    <nd ref="237054799" lat="1.2871039" lon="103.8532676"/>
+    <nd ref="12762090856" lat="1.2870678" lon="103.8533008"/>
+    <nd ref="12762090857" lat="1.2870013" lon="103.8533443"/>
+    <nd ref="12762090858" lat="1.2869481" lon="103.8533754"/>
+    <nd ref="9569954749" lat="1.2868763" lon="103.8534399"/>
+    <tag k="highway" v="service"/>
+    <tag k="lit" v="yes"/>
+    <tag k="name" v="Fullerton Road"/>
+    <tag k="oneway" v="yes"/>
+  </way>
+  <way id="1121759130">
+    <bounds minlat="1.2883390" minlon="103.8523418" maxlat="1.2884014" maxlon="103.8524101"/>
+    <nd ref="4451336947" lat="1.2883390" lon="103.8524101"/>
+    <nd ref="4451336935" lat="1.2883511" lon="103.8523788"/>
+    <nd ref="4732505517" lat="1.2883751" lon="103.8523538"/>
+    <nd ref="4451336954" lat="1.2884014" lon="103.8523418"/>
+    <tag k="highway" v="residential"/>
+    <tag k="junction" v="roundabout"/>
+    <tag k="lanes" v="1"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Connaught Drive"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="right"/>
+  </way>
+  <way id="1121759131">
+    <bounds minlat="1.2865708" minlon="103.8534399" maxlat="1.2868763" maxlon="103.8536500"/>
+    <nd ref="9569954749" lat="1.2868763" lon="103.8534399"/>
+    <nd ref="9569954750" lat="1.2867720" lon="103.8535107"/>
+    <nd ref="9569954751" lat="1.2866113" lon="103.8536251"/>
+    <nd ref="2511487801" lat="1.2865708" lon="103.8536500"/>
+    <tag k="highway" v="service"/>
+    <tag k="lit" v="yes"/>
+    <tag k="name" v="Fullerton Road"/>
+  </way>
+  <way id="1206760203">
+    <bounds minlat="1.2865708" minlon="103.8536500" maxlat="1.2866054" maxlon="103.8537625"/>
+    <nd ref="2511487801" lat="1.2865708" lon="103.8536500"/>
+    <nd ref="9569954753" lat="1.2865738" lon="103.8536782"/>
+    <nd ref="9569954754" lat="1.2865829" lon="103.8537184"/>
+    <nd ref="237012287" lat="1.2866054" lon="103.8537625"/>
+    <tag k="highway" v="service"/>
+    <tag k="lit" v="yes"/>
+    <tag k="name" v="Fullerton Road"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="smoothness" v="excellent"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1303467716">
+    <bounds minlat="1.2915628" minlon="103.8546550" maxlat="1.2916630" maxlon="103.8547543"/>
+    <nd ref="12071463879" lat="1.2915628" lon="103.8547543"/>
+    <nd ref="1398079475" lat="1.2916630" lon="103.8546550"/>
+    <tag k="foot" v="no"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Stamford Road"/>
+    <tag k="name:zh" v="史丹福路"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="GPS &amp; Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+  </way>
+  <way id="1392512181">
+    <bounds minlat="1.2923967" minlon="103.8539248" maxlat="1.2924047" maxlon="103.8539328"/>
+    <nd ref="12522242619" lat="1.2923967" lon="103.8539328"/>
+    <nd ref="3071267396" lat="1.2924047" lon="103.8539248"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Stamford Road"/>
+    <tag k="name:zh" v="史丹福路"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="sidewalk:both" v="separate"/>
+    <tag k="source" v="GPS &amp; Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="through|through|through|through|right"/>
+  </way>
+  <way id="1415079998">
+    <bounds minlat="1.2914033" minlon="103.8600220" maxlat="1.2914054" maxlon="103.8600553"/>
+    <nd ref="13003578482" lat="1.2914054" lon="103.8600220"/>
+    <nd ref="1832823668" lat="1.2914033" lon="103.8600553"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="foot" v="yes"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Boulevard"/>
+    <tag k="name:zh" v="莱佛士林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left;through|none|none|none|none"/>
+  </way>
+  <way id="1415079999">
+    <bounds minlat="1.2914054" minlon="103.8599232" maxlat="1.2914117" maxlon="103.8600220"/>
+    <nd ref="9946316973" lat="1.2914117" lon="103.8599232"/>
+    <nd ref="13003578482" lat="1.2914054" lon="103.8600220"/>
+    <tag k="busway:left" v="lane"/>
+    <tag k="foot" v="yes"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lanes:bus" v="1"/>
+    <tag k="lanes:bus:conditional" v="1 @ (Mo-Sa 07:30-23:00)"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxspeed" v="50"/>
+    <tag k="name" v="Raffles Boulevard"/>
+    <tag k="name:zh" v="莱佛士林荫道"/>
+    <tag k="oneway" v="yes"/>
+    <tag k="source" v="Yahoo aerial images"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="turn:lanes" v="left;through|none|none|none|none"/>
+  </way>
+  <relation id="421263">
+    <bounds minlat="1.2865708" minlon="103.8514513" maxlat="1.2948413" maxlon="103.8644596"/>
+    <member type="way" ref="686335807" role="backward">
+      <nd lat="1.2887014" lon="103.8628407"/>
+      <nd lat="1.2886748" lon="103.8635476"/>
+      <nd lat="1.2886587" lon="103.8638731"/>
+      <nd lat="1.2886633" lon="103.8639349"/>
+      <nd lat="1.2886770" lon="103.8639715"/>
+      <nd lat="1.2887063" lon="103.8640023"/>
+      <nd lat="1.2887646" lon="103.8640496"/>
+      <nd lat="1.2893103" lon="103.8643984"/>
+      <nd lat="1.2893969" lon="103.8644413"/>
+      <nd lat="1.2895026" lon="103.8644596"/>
+      <nd lat="1.2896534" lon="103.8644482"/>
+      <nd lat="1.2916929" lon="103.8642117"/>
+      <nd lat="1.2940727" lon="103.8638557"/>
+      <nd lat="1.2941585" lon="103.8638501"/>
+      <nd lat="1.2942661" lon="103.8638328"/>
+      <nd lat="1.2943212" lon="103.8637918"/>
+      <nd lat="1.2943578" lon="103.8637208"/>
+      <nd lat="1.2943588" lon="103.8636225"/>
+      <nd lat="1.2943517" lon="103.8635351"/>
+      <nd lat="1.2943611" lon="103.8634118"/>
+      <nd lat="1.2944007" lon="103.8632824"/>
+      <nd lat="1.2945220" lon="103.8630464"/>
+    </member>
+    <member type="way" ref="100484287" role="pitlane">
+      <nd lat="1.2887014" lon="103.8628407"/>
+      <nd lat="1.2887279" lon="103.8632536"/>
+      <nd lat="1.2887453" lon="103.8638073"/>
+      <nd lat="1.2887568" lon="103.8638756"/>
+      <nd lat="1.2887864" lon="103.8639319"/>
+      <nd lat="1.2888263" lon="103.8639740"/>
+      <nd lat="1.2889170" lon="103.8640347"/>
+      <nd lat="1.2892835" lon="103.8642651"/>
+      <nd lat="1.2893596" lon="103.8643031"/>
+      <nd lat="1.2894651" lon="103.8643271"/>
+      <nd lat="1.2895766" lon="103.8643387"/>
+      <nd lat="1.2896515" lon="103.8643313"/>
+      <nd lat="1.2929856" lon="103.8638851"/>
+      <nd lat="1.2931305" lon="103.8638658"/>
+      <nd lat="1.2932544" lon="103.8638606"/>
+      <nd lat="1.2934466" lon="103.8638425"/>
+      <nd lat="1.2940416" lon="103.8637574"/>
+      <nd lat="1.2941208" lon="103.8637308"/>
+      <nd lat="1.2941967" lon="103.8636644"/>
+      <nd lat="1.2942320" lon="103.8636063"/>
+      <nd lat="1.2942570" lon="103.8635345"/>
+      <nd lat="1.2942787" lon="103.8634356"/>
+      <nd lat="1.2942990" lon="103.8633351"/>
+      <nd lat="1.2943371" lon="103.8632484"/>
+      <nd lat="1.2944147" lon="103.8631271"/>
+      <nd lat="1.2944754" lon="103.8630531"/>
+      <nd lat="1.2945220" lon="103.8630464"/>
+    </member>
+    <member type="way" ref="686335806" role="backward">
+      <nd lat="1.2887895" lon="103.8619413"/>
+      <nd lat="1.2887046" lon="103.8627747"/>
+      <nd lat="1.2887014" lon="103.8628407"/>
+    </member>
+    <member type="way" ref="747875236" role="backward">
+      <nd lat="1.2895140" lon="103.8516524"/>
+      <nd lat="1.2896701" lon="103.8517392"/>
+    </member>
+    <member type="way" ref="747875237" role="backward">
+      <nd lat="1.2893739" lon="103.8515745"/>
+      <nd lat="1.2895140" lon="103.8516524"/>
+    </member>
+    <member type="way" ref="475217889" role="backward">
+      <nd lat="1.2890920" lon="103.8514513"/>
+      <nd lat="1.2891414" lon="103.8514573"/>
+      <nd lat="1.2891874" lon="103.8514743"/>
+      <nd lat="1.2893739" lon="103.8515745"/>
+    </member>
+    <member type="way" ref="759511978" role="backward">
+      <nd lat="1.2889492" lon="103.8516398"/>
+      <nd lat="1.2890920" lon="103.8514513"/>
+    </member>
+    <member type="way" ref="448084962" role="forward">
+      <nd lat="1.2889492" lon="103.8516398"/>
+      <nd lat="1.2887807" lon="103.8518670"/>
+    </member>
+    <member type="way" ref="684544691" role="forward">
+      <nd lat="1.2887807" lon="103.8518670"/>
+      <nd lat="1.2886636" lon="103.8520374"/>
+    </member>
+    <member type="way" ref="1015882723" role="forward">
+      <nd lat="1.2886636" lon="103.8520374"/>
+      <nd lat="1.2886362" lon="103.8520792"/>
+    </member>
+    <member type="way" ref="1015882722" role="backward">
+      <nd lat="1.2884014" lon="103.8523418"/>
+      <nd lat="1.2884640" lon="103.8522876"/>
+      <nd lat="1.2885016" lon="103.8522399"/>
+      <nd lat="1.2886362" lon="103.8520792"/>
+    </member>
+    <member type="way" ref="1121759130" role="backward">
+      <nd lat="1.2883390" lon="103.8524101"/>
+      <nd lat="1.2883511" lon="103.8523788"/>
+      <nd lat="1.2883751" lon="103.8523538"/>
+      <nd lat="1.2884014" lon="103.8523418"/>
+    </member>
+    <member type="way" ref="475215022" role="backward">
+      <nd lat="1.2877239" lon="103.8525432"/>
+      <nd lat="1.2878349" lon="103.8524516"/>
+      <nd lat="1.2880957" lon="103.8523772"/>
+      <nd lat="1.2882495" lon="103.8523827"/>
+      <nd lat="1.2882719" lon="103.8523895"/>
+      <nd lat="1.2883390" lon="103.8524101"/>
+    </member>
+    <member type="way" ref="480247943" role="forward">
+      <nd lat="1.2877239" lon="103.8525432"/>
+      <nd lat="1.2876704" lon="103.8526038"/>
+      <nd lat="1.2876606" lon="103.8526136"/>
+      <nd lat="1.2874994" lon="103.8527757"/>
+    </member>
+    <member type="way" ref="29377119" role="forward">
+      <nd lat="1.2874994" lon="103.8527757"/>
+      <nd lat="1.2871039" lon="103.8532676"/>
+    </member>
+    <member type="way" ref="1121759129" role="forward">
+      <nd lat="1.2871039" lon="103.8532676"/>
+      <nd lat="1.2870678" lon="103.8533008"/>
+      <nd lat="1.2870013" lon="103.8533443"/>
+      <nd lat="1.2869481" lon="103.8533754"/>
+      <nd lat="1.2868763" lon="103.8534399"/>
+    </member>
+    <member type="way" ref="1121759131" role="forward">
+      <nd lat="1.2868763" lon="103.8534399"/>
+      <nd lat="1.2867720" lon="103.8535107"/>
+      <nd lat="1.2866113" lon="103.8536251"/>
+      <nd lat="1.2865708" lon="103.8536500"/>
+    </member>
+    <member type="way" ref="1206760203" role="forward">
+      <nd lat="1.2865708" lon="103.8536500"/>
+      <nd lat="1.2865738" lon="103.8536782"/>
+      <nd lat="1.2865829" lon="103.8537184"/>
+      <nd lat="1.2866054" lon="103.8537625"/>
+    </member>
+    <member type="way" ref="528539591" role="forward">
+      <nd lat="1.2866054" lon="103.8537625"/>
+      <nd lat="1.2866461" lon="103.8537699"/>
+      <nd lat="1.2867007" lon="103.8537803"/>
+    </member>
+    <member type="way" ref="767388313" role="forward">
+      <nd lat="1.2892613" lon="103.8542660"/>
+      <nd lat="1.2904014" lon="103.8546839"/>
+    </member>
+    <member type="way" ref="35037538" role="forward">
+      <nd lat="1.2867007" lon="103.8537803"/>
+      <nd lat="1.2892613" lon="103.8542660"/>
+    </member>
+    <member type="way" ref="750071184" role="forward">
+      <nd lat="1.2910827" lon="103.8549222"/>
+      <nd lat="1.2909735" lon="103.8548828"/>
+      <nd lat="1.2906554" lon="103.8547722"/>
+      <nd lat="1.2904014" lon="103.8546839"/>
+    </member>
+    <member type="way" ref="581766308" role="forward">
+      <nd lat="1.2913240" lon="103.8550077"/>
+      <nd lat="1.2910827" lon="103.8549222"/>
+    </member>
+    <member type="way" ref="479605911" role="forward">
+      <nd lat="1.2911468" lon="103.8552168"/>
+      <nd lat="1.2912783" lon="103.8550590"/>
+      <nd lat="1.2913240" lon="103.8550077"/>
+    </member>
+    <member type="way" ref="479565613" role="forward">
+      <nd lat="1.2909459" lon="103.8554503"/>
+      <nd lat="1.2911304" lon="103.8552358"/>
+      <nd lat="1.2911468" lon="103.8552168"/>
+    </member>
+    <member type="way" ref="764062390" role="backward">
+      <nd lat="1.2906494" lon="103.8557948"/>
+      <nd lat="1.2909459" lon="103.8554503"/>
+    </member>
+    <member type="way" ref="479565612" role="backward">
+      <nd lat="1.2903222" lon="103.8561749"/>
+      <nd lat="1.2904397" lon="103.8560384"/>
+      <nd lat="1.2904752" lon="103.8559972"/>
+      <nd lat="1.2905895" lon="103.8558644"/>
+      <nd lat="1.2906494" lon="103.8557948"/>
+    </member>
+    <member type="way" ref="634832601" role="backward">
+      <nd lat="1.2902257" lon="103.8562871"/>
+      <nd lat="1.2903222" lon="103.8561749"/>
+    </member>
+    <member type="way" ref="633311062" role="backward">
+      <nd lat="1.2897940" lon="103.8569869"/>
+      <nd lat="1.2898254" lon="103.8568781"/>
+      <nd lat="1.2898549" lon="103.8567861"/>
+      <nd lat="1.2898782" lon="103.8567376"/>
+      <nd lat="1.2899135" lon="103.8566645"/>
+      <nd lat="1.2899715" lon="103.8565763"/>
+      <nd lat="1.2899906" lon="103.8565472"/>
+      <nd lat="1.2900794" lon="103.8564514"/>
+      <nd lat="1.2901714" lon="103.8563522"/>
+      <nd lat="1.2902257" lon="103.8562871"/>
+    </member>
+    <member type="way" ref="764062389" role="backward">
+      <nd lat="1.2897548" lon="103.8573058"/>
+      <nd lat="1.2897557" lon="103.8572552"/>
+      <nd lat="1.2897751" lon="103.8571045"/>
+      <nd lat="1.2897940" lon="103.8569869"/>
+    </member>
+    <member type="way" ref="303314681" role="backward">
+      <nd lat="1.2897405" lon="103.8575749"/>
+      <nd lat="1.2897454" lon="103.8574822"/>
+      <nd lat="1.2897468" lon="103.8574561"/>
+      <nd lat="1.2897535" lon="103.8573305"/>
+      <nd lat="1.2897548" lon="103.8573058"/>
+    </member>
+    <member type="way" ref="767388315" role="backward">
+      <nd lat="1.2897309" lon="103.8577561"/>
+      <nd lat="1.2897405" lon="103.8575749"/>
+    </member>
+    <member type="way" ref="763531722" role="backward">
+      <nd lat="1.2897137" lon="103.8580786"/>
+      <nd lat="1.2897309" lon="103.8577561"/>
+    </member>
+    <member type="way" ref="633343709" role="backward">
+      <nd lat="1.2897023" lon="103.8582930"/>
+      <nd lat="1.2897137" lon="103.8580786"/>
+    </member>
+    <member type="way" ref="633340452" role="backward">
+      <nd lat="1.2896858" lon="103.8586061"/>
+      <nd lat="1.2897023" lon="103.8582930"/>
+    </member>
+    <member type="way" ref="479565608" role="backward">
+      <nd lat="1.2896723" lon="103.8588597"/>
+      <nd lat="1.2896780" lon="103.8587507"/>
+      <nd lat="1.2896858" lon="103.8586061"/>
+    </member>
+    <member type="way" ref="842953325" role="backward">
+      <nd lat="1.2896553" lon="103.8591787"/>
+      <nd lat="1.2896723" lon="103.8588597"/>
+    </member>
+    <member type="way" ref="633340456" role="backward">
+      <nd lat="1.2896398" lon="103.8595101"/>
+      <nd lat="1.2896553" lon="103.8591787"/>
+    </member>
+    <member type="way" ref="635394837" role="backward">
+      <nd lat="1.2896305" lon="103.8596687"/>
+      <nd lat="1.2896398" lon="103.8595101"/>
+    </member>
+    <member type="way" ref="180551367" role="backward">
+      <nd lat="1.2896130" lon="103.8599725"/>
+      <nd lat="1.2896305" lon="103.8596687"/>
+    </member>
+    <member type="way" ref="581942152" role="backward">
+      <nd lat="1.2895801" lon="103.8605926"/>
+      <nd lat="1.2895948" lon="103.8603161"/>
+      <nd lat="1.2896130" lon="103.8599725"/>
+    </member>
+    <member type="way" ref="173791995" role="backward">
+      <nd lat="1.2895650" lon="103.8608765"/>
+      <nd lat="1.2895672" lon="103.8608347"/>
+      <nd lat="1.2895801" lon="103.8605926"/>
+    </member>
+    <member type="way" ref="152783801" role="backward">
+      <nd lat="1.2895592" lon="103.8609857"/>
+      <nd lat="1.2895650" lon="103.8608765"/>
+    </member>
+    <member type="way" ref="479284866" role="backward">
+      <nd lat="1.2895529" lon="103.8611045"/>
+      <nd lat="1.2895592" lon="103.8609857"/>
+    </member>
+    <member type="way" ref="303311924" role="backward">
+      <nd lat="1.2895529" lon="103.8611045"/>
+      <nd lat="1.2894944" lon="103.8612069"/>
+      <nd lat="1.2894373" lon="103.8612622"/>
+      <nd lat="1.2893749" lon="103.8612770"/>
+      <nd lat="1.2892211" lon="103.8612770"/>
+      <nd lat="1.2891389" lon="103.8612786"/>
+      <nd lat="1.2890600" lon="103.8612981"/>
+      <nd lat="1.2889754" lon="103.8613328"/>
+      <nd lat="1.2889054" lon="103.8613893"/>
+      <nd lat="1.2888544" lon="103.8614754"/>
+      <nd lat="1.2888304" lon="103.8615760"/>
+      <nd lat="1.2888019" lon="103.8618303"/>
+      <nd lat="1.2887895" lon="103.8619413"/>
+    </member>
+    <member type="way" ref="465064165" role="forward">
+      <nd lat="1.2945220" lon="103.8630464"/>
+      <nd lat="1.2945495" lon="103.8630271"/>
+      <nd lat="1.2946271" lon="103.8629806"/>
+      <nd lat="1.2947144" lon="103.8629382"/>
+      <nd lat="1.2947850" lon="103.8628791"/>
+      <nd lat="1.2948213" lon="103.8628109"/>
+      <nd lat="1.2948393" lon="103.8627335"/>
+      <nd lat="1.2948413" lon="103.8626515"/>
+      <nd lat="1.2948294" lon="103.8626109"/>
+      <nd lat="1.2947844" lon="103.8625486"/>
+      <nd lat="1.2947048" lon="103.8624761"/>
+      <nd lat="1.2946376" lon="103.8624309"/>
+      <nd lat="1.2945431" lon="103.8623862"/>
+    </member>
+    <member type="way" ref="686323967" role="backward">
+      <nd lat="1.2943413" lon="103.8623708"/>
+      <nd lat="1.2944856" lon="103.8623818"/>
+      <nd lat="1.2945431" lon="103.8623862"/>
+    </member>
+    <member type="way" ref="686335799" role="backward">
+      <nd lat="1.2937976" lon="103.8623658"/>
+      <nd lat="1.2938660" lon="103.8623540"/>
+      <nd lat="1.2940148" lon="103.8623460"/>
+      <nd lat="1.2943413" lon="103.8623708"/>
+    </member>
+    <member type="way" ref="686323968" role="backward">
+      <nd lat="1.2937185" lon="103.8623795"/>
+      <nd lat="1.2937976" lon="103.8623658"/>
+    </member>
+    <member type="way" ref="686335800" role="backward">
+      <nd lat="1.2933616" lon="103.8625264"/>
+      <nd lat="1.2935764" lon="103.8624291"/>
+      <nd lat="1.2937185" lon="103.8623795"/>
+    </member>
+    <member type="way" ref="21805129" role="backward">
+      <nd lat="1.2915327" lon="103.8628486"/>
+      <nd lat="1.2916159" lon="103.8628898"/>
+      <nd lat="1.2916981" lon="103.8629054"/>
+      <nd lat="1.2918067" lon="103.8629088"/>
+      <nd lat="1.2919464" lon="103.8628983"/>
+      <nd lat="1.2920520" lon="103.8628904"/>
+      <nd lat="1.2924838" lon="103.8628207"/>
+      <nd lat="1.2926040" lon="103.8627941"/>
+      <nd lat="1.2928397" lon="103.8627184"/>
+      <nd lat="1.2933616" lon="103.8625264"/>
+    </member>
+    <member type="way" ref="654223306" role="backward">
+      <nd lat="1.2913032" lon="103.8625310"/>
+      <nd lat="1.2913649" lon="103.8626721"/>
+      <nd lat="1.2914334" lon="103.8627650"/>
+      <nd lat="1.2914723" lon="103.8628065"/>
+      <nd lat="1.2915327" lon="103.8628486"/>
+    </member>
+    <member type="way" ref="672222982" role="backward">
+      <nd lat="1.2912552" lon="103.8623470"/>
+      <nd lat="1.2913032" lon="103.8625310"/>
+    </member>
+    <member type="way" ref="174262763" role="backward">
+      <nd lat="1.2913099" lon="103.8620486"/>
+      <nd lat="1.2912552" lon="103.8623470"/>
+    </member>
+    <member type="way" ref="383365018" role="backward">
+      <nd lat="1.2913406" lon="103.8616157"/>
+      <nd lat="1.2913099" lon="103.8620486"/>
+    </member>
+    <member type="way" ref="528537303" role="backward">
+      <nd lat="1.2913404" lon="103.8615148"/>
+      <nd lat="1.2913406" lon="103.8616157"/>
+    </member>
+    <member type="way" ref="383365019" role="backward">
+      <nd lat="1.2913424" lon="103.8612076"/>
+      <nd lat="1.2913404" lon="103.8615148"/>
+    </member>
+    <member type="way" ref="584419619" role="backward">
+      <nd lat="1.2913321" lon="103.8609332"/>
+      <nd lat="1.2913371" lon="103.8610007"/>
+      <nd lat="1.2913424" lon="103.8612076"/>
+    </member>
+    <member type="way" ref="176298699" role="backward">
+      <nd lat="1.2913301" lon="103.8608319"/>
+      <nd lat="1.2913321" lon="103.8609332"/>
+    </member>
+    <member type="way" ref="479540202" role="backward">
+      <nd lat="1.2913836" lon="103.8603800"/>
+      <nd lat="1.2913364" lon="103.8607530"/>
+      <nd lat="1.2913301" lon="103.8608319"/>
+    </member>
+    <member type="way" ref="633871920" role="backward">
+      <nd lat="1.2914033" lon="103.8600553"/>
+      <nd lat="1.2913836" lon="103.8603800"/>
+    </member>
+    <member type="way" ref="1415079998" role="backward">
+      <nd lat="1.2914054" lon="103.8600220"/>
+      <nd lat="1.2914033" lon="103.8600553"/>
+    </member>
+    <member type="way" ref="1415079999" role="backward">
+      <nd lat="1.2914117" lon="103.8599232"/>
+      <nd lat="1.2914054" lon="103.8600220"/>
+    </member>
+    <member type="way" ref="633871919" role="backward">
+      <nd lat="1.2914253" lon="103.8597007"/>
+      <nd lat="1.2914117" lon="103.8599232"/>
+    </member>
+    <member type="way" ref="479745479" role="backward">
+      <nd lat="1.2914445" lon="103.8593764"/>
+      <nd lat="1.2914304" lon="103.8596063"/>
+      <nd lat="1.2914253" lon="103.8597007"/>
+    </member>
+    <member type="way" ref="479745478" role="backward">
+      <nd lat="1.2914593" lon="103.8591706"/>
+      <nd lat="1.2914491" lon="103.8592734"/>
+      <nd lat="1.2914445" lon="103.8593764"/>
+    </member>
+    <member type="way" ref="649944021" role="backward">
+      <nd lat="1.2914743" lon="103.8590169"/>
+      <nd lat="1.2914593" lon="103.8591706"/>
+    </member>
+    <member type="way" ref="479540200" role="backward">
+      <nd lat="1.2916120" lon="103.8585312"/>
+      <nd lat="1.2915475" lon="103.8587030"/>
+      <nd lat="1.2915233" lon="103.8587725"/>
+      <nd lat="1.2915103" lon="103.8588089"/>
+      <nd lat="1.2914743" lon="103.8590169"/>
+    </member>
+    <member type="way" ref="635373148" role="backward">
+      <nd lat="1.2917694" lon="103.8582593"/>
+      <nd lat="1.2917362" lon="103.8583143"/>
+      <nd lat="1.2916120" lon="103.8585312"/>
+    </member>
+    <member type="way" ref="545362403" role="backward">
+      <nd lat="1.2917790" lon="103.8582423"/>
+      <nd lat="1.2917694" lon="103.8582593"/>
+    </member>
+    <member type="way" ref="545362402" role="backward">
+      <nd lat="1.2919820" lon="103.8578896"/>
+      <nd lat="1.2918934" lon="103.8580435"/>
+      <nd lat="1.2918776" lon="103.8580705"/>
+      <nd lat="1.2917790" lon="103.8582423"/>
+    </member>
+    <member type="way" ref="723073393" role="backward">
+      <nd lat="1.2919894" lon="103.8578775"/>
+      <nd lat="1.2919820" lon="103.8578896"/>
+    </member>
+    <member type="way" ref="75067163" role="backward">
+      <nd lat="1.2923557" lon="103.8572319"/>
+      <nd lat="1.2921020" lon="103.8576827"/>
+      <nd lat="1.2920774" lon="103.8577256"/>
+    </member>
+    <member type="way" ref="635375722" role="backward">
+      <nd lat="1.2923891" lon="103.8571760"/>
+      <nd lat="1.2923557" lon="103.8572319"/>
+    </member>
+    <member type="way" ref="649336906" role="backward">
+      <nd lat="1.2924516" lon="103.8570723"/>
+      <nd lat="1.2923891" lon="103.8571760"/>
+    </member>
+    <member type="way" ref="763525862" role="backward">
+      <nd lat="1.2925027" lon="103.8569856"/>
+      <nd lat="1.2924516" lon="103.8570723"/>
+    </member>
+    <member type="way" ref="21701074" role="backward">
+      <nd lat="1.2927809" lon="103.8565140"/>
+      <nd lat="1.2925727" lon="103.8568682"/>
+      <nd lat="1.2925027" lon="103.8569856"/>
+    </member>
+    <member type="way" ref="763525863" role="backward">
+      <nd lat="1.2929484" lon="103.8562154"/>
+      <nd lat="1.2927809" lon="103.8565140"/>
+    </member>
+    <member type="way" ref="763525864" role="backward">
+      <nd lat="1.2930831" lon="103.8559769"/>
+      <nd lat="1.2929484" lon="103.8562154"/>
+    </member>
+    <member type="way" ref="51511352" role="backward">
+      <nd lat="1.2931720" lon="103.8558226"/>
+      <nd lat="1.2930831" lon="103.8559769"/>
+    </member>
+    <member type="way" ref="459186771" role="backward">
+      <nd lat="1.2924992" lon="103.8554120"/>
+      <nd lat="1.2928507" lon="103.8556295"/>
+      <nd lat="1.2931720" lon="103.8558226"/>
+    </member>
+    <member type="way" ref="831044956" role="backward">
+      <nd lat="1.2922894" lon="103.8552936"/>
+      <nd lat="1.2924992" lon="103.8554120"/>
+    </member>
+    <member type="way" ref="16688065" role="backward">
+      <nd lat="1.2914505" lon="103.8548655"/>
+      <nd lat="1.2915357" lon="103.8549025"/>
+      <nd lat="1.2915866" lon="103.8549246"/>
+      <nd lat="1.2918822" lon="103.8550798"/>
+      <nd lat="1.2922894" lon="103.8552936"/>
+    </member>
+    <member type="way" ref="51511339" role="forward">
+      <nd lat="1.2914505" lon="103.8548655"/>
+      <nd lat="1.2915628" lon="103.8547543"/>
+    </member>
+    <member type="way" ref="1303467716" role="forward">
+      <nd lat="1.2915628" lon="103.8547543"/>
+      <nd lat="1.2916630" lon="103.8546550"/>
+    </member>
+    <member type="way" ref="156457347" role="forward">
+      <nd lat="1.2916630" lon="103.8546550"/>
+      <nd lat="1.2918487" lon="103.8544670"/>
+    </member>
+    <member type="way" ref="650084964" role="forward">
+      <nd lat="1.2918487" lon="103.8544670"/>
+      <nd lat="1.2920088" lon="103.8543182"/>
+    </member>
+    <member type="way" ref="634770511" role="forward">
+      <nd lat="1.2920088" lon="103.8543182"/>
+      <nd lat="1.2922316" lon="103.8540982"/>
+    </member>
+    <member type="way" ref="750071183" role="forward">
+      <nd lat="1.2922316" lon="103.8540982"/>
+      <nd lat="1.2922407" lon="103.8540891"/>
+      <nd lat="1.2923967" lon="103.8539328"/>
+    </member>
+    <member type="way" ref="1392512181" role="forward">
+      <nd lat="1.2923967" lon="103.8539328"/>
+      <nd lat="1.2924047" lon="103.8539248"/>
+    </member>
+    <member type="way" ref="479565615" role="forward">
+      <nd lat="1.2924047" lon="103.8539248"/>
+      <nd lat="1.2924912" lon="103.8537917"/>
+      <nd lat="1.2926038" lon="103.8536185"/>
+    </member>
+    <member type="way" ref="173779754" role="backward">
+      <nd lat="1.2923897" lon="103.8532520"/>
+      <nd lat="1.2925175" lon="103.8533954"/>
+      <nd lat="1.2925756" lon="103.8534982"/>
+      <nd lat="1.2926038" lon="103.8536185"/>
+    </member>
+    <member type="way" ref="845894319" role="backward">
+      <nd lat="1.2921701" lon="103.8531320"/>
+      <nd lat="1.2923897" lon="103.8532520"/>
+    </member>
+    <member type="way" ref="647084783" role="backward">
+      <nd lat="1.2919144" lon="103.8529922"/>
+      <nd lat="1.2920809" lon="103.8530832"/>
+      <nd lat="1.2921701" lon="103.8531320"/>
+    </member>
+    <member type="way" ref="649520780" role="backward">
+      <nd lat="1.2912821" lon="103.8526354"/>
+      <nd lat="1.2919144" lon="103.8529922"/>
+    </member>
+    <member type="way" ref="480250096" role="backward">
+      <nd lat="1.2910839" lon="103.8525268"/>
+      <nd lat="1.2912821" lon="103.8526354"/>
+    </member>
+    <member type="way" ref="155907160" role="backward">
+      <nd lat="1.2909086" lon="103.8524294"/>
+      <nd lat="1.2910839" lon="103.8525268"/>
+    </member>
+    <member type="way" ref="21584500" role="backward">
+      <nd lat="1.2896701" lon="103.8517392"/>
+      <nd lat="1.2907304" lon="103.8523289"/>
+      <nd lat="1.2908769" lon="103.8524116"/>
+      <nd lat="1.2909086" lon="103.8524294"/>
+    </member>
+    <member type="way" ref="173791997" role="backward">
+      <nd lat="1.2920774" lon="103.8577256"/>
+      <nd lat="1.2919894" lon="103.8578775"/>
+    </member>
+    <tag k="name" v="Marina Bay Street Circuit"/>
+    <tag k="type" v="circuit"/>
+    <tag k="wikidata" v="Q171390"/>
+    <tag k="wikipedia" v="en:Marina Bay Street Circuit"/>
+  </relation>
+
+</osm>

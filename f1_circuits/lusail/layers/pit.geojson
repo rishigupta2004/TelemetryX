@@ -1,0 +1,14 @@
+{
+"type": "FeatureCollection",
+"_circuit": "lusail_v1",
+"_layer": "pit",
+"_label": "Lusail International Circuit",
+"_note": "pit_entry and pit_exit are Points at where cars enter\/leave pit lane. pit_lane is a LineString along pit road centreline.",
+"name": "pit",
+"features": [
+{ "type": "Feature", "id": "pit_entry", "properties": { "type": "pit_entry", "circuit": "lusail_v1", "notes": "Point where cars leave main track into pit lane" }, "geometry": null },
+{ "type": "Feature", "id": "pit_exit", "properties": { "type": "pit_exit", "circuit": "lusail_v1", "notes": "Point where cars rejoin main track from pit lane" }, "geometry": null },
+{ "type": "Feature", "id": "pit_lane", "properties": { "type": "pit_lane", "circuit": "lusail_v1", "notes": "LineString — trace full pit lane centreline" }, "geometry": { "type": "LineString", "coordinates": [ ] } },
+{ "type": "Feature", "properties": { "id": null, "type": "PIT LANE", "circuit": "QATAR", "notes": null }, "geometry": { "type": "LineString", "coordinates": [ [ 51.452529912592816, 25.484521622301973 ], [ 51.4522372333481, 25.485222278675682 ], [ 51.448769427751643, 25.490978303821731 ], [ 51.448379188758686, 25.491288721202487 ] ] } }
+]
+}

@@ -1,0 +1,18 @@
+{
+"type": "FeatureCollection",
+"_circuit": "abu_dhabi_v1",
+"_layer": "drs",
+"_label": "Yas Marina pre-2021",
+"_note": "3 features per zone: detection_point (Point), activation_point (Point), zone_line (LineString).",
+"name": "drs_v1",
+"features": [
+{ "type": "Feature", "id": "z1_detection", "properties": { "zone": 1, "feature_type": "detection_point", "ref": "40m before T7", "circuit": "abu_dhabi_v1", "notes": "Place at DRS detection sensor — style RED" }, "geometry": null },
+{ "type": "Feature", "id": "z1_activation", "properties": { "zone": 1, "feature_type": "activation_point", "ref": "270m after T7", "circuit": "abu_dhabi_v1", "notes": "Place where DRS wing opens — style GREEN" }, "geometry": null },
+{ "type": "Feature", "id": "z1_zone_line", "properties": { "zone": 1, "feature_type": "zone_line", "ref": "Zone 1: activation point → braking point", "circuit": "abu_dhabi_v1", "notes": "Draw line from activation to end of DRS zone — style GREEN line" }, "geometry": { "type": "LineString", "coordinates": [ ] } },
+{ "type": "Feature", "id": "z2_detection", "properties": { "zone": 2, "feature_type": "detection_point", "ref": "50m after T9", "circuit": "abu_dhabi_v1", "notes": "Place at DRS detection sensor — style RED" }, "geometry": null },
+{ "type": "Feature", "id": "z2_activation", "properties": { "zone": 2, "feature_type": "activation_point", "ref": "165m after T9", "circuit": "abu_dhabi_v1", "notes": "Place where DRS wing opens — style GREEN" }, "geometry": null },
+{ "type": "Feature", "id": "z2_zone_line", "properties": { "zone": 2, "feature_type": "zone_line", "ref": "Zone 2: activation point → braking point", "circuit": "abu_dhabi_v1", "notes": "Draw line from activation to end of DRS zone — style GREEN line" }, "geometry": { "type": "LineString", "coordinates": [ ] } },
+{ "type": "Feature", "properties": { "id": "001", "zone": null, "feature_type": null, "ref": null, "circuit": null, "notes": null }, "geometry": { "type": "LineString", "coordinates": [ [ 54.604283745545516, 24.476168470718861 ], [ 54.601596764297838, 24.468651948012937 ] ] } },
+{ "type": "Feature", "properties": { "id": "002", "zone": null, "feature_type": null, "ref": null, "circuit": null, "notes": null }, "geometry": { "type": "LineString", "coordinates": [ [ 54.60281293064687, 24.46697038948702 ], [ 54.602972163713346, 24.466780289717246 ], [ 54.60313462779812, 24.466592943745614 ], [ 54.60330027528493, 24.466408406480969 ], [ 54.605868713242273, 24.464524885312251 ], [ 54.606056447056559, 24.464412431295624 ], [ 54.606245830687548, 24.46430277852004 ], [ 54.606436822340072, 24.464195951184827 ], [ 54.606629379864067, 24.46409197286577 ], [ 54.606823460763906, 24.463990866509906 ], [ 54.60701902220778, 24.463892654430445 ], [ 54.607883949178031, 24.463510681606021 ] ] } }
+]
+}

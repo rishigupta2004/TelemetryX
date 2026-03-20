@@ -1,0 +1,324 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "abu_dhabi_v1",
+  "_layer": "corners",
+  "_label": "Yas Marina pre-2021",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "",
+        "circuit": "abu_dhabi_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "",
+        "circuit": "abu_dhabi_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "",
+        "circuit": "abu_dhabi_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "",
+        "circuit": "abu_dhabi_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "",
+        "circuit": "abu_dhabi_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "",
+        "circuit": "abu_dhabi_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "",
+        "circuit": "abu_dhabi_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "",
+        "circuit": "abu_dhabi_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "",
+        "circuit": "abu_dhabi_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "",
+        "circuit": "abu_dhabi_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "corner_number": 11,
+        "name": "",
+        "circuit": "abu_dhabi_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "properties": {
+        "corner_number": 12,
+        "name": "",
+        "circuit": "abu_dhabi_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "properties": {
+        "corner_number": 13,
+        "name": "",
+        "circuit": "abu_dhabi_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "properties": {
+        "corner_number": 14,
+        "name": "",
+        "circuit": "abu_dhabi_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 15,
+      "properties": {
+        "corner_number": 15,
+        "name": "",
+        "circuit": "abu_dhabi_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 16,
+      "properties": {
+        "corner_number": 16,
+        "name": "",
+        "circuit": "abu_dhabi_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 17,
+      "properties": {
+        "corner_number": 17,
+        "name": "",
+        "circuit": "abu_dhabi_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 18,
+      "properties": {
+        "corner_number": 18,
+        "name": "",
+        "circuit": "abu_dhabi_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 19,
+      "properties": {
+        "corner_number": 19,
+        "name": "",
+        "circuit": "abu_dhabi_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 20,
+      "properties": {
+        "corner_number": 20,
+        "name": "",
+        "circuit": "abu_dhabi_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 21,
+      "properties": {
+        "corner_number": 21,
+        "name": "",
+        "circuit": "abu_dhabi_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "Yas_Marina", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 54.608050787882938, 24.470399363922358 ] } },
+{ "type": "Feature", "properties": { "corner_number": 2, "name": null, "circuit": "Yas_Marina", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 54.607545881275939, 24.472519971671751 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "Yas_Marina", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 54.60594335161025, 24.473327822242947 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "Yas_Marina", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 54.605811636843207, 24.477617333156317 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "Yas_Marina", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 54.605311120728445, 24.477814905306882 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "Yas_Marina", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 54.605565769278058, 24.478987166733567 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "Yas_Marina", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 54.606048723423882, 24.475141095535903 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "Yas_Marina", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 54.601592373805595, 24.468489499800235 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "Yas_Marina", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 54.602215823702934, 24.468476328323533 ] } },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": "Yas_Marina", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 54.603036845750843, 24.466680616999511 ] } },
+{ "type": "Feature", "properties": { "corner_number": 11, "name": null, "circuit": "Yas_Marina", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 54.609117677496002, 24.463058460905827 ] } },
+{ "type": "Feature", "properties": { "corner_number": 12, "name": null, "circuit": "Yas_Marina", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 54.609354764076677, 24.463620443911879 ] } },
+{ "type": "Feature", "properties": { "corner_number": 13, "name": null, "circuit": "Yas_Marina", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 54.609741127393342, 24.463712644248808 ] } },
+{ "type": "Feature", "properties": { "corner_number": 14, "name": null, "circuit": "Yas_Marina", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 54.609692831978755, 24.464994667981362 ] } },
+{ "type": "Feature", "properties": { "corner_number": 15, "name": null, "circuit": "Yas_Marina", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 54.606900478917439, 24.464682943032699 ] } },
+{ "type": "Feature", "properties": { "corner_number": 16, "name": null, "circuit": "Yas_Marina", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 54.605662360107239, 24.465363469329088 ] } },
+{ "type": "Feature", "properties": { "corner_number": 17, "name": null, "circuit": "Yas_Marina", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 54.605324292205161, 24.466584026170352 ] } },
+{ "type": "Feature", "properties": { "corner_number": 18, "name": null, "circuit": "Yas_Marina", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 54.606461429693965, 24.466803550782092 ] } },
+{ "type": "Feature", "properties": { "corner_number": 19, "name": null, "circuit": "Yas_Marina", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 54.606452648709499, 24.467835316457258 ] } },
+{ "type": "Feature", "properties": { "corner_number": 20, "name": null, "circuit": "Yas_Marina", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 54.603594438264665, 24.467707992182447 ] } },
+{ "type": "Feature", "properties": { "corner_number": 21, "name": null, "circuit": "Yas_Marina", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 54.602698777848772, 24.46957834187446 ] } }
+]
+}

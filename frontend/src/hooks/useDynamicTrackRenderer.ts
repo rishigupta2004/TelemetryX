@@ -23,7 +23,7 @@ interface CurrentFlags {
 }
 
 interface ResolvedCar {
-  car: { driverCode: string; teamColor: string; isInPit: boolean; hasLivePosition: boolean; sourceTimestamp: number | null }
+  car: { driverCode: string; teamColor: string; isInPit: boolean; hasLivePosition: boolean; sourceTimestamp: number | null; currentLap?: number }
   pos: Point
   hidden: boolean
   stale: boolean
@@ -48,7 +48,8 @@ const drawCar = (
   isCompact: boolean,
   hoveredCode: string | null,
   primaryCode: string | null,
-  compareCode: string | null
+  compareCode: string | null,
+  raceMaxLap: number
 ) => {
   const { car: c, pos, hidden, stale } = car
   if (hidden) return
@@ -57,6 +58,7 @@ const drawCar = (
   const isPrimary = primaryCode === c.driverCode
   const isCompare = compareCode === c.driverCode
   const bubbleFill = c.teamColor || '#6b7280'
+  const isDNF = raceMaxLap >= 5 && (c.currentLap || 0) < (raceMaxLap - 4)
 
   const textColorForHex = (hex: string): string => {
     const fallback = '#ffffff'
@@ -86,13 +88,14 @@ const drawCar = (
   }
 
   const codeColor = textColorForHex(bubbleFill)
-  const baseAlpha = stale ? 0.5 : isInPit ? 0.35 : 1.0
+  const baseAlpha = isDNF ? 0.12 : (stale ? 0.5 : isInPit ? 0.35 : 1.0)
+  const drawRadius = isDNF ? Math.max(5, radius * 0.55) : (isHovered ? radius + 3 : radius)
 
   ctx.save()
   ctx.translate(pos.x, pos.y)
 
   if (isPrimary || isCompare) {
-    const ringRadius = radius + 6
+    const ringRadius = drawRadius + 6
     ctx.beginPath()
     ctx.arc(0, 0, ringRadius, 0, Math.PI * 2)
     
@@ -119,11 +122,11 @@ const drawCar = (
   }
 
   ctx.beginPath()
-  ctx.arc(0, 0, isHovered ? radius + 3 : radius, 0, Math.PI * 2)
+  ctx.arc(0, 0, drawRadius, 0, Math.PI * 2)
   
   const carGrad = ctx.createRadialGradient(
-    -radius * 0.3, -radius * 0.3, 0,
-    0, 0, radius * 1.2
+    -drawRadius * 0.3, -drawRadius * 0.3, 0,
+    0, 0, drawRadius * 1.2
   )
   carGrad.addColorStop(0, bubbleFill)
   carGrad.addColorStop(0.7, bubbleFill)
@@ -138,7 +141,7 @@ const drawCar = (
   ctx.shadowColor = bubbleFill
   ctx.shadowBlur = isHovered ? 28 : 18
   ctx.beginPath()
-  ctx.arc(0, 0, isHovered ? radius + 3 : radius, 0, Math.PI * 2)
+  ctx.arc(0, 0, drawRadius, 0, Math.PI * 2)
   ctx.strokeStyle = bubbleFill
   ctx.lineWidth = 2
   ctx.globalAlpha = baseAlpha * 0.6
@@ -147,7 +150,7 @@ const drawCar = (
   ctx.shadowBlur = 0
 
   ctx.beginPath()
-  ctx.arc(-radius * 0.28, -radius * 0.3, radius * 0.4, 0, Math.PI * 2)
+  ctx.arc(-drawRadius * 0.28, -drawRadius * 0.3, drawRadius * 0.4, 0, Math.PI * 2)
   ctx.fillStyle = 'rgba(255, 255, 255, 0.4)'
   ctx.globalAlpha = baseAlpha
   ctx.fill()
@@ -156,7 +159,7 @@ const drawCar = (
   ctx.lineWidth = isPrimary || isCompare ? 2.5 : isHovered ? 2 : 1.2
   ctx.globalAlpha = baseAlpha
   ctx.beginPath()
-  ctx.arc(0, 0, isHovered ? radius + 3 : radius, 0, Math.PI * 2)
+  ctx.arc(0, 0, drawRadius, 0, Math.PI * 2)
   ctx.stroke()
 
   ctx.fillStyle = codeColor
@@ -267,13 +270,14 @@ export const useDynamicTrackRenderer = (
       }
     }
 
-    const radius = isCompact ? 12 : 16
+    const raceMaxLap = Math.max(0, ...resolvedCarsRef.current.map(c => c.car.currentLap || 0))
+    const radius = isCompact ? 8 : 11
     const hoveredCode = hoveredDriverRef.current
     const primaryCode = primaryDriverRef.current
     const compareCode = compareDriverRef.current
 
     for (const car of cars) {
-      drawCar(ctx, car, radius, isCompact, hoveredCode, primaryCode, compareCode)
+      drawCar(ctx, car, radius, isCompact, hoveredCode, primaryCode, compareCode, raceMaxLap)
     }
 
     rafRef.current = requestAnimationFrame(render)

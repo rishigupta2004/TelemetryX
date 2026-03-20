@@ -1,0 +1,14 @@
+{
+"type": "FeatureCollection",
+"_circuit": "japan_v1",
+"_layer": "pit",
+"_label": "Suzuka",
+"_note": "pit_entry and pit_exit are Points at where cars enter\/leave pit lane. pit_lane is a LineString along pit road centreline.",
+"name": "pit",
+"features": [
+{ "type": "Feature", "id": "pit_entry", "properties": { "type": "pit_entry", "circuit": "japan_v1", "notes": "Point where cars leave main track into pit lane" }, "geometry": null },
+{ "type": "Feature", "id": "pit_exit", "properties": { "type": "pit_exit", "circuit": "japan_v1", "notes": "Point where cars rejoin main track from pit lane" }, "geometry": null },
+{ "type": "Feature", "id": "pit_lane", "properties": { "type": "pit_lane", "circuit": "japan_v1", "notes": "LineString — trace full pit lane centreline" }, "geometry": { "type": "LineString", "coordinates": [ ] } },
+{ "type": "Feature", "properties": { "id": null, "type": "PIT LANE", "circuit": "SUZUKA", "notes": null }, "geometry": { "type": "LineString", "coordinates": [ [ 136.536099674103241, 34.846020423169449 ], [ 136.536324729693433, 34.846047497526172 ], [ 136.536566706756616, 34.846037344642397 ], [ 136.536774840873875, 34.845995040960027 ], [ 136.536994820022215, 34.845935815804708 ], [ 136.537162342604404, 34.845874898502096 ], [ 136.537304482977135, 34.845822441935958 ], [ 136.537460160528269, 34.845744603160391 ], [ 136.537697061149544, 34.845619384260573 ], [ 136.537937346065405, 34.845462014562145 ], [ 136.538131943004316, 34.845284339096189 ], [ 136.539433204274104, 34.843996615004791 ], [ 136.541638120185581, 34.841869494366343 ], [ 136.542509049529002, 34.8411282071771 ] ] } }
+]
+}

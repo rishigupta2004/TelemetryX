@@ -8,7 +8,6 @@ import {
   drawDRSZones,
   drawStartFinish,
   drawSectorMarkers,
-  drawPitMarkers,
   drawCornerBadges as drawCornerBadgesRender
 } from '../lib/trackRendering'
 
@@ -43,7 +42,6 @@ export const useStaticTrackRenderer = (
   containerRef: RefObject<HTMLDivElement | null>
 ) => {
   const staticCanvasRef = useRef<HTMLCanvasElement>(null)
-  const offscreenCanvasRef = useRef<OffscreenCanvas | null>(null)
   const isAnimatingInRef = useRef(true)
 
   const cornerBadges = useMemo(() => {
@@ -79,20 +77,6 @@ export const useStaticTrackRenderer = (
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     ctx.clearRect(0, 0, containerWidth, containerHeight)
 
-    let offscreenCtx: OffscreenCanvasRenderingContext2D | null = null
-    if (typeof OffscreenCanvas !== 'undefined') {
-      try {
-        const offscreen = new OffscreenCanvas(containerWidth * dpr, containerHeight * dpr)
-        offscreenCtx = offscreen.getContext('2d', { alpha: true })
-        if (offscreenCtx) {
-          offscreenCtx.setTransform(dpr, 0, 0, dpr, 0, 0)
-          offscreenCtx.clearRect(0, 0, containerWidth, containerHeight)
-          offscreenCanvasRef.current = offscreen
-        }
-      } catch { offscreenCtx = null }
-    }
-    const targetCtx = offscreenCtx || ctx
-
     const gradient = ctx.createRadialGradient(
       containerWidth / 2, containerHeight / 2, 0,
       containerWidth / 2, containerHeight / 2, Math.max(containerWidth, containerHeight) * 0.7
@@ -102,12 +86,12 @@ export const useStaticTrackRenderer = (
     ctx.fillStyle = gradient
     ctx.fillRect(0, 0, containerWidth, containerHeight)
 
-    const { bounds } = trackData
+    const { bounds, width, height } = trackData
 
     ctx.fillStyle = '#0a0a0c'
     for (let i = 0; i < 50; i++) {
-      const sx = bounds.minX + Math.random() * containerWidth
-      const sy = bounds.minY + Math.random() * containerHeight
+      const sx = bounds.minX + Math.random() * width
+      const sy = bounds.minY + Math.random() * height
       const sr = Math.random() * 1.2 + 0.3
       ctx.globalAlpha = Math.random() * 0.3 + 0.1
       ctx.beginPath()
@@ -116,17 +100,12 @@ export const useStaticTrackRenderer = (
     }
     ctx.globalAlpha = 1
 
-    drawTrack(targetCtx, trackData.points, trackData.hasPitLaneData, trackData.pitLanePoints)
-    drawDRSZones(targetCtx, trackData.drsPolylines, isCompact)
-    drawStartFinish(targetCtx, trackData.points, trackData.startIndex)
-    drawSectorMarkers(targetCtx, trackData.points, trackData.sectorMarkers)
-    drawPitMarkers(targetCtx, trackData.points, trackData.pitEntryIdx, trackData.pitExitIdx)
-    drawCornerBadgesRender(targetCtx, cornerBadges, isCompact)
-
-    if (offscreenCtx && offscreenCanvasRef.current) {
-      ctx.drawImage(offscreenCanvasRef.current, 0, 0)
-    }
+    drawTrack(ctx, trackData.points, false)
+    drawDRSZones(ctx, trackData.drsPolylines, isCompact)
+    drawStartFinish(ctx, trackData.points, trackData.startIndex)
+    drawSectorMarkers(ctx, trackData.points, trackData.sectorMarkers)
+    drawCornerBadgesRender(ctx, cornerBadges, isCompact)
   }, [trackData, cornerBadges, isCompact, containerRef])
 
-  return { staticCanvasRef, offscreenCanvasRef, isAnimatingIn: isAnimatingInRef.current }
+  return { staticCanvasRef, isAnimatingIn: isAnimatingInRef.current }
 }

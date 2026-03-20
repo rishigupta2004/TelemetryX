@@ -1,0 +1,175 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "bahrain_sakhir_v1",
+  "_layer": "corners",
+  "_label": "Bahrain Outer \u2014 Sakhir 2020",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "",
+        "circuit": "bahrain_sakhir_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "",
+        "circuit": "bahrain_sakhir_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "",
+        "circuit": "bahrain_sakhir_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "",
+        "circuit": "bahrain_sakhir_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "",
+        "circuit": "bahrain_sakhir_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "",
+        "circuit": "bahrain_sakhir_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "",
+        "circuit": "bahrain_sakhir_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "",
+        "circuit": "bahrain_sakhir_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "",
+        "circuit": "bahrain_sakhir_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "",
+        "circuit": "bahrain_sakhir_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "corner_number": 11,
+        "name": "",
+        "circuit": "bahrain_sakhir_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "SAKHIR", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 50.510748096946813, 26.036849448542551 ] } },
+{ "type": "Feature", "properties": { "corner_number": 2, "name": null, "circuit": "SAKHIR", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 50.511559681489366, 26.036328580851062 ] } },
+{ "type": "Feature", "properties": { "corner_number": null, "name": null, "circuit": null, "notes": null }, "geometry": { "type": "Point", "coordinates": [ 50.511559681489366, 26.036328580851062 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "SAKHIR", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 50.512577190468086, 26.036582958095742 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "SAKHIR", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 50.518343074680857, 26.035601788723401 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "SAKHIR", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 50.51783432019149, 26.034426808117018 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "SAKHIR", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 50.5186701311383, 26.032585601393613 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "SAKHIR", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 50.51806447103192, 26.031374281180849 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "SAKHIR", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 50.5183188482766, 26.030889753095742 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "SAKHIR", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 50.517301339297873, 26.029339263223402 ] } },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": "SAKHIR", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 50.510699644138299, 26.026032359042549 ] } },
+{ "type": "Feature", "properties": { "corner_number": 11, "name": null, "circuit": "SAKHIR", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 50.510275682063835, 26.0267106983617 ] } }
+]
+}

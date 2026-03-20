@@ -1,0 +1,264 @@
+{
+  "type": "FeatureCollection",
+  "_circuit": "hockenheim_v1",
+  "_layer": "corners",
+  "_label": "Hockenheimring",
+  "_note": "Place each point at corner apex on track centreline in QGIS.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "corner_number": 1,
+        "name": "",
+        "circuit": "hockenheim_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "properties": {
+        "corner_number": 2,
+        "name": "",
+        "circuit": "hockenheim_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "properties": {
+        "corner_number": 3,
+        "name": "",
+        "circuit": "hockenheim_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "properties": {
+        "corner_number": 4,
+        "name": "",
+        "circuit": "hockenheim_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "properties": {
+        "corner_number": 5,
+        "name": "",
+        "circuit": "hockenheim_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "properties": {
+        "corner_number": 6,
+        "name": "Einfahrt Motodrom",
+        "circuit": "hockenheim_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "properties": {
+        "corner_number": 7,
+        "name": "",
+        "circuit": "hockenheim_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "properties": {
+        "corner_number": 8,
+        "name": "",
+        "circuit": "hockenheim_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "properties": {
+        "corner_number": 9,
+        "name": "",
+        "circuit": "hockenheim_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "properties": {
+        "corner_number": 10,
+        "name": "",
+        "circuit": "hockenheim_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "properties": {
+        "corner_number": 11,
+        "name": "",
+        "circuit": "hockenheim_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "properties": {
+        "corner_number": 12,
+        "name": "",
+        "circuit": "hockenheim_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "properties": {
+        "corner_number": 13,
+        "name": "Spitzkehre",
+        "circuit": "hockenheim_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "properties": {
+        "corner_number": 14,
+        "name": "",
+        "circuit": "hockenheim_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 15,
+      "properties": {
+        "corner_number": 15,
+        "name": "",
+        "circuit": "hockenheim_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 16,
+      "properties": {
+        "corner_number": 16,
+        "name": "",
+        "circuit": "hockenheim_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 17,
+      "properties": {
+        "corner_number": 17,
+        "name": "",
+        "circuit": "hockenheim_v1",
+        "notes": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": []
+      }
+    },
+{ "type": "Feature", "properties": { "corner_number": 1, "name": null, "circuit": "HOCKENHEIM", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 8.564237599485397, 49.329884446495136 ] } },
+{ "type": "Feature", "properties": { "corner_number": 2, "name": null, "circuit": "HOCKENHEIM", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 8.56902970426982, 49.333838667927687 ] } },
+{ "type": "Feature", "properties": { "corner_number": 3, "name": null, "circuit": "HOCKENHEIM", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 8.569632392294855, 49.333338877858139 ] } },
+{ "type": "Feature", "properties": { "corner_number": 4, "name": null, "circuit": "HOCKENHEIM", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 8.569705890834493, 49.33278028895689 ] } },
+{ "type": "Feature", "properties": { "corner_number": 6, "name": null, "circuit": "HOCKENHEIM", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 8.58434679993046, 49.332515694214194 ] } },
+{ "type": "Feature", "properties": { "corner_number": 5, "name": null, "circuit": "HOCKENHEIM", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 8.576644152976357, 49.331148621376919 ] } },
+{ "type": "Feature", "properties": { "corner_number": 7, "name": null, "circuit": "HOCKENHEIM", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 8.579422397774689, 49.330281338609183 ] } },
+{ "type": "Feature", "properties": { "corner_number": 8, "name": null, "circuit": "HOCKENHEIM", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 8.575556374589709, 49.330590032475669 ] } },
+{ "type": "Feature", "properties": { "corner_number": 9, "name": null, "circuit": "HOCKENHEIM", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 8.575571074297637, 49.329634551460366 ] } },
+{ "type": "Feature", "properties": { "corner_number": 10, "name": null, "circuit": "HOCKENHEIM", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 8.576012065535467, 49.3291200616829 ] } },
+{ "type": "Feature", "properties": { "corner_number": 11, "name": null, "circuit": "HOCKENHEIM", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 8.575644572837275, 49.32862027161336 ] } },
+{ "type": "Feature", "properties": { "corner_number": 12, "name": null, "circuit": "HOCKENHWIM", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 8.570955366008345, 49.326841606954112 ] } },
+{ "type": "Feature", "properties": { "corner_number": 13, "name": null, "circuit": "HOCKENHWIM", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 8.56744213581363, 49.328649671029211 ] } },
+{ "type": "Feature", "properties": { "corner_number": 14, "name": null, "circuit": "HOCKENHWIM", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 8.567721430264257, 49.327444294979145 ] } },
+{ "type": "Feature", "properties": { "corner_number": 15, "name": null, "circuit": "HOCKENHWIM", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 8.568618112447846, 49.327179700236442 ] } },
+{ "type": "Feature", "properties": { "corner_number": 16, "name": null, "circuit": "HOCKENHWIM", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 8.569397196968012, 49.326224219221146 ] } },
+{ "type": "Feature", "properties": { "corner_number": 17, "name": null, "circuit": "HOCKENHWIM", "notes": null }, "geometry": { "type": "Point", "coordinates": [ 8.567780229095968, 49.325606831488187 ] } }
+]
+}

@@ -164,6 +164,49 @@ def _resolve_canonical_track_geometry_file(
     return None
 
 
+def normalize_track_geometry_start_position(geometry: Any) -> Any:
+    """Keep startPosition in sync with the canonical start index and centerline."""
+    if not isinstance(geometry, dict):
+        return geometry
+
+    centerline = geometry.get("centerline")
+    if not isinstance(centerline, list) or len(centerline) < 1:
+        return geometry
+
+    n = len(centerline)
+    raw_start_finish = geometry.get("start_finish")
+    start_finish = raw_start_finish if isinstance(raw_start_finish, dict) else {}
+    candidate_indices = [start_finish.get("index"), geometry.get("startPositionIndex")]
+
+    start_idx: Optional[int] = None
+    for candidate in candidate_indices:
+        try:
+            idx = int(candidate)
+        except Exception:
+            continue
+        if n <= 0:
+            continue
+        start_idx = max(0, min(n - 1, idx))
+        break
+
+    if start_idx is None:
+        start_idx = 0
+
+    point = centerline[start_idx] if start_idx < n else None
+    if not isinstance(point, (list, tuple)) or len(point) < 2:
+        return geometry
+    try:
+        lon = float(point[0])
+        lat = float(point[1])
+    except Exception:
+        return geometry
+
+    geometry["startPositionIndex"] = start_idx
+    geometry["start_finish"] = {"index": start_idx}
+    geometry["startPosition"] = [lon, lat]
+    return geometry
+
+
 def read_parquet_df(path: str, columns: Optional[Sequence[str]] = None) -> pd.DataFrame:
     """Read a parquet file via DuckDB (avoids requiring pyarrow/fastparquet)."""
     if not path or not os.path.exists(path):

@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, Query
+from fastapi.responses import JSONResponse
 from typing import List, Dict, Any, Optional
 import pandas as pd
 import os
@@ -20,6 +21,7 @@ from ..utils import normalize_key
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
+STATIC_CACHE_HEADERS = {"Cache-Control": "max-age=3600"}
 
 FEATURE_DATASETS: Dict[str, str] = {
     "lap": "lap_features.parquet",
@@ -373,13 +375,19 @@ async def get_session_features(
 @router.get("/features/{year}/{race}/{session}/lap")
 async def get_lap_features(year: int, race: str, session: str) -> List[Dict[str, Any]]:
     """Get lap features for a race session."""
-    return _load_named_feature(year, race, session, "lap")
+    return JSONResponse(
+        content=_load_named_feature(year, race, session, "lap"),
+        headers=STATIC_CACHE_HEADERS,
+    )
 
 
 @router.get("/features/{year}/{race}/{session}/tyre")
 async def get_tyre_features(year: int, race: str, session: str) -> List[Dict[str, Any]]:
     """Get tyre features for a race session."""
-    return _load_named_feature(year, race, session, "tyre")
+    return JSONResponse(
+        content=_load_named_feature(year, race, session, "tyre"),
+        headers=STATIC_CACHE_HEADERS,
+    )
 
 
 @router.get("/features/{year}/{race}/{session}/comparison")

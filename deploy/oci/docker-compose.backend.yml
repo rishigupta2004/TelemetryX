@@ -1,0 +1,35 @@
+services:
+  telemetryx-redis:
+    image: redis:7-alpine
+    container_name: telemetryx-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    volumes:
+      - /opt/telemetryx/state/redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  telemetryx-backend:
+    build:
+      context: /opt/telemetryx/app
+      dockerfile: backend/Dockerfile
+    container_name: telemetryx-backend
+    restart: unless-stopped
+    depends_on:
+      telemetryx-redis:
+        condition: service_healthy
+    ports:
+      - "9000:9000"
+    env_file:
+      - /opt/telemetryx/deploy/.env.backend
+    volumes:
+      - /opt/telemetryx/data:/data:ro
+      - /opt/telemetryx/state:/state
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:9000/health', timeout=3).read()"]
+      interval: 15s
+      timeout: 5s
+      retries: 5

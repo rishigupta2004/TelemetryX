@@ -87,7 +87,7 @@ class StrategyRecommendationsPayload(BaseModel):
     year: int
     race_name: str
     n_simulations: int
-    best_strategy: StrategyRecommendationItem
+    best_strategy: Optional[StrategyRecommendationItem] = None
     all_strategies: Dict[str, StrategyRecommendationItem]
 
 
@@ -1525,14 +1525,19 @@ async def list_models() -> Dict[str, Any]:
 @router.get("/models/strategy-recommendations/{year}/{race}")
 async def get_strategy_recommendations(year: int, race: str) -> Dict[str, Any]:
     race_name = race.replace("-", " ")
-    payload = _read_strategy_payload(int(year), str(race_name))
-    if not payload:
+    payload, source_year = _resolve_strategy_payload_with_fallback(
+        int(year), str(race_name)
+    )
+    if not payload or not payload.get("all_strategies"):
         return {
             "year": year,
             "race_name": race_name,
             "n_simulations": 0,
             "best_strategy": None,
             "all_strategies": {},
+            "source_year": None,
+            "fallback_used": False,
+            "availability_reason": "No strategy payload found for this race in available years.",
         }
     try:
         if hasattr(StrategyRecommendationsPayload, "model_validate"):
@@ -1547,5 +1552,10 @@ async def get_strategy_recommendations(year: int, race: str) -> Dict[str, Any]:
             detail=f"Invalid strategy recommendations payload schema: {e}",
         )
     if hasattr(validated, "model_dump"):
-        return convert_numpy(validated.model_dump())
-    return convert_numpy(validated.dict())
+        out = validated.model_dump()
+    else:
+        out = validated.dict()
+    out["source_year"] = int(source_year)
+    out["fallback_used"] = int(source_year) != int(year)
+    out["availability_reason"] = None
+    return convert_numpy(out)

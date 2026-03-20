@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, Query
+from fastapi.responses import JSONResponse
 from typing import Dict, Any, Optional, List, Tuple
 import os
 import json
@@ -16,6 +17,7 @@ from db.connection import db_connection, get_db_connection
 from ..utils import (
     resolve_dir,
     resolve_track_geometry_file,
+    normalize_track_geometry_start_position,
     normalize_key,
     normalize_session_code,
     display_session_code,
@@ -26,6 +28,7 @@ from . import metrics as metrics_router
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
+STATIC_CACHE_HEADERS = {"Cache-Control": "max-age=3600"}
 
 VALID_SESSIONS = {
     "R",
@@ -76,6 +79,8 @@ def _validate_round(round: str) -> str:
 
 
 _track_geometry_cache = {}
+_session_meta_cache: Dict[Tuple[int, str, str], Dict[str, Any]] = {}
+_SESSION_META_CACHE_MAX = 256
 
 MAX_SESSION_WINDOW_S = 300.0
 DEFAULT_TELEMETRY_WINDOW_S = 120.0
@@ -920,7 +925,7 @@ def load_telemetry(
     """Load telemetry (optionally windowed + downsampled in SQL)."""
     tel_file = os.path.join(silver_path, "telemetry.parquet")
     if not os.path.exists(tel_file):
-        logger.debug(f"Telemetry file not found: {tel_file}")
+        logger.warning(f"[Telemetry] MISSING: {tel_file}")
         return {}
     laps_file = os.path.join(silver_path, "laps.parquet")
 
@@ -931,26 +936,57 @@ def load_telemetry(
             schema_query = f"DESCRIBE SELECT * FROM read_parquet('{tel_file}')"
             schema_result = conn.execute(schema_query).fetchall()
             columns_in_file = {row[0] for row in schema_result}
+            lower_col_map = {str(col).lower(): str(col) for col in columns_in_file}
 
-            # Required columns for telemetry
-            required_columns = {
-                "session_time_seconds",
-                "speed",
-                "throttle",
-                "brake",
-                "rpm",
-                "gear",
-                "drs",
-                "driver_number",
-            }
+            def _pick_col(*candidates: str) -> Optional[str]:
+                for candidate in candidates:
+                    found = lower_col_map.get(candidate.lower())
+                    if found:
+                        return found
+                return None
 
-            if not required_columns.issubset(columns_in_file):
-                missing = required_columns - columns_in_file
+            def _qcol(name: str) -> str:
+                return '"' + str(name).replace('"', '""') + '"'
+
+            time_col = _pick_col("session_time_seconds", "time_seconds", "timestamp", "time")
+            driver_col = _pick_col("driver_number", "drivernumber", "drivernumber")
+            if not time_col or not driver_col:
                 logger.warning(
-                    f"Telemetry file has wrong schema: {tel_file}. "
-                    f"Missing columns: {missing}. Has: {columns_in_file}"
+                    f"[Telemetry] SCHEMA MISMATCH (core missing): time_col={time_col}, driver_col={driver_col} for {tel_file}. "
+                    f"Available columns: {sorted(columns_in_file)}"
                 )
                 return {}
+
+            channel_map = {
+                "speed": _pick_col("speed"),
+                "throttle": _pick_col("throttle"),
+                "brake": _pick_col("brake"),
+                "rpm": _pick_col("rpm"),
+                "gear": _pick_col("gear", "ngear", "n_gear"),
+                "drs": _pick_col("drs"),
+            }
+            required_columns = {"session_time_seconds", "driver_number", "speed", "throttle", "brake"}
+            if not required_columns.issubset({str(col).lower() for col in columns_in_file}):
+                logger.warning(
+                    f"[Telemetry] SCHEMA MISMATCH (required missing): required={sorted(required_columns)} available={sorted(columns_in_file)} file={tel_file}"
+                )
+                return {}
+            missing_channels = sorted([name for name, src in channel_map.items() if src is None])
+            if missing_channels:
+                logger.warning(
+                    f"[Telemetry] PARTIAL CHANNELS ({missing_channels}) for {tel_file}. "
+                    f"Available columns: {sorted(columns_in_file)}"
+                )
+
+            def _col_expr(source_name: Optional[str], sql_type: str, scale: int = 2) -> str:
+                if source_name:
+                    src = _qcol(source_name)
+                    if sql_type == "INTEGER":
+                        return f"CAST(t.{src} AS INTEGER)"
+                    return f"ROUND(try_cast(t.{src} AS DOUBLE), {scale})"
+                if sql_type == "INTEGER":
+                    return "NULL"
+                return "NULL"
             optional_column_groups = {
                 "ersDeploy": [
                     "ers_deploy",
@@ -967,10 +1003,10 @@ def load_telemetry(
             }
             optional_expr: Dict[str, str] = {}
             for alias, candidates in optional_column_groups.items():
-                src = next((c for c in candidates if c in columns_in_file), None)
+                src = _pick_col(*candidates)
                 if src:
                     optional_expr[alias] = (
-                        f"ROUND(try_cast(t.{src} AS DOUBLE), 2) as {alias}"
+                        f"ROUND(try_cast(t.{_qcol(src)} AS DOUBLE), 2) as {alias}"
                     )
                 else:
                     optional_expr[alias] = f"NULL as {alias}"
@@ -981,95 +1017,157 @@ def load_telemetry(
         hz = max(0.0, min(50.0, float(hz or 0.0)))
         t0_bound, t1_bound = _resolve_time_window(t0, t1, DEFAULT_TELEMETRY_WINDOW_S)
 
-        where = [
-            "t.driver_number IS NOT NULL",
-            "t.session_time_seconds >= ?",
-            "t.session_time_seconds <= ?",
-        ]
-        params: List[Any] = [tel_file, float(t0_bound), float(t1_bound)]
-        if driver_numbers:
-            where.append(
-                "t.driver_number IN (" + ",".join(["?"] * len(driver_numbers)) + ")"
-            )
-            params.extend([int(x) for x in driver_numbers])
-        where_sql = " AND ".join(where)
+        min_t: Optional[float] = None
+        max_t: Optional[float] = None
+        try:
+            time_range = conn.execute(
+                f"SELECT MIN({ _qcol(time_col) }), MAX({ _qcol(time_col) }) FROM read_parquet(?)",
+                [tel_file],
+            ).fetchone()
+            if time_range:
+                min_t = float(time_range[0]) if time_range[0] is not None else None
+                max_t = float(time_range[1]) if time_range[1] is not None else None
+        except Exception:
+            min_t = None
+            max_t = None
 
-        # Keep telemetry query minimal in the hot path; driver names are resolved client-side.
-        if hz > 0:
-            bucket = f"CAST(floor(t.session_time_seconds * {hz}) AS BIGINT)"
-            query = f"""
-                WITH base AS (
+        if t0 is not None and t1 is not None and min_t is not None and max_t is not None:
+            if float(t0_bound) > max_t or float(t1_bound) < min_t:
+                t0_bound = float(min_t)
+                t1_bound = float(min(min_t + 200.0, max_t))
+
+        race_time_offset = 0.0
+        should_shift_to_race_time = False
+        try:
+            if os.path.exists(laps_file):
+                offset_row = conn.execute(
+                    """
+                    SELECT MIN(CAST(session_time_seconds AS DOUBLE))
+                    FROM read_parquet(?)
+                    WHERE session_time_seconds IS NOT NULL
+                      AND CAST(lap_number AS INTEGER) = 1
+                    """,
+                    [laps_file],
+                ).fetchone()
+                if offset_row and offset_row[0] is not None:
+                    race_time_offset = float(offset_row[0])
+            should_shift_to_race_time = (
+                race_time_offset > 1000.0 and float(t1_bound) <= 2000.0
+            )
+        except Exception:
+            race_time_offset = 0.0
+            should_shift_to_race_time = False
+
+        query_t0 = float(t0_bound)
+        query_t1 = float(t1_bound)
+        if should_shift_to_race_time:
+            query_t0 += race_time_offset
+            query_t1 += race_time_offset
+        print(
+            f"[Telemetry] t0={query_t0} t1={query_t1} data_range="
+            f"{(f'{min_t:.1f}' if min_t is not None else 'None')}–"
+            f"{(f'{max_t:.1f}' if max_t is not None else 'None')} file={tel_file}"
+        )
+
+        time_ref = f"t.{_qcol(time_col)}"
+        driver_ref = f"t.{_qcol(driver_col)}"
+
+        def _run_query(window_t0: float, window_t1: float) -> List[Any]:
+            where = [
+                f"{driver_ref} IS NOT NULL",
+                f"{time_ref} >= ?",
+                f"{time_ref} <= ?",
+            ]
+            params: List[Any] = [tel_file, float(window_t0), float(window_t1)]
+            if driver_numbers:
+                where.append(
+                    f"{driver_ref} IN (" + ",".join(["?"] * len(driver_numbers)) + ")"
+                )
+                params.extend([int(x) for x in driver_numbers])
+            where_sql = " AND ".join(where)
+
+            # Keep telemetry query minimal in the hot path; driver names are resolved client-side.
+            if hz > 0:
+                bucket = f"CAST(floor({time_ref} * {hz}) AS BIGINT)"
+                query = f"""
+                    WITH base AS (
+                        SELECT
+                            CAST({driver_ref} AS INTEGER) as driver_number,
+                            CAST({driver_ref} AS VARCHAR) as driver_name,
+                            {time_ref} as timestamp,
+                            {_col_expr(channel_map["speed"], "DOUBLE", 2)} as speed,
+                            {_col_expr(channel_map["throttle"], "DOUBLE", 2)} as throttle,
+                            ROUND(
+                                CASE
+                                    WHEN try_cast({_col_expr(channel_map["brake"], "DOUBLE", 2)} AS DOUBLE) IS NULL THEN 0.0
+                                    WHEN try_cast({_col_expr(channel_map["brake"], "DOUBLE", 2)} AS DOUBLE) <= 1.0 THEN try_cast({_col_expr(channel_map["brake"], "DOUBLE", 2)} AS DOUBLE) * 100.0
+                                    ELSE try_cast({_col_expr(channel_map["brake"], "DOUBLE", 2)} AS DOUBLE)
+                                END,
+                                2
+                            ) as brake,
+                            {_col_expr(channel_map["rpm"], "DOUBLE", 0)} as rpm,
+                            {_col_expr(channel_map["gear"], "INTEGER")} as gear,
+                            {_col_expr(channel_map["drs"], "INTEGER")} as drs,
+                            {optional_expr["ersDeploy"]},
+                            {optional_expr["ersHarvest"]},
+                            row_number() OVER (
+                                PARTITION BY CAST({driver_ref} AS INTEGER), {bucket}
+                                ORDER BY {time_ref} DESC
+                            ) as rn
+                        FROM read_parquet(?) t
+                        WHERE {where_sql}
+                    )
                     SELECT
-                        t.driver_number,
-                        CAST(t.driver_number AS VARCHAR) as driver_name,
-                        t.session_time_seconds as timestamp,
-                        ROUND(t.speed, 2) as speed,
-                        ROUND(t.throttle, 2) as throttle,
+                        driver_number,
+                        driver_name,
+                        timestamp,
+                        speed,
+                        throttle,
+                        brake,
+                        rpm,
+                        gear,
+                        drs,
+                        ersDeploy,
+                        ersHarvest
+                    FROM base
+                    WHERE rn = 1
+                    ORDER BY driver_number, timestamp
+                    LIMIT ?
+                """
+            else:
+                query = f"""
+                    SELECT
+                        CAST({driver_ref} AS INTEGER) as driver_number,
+                        CAST({driver_ref} AS VARCHAR) as driver_name,
+                        {time_ref} as timestamp,
+                        {_col_expr(channel_map["speed"], "DOUBLE", 2)} as speed,
+                        {_col_expr(channel_map["throttle"], "DOUBLE", 2)} as throttle,
                         ROUND(
                             CASE
-                                WHEN try_cast(t.brake AS DOUBLE) IS NULL THEN 0.0
-                                WHEN try_cast(t.brake AS DOUBLE) <= 1.0 THEN try_cast(t.brake AS DOUBLE) * 100.0
-                                ELSE try_cast(t.brake AS DOUBLE)
+                                WHEN try_cast({_col_expr(channel_map["brake"], "DOUBLE", 2)} AS DOUBLE) IS NULL THEN 0.0
+                                WHEN try_cast({_col_expr(channel_map["brake"], "DOUBLE", 2)} AS DOUBLE) <= 1.0 THEN try_cast({_col_expr(channel_map["brake"], "DOUBLE", 2)} AS DOUBLE) * 100.0
+                                ELSE try_cast({_col_expr(channel_map["brake"], "DOUBLE", 2)} AS DOUBLE)
                             END,
                             2
                         ) as brake,
-                        ROUND(t.rpm, 0) as rpm,
-                        CAST(t.gear AS INTEGER) as gear,
-                        CAST(t.drs AS INTEGER) as drs,
+                        {_col_expr(channel_map["rpm"], "DOUBLE", 0)} as rpm,
+                        {_col_expr(channel_map["gear"], "INTEGER")} as gear,
+                        {_col_expr(channel_map["drs"], "INTEGER")} as drs,
                         {optional_expr["ersDeploy"]},
-                        {optional_expr["ersHarvest"]},
-                        row_number() OVER (
-                            PARTITION BY t.driver_number, {bucket}
-                            ORDER BY t.session_time_seconds DESC
-                        ) as rn
+                        {optional_expr["ersHarvest"]}
                     FROM read_parquet(?) t
                     WHERE {where_sql}
-                )
-                SELECT
-                    driver_number,
-                    driver_name,
-                    timestamp,
-                    speed,
-                    throttle,
-                    brake,
-                    rpm,
-                    gear,
-                    drs,
-                    ersDeploy,
-                    ersHarvest
-                FROM base
-                WHERE rn = 1
-                ORDER BY driver_number, timestamp
-                LIMIT ?
-            """
-        else:
-            query = f"""
-                SELECT
-                    t.driver_number,
-                    CAST(t.driver_number AS VARCHAR) as driver_name,
-                    t.session_time_seconds as timestamp,
-                    ROUND(t.speed, 2) as speed,
-                    ROUND(t.throttle, 2) as throttle,
-                    ROUND(
-                        CASE
-                            WHEN try_cast(t.brake AS DOUBLE) IS NULL THEN 0.0
-                            WHEN try_cast(t.brake AS DOUBLE) <= 1.0 THEN try_cast(t.brake AS DOUBLE) * 100.0
-                            ELSE try_cast(t.brake AS DOUBLE)
-                        END,
-                        2
-                    ) as brake,
-                    ROUND(t.rpm, 0) as rpm,
-                    CAST(t.gear AS INTEGER) as gear,
-                    CAST(t.drs AS INTEGER) as drs,
-                    {optional_expr["ersDeploy"]},
-                    {optional_expr["ersHarvest"]}
-                FROM read_parquet(?) t
-                WHERE {where_sql}
-                ORDER BY t.driver_number, t.session_time_seconds
-                LIMIT ?
-            """
+                    ORDER BY CAST({driver_ref} AS INTEGER), {time_ref}
+                    LIMIT ?
+                """
+            return conn.execute(query, [*params, int(max_rows) + 1]).fetchall()
 
-        rows = conn.execute(query, [*params, int(max_rows) + 1]).fetchall()
+        rows = _run_query(query_t0, query_t1)
+        if should_shift_to_race_time and not rows:
+            # Some sessions already store telemetry in race-relative seconds.
+            # Retry once without offset so telemetry does not disappear.
+            rows = _run_query(float(t0_bound), float(t1_bound))
+            should_shift_to_race_time = False
         if len(rows) > int(max_rows):
             raise HTTPException(
                 status_code=413, detail=f"Result exceeds {int(max_rows)} rows"
@@ -1115,6 +1213,12 @@ def load_telemetry(
         tel_by_driver: Dict[str, List[Dict[str, Any]]] = {}
         for row in rows:
             record = dict(zip(columns, row))
+            if should_shift_to_race_time:
+                try:
+                    ts_val = float(record.get("timestamp"))
+                    record["timestamp"] = ts_val - race_time_offset
+                except Exception:
+                    pass
             try:
                 drv_num = int(record.get("driverNumber") or 0)
                 if drv_num in driver_name_map:
@@ -2273,7 +2377,7 @@ def load_track_geometry(race_name: str, year: Optional[int] = None) -> Optional[
     )
     if geometry_file:
         with open(geometry_file, "r") as f:
-            return json.load(f)
+            return normalize_track_geometry_start_position(json.load(f))
     return None
 
 
@@ -2337,6 +2441,11 @@ def get_total_laps(year: int, race_name: str, session: str) -> int:
 
 
 def load_metadata(year: int, race_name: str, session: str) -> Dict:
+    cache_key = (int(year), str(race_name), str(normalize_session_code(session)))
+    cached = _session_meta_cache.get(cache_key)
+    if cached is not None:
+        return dict(cached)
+
     gold_session_path = os.path.join(
         GOLD_DIR, str(year), race_name, normalize_session_code(session)
     )
@@ -2349,15 +2458,22 @@ def load_metadata(year: int, race_name: str, session: str) -> Dict:
             metadata = json.load(f)
             metadata["duration"] = calculate_session_duration(year, race_name, session)
             metadata["totalLaps"] = get_total_laps(year, race_name, session)
+            if len(_session_meta_cache) >= _SESSION_META_CACHE_MAX:
+                _session_meta_cache.pop(next(iter(_session_meta_cache)))
+            _session_meta_cache[cache_key] = dict(metadata)
             return metadata
 
-    return {
+    metadata = {
         "year": year,
         "raceName": race_name,
         "sessionType": session,
         "duration": calculate_session_duration(year, race_name, session),
         "totalLaps": get_total_laps(year, race_name, session),
     }
+    if len(_session_meta_cache) >= _SESSION_META_CACHE_MAX:
+        _session_meta_cache.pop(next(iter(_session_meta_cache)))
+    _session_meta_cache[cache_key] = dict(metadata)
+    return metadata
 
 
 @router.get("/sessions/{year}/{race}/{session}")
@@ -2398,7 +2514,7 @@ async def get_session(year: int, race: str, session: str) -> Dict[str, Any]:
     # Load data from disk
     metadata = load_metadata(year, race_dir, session_code)
     drivers = load_drivers(silver_path, year=year)
-    laps = load_laps(silver_path)
+    laps = load_laps(silver_path, latest_only=True)
     track_geometry = load_track_geometry(race_dir, year=year)
     weather = load_weather(silver_path)
     race_control = load_race_control(silver_path)
@@ -2467,7 +2583,7 @@ async def get_session_viz(
     )
     cached = cache_get(cache_key)
     if cached is not None:
-        return cached
+        return JSONResponse(content=cached, headers=STATIC_CACHE_HEADERS)
 
     metadata = load_metadata(year, race_dir, session_code)
     drivers = load_drivers(silver_path, year=year)
@@ -2533,7 +2649,7 @@ async def get_session_viz(
         "trackGeometry": track_geometry,
     }
     cache_set(cache_key, payload)
-    return payload
+    return JSONResponse(content=payload, headers=STATIC_CACHE_HEADERS)
 
 
 @router.get("/sessions/{year}/{race}/{session}/laps")
@@ -2563,7 +2679,7 @@ async def get_session_laps(year: int, race: str, session: str) -> list:
     # Try to get from Redis cache first
     cached = cache_get(cache_key)
     if cached is not None:
-        return cached
+        return JSONResponse(content=cached, headers=STATIC_CACHE_HEADERS)
 
     # Load from disk
     laps = load_laps(silver_path)
@@ -2571,7 +2687,7 @@ async def get_session_laps(year: int, race: str, session: str) -> list:
     # Cache the result
     cache_set(cache_key, laps)
 
-    return laps
+    return JSONResponse(content=laps, headers=STATIC_CACHE_HEADERS)
 
 
 @router.get("/sessions/{year}/{race}/{session}/telemetry")

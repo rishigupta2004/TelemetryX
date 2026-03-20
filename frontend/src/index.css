@@ -1,0 +1,235 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-panel: var(--bg-panel);
+  --color-bg-base: var(--bg-base);
+  --color-bg-raised: var(--bg-raised);
+  --color-bg-void: var(--bg-void);
+  --color-bg-inset: var(--bg-inset);
+  --color-bg-card: var(--bg-card);
+  --color-bg-hover: var(--bg-hover);
+  --color-bg-selected: var(--bg-selected);
+  --color-fg-primary: var(--fg-primary);
+  --color-fg-secondary: var(--fg-secondary);
+  --color-fg-muted: var(--fg-muted);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-accent-blue: var(--accent-blue);
+  --color-border: var(--border);
+  --color-border-hard: var(--border-hard);
+  --color-border-soft: var(--border-soft);
+  --color-border-micro: var(--border-micro);
+}
+
+:root {
+  --bg-void: #000000;
+  --bg-primary: #0a0a0a;
+  --bg-base: #111111;
+  --bg-secondary: #141414;
+  --bg-surface: #1a1a1a;
+  --bg-panel: #171717;
+  --bg-raised: #1f1f1f;
+  --bg-inset: #0d0d0d;
+  --bg-card: #1c1c1c;
+  --bg-hover: #262626;
+  --bg-selected: #2a1111;
+  --fg-primary: #f5f5f5;
+  --fg-secondary: #a3a3a3;
+  --fg-muted: #737373;
+  --text-primary: var(--fg-primary);
+  --text-secondary: var(--fg-secondary);
+  --text-muted: var(--fg-muted);
+  --accent: #e10600;
+  --accent-blue: #94a3b8; /* Kept for legacy bindings, but overridden visually if possible */
+  --border: #262626;
+  --border-hard: #404040;
+  --border-soft: #1f1f1f;
+  --border-micro: #171717;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-primary);
+  color: var(--fg-primary);
+  font-family: 'Inter', -apple-system, sans-serif;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+  font-family: 'Inter', sans-serif;
+}
+
+button {
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background-color: var(--bg-surface);
+  transition: border-color 150ms ease, background-color 150ms ease;
+  cursor: pointer;
+}
+
+button:hover {
+  border-color: var(--border-hard);
+  background-color: var(--bg-hover);
+}
+
+button:active {
+  background-color: var(--bg-raised);
+}
+
+input, select, textarea {
+  border-radius: 2px;
+  border: 1px solid var(--border);
+  background-color: var(--bg-inset);
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px rgba(225, 6, 0, 0.2);
+}
+
+.panel-border {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background-color: var(--bg-panel);
+}
+
+/* Scrollbar tweaks for technical look */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-inset);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-hard);
+}
+
+@keyframes gridPulse {
+  0%, 100% { opacity: 0.18; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(1.01); }
+}
+
+@keyframes welcomeParticleFloat {
+  0%, 100% { transform: translateY(0px); opacity: 0.35; }
+  50% { transform: translateY(-10px); opacity: 0.8; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+@keyframes welcomeProgress {
+  0% { width: 0%; }
+  60% { width: 84%; }
+  100% { width: 100%; }
+}
+
+@keyframes statusPulseConnected {
+  0%, 100% { transform: scale(1); opacity: 0.95; }
+  50% { transform: scale(1.18); opacity: 1; }
+}
+
+@keyframes statusPulseDisconnected {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+
+@keyframes modalOverlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalOverlayOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes modalCardIn {
+  from { opacity: 0; transform: translateY(18px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes modalCardOut {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to { opacity: 0; transform: translateY(12px) scale(0.98); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmerProgress {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(120%); }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+@keyframes underlineExpand {
+  0% { width: 0; opacity: 0.5; }
+  100% { width: 100%; opacity: 1; }
+}
+
+.welcome-particle {
+  animation: welcomeParticleFloat 3.8s ease-in-out infinite;
+}
+
+.status-pulse-connected {
+  animation: statusPulseConnected 1.6s ease-in-out infinite;
+}
+
+.status-pulse-disconnected {
+  animation: statusPulseDisconnected 1.6s ease-in-out infinite;
+}
+
+.animate-shimmer-progress {
+  animation: shimmerProgress 1.7s linear infinite;
+}
+
+.animate-gradient {
+  animation: gradientShift 3s linear infinite;
+}
+
+.animate-underline-expand {
+  animation: underlineExpand 0.8s ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .welcome-particle,
+  .status-pulse-connected,
+  .status-pulse-disconnected,
+  .animate-shimmer-progress,
+  .animate-gradient,
+  .animate-underline-expand {
+    animation: none !important;
+  }
+}

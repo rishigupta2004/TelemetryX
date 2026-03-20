@@ -1,0 +1,15 @@
+[Unit]
+Description=TelemetryX Backend Stack (Docker Compose)
+After=network-online.target docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/telemetryx
+ExecStart=/usr/bin/docker compose --env-file /opt/telemetryx/deploy/.env.backend -f /opt/telemetryx/deploy/docker-compose.backend.yml up -d --build
+ExecStop=/usr/bin/docker compose --env-file /opt/telemetryx/deploy/.env.backend -f /opt/telemetryx/deploy/docker-compose.backend.yml down
+TimeoutStartSec=0
+
+[Install]
+WantedBy=multi-user.target

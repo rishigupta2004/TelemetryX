@@ -16,7 +16,11 @@ from fastapi import APIRouter, HTTPException, Query
 from fastapi.concurrency import run_in_threadpool
 
 from ..config import GOLD_DIR, MEDIA_CACHE_DIR, TRACK_GEOMETRY_DIR
-from ..utils import normalize_key, resolve_track_geometry_file
+from ..utils import (
+    normalize_key,
+    normalize_track_geometry_start_position,
+    resolve_track_geometry_file,
+)
 
 router = APIRouter()
 
@@ -902,7 +906,7 @@ def _load_track_geometry(year: int, race_name: str) -> Dict[str, Any]:
         return {}
     try:
         with open(fpath, "r") as fh:
-            return json.load(fh)
+            return normalize_track_geometry_start_position(json.load(fh))
     except Exception:
         return {}
 

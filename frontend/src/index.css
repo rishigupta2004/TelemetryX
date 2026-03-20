@@ -28,28 +28,28 @@
 
 :root {
   --bg-void: #000000;
-  --bg-primary: #0a0a0a;
-  --bg-base: #111111;
-  --bg-secondary: #141414;
-  --bg-surface: #1a1a1a;
-  --bg-panel: #171717;
-  --bg-raised: #1f1f1f;
-  --bg-inset: #0d0d0d;
-  --bg-card: #1c1c1c;
-  --bg-hover: #262626;
-  --bg-selected: #2a1111;
-  --fg-primary: #f5f5f5;
-  --fg-secondary: #a3a3a3;
-  --fg-muted: #737373;
+  --bg-primary: #030406; /* Deep space dark blue/black */
+  --bg-base: #06080d;
+  --bg-secondary: #0a0d14;
+  --bg-surface: rgba(10, 13, 20, 0.7); /* Translucent surface */
+  --bg-panel: rgba(14, 18, 26, 0.85);
+  --bg-raised: rgba(22, 28, 40, 0.9);
+  --bg-inset: #05070a;
+  --bg-card: rgba(16, 20, 30, 0.75);
+  --bg-hover: rgba(30, 40, 60, 0.8);
+  --bg-selected: rgba(225, 6, 0, 0.15); /* F1 red tint */
+  --fg-primary: #ffffff;
+  --fg-secondary: #b0b8c6;
+  --fg-muted: #6b7280;
   --text-primary: var(--fg-primary);
   --text-secondary: var(--fg-secondary);
   --text-muted: var(--fg-muted);
-  --accent: #e10600;
-  --accent-blue: #94a3b8; /* Kept for legacy bindings, but overridden visually if possible */
-  --border: #262626;
-  --border-hard: #404040;
-  --border-soft: #1f1f1f;
-  --border-micro: #171717;
+  --accent: #E10600; /* F1 Red */
+  --accent-blue: #00E5FF; /* Re-purposed as Cyber Cyan */
+  --border: rgba(255, 255, 255, 0.08); /* Lighter border */
+  --border-hard: rgba(255, 255, 255, 0.15);
+  --border-soft: rgba(255, 255, 255, 0.04);
+  --border-micro: rgba(255, 255, 255, 0.02);
 }
 
 * {
@@ -64,68 +64,121 @@ html, body, #root {
 body {
   margin: 0;
   background-color: var(--bg-primary);
+  background-image: 
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-position: center;
   color: var(--fg-primary);
   font-family: 'Inter', -apple-system, sans-serif;
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
+body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 10%, rgba(225, 6, 0, 0.08) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Base Form Elements */
 button, input, select, textarea {
   font: inherit;
   color: inherit;
   font-family: 'Inter', sans-serif;
+  position: relative;
+  z-index: 1;
 }
 
 button {
   border-radius: 4px;
-  border: 1px solid var(--border);
-  background-color: var(--bg-surface);
-  transition: border-color 150ms ease, background-color 150ms ease;
+  border: 1px solid var(--border-hard);
+  background: linear-gradient(180deg, var(--bg-raised) 0%, var(--bg-panel) 100%);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
 }
 
 button:hover {
-  border-color: var(--border-hard);
-  background-color: var(--bg-hover);
+  border-color: var(--accent);
+  background: linear-gradient(180deg, var(--bg-hover) 0%, var(--bg-raised) 100%);
+  box-shadow: 0 0 12px rgba(225, 6, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+  transform: translateY(-1px);
 }
 
 button:active {
-  background-color: var(--bg-raised);
+  background: var(--bg-inset);
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
 }
 
 input, select, textarea {
-  border-radius: 2px;
+  border-radius: 4px;
   border: 1px solid var(--border);
   background-color: var(--bg-inset);
-  transition: border-color 150ms ease, box-shadow 150ms ease;
+  box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+  transition: all 200ms ease;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--accent-blue);
 }
 
 input:focus, select:focus, textarea:focus {
   outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 1px rgba(225, 6, 0, 0.2);
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 1px rgba(0, 229, 255, 0.2), inset 0 1px 4px rgba(0,0,0,0.6);
+  background-color: var(--bg-base);
 }
 
+/* Glassmorphism Panels */
 .panel-border {
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-top-color: var(--border-hard);
+  border-radius: 6px;
   background-color: var(--bg-panel);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  transition: border-color 300ms ease, box-shadow 300ms ease, transform 300ms ease;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Scrollbar tweaks for technical look */
+.panel-border::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.2; /* Permanent slight glow */
+  transition: opacity 300ms ease;
+}
+
+.panel-border:hover::before {
+  opacity: 1;
+}
+
+.panel-border:hover {
+  border-color: var(--border-hard);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+/* Scrollbar (Cyberpunk/Technical) */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
   background: var(--bg-inset);
+  border-left: 1px solid var(--border-micro);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 4px;
+  background: var(--border-hard);
+  border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--border-hard);
+  background: var(--accent);
 }
 
 @keyframes gridPulse {
@@ -134,39 +187,39 @@ input:focus, select:focus, textarea:focus {
 }
 
 @keyframes welcomeParticleFloat {
-  0%, 100% { transform: translateY(0px); opacity: 0.35; }
-  50% { transform: translateY(-10px); opacity: 0.8; }
+  0%, 100% { transform: translateY(0px) scale(1); opacity: 0.35; }
+  50% { transform: translateY(-10px) scale(1.05); opacity: 0.8; filter: blur(1px); }
 }
 
 @keyframes pulse-glow {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.04); }
+  0%, 100% { transform: scale(1); box-shadow: 0 0 8px rgba(225, 6, 0, 0.4); }
+  50% { transform: scale(1.04); box-shadow: 0 0 24px rgba(225, 6, 0, 0.8); }
 }
 
 @keyframes welcomeProgress {
-  0% { width: 0%; }
-  60% { width: 84%; }
-  100% { width: 100%; }
+  0% { width: 0%; box-shadow: 0 0 0 transparent; }
+  60% { width: 84%; box-shadow: 0 0 10px var(--accent); }
+  100% { width: 100%; box-shadow: 0 0 20px var(--accent); }
 }
 
 @keyframes statusPulseConnected {
-  0%, 100% { transform: scale(1); opacity: 0.95; }
-  50% { transform: scale(1.18); opacity: 1; }
+  0%, 100% { transform: scale(1); opacity: 0.9; filter: drop-shadow(0 0 4px #00FF00); }
+  50% { transform: scale(1.18); opacity: 1; filter: drop-shadow(0 0 12px #00FF00); }
 }
 
 @keyframes statusPulseDisconnected {
-  0%, 100% { transform: scale(1); opacity: 0.85; }
-  50% { transform: scale(1.15); opacity: 1; }
+  0%, 100% { transform: scale(1); opacity: 0.85; filter: drop-shadow(0 0 4px #FF2D2D); }
+  50% { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 12px #FF2D2D); }
 }
 
 @keyframes modalOverlayIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from { opacity: 0; backdrop-filter: blur(0px); }
+  to { opacity: 1; backdrop-filter: blur(8px); }
 }
 
 @keyframes modalOverlayOut {
-  from { opacity: 1; }
-  to { opacity: 0; }
+  from { opacity: 1; backdrop-filter: blur(8px); }
+  to { opacity: 0; backdrop-filter: blur(0px); }
 }
 
 @keyframes modalCardIn {
@@ -200,7 +253,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .welcome-particle {
-  animation: welcomeParticleFloat 3.8s ease-in-out infinite;
+  animation: welcomeParticleFloat 3.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 .status-pulse-connected {
@@ -221,6 +274,18 @@ input:focus, select:focus, textarea:focus {
 
 .animate-underline-expand {
   animation: underlineExpand 0.8s ease-out forwards;
+}
+
+/* Adding scanline effect to app globally! Gives technical feel */
+#root::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.25) 51%);
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.25;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -983,12 +983,23 @@ def load_telemetry(
                     f"Available columns: {sorted(columns_in_file)}"
                 )
 
-            def _col_expr(source_name: Optional[str], sql_type: str, scale: int = 2) -> str:
+            def _col_expr(source_name: Optional[str], sql_type: str, scale: int = 2, normalize_0_1: bool = False) -> str:
                 if source_name:
                     src = _qcol(source_name)
+                    base_expr = f"try_cast(t.{src} AS DOUBLE)"
+                    if normalize_0_1:
+                        return (
+                            f"ROUND("
+                            f"CASE "
+                            f"  WHEN {base_expr} IS NULL THEN 0.0 "
+                            f"  WHEN {base_expr} <= 1.0 THEN {base_expr} * 100.0 "
+                            f"  ELSE {base_expr} "
+                            f"END"
+                            f", {scale})"
+                        )
                     if sql_type == "INTEGER":
                         return f"CAST(t.{src} AS INTEGER)"
-                    return f"ROUND(try_cast(t.{src} AS DOUBLE), {scale})"
+                    return f"ROUND({base_expr}, {scale})"
                 if sql_type == "INTEGER":
                     return "NULL"
                 return "NULL"
@@ -1120,23 +1131,16 @@ def load_telemetry(
 
             # Keep telemetry query minimal in the hot path; driver names are resolved client-side.
             if hz > 0:
-                bucket = f"CAST(floor({time_ref} * {hz}) AS BIGINT)"
+                bucket = f"CAST(floor({_tnorm_t} * {hz}) AS BIGINT)"
                 query = f"""
                     WITH base AS (
                         SELECT
                             CAST({driver_ref} AS INTEGER) as driver_number,
                             CAST({driver_ref} AS VARCHAR) as driver_name,
-                            {time_ref} as timestamp,
+                            {_tnorm_t} as timestamp,
                             {_col_expr(channel_map["speed"], "DOUBLE", 2)} as speed,
-                            {_col_expr(channel_map["throttle"], "DOUBLE", 2)} as throttle,
-                            ROUND(
-                                CASE
-                                    WHEN try_cast({_col_expr(channel_map["brake"], "DOUBLE", 2)} AS DOUBLE) IS NULL THEN 0.0
-                                    WHEN try_cast({_col_expr(channel_map["brake"], "DOUBLE", 2)} AS DOUBLE) <= 1.0 THEN try_cast({_col_expr(channel_map["brake"], "DOUBLE", 2)} AS DOUBLE) * 100.0
-                                    ELSE try_cast({_col_expr(channel_map["brake"], "DOUBLE", 2)} AS DOUBLE)
-                                END,
-                                2
-                            ) as brake,
+                            {_col_expr(channel_map["throttle"], "DOUBLE", 2, normalize_0_1=True)} as throttle,
+                            {_col_expr(channel_map["brake"], "DOUBLE", 2, normalize_0_1=True)} as brake,
                             {_col_expr(channel_map["rpm"], "DOUBLE", 0)} as rpm,
                             {_col_expr(channel_map["gear"], "INTEGER")} as gear,
                             {_col_expr(channel_map["drs"], "INTEGER")} as drs,
@@ -1144,7 +1148,7 @@ def load_telemetry(
                             {optional_expr["ersHarvest"]},
                             row_number() OVER (
                                 PARTITION BY CAST({driver_ref} AS INTEGER), {bucket}
-                                ORDER BY {time_ref} DESC
+                                ORDER BY {_tnorm_t} DESC
                             ) as rn
                         FROM read_parquet(?) t
                         WHERE {where_sql}
@@ -1171,17 +1175,10 @@ def load_telemetry(
                     SELECT
                         CAST({driver_ref} AS INTEGER) as driver_number,
                         CAST({driver_ref} AS VARCHAR) as driver_name,
-                        {time_ref} as timestamp,
+                        {_tnorm_t} as timestamp,
                         {_col_expr(channel_map["speed"], "DOUBLE", 2)} as speed,
-                        {_col_expr(channel_map["throttle"], "DOUBLE", 2)} as throttle,
-                        ROUND(
-                            CASE
-                                WHEN try_cast({_col_expr(channel_map["brake"], "DOUBLE", 2)} AS DOUBLE) IS NULL THEN 0.0
-                                WHEN try_cast({_col_expr(channel_map["brake"], "DOUBLE", 2)} AS DOUBLE) <= 1.0 THEN try_cast({_col_expr(channel_map["brake"], "DOUBLE", 2)} AS DOUBLE) * 100.0
-                                ELSE try_cast({_col_expr(channel_map["brake"], "DOUBLE", 2)} AS DOUBLE)
-                            END,
-                            2
-                        ) as brake,
+                        {_col_expr(channel_map["throttle"], "DOUBLE", 2, normalize_0_1=True)} as throttle,
+                        {_col_expr(channel_map["brake"], "DOUBLE", 2, normalize_0_1=True)} as brake,
                         {_col_expr(channel_map["rpm"], "DOUBLE", 0)} as rpm,
                         {_col_expr(channel_map["gear"], "INTEGER")} as gear,
                         {_col_expr(channel_map["drs"], "INTEGER")} as drs,
@@ -1189,7 +1186,7 @@ def load_telemetry(
                         {optional_expr["ersHarvest"]}
                     FROM read_parquet(?) t
                     WHERE {where_sql}
-                    ORDER BY CAST({driver_ref} AS INTEGER), {time_ref}
+                    ORDER BY CAST({driver_ref} AS INTEGER), {_tnorm_t}
                     LIMIT ?
                 """
             return conn.execute(query, [*params, int(max_rows) + 1]).fetchall()

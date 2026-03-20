@@ -78,6 +78,13 @@ const detectCircuitFolder = (trackName: string | null | undefined, raceName: str
   for (const rule of rules) {
     if (key.includes(rule.token)) return rule.folder
   }
+  // Try direct substring match with race name words
+  const raceWords = normalizeCircuitKey(raceName ?? '').split(' ').filter(w => w.length > 3)
+  for (const rule of rules) {
+    if (raceWords.some(word => rule.token.includes(word) || word.includes(rule.token))) {
+      return rule.folder
+    }
+  }
   return null
 }
 
@@ -121,7 +128,10 @@ const resolveStartFinishFallbackIndex = (
 ): number | null => {
   if (!points.length || !Array.isArray(startFinishPoints) || !startFinishPoints.length) return null
   const wantedFolder = detectCircuitFolder(trackName, raceName)
-  if (!wantedFolder) return null
+  if (!wantedFolder) {
+    console.warn('[TrackData] No circuit folder match for:', trackName, raceName)
+    return null
+  }
   const candidates = (startFinishPoints as Array<{ lon: number; lat: number; circuitFolder?: string }>).filter((row) =>
     String(row.circuitFolder || '').toLowerCase() === wantedFolder
   )

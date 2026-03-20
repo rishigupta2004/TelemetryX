@@ -364,6 +364,7 @@ export const TelemetryView = React.memo(function TelemetryView({ active = true }
                         shadingData={chart.shadingData}
                         frame={false}
                         showHeader={true}
+                        annotations={chart.key === 'speed' ? chartData?.peaks : undefined}
                         onCursor={handleCursor(String(chart.key))}
                         playbackCursorRef={cursorFractionRef}
                         onSeek={handleSeek}

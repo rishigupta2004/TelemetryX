@@ -4,9 +4,9 @@
      ═══════════════════════════════════════════════════════════════════════════ */
   --font-sans: 'Inter', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
-  --font-heading: 'Orbitron', sans-serif;
-  --font-display: 'Titillium Web', sans-serif;
-  --font-ui: 'Titillium Web', sans-serif;
+  --font-heading: 'Orbitron', 'Inter', sans-serif;
+  --font-display: 'Rajdhani', 'Titillium Web', sans-serif;
+  --font-ui: 'Rajdhani', 'Titillium Web', sans-serif;
   --font-data: 'JetBrains Mono', monospace;
   --font-body: 'Inter', sans-serif;
   --font-label: 'Rajdhani', sans-serif;
@@ -52,14 +52,14 @@
   /* ═══════════════════════════════════════════════════════════════════════════
      ANIMATIONS & TRANSITIONS
      ═══════════════════════════════════════════════════════════════════════════ */
-  --transition-fast: 150ms ease-out;
-  --transition-normal: 300ms ease-out;
-  --transition-slow: 500ms ease-out;
+  --transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-normal: 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-slow: 500ms cubic-bezier(0.16, 1, 0.3, 1);
   
-  --animation-fade-in: fadeInUp 0.3s ease-out;
-  --animation-scale-in: scaleIn 0.2s ease-out;
-  --animation-slide-in: slideIn 0.3s ease-out;
+  --animation-fade-in: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  --animation-scale-in: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  --animation-slide-in: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   
-  --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.3);
-  --shadow-deep: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 24px rgba(0, 229, 255, 0.35), inset 0 0 8px rgba(0, 229, 255, 0.1);
+  --shadow-deep: 0 20px 48px -12px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.08);
 }

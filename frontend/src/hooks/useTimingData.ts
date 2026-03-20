@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useCarPositions } from './useCarPositions'
-import { useSessionTime10 } from '../lib/timeUtils'
+import { useSessionTime30 } from '../lib/timeUtils'
 import { useSessionStore } from '../stores/sessionStore'
 import { ubLaps, currentLap } from '../lib/telemetryUtils'
 import type { Driver, LapRow } from '../types'
@@ -151,7 +151,7 @@ export const useTimingData = (): UseTimingDataResult => {
   const lapsFromStore = useSessionStore(s => s.laps)
   const loadingState = useSessionStore(s => s.loadingState)
   const sessionError = useSessionStore(s => s.error)
-  const sessionTime = useSessionTime10()
+  const sessionTime = useSessionTime30()
   const carPositions = useCarPositions()
   const roundedSessionTime = Math.round(sessionTime * 30) / 30
 
@@ -208,17 +208,22 @@ export const useTimingData = (): UseTimingDataResult => {
 
         let s1: number | null = null, s2: number | null = null, s3: number | null = null
         if (currentInProgress) {
-          const s1t = currentInProgress.sector1, s2t = currentInProgress.sector2
-          const s1f = (s1t && s1t > 0 && lapDur2 > 0) ? s1t / lapDur2 : 0.33
-          const s2f = s1f + ((s2t && s2t > 0 && lapDur2 > 0) ? s2t / lapDur2 : 0.33)
-          if (lapProgress > s1f) s1 = currentInProgress.sector1
-          if (lapProgress > s2f) s2 = currentInProgress.sector2
+          const s1t = Number(currentInProgress.sector1)
+          const s2t = Number(currentInProgress.sector2)
+          const s3t = Number(currentInProgress.sector3)
+          const dur = Math.max(1, lapDur2)
+          
+          const s1Boundary = s1t > 0 ? s1t / dur : 0.33
+          const s2Boundary = (s1t > 0 && s2t > 0) ? (s1t + s2t) / dur : 0.66
+          
+          if (lapProgress > s1Boundary && s1t > 0) s1 = s1t
+          if (lapProgress > s2Boundary && s2t > 0) s2 = s2t
         }
 
         if (lastCompleted) {
-          const since = t - lastCompleted.lapEndSeconds
-          if (since >= 0 && since < 5) { s1 = lastCompleted.sector1; s2 = lastCompleted.sector2; s3 = lastCompleted.sector3 }
-          else if (since >= 5 && since < 8 && !s1) s3 = lastCompleted.sector3
+          if (!s1 && lastCompleted.sector1) s1 = lastCompleted.sector1
+          if (!s2 && lastCompleted.sector2) s2 = lastCompleted.sector2
+          if (!s3 && lastCompleted.sector3) s3 = lastCompleted.sector3
         }
 
         const pIdx = completedCount > 0 ? completedCount - 1 : 0

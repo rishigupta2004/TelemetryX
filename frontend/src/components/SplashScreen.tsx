@@ -27,40 +27,33 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
   
   const getStatusText = () => {
     switch (status) {
-      case 'loading': return 'Initializing...'
-      case 'connected': return 'Connected'
-      case 'offline': return 'Offline Mode'
+      case 'loading': return 'CORE INITIALIZING...'
+      case 'connected': return 'UPLINK SECURED'
+      case 'offline': return 'OFFLINE FALLBACK'
     }
   }
   
   return (
-    <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center splash-screen">
+    <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-bg-void font-ui">
       {/* Background pattern */}
       <div 
-        className="absolute inset-0 opacity-30"
+        className="absolute inset-0 opacity-15 pointer-events-none"
         style={{
-          backgroundImage: `repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 50px,
-            rgba(255,255,255,0.02) 50px,
-            rgba(255,255,255,0.02) 51px
-          ),
-          repeating-linear-gradient(
-            90deg,
-            transparent,
-            transparent 50px,
-            rgba(255,255,255,0.02) 50px,
-            rgba(255,255,255,0.02) 51px
-          )`
+          backgroundImage: `
+            linear-gradient(rgba(225,6,0,0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(225,6,0,0.1) 1px, transparent 1px)
+          `,
+          backgroundSize: '40px 40px',
+          backgroundPosition: 'center center',
+          animation: 'gridPulse 4s ease-in-out infinite',
         }}
       />
       
       {/* Glow effect */}
       <div 
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full"
         style={{
-          background: 'radial-gradient(circle, rgba(225,6,0,0.15) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(225,6,0,0.1) 0%, transparent 60%)',
           filter: 'blur(40px)'
         }}
       />
@@ -68,26 +61,25 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center">
         {/* Logo */}
-        <h1 className="text-6xl font-bold tracking-tight splash-logo">
-          TelemetryX
+        <h1 className="text-5xl font-black italic tracking-tighter font-display text-transparent bg-clip-text bg-gradient-to-br from-white via-white to-fg-muted drop-shadow-[0_0_12px_rgba(255,255,255,0.2)]">
+          TELEMETRY<span className="text-red-core drop-shadow-[0_0_24px_rgba(225,6,0,0.6)]">X</span>
         </h1>
         
         {/* Status */}
-        <div className="mt-8 flex items-center gap-3">
+        <div className="mt-8 flex items-center justify-center gap-3 bg-bg-surface/30 px-4 py-2 border border-border-soft/50 shadow-[inset_0_0_10px_rgba(0,0,0,0.5)]">
           <div 
-            className={`w-2 h-2 rounded-full splash-status-dot ${
-              status === 'loading' ? 'bg-gray-500' : 
-              status === 'connected' ? 'bg-green-500 shadow-green-500/50' : 
-              'bg-amber-500 shadow-amber-500/50'
+            className={`w-2 h-2 rounded-sm ${
+              status === 'loading' ? 'bg-amber-500 animate-pulse shadow-[0_0_8px_#f59e0b]' : 
+              status === 'connected' ? 'bg-green-pb animate-pulse shadow-[0_0_8px_#00E5FF]' : 
+              'bg-red-core shadow-[0_0_8px_#e10600]'
             }`}
           />
-          <span className="text-sm text-gray-500 font-mono">
+          <span className="text-[10px] font-bold tracking-widest text-fg-muted uppercase font-mono mt-0.5">
             {getStatusText()}
           </span>
         </div>
       </div>
       
-      {/* CSS animations */}
       {/* CSS animations moved to external stylesheet for better performance */}
       <div className="sr-only" aria-hidden="true">
         Splash screen animations loaded

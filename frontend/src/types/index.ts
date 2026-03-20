@@ -157,6 +157,8 @@ export interface TelemetryRow {
   drs: number
   ersDeploy: number | null
   ersHarvest: number | null
+  lonAcc?: number | null
+  latAcc?: number | null
 }
 
 export interface TelemetryResponse {

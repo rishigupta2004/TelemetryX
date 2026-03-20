@@ -11,7 +11,6 @@ interface HealthStatus {
   error?: string
 }
 
-// Static particle positions — computed once, never during render
 const PARTICLES = Array.from({ length: 24 }, (_, i) => ({
   left: `${(i % 6) * 16.5 + (i % 3) * 2.1}%`,
   top: `${Math.floor(i / 6) * 25 + (i % 4) * 3}%`,
@@ -89,8 +88,8 @@ export function WelcomeScreen({ onFinish }: WelcomeScreenProps) {
       setTimeout(onFinish, 400)
     }
 
-    const firstLoadDelay = healthStatus.connected ? 1350 : 2200
-    const repeatLoadDelay = healthStatus.connected ? 520 : 780
+    const firstLoadDelay = healthStatus.connected ? 1500 : 2200
+    const repeatLoadDelay = healthStatus.connected ? 600 : 780
     const lowPowerDelay = healthStatus.connected ? 700 : 1000
     const targetDelay = reducedMotion
       ? 420
@@ -110,145 +109,132 @@ export function WelcomeScreen({ onFinish }: WelcomeScreenProps) {
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden"
+      className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-bg-void"
       style={{
         opacity: done ? 0 : 1,
-        transition: 'opacity 400ms ease-out',
-        background: 'radial-gradient(ellipse at center, #0f0f14 0%, #050507 100%)',
+        transition: 'opacity 500ms cubic-bezier(0.16, 1, 0.3, 1)',
         pointerEvents: done ? 'none' : 'auto',
       }}
     >
-      {/* Animated grid background */}
+      {/* Cinematic HUD Backgrounds */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(15,15,20,1)_0%,rgba(3,4,6,1)_100%)] z-0" />
+      
+      {/* Vignettting & Scanlines */}
+      <div className="absolute inset-0 z-[1] opacity-40 pointer-events-none" style={{ background: 'radial-gradient(circle, transparent 20%, #000 120%)' }} />
+      <div className="absolute inset-0 z-[2] opacity-[0.03] pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIi8+Cjwvc3ZnPg==')] animate-pulse" />
+
+      {/* Grid Pattern */}
       <div 
-        className="absolute inset-0 opacity-20"
+        className="absolute inset-0 z-[1] opacity-15 pointer-events-none"
         style={{
           backgroundImage: `
-            linear-gradient(rgba(225,6,0,0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(225,6,0,0.03) 1px, transparent 1px)
+            linear-gradient(rgba(225,6,0,0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(225,6,0,0.1) 1px, transparent 1px)
           `,
-          backgroundSize: '50px 50px',
+          backgroundSize: '40px 40px',
+          backgroundPosition: 'center center',
           animation: 'gridPulse 4s ease-in-out infinite',
         }}
       />
 
-      {/* CSS-only particle dots — no JS per-frame */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+      {/* CSS-only particle dots */}
+      <div className="pointer-events-none absolute inset-0 z-[2] overflow-hidden" aria-hidden>
         {PARTICLES.slice(0, visibleParticles).map((p, i) => (
           <div
             key={i}
-            className="welcome-particle absolute h-[3px] w-[3px] rounded-full"
+            className="absolute h-[2px] w-[2px] rounded-full"
             style={{ 
               left: p.left, 
               top: p.top, 
               animationDelay: p.delay,
-              background: 'radial-gradient(circle, rgba(225,6,0,0.9) 0%, rgba(180,6,0,0.4) 50%, transparent 100%)',
-              boxShadow: '0 0 8px rgba(225,6,0,0.7), 0 0 16px rgba(225,6,0,0.3)',
-              opacity: 0.5,
-              animationDuration: lowPowerMode ? '5.2s' : '3.8s'
+              background: 'rgba(225,6,0,0.8)',
+              boxShadow: '0 0 12px rgba(225,6,0,0.6)',
+              opacity: 0.6,
+              animation: `pulse-glow ${lowPowerMode ? '5.2s' : '3.8s'} infinite`
             }}
           />
         ))}
       </div>
 
-      {/* Main card */}
+      {/* Dynamic AAA Loading Container */}
       <div
-        className={`welcome-card relative z-10 w-full rounded-2xl text-center transition-all duration-700 ${isMobile ? 'max-w-[92vw] p-6' : 'max-w-sm p-10'} ${showCard ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-        style={{
-          background: 'linear-gradient(180deg, rgba(18,18,22,0.98) 0%, rgba(8,8,10,0.98) 100%)',
-          border: '1px solid rgba(255,255,255,0.06)',
-          boxShadow: '0 30px 100px rgba(0,0,0,0.7), 0 0 60px rgba(225,6,0,0.08), inset 0 1px 0 rgba(255,255,255,0.05)',
-        }}
+        className={`relative z-10 flex flex-col items-center justify-center transition-all duration-1000 ${showCard ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
       >
-        {/* Logo with glow effect */}
-        <div className="welcome-logo mx-auto mb-6 flex h-22 w-22 items-center justify-center rounded-2xl transition-all duration-500"
-          style={{ 
-            background: 'linear-gradient(135deg, rgba(225,6,0,0.25) 0%, rgba(180,6,0,0.08) 100%)', 
-            border: '1px solid rgba(225,6,0,0.5)',
-            boxShadow: '0 0 40px rgba(225,6,0,0.4), 0 0 80px rgba(225,6,0,0.15), inset 0 0 30px rgba(225,6,0,0.15)',
-            animation: 'pulse-glow 3s ease-in-out infinite',
-          }}>
-          <svg width="40" height="40" viewBox="0 0 32 32" fill="none" aria-hidden className="transition-transform duration-500 hover:scale-110" style={{ filter: 'drop-shadow(0 0 8px rgba(225,6,0,0.5))' }}>
+        {/* Holographic Logo Array */}
+        <div className="relative mb-8 flex h-32 w-32 items-center justify-center">
+          {/* Animated rings */}
+          <div className="absolute inset-0 rounded-full border border-red-core/30 animate-[spin_8s_linear_infinite] shadow-[0_0_30px_rgba(225,6,0,0.2)]" />
+          <div className="absolute inset-2 rounded-full border border-red-core/20 border-dashed animate-[spin_12s_linear_infinite_reverse]" />
+          <div className="absolute inset-0 bg-red-core/10 rounded-full blur-xl animate-pulse" />
+          
+          <svg width="48" height="48" viewBox="0 0 32 32" fill="none" aria-hidden className="relative z-10 drop-shadow-[0_0_12px_rgba(225,6,0,0.8)]">
             <path d="M4 24L10 8L16 20L22 12L28 24" stroke="#e10600" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-            <circle cx="10" cy="8" r="2.5" fill="#e10600" opacity="0.9" />
-            <circle cx="16" cy="20" r="2.5" fill="#e10600" opacity="0.7" />
-            <circle cx="22" cy="12" r="2.5" fill="#e10600" opacity="0.9" />
+            <circle cx="10" cy="8" r="2.5" fill="#e10600" />
+            <circle cx="16" cy="20" r="2.5" fill="#e10600" opacity="0.8" />
+            <circle cx="22" cy="12" r="2.5" fill="#e10600" />
           </svg>
         </div>
 
-        <h1
-          className="welcome-title mb-3 text-4xl font-bold tracking-wide"
-          style={{
-            fontFamily: "'Orbitron', 'Inter', sans-serif",
-            background: 'linear-gradient(135deg, #ffffff 0%, #e10600 60%, #ff6b35 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-            filter: 'drop-shadow(0 0 30px rgba(225,6,0,0.4))',
-          }}
-        >
-          TELEMETRYX
-        </h1>
-        <p className={`font-medium tracking-[0.23em] uppercase text-[#6a7585] ${isMobile ? 'mb-6 text-[11px]' : 'mb-8 text-sm'}`}>
-          Race Intelligence Platform
-        </p>
-
-        {/* Health status indicator - Enhanced */}
-        {healthStatus.checked && (
-          <div 
-            className="mb-6 flex items-center justify-center gap-3 rounded-xl px-5 py-3.5 text-sm font-medium transition-all duration-500"
-            style={{ 
-              background: healthStatus.connected 
-                ? 'linear-gradient(135deg, rgba(21,128,61,0.15) 0%, rgba(21,128,61,0.05) 100%)' 
-                : 'linear-gradient(135deg, rgba(153,27,27,0.15) 0%, rgba(153,27,27,0.05) 100%)',
-              border: `1px solid ${healthStatus.connected ? 'rgba(21,128,61,0.4)' : 'rgba(153,27,27,0.4)'}`,
-              boxShadow: healthStatus.connected 
-                ? '0 0 30px rgba(21,128,61,0.2), inset 0 0 25px rgba(21,128,61,0.05)' 
-                : '0 0 30px rgba(153,27,27,0.2), inset 0 0 25px rgba(153,27,27,0.05)',
-            }}
-          >
-            <div 
-              className={`h-3 w-3 rounded-full ${healthStatus.connected ? 'status-pulse-connected' : 'status-pulse-disconnected'}`}
-              style={{ 
-                background: healthStatus.connected ? '#22c55e' : '#ef4444',
-                boxShadow: healthStatus.connected 
-                  ? '0 0 10px #22c55e, 0 0 20px rgba(34,197,94,0.6)' 
-                  : '0 0 10px #ef4444, 0 0 20px rgba(239,68,68,0.6)'
-              }}
-            />
-            <div className="flex flex-col items-start gap-0.5">
-              <span style={{ color: healthStatus.connected ? '#4ade80' : '#f87171' }} className="font-semibold">
-                {healthStatus.connected ? 'Backend Connected' : 'Offline Mode'}
-              </span>
-              {!healthStatus.connected && healthStatus.error && (
-                <span style={{ color: '#9ca3af' }} className="text-xs font-normal">
-                  {healthStatus.error}
-                </span>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Progress indicator with glow effect */}
-        <div className="space-y-3">
-          <div className="flex items-center justify-between text-[11px] uppercase tracking-wider">
-            <span style={{ color: '#4b5563' }}>Initializing</span>
-            <span style={{ color: '#e10600' }} className={`font-semibold ${healthStatus.checked ? 'animate-pulse' : ''}`}>
-              {healthStatus.checked ? (healthStatus.connected ? 'Ready' : 'Retry') : 'Loading...'}
-            </span>
-          </div>
-          <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/5">
-            <div
-              className="h-full rounded-full progress-glow"
-              style={{
-                background: healthStatus.checked && !healthStatus.connected 
-                  ? 'linear-gradient(90deg,#991b1b,#dc2626,#991b1b)' 
-                  : 'linear-gradient(90deg,#7a0300,#e10600,#ff6b35)',
-                animation: 'welcomeProgress 2s ease-in-out forwards',
-                width: '0%',
-              }}
-            />
+        {/* Cinematic Title */}
+        <div className="flex flex-col items-center">
+          <h1 className="font-display text-5xl md:text-7xl font-black italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white via-white to-fg-muted drop-shadow-[0_0_16px_rgba(255,255,255,0.2)]">
+            TELEMETRY<span className="text-red-core drop-shadow-[0_0_24px_rgba(225,6,0,0.6)]">X</span>
+          </h1>
+          <div className="mt-2 flex items-center gap-4">
+            <div className="h-[1px] w-12 bg-gradient-to-r from-transparent to-red-core/50" />
+            <p className="font-heading text-[12px] uppercase tracking-[0.4em] text-red-core drop-shadow-[0_0_8px_rgba(225,6,0,0.4)]">
+              INITIALIZATION SEQUENCE
+            </p>
+            <div className="h-[1px] w-12 bg-gradient-to-l from-transparent to-red-core/50" />
           </div>
         </div>
+
+        {/* Boot Sequence Terminal Output */}
+        <div className="mt-16 w-[320px] md:w-[480px]">
+          {healthStatus.checked && (
+            <div 
+              className="mb-4 flex items-center justify-between text-xs font-mono font-bold uppercase tracking-widest transition-all duration-500"
+              style={{ color: healthStatus.connected ? '#00FF00' : '#FF2D2D', textShadow: `0 0 10px ${healthStatus.connected ? 'rgba(0,255,0,0.5)' : 'rgba(255,45,45,0.5)'}` }}
+            >
+              <div className="flex items-center gap-3">
+                <span className={`h-2 w-2 rounded-sm ${healthStatus.connected ? 'bg-[#00FF00] animate-pulse' : 'bg-[#FF2D2D]'}`} style={{ boxShadow: `0 0 8px ${healthStatus.connected ? '#00FF00' : '#FF2D2D'}` }} />
+                <span>{healthStatus.connected ? 'SECURE CONNECTION ESTABLISHED' : 'SYSTEM OFFLINE'}</span>
+              </div>
+              <span className="opacity-70">{healthStatus.connected ? 'OK' : 'ERR'}</span>
+            </div>
+          )}
+
+          {!healthStatus.checked && (
+             <div className="mb-4 flex items-center justify-between text-xs font-mono font-bold uppercase tracking-widest text-[#FFB800] drop-shadow-[0_0_10px_rgba(255,184,0,0.5)]">
+               <div className="flex items-center gap-3">
+                 <span className="h-2 w-2 rounded-sm bg-[#FFB800] animate-pulse" style={{ boxShadow: '0 0 8px #FFB800' }} />
+                 <span>HANDSHAKING CORE SERVICES</span>
+               </div>
+               <span className="opacity-70 animate-pulse">WAIT</span>
+             </div>
+          )}
+
+          {/* Aggressive Progress Bar */}
+          <div className="relative h-1 w-full overflow-hidden bg-bg-surface border border-border-micro">
+            <div
+              className="absolute left-0 top-0 h-full bg-red-core shadow-[0_0_12px_rgba(225,6,0,0.8)] transition-all ease-out"
+              style={{
+                width: healthStatus.checked ? (healthStatus.connected ? '100%' : '15%') : '40%',
+                transitionDuration: healthStatus.checked ? '800ms' : '2000ms'
+              }}
+            />
+          </div>
+          
+          <div className="mt-3 flex justify-between font-mono text-[9px] uppercase tracking-widest text-fg-muted/60">
+            <span>SYS.VER 2.4.1</span>
+            <span>{hasSeenWelcome ? 'FAST_BOOT_ENGAGED' : 'COLD_START'}</span>
+          </div>
+        </div>
+      </div>
+      
+      {/* Performance optimization */}
+      <div className="sr-only" aria-hidden="true">
+        Session picker animations loaded
       </div>
     </div>
   )

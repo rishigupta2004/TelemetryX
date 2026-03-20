@@ -53,6 +53,7 @@ interface UPlotChartProps {
     endTime: number
     color: 'purple' | 'green' | 'yellow'
   }[]
+  annotations?: { x: number; y: number; label: string; color?: string }[]
 }
 
 export const UPlotChart = React.memo(function UPlotChart({
@@ -78,7 +79,8 @@ export const UPlotChart = React.memo(function UPlotChart({
   playbackCursorFraction,
   playbackCursorRef,
   onSeek,
-  sectorRegions
+  sectorRegions,
+  annotations
 }: UPlotChartProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const chartRef = useRef<uPlot | null>(null)
@@ -103,6 +105,11 @@ export const UPlotChart = React.memo(function UPlotChart({
     if (Math.abs(value) >= 1000) return `${Math.round(value)}${yTickUnit ? ` ${yTickUnit}` : ''}`
     return `${value.toFixed(Number.isInteger(value) ? 0 : 1)}${yTickUnit ? ` ${yTickUnit}` : ''}`
   }
+
+  const annotationsRef = useRef(annotations)
+  useEffect(() => {
+    annotationsRef.current = annotations
+  }, [annotations])
 
   const formatXTick = (value: number) => {
     if (xTickMode === 'distance') {
@@ -426,6 +433,28 @@ export const UPlotChart = React.memo(function UPlotChart({
         }
       ],
       draw: [
+        (u: uPlot) => {
+          if (!annotationsRef.current?.length) return
+          const { ctx } = u
+          ctx.save()
+          ctx.font = '10px "JetBrains Mono", monospace'
+          ctx.textAlign = 'center'
+          ctx.textBaseline = 'bottom'
+          
+          annotationsRef.current.forEach(ann => {
+            const x = u.valToPos(ann.x, 'x', true)
+            const y = u.valToPos(ann.y, 'y', true)
+            if (x >= u.bbox.left && x <= u.bbox.left + u.bbox.width && 
+                y >= u.bbox.top && y <= u.bbox.top + u.bbox.height) {
+              ctx.fillStyle = ann.color || '#fbbf24' // Amber-400
+              ctx.fillText(ann.label, x, y - 4)
+              ctx.beginPath()
+              ctx.arc(x, y, 2, 0, 2 * Math.PI)
+              ctx.fill()
+            }
+          })
+          ctx.restore()
+        },
         (u: uPlot) => {
           const markerRows = markersRef.current
           const shade = shadingDataRef.current

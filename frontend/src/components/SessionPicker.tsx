@@ -32,19 +32,19 @@ function sortSessions(sessions: string[]): string[] {
 
 function SkeletonItem({ className = '' }: { className?: string }) {
   return (
-    <div className={`animate-pulse rounded-lg bg-white/5 ${className}`}>
-      <div className="h-full w-full bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer" />
+    <div className={`animate-pulse border border-border-micro bg-bg-surface/50 ${className}`}>
+      <div className="h-full w-full bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer" />
     </div>
   )
 }
 
 function SessionItemSkeleton() {
   return (
-    <div className="flex items-center gap-3 rounded-xl border border-white/5 bg-white/[0.02] p-3">
-      <SkeletonItem className="h-10 w-10 rounded-lg" />
-      <div className="flex-1 space-y-2">
-        <SkeletonItem className="h-3 w-24 rounded" />
-        <SkeletonItem className="h-2 w-16 rounded" />
+    <div className="flex items-center gap-4 border-l-2 border-border-soft bg-bg-surface/30 p-4">
+      <SkeletonItem className="h-12 w-12" />
+      <div className="flex-1 space-y-3">
+        <SkeletonItem className="h-4 w-32" />
+        <SkeletonItem className="h-2 w-20" />
       </div>
     </div>
   )
@@ -117,101 +117,92 @@ export default function SessionPicker({ open, onClose }: SessionPickerProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center"
+      className="fixed inset-0 z-50 flex items-center justify-center font-ui"
       style={{
-        animation: closing ? 'modalOverlayOut 0.2s ease-in forwards' : 'modalOverlayIn 0.25s ease-out',
+        animation: closing ? 'modalOverlayOut 0.2s ease-in forwards' : 'modalOverlayIn 0.2s ease-out',
       }}
       onClick={(e) => { if (e.target === e.currentTarget) handleClose() }}
     >
-      {/* Backdrop with enhanced glassmorphism */}
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-2xl" />
+      {/* Heavy Cinematic Backdrop */}
+      <div className="absolute inset-0 bg-bg-void/90 backdrop-blur-xl" />
+      <div className="absolute inset-0 z-[1] opacity-[0.05] pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIi8+Cjwvc3ZnPg==')]" />
       
-      {/* Ambient glow effects */}
-      <div className="absolute top-1/4 left-1/4 h-96 w-96 rounded-full bg-accent/5 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-accent/8 blur-[120px] pointer-events-none" />
+      {/* Intense Accent Glows */}
+      <div className="absolute top-0 left-1/4 h-[500px] w-[500px] rounded-full bg-red-core/10 blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 h-[500px] w-[500px] bg-red-core/5 blur-[150px] pointer-events-none" />
 
-      {/* Modal */}
+      {/* Terminal Modal Window */}
       <div
-        className="relative z-10 w-[920px] max-w-[95vw] rounded-3xl p-1"
+        className="relative z-10 w-[1080px] max-w-[95vw]"
         style={{
           animation: closing ? 'modalCardOut 0.2s ease-in forwards' : 'modalCardIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
         }}
       >
-        {/* Gradient border container */}
-        <div className="relative rounded-3xl bg-gradient-to-br from-white/20 via-white/10 to-white/5 p-[1px]">
-          <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-accent/30 via-transparent to-accent/10 opacity-50" />
+        <div className="relative border border-red-core/30 bg-bg-panel/95 shadow-[0_0_50px_rgba(225,6,0,0.15)] overflow-hidden">
           
-          {/* Inner modal content */}
-          <div
-            className="relative rounded-[22px] border border-white/10 bg-[#0a0a0f]/95 backdrop-blur-xl p-6 shadow-2xl"
-            style={{
-              boxShadow: `
-                0 0 80px -20px rgba(99, 102, 241, 0.3),
-                0 30px 60px -20px rgba(139, 92, 246, 0.15),
-                0 0 0 1px rgba(255, 255, 255, 0.05) inset,
-                0 20px 40px -10px rgba(0, 0, 0, 0.5)
-              `
-            }}
-          >
-            {/* Header */}
-            <div className="mb-6 flex items-center justify-between">
-              <div className="relative">
-                <h2 className="text-2xl font-bold tracking-[-0.03em] text-white">
-                  <span className="bg-gradient-to-r from-white via-white to-white/60 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
-                    Select Session
-                  </span>
-                </h2>
-                <p className="mt-1.5 text-sm text-text-muted/70">Choose year → race → session type</p>
-                
-                {/* Animated underline */}
-                <div className="absolute -bottom-1 left-0 h-0.5 w-0 animate-underline-expand bg-gradient-to-r from-accent to-red-400 rounded-full" />
+          {/* Tactical Header Overlay */}
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-core/0 via-red-core to-red-core/0 shadow-[0_0_15px_#e10600]" />
+          <div className="absolute -top-[10px] -left-[10px] w-[40px] h-[40px] border-t-2 border-l-2 border-red-core/50" />
+          <div className="absolute -top-[10px] -right-[10px] w-[40px] h-[40px] border-t-2 border-r-2 border-red-core/50" />
+          <div className="absolute -bottom-[10px] -left-[10px] w-[40px] h-[40px] border-b-2 border-l-2 border-red-core/50" />
+          <div className="absolute -bottom-[10px] -right-[10px] w-[40px] h-[40px] border-b-2 border-r-2 border-red-core/50" />
+
+          <div className="relative p-8 px-10">
+            {/* Header section */}
+            <div className="mb-8 flex items-end justify-between border-b border-border/50 pb-4">
+              <div className="relative flex items-center gap-4">
+                <div className="flex h-12 w-12 items-center justify-center bg-red-core/10 border border-red-core/30 shadow-[0_0_15px_rgba(225,6,0,0.2)]">
+                  <svg width="24" height="24" viewBox="0 0 32 32" fill="none" className="drop-shadow-[0_0_8px_#e10600]">
+                    <path d="M4 24L10 8L16 20L22 12L28 24" stroke="#e10600" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </div>
+                <div>
+                  <h2 className="font-display text-2xl font-black uppercase italic tracking-widest text-fg-primary drop-shadow-md">
+                    SESSION <span className="text-red-core drop-shadow-[0_0_8px_rgba(225,6,0,0.5)]">SELECTOR</span>
+                  </h2>
+                  <div className="mt-1 flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-[0.3em] text-red-core/80">
+                    <span className="h-1 w-1 bg-red-core animate-pulse" /> TARGET ACQUISITION
+                  </div>
+                </div>
               </div>
               
               <button
-                className="group relative flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-text-muted transition-all duration-300 hover:border-accent/50 hover:bg-accent/20 hover:text-white hover:scale-110 hover:shadow-lg hover:shadow-accent/25"
+                className="group relative flex h-10 w-10 items-center justify-center border border-border-soft bg-bg-surface text-fg-muted transition-all duration-300 hover:border-red-core/50 hover:bg-red-core/10 hover:text-red-core hover:shadow-[0_0_15px_rgba(225,6,0,0.3)]"
                 onClick={handleClose}
                 type="button"
-                title="Close (Esc)"
+                title="Abort (Esc)"
               >
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-accent/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                <svg className="h-5 w-5 relative z-10 transition-transform duration-300 group-hover:rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <div className="absolute inset-0 bg-red-core/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                <svg className="h-5 w-5 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
 
-            {/* Loading states */}
+            {/* Loading / Overlays */}
             {(loadingState === 'loading' || pendingAction) && (
-              <div className="mb-4 space-y-3" style={{ animation: 'fadeInUp 0.3s ease-out' }}>
-                <div className="flex items-center gap-2.5 text-sm text-text-secondary">
-                  <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-text-secondary border-t-accent" />
-                  <span className="font-medium">Loading…</span>
+              <div className="mb-6 border border-red-core/20 bg-red-core/5 p-4 backdrop-blur-sm shadow-[inset_0_0_20px_rgba(225,6,0,0.1)]">
+                <div className="flex items-center gap-4 text-sm text-red-core">
+                  <div className="h-5 w-5 border-2 border-red-core/30 border-t-red-core animate-spin rounded-full shadow-[0_0_8px_#e10600]" />
+                  <span className="font-mono font-bold tracking-widest uppercase">Fetching Central Uplink...</span>
                 </div>
                 
                 {pendingAction === 'session' && (
-                  <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
-                    <div className="mb-3 flex items-center justify-between">
-                      <span className="text-sm font-medium text-text-primary">Loading selected session</span>
-                      <span className="text-sm font-semibold text-accent">in progress</span>
+                  <div className="mt-4 border-t border-red-core/20 pt-4">
+                    <div className="mb-2 flex items-center justify-between font-mono text-[11px] font-bold uppercase tracking-widest text-fg-primary">
+                      <span>Syncing telemetry stream</span>
+                      <span className="text-red-core animate-pulse">ENGAGED</span>
                     </div>
                     
-                    {/* Enhanced progress bar */}
-                    <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-white/10">
+                    {/* Aggressive Data Progress Bar */}
+                    <div className="relative h-1.5 w-full overflow-hidden bg-bg-surface border border-border">
                       <div
-                        className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-accent via-red-500 to-accent transition-all duration-500 ease-out"
-                        style={{ width: '100%' }}
-                      >
-                        <div className="absolute inset-0 bg-gradient-to-b from-white/30 to-transparent" />
-                      </div>
-                      {/* Progress shimmer effect */}
-                      <div 
-                        className="absolute inset-0 -translate-x-full animate-shimmer-progress bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                        className="absolute inset-y-0 left-0 bg-red-core shadow-[0_0_12px_#e10600] transition-all duration-500 ease-out"
                         style={{ width: '100%' }}
                       />
                     </div>
-                    
-                    <div className="mt-2 text-xs text-text-muted">
-                      Feature and ML datasets will load lazily per view.
+                    <div className="mt-2 text-[10px] font-mono tracking-widest text-fg-muted/60 uppercase">
+                      // BYPASSING CACHE - ESTABLISHING PIPELINE
                     </div>
                   </div>
                 )}
@@ -219,163 +210,131 @@ export default function SessionPicker({ open, onClose }: SessionPickerProps) {
             )}
 
             {apiError && (
-              <div className="mb-4 rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300 backdrop-blur-sm">
-                <span className="font-semibold">Error:</span> {apiError.message}
+              <div className="mb-6 flex items-start gap-4 border border-red-core/50 bg-red-core/20 p-4 shadow-[0_0_15px_rgba(225,6,0,0.3)] backdrop-blur-md">
+                <span className="text-xl text-white">⚠</span>
+                <div>
+                  <div className="font-mono text-sm font-bold text-white tracking-widest uppercase">Uplink Failure</div>
+                  <div className="mt-1 font-mono text-xs text-white/80">{apiError.message}</div>
+                </div>
               </div>
             )}
 
-            <div className="grid grid-cols-3 gap-5">
-              {/* Year column */}
-              <section className="group">
-                <h3 className="mb-3 flex items-center gap-2.5 text-xs font-bold uppercase tracking-[0.2em] text-text-muted/60">
-                  <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-white/5 border border-white/10">
-                    <svg className="h-4 w-4 text-accent/80" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
+            {/* Three Pillar Selection Interface */}
+            <div className="grid grid-cols-3 gap-8">
+              {/* Year Pillar */}
+              <section className="group relative border-r border-border/50 pr-8">
+                <h3 className="mb-4 flex items-center gap-3 font-mono text-[10px] font-black uppercase tracking-[0.25em] text-fg-muted">
+                  <div className="flex h-5 w-5 items-center justify-center border border-border-soft bg-bg-surface text-fg-primary">
+                    1
                   </div>
-                  <span>Year</span>
+                  <span>Campaign</span>
                 </h3>
-                <div className="scrollbar-custom max-h-80 space-y-1.5 overflow-auto rounded-2xl border border-white/10 bg-white/[0.02] p-2.5">
+                
+                <div className="scrollbar-custom max-h-[450px] space-y-2 overflow-auto pr-2">
                   {seasons.length === 0 && pendingAction === 'seasons' ? (
-                    Array.from({ length: 5 }).map((_, i) => (
-                      <SessionItemSkeleton key={i} />
-                    ))
+                    Array.from({ length: 5 }).map((_, i) => <SessionItemSkeleton key={i} />)
                   ) : (
-                    seasons.map((season, i) => (
-                      <button
-                        key={season.year}
-                        className={`group/item relative w-full rounded-xl px-4 py-3.5 text-left text-sm font-semibold transition-all duration-300 ${
-                          selectedYear === season.year
-                            ? 'bg-gradient-to-r from-accent/30 via-accent/20 to-accent/10 text-white border border-accent/40 shadow-lg shadow-accent/20'
-                            : 'text-text-secondary hover:bg-white/10 hover:text-white border border-transparent hover:border-white/10'
-                        }`}
-                        style={{ 
-                          animation: `fadeInUp 0.3s ease-out ${i * 30}ms both`,
-                        }}
-                        onClick={() => {
-                          setPendingAction('races')
-                          void fetchRaces(season.year).finally(() => setPendingAction(null))
-                        }}
-                        type="button"
-                      >
-                        {/* Glow effect for selected */}
-                        {selectedYear === season.year && (
-                          <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-accent/20 to-red-500/10 blur-xl transition-all duration-300 group-hover/item:blur-2xl" />
-                        )}
-                        <span className="relative z-10">{season.year}</span>
-                      </button>
-                    ))
+                    seasons.map((season, i) => {
+                      const isSelected = selectedYear === season.year;
+                      return (
+                        <button
+                          key={season.year}
+                          className={`relative w-full border-l-4 px-5 py-4 text-left font-display text-lg font-bold transition-all duration-200 ${
+                            isSelected
+                              ? 'border-red-core bg-red-core/15 text-white shadow-[inset_20px_0_40px_-20px_rgba(225,6,0,0.3)]'
+                              : 'border-transparent bg-bg-surface/30 text-fg-secondary hover:border-red-core/30 hover:bg-bg-surface hover:text-fg-primary'
+                          }`}
+                          style={{ animation: `fadeInUp 0.3s ease-out ${i * 30}ms both` }}
+                          onClick={() => {
+                            setPendingAction('races')
+                            void fetchRaces(season.year).finally(() => setPendingAction(null))
+                          }}
+                          type="button"
+                        >
+                          {isSelected && <div className="absolute top-0 right-0 bottom-0 w-8 bg-gradient-to-l from-red-core/10 to-transparent" />}
+                          <span className={`${isSelected ? 'drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]' : ''}`}>{season.year}</span>
+                        </button>
+                      )
+                    })
                   )}
                 </div>
               </section>
 
-              {/* Race column */}
-              <section className="group">
-                <h3 className="mb-3 flex items-center gap-2.5 text-xs font-bold uppercase tracking-[0.2em] text-text-muted/60">
-                  <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-white/5 border border-white/10">
-                    <svg className="h-4 w-4 text-amber-500/80" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
+              {/* Race Pillar */}
+              <section className="group relative border-r border-border/50 pr-8">
+                <h3 className="mb-4 flex items-center gap-3 font-mono text-[10px] font-black uppercase tracking-[0.25em] text-fg-muted">
+                  <div className="flex h-5 w-5 items-center justify-center border border-border-soft bg-bg-surface text-fg-primary">
+                    2
                   </div>
-                  <span>Race</span>
+                  <span>Location Drop</span>
                 </h3>
-                <div className="scrollbar-custom max-h-80 space-y-1.5 overflow-auto rounded-2xl border border-white/10 bg-white/[0.02] p-2.5">
+                
+                <div className="scrollbar-custom max-h-[450px] space-y-2 overflow-auto pr-2">
                   {selectedYear === null && (
-                    <div className="flex flex-col items-center justify-center py-8 text-center">
-                      <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/5 border border-white/10">
-                        <svg className="h-6 w-6 text-text-muted/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                      </div>
-                      <div className="text-sm text-text-muted/50">Select a year first</div>
+                    <div className="flex h-[200px] flex-col items-center justify-center border border-dashed border-border-soft bg-bg-surface/20 text-center">
+                      <div className="font-mono text-[10px] font-bold tracking-widest text-fg-muted uppercase">Awaiting Campaign</div>
                     </div>
                   )}
                   {selectedYear !== null && races.length === 0 && loadingState !== 'loading' && !pendingAction && (
-                    <div className="flex flex-col items-center justify-center py-8 text-center">
-                      <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/5 border border-white/10">
-                        <svg className="h-6 w-6 text-text-muted/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      </div>
-                      <div className="text-sm text-text-muted/50">No races available</div>
+                    <div className="flex h-[200px] flex-col items-center justify-center border border-dashed border-red-500/20 bg-red-500/5 text-center text-red-500/70">
+                      <div className="font-mono text-[10px] font-bold tracking-widest uppercase">No Intel Available</div>
                     </div>
                   )}
                   {selectedYear !== null && (races.length === 0 || pendingAction === 'races') && (
-                    Array.from({ length: 6 }).map((_, i) => (
-                      <SessionItemSkeleton key={i} />
-                    ))
+                    Array.from({ length: 7 }).map((_, i) => <SessionItemSkeleton key={i} />)
                   )}
-                  {sortedRaces.map((race, i) => (
-                    <button
-                      key={race.race_name ?? race.name ?? `${race.display_name}-${i}`}
-                      className={`group/item relative w-full rounded-xl px-4 py-3.5 text-left text-sm transition-all duration-300 ${
-                        selectedRace === (race.race_name ?? race.name)
-                          ? 'bg-gradient-to-r from-accent/30 via-accent/20 to-accent/10 text-white border border-accent/40 shadow-lg shadow-accent/20'
-                          : 'text-text-secondary hover:bg-white/10 hover:text-white border border-transparent hover:border-white/10'
-                      }`}
-                      style={{ animation: `fadeInUp 0.3s ease-out ${i * 25}ms both` }}
-                      onClick={() => {
-                        if (!selectedYear) return
-                        const raceKey = race.race_name ?? race.name ?? race.display_name ?? ''
-                        setPendingAction('races')
-                        void fetchSessions(selectedYear, raceKey).finally(() => setPendingAction(null))
-                      }}
-                      type="button"
-                    >
-                      {selectedRace === (race.race_name ?? race.name) && (
-                        <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-accent/20 to-red-500/10 blur-xl transition-all duration-300 group-hover/item:blur-2xl" />
-                      )}
-                      <span className="relative z-10 font-medium">{race.display_name ?? race.race_name ?? race.name ?? 'Unknown'}</span>
-                    </button>
-                  ))}
+                  
+                  {sortedRaces.map((race, i) => {
+                    const isSelected = selectedRace === (race.race_name ?? race.name);
+                    return (
+                      <button
+                        key={race.race_name ?? race.name ?? `${race.display_name}-${i}`}
+                        className={`group/item relative w-full border-l-4 px-5 py-4 text-left transition-all duration-200 ${
+                          isSelected
+                            ? 'border-[#00E5FF] bg-[#00E5FF]/15 shadow-[inset_20px_0_40px_-20px_rgba(0,229,255,0.2)]'
+                            : 'border-transparent bg-bg-surface/30 hover:border-[#00E5FF]/30 hover:bg-bg-surface'
+                        }`}
+                        style={{ animation: `fadeInUp 0.3s ease-out ${i * 25}ms both` }}
+                        onClick={() => {
+                          if (!selectedYear) return
+                          const raceKey = race.race_name ?? race.name ?? race.display_name ?? ''
+                          setPendingAction('races')
+                          void fetchSessions(selectedYear, raceKey).finally(() => setPendingAction(null))
+                        }}
+                        type="button"
+                      >
+                        {isSelected && <div className="absolute top-0 right-0 bottom-0 w-8 bg-gradient-to-l from-[#00E5FF]/10 to-transparent" />}
+                        <div className={`font-display text-[15px] font-bold leading-tight ${isSelected ? 'text-white drop-shadow-[0_0_8px_rgba(0,229,255,0.6)]' : 'text-fg-secondary group-hover/item:text-fg-primary'}`}>
+                          {race.display_name ?? race.race_name ?? race.name ?? 'UNKNOWN'}
+                        </div>
+                      </button>
+                    )
+                  })}
                 </div>
               </section>
 
-              {/* Session column */}
-              <section className="group">
-                <h3 className="mb-3 flex items-center gap-2.5 text-xs font-bold uppercase tracking-[0.2em] text-text-muted/60">
-                  <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-white/5 border border-white/10">
-                    <svg className="h-4 w-4 text-green-500/80" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-                    </svg>
+              {/* Session Pillar */}
+              <section className="group relative">
+                <h3 className="mb-4 flex items-center gap-3 font-mono text-[10px] font-black uppercase tracking-[0.25em] text-fg-muted">
+                  <div className="flex h-5 w-5 items-center justify-center border border-border-soft bg-bg-surface text-fg-primary">
+                    3
                   </div>
-                  <span>Session</span>
+                  <span>Stream Vector</span>
                 </h3>
-                <div className="scrollbar-custom max-h-80 space-y-2 overflow-auto rounded-2xl border border-white/10 bg-white/[0.02] p-2.5">
+                
+                <div className="scrollbar-custom max-h-[450px] space-y-2 overflow-auto pr-2">
                   {!selectedRaceObj && (
-                    <div className="flex flex-col items-center justify-center py-8 text-center">
-                      <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl border border-accent/45 bg-gradient-to-br from-accent/25 to-accent/5 shadow-[0_0_28px_rgba(225,6,0,0.25)]">
-                        <svg width="20" height="20" viewBox="0 0 32 32" fill="none" aria-hidden>
-                          <path d="M4 24L10 8L16 20L22 12L28 24" stroke="#e10600" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                          <circle cx="10" cy="8" r="2.2" fill="#e10600" opacity="0.9" />
-                          <circle cx="16" cy="20" r="2.2" fill="#e10600" opacity="0.7" />
-                          <circle cx="22" cy="12" r="2.2" fill="#e10600" opacity="0.9" />
-                        </svg>
-                      </div>
-                      <div className="text-[11px] font-semibold tracking-[0.22em] text-text-muted/60 uppercase">TelemetryX Lobby</div>
-                      <div className="mt-1 text-sm font-semibold text-text-primary">Select a race to unlock sessions</div>
-                      <div className="mt-3 w-full max-w-[190px] rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2">
-                        <div className="mb-1.5 flex items-center justify-between text-[10px] uppercase tracking-[0.16em] text-text-muted/70">
-                          <span>Scanner</span>
-                          <span className="text-accent">Standby</span>
-                        </div>
-                        <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
-                          <div className="h-full w-full -translate-x-full rounded-full bg-gradient-to-r from-transparent via-accent/90 to-transparent animate-shimmer-progress" />
-                        </div>
-                      </div>
-                      <div className="mt-2 text-[11px] text-text-muted/45">Pick year and race from the left lanes</div>
+                    <div className="flex h-[200px] flex-col items-center justify-center border border-dashed border-border-soft bg-bg-surface/20 text-center">
+                      <div className="font-mono text-[10px] font-bold tracking-widest text-fg-muted uppercase">Lock Location Drop First</div>
                     </div>
                   )}
                   {selectedRaceObj && sessions.length === 0 && (
-                    Array.from({ length: 4 }).map((_, i) => (
-                      <SessionItemSkeleton key={i} />
-                    ))
+                     Array.from({ length: 4 }).map((_, i) => <SessionItemSkeleton key={i} />)
                   )}
-                  {selectedRaceObj &&
-                    sortSessions(sessions).map((session, i) => (
+                  {selectedRaceObj && sortSessions(sessions).map((session, i) => (
                       <button
                         key={session}
-                        className="group/item relative w-full rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3.5 text-left transition-all duration-300 hover:border-accent/40 hover:bg-white/10 hover:shadow-lg hover:shadow-accent/10"
+                        className="group/item relative w-full border-y border-transparent border-l-4 px-5 py-4 text-left bg-bg-surface/30 transition-all duration-300 hover:border-l-red-core hover:border-y-red-core/30 hover:bg-red-core/10 hover:shadow-[0_0_20px_rgba(225,6,0,0.2)]"
                         style={{ animation: `fadeInUp 0.3s ease-out ${i * 40}ms both` }}
                         onClick={() => {
                           if (!selectedYear || !selectedRaceObj) return
@@ -387,19 +346,19 @@ export default function SessionPicker({ open, onClose }: SessionPickerProps) {
                         }}
                         type="button"
                       >
-                        <div className="relative z-10">
-                          <div className="text-sm font-bold text-text-primary transition-colors duration-200 group-hover/item:text-white">
-                            {session}
+                        <div className="relative z-10 flex items-center justify-between">
+                          <div>
+                            <div className="font-display text-2xl font-black italic tracking-tighter text-fg-primary transition-all duration-300 group-hover/item:text-white group-hover/item:drop-shadow-[0_0_10px_rgba(225,6,0,0.8)]">
+                              {session}
+                            </div>
+                            <div className="font-mono text-[10px] font-bold uppercase tracking-widest text-fg-muted mt-1 transition-colors duration-300 group-hover/item:text-red-core/80">
+                              {SESSION_LABELS[session] ?? session}
+                            </div>
                           </div>
-                          <div className="text-xs text-text-muted/60 mt-0.5 transition-colors duration-200 group-hover/item:text-text-muted">
-                            {SESSION_LABELS[session] ?? session}
+                          
+                          <div className="flex h-8 w-8 items-center justify-center rounded-sm border border-transparent bg-transparent opacity-0 transition-all duration-300 group-hover/item:border-red-core/50 group-hover/item:bg-red-core/20 group-hover/item:opacity-100">
+                            <span className="font-mono text-sm font-bold text-red-core">G</span>
                           </div>
-                        </div>
-                        {/* Arrow indicator */}
-                        <div className="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 transition-all duration-300 group-hover/item:translate-x-1 group-hover/item:opacity-100">
-                          <svg className="h-4 w-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                          </svg>
                         </div>
                       </button>
                     ))}
@@ -410,7 +369,6 @@ export default function SessionPicker({ open, onClose }: SessionPickerProps) {
         </div>
       </div>
 
-      {/* Performance optimization: Move animations to CSS classes */}
       <div className="sr-only" aria-hidden="true">
         Session picker animations loaded
       </div>

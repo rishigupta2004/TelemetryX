@@ -13,7 +13,7 @@ interface MultiDriverTelemetryProps {
 }
 
 const CHART_HEIGHT = 140
-const METRICS: ChannelKey[] = ['speed', 'throttle', 'brake', 'gear']
+const METRICS: (ChannelKey | 'delta')[] = ['delta', 'speed', 'throttle', 'brake', 'lonAcc', 'latAcc', 'gear']
 
 interface ProcessedDriverData {
   driver: SelectedDriver
@@ -22,6 +22,9 @@ interface ProcessedDriverData {
   throttle: number[]
   brake: number[]
   gear: number[]
+  lonAcc: number[]
+  latAcc: number[]
+  delta: number[]
 }
 
 interface ProcessedData {
@@ -160,13 +163,49 @@ export const MultiDriverTelemetry = React.memo(function MultiDriverTelemetry({
         driver,
         distance: needsDownsampling ? distance.filter((_, i) => i % Math.floor(timestamps.length / MAX_TELEMETRY_POINTS) === 0).slice(0, MAX_TELEMETRY_POINTS) : distance,
         speed: needsDownsampling ? speed.filter((_, i) => i % Math.floor(speed.length / MAX_TELEMETRY_POINTS) === 0).slice(0, MAX_TELEMETRY_POINTS) : speed,
-        throttle: needsDownsampling ? throttle.filter((_, i) => i % Math.floor(throttle.length / MAX_TELEMETRY_POINTS) === 0).slice(0, MAX_TELEMETRY_POINTS) : throttle,
-        brake: needsDownsampling ? brake.filter((_, i) => i % Math.floor(brake.length / MAX_TELEMETRY_POINTS) === 0).slice(0, MAX_TELEMETRY_POINTS) : brake,
         gear: needsDownsampling ? gear.filter((_, i) => i % Math.floor(gear.length / MAX_TELEMETRY_POINTS) === 0).slice(0, MAX_TELEMETRY_POINTS) : gear,
+        lonAcc: [], 
+        latAcc: [],
+        delta: [],
+        times: needsDownsampling ? filteredRows.map(r => r.timestamp - lapInfo.lapStartSeconds).filter((_, i) => i % Math.floor(filteredRows.length / MAX_TELEMETRY_POINTS) === 0).slice(0, MAX_TELEMETRY_POINTS) : filteredRows.map(r => r.timestamp - lapInfo.lapStartSeconds),
       })
     }
 
     if (!results.length) return null
+
+    // Post-process to calculate accelerations and deltas
+    results.forEach((d, idx) => {
+      // Lon Acc: (v1 - v0) / dt
+      d.lonAcc = d.speed.map((v, i, arr) => {
+        if (i === 0) return 0
+        const dv = (v - arr[i - 1]) / 3.6
+        // Approximate dt from distance/speed if timestamps aren't precise enough
+        const distStep = d.distance[i] - d.distance[i-1]
+        const vAvg = (v + arr[i-1]) / (2 * 3.6)
+        const dt = distStep / (vAvg || 0.1)
+        return dv / (dt || 0.1) / 9.80665
+      })
+      d.latAcc = new Array(d.speed.length).fill(0) 
+
+      // Delta relative to first driver
+      if (idx === 0) {
+        d.delta = new Array(d.speed.length).fill(0)
+      } else {
+        const baseline = results[0]
+        d.delta = d.distance.map((dist, i) => {
+          // Find time at this distance in baseline
+          let lo = 0, hi = baseline.distance.length - 1
+          while (lo < hi) {
+            const mid = (lo + hi) >> 1
+            if (baseline.distance[mid] < dist) lo = mid + 1
+            else hi = mid
+          }
+          const baseTime = (baseline as any).times[lo] || 0
+          const currTime = (d as any).times[i] || 0
+          return currTime - baseTime
+        })
+      }
+    })
 
     const maxDistance = Math.max(...results.map(r => r.distance[r.distance.length - 1] || 0))
     if (maxDistance === 0) return null
@@ -194,6 +233,9 @@ export const MultiDriverTelemetry = React.memo(function MultiDriverTelemetry({
       case 'throttle': return driverData.throttle
       case 'brake': return driverData.brake
       case 'gear': return driverData.gear
+      case 'lonAcc': return driverData.lonAcc
+      case 'latAcc': return driverData.latAcc
+      case 'delta': return driverData.delta
       case 'rpm': return []
       case 'drs': return []
       default: return []

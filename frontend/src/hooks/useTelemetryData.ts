@@ -55,10 +55,16 @@ export function useTelemetryData(
   const telemetryData = useTelemetryStore((s) => s.telemetryData)
   const telemetryWindowStart = useTelemetryStore((s) => s.windowStart)
   const telemetryWindowEnd = useTelemetryStore((s) => s.windowEnd)
-  const asFiniteNumber = (value: unknown): number => {
-    const num = Number(value)
-    return Number.isFinite(num) ? num : Number.NaN
-  }
+const asFiniteNumber = (value: unknown): number => {
+  const num = Number(value)
+  return Number.isFinite(num) ? num : Number.NaN
+}
+
+const formatDelta = (v: number) => {
+  if (!Number.isFinite(v)) return '--'
+  const sign = v > 0 ? '+' : ''
+  return `${sign}${v.toFixed(3)}s`
+}
 
   const drivers = sessionData?.drivers || []
   const laps = fullLaps.length ? fullLaps : sessionData?.laps || []
@@ -351,6 +357,68 @@ export function useTelemetryData(
     const alignedPrimary = (key: MetricKey) => sourceRows.map((r) => asFiniteNumber(r[key]))
     const alignedCompare = (key: MetricKey) => align(key, sourceRows)
 
+    const speed = { primary: alignedPrimary('speed'), compare: alignedCompare('speed') }
+    const throttle = { primary: alignedPrimary('throttle'), compare: alignedCompare('throttle') }
+    const brake = { primary: alignedPrimary('brake'), compare: alignedCompare('brake') }
+    const gear = { primary: alignedPrimary('gear'), compare: alignedCompare('gear') }
+    const rpm = { primary: alignedPrimary('rpm'), compare: alignedCompare('rpm') }
+    const drs = { primary: alignedPrimary('drs'), compare: alignedCompare('drs') }
+
+    const lonAcc = {
+      primary: sourceRows.map((r, i, arr) => {
+        if (i === 0) return 0
+        const dv = (Number(r.speed || 0) - Number(arr[i - 1].speed || 0)) / 3.6
+        const dt = Math.max(0.001, (timestampsAbs[i] ?? 0) - (timestampsAbs[i - 1] ?? 0))
+        return dv / dt / 9.80665
+      }),
+      compare: align('speed', sourceRows).map((v, i, arr) => {
+        if (i === 0) return 0
+        const dv = (v - (arr[i - 1] ?? v)) / 3.6
+        const dt = Math.max(0.001, (timestampsAbs[i] ?? 0) - (timestampsAbs[i - 1] ?? 0))
+        return dv / dt / 9.80665
+      })
+    }
+
+    const latAcc = {
+      primary: sourceRows.map((r) => asFiniteNumber(r.latAcc ?? 0)),
+      compare: align('latAcc', sourceRows)
+    }
+
+    const delta = {
+      primary: new Array(sourceRows.length).fill(0),
+      compare: (() => {
+        if (!cRows.length || !compareDriver) return []
+        const cLaps = lapsByDriver.get(compareDriver) ?? []
+        const compareSyncLap = cLaps.find(l => l.lapNumber === activeLapNumber)
+        return sourceRows.map((p, i) => {
+           const pT = p.timestamp - lapT0
+           const cT = align('timestamp', sourceRows)[i] - (compareSyncLap?.lapStartSeconds ?? lapT0)
+           return pT - cT
+        })
+      })()
+    }
+
+    // Peak detection for speed
+    const peaks: { x: number; y: number; label: string }[] = []
+    const priSpeed = speed.primary
+    if (priSpeed.length > 20) {
+      for (let i = 15; i < priSpeed.length - 15; i++) {
+        const curr = priSpeed[i]
+        const prev = priSpeed[i - 1]
+        const next = priSpeed[i + 1]
+        if (curr > 250 && curr > prev && curr > next) {
+          const isMax = priSpeed.slice(i - 20, i + 20).every(v => v <= curr)
+          if (isMax) {
+            peaks.push({ x: distance[i], y: curr, label: Math.round(curr).toString() })
+            i += 40 // Substantial gap between peak annotations
+          }
+        }
+      }
+    }
+
+    const distanceMax = distance[distance.length - 1] ?? 0
+    const useDistance = distanceMax > 100
+
     return {
       lapT0,
       lapT1,
@@ -358,12 +426,17 @@ export function useTelemetryData(
       timestampsAbs,
       timestampsRel: timestampsAbs.map((t) => t - lapT0),
       distance,
-      speed: { primary: alignedPrimary('speed'), compare: alignedCompare('speed') },
-      throttle: { primary: alignedPrimary('throttle'), compare: alignedCompare('throttle') },
-      brake: { primary: alignedPrimary('brake'), compare: alignedCompare('brake') },
-      gear: { primary: alignedPrimary('gear'), compare: alignedCompare('gear') },
-      rpm: { primary: alignedPrimary('rpm'), compare: alignedCompare('rpm') },
-      drs: { primary: alignedPrimary('drs'), compare: alignedCompare('drs') },
+      useDistance,
+      speed,
+      throttle,
+      brake,
+      gear,
+      rpm,
+      drs,
+      lonAcc,
+      latAcc,
+      delta,
+      peaks
     }
   }, [telemetryByCode, selectedDriver, compareDriver, lapTimeWindow])
 
@@ -426,13 +499,19 @@ export interface ChartDataResult {
     lapT1: number
     fullLapDuration: number
     timestampsAbs: number[]
+    timestampsRel: number[]
     distance: number[]
+    useDistance: boolean
     speed: MetricPair
     throttle: MetricPair
     brake: MetricPair
     gear: MetricPair
     rpm: MetricPair
     drs: MetricPair
+    lonAcc: MetricPair
+    latAcc: MetricPair
+    delta: MetricPair
+    peaks?: { x: number; y: number; label: string; color?: string }[]
   } | null
   builtCharts: BuiltChart[]
 }
@@ -452,23 +531,29 @@ export function useTelemetryCharts(
 
     const end = totalPoints
 
-    const pick = (k: MetricKey): MetricPair => ({
-      primary: windowedTelemetry[k].primary.slice(0, end),
-      compare: windowedTelemetry[k].compare.slice(0, end),
+    const pick = (k: MetricKey | 'delta'): MetricPair => ({
+      primary: windowedTelemetry[k].primary,
+      compare: windowedTelemetry[k].compare,
     })
 
     return {
       lapT0: windowedTelemetry.lapT0,
       lapT1: windowedTelemetry.lapT1,
       fullLapDuration: windowedTelemetry.fullLapDuration,
-      timestampsAbs: windowedTelemetry.timestampsAbs.slice(0, end),
-      distance: windowedTelemetry.distance.slice(0, end),
+      timestampsAbs: windowedTelemetry.timestampsAbs,
+      timestampsRel: windowedTelemetry.timestampsRel,
+      distance: windowedTelemetry.distance,
+      useDistance: windowedTelemetry.useDistance,
       speed: pick('speed'),
       throttle: pick('throttle'),
       brake: pick('brake'),
       gear: pick('gear'),
       rpm: pick('rpm'),
       drs: pick('drs'),
+      lonAcc: pick('lonAcc'),
+      latAcc: pick('latAcc'),
+      delta: pick('delta'),
+      peaks: windowedTelemetry.peaks,
     }
   }, [windowedTelemetry])
 
@@ -476,7 +561,11 @@ export function useTelemetryCharts(
     if (!chartData || !selectedDriver) return []
 
     const distanceMax = chartData.distance[chartData.distance.length - 1] ?? 0
+    const useDistance = chartData.useDistance && distanceMax > 100
+    const xAxis = useDistance ? chartData.distance : chartData.timestampsRel
+
     const distanceAtTime = (tAbs: number) => {
+      if (!useDistance) return tAbs - chartData.lapT0
       const times = chartData.timestampsAbs
       const dist = chartData.distance
       if (!times.length || !dist.length) return 0
@@ -551,7 +640,7 @@ export function useTelemetryCharts(
         yTickMode: cfg.tickMode,
         yTickUnit: cfg.tickUnit,
         stepped: cfg.stepped,
-        timestamps: chartData.distance,
+        timestamps: xAxis,
         series,
         subtitle: metricSubtitle(pair.primary, pair.compare, cfg.tickMode, cfg.tickUnit, compareDriver),
         markers: sectorMarkers,
@@ -561,6 +650,28 @@ export function useTelemetryCharts(
     })
 
     const result: BuiltChart[] = mappedCharts.filter((c): c is BuiltChart => c != null)
+
+    // Add Delta Time chart if comparing
+    if (compareDriver && chartData.delta.compare.length) {
+      result.unshift({
+        key: 'delta',
+        title: 'Delta (s)',
+        yLabel: 'Delta (s)',
+        yTickMode: 'default',
+        yTickUnit: 's',
+        timestamps: xAxis,
+        series: [
+          {
+            label: `${selectedDriver} vs ${compareDriver}`,
+            data: chartData.delta.compare,
+            color: '#facc15',
+            width: 2.2,
+          },
+        ],
+        subtitle: `Time Delta: ${formatDelta(chartData.delta.compare[chartData.delta.compare.length - 1])}`,
+        markers: [],
+      })
+    }
 
     if (compareDriver && chartData.speed.compare.length) {
       const deltaSpeedData = chartData.speed.primary.map(
@@ -578,7 +689,7 @@ export function useTelemetryCharts(
         yTickMode: 'default',
         yTickUnit: 'km/h',
         stepped: false,
-        timestamps: chartData.distance,
+        timestamps: xAxis,
         series: [
           {
             label: `${selectedDriver} - ${compareDriver}`,

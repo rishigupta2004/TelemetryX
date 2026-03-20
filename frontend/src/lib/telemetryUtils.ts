@@ -49,7 +49,7 @@ export const currentLap = (laps: LapRow[], t: number): LapRow | null => {
   return null
 }
 
-export type ChannelKey = 'speed' | 'throttle' | 'brake' | 'gear' | 'rpm' | 'drs'
+export type ChannelKey = 'speed' | 'throttle' | 'brake' | 'gear' | 'rpm' | 'drs' | 'lonAcc' | 'latAcc'
 
 export type ChannelDefinition = {
   key: ChannelKey
@@ -69,7 +69,9 @@ export const CHANNELS: ChannelDefinition[] = [
   { key: 'brake', title: 'Brake', y: [0, 100], axisLabel: 'Brake (%)', tickMode: 'percent', fillColor: 'rgba(232,0,45,0.2)' },
   { key: 'rpm', title: 'RPM', y: [0, 15000], axisLabel: 'Engine Speed (RPM)', tickMode: 'rpm' },
   { key: 'gear', title: 'Gear', y: [0, 8], axisLabel: 'Gear', tickMode: 'integer', stepped: true },
-  { key: 'drs', title: 'DRS', y: [0, 1], axisLabel: 'DRS State', tickMode: 'binary', stepped: true }
+  { key: 'drs', title: 'DRS', y: [0, 1], axisLabel: 'DRS State', tickMode: 'binary', stepped: true },
+  { key: 'lonAcc', title: 'Lon Acc', y: [-6, 6], axisLabel: 'Long. Accel (g)', tickMode: 'default', tickUnit: 'g' },
+  { key: 'latAcc', title: 'Lat Acc', y: [-6, 6], axisLabel: 'Lat. Accel (g)', tickMode: 'default', tickUnit: 'g' }
 ]
 
 export const CHANNEL_KEYS = CHANNELS.map(c => c.key) as ChannelKey[]
@@ -84,10 +86,12 @@ export type Windowed = {
   timestampsAbs: number[]
   timestampsRel: number[]
   distance: number[]
-} & Record<MetricKey, MetricPair>
+  useDistance: boolean
+  peaks?: { x: number; y: number; label: string; color?: string }[]
+} & Record<MetricKey | 'delta', MetricPair>
 
 export type BuiltChart = {
-  key: MetricKey | 'deltaSpeed'
+  key: MetricKey | 'deltaSpeed' | 'delta'
   title: string
   yRange?: [number, number]
   yLabel: string

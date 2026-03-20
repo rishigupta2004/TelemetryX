@@ -927,6 +927,7 @@ def load_telemetry(
     max_rows: int = MAX_SESSION_TELEMETRY_ROWS,
 ) -> dict:
     """Load telemetry (optionally windowed + downsampled in SQL)."""
+    logger.info("[TEL_ENTRY] t0=%s t1=%s hz=%s file_exists=%s", t0, t1, hz, os.path.exists(os.path.join(silver_path, "telemetry.parquet")))
     tel_file = os.path.join(silver_path, "telemetry.parquet")
     if not os.path.exists(tel_file):
         logger.warning(f"[Telemetry] MISSING: {tel_file}")
@@ -1018,19 +1019,40 @@ def load_telemetry(
             logger.error(f"Error validating telemetry schema for {tel_file}: {e}")
             return {}
 
+        def _ns_to_s(v):
+            if v is None:
+                return None
+            f = float(v)
+            if abs(f) > 1e11:
+                return f / 1e9
+            if abs(f) > 1e8:
+                return f / 1e6
+            if abs(f) > 1e5:
+                return f / 1e3
+            return f
+
         hz = max(0.0, min(50.0, float(hz or 0.0)))
         t0_bound, t1_bound = _resolve_time_window(t0, t1, DEFAULT_TELEMETRY_WINDOW_S)
+
+        _tnorm = (
+            f"CASE"
+            f" WHEN ABS(CAST({_qcol(time_col)} AS DOUBLE)) > 1e11 THEN CAST({_qcol(time_col)} AS DOUBLE)/1e9"
+            f" WHEN ABS(CAST({_qcol(time_col)} AS DOUBLE)) > 1e8  THEN CAST({_qcol(time_col)} AS DOUBLE)/1e6"
+            f" WHEN ABS(CAST({_qcol(time_col)} AS DOUBLE)) > 1e5  THEN CAST({_qcol(time_col)} AS DOUBLE)/1e3"
+            f" ELSE CAST({_qcol(time_col)} AS DOUBLE)"
+            f" END"
+        )
 
         min_t: Optional[float] = None
         max_t: Optional[float] = None
         try:
             time_range = conn.execute(
-                f"SELECT MIN({ _qcol(time_col) }), MAX({ _qcol(time_col) }) FROM read_parquet(?)",
+                f"SELECT MIN({_tnorm}), MAX({_tnorm}) FROM read_parquet(?) t",
                 [tel_file],
             ).fetchone()
             if time_range:
-                min_t = float(time_range[0]) if time_range[0] is not None else None
-                max_t = float(time_range[1]) if time_range[1] is not None else None
+                min_t = _ns_to_s(time_range[0])
+                max_t = _ns_to_s(time_range[1])
         except Exception:
             min_t = None
             max_t = None
@@ -1044,29 +1066,22 @@ def load_telemetry(
         should_shift_to_race_time = False
         try:
             if os.path.exists(laps_file):
-                offset_row = conn.execute(
-                    """
-                    SELECT MIN(
-                        CAST(session_time_seconds AS DOUBLE) - CAST(lap_time_seconds AS DOUBLE)
-                    )
+                row = conn.execute(f"""
+                    SELECT
+                        MIN(CASE WHEN ABS(CAST(session_time_seconds AS DOUBLE)) > 1e11
+                                 THEN CAST(session_time_seconds AS DOUBLE)/1e9
+                                 ELSE CAST(session_time_seconds AS DOUBLE) END) as lap1_end_s,
+                        AVG(CAST(lap_time_seconds AS DOUBLE)) as lap1_dur_s
                     FROM read_parquet(?)
                     WHERE session_time_seconds IS NOT NULL
                       AND lap_time_seconds IS NOT NULL
-                      AND lap_time_seconds > 0
                       AND CAST(lap_number AS INTEGER) = 1
-                    """,
-                    [laps_file],
-                ).fetchone()
-                if offset_row and offset_row[0] is not None:
-                    race_time_offset = max(0.0, float(offset_row[0]))
-            # FIX: old threshold was >1000 which never fired because
-            # MIN(session_time_seconds WHERE lap=1) ≈ 90s (lap end time),
-            # not 1000s. New: shift if offset > 30s AND client window
-            # starts before the data begins.
-            should_shift_to_race_time = (
-                race_time_offset > 30.0
-                and float(t1_bound) < race_time_offset + 60.0
-            )
+                """, [laps_file]).fetchone()
+                if row and row[0] is not None:
+                    lap1_end_s = _ns_to_s(row[0])
+                    lap1_dur_s = float(row[1]) if row[1] is not None else 0.0
+                    race_time_offset = max(0.0, lap1_end_s - lap1_dur_s)
+            should_shift_to_race_time = race_time_offset > 30.0 and float(t0_bound) < (race_time_offset + 120.0)
         except Exception:
             race_time_offset = 0.0
             should_shift_to_race_time = False
@@ -1076,20 +1091,24 @@ def load_telemetry(
         if should_shift_to_race_time:
             query_t0 += race_time_offset
             query_t1 += race_time_offset
-        print(
-            f"[Telemetry] t0={query_t0} t1={query_t1} data_range="
-            f"{(f'{min_t:.1f}' if min_t is not None else 'None')}–"
-            f"{(f'{max_t:.1f}' if max_t is not None else 'None')} file={tel_file}"
-        )
+        logger.info("[Telemetry] range=[%.1f, %.1f] offset=%.1f shift=%s", min_t, max_t, race_time_offset, should_shift_to_race_time)
 
         time_ref = f"t.{_qcol(time_col)}"
         driver_ref = f"t.{_qcol(driver_col)}"
+        _tnorm_t = (
+            f"CASE"
+            f" WHEN ABS(CAST({time_ref} AS DOUBLE)) > 1e11 THEN CAST({time_ref} AS DOUBLE)/1e9"
+            f" WHEN ABS(CAST({time_ref} AS DOUBLE)) > 1e8  THEN CAST({time_ref} AS DOUBLE)/1e6"
+            f" WHEN ABS(CAST({time_ref} AS DOUBLE)) > 1e5  THEN CAST({time_ref} AS DOUBLE)/1e3"
+            f" ELSE CAST({time_ref} AS DOUBLE)"
+            f" END"
+        )
 
         def _run_query(window_t0: float, window_t1: float) -> List[Any]:
             where = [
                 f"{driver_ref} IS NOT NULL",
-                f"{time_ref} >= ?",
-                f"{time_ref} <= ?",
+                f"({_tnorm_t}) >= ?",
+                f"({_tnorm_t}) <= ?",
             ]
             params: List[Any] = [tel_file, float(window_t0), float(window_t1)]
             if driver_numbers:

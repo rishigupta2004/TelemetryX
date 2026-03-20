@@ -229,12 +229,12 @@ export const useTimingData = (): UseTimingDataResult => {
 
         const liveCar = carPosByNum.get(driver.driverNumber)
         const positionFromLive = liveCar?.position
-        const positionFromLaps = lastCompleted?.position
+        const positionFromAnyLap = laps[Math.min(completedCount, laps.length - 1)]?.position ?? lastCompleted?.position
         const provisionalPosition =
           positionFromLive && positionFromLive > 0
             ? positionFromLive
-            : positionFromLaps && positionFromLaps > 0
-              ? positionFromLaps
+            : positionFromAnyLap && positionFromAnyLap > 0
+              ? positionFromAnyLap
               : 99
 
         return {
@@ -273,21 +273,17 @@ export const useTimingData = (): UseTimingDataResult => {
       })
 
       rows.sort((a, b) => {
-        const aKnown = a.position > 0 && a.position < 99 && a.lapsCompleted > 0
-        const bKnown = b.position > 0 && b.position < 99 && b.lapsCompleted > 0
-        if (aKnown && bKnown) return a.position - b.position
-        if (aKnown !== bKnown) return aKnown ? -1 : 1
+        const aPos = a.position < 99 ? a.position : 999
+        const bPos = b.position < 99 ? b.position : 999
+        if (aPos !== bPos) return aPos - bPos
         const aProgress = a.lapsCompleted + a.lapProgress
         const bProgress = b.lapsCompleted + b.lapProgress
-        if (aProgress !== bProgress) return bProgress - aProgress
+        if (Math.abs(aProgress - bProgress) > 0.01) return bProgress - aProgress
         return a.driverCode.localeCompare(b.driverCode)
       })
-      for (let i = 0; i < rows.length; i += 1) {
-        if (rows[i].lapsCompleted <= 0) {
-          rows[i].position = 99
-        } else if (rows[i].position >= 99) {
-          rows[i].position = i + 1
-        }
+      const hasRealPositions = rows.some(r => r.position < 99)
+      if (!hasRealPositions) {
+        for (let i = 0; i < rows.length; i++) rows[i].position = i + 1
       }
 
       // ─── GAP / INTERVAL COMPUTATION ───────────────────────────────────────────

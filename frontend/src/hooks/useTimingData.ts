@@ -273,9 +273,9 @@ export const useTimingData = (): UseTimingDataResult => {
       })
 
       rows.sort((a, b) => {
-        const aKnown = a.position > 0 && a.position < 99
-        const bKnown = b.position > 0 && b.position < 99
-        if (aKnown && bKnown && a.position !== b.position) return a.position - b.position
+        const aKnown = a.position > 0 && a.position < 99 && a.lapsCompleted > 0
+        const bKnown = b.position > 0 && b.position < 99 && b.lapsCompleted > 0
+        if (aKnown && bKnown) return a.position - b.position
         if (aKnown !== bKnown) return aKnown ? -1 : 1
         const aProgress = a.lapsCompleted + a.lapProgress
         const bProgress = b.lapsCompleted + b.lapProgress
@@ -283,7 +283,11 @@ export const useTimingData = (): UseTimingDataResult => {
         return a.driverCode.localeCompare(b.driverCode)
       })
       for (let i = 0; i < rows.length; i += 1) {
-        rows[i].position = i + 1
+        if (rows[i].lapsCompleted <= 0) {
+          rows[i].position = 99
+        } else if (rows[i].position >= 99) {
+          rows[i].position = i + 1
+        }
       }
 
       // ─── GAP / INTERVAL COMPUTATION ───────────────────────────────────────────
@@ -319,7 +323,19 @@ export const useTimingData = (): UseTimingDataResult => {
         const raceTimeFor = (candidate: TimingRow): number | null => {
           if (candidate.lapsCompleted <= 0) return null
           const cum = index.elapsedByDriverNumber.get(candidate.driverNumber)?.[candidate.lapsCompleted - 1] ?? 0
-          const inLap = candidate.lapProgress * Math.max(1, candidate.lapTimeRef)
+          
+          let inLap = candidate.lapProgress * Math.max(1, candidate.lapTimeRef)
+          const s1 = candidate.sector1
+          const s2 = candidate.sector2
+          
+          if (s1 && s1 > 0 && s2 && s2 > 0) {
+            const s3_progress = Math.max(0, candidate.lapProgress - 0.66) / 0.34
+            inLap = s1 + s2 + s3_progress * Math.max(0.1, candidate.lapTimeRef - s1 - s2)
+          } else if (s1 && s1 > 0) {
+            const s2_progress = Math.max(0, candidate.lapProgress - 0.33) / 0.33
+            inLap = s1 + s2_progress * Math.max(0.1, (candidate.lapTimeRef - s1) / 2)
+          }
+          
           const total = cum + inLap
           return Number.isFinite(total) ? total : null
         }

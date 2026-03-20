@@ -1,14 +1,41 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { EmptyState } from '../components/EmptyState'
+import { LoadingSkeleton } from '../components/LoadingSkeleton'
 import { UPlotChart } from '../components/UPlotChart'
 import { ViewErrorBoundary } from '../components/ViewErrorBoundary'
+import { BoxPlotChart } from '../components/BoxPlotChart'
 import { useDriverStore } from '../stores/driverStore'
 import { useSessionStore } from '../stores/sessionStore'
 import { useTelemetryStore } from '../stores/telemetryStore'
-import type { LapRow, TelemetryRow } from '../types'
-import { COMPOUND_COLORS } from '../lib/colors'
+import { useFeaturesStore } from '../stores/featuresStore'
+import { useTelemetryData } from '../hooks/useTelemetryData'
+import { useSessionTime10 } from '../lib/timeUtils'
+import { buildPaceSeries, median, movingAverage, PaceSeries } from '../lib/featuresUtils'
+import type { LapRow, Driver } from '../types'
 
-function formatTime(seconds: number | null | undefined): string {
+type AnalyticsTab = 'racepace' | 'telemetry'
+
+interface BoxPlotData {
+  label: string
+  min: number
+  q1: number
+  median: number
+  mean: number
+  q3: number
+  max: number
+  outliers: number[]
+  color: string
+  meanTime: string
+  tyreStrategy: string
+}
+
+const formatTime = (seconds: number | null | undefined): string => {
+  if (seconds == null || !Number.isFinite(seconds) || seconds <= 0) return '—'
+  const secs = seconds.toFixed(3)
+  return secs
+}
+
+const formatTimeFull = (seconds: number | null | undefined): string => {
   if (seconds == null || !Number.isFinite(seconds) || seconds <= 0) return '--:--.---'
   const mins = Math.floor(seconds / 60)
   const secs = Math.floor(seconds % 60)
@@ -36,337 +63,38 @@ function getLapTimeSeconds(lap: LapRow): number {
   return Number.isFinite(value) ? value : Number.NaN
 }
 
-function quantileBucket(value: number, sorted: number[]): number {
-  if (!Number.isFinite(value) || !sorted.length) return 2
-  const idx = sorted.findIndex((item) => value <= item)
-  if (idx < 0) return 4
-  return Math.max(0, Math.min(4, Math.floor((idx / sorted.length) * 5)))
-}
-
-const HEATMAP_COLORS = ['bg-emerald-500/25', 'bg-lime-500/20', 'bg-amber-500/20', 'bg-orange-500/25', 'bg-rose-500/25']
-
-function extractApexRows(rows: TelemetryRow[], maxCorners: number): Array<{ label: string; speed: number; timestamp: number }> {
-  if (rows.length < 7) return []
-  const picked: Array<{ speed: number; timestamp: number; idx: number; prominence: number }> = []
-  let lastAccepted = -9999
-  for (let i = 3; i < rows.length - 3; i += 1) {
-    const s = Number(rows[i].speed || 0)
-    if (!Number.isFinite(s) || s < 20 || s > 400) continue
-    const prev = Number(rows[i - 1].speed || 0)
-    const next = Number(rows[i + 1].speed || 0)
-    if (!(s <= prev && s <= next)) continue
-    const wingMax = Math.max(
-      Number(rows[i - 3].speed || 0),
-      Number(rows[i - 2].speed || 0),
-      Number(rows[i + 2].speed || 0),
-      Number(rows[i + 3].speed || 0)
-    )
-    const prominence = wingMax - s
-    if (prominence < 4) continue
-    if (i - lastAccepted < 8) continue
-    picked.push({ speed: s, timestamp: rows[i].timestamp, idx: i, prominence })
-    lastAccepted = i
-  }
-  if (!picked.length) return []
-  const strongest = [...picked]
-    .sort((a, b) => b.prominence - a.prominence)
-    .slice(0, maxCorners)
-    .sort((a, b) => a.timestamp - b.timestamp)
-  return strongest.map((row, idx) => ({
-    label: `C${idx + 1}`,
-    speed: row.speed,
-    timestamp: row.timestamp
-  }))
-}
-
-type AnalyticsPanel = 'lapTime' | 'paceDelta' | 'tyreDeg' | 'sectors' | 'efficiency' | 'cornerSpeed'
-
 export const AnalyticsView = React.memo(function AnalyticsView() {
   const sessionData = useSessionStore((s) => s.sessionData)
   const selectedYear = useSessionStore((s) => s.selectedYear)
   const selectedRace = useSessionStore((s) => s.selectedRace)
   const selectedSession = useSessionStore((s) => s.selectedSession)
-  const lapsStore = useSessionStore((s) => s.laps)
+  const lapsFromStore = useSessionStore((s) => s.laps)
+  
   const primaryDriver = useDriverStore((s) => s.primaryDriver)
   const compareDriver = useDriverStore((s) => s.compareDriver)
-  const telemetryData = useTelemetryStore((s) => s.telemetryData)
+  
+  const telemetryStoreData = useTelemetryStore((s) => s.telemetryData)
   const loadTelemetry = useTelemetryStore((s) => s.loadTelemetry)
-  const [activePanel, setActivePanel] = useState<AnalyticsPanel>('lapTime')
-  const [panelHeight, setPanelHeight] = useState(520)
+  
+  const featuresStore = useFeaturesStore()
+  const loadFeatures = featuresStore.loadFeatures
+  
+  const sessionTime = useSessionTime10()
+  const [activeTab, setActiveTab] = useState<AnalyticsTab>('racepace')
   const panelRef = useRef<HTMLDivElement>(null)
-  const [cursorInfo, setCursorInfo] = useState<{ x: null | number; values: number[]; labels: string[] } | null>(null)
+  const [panelHeight, setPanelHeight] = useState(400)
 
-  const laps = lapsStore.length ? lapsStore : sessionData?.laps ?? []
+  const laps = lapsFromStore.length ? lapsFromStore : sessionData?.laps ?? []
   const drivers = sessionData?.drivers ?? []
-  const validLaps = useMemo(
-    () =>
-      (laps ?? []).filter(
-        (l) =>
-          l.lapTime != null &&
-          Number.isFinite(Number(l.lapTime)) &&
-          Number(l.lapTime) > 40
-      ),
-    [laps]
-  )
-
-  const telemetryByCode = useMemo(() => {
-    const map = new Map<string, TelemetryRow[]>()
-    if (!telemetryData || !drivers.length) return map
-    const rowsByKey = telemetryData as Record<string, TelemetryRow[] | undefined>
-
-    const lookup = (key: string): TelemetryRow[] | null => {
-      const direct = rowsByKey[key]
-      if (Array.isArray(direct) && direct.length) return direct
-      const upper = rowsByKey[key.toUpperCase()]
-      if (Array.isArray(upper) && upper.length) return upper
-      const lower = rowsByKey[key.toLowerCase()]
-      if (Array.isArray(lower) && lower.length) return lower
-      return []
-    }
-
-    const allRows = Object.values(rowsByKey).filter((rows): rows is TelemetryRow[] => Array.isArray(rows) && rows.length > 0)
-    for (const driver of drivers) {
-      const candidates = [
-        driver.code,
-        driver.code.toUpperCase(),
-        String(driver.driverNumber),
-        String(driver.driverName || ''),
-        String(driver.driverName || '').toUpperCase(),
-      ].filter(Boolean)
-
-      let resolved: TelemetryRow[] | null = null
-      for (const candidate of candidates) {
-        const rows = lookup(candidate)
-        if (rows) {
-          resolved = rows
-          break
-        }
-      }
-      if (!resolved) {
-        resolved =
-          allRows.find((rows) => {
-            const first = rows[0]
-            const num = Number(first.driverNumber)
-            const name = String(first.driverName || '').toUpperCase()
-            return (
-              (Number.isFinite(num) && num === driver.driverNumber) ||
-              name === driver.code.toUpperCase() ||
-              name === String(driver.driverName || '').toUpperCase()
-            )
-          }) ?? null
-      }
-      if (resolved) map.set(driver.code, resolved)
-    }
-    return map
-  }, [telemetryData, drivers])
-
-  const lapsByCode = useMemo(() => {
-    const byCode = new Map<string, LapRow[]>()
-    const codeByNumber = new Map<number, string>()
-    const codeByName = new Map<string, string>()
-    for (const driver of drivers) {
-      codeByNumber.set(driver.driverNumber, driver.code)
-      codeByName.set(String(driver.driverName || '').toUpperCase(), driver.code)
-      codeByName.set(String(driver.code || '').toUpperCase(), driver.code)
-    }
-    for (const lap of laps) {
-      const key =
-        codeByNumber.get(lap.driverNumber) ||
-        codeByName.get(String(lap.driverName || '').toUpperCase()) ||
-        String(lap.driverName || '').toUpperCase()
-      if (!key) continue
-      const list = byCode.get(key) ?? []
-      list.push(lap)
-      byCode.set(key, list)
-    }
-    for (const [key, rows] of byCode.entries()) {
-      rows.sort((a, b) => a.lapNumber - b.lapNumber)
-      byCode.set(key, rows)
-    }
-    return byCode
-  }, [drivers, laps])
-
-  const maxLap = useMemo(() => Math.max(1, ...laps.map((lap) => lap.lapNumber || 0)), [laps])
-  const lapAxis = useMemo(() => Array.from({ length: maxLap }, (_, i) => i + 1), [maxLap])
-
-  const orderedCodes = useMemo(() => {
-    if (!drivers.length) return []
-    const finalPos = drivers
-      .map((driver) => {
-        const dLaps = lapsByCode.get(driver.code) ?? []
-        const last = dLaps[dLaps.length - 1]
-        return { code: driver.code, pos: last?.position ?? 99 }
-      })
-      .sort((a, b) => a.pos - b.pos)
-      .slice(0, Math.min(20, drivers.length))
-    return finalPos.map((row) => row.code)
-  }, [drivers, lapsByCode])
-
-  const lapProgressionSeries = useMemo(() => {
-    return orderedCodes.map((code) => {
-      const rows = lapsByCode.get(code) ?? []
-      const byLap = new Map<number, number>()
-      for (const lap of rows) {
-        if (!validLap(lap)) continue
-        byLap.set(lap.lapNumber, getLapTimeSeconds(lap))
-      }
-      const data = lapAxis.map((lapNum) => byLap.get(lapNum) ?? Number.NaN)
-      const color = drivers.find((d) => d.code === code)?.teamColor || '#9fb3d4'
-      return { label: code, data, color }
-    })
-  }, [orderedCodes, lapsByCode, lapAxis, drivers])
-
-  const lapTimeAxisMax = useMemo(() => {
-    let maxFiniteLap = 1
-    for (const series of lapProgressionSeries) {
-      for (let i = 0; i < series.data.length; i += 1) {
-        if (Number.isFinite(series.data[i])) maxFiniteLap = Math.max(maxFiniteLap, lapAxis[i] ?? 1)
-      }
-    }
-    return Math.max(1, maxFiniteLap)
-  }, [lapProgressionSeries, lapAxis])
-
-  const fieldMedianByLap = useMemo(() => {
-    const out = new Map<number, number>()
-    for (const lapNum of lapAxis) {
-      const values: number[] = []
-      for (const rows of lapsByCode.values()) {
-        const lap = rows.find((row) => row.lapNumber === lapNum)
-        if (lap && validLap(lap)) {
-          values.push(getLapTimeSeconds(lap))
-        }
-      }
-      values.sort((a, b) => a - b)
-      if (values.length) out.set(lapNum, values[Math.floor(values.length / 2)])
-    }
-    return out
-  }, [lapAxis, lapsByCode])
-
-  const selectedCode = primaryDriver || orderedCodes[0] || null
-
-  const analyticsFetchWindow = useMemo<{ t0: number; t1: number } | null>(() => {
-    if (!selectedCode) return null
-    const rows = (lapsByCode.get(selectedCode) ?? []).filter(validLap)
-    const bestLap = rows.sort((a, b) => getLapTimeSeconds(a) - getLapTimeSeconds(b))[0]
-    if (!bestLap) return null
-    const t0 = Math.max(0, Math.floor(bestLap.lapStartSeconds - 20))
-    const t1 = Math.ceil(bestLap.lapEndSeconds + 20)
-    return { t0, t1 }
-  }, [selectedCode, lapsByCode])
-
-  const paceDelta = useMemo(() => {
-    if (!selectedCode) return []
-    const rows = lapsByCode.get(selectedCode) ?? []
-    const byLap = new Map(rows.map((lap) => [lap.lapNumber, lap]))
-    return lapAxis.map((lapNum) => {
-      const lap = byLap.get(lapNum)
-      const med = fieldMedianByLap.get(lapNum)
-      if (!lap || !med || !validLap(lap)) return Number.NaN
-      return getLapTimeSeconds(lap) - med
-    })
-  }, [selectedCode, lapsByCode, lapAxis, fieldMedianByLap])
-
-  const paceAxisMax = useMemo(() => {
-    let maxFiniteLap = 1
-    for (let i = 0; i < paceDelta.length; i += 1) {
-      if (Number.isFinite(paceDelta[i])) maxFiniteLap = Math.max(maxFiniteLap, lapAxis[i] ?? 1)
-    }
-    return Math.max(1, maxFiniteLap)
-  }, [paceDelta, lapAxis])
-
-  const tyreDegradationSeries = useMemo(() => {
-    if (!selectedCode) return [] as Array<{ label: string; data: number[]; color: string }>
-    const rows = (lapsByCode.get(selectedCode) ?? []).filter(validLap)
-    const compounds = ['SOFT', 'MEDIUM', 'HARD', 'INTERMEDIATE', 'WET']
-    return compounds.map((compound) => {
-      const data = lapAxis.map((lapNum) => {
-        const lap = rows.find((item) => item.lapNumber === lapNum)
-        if (!lap) return Number.NaN
-        const key = String(lap.tyreCompound || '').toUpperCase()
-        const normalized = key[0] === 'S' ? 'SOFT' : key[0] === 'M' ? 'MEDIUM' : key[0] === 'H' ? 'HARD' : key[0] === 'I' ? 'INTERMEDIATE' : key[0] === 'W' ? 'WET' : key
-        if (normalized !== compound) return Number.NaN
-        return getLapTimeSeconds(lap)
-      })
-      return { label: compound, data, color: COMPOUND_COLORS[compound] ?? '#a0a0a0' }
-    })
-  }, [selectedCode, lapsByCode, lapAxis])
-
-  const tyreAxisMax = useMemo(() => {
-    let maxFiniteLap = 1
-    for (const series of tyreDegradationSeries) {
-      for (let i = 0; i < series.data.length; i += 1) {
-        if (Number.isFinite(series.data[i])) maxFiniteLap = Math.max(maxFiniteLap, lapAxis[i] ?? 1)
-      }
-    }
-    return Math.max(1, maxFiniteLap)
-  }, [tyreDegradationSeries, lapAxis])
-
-  const miniSectorHeatmap = useMemo(() => {
-    const rows = orderedCodes.map((code) => {
-      const dLaps = (lapsByCode.get(code) ?? []).filter(validLap)
-      const avg = (items: Array<number | null>) => {
-        const vals = items.filter((v): v is number => Number.isFinite(v as number) && (v as number) > 0)
-        if (!vals.length) return Number.NaN
-        return vals.reduce((a, b) => a + b, 0) / vals.length
-      }
-      return {
-        code,
-        s1: avg(dLaps.map((lap) => lap.sector1)),
-        s2: avg(dLaps.map((lap) => lap.sector2)),
-        s3: avg(dLaps.map((lap) => lap.sector3))
-      }
-    })
-    const s1Sorted = rows.map((r) => r.s1).filter(Number.isFinite).sort((a, b) => a - b)
-    const s2Sorted = rows.map((r) => r.s2).filter(Number.isFinite).sort((a, b) => a - b)
-    const s3Sorted = rows.map((r) => r.s3).filter(Number.isFinite).sort((a, b) => a - b)
-    return rows.map((row) => ({
-      ...row,
-      b1: quantileBucket(row.s1, s1Sorted),
-      b2: quantileBucket(row.s2, s2Sorted),
-      b3: quantileBucket(row.s3, s3Sorted)
-    }))
-  }, [orderedCodes, lapsByCode])
-
-  const efficiency = useMemo(() => {
-    return orderedCodes
-      .map((code) => {
-        const points = telemetryByCode.get(code) ?? []
-        if (!points.length) return []
-        const throttleAvg = points.reduce((sum, r) => sum + Number(r.throttle || 0), 0) / points.length
-        const brakeAvg = points.reduce((sum, r) => sum + Number(r.brake || 0), 0) / points.length
-        const speedAvg = points.reduce((sum, r) => sum + Number(r.speed || 0), 0) / points.length
-        const score = Math.max(0, Math.min(100, throttleAvg * 0.55 + (100 - brakeAvg) * 0.35 + (speedAvg / 360) * 100 * 0.1))
-        return { code, throttleAvg, brakeAvg, score }
-      })
-      .filter((row): row is { code: string; throttleAvg: number; brakeAvg: number; score: number } => !!row)
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 20)
-  }, [orderedCodes, telemetryByCode])
-
-  const compareDelta = useMemo<number | null>(() => {
-    if (!selectedCode || !compareDriver) return null
-    const a = (lapsByCode.get(selectedCode) ?? []).filter(validLap)
-    const b = (lapsByCode.get(compareDriver) ?? []).filter(validLap)
-    const byLapB = new Map(b.map((lap) => [lap.lapNumber, lap]))
-    const deltas = a
-      .map((lap) => {
-        const other = byLapB.get(lap.lapNumber)
-        if (!other) return Number.NaN
-        return getLapTimeSeconds(lap) - getLapTimeSeconds(other)
-      })
-      .filter((v): v is number => Number.isFinite(v))
-    if (!deltas.length) return null
-    const avg = deltas.reduce((x, y) => x + y, 0) / deltas.length
-    return Number.isFinite(avg) ? avg : null
-  }, [selectedCode, compareDriver, lapsByCode])
+  const year = selectedYear ?? sessionData?.metadata?.year ?? 0
+  const raceName = selectedRace ?? sessionData?.metadata?.raceName ?? ''
+  const sessionType = selectedSession ?? sessionData?.metadata?.sessionType ?? ''
 
   useEffect(() => {
-    if (!selectedYear || !selectedRace || !selectedSession || !selectedCode || !analyticsFetchWindow) return
-    if (!analyticsFetchWindow) return
-    const existingRows = telemetryByCode.get(selectedCode)
-    if (existingRows && existingRows.length > 32) return
-    void loadTelemetry(selectedYear, selectedRace, selectedSession, analyticsFetchWindow.t0, analyticsFetchWindow.t1)
-  }, [selectedYear, selectedRace, selectedSession, selectedCode, telemetryByCode, loadTelemetry, analyticsFetchWindow, activePanel])
+    if (year && raceName && sessionType) {
+      loadFeatures(year, raceName, sessionType)
+    }
+  }, [year, raceName, sessionType, loadFeatures])
 
   useEffect(() => {
     const el = panelRef.current
@@ -379,248 +107,367 @@ export const AnalyticsView = React.memo(function AnalyticsView() {
     return () => observer.disconnect()
   }, [])
 
-  useEffect(() => {
-    setCursorInfo(null)
-  }, [activePanel])
+  const driverMap = useMemo(() => {
+    const map = new Map<number, Driver>()
+    for (const d of drivers) {
+      map.set(d.driverNumber, d)
+    }
+    return map
+  }, [drivers])
 
-  const cornerSpeedRows = useMemo(() => {
-    if (!selectedCode) return []
-    const rows = telemetryByCode.get(selectedCode) ?? []
-    if (!rows.length) return []
-    const bestLap = (lapsByCode.get(selectedCode) ?? [])
-      .filter(validLap)
-      .sort((a, b) => getLapTimeSeconds(a) - getLapTimeSeconds(b))[0]
-    if (!bestLap) return []
-    const lapRows = rows.filter((row) => row.timestamp >= bestLap.lapStartSeconds && row.timestamp <= bestLap.lapEndSeconds)
-    return extractApexRows(lapRows, 25)
-  }, [selectedCode, telemetryByCode, lapsByCode])
+  const lapFeatures = featuresStore.lap
+  const tyreFeatures = featuresStore.tyre
 
-  const handleCursor = useCallback(
-    (labels: string[]) =>
-      (payload: { x: number | null; values: number[] }) => {
-        setCursorInfo({ x: payload.x, values: payload.values, labels })
-      },
-    []
+  const boxPlotData = useMemo((): BoxPlotData[] => {
+    if (!lapFeatures?.length || !drivers.length) return []
+
+    const validLaps = lapFeatures.filter((lap) => {
+      const time = Number(lap.lap_time ?? lap.lapTime ?? 0)
+      return Number.isFinite(time) && time > 40 && time < 200
+    })
+
+    if (!validLaps.length) return []
+
+    const byDriver = new Map<string, LapRow[]>()
+    for (const lap of validLaps) {
+      const driver = driverMap.get(lap.driver_number)
+      const code = driver?.code ?? String(lap.driver_name ?? lap.driver_number)
+      const rows = byDriver.get(code) ?? []
+      const lapRow: LapRow = {
+        driverNumber: lap.driver_number,
+        driverName: lap.driver_name,
+        lapNumber: lap.lap_number,
+        lapTime: lap.lap_time ?? 0,
+        lapStartSeconds: 0,
+        lapEndSeconds: 0,
+        position: 0,
+        tyreCompound: '',
+        isDeleted: false,
+        isValid: true,
+      }
+      rows.push(lapRow)
+      byDriver.set(code, rows)
+    }
+
+    const results: BoxPlotData[] = []
+
+    for (const [code, driverLaps] of byDriver) {
+      const times = driverLaps.map((l) => getLapTimeSeconds(l)).filter((t) => Number.isFinite(t))
+      if (times.length < 3) continue
+
+      const smoothed = movingAverage(times, 3)
+      const sorted = [...smoothed].sort((a, b) => a - b)
+      
+      const q1 = sorted[Math.floor(sorted.length * 0.25)]
+      const q3 = sorted[Math.floor(sorted.length * 0.75)]
+      const med = sorted[Math.floor(sorted.length * 0.5)]
+      const mean = smoothed.reduce((a, b) => a + b, 0) / smoothed.length
+      const iqr = q3 - q1
+      
+      const lowerWhisker = Math.max(sorted[0], q1 - 1.5 * iqr)
+      const upperWhisker = Math.min(sorted[sorted.length - 1], q3 + 1.5 * iqr)
+      
+      const outliers = smoothed.filter((t) => t < q1 - 1.5 * iqr || t > q3 + 1.5 * iqr)
+
+      const driver = drivers.find((d) => d.code === code)
+      const color = driver?.teamColor ?? '#9fb3d4'
+
+      const tyreStints = tyreFeatures?.filter(
+        (t) => {
+          const tDriver = driverMap.get(t.driver_number)
+          return (tDriver?.code ?? String(t.driver_name ?? '')) === code
+        }
+      ).sort((a, b) => a.stint_number - b.stint_number) ?? []
+
+      const tyreStrategy = tyreStints
+        .map((s) => {
+          const c = String(s.tyre_compound ?? '').toUpperCase()
+          if (c.includes('SOFT')) return 'S'
+          if (c.includes('MEDIUM')) return 'M'
+          if (c.includes('HARD')) return 'H'
+          if (c.includes('INTER')) return 'I'
+          if (c.includes('WET')) return 'W'
+          return '?'
+        })
+        .join('-')
+
+      results.push({
+        label: code,
+        min: lowerWhisker,
+        q1,
+        median: med,
+        mean,
+        q3,
+        max: upperWhisker,
+        outliers: outliers.slice(0, 5),
+        color,
+        meanTime: formatTime(mean),
+        tyreStrategy: tyreStrategy || '—',
+      })
+    }
+
+    return results.sort((a, b) => a.mean - b.mean)
+  }, [lapFeatures, drivers, driverMap, tyreFeatures])
+
+  const paceSeries = useMemo((): PaceSeries[] => {
+    if (!sessionData?.laps?.length || !drivers.length) return []
+    return buildPaceSeries(sessionData)
+  }, [sessionData, drivers])
+
+  const paceChartSeries = useMemo(() => {
+    return paceSeries.map((s) => ({
+      label: s.code,
+      data: s.laps.map((lap, i) => {
+        const idx = s.laps.indexOf(lap)
+        return idx >= 0 && s.smoothed[idx] ? s.smoothed[idx] : NaN
+      }),
+      color: s.color,
+      width: 2,
+    }))
+  }, [paceSeries])
+
+  const maxLap = useMemo(() => {
+    if (!paceSeries.length) return 1
+    return Math.max(...paceSeries.map((s) => Math.max(...s.laps)))
+  }, [paceSeries])
+
+  const windowedTelemetry = useMemo(() => {
+    if (!primaryDriver || !telemetryStoreData) return null
+    return null
+  }, [primaryDriver, telemetryStoreData])
+
+  const sessionTimeNum = Math.round(sessionTime * 30) / 30
+
+  const {
+    windowedTelemetry: telemetryData,
+    lapTimeWindow,
+  } = useTelemetryData(
+    sessionTimeNum,
+    1,
+    primaryDriver,
+    compareDriver
   )
 
-  const cursorText = useMemo(() => {
-    if (!cursorInfo || cursorInfo.x == null) return null
-    const lapLabel = `Lap ${Math.round(cursorInfo.x)}`
-    const formatValue = (value: number) => {
-      if (!Number.isFinite(value)) return '—'
-      if (activePanel === 'paceDelta') return `${value >= 0 ? '+' : ''}${value.toFixed(3)}s`
-      return formatTime(value)
-    }
-    const valueText = cursorInfo.labels
-      .map((label, idx) => `${label}: ${formatValue(cursorInfo.values[idx])}`)
-      .join(' | ')
-    return `${lapLabel} · ${valueText}`
-  }, [cursorInfo, activePanel])
+  useEffect(() => {
+    if (!selectedYear || !selectedRace || !selectedSession || !primaryDriver || !lapTimeWindow) return
+    loadTelemetry(selectedYear, selectedRace, selectedSession, lapTimeWindow.t0, lapTimeWindow.t1)
+  }, [selectedYear, selectedRace, selectedSession, primaryDriver, lapTimeWindow, loadTelemetry])
 
-  const panelLabelByKey: Record<AnalyticsPanel, string> = {
-    lapTime: 'LAP TIME',
-    paceDelta: 'PACE DELTA',
-    tyreDeg: 'TYRE DEG',
-    sectors: 'SECTORS',
-    efficiency: 'EFFICIENCY',
-    cornerSpeed: 'CORNER SPEED',
+  const telemetryDistance = telemetryData?.distance ?? []
+  const telemetrySpeed = telemetryData?.speed ?? { primary: [], compare: [] }
+  const telemetryThrottle = telemetryData?.throttle ?? { primary: [], compare: [] }
+  const telemetryBrake = telemetryData?.brake ?? { primary: [], compare: [] }
+  const telemetryGear = telemetryData?.gear ?? { primary: [], compare: [] }
+  const telemetryLonAcc = telemetryData?.lonAcc ?? { primary: [], compare: [] }
+  const telemetryLatAcc = telemetryData?.latAcc ?? { primary: [], compare: [] }
+
+  const primaryDriverData = drivers.find((d) => d.code === primaryDriver)
+  const compareDriverData = drivers.find((d) => d.code === compareDriver)
+
+  const primaryColor = primaryDriverData?.teamColor ?? '#82cfff'
+  const compareColor = compareDriverData?.teamColor ?? '#a6b0bf'
+
+  const subtitle = useMemo(() => {
+    if (!primaryDriver || !lapTimeWindow) return ''
+    const compound = lapTimeWindow.lap?.tyreCompound ?? ''
+    const time = lapTimeWindow.lap?.lapTime ?? 0
+    let result = `${primaryDriver} (${compound}, ${formatTimeFull(time)})`
+    if (compareDriver) {
+      const cCompound = ''
+      const cTime = 0
+      result += ` vs ${compareDriver} (${cCompound}, ${formatTimeFull(cTime)})`
+    }
+    return result
+  }, [primaryDriver, compareDriver, lapTimeWindow])
+
+  const hasRacePaceData = boxPlotData.length > 0 || paceSeries.length > 0
+  const hasTelemetryData = telemetryDistance.length > 0 && telemetrySpeed.primary.length > 0
+
+  const isLoading = featuresStore.loading
+
+  const renderRacePaceTab = () => {
+    if (isLoading && !hasRacePaceData) {
+      return (
+        <div className="h-full flex items-center justify-center">
+          <LoadingSkeleton rows={6} className="w-full max-w-md" />
+        </div>
+      )
+    }
+
+    if (!hasRacePaceData) {
+      return (
+        <EmptyState
+          title="No race pace data"
+          detail="Load a session with lap data to view race pace analysis."
+          variant="muted"
+        />
+      )
+    }
+
+    const boxHeight = Math.round(panelHeight * 0.4)
+    const lineHeight = panelHeight - boxHeight - 20
+
+    return (
+      <div className="flex flex-col gap-2 h-full">
+        <div className="flex-shrink-0" style={{ height: boxHeight }}>
+          <BoxPlotChart
+            data={boxPlotData}
+            height={boxHeight - 40}
+            yLabel="Smoothed Laptime (s)"
+            formatValue={formatTime}
+          />
+        </div>
+        <div className="flex-1 min-h-0">
+          <UPlotChart
+            title="Race Pace"
+            timestamps={paceSeries[0]?.laps ?? []}
+            series={paceChartSeries}
+            height={lineHeight}
+            xRange={[0, maxLap]}
+            xLabel="Lap"
+            xTickMode="integer"
+            yLabel="Laptime (s)"
+            yTickMode="default"
+            yTickUnit="s"
+            frame={false}
+            showHeader={false}
+          />
+        </div>
+      </div>
+    )
   }
 
-  const renderPanel = () => {
-    if (!sessionData) {
+  const renderTelemetryTab = () => {
+    if (!primaryDriver) {
       return (
-        <div className="flex items-center justify-center h-64 text-gray-400">
-          Select a session to view analytics
+        <EmptyState
+          title="No driver selected"
+          detail="Select a primary driver to view telemetry comparison."
+          variant="muted"
+        />
+      )
+    }
+
+    if (!hasTelemetryData) {
+      return (
+        <div className="h-full flex items-center justify-center">
+          <LoadingSkeleton rows={8} className="w-full max-w-md" />
         </div>
       )
     }
-    if (!laps.length || !drivers.length) {
-      return (
-        <div className="flex items-center justify-center h-64 text-gray-400 font-mono text-xs uppercase tracking-widest bg-bg-secondary/30 rounded border border-white/5">
-          <div className="flex flex-col items-center gap-3">
-            <span className="h-2 w-2 rounded-full bg-accent animate-pulse" />
-            Initializing data stream...
-          </div>
-        </div>
-      )
-    }
-    if (!validLaps.length) {
-      return (
-        <div className="flex h-full items-center justify-center text-text-muted">
-          No lap data available for analytics
-        </div>
-      )
-    }
-    switch (activePanel) {
-      case 'lapTime':
-        if (!lapProgressionSeries.length) {
-          return <EmptyState title="No lap-time traces yet" detail="Select a session/driver with valid laps to render analytics." variant="muted" />
-        }
-        if (!lapProgressionSeries.some((series) => series.data.some((value) => Number.isFinite(value)))) {
-          const preview = (lapsByCode.get(selectedCode || '') ?? []).filter(validLap).slice(0, 16)
-          return (
-            <div className="p-4 text-gray-300">
-              <div className="text-sm text-gray-500 mb-2">LAP TIMES — {preview.length} rows</div>
-              {preview.map((lap) => (
-                <div key={`${lap.driverNumber}-${lap.lapNumber}`} className="flex gap-4 py-1 border-b border-gray-800">
-                  <span className="w-8 text-gray-400">L{lap.lapNumber}</span>
-                  <span className="font-mono">{formatTime(getLapTimeSeconds(lap))}</span>
-                </div>
-              ))}
-            </div>
-          )
-        }
-        return (
-          <UPlotChart
-            title="Lap Time"
-            timestamps={lapAxis}
-            series={lapProgressionSeries}
-            height={panelHeight}
-            xRange={[1, lapTimeAxisMax]}
-            xLabel="Lap"
-            xTickMode="integer"
-            yLabel="Lap Time (s)"
-            yTickMode="default"
-            yTickUnit="s"
-            frame={false}
-            showHeader={false}
-            onCursor={handleCursor(lapProgressionSeries.map((s) => s.label))}
-          />
-        )
-      case 'paceDelta':
-        if (!selectedCode) {
-          return <EmptyState title="No driver selected" detail="Pick a primary driver to compute pace delta." variant="muted" />
-        }
-        return (
-          <UPlotChart
-            title="Pace Delta"
-            timestamps={lapAxis}
-            series={[{ label: selectedCode || 'Driver', data: paceDelta, color: '#c7d0db', width: 2 }]}
-            height={panelHeight}
-            xRange={[1, paceAxisMax]}
-            xLabel="Lap"
-            xTickMode="integer"
-            yLabel="Delta (s)"
-            yTickMode="default"
-            yTickUnit="s"
-            frame={false}
-            showHeader={false}
-            onCursor={handleCursor([selectedCode || 'Driver'])}
-          />
-        )
-      case 'tyreDeg':
-        if (!tyreDegradationSeries.length) {
-          return <EmptyState title="No tyre data available" detail="Tyre degradation needs valid lap/compound rows." variant="muted" />
-        }
-        return (
-          <UPlotChart
-            title="Tyre Degradation"
-            timestamps={lapAxis}
-            series={tyreDegradationSeries}
-            height={panelHeight}
-            xRange={[1, tyreAxisMax]}
-            xLabel="Lap"
-            xTickMode="integer"
-            yLabel="Lap Time (s)"
-            yTickMode="default"
-            yTickUnit="s"
-            frame={false}
-            showHeader={false}
-            onCursor={handleCursor(tyreDegradationSeries.map((s) => s.label))}
-          />
-        )
-      case 'sectors':
-        if (!miniSectorHeatmap.length) {
-          return <EmptyState title="No sector data available" detail="Completed lap sectors have not been populated for this selection yet." variant="muted" />
-        }
-        return (
-          <div className="h-full overflow-auto">
-            <div className="mb-2 text-xs uppercase tracking-[0.14em] text-fg-secondary">Mini-Sector Heatmap</div>
-            <div className="space-y-1">
-              {miniSectorHeatmap.map((row) => (
-                <div key={row.code} className="grid grid-cols-[46px_1fr_1fr_1fr] items-center gap-1 text-[11px]">
-                  <div className="font-mono text-fg-primary">{row.code}</div>
-                  <div className={`rounded px-1.5 py-1 text-center ${HEATMAP_COLORS[row.b1]}`}>S1 {formatTime(row.s1)}</div>
-                  <div className={`rounded px-1.5 py-1 text-center ${HEATMAP_COLORS[row.b2]}`}>S2 {formatTime(row.s2)}</div>
-                  <div className={`rounded px-1.5 py-1 text-center ${HEATMAP_COLORS[row.b3]}`}>S3 {formatTime(row.s3)}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )
-      case 'efficiency':
-        return (
-          <div className="h-full overflow-auto">
-            <div className="mb-2 text-xs uppercase tracking-[0.14em] text-fg-secondary">Throttle / Brake Efficiency</div>
-            {efficiency.length === 0 ? (
-              <div className="text-xs text-fg-muted">Load telemetry in Telemetry view to populate efficiency ranking.</div>
-            ) : (
-              <div className="space-y-1.5">
-                {efficiency.map((row) => (
-                  <div key={row.code} className="grid grid-cols-[40px_1fr_56px] items-center gap-2 text-[11px]">
-                    <div className="font-mono text-fg-primary">{row.code}</div>
-                    <div className="h-2 rounded bg-white/10">
-                      <div className="h-2 rounded bg-white/70" style={{ width: `${row.score}%` }} />
-                    </div>
-                    <div className="text-right font-mono text-fg-secondary">{row.score.toFixed(1)}</div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )
-      case 'cornerSpeed':
-        return (
-          <div className="h-full overflow-auto">
-            <div className="mb-1 text-xs uppercase tracking-[0.14em] text-fg-secondary">Corner Speed Analysis</div>
-            {cornerSpeedRows.length === 0 ? (
-              <div className="text-xs text-fg-muted">Telemetry corner samples unavailable yet for this selection.</div>
-            ) : (
-              <div className="space-y-1.5">
-                {cornerSpeedRows.map((row) => (
-                  <div key={row.label} className="grid grid-cols-[34px_1fr_56px] items-center gap-2 text-[11px]">
-                    <div className="font-mono text-fg-primary">{row.label}</div>
-                    <div className="h-2 rounded bg-white/10">
-                      <div
-                        className="h-2 rounded bg-amber-300/80"
-                        style={{ width: `${Math.max(8, Math.min(100, (row.speed / 330) * 100))}%` }}
-                      />
-                    </div>
-                    <div className="text-right font-mono text-fg-secondary">{Number(row.speed).toFixed(0)} km/h</div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )
-      default:
-        return (
-          <div className="flex items-center justify-center h-64 text-gray-400">
-            {panelLabelByKey[activePanel] ?? String(activePanel)} — coming soon
-          </div>
-        )
-    }
+
+    const chartHeight = Math.round((panelHeight - 60) / 6)
+
+    return (
+      <div className="flex flex-col gap-0.5 h-full overflow-auto">
+        <UPlotChart
+          title="Speed"
+          subtitle={subtitle}
+          timestamps={telemetryDistance}
+          series={[
+            { label: primaryDriver ?? 'Primary', data: telemetrySpeed.primary, color: primaryColor, width: 2 },
+            ...(compareDriver && telemetrySpeed.compare.length
+              ? [{ label: compareDriver, data: telemetrySpeed.compare, color: compareColor, width: 2 }]
+              : [])
+          ]}
+          height={chartHeight}
+          xTickMode="distance"
+          xTickUnit="m"
+          yLabel="km/h"
+          yTickMode="integer"
+          yTickUnit="km/h"
+        />
+        <UPlotChart
+          title="Lon Acc"
+          timestamps={telemetryDistance}
+          series={[
+            { label: primaryDriver ?? 'Primary', data: telemetryLonAcc.primary, color: primaryColor, width: 2 },
+            ...(compareDriver && telemetryLonAcc.compare.length
+              ? [{ label: compareDriver, data: telemetryLonAcc.compare, color: compareColor, width: 2 }]
+              : [])
+          ]}
+          height={chartHeight}
+          xTickMode="distance"
+          xTickUnit="m"
+          yLabel="g"
+          yTickMode="default"
+          yTickUnit="g"
+        />
+        <UPlotChart
+          title="Lat Acc"
+          timestamps={telemetryDistance}
+          series={[
+            { label: primaryDriver ?? 'Primary', data: telemetryLatAcc.primary, color: primaryColor, width: 2 },
+            ...(compareDriver && telemetryLatAcc.compare.length
+              ? [{ label: compareDriver, data: telemetryLatAcc.compare, color: compareColor, width: 2 }]
+              : [])
+          ]}
+          height={chartHeight}
+          xTickMode="distance"
+          xTickUnit="m"
+          yLabel="g"
+          yTickMode="default"
+          yTickUnit="g"
+        />
+        <UPlotChart
+          title="Throttle"
+          timestamps={telemetryDistance}
+          series={[
+            { label: primaryDriver ?? 'Primary', data: telemetryThrottle.primary, color: primaryColor, width: 2 },
+            ...(compareDriver && telemetryThrottle.compare.length
+              ? [{ label: compareDriver, data: telemetryThrottle.compare, color: compareColor, width: 2 }]
+              : [])
+          ]}
+          height={chartHeight}
+          xTickMode="distance"
+          xTickUnit="m"
+          yLabel="%"
+          yTickMode="percent"
+          yTickUnit="%"
+        />
+        <UPlotChart
+          title="Brake"
+          timestamps={telemetryDistance}
+          series={[
+            { label: primaryDriver ?? 'Primary', data: telemetryBrake.primary, color: primaryColor, width: 2 },
+            ...(compareDriver && telemetryBrake.compare.length
+              ? [{ label: compareDriver, data: telemetryBrake.compare, color: compareColor, width: 2 }]
+              : [])
+          ]}
+          height={chartHeight}
+          xTickMode="distance"
+          xTickUnit="m"
+          yLabel=""
+          yTickMode="binary"
+          stepped={true}
+        />
+        <UPlotChart
+          title="Gear"
+          timestamps={telemetryDistance}
+          series={[
+            { label: primaryDriver ?? 'Primary', data: telemetryGear.primary, color: primaryColor, width: 2 },
+            ...(compareDriver && telemetryGear.compare.length
+              ? [{ label: compareDriver, data: telemetryGear.compare, color: compareColor, width: 2 }]
+              : [])
+          ]}
+          height={chartHeight}
+          xTickMode="distance"
+          xTickUnit="m"
+          yLabel=""
+          yTickMode="integer"
+          stepped={true}
+        />
+      </div>
+    )
   }
 
-  const tabs: Array<{ key: AnalyticsPanel; label: string }> = [
-    { key: 'lapTime', label: 'Lap Time' },
-    { key: 'paceDelta', label: 'Pace Delta' },
-    { key: 'tyreDeg', label: 'Tyre Deg' },
-    { key: 'sectors', label: 'Sectors' },
-    { key: 'efficiency', label: 'Efficiency' },
-    { key: 'cornerSpeed', label: 'Corner Speed' }
+  const tabs: Array<{ key: AnalyticsTab; label: string }> = [
+    { key: 'racepace', label: 'Race Pace' },
+    { key: 'telemetry', label: 'Telemetry' },
   ]
 
-  const activeLegend = useMemo(() => {
-    if (activePanel === 'lapTime') return lapProgressionSeries ?? []
-    if (activePanel === 'tyreDeg') return tyreDegradationSeries ?? []
-    return []
-  }, [activePanel, lapProgressionSeries, tyreDegradationSeries])
-  const legendVisible = useMemo(() => activeLegend.slice(0, 5), [activeLegend])
-  const legendOverflow = Math.max(0, activeLegend.length - legendVisible.length)
-
-  const sessionLabel = sessionData
-    ? `${sessionData.metadata.year} ${sessionData.metadata.raceName} · ${sessionData.metadata.sessionType}`
+  const sessionTitle = sessionData
+    ? `${year} ${raceName} - ${sessionType}`
     : 'Analytics'
 
   return (
@@ -635,49 +482,28 @@ export const AnalyticsView = React.memo(function AnalyticsView() {
             <button
               key={tab.key}
               type="button"
-              onClick={() => setActivePanel(tab.key)}
-              className={`flex-shrink-0 rounded-md border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] ${activePanel === tab.key ? 'border-accent bg-accent/10 text-fg-primary' : 'border-border bg-bg-secondary text-fg-secondary'
+              onClick={() => setActiveTab(tab.key)}
+              className={`flex-shrink-0 rounded-md border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] ${activeTab === tab.key ? 'border-accent bg-accent/10 text-fg-primary' : 'border-border bg-bg-secondary text-fg-secondary'
                 }`}
             >
               {tab.label}
             </button>
           ))}
-          {legendVisible.map((series) => (
-            <div key={series.label} className="flex flex-shrink-0 items-center gap-1.5 text-[10px] text-fg-secondary">
-              <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: series.color }} />
-              <span className="font-mono text-fg-primary">{series.label}</span>
-            </div>
-          ))}
-          {legendOverflow > 0 && (
-            <span className="flex-shrink-0 rounded border border-border bg-bg-inset px-1.5 py-0.5 text-[9px] font-mono text-fg-muted">
-              +{legendOverflow} more
-            </span>
-          )}
         </div>
         <div className="flex flex-wrap items-center gap-1.5 text-[10px] text-fg-muted">
-          <span className="max-w-full truncate rounded-md border border-border bg-bg-inset px-2 py-0.5 font-mono" title={sessionLabel}>
-            {sessionLabel}
+          <span className="max-w-full truncate rounded-md border border-border bg-bg-inset px-2 py-0.5 font-mono" title={sessionTitle}>
+            {sessionTitle}
           </span>
           <span className="rounded-md border border-border bg-bg-inset px-2 py-0.5 font-mono">
-            Driver {selectedCode || '-'} {compareDriver ? `| ${compareDriver}` : ''}
+            Driver {primaryDriver || '-'} {compareDriver ? `| ${compareDriver}` : ''}
           </span>
-          {typeof compareDelta === 'number' && Number.isFinite(compareDelta) && (
-            <span className="rounded-md border border-border bg-bg-inset px-2 py-0.5 font-mono">
-              Avg Δ {compareDelta >= 0 ? '+' : ''}{(typeof compareDelta === 'number' && Number.isFinite(compareDelta) ? compareDelta.toFixed(3) : '—')}s
-            </span>
-          )}
-          {cursorText && (
-            <span className="max-w-[420px] truncate rounded-md border border-border bg-bg-inset px-2 py-0.5 font-mono" title={cursorText}>
-              {cursorText}
-            </span>
-          )}
         </div>
       </div>
 
       <div className="bg-bg-surface rounded-md border border-border flex-1 overflow-hidden">
-        <div ref={panelRef} className="h-full w-full min-h-[400px] p-2.5">
-          <ViewErrorBoundary viewName="AnalyticsView">
-            {renderPanel()}
+        <div ref={panelRef} className="h-full w-full p-2.5">
+          <ViewErrorBoundary viewName="Analytics Panel">
+            {activeTab === 'racepace' ? renderRacePaceTab() : renderTelemetryTab()}
           </ViewErrorBoundary>
         </div>
       </div>

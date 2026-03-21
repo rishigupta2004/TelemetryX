@@ -132,11 +132,27 @@ const RaceControlMessageRow = memo(function RaceControlMessageRow({
     }
   }, [])
 
+  const isCritical = tag?.text === 'SC' || tag?.text === 'VSC' || tag?.text === 'RED'
+
   return (
     <div
       ref={ref}
-      className={`relative border border-border-micro px-2 py-1.5 transition-colors ${accent.bg}`}
+      className={`relative border border-border-micro px-2 py-1.5 transition-colors ${accent.bg} ${isCritical ? 'tx-critical-msg' : ''}`}
     >
+      <style>{`
+        @keyframes msg-shout {
+          0%, 100% { box-shadow: inset 0 0 10px rgba(255,165,0,0); }
+          50% { box-shadow: inset 0 0 25px rgba(255,165,0,0.25); }
+        }
+        @keyframes msg-shout-red {
+          0%, 100% { box-shadow: inset 0 0 10px rgba(255,0,0,0); }
+          50% { box-shadow: inset 0 0 25px rgba(255,0,0,0.3); }
+        }
+        .tx-critical-msg {
+          animation: ${tag?.text === 'RED' ? 'msg-shout-red' : 'msg-shout'} 2s ease-in-out infinite;
+          border-color: rgba(255,255,255,0.2) !important;
+        }
+      `}</style>
       {/* Left accent bar */}
       <div className={`absolute bottom-0 left-0 top-0 w-[1.5px] ${accent.bar}`} />
 

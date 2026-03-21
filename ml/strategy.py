@@ -16,6 +16,8 @@ from dataclasses import dataclass
 from collections import defaultdict
 import random
 
+from functools import lru_cache
+
 DATA_PATH = Path(__file__).parent.parent / "backend" / "etl" / "data"
 SILVER_PATH = DATA_PATH / "silver"
 FEATURES_PATH = DATA_PATH / "features"
@@ -96,10 +98,11 @@ def get_race_config(year: int, race_name: str, session: str = "R") -> RaceConfig
     )
 
 
+@lru_cache(maxsize=128)
 def generate_strategy_permutations(
     total_laps: int,
-    compounds: List[str] = ["SOFT", "MEDIUM", "HARD"]
-) -> List[Tuple[List[str], List[int]]]:
+    compounds: tuple = ("SOFT", "MEDIUM", "HARD"),  # tuple = hashable
+) -> list:
     strategies = []
     
     for stops in range(0, 4):
@@ -267,7 +270,8 @@ def run_monte_carlo_simulation(
     if verbose:
         print(f"Race config: {config.total_laps} laps, base time {config.base_lap_time:.2f}s")
     
-    strategies = generate_strategy_permutations(config.total_laps)
+    available = tuple(config.tyre_life.keys()) or ("SOFT", "MEDIUM", "HARD")
+    strategies = generate_strategy_permutations(config.total_laps, available)
     
     if verbose:
         print(f"Testing {len(strategies)} strategy permutations...")

@@ -44,26 +44,53 @@ const TimingRowItem = memo(function TimingRowItem({ row, idx, selected, sessionB
     ? 'rgba(255,0,0,0.04)'
     : idx % 2 === 0 ? 'var(--bg-card)' : 'var(--bg-secondary)'
   const selectedBg = selected ? 'var(--bg-selected)' : baseBg
+  const progressPct = (row.lapProgress ?? 0) * 100
 
   return (
     <tr
       key={row.driverNumber}
       aria-label={`${row.driverCode} position ${row.position}`}
-      className="h-[26px] cursor-pointer border-b border-border/20 transition-colors duration-150 hover:bg-white/5"
+      className="group h-[32px] cursor-pointer border-b border-border/10 transition-colors duration-150 hover:bg-white/5"
       style={{ backgroundColor: selectedBg }}
       onClick={() => onSelect(row.driverNumber)}
       title={`${row.teamName} - Lap ${row.lapsCompleted}`}
     >
-      <td className="px-1 font-mono font-semibold text-fg-secondary">{row.position}</td>
+      <td className="relative px-1 font-mono font-bold text-fg-secondary">
+        <div className="relative z-10 flex items-center justify-center">{row.position}</div>
+        {/* Lap Progress Bar */}
+        <div 
+          className="absolute bottom-0 left-0 h-[1.5px] bg-white/20 transition-all duration-300"
+          style={{ width: `${progressPct}%`, backgroundColor: row.teamColor }}
+        />
+      </td>
       <td className="px-1">
-        <div className="flex items-center gap-1.5">
-          <span className="h-2 w-2 rounded-full" style={{ backgroundColor: row.teamColor }} />
-          <span className={`truncate font-semibold tracking-[0.02em] ${row.status === 'dnf' ? 'text-fg-muted opacity-50 line-through' : 'text-fg-primary'}`}>
+        <div className="flex items-center gap-2">
+          {/* Team Logo / Color Strip */}
+          <div className="relative h-6 w-6 shrink-0 overflow-hidden rounded bg-black/40 border border-white/5">
+            {row.teamImage ? (
+              <img src={row.teamImage} alt="" className="h-full w-full object-contain p-0.5" />
+            ) : (
+              <div className="h-full w-full" style={{ backgroundColor: row.teamColor }} />
+            )}
+          </div>
+          
+          {/* Driver Headshot */}
+          <div className="relative h-6 w-6 shrink-0 overflow-hidden rounded-full bg-slate-800 border border-white/10 shadow-sm">
+            {row.driverImage ? (
+              <img src={row.driverImage} alt="" className="h-full w-full object-cover" />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center text-[7px] font-bold text-slate-500">
+                {row.driverCode.slice(0, 2)}
+              </div>
+            )}
+          </div>
+
+          <span className={`truncate font-bold tracking-[0.05em] text-[11px] ${row.status === 'dnf' ? 'text-fg-muted opacity-50 line-through' : 'text-fg-primary'}`}>
             {row.driverCode}
           </span>
         </div>
       </td>
-      <td className="px-1 text-right font-mono tabular-nums text-fg-primary">{row.gap}</td>
+      <td className="px-1 text-right font-mono tabular-nums text-fg-primary font-medium">{row.gap}</td>
       <td className="px-1 text-right font-mono tabular-nums text-fg-secondary">{row.interval}</td>
       <td className="px-1 text-right font-mono tabular-nums text-white/90">{row.lastLap}</td>
       <td
@@ -155,10 +182,10 @@ export default function TimingTower({ rows, status = 'ready', error = null }: Ti
       }}
     >
       <table className="w-full table-fixed text-[10px]">
-        <thead className="sticky top-0 z-10 bg-bg-secondary/95 backdrop-blur-md shadow-[0_1px_0_var(--border-hard)]">
-          <tr className="h-[26px] text-[8px] font-semibold uppercase tracking-[0.12em] text-fg-muted">
-            <th className="w-8 px-1 text-left">Pos</th>
-            <th className="w-[58px] px-1 text-left">Driver</th>
+        <thead className="sticky top-0 z-20 bg-bg-secondary/95 backdrop-blur-md shadow-[0_1px_0_var(--border-hard)]">
+          <tr className="h-[28px] text-[8.5px] font-bold uppercase tracking-[0.15em] text-fg-muted">
+            <th className="w-8 px-1 text-center">Pos</th>
+            <th className="w-[110px] px-1 text-left">Driver Info</th>
             <th className="w-[56px] px-1 text-right">Gap</th>
             <th className="w-[56px] px-1 text-right">Int</th>
             <th className="w-[60px] px-1 text-right">Last</th>

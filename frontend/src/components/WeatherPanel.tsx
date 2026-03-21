@@ -99,6 +99,17 @@ export const WeatherPanel = React.memo(function WeatherPanel({ compact = false }
     return weatherSeries[idx].timestamp <= sessionTime ? weatherSeries[idx] : null
   }, [weatherSeries, sessionTime])
 
+  const previousWeather = useMemo<WeatherRow | null>(() => {
+    if (!weatherSeries.length || !weather) return null
+    const idx = weatherSeries.indexOf(weather)
+    return idx > 0 ? weatherSeries[idx - 1] : null
+  }, [weatherSeries, weather])
+
+  const getTrend = (curr: number, prev: number | undefined) => {
+    if (prev === undefined || Math.abs(curr - prev) < 0.05) return null
+    return curr > prev ? '↑' : '↓'
+  }
+
   if (!weather) {
     return (
       <div className="flex h-full items-center justify-center p-2 bg-transparent text-center">
@@ -156,18 +167,20 @@ export const WeatherPanel = React.memo(function WeatherPanel({ compact = false }
       {/* Main stats grid */}
       <div className="grid grid-cols-2 gap-[1px] bg-border-hard border border-border-hard">
         {/* Air Temp */}
-        <div className="bg-bg-surface p-3 flex flex-col items-center justify-center">
+        <div className="bg-bg-surface p-3 flex flex-col items-center justify-center relative overflow-hidden">
           <div className="text-[10px] font-mono tracking-widest text-fg-muted mb-1">AIR TEMP</div>
-          <div className="font-mono text-[16px] font-bold text-fg-primary leading-tight">
+          <div className="font-mono text-[16px] font-bold text-fg-primary leading-tight flex items-center gap-1">
             {weather.airTemp.toFixed(1)}°C
+            <span className="text-[10px] text-fg-secondary">{getTrend(weather.airTemp, previousWeather?.airTemp)}</span>
           </div>
         </div>
 
         {/* Track Temp */}
-        <div className="bg-bg-surface p-3 flex flex-col items-center justify-center" style={{ backgroundColor: trackTemp.bg }}>
+        <div className="bg-bg-surface p-3 flex flex-col items-center justify-center relative overflow-hidden" style={{ backgroundColor: trackTemp.bg }}>
           <div className="text-[10px] font-mono tracking-widest text-fg-muted mb-1">TRACK TEMP</div>
-          <div className="font-mono text-[16px] font-bold leading-tight" style={{ color: trackTemp.text }}>
+          <div className="font-mono text-[16px] font-bold leading-tight flex items-center gap-1" style={{ color: trackTemp.text }}>
             {weather.trackTemp.toFixed(1)}°C
+            <span className="text-[10px] opacity-70">{getTrend(weather.trackTemp, previousWeather?.trackTemp)}</span>
           </div>
         </div>
 
@@ -192,12 +205,15 @@ export const WeatherPanel = React.memo(function WeatherPanel({ compact = false }
       </div>
 
       {/* Bottom row */}
-      <div className="mt-4 grid grid-cols-2 gap-[1px] bg-border-hard border border-border-hard">
+      <div className={`mt-4 grid grid-cols-2 gap-[1px] bg-border-hard border border-border-hard ${isRaining ? 'shadow-[0_0_15px_rgba(33,150,243,0.3)] animate-pulse' : ''}`}>
         {/* Rainfall */}
-        <div className="bg-bg-surface px-3 py-2 flex justify-between items-center text-[10px] font-mono tracking-widest uppercase">
+        <div className={`bg-bg-surface px-3 py-2 flex justify-between items-center text-[10px] font-mono tracking-widest uppercase ${isRaining ? 'bg-blue-900/10' : ''}`}>
           <span className="text-fg-muted">RAIN</span>
           {isRaining ? (
-            <span className="text-blue-sel font-bold">{weather.rainfall.toFixed(1)} MM</span>
+            <span className="text-blue-sel font-bold flex items-center gap-1">
+              <span className="w-1 h-1 rounded-full bg-blue-sel animate-ping" />
+              {weather.rainfall.toFixed(1)} MM
+            </span>
           ) : (
             <span className="text-green-live">NONE</span>
           )}

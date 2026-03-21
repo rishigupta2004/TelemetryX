@@ -82,27 +82,36 @@ export default function App() {
           {loadingState === 'ready' && (
             <div className="flex h-full min-h-0">
               <Sidebar currentView={activeView} onViewChange={(view) => setActiveView(view as AppView)} />
-              <div className="flex-1 min-h-0 min-w-0">
-                {activeView === 'timing' && <div className="h-full w-full min-w-0"><TimingView /></div>}
-                {activeView === 'telemetry' && <div className="h-full w-full min-w-0"><TelemetryView active /></div>}
-                {activeView === 'strategy' && (
-                  <div className="h-full w-full min-w-0">
-                    <Suspense fallback={<ViewSkeleton label="Strategy view" />}>
-                      <StrategyView active />
-                    </Suspense>
-                  </div>
-                )}
-                {activeView === 'analytics' && (
-                  <div className="h-full w-full min-w-0">
-                    <Suspense fallback={<ViewSkeleton label="Analytics view" />}>
-                      <AnalyticsView />
-                    </Suspense>
-                  </div>
-                )}
-                {activeView === 'broadcast' && <div className="h-full w-full min-w-0"><BroadcastView /></div>}
-                {activeView === 'standings' && <div className="h-full w-full min-w-0"><StandingsView /></div>}
-                {activeView === 'profiles' && <div className="h-full w-full min-w-0"><ProfilesView /></div>}
-                {activeView === 'fiaDocs' && <div className="h-full w-full min-w-0"><FiaDocumentsView /></div>}
+              <div className="flex-1 min-h-0 min-w-0 relative">
+                {/* CSS-based tab persistence: keep mounted views alive, hide with display:none */}
+                <div className="h-full w-full min-w-0" style={{ display: activeView === 'timing' ? 'block' : 'none' }}>
+                  <TimingView />
+                </div>
+                <div className="h-full w-full min-w-0" style={{ display: activeView === 'telemetry' ? 'block' : 'none' }}>
+                  <TelemetryView active={activeView === 'telemetry'} />
+                </div>
+                <div className="h-full w-full min-w-0" style={{ display: activeView === 'strategy' ? 'block' : 'none' }}>
+                  <Suspense fallback={<ViewSkeleton label="Strategy view" />}>
+                    <StrategyView active={activeView === 'strategy'} />
+                  </Suspense>
+                </div>
+                <div className="h-full w-full min-w-0" style={{ display: activeView === 'analytics' ? 'block' : 'none' }}>
+                  <Suspense fallback={<ViewSkeleton label="Analytics view" />}>
+                    <AnalyticsView />
+                  </Suspense>
+                </div>
+                <div className="h-full w-full min-w-0" style={{ display: activeView === 'broadcast' ? 'block' : 'none' }}>
+                  <BroadcastView />
+                </div>
+                <div className="h-full w-full min-w-0" style={{ display: activeView === 'standings' ? 'block' : 'none' }}>
+                  <StandingsView />
+                </div>
+                <div className="h-full w-full min-w-0" style={{ display: activeView === 'profiles' ? 'block' : 'none' }}>
+                  <ProfilesView />
+                </div>
+                <div className="h-full w-full min-w-0" style={{ display: activeView === 'fiaDocs' ? 'block' : 'none' }}>
+                  <FiaDocumentsView />
+                </div>
               </div>
             </div>
           )}

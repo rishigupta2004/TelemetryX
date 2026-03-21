@@ -153,7 +153,7 @@ export function TrackMap({ compact = false, mode = 'full' }: TrackMapProps) {
         driverCode: driver.code,
         driverNumber: driver.driverNumber,
         teamColor: driver.teamColor || '#fff',
-        progress: (unwrapped + offset * 0.08) % 1,
+        progress: (unwrapped - offset * 0.08 + 1) % 1,
         currentLap: lapNumber,
         position: lap?.position ?? 99,
         x: null,

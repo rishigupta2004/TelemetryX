@@ -53,9 +53,13 @@ def build_race_context_features(year: int, race: str, session: str) -> pd.DataFr
 
     if not weather.empty:
         weather = weather.rename(columns={"Rainfall": "rainfall"})
-        for col in ["air_temperature", "track_temperature", "humidity", "wind_speed", "wind_direction", "pressure", "rainfall"]:
+        weather_cols = ["air_temperature", "track_temperature", "humidity",
+                        "wind_speed", "wind_direction", "pressure", "rainfall"]
+        first_lap = df["lap_number"].min()
+        for col in weather_cols:
             if col in weather.columns:
-                df[col] = weather[col].iloc[0]
+                df[col] = None
+                df.loc[df["lap_number"] == first_lap, col] = weather[col].iloc[0]
 
     df["weather_conditions"] = df.apply(
         lambda r: "RAIN" if pd.notna(r.get("rainfall")) and r["rainfall"] > 0

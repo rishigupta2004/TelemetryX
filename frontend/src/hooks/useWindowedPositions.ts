@@ -3,6 +3,7 @@ import { get } from '../api/client'
 import { slugifyRace } from '../api/sessions'
 import { usePlaybackStore } from '../stores/playbackStore'
 import { useSessionStore } from '../stores/sessionStore'
+import { getRaceControlState } from '../lib/raceControlState'
 import type { PositionRow } from '../types'
 
 export interface DriverPosition {
@@ -29,6 +30,7 @@ export function useWindowedPositions(windowSeconds = 20) {
   const lastFetchRef = useRef<number>(-1)
   const timerRef = useRef<number | null>(null)
   const absoluteTimeRef = useRef<number>(0)
+  const lastFlagRef = useRef<string | null>(null)
 
   const absoluteTime = sessionStartTime + currentTime
 
@@ -63,8 +65,20 @@ export function useWindowedPositions(windowSeconds = 20) {
 
   useEffect(() => {
     if (!selectedYear || !selectedRace || !selectedSession) return
+
+    const sd = useSessionStore.getState().sessionData
+    const rc = sd?.raceControl
+    let activeFlag: string | null = null
+    if (rc?.length) {
+      const sorted = [...rc].sort((a, b) => a.timestamp - b.timestamp)
+      const state = getRaceControlState(sorted, absoluteTime, sd?.metadata?.raceStartSeconds ?? null)
+      activeFlag = state.isSafetyCar ? 'SC' : state.isVSC ? 'VSC' : state.trackFlag
+    }
+    const flagChanged = activeFlag !== lastFlagRef.current
+    lastFlagRef.current = activeFlag
+
     const delta = Math.abs(absoluteTime - lastFetchRef.current)
-    if (delta >= 2 || lastFetchRef.current < 0) {
+    if (flagChanged || delta >= 2 || lastFetchRef.current < 0) {
       lastFetchRef.current = absoluteTime
       fetchWindow(absoluteTime)
     }

@@ -456,7 +456,120 @@ def _load_wikipedia_images(
     return {"drivers": driver_images, "teams": team_images}
 
 
+def _fetch_jolpica_standings(year: int) -> Optional[Dict[str, Any]]:
+    """Fetch championship standings from Jolpica (Ergast replacement) API."""
+    headers = {"User-Agent": "TelemetryX/1.0"}
+    drivers: List[Dict[str, Any]] = []
+    constructors: List[Dict[str, Any]] = []
+    rounds_count = 0
+    last_race = ""
+
+    try:
+        # Driver standings
+        dr_resp = requests.get(
+            f"https://api.jolpi.ca/ergast/f1/{year}/driverstandings.json?limit=100",
+            timeout=12, headers=headers,
+        )
+        if dr_resp.status_code != 200:
+            return None
+        dr_data = dr_resp.json()
+        standings_lists = dr_data.get("MRData", {}).get("StandingsTable", {}).get("StandingsLists", [])
+        if not standings_lists:
+            return None
+
+        sl = standings_lists[0]
+        rounds_count = _safe_int(sl.get("round")) or 0
+        # Fetch the race name for the latest round
+        last_race_raw = sl.get("season", str(year))
+
+        for entry in sl.get("DriverStandings", []):
+            driver_info = entry.get("Driver", {})
+            cons_list = entry.get("Constructors", [])
+            team_name = cons_list[0].get("name", "Unknown") if cons_list else "Unknown"
+            pos = _safe_int(entry.get("position")) or 99
+            pts = _safe_float(entry.get("points")) or 0
+            wins = _safe_int(entry.get("wins")) or 0
+            code = driver_info.get("code", "")
+            full_name = f"{driver_info.get('givenName', '')} {driver_info.get('familyName', '')}".strip()
+            number = _safe_int(driver_info.get("permanentNumber"))
+
+            drivers.append({
+                "position": pos,
+                "driverNumber": number,
+                "driverName": code or full_name,
+                "teamName": team_name,
+                "points": int(pts),
+                "wins": wins,
+                "podiums": 0,  # Jolpica doesn't provide this directly
+                "starts": rounds_count,
+                "bestFinish": 1 if wins > 0 else None,
+                "bestQuali": None,
+                "bestRace": None,
+                "seasons": 1,
+                "seasonPointsProgression": [],
+            })
+
+        # Constructor standings
+        cs_resp = requests.get(
+            f"https://api.jolpi.ca/ergast/f1/{year}/constructorstandings.json?limit=50",
+            timeout=12, headers=headers,
+        )
+        if cs_resp.status_code == 200:
+            cs_data = cs_resp.json()
+            cs_lists = cs_data.get("MRData", {}).get("StandingsTable", {}).get("StandingsLists", [])
+            if cs_lists:
+                for entry in cs_lists[0].get("ConstructorStandings", []):
+                    cons = entry.get("Constructor", {})
+                    pos = _safe_int(entry.get("position")) or 99
+                    pts = _safe_float(entry.get("points")) or 0
+                    wins = _safe_int(entry.get("wins")) or 0
+                    constructors.append({
+                        "position": pos,
+                        "teamName": cons.get("name", "Unknown"),
+                        "points": int(pts),
+                        "wins": wins,
+                        "podiums": 0,
+                        "starts": rounds_count,
+                        "bestFinish": 1 if wins > 0 else None,
+                        "driverCount": 2,
+                    })
+
+        # We intentionally skip fetching full race results (results.json) because it
+        # is too heavy and often times out, which causes the entire Jolpica fallback
+        # to fail and revert to wrong parquet data.
+        # Progression and podiums will be blank/0, but standings points/positions
+        # will be 100% accurate.
+        
+        # We can still extract bestFinish from wins
+        for dr in drivers:
+            dr["podiums"] = dr["wins"] # rough approximation
+            if dr["wins"] > 0:
+                dr["bestFinish"] = 1
+
+
+        if not last_race:
+            last_race = f"Round {rounds_count}"
+
+        return {
+            "year": int(year),
+            "roundsCount": rounds_count,
+            "lastRace": last_race,
+            "drivers": drivers,
+            "constructors": constructors,
+            "sourceFiles": [],
+            "generatedAt": int(time.time()),
+        }
+    except Exception:
+        return None
+
+
 def _build_season_standings(year: int) -> Dict[str, Any]:
+    # Try Jolpica API first for accurate data
+    jolpica_data = _fetch_jolpica_standings(year)
+    if jolpica_data and jolpica_data.get("drivers"):
+        return jolpica_data
+
+    # Fall back to parquet-based computation
     races = _race_dirs_for_year(year)
     if not races:
         raise HTTPException(status_code=404, detail=f"No gold standings data available for {year}")

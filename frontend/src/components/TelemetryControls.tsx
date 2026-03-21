@@ -2,6 +2,14 @@ import React, { useEffect, useRef } from 'react'
 import { animate } from 'animejs'
 import type { LapTimeWindow } from '../hooks/useTelemetryData'
 
+function formatLapTime(seconds: number): string {
+  if (!seconds || isNaN(seconds)) return '0:00.000'
+  const mins = Math.floor(seconds / 60)
+  const secs = Math.floor(seconds % 60)
+  const ms = Math.floor((seconds % 1) * 1000)
+  return `${mins}:${secs.toString().padStart(2, '0')}.${ms.toString().padStart(3, '0')}`
+}
+
 interface TelemetryControlsProps {
   selectedDriver: string | null
   compareDriver: string | null
@@ -119,7 +127,7 @@ export const TelemetryControls = React.memo(function TelemetryControls({
       {lapTimeWindow && (
         <div className="flex items-center gap-1.5 rounded-md bg-bg-inset px-2.5 py-1 border border-border-micro">
           <span className="text-[9px] text-fg-muted uppercase tracking-wider">Lap Time</span>
-          <span className="font-mono text-[12px] text-fg-primary font-semibold">{lapTimeWindow.duration.toFixed(3)}s</span>
+          <span className="font-mono text-[12px] text-fg-primary font-semibold">{formatLapTime(lapTimeWindow.duration)}</span>
         </div>
       )}
 

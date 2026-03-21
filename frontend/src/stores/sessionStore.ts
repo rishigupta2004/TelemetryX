@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { fetchRaces, fetchSeasons, fetchSession, fetchSessionContext, fetchSessions, fetchLaps, fetchPositions, slugifyRace } from '../api/sessions'
 import { usePlaybackStore } from './playbackStore'
 import { useDriverStore } from './driverStore'
+import { useTelemetryStore } from './telemetryStore'
 import type { ApiErrorInfo, Driver, LapRow, Race, Season, SessionInfoResponse, SessionMetadata, SessionResponse } from '../types'
 import { isAbortLikeError, toApiErrorInfo } from '../api/client'
 
@@ -146,7 +147,9 @@ export const useSessionStore = create<SessionState>((set, get) => ({
 
   loadSession: async (year, race, session) => {
     const requestId = ++latestSessionRequestId
+    latestSessionsRequestId++ // cancel any in-flight fetchSessions that could reset loadingState
     useDriverStore.getState().clearSelection()
+    useTelemetryStore.getState().clearTelemetry()
 
     set({
       loadingState: 'loading', error: null, apiError: null,

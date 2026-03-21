@@ -1,9 +1,8 @@
-import sys
+import sys, os
+os.environ["PYDANTIC_SKIP_PLUGINS"] = "1"
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-
-import os
 
 from fastapi import Depends, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware

@@ -501,81 +501,78 @@ def load_drivers(silver_path: str, year: Optional[int] = None) -> list:
         return []
 
     conn = get_db_connection().parquet_conn
-    try:
-        # Check which columns are available (FastF1 vs OpenF1)
-        schema_query = f"DESCRIBE SELECT * FROM read_parquet('{laps_file}')"
-        columns = {row[0] for row in conn.execute(schema_query).fetchall()}
+    # Check which columns are available (FastF1 vs OpenF1)
+    schema_query = f"DESCRIBE SELECT * FROM read_parquet('{laps_file}')"
+    columns = {row[0] for row in conn.execute(schema_query).fetchall()}
 
-        # FastF1 has driver_name and team_name, OpenF1 only has driver_number
-        if "driver_name" in columns:
-            query = f"""
-                SELECT DISTINCT driver_name, driver_number, team_name
-                FROM read_parquet('{laps_file}')
-                WHERE driver_name IS NOT NULL
-                ORDER BY driver_name
-            """
-            result = conn.execute(query).fetchall()
-            drivers = []
-            for row in result:
-                driver_name = row[0]
-                driver_number = row[1]
-                team_name = row[2] or get_team_name(row[1])
-                team_color = get_team_color(team_name)
-                if year:
-                    from ..catalog import canonical_driver_info
+    # FastF1 has driver_name and team_name, OpenF1 only has driver_number
+    if "driver_name" in columns:
+        query = f"""
+            SELECT DISTINCT driver_name, driver_number, team_name
+            FROM read_parquet('{laps_file}')
+            WHERE driver_name IS NOT NULL
+            ORDER BY driver_name
+        """
+        result = conn.execute(query).fetchall()
+        drivers = []
+        for row in result:
+            driver_name = row[0]
+            driver_number = row[1]
+            team_name = row[2] or get_team_name(row[1])
+            team_color = get_team_color(team_name)
+            if year:
+                from ..catalog import canonical_driver_info
 
-                    info = canonical_driver_info(
-                        int(year), str(driver_number), str(driver_name)
-                    )
-                    if info:
-                        driver_name = info.get("driver_name") or driver_name
-                        team_name = info.get("team_name") or team_name
-                        team_color = info.get("team_color") or team_color
-                drivers.append(
-                    {
-                        "driverName": driver_name,
-                        "driverNumber": driver_number,
-                        "teamName": team_name,
-                        "teamColor": team_color,
-                    }
+                info = canonical_driver_info(
+                    int(year), str(driver_number), str(driver_name)
                 )
-            return drivers
-        else:
-            # OpenF1 schema - only has driver_number, use mapping
-            query = f"""
-                SELECT DISTINCT driver_number
-                FROM read_parquet('{laps_file}')
-                WHERE driver_number IS NOT NULL
-                ORDER BY driver_number
-            """
-            result = conn.execute(query).fetchall()
-            drivers = []
-            for row in result:
-                driver_number = row[0]
-                driver_name = get_driver_name(driver_number)
-                team_name = get_team_name(driver_number)
-                team_color = get_team_color(team_name)
-                if year:
-                    from ..catalog import canonical_driver_info
+                if info:
+                    driver_name = info.get("driver_name") or driver_name
+                    team_name = info.get("team_name") or team_name
+                    team_color = info.get("team_color") or team_color
+            drivers.append(
+                {
+                    "driverName": driver_name,
+                    "driverNumber": driver_number,
+                    "teamName": team_name,
+                    "teamColor": team_color,
+                }
+            )
+        return drivers
+    else:
+        # OpenF1 schema - only has driver_number, use mapping
+        query = f"""
+            SELECT DISTINCT driver_number
+            FROM read_parquet('{laps_file}')
+            WHERE driver_number IS NOT NULL
+            ORDER BY driver_number
+        """
+        result = conn.execute(query).fetchall()
+        drivers = []
+        for row in result:
+            driver_number = row[0]
+            driver_name = get_driver_name(driver_number)
+            team_name = get_team_name(driver_number)
+            team_color = get_team_color(team_name)
+            if year:
+                from ..catalog import canonical_driver_info
 
-                    info = canonical_driver_info(
-                        int(year), str(driver_number), str(driver_name)
-                    )
-                    if info:
-                        driver_name = info.get("driver_name") or driver_name
-                        team_name = info.get("team_name") or team_name
-                        team_color = info.get("team_color") or team_color
-                drivers.append(
-                    {
-                        "driverName": driver_name,
-                        "driverNumber": driver_number,
-                        "teamName": team_name,
-                        "teamColor": team_color,
-                    }
+                info = canonical_driver_info(
+                    int(year), str(driver_number), str(driver_name)
                 )
-            return drivers
-    finally:
-        conn.close()
+                if info:
+                    driver_name = info.get("driver_name") or driver_name
+                    team_name = info.get("team_name") or team_name
+                    team_color = info.get("team_color") or team_color
+            drivers.append(
+                {
+                    "driverName": driver_name,
+                    "driverNumber": driver_number,
+                    "teamName": team_name,
+                    "teamColor": team_color,
+                }
+            )
+        return drivers
 
 
 def load_laps(silver_path: str, latest_only: bool = False) -> list:
@@ -585,15 +582,14 @@ def load_laps(silver_path: str, latest_only: bool = False) -> list:
 
     # Use pooled connection instead of creating new one each time
     conn = get_db_connection().parquet_conn
-    try:
-        # Check which columns are available (FastF1 vs OpenF1)
-        schema_query = f"DESCRIBE SELECT * FROM read_parquet('{laps_file}')"
-        columns_in_file = {row[0] for row in conn.execute(schema_query).fetchall()}
+    # Check which columns are available (FastF1 vs OpenF1)
+    schema_query = f"DESCRIBE SELECT * FROM read_parquet('{laps_file}')"
+    columns_in_file = {row[0] for row in conn.execute(schema_query).fetchall()}
 
-        # Determine schema type
-        is_fastf1 = "driver_name" in columns_in_file
+    # Determine schema type
+    is_fastf1 = "driver_name" in columns_in_file
 
-        if is_fastf1:
+    if is_fastf1:
             has_pit_in = "pit_in_time_formatted" in columns_in_file
             has_pit_out = "pit_out_time_formatted" in columns_in_file
             pit_in_expr = (
@@ -724,8 +720,132 @@ def load_laps(silver_path: str, latest_only: bool = False) -> list:
                 "sector2",
                 "sector3",
             ]
-        else:
-            # OpenF1 schema
+            # Process FastF1 results
+            def _coerce_seconds(value):
+                if value is None:
+                    return None
+                # DuckDB may return timedelta-like objects, integers (ns/us/ms), or floats.
+                try:
+                    if hasattr(value, "total_seconds"):
+                        return float(value.total_seconds())
+                except Exception:
+                    pass
+                if isinstance(value, datetime.time):
+                    return float(
+                        value.hour * 3600
+                        + value.minute * 60
+                        + value.second
+                        + value.microsecond / 1e6
+                    )
+                try:
+                    numeric = float(value)
+                except Exception:
+                    return None
+                # Heuristic unit normalization:
+                # - ns values ~ 1e12 for ~1000s
+                # - us values ~ 1e9 for ~1000s
+                # - ms values ~ 1e6 for ~1000s
+                if numeric > 1e11:
+                    return numeric / 1e9
+                if numeric > 1e8:
+                    return numeric / 1e6
+                if numeric > 1e5:
+                    return numeric / 1e3
+                return numeric
+
+            def _parse_formatted_clock(value):
+                if value is None:
+                    return None
+                raw = str(value).strip()
+                if not raw:
+                    return None
+                if "day" in raw:
+                    parts = raw.split()
+                    raw = parts[-1] if parts else raw
+                if ":" not in raw:
+                    try:
+                        return float(raw)
+                    except Exception:
+                        return None
+                bits = raw.split(":")
+                try:
+                    nums = [float(x) for x in bits]
+                except Exception:
+                    return None
+                if len(nums) == 2:
+                    minutes, seconds = nums
+                    hours = 0.0
+                elif len(nums) == 3:
+                    hours, minutes, seconds = nums
+                else:
+                    return None
+                return hours * 3600.0 + minutes * 60.0 + seconds
+
+            laps = []
+            for row in result:
+                    record = dict(zip(columns, row))
+                    # Sector*SessionTime comes from FastF1 as a "session time at sector end" (not duration).
+                    # Normalize units to seconds and convert to sector durations when possible.
+                    s1 = _coerce_seconds(record.get("sector1"))
+                    s2 = _coerce_seconds(record.get("sector2"))
+                    s3 = _coerce_seconds(record.get("sector3"))
+                    lap_time = _coerce_seconds(record.get("lapTime"))
+
+                    if (
+                        lap_time is not None
+                        and s3 is not None
+                        and s3 > lap_time
+                        and (s2 is None or s3 >= s2)
+                        and (s1 is None or s2 is None or s2 >= s1)
+                    ):
+                        lap_start = s3 - lap_time
+                        dur1 = (s1 - lap_start) if s1 is not None else None
+                        dur2 = (s2 - s1) if (s2 is not None and s1 is not None) else None
+                        dur3 = (s3 - s2) if (s3 is not None and s2 is not None) else None
+
+                        def _ok(d):
+                            return (
+                                d
+                                if d is not None and pd.notna(d) and d > 0 and d < 600
+                                else None
+                            )
+
+                        record["sector1"] = _ok(dur1)
+                        record["sector2"] = _ok(dur2)
+                        record["sector3"] = _ok(dur3)
+                    else:
+                        # Avoid surfacing session-time stamps in the UI if we couldn't convert them.
+                        if (
+                            lap_time is None or (lap_time is not None and lap_time < 600)
+                        ) and any(v is not None and v > 600 for v in (s1, s2, s3)):
+                            record["sector1"] = None
+                            record["sector2"] = None
+                            record["sector3"] = None
+                        else:
+                            record["sector1"] = s1
+                            record["sector2"] = s2
+                            record["sector3"] = s3
+                    # Normalize lap start/end timestamps to session-time seconds if available.
+                    end_s = _coerce_seconds(
+                        record.get("lapEndSeconds") or record.get("session_time_seconds")
+                    )
+                    start_s = _coerce_seconds(record.get("lapStartTime"))
+                    if start_s is None and end_s is not None and lap_time is not None:
+                        start_s = end_s - lap_time
+                    if end_s is None and start_s is not None and lap_time is not None:
+                        end_s = start_s + lap_time
+                    record["lapStartSeconds"] = start_s
+                    record["lapEndSeconds"] = end_s
+                    record["pitInSeconds"] = _parse_formatted_clock(
+                        record.get("pitInTimeFormatted")
+                    )
+                    record["pitOutSeconds"] = _parse_formatted_clock(
+                        record.get("pitOutTimeFormatted")
+                    )
+                    laps.append(record)
+            return laps
+    else:
+        # OpenF1 schema
             if latest_only:
                 query = f"""
                     SELECT 
@@ -788,134 +908,7 @@ def load_laps(silver_path: str, latest_only: bool = False) -> list:
                         "sector3": row[6],
                     }
                 )
-            return laps
-
-        # Process FastF1 results
-        def _coerce_seconds(value):
-            if value is None:
-                return None
-            # DuckDB may return timedelta-like objects, integers (ns/us/ms), or floats.
-            try:
-                if hasattr(value, "total_seconds"):
-                    return float(value.total_seconds())
-            except Exception:
-                pass
-            if isinstance(value, datetime.time):
-                return float(
-                    value.hour * 3600
-                    + value.minute * 60
-                    + value.second
-                    + value.microsecond / 1e6
-                )
-            try:
-                numeric = float(value)
-            except Exception:
-                return None
-            # Heuristic unit normalization:
-            # - ns values ~ 1e12 for ~1000s
-            # - us values ~ 1e9 for ~1000s
-            # - ms values ~ 1e6 for ~1000s
-            if numeric > 1e11:
-                return numeric / 1e9
-            if numeric > 1e8:
-                return numeric / 1e6
-            if numeric > 1e5:
-                return numeric / 1e3
-            return numeric
-
-        def _parse_formatted_clock(value):
-            if value is None:
-                return None
-            raw = str(value).strip()
-            if not raw:
-                return None
-            if "day" in raw:
-                parts = raw.split()
-                raw = parts[-1] if parts else raw
-            if ":" not in raw:
-                try:
-                    return float(raw)
-                except Exception:
-                    return None
-            bits = raw.split(":")
-            try:
-                nums = [float(x) for x in bits]
-            except Exception:
-                return None
-            if len(nums) == 2:
-                minutes, seconds = nums
-                hours = 0.0
-            elif len(nums) == 3:
-                hours, minutes, seconds = nums
-            else:
-                return None
-            return hours * 3600.0 + minutes * 60.0 + seconds
-
-        laps = []
-        for row in result:
-            record = dict(zip(columns, row))
-            # Sector*SessionTime comes from FastF1 as a "session time at sector end" (not duration).
-            # Normalize units to seconds and convert to sector durations when possible.
-            s1 = _coerce_seconds(record.get("sector1"))
-            s2 = _coerce_seconds(record.get("sector2"))
-            s3 = _coerce_seconds(record.get("sector3"))
-            lap_time = _coerce_seconds(record.get("lapTime"))
-
-            if (
-                lap_time is not None
-                and s3 is not None
-                and s3 > lap_time
-                and (s2 is None or s3 >= s2)
-                and (s1 is None or s2 is None or s2 >= s1)
-            ):
-                lap_start = s3 - lap_time
-                dur1 = (s1 - lap_start) if s1 is not None else None
-                dur2 = (s2 - s1) if (s2 is not None and s1 is not None) else None
-                dur3 = (s3 - s2) if (s3 is not None and s2 is not None) else None
-
-                def _ok(d):
-                    return (
-                        d
-                        if d is not None and pd.notna(d) and d > 0 and d < 600
-                        else None
-                    )
-
-                record["sector1"] = _ok(dur1)
-                record["sector2"] = _ok(dur2)
-                record["sector3"] = _ok(dur3)
-            else:
-                # Avoid surfacing session-time stamps in the UI if we couldn't convert them.
-                if (
-                    lap_time is None or (lap_time is not None and lap_time < 600)
-                ) and any(v is not None and v > 600 for v in (s1, s2, s3)):
-                    record["sector1"] = None
-                    record["sector2"] = None
-                    record["sector3"] = None
-                else:
-                    record["sector1"] = s1
-                    record["sector2"] = s2
-                    record["sector3"] = s3
-            # Normalize lap start/end timestamps to session-time seconds if available.
-            end_s = _coerce_seconds(
-                record.get("lapEndSeconds") or record.get("session_time_seconds")
-            )
-            start_s = _coerce_seconds(record.get("lapStartTime"))
-            if start_s is None and end_s is not None and lap_time is not None:
-                start_s = end_s - lap_time
-            if end_s is None and start_s is not None and lap_time is not None:
-                end_s = start_s + lap_time
-            record["lapStartSeconds"] = start_s
-            record["lapEndSeconds"] = end_s
-            record["pitInSeconds"] = _parse_formatted_clock(
-                record.get("pitInTimeFormatted")
-            )
-            record["pitOutSeconds"] = _parse_formatted_clock(
-                record.get("pitOutTimeFormatted")
-            )
-            laps.append(record)
-        return laps
-    finally:
-        conn.close()
+    return laps
 
 
 def load_telemetry(
@@ -927,348 +920,303 @@ def load_telemetry(
     max_rows: int = MAX_SESSION_TELEMETRY_ROWS,
 ) -> dict:
     """Load telemetry (optionally windowed + downsampled in SQL)."""
-    logger.info("[TEL_ENTRY] t0=%s t1=%s hz=%s file_exists=%s", t0, t1, hz, os.path.exists(os.path.join(silver_path, "telemetry.parquet")))
     tel_file = os.path.join(silver_path, "telemetry.parquet")
-    if not os.path.exists(tel_file):
-        logger.warning(f"[Telemetry] MISSING: {tel_file}")
-        return {}
     laps_file = os.path.join(silver_path, "laps.parquet")
+
+    logger.info(
+        "[TEL] called: t0=%s t1=%s hz=%s tel_exists=%s laps_exists=%s",
+        t0, t1, hz,
+        os.path.exists(tel_file),
+        os.path.exists(laps_file),
+    )
+
+    if not os.path.exists(tel_file):
+        logger.warning("[TEL] MISSING telemetry.parquet at %s", tel_file)
+        return {}
 
     conn = get_db_connection().parquet_conn
     try:
-        # Validate schema before querying
+        # ── 1. schema discovery ──────────────────────────────────────────────
         try:
-            schema_query = f"DESCRIBE SELECT * FROM read_parquet('{tel_file}')"
-            schema_result = conn.execute(schema_query).fetchall()
-            columns_in_file = {row[0] for row in schema_result}
-            lower_col_map = {str(col).lower(): str(col) for col in columns_in_file}
+            schema_rows = conn.execute(
+                "DESCRIBE SELECT * FROM read_parquet(?)", [tel_file]
+            ).fetchall()
+            columns_in_file = {r[0] for r in schema_rows}
+            lower_map = {str(c).lower(): str(c) for c in columns_in_file}
 
-            def _pick_col(*candidates: str) -> Optional[str]:
-                for candidate in candidates:
-                    found = lower_col_map.get(candidate.lower())
+            def _pick(*names):
+                for n in names:
+                    found = lower_map.get(n.lower())
                     if found:
                         return found
                 return None
 
-            def _qcol(name: str) -> str:
+            def _q(name):                          # safe quote
                 return '"' + str(name).replace('"', '""') + '"'
 
-            time_col = _pick_col("session_time_seconds", "time_seconds", "timestamp", "time")
-            driver_col = _pick_col("driver_number", "drivernumber", "drivernumber")
+            time_col   = _pick("session_time_seconds", "time_seconds", "timestamp", "time")
+            driver_col = _pick("driver_number", "drivernumber")
+
             if not time_col or not driver_col:
-                logger.warning(
-                    f"[Telemetry] SCHEMA MISMATCH (core missing): time_col={time_col}, driver_col={driver_col} for {tel_file}. "
-                    f"Available columns: {sorted(columns_in_file)}"
-                )
+                logger.warning("[TEL] schema missing core cols: %s", sorted(columns_in_file))
                 return {}
 
-            channel_map = {
-                "speed": _pick_col("speed"),
-                "throttle": _pick_col("throttle"),
-                "brake": _pick_col("brake"),
-                "rpm": _pick_col("rpm"),
-                "gear": _pick_col("gear", "ngear", "n_gear"),
-                "drs": _pick_col("drs"),
+            ch = {
+                "speed":    _pick("speed"),
+                "throttle": _pick("throttle"),
+                "brake":    _pick("brake"),
+                "rpm":      _pick("rpm"),
+                "gear":     _pick("gear", "ngear", "n_gear"),
+                "drs":      _pick("drs"),
             }
-            required_columns = {"session_time_seconds", "driver_number", "speed", "throttle", "brake"}
-            if not required_columns.issubset({str(col).lower() for col in columns_in_file}):
-                logger.warning(
-                    f"[Telemetry] SCHEMA MISMATCH (required missing): required={sorted(required_columns)} available={sorted(columns_in_file)} file={tel_file}"
-                )
-                return {}
-            missing_channels = sorted([name for name, src in channel_map.items() if src is None])
-            if missing_channels:
-                logger.warning(
-                    f"[Telemetry] PARTIAL CHANNELS ({missing_channels}) for {tel_file}. "
-                    f"Available columns: {sorted(columns_in_file)}"
-                )
 
-            def _col_expr(source_name: Optional[str], sql_type: str, scale: int = 2, normalize_0_1: bool = False) -> str:
-                if source_name:
-                    src = _qcol(source_name)
-                    base_expr = f"try_cast(t.{src} AS DOUBLE)"
-                    if normalize_0_1:
-                        return (
-                            f"ROUND("
-                            f"CASE "
-                            f"  WHEN {base_expr} IS NULL THEN 0.0 "
-                            f"  WHEN {base_expr} <= 1.0 THEN {base_expr} * 100.0 "
-                            f"  ELSE {base_expr} "
-                            f"END"
-                            f", {scale})"
-                        )
-                    if sql_type == "INTEGER":
-                        return f"CAST(t.{src} AS INTEGER)"
-                    return f"ROUND({base_expr}, {scale})"
-                if sql_type == "INTEGER":
+            required = {"session_time_seconds", "driver_number", "speed", "throttle", "brake"}
+            if not required.issubset({c.lower() for c in columns_in_file}):
+                logger.warning("[TEL] missing required cols, have: %s", sorted(columns_in_file))
+                return {}
+
+            def _expr(src, kind="DOUBLE", scale=2):
+                if not src:
                     return "NULL"
-                return "NULL"
-            optional_column_groups = {
-                "ersDeploy": [
-                    "ers_deploy",
-                    "ers_deployment",
-                    "ersdeploy",
-                    "ersDeployment",
-                ],
-                "ersHarvest": [
-                    "ers_harvest",
-                    "ers_recovery",
-                    "ersharvest",
-                    "ersHarvest",
-                ],
-            }
-            optional_expr: Dict[str, str] = {}
-            for alias, candidates in optional_column_groups.items():
-                src = _pick_col(*candidates)
-                if src:
-                    optional_expr[alias] = (
-                        f"ROUND(try_cast(t.{_qcol(src)} AS DOUBLE), 2) as {alias}"
-                    )
-                else:
-                    optional_expr[alias] = f"NULL as {alias}"
-        except Exception as e:
-            logger.error(f"Error validating telemetry schema for {tel_file}: {e}")
+                ref = f"t.{_q(src)}"
+                if kind == "INTEGER":
+                    return f"CAST({ref} AS INTEGER)"
+                return f"ROUND(try_cast({ref} AS DOUBLE), {scale})"
+
+            opt = {}
+            for alias, cands in {
+                "ersDeploy": ["ers_deploy", "ers_deployment"],
+                "ersHarvest": ["ers_harvest", "ers_recovery"],
+            }.items():
+                src = _pick(*cands)
+                opt[alias] = (
+                    f"ROUND(try_cast(t.{_q(src)} AS DOUBLE), 2) AS {alias}"
+                    if src else f"NULL AS {alias}"
+                )
+        except Exception as exc:
+            logger.error("[TEL] schema error %s: %s", tel_file, exc)
             return {}
 
-        def _ns_to_s(v):
-            if v is None:
-                return None
-            f = float(v)
-            if abs(f) > 1e11:
-                return f / 1e9
-            if abs(f) > 1e8:
-                return f / 1e6
-            if abs(f) > 1e5:
-                return f / 1e3
-            return f
+        # ── 2. SQL normalisation expression (ns → s, us → s, ms → s) ────────
+        #
+        # FastF1 pyarrow writes Timedelta as int64 NANOSECONDS.
+        # DuckDB CAST(ns_value AS DOUBLE) → 5_400_000_000_000.0  (not 5400.0)
+        # We normalise both in SELECT (timestamp output) and in WHERE (filter).
+        #
+        time_ref   = f"t.{_q(time_col)}"
+        driver_ref = f"t.{_q(driver_col)}"
 
+        def _norm_sql(expr):
+            """Wrap any SQL expression so it always returns seconds."""
+            return (
+                f"CASE"
+                f" WHEN ABS(CAST(({expr}) AS DOUBLE)) > 1e11"
+                f"   THEN CAST(({expr}) AS DOUBLE) / 1.0e9"
+                f" WHEN ABS(CAST(({expr}) AS DOUBLE)) > 1e8"
+                f"   THEN CAST(({expr}) AS DOUBLE) / 1.0e6"
+                f" WHEN ABS(CAST(({expr}) AS DOUBLE)) > 1e5"
+                f"   THEN CAST(({expr}) AS DOUBLE) / 1.0e3"
+                f" ELSE CAST(({expr}) AS DOUBLE)"
+                f" END"
+            )
+
+        t_norm  = _norm_sql(time_ref)           # used in SELECT + WHERE
+        # same for laps_file session_time_seconds (no alias needed in that query)
+        l_norm  = _norm_sql("session_time_seconds")
+
+        # ── 3. clamp hz / window ─────────────────────────────────────────────
         hz = max(0.0, min(50.0, float(hz or 0.0)))
         t0_bound, t1_bound = _resolve_time_window(t0, t1, DEFAULT_TELEMETRY_WINDOW_S)
 
-        _tnorm = (
-            f"CASE"
-            f" WHEN ABS(CAST({_qcol(time_col)} AS DOUBLE)) > 1e11 THEN CAST({_qcol(time_col)} AS DOUBLE)/1e9"
-            f" WHEN ABS(CAST({_qcol(time_col)} AS DOUBLE)) > 1e8  THEN CAST({_qcol(time_col)} AS DOUBLE)/1e6"
-            f" WHEN ABS(CAST({_qcol(time_col)} AS DOUBLE)) > 1e5  THEN CAST({_qcol(time_col)} AS DOUBLE)/1e3"
-            f" ELSE CAST({_qcol(time_col)} AS DOUBLE)"
-            f" END"
-        )
-
+        # ── 4. actual data range in SECONDS ──────────────────────────────────
         min_t: Optional[float] = None
         max_t: Optional[float] = None
         try:
-            time_range = conn.execute(
-                f"SELECT MIN({_tnorm}), MAX({_tnorm}) FROM read_parquet(?) t",
+            rng = conn.execute(
+                f"SELECT MIN({t_norm}), MAX({t_norm}) FROM read_parquet(?) t",
                 [tel_file],
             ).fetchone()
-            if time_range:
-                min_t = _ns_to_s(time_range[0])
-                max_t = _ns_to_s(time_range[1])
+            if rng and rng[0] is not None:
+                min_t, max_t = float(rng[0]), float(rng[1])
         except Exception:
-            min_t = None
-            max_t = None
+            pass
 
-        if t0 is not None and t1 is not None and min_t is not None and max_t is not None:
-            if float(t0_bound) > max_t or float(t1_bound) < min_t:
-                t0_bound = float(min_t)
-                t1_bound = float(min(min_t + 200.0, max_t))
+        logger.info("[TEL] data_range=[%s, %s] client=[%s, %s]",
+                    f"{min_t:.1f}" if min_t else "?",
+                    f"{max_t:.1f}" if max_t else "?",
+                    t0_bound, t1_bound)
 
+        # ── 5. race-start offset (SECONDS only) ──────────────────────────────
         race_time_offset = 0.0
-        should_shift_to_race_time = False
+        should_shift     = False
         try:
             if os.path.exists(laps_file):
-                row = conn.execute(f"""
+                row = conn.execute(
+                    f"""
                     SELECT
-                        MIN(CASE WHEN ABS(CAST(session_time_seconds AS DOUBLE)) > 1e11
-                                 THEN CAST(session_time_seconds AS DOUBLE)/1e9
-                                 ELSE CAST(session_time_seconds AS DOUBLE) END) as lap1_end_s,
-                        AVG(CAST(lap_time_seconds AS DOUBLE)) as lap1_dur_s
+                        MIN({l_norm})                          AS lap1_end_s,
+                        AVG(CAST(lap_time_seconds AS DOUBLE))  AS lap1_dur_s
                     FROM read_parquet(?)
                     WHERE session_time_seconds IS NOT NULL
-                      AND lap_time_seconds IS NOT NULL
+                      AND lap_time_seconds     IS NOT NULL
                       AND CAST(lap_number AS INTEGER) = 1
-                """, [laps_file]).fetchone()
-                if row and row[0] is not None:
-                    lap1_end_s = _ns_to_s(row[0])
-                    lap1_dur_s = float(row[1]) if row[1] is not None else 0.0
+                    """,
+                    [laps_file],
+                ).fetchone()
+                if row and row[0] is not None and row[1] is not None:
+                    # lap_time_seconds is float64 SECONDS already in FastF1 parquet
+                    lap1_end_s  = float(row[0])
+                    lap1_dur_s  = float(row[1])
                     race_time_offset = max(0.0, lap1_end_s - lap1_dur_s)
-            should_shift_to_race_time = race_time_offset > 30.0 and float(t0_bound) < (race_time_offset + 120.0)
-        except Exception:
-            race_time_offset = 0.0
-            should_shift_to_race_time = False
 
-        query_t0 = float(t0_bound)
-        query_t1 = float(t1_bound)
-        if should_shift_to_race_time:
-            query_t0 += race_time_offset
-            query_t1 += race_time_offset
-        logger.info("[Telemetry] range=[%.1f, %.1f] offset=%.1f shift=%s", min_t, max_t, race_time_offset, should_shift_to_race_time)
+            should_shift = (
+                race_time_offset > 30.0
+                and float(t1_bound) < (race_time_offset + 120.0)
+            )
+        except Exception as exc:
+            logger.warning("[TEL] offset calc failed: %s", exc)
 
-        time_ref = f"t.{_qcol(time_col)}"
-        driver_ref = f"t.{_qcol(driver_col)}"
-        _tnorm_t = (
-            f"CASE"
-            f" WHEN ABS(CAST({time_ref} AS DOUBLE)) > 1e11 THEN CAST({time_ref} AS DOUBLE)/1e9"
-            f" WHEN ABS(CAST({time_ref} AS DOUBLE)) > 1e8  THEN CAST({time_ref} AS DOUBLE)/1e6"
-            f" WHEN ABS(CAST({time_ref} AS DOUBLE)) > 1e5  THEN CAST({time_ref} AS DOUBLE)/1e3"
-            f" ELSE CAST({time_ref} AS DOUBLE)"
-            f" END"
-        )
+        logger.info("[TEL] race_offset=%.1f shift=%s", race_time_offset, should_shift)
 
-        def _run_query(window_t0: float, window_t1: float) -> List[Any]:
+        query_t0 = float(t0_bound) + (race_time_offset if should_shift else 0.0)
+        query_t1 = float(t1_bound) + (race_time_offset if should_shift else 0.0)
+
+        # ── 6. query builder ─────────────────────────────────────────────────
+        def _run(wt0: float, wt1: float):
             where = [
                 f"{driver_ref} IS NOT NULL",
-                f"({_tnorm_t}) >= ?",
-                f"({_tnorm_t}) <= ?",
+                f"({t_norm}) >= ?",          # compare normalised seconds
+                f"({t_norm}) <= ?",
             ]
-            params: List[Any] = [tel_file, float(window_t0), float(window_t1)]
+            params: list = [tel_file, float(wt0), float(wt1)]
+
             if driver_numbers:
                 where.append(
                     f"{driver_ref} IN (" + ",".join(["?"] * len(driver_numbers)) + ")"
                 )
-                params.extend([int(x) for x in driver_numbers])
+                params.extend(int(x) for x in driver_numbers)
+
             where_sql = " AND ".join(where)
 
-            # Keep telemetry query minimal in the hot path; driver names are resolved client-side.
+            # throttle: multiply by 100 when stored as 0-1 float
+            throttle_expr = (
+                f"ROUND(CASE"
+                f"  WHEN try_cast({_expr(ch['throttle'])} AS DOUBLE) <= 1.0"
+                f"    THEN try_cast({_expr(ch['throttle'])} AS DOUBLE) * 100.0"
+                f"  ELSE try_cast({_expr(ch['throttle'])} AS DOUBLE)"
+                f" END, 2)"
+                if ch["throttle"] else "NULL"
+            )
+            brake_expr = (
+                f"ROUND(CASE"
+                f"  WHEN try_cast({_expr(ch['brake'])} AS DOUBLE) IS NULL THEN 0.0"
+                f"  WHEN try_cast({_expr(ch['brake'])} AS DOUBLE) <= 1.0"
+                f"    THEN try_cast({_expr(ch['brake'])} AS DOUBLE) * 100.0"
+                f"  ELSE try_cast({_expr(ch['brake'])} AS DOUBLE)"
+                f" END, 2)"
+                if ch["brake"] else "NULL"
+            )
+
+            select_cols = (
+                f"CAST({driver_ref} AS INTEGER)  AS driver_number,\n"
+                f"CAST({driver_ref} AS VARCHAR)   AS driver_name,\n"
+                f"({t_norm})                       AS timestamp,\n"
+                f"{_expr(ch['speed'],    'DOUBLE', 2)} AS speed,\n"
+                f"{throttle_expr}                 AS throttle,\n"
+                f"{brake_expr}                    AS brake,\n"
+                f"{_expr(ch['rpm'],  'DOUBLE', 0)} AS rpm,\n"
+                f"{_expr(ch['gear'], 'INTEGER')}   AS gear,\n"
+                f"{_expr(ch['drs'],  'INTEGER')}   AS drs,\n"
+                f"{opt['ersDeploy']},\n"
+                f"{opt['ersHarvest']}"
+            )
+
             if hz > 0:
-                bucket = f"CAST(floor({_tnorm_t} * {hz}) AS BIGINT)"
-                query = f"""
+                bucket = f"CAST(floor(({t_norm}) * {hz}) AS BIGINT)"
+                sql = f"""
                     WITH base AS (
-                        SELECT
-                            CAST({driver_ref} AS INTEGER) as driver_number,
-                            CAST({driver_ref} AS VARCHAR) as driver_name,
-                            {_tnorm_t} as timestamp,
-                            {_col_expr(channel_map["speed"], "DOUBLE", 2)} as speed,
-                            {_col_expr(channel_map["throttle"], "DOUBLE", 2, normalize_0_1=True)} as throttle,
-                            {_col_expr(channel_map["brake"], "DOUBLE", 2, normalize_0_1=True)} as brake,
-                            {_col_expr(channel_map["rpm"], "DOUBLE", 0)} as rpm,
-                            {_col_expr(channel_map["gear"], "INTEGER")} as gear,
-                            {_col_expr(channel_map["drs"], "INTEGER")} as drs,
-                            {optional_expr["ersDeploy"]},
-                            {optional_expr["ersHarvest"]},
+                        SELECT {select_cols},
                             row_number() OVER (
                                 PARTITION BY CAST({driver_ref} AS INTEGER), {bucket}
-                                ORDER BY {_tnorm_t} DESC
-                            ) as rn
+                                ORDER BY ({t_norm}) DESC
+                            ) AS rn
                         FROM read_parquet(?) t
                         WHERE {where_sql}
                     )
-                    SELECT
-                        driver_number,
-                        driver_name,
-                        timestamp,
-                        speed,
-                        throttle,
-                        brake,
-                        rpm,
-                        gear,
-                        drs,
-                        ersDeploy,
-                        ersHarvest
-                    FROM base
-                    WHERE rn = 1
+                    SELECT driver_number, driver_name, timestamp,
+                           speed, throttle, brake, rpm, gear, drs,
+                           ersDeploy, ersHarvest
+                    FROM base WHERE rn = 1
                     ORDER BY driver_number, timestamp
                     LIMIT ?
                 """
             else:
-                query = f"""
-                    SELECT
-                        CAST({driver_ref} AS INTEGER) as driver_number,
-                        CAST({driver_ref} AS VARCHAR) as driver_name,
-                        {_tnorm_t} as timestamp,
-                        {_col_expr(channel_map["speed"], "DOUBLE", 2)} as speed,
-                        {_col_expr(channel_map["throttle"], "DOUBLE", 2, normalize_0_1=True)} as throttle,
-                        {_col_expr(channel_map["brake"], "DOUBLE", 2, normalize_0_1=True)} as brake,
-                        {_col_expr(channel_map["rpm"], "DOUBLE", 0)} as rpm,
-                        {_col_expr(channel_map["gear"], "INTEGER")} as gear,
-                        {_col_expr(channel_map["drs"], "INTEGER")} as drs,
-                        {optional_expr["ersDeploy"]},
-                        {optional_expr["ersHarvest"]}
+                sql = f"""
+                    SELECT {select_cols}
                     FROM read_parquet(?) t
                     WHERE {where_sql}
-                    ORDER BY CAST({driver_ref} AS INTEGER), {_tnorm_t}
+                    ORDER BY CAST({driver_ref} AS INTEGER), ({t_norm})
                     LIMIT ?
                 """
-            return conn.execute(query, [*params, int(max_rows) + 1]).fetchall()
 
-        rows = _run_query(query_t0, query_t1)
-        if should_shift_to_race_time and not rows:
-            # Some sessions already store telemetry in race-relative seconds.
-            # Retry once without offset so telemetry does not disappear.
-            rows = _run_query(float(t0_bound), float(t1_bound))
-            should_shift_to_race_time = False
+            return conn.execute(sql, [*params, int(max_rows) + 1]).fetchall()
+
+        rows = _run(query_t0, query_t1)
+        logger.info("[TEL] rows_returned=%d (query_t0=%.1f query_t1=%.1f)", len(rows), query_t0, query_t1)
+
+        # retry without shift if data already uses session-relative seconds
+        if should_shift and not rows:
+            logger.info("[TEL] shift retry without offset")
+            rows = _run(float(t0_bound), float(t1_bound))
+            should_shift = False
+
         if len(rows) > int(max_rows):
-            raise HTTPException(
-                status_code=413, detail=f"Result exceeds {int(max_rows)} rows"
-            )
+            raise HTTPException(status_code=413, detail=f"Result exceeds {int(max_rows)} rows")
 
-        driver_name_map: Dict[int, str] = {}
+        # ── 7. driver name lookup ─────────────────────────────────────────────
+        driver_name_map: dict = {}
         try:
             if os.path.exists(laps_file):
-                rows_nums = sorted({int(r[0]) for r in rows if r and r[0] is not None})
-                if rows_nums:
-                    in_list = ",".join(str(n) for n in rows_nums)
-                    map_rows = conn.execute(
-                        f"""
-                        SELECT DISTINCT
-                            driver_number,
-                            CAST(driver_name AS VARCHAR) as driver_name
-                        FROM read_parquet('{laps_file}')
-                        WHERE driver_number IN ({in_list})
-                          AND driver_name IS NOT NULL
-                        """
-                    ).fetchall()
-                    for num, name in map_rows:
-                        try:
-                            driver_name_map[int(num)] = str(name)
-                        except Exception:
-                            continue
+                nums = sorted({int(r[0]) for r in rows if r and r[0] is not None})
+                if nums:
+                    in_clause = ",".join(str(n) for n in nums)
+                    for num, name in conn.execute(
+                        f"""SELECT DISTINCT driver_number, CAST(driver_name AS VARCHAR)
+                            FROM read_parquet('{laps_file}')
+                            WHERE driver_number IN ({in_clause}) AND driver_name IS NOT NULL"""
+                    ).fetchall():
+                        driver_name_map[int(num)] = str(name)
         except Exception:
-            driver_name_map = {}
+            pass
 
-        columns = [
-            "driverNumber",
-            "driverName",
-            "timestamp",
-            "speed",
-            "throttle",
-            "brake",
-            "rpm",
-            "gear",
-            "drs",
-            "ersDeploy",
-            "ersHarvest",
-        ]
-        tel_by_driver: Dict[str, List[Dict[str, Any]]] = {}
+        # ── 8. assemble output ───────────────────────────────────────────────
+        cols = ["driverNumber","driverName","timestamp",
+                "speed","throttle","brake","rpm","gear","drs",
+                "ersDeploy","ersHarvest"]
+        out: dict = {}
         for row in rows:
-            record = dict(zip(columns, row))
-            if should_shift_to_race_time:
+            rec = dict(zip(cols, row))
+            if should_shift:
                 try:
-                    ts_val = float(record.get("timestamp"))
-                    record["timestamp"] = ts_val - race_time_offset
+                    rec["timestamp"] = float(rec["timestamp"]) - race_time_offset
                 except Exception:
                     pass
             try:
-                drv_num = int(record.get("driverNumber") or 0)
-                if drv_num in driver_name_map:
-                    record["driverName"] = driver_name_map[drv_num]
+                n = int(rec.get("driverNumber") or 0)
+                if n in driver_name_map:
+                    rec["driverName"] = driver_name_map[n]
             except Exception:
                 pass
-            drv = str(record.get("driverName") or "")
-            tel_by_driver.setdefault(drv, []).append(record)
+            out.setdefault(str(rec.get("driverName") or ""), []).append(rec)
 
-        logger.info(
-            f"Loaded telemetry for {len(tel_by_driver)} drivers from {tel_file}"
-        )
-        return tel_by_driver
+        logger.info("[TEL] returning %d drivers", len(out))
+        return out
 
     except HTTPException:
         raise
-    except Exception as e:
-        logger.error(f"Error loading telemetry from {tel_file}: {e}")
+    except Exception as exc:
+        logger.error("[TEL] Error: %s", exc, exc_info=True)
         return {}
-    finally:
-        conn.close()
 
 
 def load_weather(silver_path: str, limit: int = 240) -> list:
@@ -1358,8 +1306,6 @@ def load_weather(silver_path: str, limit: int = 240) -> list:
     except Exception as e:
         logger.error(f"Error reading weather: {e}")
         return []
-    finally:
-        conn.close()
 
 
 def load_race_control(silver_path: str, limit: int = 200) -> list:
@@ -1536,8 +1482,6 @@ def load_race_control(silver_path: str, limit: int = 200) -> list:
     except Exception as e:
         logger.error(f"Error reading race control: {e}")
         return []
-    finally:
-        conn.close()
 
 
 def _centerline_with_dist(geometry: Optional[Dict[str, Any]]) -> List[Dict[str, float]]:
@@ -1976,16 +1920,13 @@ def load_positions(year: int, race_name: str, session: str) -> list:
     if os.path.exists(laps_file):
         try:
             conn = get_db_connection().parquet_conn
-            try:
-                query = f"""
-                    SELECT DISTINCT driver_name, driver_number
-                    FROM read_parquet('{laps_file}')
-                    WHERE driver_name IS NOT NULL AND driver_number IS NOT NULL
-                """
-                for row in conn.execute(query).fetchall():
-                    driver_mapping[int(row[1])] = row[0]
-            finally:
-                conn.close()
+            query = f"""
+                SELECT DISTINCT driver_name, driver_number
+                FROM read_parquet('{laps_file}')
+                WHERE driver_name IS NOT NULL AND driver_number IS NOT NULL
+            """
+            for row in conn.execute(query).fetchall():
+                driver_mapping[int(row[1])] = row[0]
         except Exception as e:
             print(f"Error loading driver mapping: {e}")
 
@@ -2004,42 +1945,39 @@ def load_positions(year: int, race_name: str, session: str) -> list:
     if os.path.exists(fastf1_positions_path):
         try:
             conn = get_db_connection().parquet_conn
-            try:
-                schema = {
-                    r[0]
-                    for r in conn.execute(
-                        f"DESCRIBE SELECT * FROM read_parquet('{fastf1_positions_path}')"
-                    ).fetchall()
-                }
-                if {"x", "y", "driver_number"}.issubset(schema) and (
-                    "session_time_seconds" in schema or "date" in schema
-                ):
-                    if "session_time_seconds" in schema:
-                        query = f"""
-                            SELECT
-                                session_time_seconds AS timestamp,
-                                driver_number AS driverNumber,
-                                x,
-                                y
-                            FROM read_parquet('{fastf1_positions_path}')
-                            WHERE driver_number IS NOT NULL
-                            ORDER BY driver_number, session_time_seconds
-                        """
-                    else:
-                        # Derive a session-relative timestamp from `date` (global, not per-driver).
-                        query = f"""
-                            SELECT
-                                epoch(date) - min(epoch(date)) OVER () AS timestamp,
-                                driver_number AS driverNumber,
-                                x,
-                                y
-                            FROM read_parquet('{fastf1_positions_path}')
-                            WHERE driver_number IS NOT NULL
-                            ORDER BY driver_number, date
-                        """
-                    df = conn.execute(query).df()
-            finally:
-                conn.close()
+            schema = {
+                r[0]
+                for r in conn.execute(
+                    f"DESCRIBE SELECT * FROM read_parquet('{fastf1_positions_path}')"
+                ).fetchall()
+            }
+            if {"x", "y", "driver_number"}.issubset(schema) and (
+                "session_time_seconds" in schema or "date" in schema
+            ):
+                if "session_time_seconds" in schema:
+                    query = f"""
+                        SELECT
+                            session_time_seconds AS timestamp,
+                            driver_number AS driverNumber,
+                            x,
+                            y
+                        FROM read_parquet('{fastf1_positions_path}')
+                        WHERE driver_number IS NOT NULL
+                        ORDER BY driver_number, session_time_seconds
+                    """
+                else:
+                    # Derive a session-relative timestamp from `date` (global, not per-driver).
+                    query = f"""
+                        SELECT
+                            epoch(date) - min(epoch(date)) OVER () AS timestamp,
+                            driver_number AS driverNumber,
+                            x,
+                            y
+                        FROM read_parquet('{fastf1_positions_path}')
+                        WHERE driver_number IS NOT NULL
+                        ORDER BY driver_number, date
+                    """
+                df = conn.execute(query).df()
 
             if df is not None and not df.empty:
                 df = _clean_positions(df)
@@ -2096,8 +2034,8 @@ def load_positions(year: int, race_name: str, session: str) -> list:
                     df = conn.execute(
                         f"SELECT * FROM read_parquet('{silver_openf1_positions_path}')"
                     ).df()
-            finally:
-                conn.close()
+            except Exception:
+                pass
             if (
                 df is not None
                 and not df.empty
@@ -2131,10 +2069,7 @@ def load_positions(year: int, race_name: str, session: str) -> list:
     if os.path.exists(openf1_path):
         try:
             conn = get_db_connection().parquet_conn
-            try:
-                df = conn.execute(f"SELECT * FROM read_parquet('{openf1_path}')").df()
-            finally:
-                conn.close()
+            df = conn.execute(f"SELECT * FROM read_parquet('{openf1_path}')").df()
         except Exception:
             pass
 
@@ -2142,10 +2077,7 @@ def load_positions(year: int, race_name: str, session: str) -> list:
         if os.path.exists(gold_path):
             try:
                 conn = get_db_connection().parquet_conn
-                try:
-                    df = conn.execute(f"SELECT * FROM read_parquet('{gold_path}')").df()
-                finally:
-                    conn.close()
+                df = conn.execute(f"SELECT * FROM read_parquet('{gold_path}')").df()
             except Exception:
                 pass
 
@@ -2264,17 +2196,14 @@ def derive_positions_from_telemetry(year: int, race_name: str, session: str) -> 
 
     try:
         conn = get_db_connection().parquet_conn
-        try:
-            df = conn.execute(
-                f"""
-                SELECT driver_number, session_time_seconds, speed
-                FROM read_parquet('{telemetry_file}')
-                WHERE driver_number IS NOT NULL
-                ORDER BY driver_number, session_time_seconds
-                """
-            ).df()
-        finally:
-            conn.close()
+        df = conn.execute(
+            f"""
+            SELECT driver_number, session_time_seconds, speed
+            FROM read_parquet('{telemetry_file}')
+            WHERE driver_number IS NOT NULL
+            ORDER BY driver_number, session_time_seconds
+            """
+        ).df()
 
         if (
             df.empty
@@ -2424,18 +2353,15 @@ def calculate_session_duration(year: int, race_name: str, session: str) -> int:
 
     try:
         conn = get_db_connection().parquet_conn
-        try:
-            query = f"""
-                SELECT MIN(session_time_seconds), MAX(session_time_seconds)
-                FROM read_parquet('{telemetry_file}')
-                WHERE session_time_seconds IS NOT NULL
-            """
-            result = conn.execute(query).fetchone()
-            if result and result[0] is not None and result[1] is not None:
-                duration = int(result[1] - result[0])
-                return max(duration, 60)
-        finally:
-            conn.close()
+        query = f"""
+            SELECT MIN(session_time_seconds), MAX(session_time_seconds)
+            FROM read_parquet('{telemetry_file}')
+            WHERE session_time_seconds IS NOT NULL
+        """
+        result = conn.execute(query).fetchone()
+        if result and result[0] is not None and result[1] is not None:
+            duration = int(result[1] - result[0])
+            return max(duration, 60)
     except Exception:
         pass
 
@@ -2456,13 +2382,10 @@ def get_total_laps(year: int, race_name: str, session: str) -> int:
 
     try:
         conn = get_db_connection().parquet_conn
-        try:
-            query = f"SELECT MAX(lap_number) FROM read_parquet('{laps_file}')"
-            result = conn.execute(query).fetchone()
-            if result and result[0] is not None:
-                return int(result[0])
-        finally:
-            conn.close()
+        query = f"SELECT MAX(lap_number) FROM read_parquet('{laps_file}')"
+        result = conn.execute(query).fetchone()
+        if result and result[0] is not None:
+            return int(result[0])
     except Exception:
         pass
 

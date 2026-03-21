@@ -209,6 +209,7 @@ export const usePlaybackStore = create<PlaybackState>((set, get) => ({
     stopLoop()
     _internalTime = 0
     _targetTime = 0
+    _cachedState = null          // force rebuild on next play()
     set({ duration, sessionStartTime, currentTime: 0, isPlaying: false, replayPosition: 0 })
   },
 

@@ -80,9 +80,9 @@ def _find_features_path_cached(
     year: int,
     race_key: str,
     session_code: str,
-    year_mtime_ns: int,
+    race_mtime_ns: int,
 ) -> Optional[str]:
-    _ = year_mtime_ns
+    _ = race_mtime_ns
     year_path = os.path.join(features_root, str(int(year)))
     if not os.path.exists(year_path):
         return None
@@ -105,16 +105,21 @@ def find_features_path(year: int, race_name: str, session: str) -> Optional[str]
     year_path = os.path.join(features_root, str(year))
     if not os.path.exists(year_path):
         return None
+    rkey = normalize_key(race_name)
+    race_dir_path = os.path.join(year_path, race_name)
     try:
-        year_mtime_ns = int(os.stat(year_path).st_mtime_ns)
+        race_mtime_ns = int(os.stat(race_dir_path).st_mtime_ns)
     except Exception:
-        year_mtime_ns = 0
+        try:
+            race_mtime_ns = int(os.stat(year_path).st_mtime_ns)
+        except Exception:
+            race_mtime_ns = 0
     return _find_features_path_cached(
         features_root,
         int(year),
-        normalize_key(race_name),
+        rkey,
         normalize_session_code(session),
-        year_mtime_ns,
+        race_mtime_ns,
     )
 
 

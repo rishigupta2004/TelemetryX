@@ -8,7 +8,7 @@ import { useCarPositions } from '../hooks/useCarPositions'
 import type { CarPosition } from '../hooks/useCarPositions'
 import { useSessionTime } from '../lib/timeUtils'
 import { getRaceControlState } from '../lib/raceControlState'
-import { interpolateFromLookup, Point } from '../lib/trackGeometry'
+import { buildPathLookup, computeArcLengths, interpolateFromLookup, Point } from '../lib/trackGeometry'
 import { normalizeLoopProgress } from '../lib/trackHelpers'
 import type { Driver, LapRow } from '../types'
 
@@ -82,7 +82,6 @@ export function AnimatedTrackMap({
     rotateZ: localRotateZ
   }
   const svgRef = useRef<SVGSVGElement>(null)
-  const pathRef = useRef<SVGPathElement>(null)
   const animationRef = useRef<number | null>(null)
   const dotPositionsRef = useRef<Map<number, { x: number; y: number }>>(new Map())
 
@@ -190,13 +189,15 @@ export function AnimatedTrackMap({
       const duration = Math.max(1, end - start)
       const progress = clamp01((sessionTime - start) / duration)
       const unwrapped = Math.max(0, lapNumber - 1) + progress
+      const lapPosition = lap?.position ?? 99
+      const offset = lapPosition < 99 ? (lapPosition - 1) / Math.max(1, drivers.length) : 0
       return {
         driverCode: driver.code,
         driverNumber: driver.driverNumber,
         teamColor: driver.teamColor || '#fff',
-        progress: unwrapped % 1,
+        progress: (unwrapped - offset * 0.08 + 1) % 1,
         currentLap: lapNumber,
-        displayPosition: lap?.position ?? 99,
+        displayPosition: lapPosition,
         isInPit: false
       }
     }).sort((a, b) => (a.displayPosition || 99) - (b.displayPosition || 99))
@@ -255,47 +256,41 @@ export function AnimatedTrackMap({
     }))
   }, [trackData, carPositions, replayPosition, isPlaying, sessionData?.metadata?.duration, lapsFromStore])
 
-  // Calculate dot displayPositions from path with fallback
+  // Built once per track — O(1) per car, no SVG DOM access
+  const trackLookup = useMemo(() => {
+    if (!trackData?.points?.length) return null
+    const arcLens = computeArcLengths(trackData.points)
+    return buildPathLookup(trackData.points, arcLens, 10_000)
+  }, [trackData?.points])
+
   const dotPositions = useMemo(() => {
     const displayPositions = new Map<number, { x: number; y: number }>()
-    
     if (!resolvedCars.length) return displayPositions
-    
-    // Try to use SVG path first
-    if (pathRef.current) {
-      const path = pathRef.current
-      const totalLength = path.getTotalLength()
-      
+
+    if (trackLookup) {
       for (const car of resolvedCars) {
-        const distance = car.progress * totalLength
-        const point = path.getPointAtLength(Math.max(0, Math.min(distance, totalLength)))
-        displayPositions.set(car.driverNumber, { x: point.x, y: point.y })
+        const pt = interpolateFromLookup(trackLookup, car.progress)
+        displayPositions.set(car.driverNumber, { x: pt.x, y: pt.y })
       }
-    } 
-    // Fallback: calculate from trackData points if path not available
-    else if (trackData?.points?.length) {
+    } else if (trackData?.points?.length) {
       const points = trackData.points
-      
       for (const car of resolvedCars) {
         const idx = car.progress * (points.length - 1)
         const i0 = Math.floor(idx)
         const i1 = Math.min(i0 + 1, points.length - 1)
         const t = idx - i0
-        
-        const p0 = points[i0]
-        const p1 = points[i1]
-        
+        const p0 = points[i0]; const p1 = points[i1]
         if (p0 && p1) {
-          const x = p0.x + (p1.x - p0.x) * t
-          const y = p0.y + (p1.y - p0.y) * t
-          displayPositions.set(car.driverNumber, { x, y })
+          displayPositions.set(car.driverNumber, {
+            x: p0.x + (p1.x - p0.x) * t,
+            y: p0.y + (p1.y - p0.y) * t,
+          })
         }
       }
     }
-    
     dotPositionsRef.current = displayPositions
     return displayPositions
-  }, [resolvedCars, trackData])
+  }, [resolvedCars, trackData, trackLookup])
 
   // SVG viewBox
   const viewBox = useMemo(() => {
@@ -503,15 +498,6 @@ export function AnimatedTrackMap({
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeDasharray="8 12"
-            />
-            
-            {/* Main track path reference (for getPointAtLength) */}
-            <path
-              ref={pathRef}
-              d={trackPathString}
-              fill="none"
-              stroke="transparent"
-              strokeWidth="1"
             />
             
             {/* Pit lane */}

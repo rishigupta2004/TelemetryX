@@ -284,24 +284,42 @@ const formatDelta = (v: number) => {
   }, [driverLaps, selectedLap, selectedDriver, telemetryByCode, sampledSessionTime])
 
   const fetchWindow = useMemo(() => {
-    if (!driverLaps.length) return null
     if (lapTimeWindow) {
       return { t0: lapTimeWindow.t0, t1: lapTimeWindow.t1 }
     }
-    const bucketCenter = Math.floor(sampledSessionTime / WINDOW_BUCKET_SECONDS) * WINDOW_BUCKET_SECONDS
-    const t0 = Math.max(0, Math.floor(bucketCenter - HALF_WINDOW))
-    const t1 = Math.ceil(bucketCenter + HALF_WINDOW)
+    if (driverLaps.length) {
+      const bucketCenter = Math.floor(sampledSessionTime / WINDOW_BUCKET_SECONDS) * WINDOW_BUCKET_SECONDS
+      const t0 = Math.max(0, Math.floor(bucketCenter - HALF_WINDOW))
+      const t1 = Math.ceil(bucketCenter + HALF_WINDOW)
+      return { t0, t1 }
+    }
+    // Fallback: no laps available but we should still try to load telemetry
+    // Use a reasonable default range so the first fetch fires
+    const t0 = Math.max(0, Math.floor(sampledSessionTime - HALF_WINDOW))
+    const t1 = Math.ceil(sampledSessionTime + HALF_WINDOW) || 120
     return { t0, t1 }
   }, [driverLaps, sampledSessionTime, lapTimeWindow])
 
   const windowedTelemetry = useMemo((): Windowed | null => {
-    if (!selectedDriver || !lapTimeWindow) return null
+    if (!selectedDriver) return null
     const primary = telemetryByCode.get(selectedDriver) ?? []
     const compare = compareDriver ? telemetryByCode.get(compareDriver) ?? [] : []
     if (!primary.length) return null
 
-    const { t0: lapT0, t1: lapT1 } = lapTimeWindow
-    const pRows = primary.slice(lbTs(primary, lapT0), ubTs(primary, lapT1))
+    // Use lapTimeWindow if available, otherwise fall back to full range of telemetry rows
+    let lapT0: number, lapT1: number
+    if (lapTimeWindow) {
+      lapT0 = lapTimeWindow.t0
+      lapT1 = lapTimeWindow.t1
+    } else {
+      // Fallback: use the range of available telemetry data
+      lapT0 = primary[0].timestamp
+      lapT1 = primary[primary.length - 1].timestamp
+      if (!Number.isFinite(lapT0) || !Number.isFinite(lapT1) || lapT1 <= lapT0) return null
+    }
+    let pRows = primary.slice(lbTs(primary, lapT0), ubTs(primary, lapT1))
+    // If binary search yields nothing, use ALL primary rows as fallback
+    if (!pRows.length) pRows = primary
     if (!pRows.length) return null
     const cRows = compare.length ? compare.slice(lbTs(compare, lapT0), ubTs(compare, lapT1)) : []
 

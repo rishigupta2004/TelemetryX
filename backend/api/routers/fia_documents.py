@@ -27,6 +27,10 @@ _EVENTS_TTL_S = 6 * 60 * 60
 _DOCS_TTL_S = 2 * 60 * 60
 
 
+def _now_iso() -> str:
+    return dt.datetime.utcnow().isoformat() + "Z"
+
+
 def _file_cache_dir() -> Path:
     path = Path(MEDIA_CACHE_DIR) / "fia_documents"
     path.mkdir(parents=True, exist_ok=True)
@@ -354,7 +358,59 @@ async def get_fia_document_seasons(force_refresh: bool = Query(default=False)) -
 
 @router.get("/fia-documents/{year}")
 async def get_fia_document_events(year: int, force_refresh: bool = Query(default=False)) -> Dict[str, Any]:
-    return await _get_events_for_year(int(year), force_refresh=force_refresh)
+    try:
+        # Check cache first
+        cache_key = ("fia_document_events", int(year))
+        file_key = f"events_{int(year)}"
+        if not force_refresh:
+            cached = cache_get(cache_key)
+            if isinstance(cached, dict):
+                return cached
+            file_cached = _read_file_cache(file_key, _EVENTS_TTL_S)
+            if isinstance(file_cached, dict):
+                cache_set(cache_key, file_cached)
+                return file_cached
+
+        # Try to resolve season path
+        season_path = await _resolve_season_path(year, force_refresh=force_refresh)
+        if not season_path:
+            # Return empty instead of 404
+            return {
+                "year": year,
+                "season_path": "",
+                "n_events": 0,
+                "events": [],
+                "source": "unavailable",
+                "fetched_at": _now_iso(),
+            }
+
+        # Fetch events
+        season_html = await _fetch_text(_abs_url(season_path))
+        events = _parse_event_paths(season_html)
+        payload = {
+            "year": int(year),
+            "season_path": season_path,
+            "n_events": len(events),
+            "events": [{"name": name, "path": path} for name, path in events],
+            "source": _abs_url(season_path),
+            "fetched_at": _now_iso(),
+        }
+        cache_set(cache_key, payload)
+        _write_file_cache(file_key, payload)
+        return payload
+
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logger.warning("[FIA] events fetch failed year=%s: %s", year, exc)
+        return {
+            "year": year,
+            "season_path": "",
+            "n_events": 0,
+            "events": [],
+            "source": "error",
+            "fetched_at": _now_iso(),
+        }
 
 
 @router.get("/fia-documents/{year}/{race}")
@@ -376,45 +432,79 @@ async def get_fia_documents(
             cache_set(cache_key, file_cached)
             return file_cached
 
-    season_path = await _resolve_season_path(year, force_refresh=force_refresh)
-    if not season_path:
-        raise HTTPException(status_code=404, detail=f"No FIA documents season found for year {year}")
+    try:
+        season_path = await _resolve_season_path(year, force_refresh=force_refresh)
+        if not season_path:
+            return {
+                "year": year,
+                "requested_race": race_name,
+                "event_name": race_name,
+                "season_path": "",
+                "event_path": "",
+                "source": "unavailable",
+                "fetched_at": _now_iso(),
+                "total_documents": 0,
+                "category_counts": {},
+                "latest_published_at": None,
+                "documents": [],
+            }
 
-    events_payload = await _get_events_for_year(int(year), force_refresh=force_refresh)
-    events = [(str(item.get("name") or ""), str(item.get("path") or "")) for item in events_payload.get("events", [])]
-    matched = _match_event_path(events, race_name)
-    if not matched:
-        raise HTTPException(
-            status_code=404,
-            detail={
-                "message": f"No FIA event documents found for '{race_name}' in {year}",
-                "available_events": [name for name, _ in events],
-            },
-        )
+        events_payload = await _get_events_for_year(int(year), force_refresh=force_refresh)
+        events = [(str(item.get("name") or ""), str(item.get("path") or "")) for item in events_payload.get("events", [])]
+        matched = _match_event_path(events, race_name)
+        
+        if not matched:
+            raise HTTPException(
+                status_code=404,
+                detail={
+                    "message": f"No FIA event documents found for '{race_name}' in {year}",
+                    "available_events": [name for name, _ in events],
+                },
+            )
 
-    event_name, event_path = matched
-    event_html = await _fetch_text(_abs_url(event_path))
-    parsed_event_name, documents = _parse_documents(event_html)
+        event_name, event_path = matched
+        event_html = await _fetch_text(_abs_url(event_path))
+        parsed_event_name, documents = _parse_documents(event_html)
 
-    category_counts: Dict[str, int] = {}
-    for doc in documents:
-        category = str(doc.get("category") or "other")
-        category_counts[category] = category_counts.get(category, 0) + 1
+        category_counts: Dict[str, int] = {}
+        for doc in documents:
+            category = str(doc.get("category") or "other")
+            category_counts[category] = category_counts.get(category, 0) + 1
 
-    latest = next((doc.get("published_at") for doc in documents if doc.get("published_at")), None)
-    payload: Dict[str, Any] = {
-        "year": int(year),
-        "requested_race": race_name,
-        "event_name": parsed_event_name or event_name,
-        "season_path": season_path,
-        "event_path": event_path,
-        "source": _abs_url(event_path),
-        "fetched_at": dt.datetime.now(dt.timezone.utc).isoformat(),
-        "total_documents": len(documents),
-        "category_counts": category_counts,
-        "latest_published_at": latest,
-        "documents": documents,
-    }
-    cache_set(cache_key, payload)
-    _write_file_cache(file_key, payload)
-    return payload
+        latest = next((doc.get("published_at") for doc in documents if doc.get("published_at")), None)
+        
+        payload: Dict[str, Any] = {
+            "year": int(year),
+            "requested_race": race_name,
+            "event_name": parsed_event_name or event_name,
+            "season_path": season_path,
+            "event_path": event_path,
+            "source": _abs_url(event_path),
+            "fetched_at": _now_iso(),
+            "total_documents": len(documents),
+            "category_counts": category_counts,
+            "latest_published_at": latest,
+            "documents": documents,
+        }
+        
+        cache_set(cache_key, payload)
+        _write_file_cache(file_key, payload)
+        return payload
+
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logger.warning("[FIA] docs fetch failed year=%s race=%s: %s", year, race, exc)
+        return {
+            "year": year,
+            "requested_race": race_name,
+            "event_name": race_name,
+            "season_path": "",
+            "event_path": "",
+            "source": "error",
+            "fetched_at": _now_iso(),
+            "total_documents": 0,
+            "category_counts": {},
+            "latest_published_at": None,
+            "documents": [],
+        }

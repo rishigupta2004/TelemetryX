@@ -69,10 +69,8 @@ const fmtDelta = (s: number): string => {
 
 const getSectorColor = (v: number | null, sb: number, pb: number): SectorColor => {
   if (!v || v <= 0) return 'white'
-  if (sb === Number.POSITIVE_INFINITY) return 'yellow'
-  if (pb === Number.POSITIVE_INFINITY && v <= sb + 0.005) return 'purple'
-  if (v <= sb + 0.005) return 'purple'
-  if (pb < Number.POSITIVE_INFINITY && v <= pb + 0.005) return 'green'
+  if (v <= sb + 0.005 || sb === Number.POSITIVE_INFINITY) return 'purple'
+  if (v <= pb + 0.005 || pb === Number.POSITIVE_INFINITY) return 'green'
   return 'yellow'
 }
 
@@ -207,6 +205,7 @@ export const useTimingData = (): UseTimingDataResult => {
         const lapProgress = Math.max(0, Math.min(1, (t - lapStart) / lapDur2))
 
         let s1: number | null = null, s2: number | null = null, s3: number | null = null
+        let currentLapS1 = false, currentLapS2 = false
         if (currentInProgress) {
           const s1t = Number(currentInProgress.sector1)
           const s2t = Number(currentInProgress.sector2)
@@ -216,8 +215,8 @@ export const useTimingData = (): UseTimingDataResult => {
           const s1Boundary = s1t > 0 ? s1t / dur : 0.33
           const s2Boundary = (s1t > 0 && s2t > 0) ? (s1t + s2t) / dur : 0.66
           
-          if (lapProgress > s1Boundary && s1t > 0) s1 = s1t
-          if (lapProgress > s2Boundary && s2t > 0) s2 = s2t
+          if (lapProgress > s1Boundary && s1t > 0) { s1 = s1t; currentLapS1 = true }
+          if (lapProgress > s2Boundary && s2t > 0) { s2 = s2t; currentLapS2 = true }
         }
 
         if (lastCompleted) {
@@ -225,6 +224,8 @@ export const useTimingData = (): UseTimingDataResult => {
           if (!s2 && lastCompleted.sector2) s2 = lastCompleted.sector2
           if (!s3 && lastCompleted.sector3) s3 = lastCompleted.sector3
         }
+
+        const actualCurrentSector = currentLapS2 ? 3 : (currentLapS1 ? 2 : 1)
 
         const pIdx = completedCount > 0 ? completedCount - 1 : 0
         const bestLapTime = prefixBestLap[pIdx]
@@ -234,12 +235,13 @@ export const useTimingData = (): UseTimingDataResult => {
 
         const liveCar = carPosByNum.get(driver.driverNumber)
         const positionFromLive = liveCar?.position
-        const positionFromAnyLap = laps[Math.min(completedCount, laps.length - 1)]?.position ?? lastCompleted?.position
+        // With bootstrap laps (latest_only=1 lap per driver), completedCount=0
+        // even at lap 5, so lastCompleted is null. Read position from ANY lap.
+        const anyLap = laps[Math.min(Math.max(completedCount - 1, 0), laps.length - 1)]
+        const positionFromLaps = lastCompleted?.position ?? anyLap?.position
         const provisionalPosition =
-          positionFromLive && positionFromLive > 0
-            ? positionFromLive
-            : positionFromAnyLap && positionFromAnyLap > 0
-              ? positionFromAnyLap
+          positionFromLive && positionFromLive > 0 ? positionFromLive
+            : positionFromLaps && positionFromLaps > 0 ? positionFromLaps
               : 99
 
         return {
@@ -267,7 +269,7 @@ export const useTimingData = (): UseTimingDataResult => {
           s3Color: getSectorColor(s3 ?? lastCompleted?.sector3 ?? null, sessionBestS3, s3Best),
           status: currentInProgress ? 'racing' : (lastCompleted?.position !== undefined && lastCompleted?.position > 0 ? 'racing' : 'out'),
           currentLap: currLapData?.lapNumber ?? 1,
-          currentSector: s3 ? 3 : (s2 ? 2 : 1) as 1 | 2 | 3,
+          currentSector: actualCurrentSector as 1 | 2 | 3,
           lapsCompleted: completedCount,
           lapProgress,
           lapDistance: currLapData ? (currLapData.lapEndSeconds - currLapData.lapStartSeconds > 0 ? (t - currLapData.lapStartSeconds) / (currLapData.lapEndSeconds - currLapData.lapStartSeconds) : 0) : 0,
@@ -278,17 +280,19 @@ export const useTimingData = (): UseTimingDataResult => {
       })
 
       rows.sort((a, b) => {
-        const aPos = a.position < 99 ? a.position : 999
-        const bPos = b.position < 99 ? b.position : 999
+        const aPos = a.position > 0 && a.position < 99 ? a.position : 999
+        const bPos = b.position > 0 && b.position < 99 ? b.position : 999
         if (aPos !== bPos) return aPos - bPos
-        const aProgress = a.lapsCompleted + a.lapProgress
-        const bProgress = b.lapsCompleted + b.lapProgress
-        if (Math.abs(aProgress - bProgress) > 0.01) return bProgress - aProgress
-        return a.driverCode.localeCompare(b.driverCode)
+        // Same/unknown position: use race progress as tiebreaker
+        return (b.lapsCompleted + b.lapProgress) - (a.lapsCompleted + a.lapProgress)
       })
-      const hasRealPositions = rows.some(r => r.position < 99)
+      // Only assign sequential positions when lap data has no position info
+      // (e.g. very start before any lap completed AND no live car positions)
+      const hasRealPositions = rows.some(r => r.position > 0 && r.position < 99)
       if (!hasRealPositions) {
-        for (let i = 0; i < rows.length; i++) rows[i].position = i + 1
+        for (let i = 0; i < rows.length; i += 1) {
+          rows[i].position = i + 1
+        }
       }
 
       // ─── GAP / INTERVAL COMPUTATION ───────────────────────────────────────────
@@ -326,8 +330,10 @@ export const useTimingData = (): UseTimingDataResult => {
           const cum = index.elapsedByDriverNumber.get(candidate.driverNumber)?.[candidate.lapsCompleted - 1] ?? 0
           
           let inLap = candidate.lapProgress * Math.max(1, candidate.lapTimeRef)
-          const s1 = candidate.sector1
-          const s2 = candidate.sector2
+          
+          // Only use sectors if they belong to the current lap to prevent jumping
+          const s1 = candidate.currentSector > 1 ? candidate.sector1 : null
+          const s2 = candidate.currentSector > 2 ? candidate.sector2 : null
           
           if (s1 && s1 > 0 && s2 && s2 > 0) {
             const s3_progress = Math.max(0, candidate.lapProgress - 0.66) / 0.34
@@ -385,7 +391,9 @@ export const useTimingData = (): UseTimingDataResult => {
         let pbS1 = Number.POSITIVE_INFINITY
         let pbS2 = Number.POSITIVE_INFINITY
         let pbS3 = Number.POSITIVE_INFINITY
+        const fallbackLapNum = lastCompletedLap.lapNumber ?? 0
         for (const lap of driverLaps) {
+          if ((lap.lapNumber ?? 0) > fallbackLapNum) continue
           if ((lap.sector1 ?? 0) > 0) pbS1 = Math.min(pbS1, lap.sector1 as number)
           if ((lap.sector2 ?? 0) > 0) pbS2 = Math.min(pbS2, lap.sector2 as number)
           if ((lap.sector3 ?? 0) > 0) pbS3 = Math.min(pbS3, lap.sector3 as number)

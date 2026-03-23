@@ -242,15 +242,11 @@ def _session_telemetry_bounds(silver_path: str) -> Optional[Tuple[float, float]]
     try:
         row = conn.execute(
             """
-            SELECT MIN(
-                CAST(session_time_seconds AS DOUBLE) -
-                CAST(lap_time_seconds AS DOUBLE)
-            )
+            SELECT 
+                MIN(session_time_seconds) as min_ts,
+                MAX(session_time_seconds) as max_ts
             FROM read_parquet(?)
             WHERE session_time_seconds IS NOT NULL
-              AND lap_time_seconds IS NOT NULL
-              AND CAST(lap_time_seconds AS DOUBLE) > 40
-              AND CAST(lap_number AS INTEGER) = 1
             """,
             [telemetry_file],
         ).fetchone()
@@ -970,9 +966,28 @@ def load_telemetry(
                 "drs":      _pick("drs"),
             }
 
-            required = {"session_time_seconds", "driver_number", "speed", "throttle", "brake"}
-            if not required.issubset({c.lower() for c in columns_in_file}):
-                logger.warning("[TEL] missing required cols, have: %s", sorted(columns_in_file))
+            # FIX: Use flexible column matching instead of exact names
+            # Many parquet files have alternate column names like 'timestamp' or 'session_time'
+            available_time = _pick("session_time_seconds", "time_seconds", "timestamp", "time")
+            available_driver = _pick("driver_number", "drivernumber")
+            available_speed = _pick("speed")
+            available_throttle = _pick("throttle")
+            available_brake = _pick("brake")
+
+            missing_cols = []
+            if not available_time:
+                missing_cols.append("time column (session_time_seconds/time_seconds/timestamp/time)")
+            if not available_driver:
+                missing_cols.append("driver column (driver_number/drivernumber)")
+            if not available_speed:
+                missing_cols.append("speed")
+            if not available_throttle:
+                missing_cols.append("throttle")
+            if not available_brake:
+                missing_cols.append("brake")
+
+            if missing_cols:
+                logger.warning("[TEL] missing required cols: %s, have: %s", missing_cols, sorted(columns_in_file))
                 return {}
 
             def _expr(src, kind="DOUBLE", scale=2):
@@ -1207,7 +1222,10 @@ def load_telemetry(
                     rec["driverName"] = driver_name_map[n]
             except Exception:
                 pass
-            out.setdefault(str(rec.get("driverName") or ""), []).append(rec)
+            
+            # Use driverName if available, otherwise use driverNumber as key
+            driver_key = str(rec.get("driverName") or "") or str(rec.get("driverNumber") or "")
+            out.setdefault(driver_key, []).append(rec)
 
         logger.info("[TEL] returning %d drivers", len(out))
         return out

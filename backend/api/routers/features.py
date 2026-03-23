@@ -315,67 +315,10 @@ async def list_sessions(year: int, race: str) -> Dict[str, Any]:
     }
 
 
-@router.get("/features/{year}/{race}/{session}")
-async def get_session_features(
-    year: int,
-    race: str,
-    session: str,
-    feature_type: Optional[str] = None,
-    sample_limit: int = Query(default=2, ge=1, le=20),
-) -> Dict[str, Any]:
-    """Get feature data for a race session."""
-    race_name = race.replace("-", " ")
-    session_path = find_features_path(year, race_name, session)
+# NOTE: Specific routes must be defined BEFORE the generic /{session} route
+# to avoid FastAPI matching "lap" or "tyr" as the session parameter
 
-    if not session_path:
-        raise HTTPException(
-            status_code=404,
-            detail=f"No features found for {year} {race_name} {session}",
-        )
-
-    try:
-        feature_files = [f for f in os.listdir(session_path) if f.endswith(".parquet")]
-
-        if feature_type:
-            feature_files = [
-                f for f in feature_files if feature_type.lower() in f.lower()
-            ]
-
-        features = {}
-        for fname in feature_files:
-            fpath = os.path.join(session_path, fname)
-            conn = duckdb.connect()
-            try:
-                n_rows = int(
-                    conn.execute(
-                        "SELECT COUNT(*) FROM read_parquet(?)", [fpath]
-                    ).fetchone()[0]
-                    or 0
-                )
-                sample_df = conn.execute(
-                    "SELECT * FROM read_parquet(?) LIMIT ?", [fpath, int(sample_limit)]
-                ).df()
-            finally:
-                conn.close()
-            fname_key = fname.replace("_features.parquet", "")
-            features[fname_key] = {
-                "n_rows": n_rows,
-                "columns": list(sample_df.columns),
-                "sample": sample_df.to_dict(orient="records")
-                if len(sample_df) > 0
-                else [],
-            }
-
-        return {
-            "year": year,
-            "race": race_name,
-            "session": session,
-            "n_features": len(features),
-            "features": features,
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
+# ── Specific feature type routes (must come first) ──
 
 @router.get("/features/{year}/{race}/{session}/lap")
 async def get_lap_features(year: int, race: str, session: str) -> List[Dict[str, Any]]:
@@ -444,6 +387,70 @@ async def get_race_context_features(
     year: int, race: str, session: str
 ) -> List[Dict[str, Any]]:
     return _load_named_feature(year, race, session, "race_context")
+
+
+# ── Generic session route (must come AFTER specific routes) ──
+
+@router.get("/features/{year}/{race}/{session}")
+async def get_session_features(
+    year: int,
+    race: str,
+    session: str,
+    feature_type: Optional[str] = None,
+    sample_limit: int = Query(default=2, ge=1, le=20),
+) -> Dict[str, Any]:
+    """Get feature data for a race session."""
+    race_name = race.replace("-", " ")
+    session_path = find_features_path(year, race_name, session)
+
+    if not session_path:
+        raise HTTPException(
+            status_code=404,
+            detail=f"No features found for {year} {race_name} {session}",
+        )
+
+    try:
+        feature_files = [f for f in os.listdir(session_path) if f.endswith(".parquet")]
+
+        if feature_type:
+            feature_files = [
+                f for f in feature_files if feature_type.lower() in f.lower()
+            ]
+
+        features = {}
+        for fname in feature_files:
+            fpath = os.path.join(session_path, fname)
+            conn = duckdb.connect()
+            try:
+                n_rows = int(
+                    conn.execute(
+                        "SELECT COUNT(*) FROM read_parquet(?)", [fpath]
+                    ).fetchone()[0]
+                    or 0
+                )
+                sample_df = conn.execute(
+                    "SELECT * FROM read_parquet(?) LIMIT ?", [fpath, int(sample_limit)]
+                ).df()
+            finally:
+                conn.close()
+            fname_key = fname.replace("_features.parquet", "")
+            features[fname_key] = {
+                "n_rows": n_rows,
+                "columns": list(sample_df.columns),
+                "sample": sample_df.to_dict(orient="records")
+                if len(sample_df) > 0
+                else [],
+            }
+
+        return {
+            "year": year,
+            "race": race_name,
+            "session": session,
+            "n_features": len(features),
+            "features": features,
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.get("/features/{year}/{race}/{session}/catalog")

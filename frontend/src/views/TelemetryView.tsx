@@ -156,14 +156,17 @@ export const TelemetryView = React.memo(function TelemetryView({ active = true }
 
   useEffect(() => {
     if (!active) return
-    if (!resolvedYear || !resolvedRace || !resolvedSession || !fetchWindow) return
+    if (!resolvedYear || !resolvedRace || !resolvedSession) return
+
+    const t0 = fetchWindow?.t0 ?? 0
+    const t1 = fetchWindow?.t1 ?? 600
 
     const next = {
       year: resolvedYear,
       race: resolvedRace,
       session: resolvedSession,
-      t0: fetchWindow.t0,
-      t1: fetchWindow.t1,
+      t0,
+      t1,
     }
     const prev = lastFetchRef.current
     if (
@@ -331,11 +334,11 @@ export const TelemetryView = React.memo(function TelemetryView({ active = true }
         ) : builtCharts.length > 0 ? (
           <div ref={chartContainerRef} className="flex-1 overflow-y-hidden w-full flex flex-col">
             <div className="flex-1 flex flex-col">
-              {builtCharts
-                .filter((chart) => stackedChannels.includes(chart.key as ChannelKey))
-                .map((chart, idx, arr) => {
-                  const isLast = idx === arr.length - 1
-                  const dynamicHeight = Math.max(80, Math.floor((chartHeight - (arr.length - 1)) / arr.length))
+                {(() => {
+                  const filteredCharts = builtCharts.filter((chart) => stackedChannels.includes(chart.key as ChannelKey))
+                  return filteredCharts.map((chart, idx, arr) => {
+                    const isLast = idx === arr.length - 1
+                    const dynamicHeight = Math.max(80, Math.floor((chartHeight - (arr.length - 1)) / arr.length))
 
                   const distArr = chartData?.distance ?? []
                   const timeArr = chartData?.timestampsAbs ?? []
@@ -371,7 +374,7 @@ export const TelemetryView = React.memo(function TelemetryView({ active = true }
                       />
                     </div>
                   )
-                })}
+                })})()}
             </div>
             {(isLoading || String(loadingState) === 'loading') && (
               <div className="pointer-events-none absolute right-3 top-3 rounded-md border border-border-hard bg-bg-panel/90 px-2 py-1 text-[10px] font-mono text-fg-muted">

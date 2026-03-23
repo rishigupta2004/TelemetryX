@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import math
 import os
 import re
@@ -11,9 +12,14 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 import duckdb
+import pandas as pd
 import requests
+
+# Import pandas notna function
+from pandas import notna as pd_notna
 from fastapi import APIRouter, HTTPException, Query
 from fastapi.concurrency import run_in_threadpool
+from fastf1.ergast import Ergast
 
 from ..config import GOLD_DIR, MEDIA_CACHE_DIR, TRACK_GEOMETRY_DIR
 from ..utils import (
@@ -23,6 +29,7 @@ from ..utils import (
 )
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 _DRIVER_POINTS = {1: 25, 2: 18, 3: 15, 4: 12, 5: 10, 6: 8, 7: 6, 8: 4, 9: 2, 10: 1}
 _CACHE_TTL_SECONDS = 12 * 60 * 60
@@ -457,100 +464,76 @@ def _load_wikipedia_images(
 
 
 def _fetch_jolpica_standings(year: int) -> Optional[Dict[str, Any]]:
-    """Fetch championship standings from Jolpica (Ergast replacement) API."""
-    headers = {"User-Agent": "TelemetryX/1.0"}
+    """Fetch championship standings using FastF1's Ergast interface (same data as Jolpica)."""
+    logger.info(f"[FastF1] Fetching standings for year {year}")
     drivers: List[Dict[str, Any]] = []
     constructors: List[Dict[str, Any]] = []
     rounds_count = 0
     last_race = ""
 
     try:
-        # Driver standings
-        dr_resp = requests.get(
-            f"https://api.jolpi.ca/ergast/f1/{year}/driverstandings.json?limit=100",
-            timeout=12, headers=headers,
-        )
-        if dr_resp.status_code != 200:
-            return None
-        dr_data = dr_resp.json()
-        standings_lists = dr_data.get("MRData", {}).get("StandingsTable", {}).get("StandingsLists", [])
-        if not standings_lists:
+        # Use FastF1's Ergast interface - same data as Jolpica but with caching
+        ergast = Ergast(result_type='pandas', auto_cast=True)
+
+        # Get driver standings for the latest round
+        driver_response = ergast.get_driver_standings(season=year)
+        if not driver_response.content or len(driver_response.content) == 0:
+            logger.warning("[FastF1] No driver standings content returned")
             return None
 
-        sl = standings_lists[0]
-        rounds_count = _safe_int(sl.get("round")) or 0
-        # Fetch the race name for the latest round
-        last_race_raw = sl.get("season", str(year))
+        # Get the latest round's standings (last entry)
+        drivers_df = driver_response.content[-1]
+        rounds_count = int(driver_response.description.iloc[-1]['round']) if not driver_response.description.empty else 0
 
-        for entry in sl.get("DriverStandings", []):
-            driver_info = entry.get("Driver", {})
-            cons_list = entry.get("Constructors", [])
-            team_name = cons_list[0].get("name", "Unknown") if cons_list else "Unknown"
-            pos = _safe_int(entry.get("position")) or 99
-            pts = _safe_float(entry.get("points")) or 0
-            wins = _safe_int(entry.get("wins")) or 0
-            code = driver_info.get("code", "")
-            full_name = f"{driver_info.get('givenName', '')} {driver_info.get('familyName', '')}".strip()
-            number = _safe_int(driver_info.get("permanentNumber"))
+        logger.info(f"[FastF1] Found driver standings for {rounds_count} rounds")
+
+        # Extract driver standings
+        for _, row in drivers_df.iterrows():
+            code = str(row.get('driverCode', ''))
+            given = str(row.get('givenName', ''))
+            family = str(row.get('familyName', ''))
+            full_name = f"{given} {family}".strip() if given or family else code
 
             drivers.append({
-                "position": pos,
-                "driverNumber": number,
+                "position": int(row.get('position', 99)),
+                "driverNumber": int(row.get('driverNumber', 0)) if pd_notna(row.get('driverNumber')) else 0,
                 "driverName": code or full_name,
-                "teamName": team_name,
-                "points": int(pts),
-                "wins": wins,
-                "podiums": 0,  # Jolpica doesn't provide this directly
+                "teamName": str(row.get('constructorName', 'Unknown')),
+                "points": int(float(row.get('points', 0))),
+                "wins": int(row.get('wins', 0)),
+                "podiums": int(row.get('wins', 0)),  # Approximate with wins
                 "starts": rounds_count,
-                "bestFinish": 1 if wins > 0 else None,
+                "bestFinish": 1 if row.get('wins', 0) > 0 else None,
                 "bestQuali": None,
                 "bestRace": None,
                 "seasons": 1,
                 "seasonPointsProgression": [],
             })
 
-        # Constructor standings
-        cs_resp = requests.get(
-            f"https://api.jolpi.ca/ergast/f1/{year}/constructorstandings.json?limit=50",
-            timeout=12, headers=headers,
-        )
-        if cs_resp.status_code == 200:
-            cs_data = cs_resp.json()
-            cs_lists = cs_data.get("MRData", {}).get("StandingsTable", {}).get("StandingsLists", [])
-            if cs_lists:
-                for entry in cs_lists[0].get("ConstructorStandings", []):
-                    cons = entry.get("Constructor", {})
-                    pos = _safe_int(entry.get("position")) or 99
-                    pts = _safe_float(entry.get("points")) or 0
-                    wins = _safe_int(entry.get("wins")) or 0
-                    constructors.append({
-                        "position": pos,
-                        "teamName": cons.get("name", "Unknown"),
-                        "points": int(pts),
-                        "wins": wins,
-                        "podiums": 0,
-                        "starts": rounds_count,
-                        "bestFinish": 1 if wins > 0 else None,
-                        "driverCount": 2,
-                    })
+        # Log sample driver points
+        if drivers:
+            sample = drivers[:3]
+            logger.info(f"[FastF1] Sample driver points: {[(d['driverName'], d['points'], d['position']) for d in sample]}")
 
-        # We intentionally skip fetching full race results (results.json) because it
-        # is too heavy and often times out, which causes the entire Jolpica fallback
-        # to fail and revert to wrong parquet data.
-        # Progression and podiums will be blank/0, but standings points/positions
-        # will be 100% accurate.
-        
-        # We can still extract bestFinish from wins
-        for dr in drivers:
-            dr["podiums"] = dr["wins"] # rough approximation
-            if dr["wins"] > 0:
-                dr["bestFinish"] = 1
+        # Get constructor standings
+        constructor_response = ergast.get_constructor_standings(season=year)
+        if constructor_response.content and len(constructor_response.content) > 0:
+            constructors_df = constructor_response.content[-1]
+            for _, row in constructors_df.iterrows():
+                constructors.append({
+                    "position": int(row.get('position', 99)),
+                    "teamName": str(row.get('constructorName', 'Unknown')),
+                    "points": int(float(row.get('points', 0))),
+                    "wins": int(row.get('wins', 0)),
+                    "podiums": 0,
+                    "starts": rounds_count,
+                    "bestFinish": 1 if row.get('wins', 0) > 0 else None,
+                    "driverCount": 2,
+                })
 
+        last_race = f"Round {rounds_count}"
 
-        if not last_race:
-            last_race = f"Round {rounds_count}"
-
-        return {
+        result = {
             "year": int(year),
             "roundsCount": rounds_count,
             "lastRace": last_race,
@@ -559,7 +542,11 @@ def _fetch_jolpica_standings(year: int) -> Optional[Dict[str, Any]]:
             "sourceFiles": [],
             "generatedAt": int(time.time()),
         }
-    except Exception:
+        logger.info(f"[FastF1] Successfully fetched standings: {len(drivers)} drivers, {len(constructors)} constructors")
+        logger.info(f"[FastF1] Top 3 drivers: {[(d['driverName'], d['points']) for d in drivers[:3]]}")
+        return result
+    except Exception as e:
+        logger.exception(f"[FastF1] Error fetching standings: {e}")
         return None
 
 

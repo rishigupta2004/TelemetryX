@@ -123,17 +123,30 @@ def _parse_season_paths(championship_page_html: str) -> Dict[int, str]:
 
 def _parse_event_paths(season_page_html: str) -> List[Tuple[str, str]]:
     out: List[Tuple[str, str]] = []
-    for value, label in _extract_select_options(season_page_html, "facetapi_select_facet_form_2"):
-        if not value.startswith("/documents/"):
-            continue
-        if "/event/" not in value:
-            continue
-        if not label or normalize_key(label) == "event":
-            continue
-        out.append((label, value))
+    debug_info: Dict[str, Any] = {"methods_tried": [], "select_ids_found": [], "select_options_found": 0}
+
+    select_ids = ["facetapi_select_facet_form_2", "facetapi_select_facet_form_1", "facetapi_select_facet_form_3", "facetapi_select_facet_form_4"]
+
+    for select_id in select_ids:
+        options = _extract_select_options(season_page_html, select_id)
+        debug_info["select_ids_found"].append({"id": select_id, "count": len(options)})
+        if options:
+            debug_info["methods_tried"].append(f"select:{select_id}")
+            for value, label in options:
+                if not value.startswith("/documents/"):
+                    continue
+                if "/event/" not in value:
+                    continue
+                if not label or normalize_key(label) == "event":
+                    continue
+                out.append((label, value))
+            if out:
+                logger.debug("[FIA] Event parsing: found %d events via select#%s", len(out), select_id)
+                break
+
     if out:
         return out
-    # Fallback: scan the whole page for event options/links.
+
     for value, label in re.findall(
         r"<option\s+value=\"([^\"]*/event/[^\"]+)\"[^>]*>(.*?)</option>",
         season_page_html,
@@ -143,8 +156,35 @@ def _parse_event_paths(season_page_html: str) -> List[Tuple[str, str]]:
         if not clean_label or normalize_key(clean_label) == "event":
             continue
         out.append((clean_label, html.unescape(value).strip()))
+        debug_info["select_options_found"] += 1
     if out:
+        debug_info["methods_tried"].append("scan_all_options")
+        logger.debug("[FIA] Event parsing: found %d events via option scan", len(out))
         return out
+
+    all_selects = re.findall(
+        r"<select[^>]*>(.*?)</select>",
+        season_page_html,
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    for select_body in all_selects:
+        for value, label in re.findall(
+            r"<option\s+value=\"([^\"]*)\"[^>]*>(.*?)</option>",
+            select_body,
+            flags=re.IGNORECASE | re.DOTALL,
+        ):
+            if "/event/" not in value:
+                continue
+            clean_label = _strip_html(label)
+            if not clean_label or normalize_key(clean_label) == "event":
+                continue
+            if (clean_label, value) not in out:
+                out.append((clean_label, html.unescape(value).strip()))
+    if out:
+        debug_info["methods_tried"].append("any_select_with_event")
+        logger.debug("[FIA] Event parsing: found %d events via any select", len(out))
+        return out
+
     for value, label in re.findall(
         r"<a[^>]+href=\"([^\"]*/event/[^\"]+)\"[^>]*>(.*?)</a>",
         season_page_html,
@@ -154,6 +194,47 @@ def _parse_event_paths(season_page_html: str) -> List[Tuple[str, str]]:
         if not clean_label:
             continue
         out.append((clean_label, html.unescape(value).strip()))
+    if out:
+        debug_info["methods_tried"].append("anchor_links")
+        logger.debug("[FIA] Event parsing: found %d events via anchor links", len(out))
+        return out
+
+    event_patterns = [
+        r"data-event=\"([^\"]+)\"",
+        r"data-path=\"([^\"]*/event/[^\"]+)\"",
+        r"data-url=\"([^\"]*/event/[^\"]+)\"",
+        r"\"event_path\"\s*:\s*\"([^\"]+)\"",
+    ]
+    for pattern in event_patterns:
+        for match in re.finditer(pattern, season_page_html, flags=re.IGNORECASE):
+            event_path = match.group(1)
+            event_name_match = re.search(r"/event/([^/]+)", event_path)
+            if event_name_match:
+                event_name = event_name_match.group(1).replace("-", " ").replace("_", " ").title()
+                if event_name and (event_name, event_path) not in out:
+                    out.append((event_name, event_path))
+    if out:
+        debug_info["methods_tried"].append("data_attributes")
+        logger.debug("[FIA] Event parsing: found %d events via data attributes", len(out))
+        return out
+
+    schedule_links = re.findall(
+        r"<a[^>]+href=\"([^\"]*)\"[^>]*>\s*([^<]*?(?:Grand|Prix|Grand Prix|Test)[^<]*?)\s*</a>",
+        season_page_html,
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    for href, label in schedule_links:
+        if "/event/" not in href:
+            continue
+        clean_label = _strip_html(label).strip()
+        if clean_label and (clean_label, href) not in out:
+            out.append((clean_label, html.unescape(href).strip()))
+    if out:
+        debug_info["methods_tried"].append("schedule_links")
+        logger.debug("[FIA] Event parsing: found %d events via schedule links", len(out))
+        return out
+
+    logger.warning("[FIA] Event parsing: no events found. Debug: %s", json.dumps(debug_info))
     return out
 
 
@@ -295,11 +376,14 @@ async def _get_season_paths(force_refresh: bool = False) -> Dict[int, str]:
     if not force_refresh:
         cached = cache_get(cache_key)
         if isinstance(cached, dict):
-            return cached
+            # Normalize keys to integers (JSON cache may have string keys)
+            return {int(k): v for k, v in cached.items()}
         file_cached = _read_file_cache(file_key, _SEASONS_TTL_S)
         if isinstance(file_cached, dict):
-            cache_set(cache_key, file_cached)
-            return file_cached
+            # Normalize keys to integers (JSON deserializes keys as strings)
+            normalized = {int(k): v for k, v in file_cached.items()}
+            cache_set(cache_key, normalized)
+            return normalized
 
     championship_html = await _fetch_text(_abs_url(_F1_CHAMPIONSHIP_DOCS_PATH))
     season_paths = _parse_season_paths(championship_html)
@@ -310,6 +394,7 @@ async def _get_season_paths(force_refresh: bool = False) -> Dict[int, str]:
 
 async def _resolve_season_path(year: int, force_refresh: bool = False) -> Optional[str]:
     season_paths = await _get_season_paths(force_refresh=force_refresh)
+    # Ensure key is int for lookup (dict may have string keys from cache)
     return season_paths.get(int(year))
 
 

@@ -8,6 +8,7 @@ import {
   lapAtTime,
   CHANNELS,
   metricSubtitle,
+  formatDelta,
 } from '../lib/telemetryUtils'
 import type {
   BuiltChart,
@@ -58,12 +59,6 @@ export function useTelemetryData(
 const asFiniteNumber = (value: unknown): number => {
   const num = Number(value)
   return Number.isFinite(num) ? num : Number.NaN
-}
-
-const formatDelta = (v: number) => {
-  if (!Number.isFinite(v)) return '--'
-  const sign = v > 0 ? '+' : ''
-  return `${sign}${v.toFixed(3)}s`
 }
 
   const drivers = sessionData?.drivers || []
@@ -293,33 +288,18 @@ const formatDelta = (v: number) => {
       const t1 = Math.ceil(bucketCenter + HALF_WINDOW)
       return { t0, t1 }
     }
-    // Fallback: no laps available but we should still try to load telemetry
-    // Use a reasonable default range so the first fetch fires
-    const t0 = Math.max(0, Math.floor(sampledSessionTime - HALF_WINDOW))
-    const t1 = Math.ceil(sampledSessionTime + HALF_WINDOW) || 120
-    return { t0, t1 }
+    // Fallback: use default window when no laps data available
+    return { t0: 0, t1: 600 }
   }, [driverLaps, sampledSessionTime, lapTimeWindow])
 
   const windowedTelemetry = useMemo((): Windowed | null => {
-    if (!selectedDriver) return null
+    if (!selectedDriver || !lapTimeWindow) return null
     const primary = telemetryByCode.get(selectedDriver) ?? []
     const compare = compareDriver ? telemetryByCode.get(compareDriver) ?? [] : []
     if (!primary.length) return null
 
-    // Use lapTimeWindow if available, otherwise fall back to full range of telemetry rows
-    let lapT0: number, lapT1: number
-    if (lapTimeWindow) {
-      lapT0 = lapTimeWindow.t0
-      lapT1 = lapTimeWindow.t1
-    } else {
-      // Fallback: use the range of available telemetry data
-      lapT0 = primary[0].timestamp
-      lapT1 = primary[primary.length - 1].timestamp
-      if (!Number.isFinite(lapT0) || !Number.isFinite(lapT1) || lapT1 <= lapT0) return null
-    }
-    let pRows = primary.slice(lbTs(primary, lapT0), ubTs(primary, lapT1))
-    // If binary search yields nothing, use ALL primary rows as fallback
-    if (!pRows.length) pRows = primary
+    const { t0: lapT0, t1: lapT1 } = lapTimeWindow
+    const pRows = primary.slice(lbTs(primary, lapT0), ubTs(primary, lapT1))
     if (!pRows.length) return null
     const cRows = compare.length ? compare.slice(lbTs(compare, lapT0), ubTs(compare, lapT1)) : []
 

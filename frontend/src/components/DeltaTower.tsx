@@ -14,6 +14,12 @@ export interface DeltaData {
 
 const TREND_THRESHOLD = 0.1
 
+function getTrendColor(trend?: string): string {
+  if (trend === 'gaining') return 'text-emerald-400'
+  if (trend === 'losing') return 'text-red-400'
+  return 'text-amber-400'
+}
+
 function parseGapToNumber(gap: string): number | null {
   if (gap === 'LEADER' || gap === '—') return null
   const match = gap.match(/^[\+\-]?(\d+(?:\.\d+)?)/)
@@ -192,7 +198,7 @@ export default function DeltaTower() {
       {deltaData.gapToLeader !== 'LEADER' && (
         <div className="mt-2 pt-2 border-t border-border/50">
           <div className="text-[9px] font-mono font-bold text-fg-muted uppercase tracking-widest">
-            TRK_TREND: <span className={getTrendColor()}>{deltaData.trend === 'gaining' ? 'GAINING' : deltaData.trend === 'losing' ? 'LOSING' : 'STABLE'}</span>
+            TRK_TREND: <span className={getTrendColor(deltaData.trend)}>{deltaData.trend === 'gaining' ? 'GAINING' : deltaData.trend === 'losing' ? 'LOSING' : 'STABLE'}</span>
           </div>
           <div className="text-[11px] font-mono tabular-nums tracking-tight font-bold text-fg-secondary mt-1">
             {deltaData.trendValue > 0 ? '+' : ''}{deltaData.trendValue.toFixed(3)}s/lap

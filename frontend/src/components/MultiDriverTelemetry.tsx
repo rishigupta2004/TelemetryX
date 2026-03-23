@@ -17,6 +17,7 @@ const METRICS: (ChannelKey | 'delta')[] = ['delta', 'speed', 'throttle', 'brake'
 
 interface ProcessedDriverData {
   driver: SelectedDriver
+  times: number[]
   distance: number[]
   speed: number[]
   throttle: number[]
@@ -163,6 +164,8 @@ export const MultiDriverTelemetry = React.memo(function MultiDriverTelemetry({
         driver,
         distance: needsDownsampling ? distance.filter((_, i) => i % Math.floor(timestamps.length / MAX_TELEMETRY_POINTS) === 0).slice(0, MAX_TELEMETRY_POINTS) : distance,
         speed: needsDownsampling ? speed.filter((_, i) => i % Math.floor(speed.length / MAX_TELEMETRY_POINTS) === 0).slice(0, MAX_TELEMETRY_POINTS) : speed,
+        throttle: needsDownsampling ? throttle.filter((_, i) => i % Math.floor(throttle.length / MAX_TELEMETRY_POINTS) === 0).slice(0, MAX_TELEMETRY_POINTS) : throttle,
+        brake: needsDownsampling ? brake.filter((_, i) => i % Math.floor(brake.length / MAX_TELEMETRY_POINTS) === 0).slice(0, MAX_TELEMETRY_POINTS) : brake,
         gear: needsDownsampling ? gear.filter((_, i) => i % Math.floor(gear.length / MAX_TELEMETRY_POINTS) === 0).slice(0, MAX_TELEMETRY_POINTS) : gear,
         lonAcc: [], 
         latAcc: [],

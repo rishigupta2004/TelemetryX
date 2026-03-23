@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /Volumes/Space/PROJECTS/TelemetryX -name *.parquet -path */features/*)",
+      "Bash(python3:*)",
+      "Bash(source .venv311/bin/activate)",
+      "Bash(curl -s http://localhost:3000/api/features/2025/Bahrain%20Grand%20Prix/R/tyre)",
+      "Bash(curl -s \"http://localhost:3000/api/features/2025/Bahrain%20Grand%20Prix/R/tyre\" -v)",
+      "Bash(curl -s http://localhost:8000/api/features/2025/Bahrain%20Grand%20Prix/R/tyre)",
+      "Bash(curl -s http://localhost:8000/api/features/2025/Bahrain%20Grand%20Prix/R/telemetry)",
+      "Bash(curl -s http://localhost:9000/api/features/2025/Bahrain%20Grand%20Prix/R/tyre)",
+      "Bash(curl -s http://localhost:9000/api/features/2025/Bahrain%20Grand%20Prix/R)",
+      "Bash(curl -s http://localhost:9000/docs)",
+      "Bash(curl -s http://localhost:9000/openapi.json)",
+      "Bash(curl -s http://localhost:9000/api/v1/features/2025/Bahrain%20Grand%20Prix/R/tyre)",
+      "Bash(curl -s \"http://localhost:9000/api/v1/sessions/2025/Bahrain%20Grand%20Prix/R/viz?include_positions=0&include_weather=0&include_race_control=0\")",
+      "Bash(curl -s http://localhost:9000/api/v1/sessions/2025/Bahrain%20Grand%20Prix/R/laps)",
+      "Bash(curl -s http://localhost:9000/api/v1/models/strategy/2025/Bahrain%20Grand%20Prix)"
+    ]
+  }
+}

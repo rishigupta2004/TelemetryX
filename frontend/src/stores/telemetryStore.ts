@@ -5,45 +5,66 @@ import type { TelemetryResponse } from '../types'
 let latestTelemetryRequestId = 0
 const CHUNK_S = 270
 const MAX_RAW_CACHE_ENTRIES = 24
-const CACHE_TTL_MS = 5 * 60 * 1000
 
-interface RawCacheEntry { data: TelemetryResponse; ts: number }
-const rawTelemetryCache = new Map<string, RawCacheEntry>()
+const worker = new Worker(new URL('../workers/telemetry.worker.ts', import.meta.url), { type: 'module' })
 
-// ── Merge helper: combine multiple chunked TelemetryResponse objects ────────
+let msgIdSeq = 0
+const pending = new Map<number, { resolve: (d: TelemetryResponse) => void; reject: (e: Error) => void; timer: ReturnType<typeof setTimeout> }>()
+const TIMEOUT_MS = 10000
+
+worker.onmessage = (e: MessageEvent) => {
+  if (e.data.type === 'result') {
+    const p = pending.get(e.data.msgId)
+    if (p) {
+      pending.delete(e.data.msgId)
+      clearTimeout(p.timer)
+      p.resolve(e.data.data)
+    }
+  }
+}
+
+worker.onerror = (e) => {
+  console.error('[telemetryStore] Worker error:', e)
+}
+
+const cleanupWorker = () => {
+  for (const p of pending.values()) {
+    clearTimeout(p.timer)
+    p.reject(new Error('Worker terminated'))
+  }
+  pending.clear()
+  worker.terminate()
+}
+
+const runWorker = (key: string, data: TelemetryResponse | null, t0: number, t1: number): Promise<TelemetryResponse> => {
+  return new Promise((resolve, reject) => {
+    const id = ++msgIdSeq
+    const timer = setTimeout(() => {
+      const p = pending.get(id)
+      if (p) { pending.delete(id); p.reject(new Error('Telemetry worker timeout')) }
+    }, TIMEOUT_MS)
+    pending.set(id, { resolve, reject, timer })
+    worker.postMessage({ type: 'process', msgId: id, sessionKey: key, data, t0, t1 })
+  })
+}
+
 const mergeChunks = (chunks: TelemetryResponse[]): TelemetryResponse => {
   const merged: TelemetryResponse = {}
   for (const chunk of chunks) {
-    for (const [key, rows] of Object.entries(chunk)) {
-      if (!Array.isArray(rows)) continue
-      if (!merged[key]) merged[key] = []
-      ;(merged[key] as unknown[]).push(...rows)
+    for (const [driver, rows] of Object.entries(chunk || {})) {
+      const cur = merged[driver]
+      if (!cur) { merged[driver] = rows.slice(); continue }
+      cur.push(...rows)
     }
   }
+  for (const rows of Object.values(merged)) rows.sort((a, b) => a.timestamp - b.timestamp)
   return merged
 }
 
-// ── Worker stub (web-worker was removed; run inline) ────────────────────────
-interface PendingEntry { timer: ReturnType<typeof setTimeout>; reject: (e: Error) => void }
-const pending = new Map<number, PendingEntry>()
-const worker = { postMessage(_msg: unknown) { /* no-op stub */ } }
-
-const runWorker = async (_sessionKey: string, data: TelemetryResponse | null, start: number, end: number): Promise<TelemetryResponse | null> => {
-  // Inline window-slice: filter each driver's rows to the [start, end] time range
-  if (!data) return null
-  const sliced: TelemetryResponse = {}
-  for (const [key, rows] of Object.entries(data)) {
-    if (!Array.isArray(rows)) continue
-    sliced[key] = rows.filter((r: any) => {
-      const t = r?.timestamp ?? r?.time ?? r?.session_time
-      return typeof t === 'number' && t >= start && t <= end
-    })
-  }
-  return sliced
-}
+const rawTelemetryCache = new Map<string, TelemetryResponse>()
 
 const cacheSetRaw = (key: string, value: TelemetryResponse): void => {
-  rawTelemetryCache.set(key, { data: value, ts: Date.now() })
+  rawTelemetryCache.set(key, value)
   if (rawTelemetryCache.size > MAX_RAW_CACHE_ENTRIES) {
     const first = rawTelemetryCache.keys().next().value
     if (first) rawTelemetryCache.delete(first)
@@ -107,7 +128,7 @@ const hasAnyRows = (tel: TelemetryResponse): boolean => {
 const fetchChunked = async (year: number, race: string, session: string, start: number, end: number, signal?: AbortSignal): Promise<TelemetryResponse> => {
   const fetchKey = `${year}|${race}|${session}|${start}|${end}`
   const cached = rawTelemetryCache.get(fetchKey)
-  if (cached && Date.now() - cached.ts < CACHE_TTL_MS) return cached.data
+  if (cached) return cached
   const chunks: TelemetryResponse[] = []
   let cursor = start
   while (cursor < end) {
@@ -163,9 +184,9 @@ export const useTelemetryStore = create<TelemetryState>((set, get) => ({
     if (sameRendered) return
 
     if (!needsFetch) {
-      // Data is already loaded; just update rendered range using existing data
+      const workerResult = await runWorker(sessionKey, null, fetchStart, fetchEnd)
       if (reqId !== latestTelemetryRequestId) return
-      set({ loadingState: 'ready', renderedStart: fetchStart, renderedEnd: fetchEnd, sessionKey })
+      set({ telemetryData: workerResult, loadingState: 'ready', renderedStart: fetchStart, renderedEnd: fetchEnd, sessionKey })
       return
     }
 

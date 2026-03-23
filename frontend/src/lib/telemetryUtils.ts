@@ -49,7 +49,7 @@ export const currentLap = (laps: LapRow[], t: number): LapRow | null => {
   return null
 }
 
-export type ChannelKey = 'speed' | 'throttle' | 'brake' | 'gear' | 'rpm' | 'drs' | 'lonAcc' | 'latAcc'
+export type ChannelKey = 'speed' | 'throttle' | 'brake' | 'gear' | 'rpm' | 'drs' | 'lonAcc' | 'latAcc' | 'delta'
 
 export type ChannelDefinition = {
   key: ChannelKey
@@ -71,7 +71,8 @@ export const CHANNELS: ChannelDefinition[] = [
   { key: 'gear', title: 'Gear', y: [0, 8], axisLabel: 'Gear', tickMode: 'integer', stepped: true },
   { key: 'drs', title: 'DRS', y: [0, 1], axisLabel: 'DRS State', tickMode: 'binary', stepped: true },
   { key: 'lonAcc', title: 'Lon Acc', y: [-6, 6], axisLabel: 'Long. Accel (g)', tickMode: 'default', tickUnit: 'g' },
-  { key: 'latAcc', title: 'Lat Acc', y: [-6, 6], axisLabel: 'Lat. Accel (g)', tickMode: 'default', tickUnit: 'g' }
+  { key: 'latAcc', title: 'Lat Acc', y: [-6, 6], axisLabel: 'Lat. Accel (g)', tickMode: 'default', tickUnit: 'g' },
+  { key: 'delta', title: 'Delta', y: [-5, 5], axisLabel: 'Delta (s)', tickMode: 'default', tickUnit: 's' }
 ]
 
 export const CHANNEL_KEYS = CHANNELS.map(c => c.key) as ChannelKey[]
